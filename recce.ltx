@@ -356,6 +356,10 @@ from non-terminals.
 \Marpa{}'s implementations allow terminals to be the LHS
 of rules,
 and every symbol except \Vsym{accept} can be a terminal.
+The implementations have options which allow
+the user to reinstate
+the traditional restrictions,
+in part or in whole.
 
 Let the input to
 the parse be \Cw{} such that $\Cw \in \var{vocab}^\ast$.
@@ -463,7 +467,9 @@ between \Vsym{Y} and \Vsym{Z}.
 
 If we let \Vdr{x} be a dotted rule, such that
 \begin{equation*}
-\Vdr{x} = [\Vsym{A} \de \Vstr{pre} \cat \Vsym{next} \cat \Vstr{post}],
+\Vdr{x} =
+\bigl[ [\Vsym{A} \de \Vstr{pre} \cat \Vsym{next} \cat \Vstr{post}],
+    \var{pos} \bigr],
 \end{equation*}
 then
 %
@@ -707,7 +713,7 @@ is the set of dotted rules
     \begin{array}{l}
     [ \Vsym{L} \de \Vstr{rh} ] \in \Vrules \, \land \\
      \Vsym{P} = \Postdot{\Vdr{d}} \, \land \\
-     \Vsym{P} \destar \Vsym{L} \cat \Vstr{alpha}
+     \exists \Vstr{z} (\Vsym{P} \destar \Vsym{L} \cat \var{z})
     \end{array}
 \right\}
 \end{equation*}
@@ -957,8 +963,7 @@ Aycock and Horspool\cite{AH2002},
 the following theorem is crucial.
 
 \begin{theorem}\label{t:leo-singleton}
-If the AHFA state of
-a Marpa Earley item (EIM) is the result of a
+If a Marpa Earley item (EIM) is the result of a
 Leo reduction,
 then its AHFA state contains only one dotted rule.
 \end{theorem}
@@ -1226,12 +1231,23 @@ Overhead is charged to the Earley set at \Vloc{i}.
 \subsection{Reduction pass}
 
 The loop over \Vtable{i} must also include
-any items added by \call{Reduce one LHS}.
+any items added by \call{Reduce one LHS}{}.
 This can be done by implementing \Vtable{i} as an ordered
 set and adding new items at the end.
 
-Exclusive time is clearly \Oc{}
-and may be charged to each \Veim{work}.
+Exclusive time is clearly \Oc{} per
+\Veim{work},
+and is charged to the \Veim{work}.
+Additionally,
+some of the time required by
+\call{Reduce one LHS}{} is caller-included,
+and therefore charged to this procedure.
+Inclusive time from \call{Reduce one LHS}{}
+is \Oc{} per call,
+as will be seen in section \ref{p:reduce-one-lhs},
+and is charged to the \Veim{work}
+that is current
+during that call to \call{Reduce one LHS}{}.
 Overhead may be charged to the Earley set at \Vloc{i}.
 
 \begin{algorithm}[h]
@@ -1314,7 +1330,7 @@ Earley items have such links.
 Inclusive time
 for the loop over the EIM attempts
 is charged to each EIM attempt.
-Overhead is caller-included.
+Overhead is \Oc{} and caller-included.
 
 \begin{algorithm}[h]
 \caption{Earley reduction operation}
@@ -1388,7 +1404,7 @@ calling procedure.
 Trivially, the space is \Oc{} per call.
 
 We show that time is also \Oc{}
-by singling out two non-trivial cases:
+by singling out the two non-trivial cases:
 checking that an Earley item is new,
 and adding it to the Earley set.
 It becomes clear
@@ -1450,25 +1466,23 @@ entry with the Earley set
 which was current when that PSL
 entry was last updated.
 
-\begin{sloppypar}
+Let $\mymathop{PSL}(\Vloc{l}, \Vah{a})$
+be the entry for \Vah{a} in the PSL for Earley set \Vloc{l}.
 Consider the case where Marpa is building \EVtable{\Marpa}{j}
 and wants to check whether Earley item \Veim{x} is new,
 where $\Veim{x} = [ \Vah{x}, \Vorig{x} ]$.
-Let $\mymathop{PSL}(\Vloc{l}, \Vah{a})$
-be the entry for \Vah{a} in the PSL for Earley set \Vloc{l}.
 To check if \Veim{x} is new,
 Marpa checks $\mymathop{PSL}(\Vloc{x}, \Vah{x})$.
 Let the ``date'' for that PSL entry be \Vloc{p},
 that is,
 \begin{equation*}
-    \mymathop{PSL}(\Vloc{x}, \Vah{x}) = \Vloc{p}
+    \mymathop{PSL}(\Vloc{x}, \Vah{x}) = \Vloc{p}.
 \end{equation*}
 (If the entry has never been used,
 we assume that $\Vloc{p} = \Lambda$.)
 If $\Vloc{p} \ne \Lambda \land \Vloc{p} = \Vloc{j}$,
 then \Veim{x} is not new,
 and will not be added to the Earley set.
-\end{sloppypar}
 
 If $\Vloc{p} = \Lambda \lor \Vloc{p} \ne \Vloc{j}$,
 then \Veim{x} is new.
@@ -1537,7 +1551,7 @@ properly nullable symbols.
 This corresponds directly
 to a grammar rewrite in the \Marpa{} implementation,
 and its reversal during \Marpa's evaluation phase.
-For the correctness and complexity proof in this section,
+For the correctness and complexity proofs in this \doc{},
 we assume an additional rewrite,
 this time to eliminate nulling symbols.
 
@@ -1692,11 +1706,45 @@ then
 \section{Marpa is correct}
 \label{s:correct}
 
+\subsection{Marpa's Earley sets grow at worst linearly}
+
+\begin{theorem}\label{t:es-count}
+For a context-free grammar,
+and a parse location \Vloc{i},
+\begin{equation*}
+\textup{
+    $\bigsize{\EVtable{\Marpa}{i}} = \order{\var{i}}$.
+}
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+In this context \Vloc{i} is to be treated
+as an integer, the ordinal of Earley set \Vloc{i}.
+EIM's have the form $[\Vah{x}, \Vorig{x}]$.
+\Vorig{x} is the origin of the EIM,
+which in Marpa cannot be after the current
+Earley set \Vloc{i},
+so that
+\begin{equation*}
+0 \le \Vorig{x} \le \Vloc{i}.
+\end{equation*}
+The possibilities for \Vah{x} are finite,
+since the number of AHFA states is a constant,
+$\size{\Vfa}$,
+which depends on \Cg.
+Since duplicate EIM's are never added to an Earley set,
+the maximum size of Earley set \Vloc{i} is therefore
+\begin{equation*}
+\Vloc{i} \times \size{\Vfa} = \order{\var{i}}.\qedhere
+\end{equation*}
+\end{proof}
+
+\subsection{Marpa's Earley sets are correct}
+
 \begin{theorem}\label{t:table-correct}
 Marpa's Earley sets are correct.
 \end{theorem}
-
-\subsection{Proof of Theorem \ref{t:table-correct}}
 
 \begin{sloppypar}
 The proof 
@@ -1759,8 +1807,8 @@ it remains consistent, trivially.
 Otherwise, let
 $\Veim{confirmed} = [\Vah{confirmed}, \Vloc{i}]$.
 We see that \Veim{confirmed} is consistent with respect
-to \EVtable{\Leo}{i}
-by the definition of Earley scanning (Section~\ref{d:scan}),
+to \EVtable{\Leo}{i},
+by the definition of Earley scanning (Section~\ref{d:scan})
 and Observation~\ref{o:confirmed-AHFA-consistent}.
 Consistency is invariant under union,
 and since \EVtable{\Marpa}{i} is consistent by the inner induction,
@@ -1969,15 +2017,17 @@ We now examine Earley reduction,
 under the assumption that there is
 no Leo transition.
 The Marpa pseudocode shows that the Earley items
-\EVtable{\Marpa}{i}
+in \EVtable{\Marpa}{i}
 are traversed in a single pass for reduction.
 
-To show that these predecessors are paired
-with a complete and correct sets of component Earley items,
-we stipulate the Earley set is an ordered set,
+To show that we traverse a complete and consistent
+series of component Earley items,
+we stipulate that
+the Earley set is an ordered set,
 and that new Earley items are added at the end.
-The number of Earley items is at most $\Vsize{ah} \times \var{i}$,
-where \Vsize{ah} is the number of AHFA states,
+From Theorem \ref{t:es-count}, we know
+that
+the number of Earley items is \On{},
 so a traversal of them must terminate.
 
 Consider, for the purposes of an inner induction,
@@ -1993,7 +2043,6 @@ The induction hypothesis for the inner induction
 is that for some \var{n},
 the Earley items of \EVtable{\Marpa}{i} for generations 0 through \var{n}
 are complete and consistent.
-
 From Section \ref{s:sets-consistent},
 we know that all Earley items in Marpa's sets are consistent.
 In Section \ref{s:scan-complete},
@@ -2107,7 +2156,7 @@ and the theorem.
 
 We are now is a position to show that Marpa is correct.
 \begin{theorem}
-$\myL{\Marpa,\Cg} = \myL{\Cg}$
+\textup{ $\myL{\Marpa,\Cg} = \myL{\Cg}$ }
 \end{theorem}
 
 \begin{proof}
@@ -2257,7 +2306,9 @@ theoretical apparatus of this section.
 
 \begin{theorem}\label{t:marpa-O-leo}
 \begin{equation*}
-    \Rtablesize{\Marpa} \le \var{c} \times \Rtablesize{\Leo},
+\textup{
+    $\Rtablesize{\Marpa} < \var{c} \times \Rtablesize{\Leo}$,
+}
 \end{equation*}
 where \var{c} is a constant which depends on the grammar.
 \end{theorem}
@@ -2270,29 +2321,18 @@ If an EIM corresponds to an EIMT,
 the AHFA state of the EIM contains the
 EIMT's dotted rule,
 while their origins are identical.
-The worst case is that a dotted rule appears
-in every AHFA state,
+Even in the worst case, a dotted rule cannot
+appear in every AHFA state,
 so that
 the number of Marpa items corresponding to a single
-traditional Earley item cannot be greater
+traditional Earley item must be less
 than $\size{\Vfa}$.
 Therefore,
 \begin{equation*}
-    \Rtablesize{\Marpa} \le \size{\Vfa} \times \Rtablesize{\Leo}\qedhere
+    \Rtablesize{\Marpa} < \size{\Vfa} \times \Rtablesize{\Leo}\qedhere
 \end{equation*}
 \end{proof}
 
-\begin{theorem}\label{t:tries-O-eims}
-For an unambiguous grammar,
-the number of attempts to add
-Earley items will be less than or equal to
-\begin{equation*}
-\var{c} \times \Rtablesize{\Marpa},
-\end{equation*}
-where \var{c} is a constant.
-\end{theorem}
-
-\begin{proof}
 Earley\cite{Earley1970} shows that,
 for unambiguous grammars,
 every attempt to add
@@ -2326,7 +2366,19 @@ to prove a result which is weaker than that of \cite{Earley1970},
 but that is
 still sufficient to produce the same complexity results.
 
-We now restate our argument more formally.
+\begin{theorem}\label{t:tries-O-eims}
+For an unambiguous grammar,
+the number of attempts to add
+Earley items will be less than or equal to
+\begin{equation*}
+\textup{
+    $\var{c} \times \Rtablesize{\Marpa}$,
+}
+\end{equation*}
+where \var{c} is a constant.
+\end{theorem}
+
+\begin{proof}
 Let \var{initial-tries} be the number of attempts to add the initial item to
 the Earley sets.
 For Earley set 0, it is clear from the pseudocode
@@ -2351,7 +2403,7 @@ each each dotted rule in the current Earley set,
 \var{leo-tries} \le \var{max-AHFA} \times \bigsize{\Vtable{j}}
 \end{equation*}
 
-Let \var{scan-tries} be the number of attempted Leo reductions in
+Let \var{scan-tries} be the number of attempted scan operations in
 Earley set \Vloc{j}.
 Marpa attempts a scan operation,
 in the worst case,
@@ -2397,7 +2449,7 @@ $\var{max-AHFA} \times \bigsize{\Vtable{j}}$,
 where \var{max-AHFA} is the maximum number of completed rules in
 an AHFA state,
 and $\bigsize{\Vtable{j}}$ is the number of Earley items
-in the Earley set being built.
+in the current Earley set.
 
 Here the memoization of $\mymathop{transitions}$
 plays a role.
@@ -2421,14 +2473,14 @@ which have the same dotted rule.
 the two dotted rules would produce different
 derivations, contrary to the assumption that
 the grammar is ambiguous.)
-As a worst case, assume that a dotted rule
-appears in every AHFA state.
-Then $\var{matching} \le \size{\Vfa}$,
+Even in the worst case,
+a dotted rule cannot appear in every AHFA state.
+Then $\var{matching} < \size{\Vfa}$,
 where \Vsize{\Vfa} is the number of AHFA states,
 a constant that depends on \Cg.
 From the foregoing, we know that 
 \begin{equation*}
-\var{reduction-tries} \le \var{max-AHFA} \times \size{\Vfa} \times \bigsize{\Vtable{j}}
+\var{reduction-tries} < \var{max-AHFA} \times \size{\Vfa} \times \bigsize{\Vtable{j}}
 \end{equation*}
 
 \begin{sloppypar}
@@ -2447,46 +2499,18 @@ which depend only on \Cg,
 it is clear that there is a constant \var{c}
 such that
 \begin{equation*}
-\var{tries} \le \var{c} \times \Rtablesize{\Marpa}
+\var{tries} < \var{c} \times \Rtablesize{\Marpa}
 \end{equation*}
 where \var{c} is a constant which depends on \Cg.\qedhere
 \end{sloppypar}
 \end{proof}
 
-\begin{theorem}\label{t:es-count}
-For a context-free grammar,
-and a parse location \Vloc{i},
-\begin{equation*}
-\bigsize{\EVtable{\Marpa}{i}} = \order{\var{i}}.
-\end{equation*}
-
-\begin{proof}
-In this context \Vloc{i} is to be treated
-as an integer, the ordinal of Earley set \Vloc{i}.
-EIM's have the form $[\Vah{x}, \Vorig{x}]$.
-\Vorig{x} is the origin of the EIM,
-which in Marpa cannot be after the current
-Earley set \Vloc{i},
-so that
-\begin{equation*}
-0 \le \Vorig{x} \le \Vloc{i}.
-\end{equation*}
-The possibilities for \Vah{x} are finite,
-since the number of AHFA states is a constant,
-$\size{\Vfa}$,
-which depends on \Cg.
-Since duplicate EIM's are never added to an Earley set,
-the maximum size of Earley set \Vloc{i} is therefore
-\begin{equation*}
-\Vloc{i} \times \size{\Vfa} = \order{\var{i}}.\qedhere
-\end{equation*}
-\end{proof}
-
-\end{theorem}
 \begin{theorem}\label{t:eim-count}
 For a context-free grammar,
 \begin{equation*}
-\Rtablesize{\Marpa} = \order{\var{n}^2}.
+\textup{
+    $\Rtablesize{\Marpa} = \order{\var{n}^2}$.
+}
 \end{equation*}
 \end{theorem}
 
@@ -2509,7 +2533,9 @@ For an context-free grammar,
 the number of attempts to add
 Earley items will be less than or equal to
 \begin{equation*}
-\var{c} \times \size{\Cw}^3
+\textup{
+    $\var{c} \times \size{\Cw}^3$,
+}
 \end{equation*}
 where \var{c} is a constant.
 \end{theorem}
@@ -2550,7 +2576,7 @@ at location \Vloc{j} becomes
 \bigsize{\EVtable{\Marpa}{i}}
 \times \bigsize{\EVtable{\Marpa}{j}}
 \end{equation*}
-Worst case $\var{i} \simeq \var{j}$,
+In the worst case $\var{i} \simeq \var{j}$,
 so that by Theorem \ref{t:es-count},
 \begin{equation*}
 \bigsize{\EVtable{\Marpa}{i}}
@@ -2675,23 +2701,12 @@ Marpa generalizes the idea of
 input streams beyond the traditional
 model.
 
-As noted, the distinction between
-terminal and non-terminal symbols is
-not central in \Marpa{}.
-In particular,
-Marpa allows a symbol to be both a terminal
-and a LHS.
-Marpa has options that allow
-the user to reinstate
-the traditional restrictions,
-in part or in whole.
-
 Marpa's generalized input model
 replaces the input \Cw{}
 with a set of tokens,
 \var{tokens},
 whose elements are triples of symbol,
-start location and end location:
+start location and length:
 \begin{equation*}
     (\Vsym{t}, \Vloc{start}, \var{length})
 \end{equation*}
@@ -2727,21 +2742,24 @@ so that there is never a token ``at'' earleme 0.)
 In fact,
 there may be earlemes at which no token either starts or ends,
 although for the parse to succeed, such an earleme would have to be
-``inside'' at least one token.
-Here ``inside a token'' means after the token's start earleme
+properly inside at least one token.
+Here ``properly inside'' means after the token's start earleme
 and before the token's end earleme.
 
 In the Marpa input stream, tokens
 may interweave and overlap freely,
 but gaps are not allowed.
-That is,
-\begin{multline*}
-     \forall \Vloc{i}, 0 \le \var{i} < \size{\Cw} \implies \\
-     \bigl(
-	 \exists [\Vsym{t}, \Vloc{start}, \var{length}] \in \var{tokens} \\
-	 \land \, \var{start} \le \var{i} < \var{start}+\var{length}
-     \bigr)
-\end{multline*}
+That is, for all \Vloc{i} such
+that $0 \le \Vloc{i} < \size{\Cw}$,
+there must exist
+\begin{equation*}
+	 \var{token} = [\Vsym{t}, \Vloc{start}, \var{length}]
+\end{equation*}
+such that
+\begin{gather*}
+	 \var{token} \in \var{tokens} \quad \text{and} \\
+	 \Vloc{start} \le \Vloc{i} < \Vloc{start}+\var{length}.
+\end{gather*}
 
 The intent of Marpa's generalized input model is to allow
 users to define alternative input models for special
@@ -2752,21 +2770,21 @@ naturally expressed with ambiguous tokens.
 The traditional input stream can be seen as the special case of
 the Marpa input model where
 for all \Vsym{x}, \Vsym{y}, \Vloc{x}, \Vloc{y},
-\var{xlength}, \var{ylength}
+\var{xlength}, \var{ylength},
 if we have both of
 \begin{align*}
-    [\Vsym{x}, \Vloc{x}, \var{xlength}] & \in \var{tokens} \\
-    [\Vsym{y}, \Vloc{y}, \var{ylength}] & \in \var{tokens}
+    [\Vsym{x}, \Vloc{x}, \var{xlength}] & \in \var{tokens} \quad \text{and} \\
+    [\Vsym{y}, \Vloc{y}, \var{ylength}] & \in \var{tokens},
 \end{align*}
 then we have both of
 \begin{gather*}
 \var{xlength} = \var{ylength} = 1 \quad \text{and} \\
-     \Vloc{x} = \Vloc{y} \implies \Vsym{x} = \Vsym{y}
+     \Vloc{x} = \Vloc{y} \implies \Vsym{x} = \Vsym{y}.
 \end{gather*}
 
 The correctness results hold for Marpa input streams,
 but to preserve the time complexity bounds,
-two restrictions must be imposed.
+restrictions must be imposed.
 Let \size{\var{s}} be the cardinality
 of the set \var{s}.
 Define $\mymathop{future}(\Vloc{i})$ as
@@ -2780,19 +2798,22 @@ Define $\mymathop{future}(\Vloc{i})$ as
     \end{array}
 \right\rbrace.
 \end{equation*}
-The two restrictions are that,
+The restrictions are that,
 for all \Vloc{i}, 
 $0 \le i < \size{\Cw}$,
 we require that
 there be a constant \var{c} such that
-\begin{gather*}
-    \bigl| \mymathop{future}(\Vloc{i}) \bigr| < \var{c} \quad \text{and} \\
-    \Bigl| \bigl\{
+\begin{gather}
+\label{e:restriction1}
+\bigl| \mymathop{future}(\Vloc{i}) \bigr| < \var{c} \quad \text{and} \\
+\label{e:restriction2}
+ \Bigl| \bigl\{
 	[ \Vsym{x}, \Vloc{x}, \var{length} ]
 	\bigm| \Vloc{x} = \Vloc{i}
     \bigr\} \Bigr| < \var{c}
-\end{gather*}
-These restrictions
+\end{gather}
+Restrictions \ref{e:restriction1}
+and \ref{e:restriction2}
 impose little or no obstacle
 to the practical use
 of Marpa's generalized input model.
