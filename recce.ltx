@@ -83,12 +83,12 @@
 \newcommand{\Leo}{\ensuremath{\alg{Leo}}}
 \newcommand{\Marpa}{\ensuremath{\alg{Marpa}}}
 
-\newcommand{\Vfa}{\var{fa}}
+\newcommand{\Cfa}{\var{fa}}
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\sym{\Cw[\var{#1}]}}}
 \newcommand{\CEw}[1]{\ensuremath{\sym{\Cw[#1]}}}
-\newcommand{\Vrules}{\var{rules}}
+\newcommand{\Crules}{\var{rules}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
 \newcommand{\Next}[1]{\mymathop{Next}(#1)}
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
@@ -452,7 +452,7 @@ his semantics are applied.
 \section{Earley's algorithm}
 \label{s:earley}
 
-Let $\Vrule{r} \in \Vrules$
+Let $\Vrule{r} \in \Crules$
 be a rule,
 and $\Vsize{r}$ the length of its RHS.
 A dotted rule (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
@@ -718,7 +718,7 @@ is the set of dotted rules
 \left\{
 \Bigl[ \Vsym{L} \de \mydot \Vstr{rh} \Bigr] \middle|
     \begin{array}{l}
-    [ \Vsym{L} \de \Vstr{rh} ] \in \Vrules \, \land \\
+    [ \Vsym{L} \de \Vstr{rh} ] \in \Crules \, \land \\
      \Vsym{P} = \Postdot{\Vdr{d}} \, \land \\
      \exists \Vstr{z} (\Vsym{P} \destar \Vsym{L} \cat \var{z})
     \end{array}
@@ -947,7 +947,7 @@ A Marpa Leo item has type \type{LIM}.
 a partial transition function for
 pairs of AHFA state and symbol,
 \begin{equation*}
-\GOTO: \Vfa, (\epsilon \cup \var{vocab}) \mapsto \Vfa.
+\GOTO: \Cfa, (\epsilon \cup \var{vocab}) \mapsto \Cfa.
 \end{equation*}
 $\GOTO(\Vah{from}, \epsilon)$ is a
 \dfn{null transition}.
@@ -1461,7 +1461,7 @@ as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
 the number of AHFA states,
-\Vsize{\Vfa},
+\Vsize{\Cfa},
 which is a constant depending on \Cg.
 \end{sloppypar}
 
@@ -1738,12 +1738,12 @@ so that
 \end{equation*}
 The possibilities for \Vah{x} are finite,
 since the number of AHFA states is a constant,
-$\size{\Vfa}$,
+$\size{\Cfa}$,
 which depends on \Cg.
 Since duplicate EIM's are never added to an Earley set,
 the maximum size of Earley set \Vloc{i} is therefore
 \begin{equation*}
-\Vloc{i} \times \size{\Vfa} = \order{\var{i}}.\qedhere
+\Vloc{i} \times \size{\Cfa} = \order{\var{i}}.\qedhere
 \end{equation*}
 \end{proof}
 
@@ -2333,10 +2333,10 @@ appear in every AHFA state,
 so that
 the number of Marpa items corresponding to a single
 traditional Earley item must be less
-than $\size{\Vfa}$.
+than $\size{\Cfa}$.
 Therefore,
 \begin{equation*}
-    \Rtablesize{\Marpa} < \size{\Vfa} \times \Rtablesize{\Leo}\qedhere
+    \Rtablesize{\Marpa} < \size{\Cfa} \times \Rtablesize{\Leo}\qedhere
 \end{equation*}
 \end{proof}
 
@@ -2482,12 +2482,12 @@ derivations, contrary to the assumption that
 the grammar is ambiguous.)
 Even in the worst case,
 a dotted rule cannot appear in every AHFA state.
-Then $\var{matching} < \size{\Vfa}$,
-where \Vsize{\Vfa} is the number of AHFA states,
+Then $\var{matching} < \size{\Cfa}$,
+where \Vsize{\Cfa} is the number of AHFA states,
 a constant that depends on \Cg.
 From the foregoing, we know that 
 \begin{equation*}
-\var{reduction-tries} < \var{max-AHFA} \times \size{\Vfa} \times \bigsize{\Vtable{j}}
+\var{reduction-tries} < \var{max-AHFA} \times \size{\Cfa} \times \bigsize{\Vtable{j}}
 \end{equation*}
 
 \begin{sloppypar}
@@ -2501,7 +2501,7 @@ over the Earley sets,
 and then adding
 \var{initial-tries},
 is tedious.
-But since \var{max-AHFA} and \size{\Vfa} are both constants
+But since \var{max-AHFA} and \size{\Cfa} are both constants
 which depend only on \Cg,
 it is clear that there is a constant \var{c}
 such that
