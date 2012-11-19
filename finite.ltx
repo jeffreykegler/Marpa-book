@@ -3,7 +3,6 @@
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
 \documentclass[12pt]{amsart}
 \usepackage{algorithm}
-\usepackage{algpseudocode}
 \usepackage{url}
 
 % This is now a "paper", but may be a chapter
@@ -86,7 +85,7 @@ Let $G = (N, T , P, S )$ be
 a context-free grammar.
 $G$ is called LR($\pi$).
 Let
-$A_1, A_2 \in N$, $\delta_1, \delta_2, \gamma \in (N \cup T)^*$,
+$A_1, A_2 \in N$, $\delta_1, \delta_2, \gamma_1, \gamma_2 \in (N \cup T)^*$,
 and $y_1, y_2, y_3 \in T*$,
 Consider the following three conditions:
 \begin{gather}
@@ -95,12 +94,15 @@ S \destar \delta_1 A_1 y_1 \de \delta_1 \gamma_1 y_1 \\
 \label{e:condition2}
 S \destar \delta_2 A_2 y_3 \de \delta_2 \gamma_2 y_3 = \delta_1 \gamma_1 y_2 \\
 \label{e:condition3}
+\delta_2 \gamma_2 y_3 = \delta_1 \gamma_1 y_2 \\
+\label{e:condition4}
 y_1 \equiv y_2 \mod(\pi)
 \end{gather}
 
 If conditions \ref{e:condition1},
 \ref{e:condition2},
-and \ref{e:condition3} hold,
+\ref{e:condition3},
+and \ref{e:condition4} hold,
 then
 $A_1 = A_2$, $\delta_1 = \delta_2$ and $y_2 = y_3$.
 
@@ -124,63 +126,58 @@ but are distinct Earley items, they must have
 distinct values of $i$.
 Call two of these $i_1$ and $i_2$.
 
-In the definition, we set
-$\delta_1$ to
-the first $i_1$ symbols of the input;
-$\delta_2$ to
-the first $i_2$ symbols of the input.
-We know that $\delta_1 \neq \delta_2$.
-$A_1$ and $A_2$ both to $A$;
-and both $\gamma_1$ and $\gamma_2$ to $\alpha \beta$.
+For our choice of a specific rule,
+our conditions become
+\begin{gather}
+\label{e:condition1a}
+S \destar \delta_1 A y_1 \de \delta_1 \alpha \beta y_1 \\
+\label{e:condition2b}
+S \destar \delta_2 A y_3 \de \delta_2 \alpha \beta y_3
+\end{gather}
 
-It is a property of the Earley algorithm that all
-Earley items are "correct" in the sense
-that, if they are in Earley set $j$,
-there is some input stream from $j$ onward
-which includes that item in a derivation
-consistent with the input as far as $j$.
-The presence of the Earley items in the Earley sets,
-therefore, guarantees that there is some
-$y_1$ and some $y_2 = y_3$
-such that the two rightmost derivations
-of the definition of LR($\pi$) hold.
+We know these hold because,
+by the correctness of Earley's algorithm,
+the presence of the Earley items
+$[A \rightarrow \alpha \mydot \beta, i_1]$
+and 
+$[A \rightarrow \alpha \mydot \beta, i_2]$
+in Earley set $j$,
+guarantee there are appropriate values
+for $\delta_1, \delta_2, y_1, y_3$
+We also know, there are rightmost derivations
+and $G$ is unambiguous, that
+$\delta_2 \alpha \beta y_3 = \delta_1 \alpha \beta y_2$,
+and therefore that $\delta_1 = \delta_2$ and $y_2 = y_3$.
 
-We now show that, given the assumption for
-the reduction,
-$y_1 \equiv y_2 \mod(\pi)$,
-holds as well.
-That assumption was that
-the number of Earley items exceeds
-the index of the partition.
-Therefore
-there must at least one pair of
-Earley items that share the
-same equivalence class.
-If the grammar is LR($\pi$),
-we are forced to
-conclude for this pair of Earley items,
-that $\delta_1 = \delta_2$.
+From the Earley items we know that
+\begin{gather}
+\delta_1 \de w[0,i_1] \\
+\delta_2 \de w[0,i_2] \\
+\delta_1 \alpha \de w[0,j] \\
+\delta_2 \alpha \de w[0,j]
+\end{gather}
+Since these are rightmost derivations,
+$\delta_1 = \delta_2$,
+and $G$ is unambiguous,
+the factoring of
+$\delta_1 \alpha$ and
+$\delta_2 \alpha$ must be identical.
+Therefore $i_1 = i_2$.
 
-But since $\delta_1$ and $\delta_2$ are,
-respectively,
-the first $i_1$
-and $i_2$ symbols of the input.
-And since the two Earley items
-are distinct,
-but share the same
-rule and the same dot position,
-they must differ in their values of $i$.
-Therefore $i_1 \neq i_2$,
-$\size{\delta_1} \neq \size{\delta_2}$,
-and, contrary to what we concluded at the
-end of the previous paragraph,
-$\delta_1 \neq \delta_2$.
+But if 
+$i_1 = i_2$,
+the two Earley items
+\begin{gather}
+[A \rightarrow \alpha \mydot \beta, i_1] \\
+[A \rightarrow \alpha \mydot \beta, i_2]
+\end{gather}
+are identical, which is contrary to our assuption,
+and which completes the reductio.
 
-By concluding that $\delta_1 \neq \delta_2$
-and $\delta_1 = \delta_2$
-completes our reductio.
-Therefore there can be at most $m$
-Earley items of the form
+From the reductio we conclude that,
+in any Earley set $j$, there can be
+at most $m = \size{\pi}$ Earley items of the
+form
 $[A \rightarrow \alpha \mydot \beta, i]$.
 QED.
 
