@@ -75,7 +75,9 @@ with $\pi$ some finite, but not
 necessarily regular, partition of $\Sigma^*$."
 \cite{Leo1991}
 
-\section{Defining LR($\pi$)}
+\section{Definitions}
+
+\section{LR($\pi$)}
 
 We take our definition of LR($\pi$)
 from 
@@ -94,7 +96,7 @@ a context-free grammar.
 Let
 $A_1, A_2 \in N$, $\delta_1, \delta_2, \gamma_1, \gamma_2 \in (N \cup T)^*$,
 and $y_1, y_2, y_3 \in T*$,
-Consider the following three conditions:
+Consider the following four conditions:
 \begin{gather}
 \label{e:condition1}
 S \destar \delta_1 A_1 y_1 \de \delta_1 \gamma_1 y_1 \\
@@ -113,13 +115,7 @@ and \ref{e:condition4} imply
 that
 $A_1 = A_2$, $\delta_1 = \delta_2$ and $y_2 = y_3$.
 
-\section{Proof}
-
-Let $m$ be the index of the partition $\pi$.
-Let $w = a_1 ... a_n, a_i \in \Sigma, 0 < i < n$
-be the input.
-Let $w_{i,j}$ be $a_i ... a_j$
-and $w_j$ be $w_{0,j}$.
+\subsection{Rules}
 
 A dotted rule
 $A \rightarrow \alpha \mydot \beta$.
@@ -128,6 +124,41 @@ if $\beta \destar \epsilon$.
 It is right recursive if
 $A \de \alpha \beta \destar \zeta A$
 for some $\zeta \in (N \cup T)*$.
+A rule is Earley-efficient if it is
+strongly incomplete or
+if it is not right recursive.
+
+\subsection{Earley-paritioned}
+
+Let $G = (N, T , P, S )$ be
+a context-free grammar.
+Let $A \rightarrow \gamma$ be a rule
+which is Earley-efficient.
+Let
+$A_1, A_2 \in N$, $\delta_1, \delta_2, \gamma_1, \gamma_2 \in (N \cup T)^*$,
+and $y_1, y_2, y_3 \in T*$,
+Consider the following three conditions:
+\begin{gather}
+\label{e:condition1}
+S \destar \delta_1 A y_1 \de \delta_1 \gamma y_1 \\
+\label{e:condition2}
+S \destar \delta_2 A y_2 \de \delta_2 \gamma y_2 \\
+\label{e:condition4}
+y_1 \equiv y_2 \mod(\pi)
+\end{gather}
+$G$ is Earley-partitioned LR($\pi$) if
+conditions \ref{e:condition1},
+\ref{e:condition2},
+and \ref{e:condition3} imply
+that $\delta_1 = \delta_2$.
+
+\section{Proof}
+
+Let $m$ be the index of the partition $\pi$.
+Let $w = a_1 ... a_n, a_i \in \Sigma, 0 < i < n$
+be the input.
+Let $w_{i,j}$ be $a_i ... a_j$
+and $w_j$ be $w_{0,j}$.
 
 Consider a specific dotted rule,
 $A \rightarrow \alpha \mydot \beta$.
