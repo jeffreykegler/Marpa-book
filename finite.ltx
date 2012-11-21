@@ -27,11 +27,11 @@
 % clearly distinguished by the typography
 \newcommand{\subtract}{\,-\,}
 
-\newcommand{\de}
+\newcommand{\der}
     {\mathrel{\mbox{$\:\stackrel{\!{R}}{\Rightarrow\!}\:$}}}
-\newcommand{\destar}
+\newcommand{\derstar}
     {\mathrel{\mbox{$\:\stackrel{\!{R\ast}}{\Rightarrow\!}\:$}}}
-\newcommand{\deplus}
+\newcommand{\derplus}
     {\mathrel{\mbox{$\:\stackrel{\!{R+}}{\Rightarrow\!}\:$}}}
 
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
@@ -99,9 +99,9 @@ and $y_1, y_2, y_3 \in T*$,
 Consider the following four conditions:
 \begin{gather}
 \label{e:lr_pi_condition1}
-S \destar \delta_1 A_1 y_1 \de \delta_1 \gamma_1 y_1 \\
+S \derstar \delta_1 A_1 y_1 \der \delta_1 \gamma_1 y_1 \\
 \label{e:lr_pi_condition2}
-S \destar \delta_2 A_2 y_3 \de \delta_2 \gamma_2 y_3 \\
+S \derstar \delta_2 A_2 y_3 \der \delta_2 \gamma_2 y_3 \\
 \label{e:lr_pi_condition3}
 \delta_2 \gamma_2 y_3 = \delta_1 \gamma_1 y_2 \\
 \label{e:lr_pi_condition4}
@@ -119,13 +119,13 @@ $A_1 = A_2$, $\delta_1 = \delta_2$ and $y_2 = y_3$.
 
 A rule is
 right recursive if
-$A \de \alpha \beta \destar \zeta A$
+$A \der \alpha \beta \derstar \zeta A$
 for some $\zeta \in (N \cup T)*$.
 
 A dotted rule
 $A \rightarrow \alpha \mydot \beta$.
 is quasi-complete
-if $\beta \destar \epsilon$.
+if $\beta \derstar \epsilon$.
 A dotted rule is right-recursive if it is
 quasi-complete and the rule
 $A \rightarrow \alpha \beta$
@@ -138,26 +138,21 @@ a context-free grammar.
 Let $A \rightarrow \gamma$ be a rule
 which is Earley-efficient.
 Let
-$A \in N$, $\delta_1, \delta_2, \gamma \in (N \cup T)^*$,
-and $y_1, y_2, y_3 \in T*$,
+$A \in N$, $\delta, \gamma \in (N \cup T)^*$,
+and $y_1, y_2 \in T*$,
 Consider the following three conditions:
 \begin{gather}
 \label{e:ep_condition1}
-S \destar \delta_1 A y_1 \de \delta_1 \gamma y_1 \\
+S \derstar \delta A y_1 \der \delta \gamma y_1 \\
 \label{e:ep_condition2}
-S \destar \delta_2 A y_2 \de \delta_2 \gamma y_2 \\
+S \derstar \delta A y_2 \der \delta \gamma y_2 \\
 \label{e:ep_condition3}
-\delta_2 \gamma y_3 = \delta_1 \gamma y_2 \\
-\label{e:ep_condition4}
 y_1 \equiv y_2 \mod(\pi)
 \end{gather}
 $G$ is Earley-partitioned if
 conditions \ref{e:ep_condition1},
 \ref{e:ep_condition2},
-\ref{e:ep_condition3}
-and \ref{e:ep_condition4}
-imply
-that $\delta_1 = \delta_2$.
+and \ref{e:ep_condition3} hold.
 
 \section{An LR($\pi$) grammar is Earley-partitioned}
 
@@ -168,15 +163,17 @@ of LR($\pi$) above,
 we map
 $A_1$ and $A_2$ to $A_{Ep}$;
 $\gamma_1$ and $\gamma_2$ to $\gamma_{Ep}$,
+$\delta_1$ and $\delta_2$ to $\delta_{Ep}$,
+$y_3$ to $y_2$
 and all other symbols to themselves.
-This yields the conditions
+By substitution we get the conditions
 \begin{gather}
 \label{e:ep_proof_condition1}
-S \destar \delta_1 A_{Ep} y_1 \de \delta_1 \gamma_{Ep} y_1 \\
+S \derstar \delta_1 A_{Ep} y_1 \der \delta_1 \gamma_{Ep} y_1 \\
 \label{e:ep_proof_condition2}
-S \destar \delta_2 A_{Ep} y_2 \de \delta_2 \gamma_{Ep} y_2 \\
+S \derstar \delta_2 A_{Ep} y_2 \der \delta_2 \gamma_{Ep} y_2 \\
 \label{e:ep_proof_condition3}
-\delta_2 \gamma_{Ep} y_3 = \delta_1 \gamma_{Ep} y_2 \\
+\delta_{Ep} \gamma_{Ep} y_2 = \delta_{Ep} \gamma_{Ep} y_2 \\
 \label{e:ep_proof_condition4}
 y_1 \equiv y_2 \mod(\pi),
 \end{gather}
@@ -241,9 +238,9 @@ and marking locations based on the Earley items,
 our conditions become
 \begin{gather}
 \label{e:condition1a}
-S \destar \delta_1 [i_1] A y_1 \de \delta_1 [i_1] \alpha [j] \beta y_1 \\
+S \derstar \delta_1 [i_1] A y_1 \der \delta_1 [i_1] \alpha [j] \beta y_1 \\
 \label{e:condition2a}
-S \destar \delta_2 [i_2] A y_3 \de \delta_2 [i_2] \alpha [j] \beta y_3
+S \derstar \delta_2 [i_2] A y_3 \der \delta_2 [i_2] \alpha [j] \beta y_3
 \end{gather}
 
 We know these hold because,
@@ -263,58 +260,57 @@ and can rewrite
 \ref{e:condition2a} as
 \begin{gather}
 \label{e:condition1b}
-S \destar \delta [i_1] A y_1 \de \delta [i_1] \alpha [j] \beta y_1 \\
+S \derstar \delta [i_1] A y_1 \der \delta [i_1] \alpha [j] \beta y_1 \\
 \label{e:condition2b}
-S \destar \delta [i_2] A y_3 \de \delta [i_2] \alpha [j] \beta y_3
+S \derstar \delta [i_2] A y_3 \der \delta [i_2] \alpha [j] \beta y_3
 \end{gather}
 
 We identify four cases:
 \begin{center}
 \begin{tabular}{ll}
-Case 1: &
-$[0] \delta [i_1] \alpha [j] \destar w[0,j]$
-and 
-$[0] \delta [i_2] \alpha [j] \destar w[0,j]$
-are two factorings of  $w[0,j]$. \\
-Case 2: & 
-$[0] \delta_1 [i_1] \alpha [j] \beta y_1
-\deplus
-[0] \delta_2 [i_2] \alpha [j] \beta y_3$ \\
-Case 3: &
-$[0] \delta_2 [i_2] \alpha [j] \beta y_3
-\deplus
-[0] \delta_1 [i_1] \alpha [j] \beta y_1$ \\
-Case 4: &
-$[0] \delta_1 [i_1] \alpha [j] =
-[0] \delta_2 [i_2] \alpha [j]$ \\
+Derivation 1 &
+$ [0] \delta_1 [i_1] \alpha [j] \beta y_1
+\derplus
+[0] \delta_2 [i_2] \alpha [j] \beta y_3 $ \\
+Derivation 2 &
+$ [0] \delta_2 [i_2] \alpha [j] \beta y_3
+\derplus
+[0] \delta_1 [i_1] \alpha [j] \beta y_1 $ \\
+Identity &
+$ [0] \delta_1 [i_1] \alpha [j] =
+[0] \delta_2 [i_2] \alpha [j] $ \\
+Factoring &
+None of the three previous cases hold.
 \end{tabular}
 \end{center}
 
-Case 1:
+\subsection{Factoring}
 If there are two factorings of $w[0,j]$,
 $G$ is ambiguous.
 This is contrary to assumption.
 
-Case 2:
+\subsection{Rightmost derivations}
+Here is the first derivation case:
 \begin{equation}
 [0] \delta_1 [i_1] \alpha [j] \beta y_1
-\deplus
+\derplus
 [0] \delta_2 [i_2] \alpha [j] \beta y_3
 \end{equation}
 By assumption we know that $A \rightarrow \alpha \beta$ is
 not a quasi-complete right recursion.
 So this case is not possible.
 
-Case 3:
-This case is also
-impossible, by symmetry with case 2.
+For
+the other rightmost derivation case
+we reach the same conclusion, by
+symmetry.
 
-Case 4:
+\subsection{Identity}
 \begin{equation}
 [0] \delta_1 [i_1] \alpha [j] =
 [0] \delta_2 [i_2] \alpha [j]
 \end{equation}
-In this case, we have $\delta_1 = \delta_2$ and
+For case of identity, we have $\delta_1 = \delta_2$ and
 $i_1 = i_2$.
 
 But if 
