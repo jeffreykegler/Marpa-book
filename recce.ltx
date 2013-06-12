@@ -976,22 +976,40 @@ then its AHFA state contains only one dotted rule.
 \end{theorem}
 
 \begin{proof}
-Since the Earley item is the result of a Leo reduction
+Let the EIM which is the result of the Leo
+reduction be
+\begin{equation*}
+\Veim{result} = [\Vah{result}, \Vorig{result}]
+\end{equation*}
+Since \Veim{result} is the result of a Leo reduction
 we know, from the definition of a Leo reduction,
-that its AHFA state contains a completed rule.
-Call that completed rule, \Vdr{complete}.
+that
+\begin{equation*}
+\Vdr{complete} \in \Vah{result}
+\end{equation*}
+where
+\Vdr{complete} is a completed rule.
 Let \Vrule{c} be the rule of \Vdr{complete},
-and \var{cp} its dot position.
+and \var{cp} its dot position,
+\begin{equation*}
+\Vdr{complete} = [ \Vrule{c}, \var{cp} ].
+\end{equation*}
 $\var{cp} > 0$ because, in \Marpa{}
 grammars, completions are never
 predictions.
 
 Suppose, for a reduction to absurdity,
 that the AHFA state contains another dotted rule,
-\Vdr{other},
-$\Vdr{complete} \neq \Vdr{other}$.
+\Vdr{other}, that is, that
+\begin{equation*}
+\Vdr{other} \in \Vah{result}.
+\end{equation*}
+where $\Vdr{complete} \neq \Vdr{other}$.
 Let \Vrule{o} be the rule of \Vdr{other},
-and \var{op} its dot position.
+and \var{op} its dot position,
+\begin{equation*}
+\Vdr{other} = [ \Vrule{o}, \var{op} ].
+\end{equation*}
 AHFA construction never places a prediction in the same
 AHFA state as a completion, so
 \Vdr{other} is not a prediction.
@@ -1006,7 +1024,9 @@ Assume, for an inner reductio,
 that 
 $\Vrule{c} = \Vrule{o}$.
 By the construction of an AHFA
-state, both dotted rules resulted from the same series
+state,
+both \Vdr{complete} and \Vdr{other}
+resulted from the same series
 of transitions.
 But the same series of transitions over the
 same rule would result in the same dot position,
@@ -1018,36 +1038,62 @@ This shows the first inner reductio.
 
 Next, we assume for an inner reductio that
 $\Vrule{c} \ne \Vrule{o}$.
-Since both dotted rules are in the same EIM
+Since both \Vdr{complete} and \Vdr{other}
+are in the same EIM
 and neither is a prediction,
 both must result from transitions,
 and their transitions must have been from the same Earley set.
 Since they are in the same AHFA state,
 by the AHFA construction,
 that transition must have been
-over the same transition symbol.
+over the same transition symbol,
+cat it \Vsym{transition}.
 \Leo{} reduction is required to be unique,
-and a Leo item is not created
-for a transition symbol,
-unless that symbol is the transition symbol of
-exactly one dotted rule in that Earley set.
-The assumption for the outer reductio
-is that both \Vdr{complete} and \Vdr{other}
-share an AHFA state in a Leo reduction EIM,
-so they must obey the Leo uniqueness requirement.
-To obey the Leo uniqueness requirement,
-we must have $\Vrule{c} = \Vrule{o}$,
-which contradicts
-the assumption for the second inner reductio.
+in the sense that,
+for any pairing of symbol
+and Earley set,
+a Leo item
+is not created from that Earley set
+unless the symbol is the transition symbol of
+one and only one dotted rule in that Earley set.
+Call this the ``Leo uniqueness requirement".
+
+The assumption for the outer reductio is
+that
+\Vdr{complete} was the result of a Leo reduction,
+so that the Leo uniqueness requirement must hold.
+But if $\Vrule{c} \ne \Vrule{o}$,
+\Vsym{transition} was the transition symbol
+of two different dotted rules,
+and the Leo uniqueness requirement does not hold.
+The conclusion that the Leo uniqueness requirement
+both does and does not hold
+is a contradiction,
+which shows the second inner reductio.
+Since the assumption for
+the second inner reductio was that
+$\Vrule{c} \ne \Vrule{o}$,
+we conclude that 
+$\Vrule{c} = \Vrule{o}$.
 
 By the two inner reductio's,
 we have both
-$\Vrule{c} = \Vrule{o}$
-and $\Vrule{c} \neq \Vrule{o}$,
+$\Vrule{c} \neq \Vrule{o}$
+and $\Vrule{c} = \Vrule{o}$,
 which completes the outer reduction to absurdity.
+
+For the outer reductio, we assumed that
+\Vdr{other},
+was a second dotted rule in \Vah{result},
+such that 
+$\Vdr{other} \neq \Vdr{complete}$.
+We can therefore conclude that 
+\begin{equation*}
+\Vdr{other} \in \Vah{result} \implies \Vdr{other} = \Vdr{complete}.
+\end{equation*}
 If \Vdr{complete} is a dotted rule
 in the AHFA state of a Leo reduction EIM,
-it must be the only dotted rule in that AHFA state.
+then it must be the only dotted rule in that AHFA state.
 \end{proof}
 
 \section{The Marpa Recognizer}
