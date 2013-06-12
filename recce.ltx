@@ -357,7 +357,7 @@ from non-terminals.
 \Marpa{}'s implementations allow terminals to be the LHS
 of rules,
 and every symbol except \Vsym{accept} can be a terminal.
-The implementations have options which allow
+The implementations have options that allow
 the user to reinstate
 the traditional restrictions,
 in part or in whole.
@@ -369,6 +369,9 @@ Let the input to
 the parse be \Cw{} such that $\Cw \in \var{vocab}^\ast$.
 Locations in the input will be of type \type{LOC}.
 Let \Vsize{w} be the length of the input, counted in symbols.
+When we state our complexity later,
+they will often be in terms of $\var{n}$,
+where $\var{n} = \Vsize{w}$.
 Let \CVw{i} be character \var{i}
 of the input,
 $0 \le \Vloc{i} < \Vsize{w}$.
@@ -407,7 +410,7 @@ a single empty start rule
 to deal with null parses.
 Marpa eliminates the need for empty rules in its grammars
 by treating null parses and trivial grammars as special cases.
-(Trivial grammars are those which recognize only the null string.)
+(Trivial grammars are those that recognize only the null string.)
 
 Because Marpa claims to be a practical parser,
 it is important to emphasize
@@ -427,8 +430,8 @@ for that original semantics.
 
 As implemented,
 the Marpa parser allows users to associate
-semantics with an original grammar,
-which has none of the restrictions imposed
+semantics with an original grammar
+that has none of the restrictions imposed
 on grammars in this \doc{}.
 The user of a Marpa parser 
 may specify any context-free grammar,
@@ -597,7 +600,7 @@ each Earley operation is shown in the form of
 an inference rule,
 the conclusion of which
 is the set of the Earley items
-which is that operation's \dfn{result}.
+that is that operation's \dfn{result}.
 The Earley sets correspond to parse locations,
 and for any Earley operation there is a
 current parse location and
@@ -787,7 +790,7 @@ Each Leo sequence, if fully expanded,
 would contain \On{} items,
 where \var{n} is the length of the sequence.
 In \Earley, each such sequence would be expanded in every
-Earley set which is the origin of an EIMT included in the
+Earley set that is the origin of an EIMT included in the
 sequence, and the total number of EIMT's would be
 \order{\var{n}^2}.
 
@@ -891,11 +894,11 @@ LALR and LR parsers.
 The LR(0) items that are the components of LR(0)
 states are, exactly, dotted rules.
 \item
-By taking into account symbols which derive the
+By taking into account symbols that derive the
 null string, the LR(0) DFA could be turned into an
 LR(0) $\epsilon$-DFA,
 which would be even more effective
-at grouping dotted rules which often occur together
+at grouping dotted rules that often occur together
 into a single DFA state.
 \end{itemize}
 
@@ -1150,7 +1153,7 @@ from \AH{}.
 \call{Scan pass}{} and \call{Reduction pass}{}
 are separated.
 As a result,
-when scanning of tokens which start at location \Vloc{i} begins,
+when the scanning of tokens that start at location \Vloc{i} begins,
 the Earley sets for all locations prior to \Vloc{i} are complete.
 This means that the scanning operation has available, in
 the Earley sets,
@@ -1264,7 +1267,7 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 \State \hspace\algorithmicindent to an LIM
 \Else
 \State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
-\State \hspace\algorithmicindent to the set of EIM's which have
+\State \hspace\algorithmicindent to the set of EIM's that have
 \State \hspace\algorithmicindent \Vsym{postdot} as their postdot symbol
 \EndIf
 \EndFor
@@ -1453,7 +1456,7 @@ A per-set list (PSL) is kept in each Earley set.
 While \Marpa{} is building a new Earley set,
 \EVtable{\Marpa}{j},
 the PSL for every previous Earley set, \Vloc{i},
-tracks the Earley items in \EVtable{\Marpa}{j} which have \Vloc{i}
+tracks the Earley items in \EVtable{\Marpa}{j} that have \Vloc{i}
 as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
@@ -1467,7 +1470,7 @@ to clear and rebuild the PSL's each time
 that a new Earley set is started.
 This can be avoided by ``dating'' each PSL
 entry with the Earley set
-which was current when that PSL
+that was current when that PSL
 entry was last updated.
 
 Let $\mymathop{PSL}(\Vloc{l}, \Vah{a})$
@@ -1959,9 +1962,9 @@ corresponds to every EIMT in
 \EVtable{\Leo}{i}.
 We will proceed by cases,
 where the cases are \Leo{} operations.
-For every operation which \Leo{} would perform,
+For every operation that \Leo{} would perform,
 we show that
-\Marpa{} performs an operation which
+\Marpa{} performs an operation that
 produces a corresponding Earley item.
 Our cases for the operations of \Leo{} are
 Earley scanning operations;
@@ -2218,7 +2221,7 @@ requires \Oc{} time and space.
 
 \begin{proof}
 The time and space used in the rewrite is a constant
-which depends on the grammar,
+that depends on the grammar,
 and is charged to the parse.
 The reversal of the rewrite can be
 done in a loop over the Earley items,
@@ -2233,7 +2236,7 @@ because the number of
 rules into which another rule must be rewritten,
 and therefore the number of Earley items
 into which another Earley item must be rewritten,
-is a constant which depends
+is a constant that depends
 on the grammar.
 \end{proof}
 
@@ -2314,7 +2317,7 @@ theoretical apparatus of this section.
     $\Rtablesize{\Marpa} < \var{c} \times \Rtablesize{\Leo}$,
 }
 \end{equation*}
-where \var{c} is a constant which depends on the grammar.
+where \var{c} is a constant that depends on the grammar.
 \end{theorem}
 
 \begin{proof}
@@ -2366,7 +2369,7 @@ will represent identical Earley causations,
 and therefore will be
 consistent with an unambiguous grammar.
 Dealing with this complication requires us
-to prove a result which is weaker than that of \cite{Earley1970},
+to prove a result that is weaker than that of \cite{Earley1970},
 but that is
 still sufficient to produce the same complexity results.
 
@@ -2446,7 +2449,7 @@ where \Vsym{lhs} is the LHS
 of a completed rule in the AHFA state
 of a component EIM in the current Earley set,
 and \Veim{predecessor} is an EIM
-in the Earley set which is origin of the component EIM.
+in the Earley set that is origin of the component EIM.
 The number of possibilities for \Vsym{lhs}
 is less than or equal to
 $\var{max-AHFA} \times \bigsize{\Vtable{j}}$,
@@ -2472,7 +2475,7 @@ Since by assumption
 \Cg{} is unambiguous,
 we know that all attempts to add duplicate
 EIM's will be for predecessors
-which have the same dotted rule.
+that have the same dotted rule.
 (If this were not the case,
 the two dotted rules would produce different
 derivations, contrary to the assumption that
@@ -2499,13 +2502,13 @@ and then adding
 \var{initial-tries},
 is tedious.
 But since \var{max-AHFA} and \size{\Cfa} are both constants
-which depend only on \Cg,
+that depend only on \Cg,
 it is clear that there is a constant \var{c}
 such that
 \begin{equation*}
 \var{tries} < \var{c} \times \Rtablesize{\Marpa}
 \end{equation*}
-where \var{c} is a constant which depends on \Cg.\qedhere
+where \var{c} is a constant that depends on \Cg.\qedhere
 \end{sloppypar}
 \end{proof}
 
@@ -2546,7 +2549,7 @@ where \var{c} is a constant.
 
 \begin{proof}
 Reexamining the proof of Theorem \ref{t:tries-O-eims},
-we see that the only bound which required
+we see that the only bound that required
 the assumption that \Cg{} was unambiguous
 was \var{reduction-tries},
 the count of the number of attempts to
@@ -2620,7 +2623,7 @@ the number of traditional Earley items produced by
 By Theorem \ref{t:marpa-O-leo},
 the number of EIM's \Marpa{} will require for the same parse
 is, worst case, $\var{c} \times \order{\var{n}}$,
-where \var{c} is a constant which depends on \Cg.
+where \var{c} is a constant that depends on \Cg.
 LR-regular grammar are unambiguous, so that
 by Theorem \ref{t:tries-O-eims},
 the number of attempts that \Marpa{} will make to add
@@ -2628,7 +2631,7 @@ EIM's is on the order of
 \begin{equation*}
     \var{d} \times \var{c} \times \order{\var{n}}
 \end{equation*}
-where \var{d} is a constant which depends on \Cg.
+where \var{d} is a constant that depends on \Cg.
 Therefore,
 by Theorems \ref{t:O1-time-per-eim}
 and \ref{t:O1-links-per-eim},
@@ -2654,7 +2657,7 @@ EIM's is
 \begin{equation*}
 \var{c} \times \order{\var{n}^2},
 \end{equation*}
-where \var{c} is a constant which depends on \Cg.
+where \var{c} is a constant that depends on \Cg.
 Therefore,
 by Theorems \ref{t:O1-time-per-eim}
 and \ref{t:O1-links-per-eim},
