@@ -369,7 +369,7 @@ Let the input to
 the parse be \Cw{} such that $\Cw \in \var{vocab}^\ast$.
 Locations in the input will be of type \type{LOC}.
 Let \Vsize{w} be the length of the input, counted in symbols.
-When we state our complexity later,
+When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
 Let \CVw{i} be character \var{i}
@@ -2382,7 +2382,8 @@ Earley items will be less than or equal to
     $\var{c} \times \Rtablesize{\Marpa}$,
 }
 \end{equation*}
-where \var{c} is a constant.
+where \var{c} is a constant
+that depends on the grammar.
 \end{theorem}
 
 \begin{proof}
@@ -2479,10 +2480,10 @@ that have the same dotted rule.
 (If this were not the case,
 the two dotted rules would produce different
 derivations, contrary to the assumption that
-the grammar is ambiguous.)
+the grammar is unambiguous.)
 Even in the worst case,
 a dotted rule cannot appear in every AHFA state.
-Then $\var{matching} < \size{\Cfa}$,
+Then $\Vsize{matching} < \size{\Cfa}$,
 where \Vsize{\Cfa} is the number of AHFA states,
 a constant that depends on \Cg.
 From the foregoing, we know that 
@@ -2512,6 +2513,14 @@ where \var{c} is a constant that depends on \Cg.\qedhere
 \end{sloppypar}
 \end{proof}
 
+As a reminder,
+we follow tradition by
+stating complexity results
+in terms of
+\var{n},
+where $\var{n} = \Vsize{\Cw}$,
+the length of the input.
+
 \begin{theorem}\label{t:eim-count}
 For a context-free grammar,
 \begin{equation*}
@@ -2536,15 +2545,9 @@ is
 \end{proof}
 
 \begin{theorem}\label{t:ambiguous-tries}
-For an context-free grammar,
+For a context-free grammar,
 the number of attempts to add
-Earley items will be less than or equal to
-\begin{equation*}
-\textup{
-    $\var{c} \times \size{\Cw}^3$,
-}
-\end{equation*}
-where \var{c} is a constant.
+Earley items is $\order{\var{n}^3}$.
 \end{theorem}
 
 \begin{proof}
@@ -2559,14 +2562,14 @@ be attempts to add EIM's other than
 as the result of Earley reductions.
 By Theorem \ref{t:eim-count},
 \begin{equation*}
-\Rtablesize{\Marpa} = \order{\size{\Cw}^2},
+\Rtablesize{\Marpa} = \order{\var{n}^2},
 \end{equation*}
 and by Theorem \ref{t:tries-O-eims},
 \begin{equation*}
 \var{other-tries} \le \var{c} \times \Rtablesize{\Marpa},
 \end{equation*}
 so that
-$\var{other-tries} = \order{\size{\Cw}^2} = \order{\var{n}^2}$.
+$\var{other-tries} = \order{\var{n}^2}$.
 
 \begin{sloppypar}
 Reconsidering \var{reduction-tries}
@@ -2603,10 +2606,6 @@ we have
 \subsection{The complexity results}
 We are now in a position to show
 specific time and space complexity results.
-For these we follow the tradition by
-expressing \Vsize{\Cw},
-the length of the input,
-as \var{n}.
 
 \begin{theorem}
 For every LR-regular grammar,
