@@ -812,9 +812,10 @@ the sequence remains \On{}.
 
 The memoization targets what I have been
 calling ``potential right-recursions''.
-In Leo's original algorithm, any quasi complete dotted rule
+In Leo's original algorithm, any quasi-complete dotted rule
 was treated as a potential right-recursion.
-A dotted rule is quasi-complete if
+A dotted rule is quasi-complete
+if and only if
 for some \Vsym{lhs}, \Vstr{rhs},
 it is \Vdr{quasi} such that
 \begin{gather*}
@@ -835,20 +836,23 @@ but right-recursive.
 \end{gather*}
 That is, a rule is right recursive if and only if it can
 derive a sentential form
-whose rightmost symbol
-is the rule's LHS.
+in which the rule's LHS appears
+either as the rightmost symbol,
+or where it is followed only by nullable symbols.
 The derivation may be direct or indirect.
 
-\Marpa{}'s means Leo memoization is only used where Leo paths could be infinitely
+By restricting Leo memoization to right-recursive rules,
+\Marpa{} incurs the cost of Leo memoization only in cases
+where Leo sequences could be infinitely
 long.
 This more careful targeting of the memoization is for efficiency reasons.
 If all quasi-complete rules are memoized,
 many memoizations will be performed where
-the longest potential Leo paths is short,
+the longest potential Leo sequence is short,
 and the payoff is therefore very limited.
 One future extension might be to identify
 non-right-recursive rules
-which generate Leo paths long enough to 
+which generate Leo sequences long enough to 
 justify inclusion in the Leo memoizations.
 Such cases are unusual, but do occur.
 
