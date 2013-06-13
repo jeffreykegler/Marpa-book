@@ -118,6 +118,7 @@
 
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
+\hyphenation{memo-ization}
 
 \begin{document}
 
@@ -808,6 +809,48 @@ will be \On{},
 so that even including expansion of the Leo sequence
 for evaluation, the time and space complexity of
 the sequence remains \On{}.
+
+The memoization targets what I have been
+calling ``potential right-recursions''.
+In Leo's original algorithm, any quasi complete dotted rule
+was treated as a potential right-recursion.
+A dotted rule is quasi-complete if
+for some \Vsym{lhs}, \Vstr{rhs},
+it is \Vdr{quasi} such that
+\begin{gather*}
+\Vdr{quasi} = \Vsym{lhs} \de \Vstr{before} \mydot \Vsym{A} \cat \Vstr{nullable} \\
+\text{where} \quad \Vstr{nullable} \destar \epsilon.
+\end{gather*}
+Less formally, a dotted rule is quasi-complete if the dot is before the last non-nullable symbol.
+
+\Marpa{} applies the Leo memoizations in more restricted circumstances.
+For \Marpa{} to consider a rule \Vrule{candidate} a potential right recursion
+and memoize it, \Vrule{candiate} must be, not just quasi-complete,
+but right-recursive.
+\Vrule{candidate} is right-recursive if
+\begin{gather*}
+\Vrule{candiate} = \Vsym{lhs} \de \Vstr{rhs} \quad \text{and} \\
+\Vsym{lhs} \de \Vstr{rhs} \destar \Vstr{before} \cat \Vsym{lhs} \cat \Vstr{nullable} \\
+\text{where} \quad \Vstr{nullable} \destar \epsilon.
+\end{gather*}
+That is, a rule is right recursive if and only if it can
+derive a sentential form
+whose rightmost symbol
+is the rule's LHS.
+The derivation may be direct or indirect.
+
+\Marpa{}'s means Leo memoization is only used where Leo paths could be infinitely
+long.
+This more careful targeting of the memoization is for efficiency reasons.
+If all quasi-complete rules are memoized,
+many memoizations will be performed where
+the longest potential Leo paths is short,
+and the payoff is therefore very limited.
+One future extension might be to identify
+non-right-recursive rules
+which generate Leo paths long enough to 
+justify inclusion in the Leo memoizations.
+Such cases are unusual, but do occur.
 
 Implementing Leo memoization requires
 adding Leo reduction as a new basic operation,
