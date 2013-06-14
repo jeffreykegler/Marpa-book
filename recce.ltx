@@ -41,6 +41,8 @@
 \newcommand{\de}{\rightarrow}
 \newcommand{\destar}
     {\mathrel{\mbox{$\:\stackrel{\!{\ast}}{\Rightarrow\!}\:$}}}
+\newcommand{\deplus}
+    {\mathrel{\mbox{$\:\stackrel{\!{+}}{\Rightarrow\!}\:$}}}
 \newcommand{\derivg}[1]{\mathrel{\mbox{$\:\Rightarrow\:$}}}
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\Rightarrow\!}\:$}}}
@@ -65,6 +67,7 @@
 \newcommand{\Vlimt}[1]{\ensuremath{\var{#1}_{LIMT}}}
 \newcommand{\Eloc}[1]{\ensuremath{{#1}_{LOC}}}
 \newcommand{\Vloc}[1]{\Eloc{\var{#1}}}
+\newcommand{\Ves}[1]{\Ees{\var{#1}}}
 \newcommand{\Vrule}[1]{\ensuremath{\var{#1}_{RULE}}}
 \newcommand{\Vruleset}[1]{\ensuremath{\var{#1}_{\set{RULE}}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
@@ -336,22 +339,39 @@ of \Vrule{r}.
 This definition follows \cite{AH2002},
 which departs from tradition by disallowing an empty RHS.
 
-\Vsym{accept} is a dedicated acceptance symbol.
+The rules imply the traditional rewriting system,
+in which $\Vstr{x} \de \Vstr{y}$
+states that \Vstr{x} derives \Vstr{y} in exactly one step;
+$\Vstr{x} \deplus \Vstr{y}$
+states that \Vstr{x} derives \Vstr{y} in one or more steps;
+and $\Vstr{x} \destar \Vstr{y}$
+states that \Vstr{x} derives \Vstr{y} in zero or more steps.
+
 Without loss of generality,
-it is assumed that
-that there is a dedicated acceptance rule,
-\begin{equation*}
-\Vrule{accept} = [ \Vsym{accept} \de \Vsym{start} ],
-\end{equation*}
-such that for every rule,
-\begin{equation*}
-\Vrule{x} = [ \Vsym{lhs} \de \Vsymset{rhs} ],
-\end{equation*}
-we have both of
+it is assumed
+that there is a dedicated acceptance rule, \Vrule{accept}
+and a dedicated acceptance symbol, \Vsym{accept}
+such that
+for every rule $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
 \begin{gather*}
-\Vsym{accept} = \Vsym{lhs} \implies \Vrule{x} = \Vrule{accept} \quad \text{and} \\
-\Vsym{accept} \notin \Vsymset{rhs}.
+\Vrule{accept} = [ \Vsym{accept} \de \Vstr{rhs-accept} ], \\
+\Vsym{accept} \notin \Vstr{rhs} \quad \text{and} \\
+\Vsym{accept} = \Vsym{lhs} \implies \Vrule{accept} = \Vrule{x}.
 \end{gather*}
+
+The symbol \Vsym{x} \dfn{right-derives} \Vsym{y} if and
+only if
+\begin{gather*}
+\Vsym{x} \deplus \Vstr{before} \cat \Vsym{y} \cat \Vstr{nullable} \\
+\text{where} \quad \Vstr{nullable} \destar \epsilon.
+\end{gather*}
+If \Vsym{x} right-derives itself, \Vsym{x} is \dfn{right-recursive},
+and the derivation itself is called a \dfn{right recursion}.
+If a rule is used in a right recursion,
+that rule is \dfn{right-recursive}.
+If it is the only rule in a right recursion,
+the right recursion is \dfn{direct},
+otherwise the right recursion is \dfn{indirect}.
 
 The definition of \Cg{} does not sharply distinguish terminals
 from non-terminals.
@@ -787,6 +807,21 @@ the only role the other EIMT's in the sequence
 play in the parse is to derive the top EIMT.
 We will call these memoized sequences, Leo sequences.
 
+To quarantee that a Leo sequence is deterministic,
+\Leo{} enforced \dfn{Leo uniqueness}.
+A dotted rule \Vdr{d} is \dfn{Leo unique} in the Earley set
+at \Ves{i}
+if and only if, for every dotted rule \Vdr{d2} in an Earley item
+in \Ves{i},
+\begin{gather*}
+    \Postdot{\Vdr{d}} \neq \Lambda \quad \text{and} \\
+    \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2}.
+\end{gather*}
+In the previous definition,
+it is important to emphasize that \Vdr{d2} ranges over all the dotted
+rules of Earley set \Ves{i},
+even those which are ineligible for Leo memoization.
+
 Each Leo sequence, if fully expanded,
 would contain \On{} items,
 where \var{n} is the length of the sequence.
@@ -826,20 +861,8 @@ Less formally, a dotted rule is quasi-complete if the dot is before the last non
 
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
 For \Marpa{} to consider a rule \Vrule{candidate} a potential right recursion
-and memoize it, \Vrule{candiate} must be, not just quasi-complete,
+and memoize it, \Vrule{candidate} must be, not just quasi-complete,
 but right-recursive.
-\Vrule{candidate} is right-recursive if
-\begin{gather*}
-\Vrule{candiate} = \Vsym{lhs} \de \Vstr{rhs} \quad \text{and} \\
-\Vsym{lhs} \de \Vstr{rhs} \destar \Vstr{before} \cat \Vsym{lhs} \cat \Vstr{nullable} \\
-\text{where} \quad \Vstr{nullable} \destar \epsilon.
-\end{gather*}
-That is, a rule is right recursive if and only if it can
-derive a sentential form
-in which the rule's LHS appears
-either as the rightmost symbol,
-or where it is followed only by nullable symbols.
-The derivation may be direct or indirect.
 
 By restricting Leo memoization to right-recursive rules,
 \Marpa{} incurs the cost of Leo memoization only in cases
