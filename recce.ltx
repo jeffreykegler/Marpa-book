@@ -942,7 +942,7 @@ are \Vlimt{predecessor} and \Vsym{lhs}.
 
 Earley reduction still applies, with an additional premise:
 \begin{multline*}
-\forall \Vlimt{x} \in \Etable{\Vorig{component}} \\
+\forall \Vlimt{x} \in \Etable{\Vorig{component}} \mid \\
 	(\Vlimt{x} = [ \Vdr{x}, \Vsym{x}, \Vorig{x} ] \implies \Vsym{x} \ne \Vsym{lhs})
 \end{multline*}
 The additional premise
@@ -954,33 +954,34 @@ it is applicable.
 
 \subsection{Leo memoization}
 
-We define
-$\mymathop{Contains}(\Ves{i}, \Vdr{d})$ as
+We first define containment of a dotted rule in an Earley set as
 \begin{equation*}
 \begin{split}
-& \exists \Vah{a}, \Veim{b}, \Vorig{j} \mid 
-\Vdr{d} \in \Vah{a}   \\
-& \qquad \land \Veim{b} = [ \Vah{a}, \Vorig{j} ] 
-\land \Veim{b} \in \Ves{i}.
+& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \Vah{a}, \Veim{b}, \Vorig{j} \mid  \\
+& \qquad \Vdr{d} \in \Vah{a}  
+  \land \Veim{b} = [ \Vah{a}, \Vorig{j} ] 
+  \land \Veim{b} \in \Ves{i},
 \end{split}
 \end{equation*}
-We define $\LeoUnique{\Vdr{x},\Vloc{current}}$ as
+Leo uniqueness as
 \begin{equation*}
 \begin{split}
-& \mymathop{Contains}(\Ves{current}, \Vdr{x}) 
- \land \Penult{\Vdr{x}} \neq \Lambda \\
-& \land \forall \Vdr{y} \Bigl( \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})  \\
-& \qquad  \qquad \land \Penult{\Vdr{x}} = \Penult{Vdr{y}} \bigr) \\
-& \qquad \implies \Vdr{x} = \Vdr{y} \Bigr).
+& \LeoUnique{\Vdr{x},\Vloc{current}} \defined \mymathop{Contains}(\Ves{current}, \Vdr{x})  \\
+& \qquad \land \Penult{\Vdr{x}} \neq \Lambda \\
+& \qquad \land \forall \Vdr{y} \Bigl( \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})  \\
+& \qquad \qquad \qquad \land \Penult{\Vdr{x}} = \Penult{Vdr{y}} \bigr) \\
+& \qquad \qquad\implies \Vdr{x} = \Vdr{y} \Bigr),
 \end{split}
 \end{equation*}
-% We define
-% $\LeoEligible{\Vdr{x},\Vloc{current}}$ as
-% begin{multline*}
-% \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
-% \land \RightRecursive{\Vrule{x}} \\
-% \land \LeoUnique{\Ves{current},Vdr{x}}.
-% \end{multline*}
+and Leo eligibility as
+\begin{equation*}
+\begin{split}
+& \LeoEligible{\Vdr{x},\Vloc{current}} \defined \\
+& \qquad \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
+& \qquad \land \RightRecursive{\Vrule{x}} \\
+& \qquad \land \LeoUnique{\Ves{current},Vdr{x}}.
+\end{split}
+\end{equation*}
 
 \begin{equation*}
 \inference{
