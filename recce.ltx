@@ -1057,6 +1057,8 @@ reduction be
 \begin{equation*}
 \Veim{result} = [\Vah{result}, \Vorig{result}]
 \end{equation*}
+Let the Earley set that contains \Veim{result} be called
+\Ves{i}.
 Since \Veim{result} is the result of a Leo reduction
 we know, from the definition of a Leo reduction,
 that
@@ -1124,20 +1126,10 @@ by the AHFA construction,
 that transition must have been
 over the same transition symbol,
 call it \Vsym{transition}.
-\Leo{} reduction is required to be unique,
-in the sense that,
-for any pairing of symbol
-and Earley set,
-a Leo item
-is not created from that Earley set
-unless the symbol is the transition symbol of
-one and only one dotted rule in that Earley set.
-Call this the ``Leo uniqueness requirement".
+But Leo uniqueness applies to \Vdr{complete},
+and requires that the transition
+over \Vsym{transition} be unique in \Ves{i}.
 
-The assumption for the outer reductio is
-that
-\Vdr{complete} was the result of a Leo reduction,
-so that the Leo uniqueness requirement must hold.
 But if $\Vrule{c} \ne \Vrule{o}$,
 \Vsym{transition} was the transition symbol
 of two different dotted rules,
@@ -1406,10 +1398,12 @@ We will call the Earley set at \Vloc{i},
 The \var{transitions} table for \Ves{i}
 is built once all EIMs have been
 added to \Ves{i}.
-This can be done in
+We first look at the resource,
+excluding the processing of Leo items.
+The non-Leo processing can be done in
 a single pass over \Ves{i},
 in \Oc{} time per EIM.
-The inclusive time and space are charged to the
+Inclusive time and space are charged to the
 Earley items being examined.
 Overhead is charged to \Ves{i}.
 
@@ -1420,17 +1414,25 @@ is Leo eligible if it is Leo unique
 and its rule is right recursive.
 (If \Vsym{transition} is Leo unique in \Ves{i}, it will be the
 postdot symbol of only one rule in \Ves{i}.)
-Whether a rule is right recursive is a property of
+whether a rule is right recursive is a property of
 the grammar and can be precomputed,
-as can all the requirements for Leo uniqueness,
-except the determination that there is only one dotted
+with the resource is charged to the parse.
+Similarly, with one exception,
+all the requirements to determine Leo uniqueness
+can be precomputed,
+and the resource is charged to the parse.
+
+The one part of the testing for
+Leo eligibility that cannot be precomputed from the grammar, is
+the determination that there is only one dotted
 rule in \Ves{i} whose postdot symbol is 
 \Vsym{transition}.
 This can be done
 in a single pass over \Ves{i}
-that notes the postdot symbols encountered
-and whether any has been enountered twice.
-The cost will be \Oc{} time per EIM.
+that notes the postdot symbols as they are encountered
+and whether any is enountered twice.
+The cost will be \Oc{} time per EIM,
+and can be charged to the Earley item being examined.
 
 The actual creation of the Leo items
 can be done in \Oc{} time per Earley set,
@@ -1438,6 +1440,8 @@ since the number of Leo items is at most
 the number of symbols in
 \Vsymset{vocab},
 which is a constant depending on \Cg{}.
+The resource to create Leo items
+may be charged to the Earley set.
 
 \begin{algorithm}[h]
 \caption{Reduce one LHS symbol}
@@ -1676,7 +1680,7 @@ for unambiguous grammars is considered.
 \begin{observation}
 The space charged to an attempt
 to add a duplicate Earley item to the Earley sets
-is \Oc if links are included,
+is \Oc{} if links are included,
 zero otherwise.
 \end{observation}
 
