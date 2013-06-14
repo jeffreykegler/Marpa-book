@@ -97,6 +97,9 @@
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
 \newcommand{\Postdot}[1]{\mymathop{Postdot}(#1)}
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
+\newcommand{\RightRecursive}[1]{\mymathop{RightRecursive}(#1)}
+\newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
+\newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
 \newcommand{\myL}[1]{\mymathop{L}(#1)}
 \newcommand\Etable[1]{\ensuremath{\mymathop{table}[#1]}}
 \newcommand\bigEtable[1]{\ensuremath{\mymathop{table}\bigl[#1\bigr]}}
@@ -204,7 +207,7 @@ being scanned.
 
 Marpa allows the lexer to check its list
 of acceptable tokens before a token is scanned.
-Because rejection of tokens is easily and 
+Because rejection of tokens is easily and
 efficiently recoverable,
 the lexer is also free to take an event-driven
 approach.
@@ -253,7 +256,7 @@ Section \ref{s:pseudocode} presents the pseudocode
 for Marpa's recognizer.
 Section
 \ref{s:proof-preliminaries}
-describes notation and deals with other 
+describes notation and deals with other
 preliminaries
 to the theoretical results.
 Section
@@ -366,10 +369,12 @@ only if
 \text{where} \quad \Vstr{nullable} \destar \epsilon.
 \end{gather*}
 If \Vsym{x} right-derives itself, \Vsym{x} is \dfn{right-recursive},
+$\RightRecursive{\Vsym{x}}$.
 and the derivation itself is called a \dfn{right recursion}.
-If a rule is used in a right recursion,
-that rule is \dfn{right-recursive}.
-If it is the only rule in a right recursion,
+If a rule \Vrule{r} is used in a right recursion,
+that rule is \dfn{right-recursive},
+$\RightRecursive{\Vrule{r}}$.
+If a rule is the only rule in a right recursion,
 the right recursion is \dfn{direct},
 otherwise the right recursion is \dfn{indirect}.
 
@@ -454,7 +459,7 @@ the Marpa parser allows users to associate
 semantics with an original grammar
 that has none of the restrictions imposed
 on grammars in this \doc{}.
-The user of a Marpa parser 
+The user of a Marpa parser
 may specify any context-free grammar,
 including one with properly nullable symbols,
 empty rules, etc.
@@ -467,7 +472,7 @@ the user.
 From the user's point of view,
 the ``free-form'' of his grammar is the
 one being used for the parse,
-and the one to which 
+and the one to which
 his semantics are applied.
 
 \section{Earley's algorithm}
@@ -569,11 +574,16 @@ An Earley parser builds a table of Earley sets,
 \quad \text{where} \quad
 0 \le \Vloc{i} \le \size{\Cw}.
 \end{equation*}
+Earley sets are of type \type{ES}.
+Earley sets are often named by their location,
+so that \Ves{i} means the Earley set at \Vloc{i}.
+Especially in cases where the Earley set is not
+named by location,
+the type designator \type{ES} is often omitted to avoid clutter.
+
 At points,
 we will need to compare the Earley sets
 produced by the different recognizers.
-Earley sets are of type \type{ES}, although
-the type is often omitted to avoid clutter.
 \EVtable{\alg{Recce}}{i} will be
 the Earley set at \Vloc{i}
 in the table of Earley sets of
@@ -632,7 +642,7 @@ the current Earley set will be \Vloc{current}.
 
 Each location starts with an empty Earley set.
 For the purposes of this description of
-\Earley{}, the order of the 
+\Earley{}, the order of the
 Earley operations
 when building an
 Earley set is non-deterministic.
@@ -686,7 +696,7 @@ of the scanning operation.
 \inference{
     \begin{array}{c}
     \Veimt{component} = \bigl[
-     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ] 
+     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
     , \Vorig{component} \bigr] \\
     \Veimt{component} \in \Vtable{current} \\[3pt]
     \Veimt{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
@@ -845,7 +855,7 @@ If, at evaluation time,
 it is desirable to expand the Leo sequence,
 only those items actually involved in the parse
 need to be expanded.
-All the EIMT's of a potential right-recursion 
+All the EIMT's of a potential right-recursion
 will be in one Earley set and the number of EIMT's
 will be \On{},
 so that even including expansion of the Leo sequence
@@ -872,7 +882,7 @@ the longest potential Leo sequence is short,
 and the payoff is therefore very limited.
 One future extension might be to identify
 non-right-recursive rules
-which generate Leo sequences long enough to 
+which generate Leo sequences long enough to
 justify inclusion in the Leo memoizations.
 Such cases are unusual, but do occur.
 
@@ -885,11 +895,12 @@ the effect on complexity, and will
 do so in the complexity results later
 in this \doc{}.
 
-Implementing Leo memoization requires
+Implementing the Leo logic requires
 adding Leo reduction as a new basic operation,
 adding a new premise to the Earley reduction
 operation,
-and extending the Earley sets to include LIMT's.
+and extending the Earley sets to memoize Earley
+items as LIMT's.
 In this \doc,
 where an Earley set is one of the domains of a relation,
 the other domains will be restricted to either
@@ -903,7 +914,7 @@ the context.
 \inference{
     \begin{array}{c}
     \Veimt{component} = \bigl[
-     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ] 
+     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
     , \Vorig{component} \bigr] \\
     \Veimt{component} \in \Vtable{current} \\[3pt]
 	\Vlimt{predecessor} \in \Etable{\Vorig{component}} \\
@@ -927,6 +938,8 @@ symbol as an operand,
 so that the operands
 are \Vlimt{predecessor} and \Vsym{lhs}.
 
+\subsection{Changes to Earley reduction}
+
 Earley reduction still applies, with an additional premise:
 \begin{multline*}
 \forall \Vlimt{x} \in \Etable{\Vorig{component}} \\
@@ -938,6 +951,49 @@ where there is an LIMT with \Vsym{lhs} as its transition symbol.
 This reflects the fact that, in \Leo{},
 Leo reduction replaces Earley reduction if and only when
 it is applicable.
+
+\subsection{Leo memoization}
+
+We define
+$\mymathop{Contains}(\Ves{i}, \Vdr{d})$ as
+\begin{equation*}
+\exists \Vah{a}, \Veim{b}, \Vorig{j} \mid \\
+    \Vdr{d} \in \Vah{a} 
+    \land \Veim{b} = [ \Vah{a}, \Vorig{j} ] 
+    \land \Veim{b} \in \Ves{i}.
+\end{equation*}
+We define $\LeoUnique{\Vdr{x},Vloc{current}}$, where
+\begin{equation*}
+  \mymathop{Contains}(\Ves{current}, \Vdr{x}) 
+  \land \Penult{\Vdr{x}} \neq \Lambda
+\end{equation*}
+as, for all \Vdr{y},
+\begin{equation*}
+  (\mymathop{Contains}(\Ves{current}, \Vdr{y}) 
+   \land \Penult{\Vdr{x}} = \Penult{Vdr{y}} ) \\
+  \implies \Vdr{x} = \Vdr{y}.
+\end{equation*}
+% We define
+% $\LeoEligible{\Vdr{x},\Vloc{current}}$ as
+% begin{multline*}
+% \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
+% \land \RightRecursive{\Vrule{x}} \\
+% \land \LeoUnique{\Ves{current},Vdr{x}}.
+% \end{multline*}
+
+\begin{equation*}
+\inference{
+    % \begin{array}{c}
+    % \Veimt{component} = \bigl[
+     % \Vdr{component}, \Vorig{component} \bigr] \\
+    % \Penult{Vdr{component}} = \Vsym{transition} \\
+    % \Vdr{component} = [ \Vrule{component}, \Vorig{component} ] \\
+    % \RightRecursive{\Vrule{component}}
+    % \end{array}
+}{
+    { \Vlimt{memo} \Vlimt{memo} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] }
+}
+\end{equation*}
 
 \section{The Aycock-Horspool finite automaton}
 \label{s:AHFA}
@@ -1099,7 +1155,7 @@ then by another inner reductio that
 $\Vrule{c} = \Vrule{o}$.
 
 Assume, for the first inner reductio,
-that 
+that
 $\Vrule{c} = \Vrule{o}$.
 By the construction of an AHFA
 state,
@@ -1141,7 +1197,7 @@ which shows the second inner reductio.
 Since the assumption for
 the second inner reductio was that
 $\Vrule{c} \ne \Vrule{o}$,
-we conclude that 
+we conclude that
 $\Vrule{c} = \Vrule{o}$.
 
 By the two inner reductio's,
@@ -1153,9 +1209,9 @@ which completes the outer reduction to absurdity.
 For the outer reductio, we assumed that
 \Vdr{other}
 was a second dotted rule in \Vah{result},
-such that 
+such that
 $\Vdr{other} \neq \Vdr{complete}$.
-We can therefore conclude that 
+We can therefore conclude that
 \begin{equation*}
 \Vdr{other} \in \Vah{result} \implies \Vdr{other} = \Vdr{complete}.
 \end{equation*}
@@ -1425,7 +1481,7 @@ and the resource is charged to the parse.
 The one part of the testing for
 Leo eligibility that cannot be precomputed from the grammar, is
 the determination that there is only one dotted
-rule in \Ves{i} whose postdot symbol is 
+rule in \Ves{i} whose postdot symbol is
 \Vsym{transition}.
 This can be done
 in a single pass over \Ves{i}
@@ -1591,7 +1647,7 @@ including the time and space used
 to add or to attempt to add \Veim{predicted}.
 This means that no time or space is ever charged
 to a predicted Earley item.
-At most one attempt to add a \Veim{predicted} will 
+At most one attempt to add a \Veim{predicted} will
 be made per attempt to add a \Veim{confirmed},
 so that the total resource charged
 to each \Veim{confirmed}
@@ -1753,7 +1809,7 @@ EIMT's in the second set.
 A Marpa Earley set \EVtable{\Marpa}{i}
 is \dfn{consistent} if and only if
 all of its EIM's correspond to
-EIMT's in 
+EIMT's in
 \EVtable{\Leo}{i}.
 \end{definition}
 
@@ -1891,7 +1947,7 @@ Marpa's Earley sets are correct.
 \end{theorem}
 
 \begin{sloppypar}
-The proof 
+The proof
 is by double induction.
 The outer induction is on the Earley sets.
 The outer induction hypothesis is that all Earley sets
@@ -1908,7 +1964,7 @@ To show the outer induction step, we show first
 consistency, then completeness.
 We show consistency by
 an inner induction on the Marpa operations.
-The inner induction hypothesis is that 
+The inner induction hypothesis is that
 \EVtable{\Marpa}{i},
 as so far built,
 is consistent with respect to
@@ -2040,7 +2096,7 @@ presence of \Vlim{predecessor},
 \end{equation*}
 in the Earley set where we would look
 for the \Veim{predecessor}.
-We treat 
+We treat
 the logic to create \Vlim{predecessor} as a matter of memoization
 of the previous Earley sets,
 and its correctness follows from
@@ -2090,12 +2146,12 @@ under Marpa's operations.
 It remains to show that,
 when Marpa's operations are run as described
 in the pseudocode of Section \ref{s:pseudocode},
-that 
+that
 \EVtable{\Marpa}{i} is complete.
 To do this,
 we show that
 at least one EIM in \EVtable{\Marpa}{i}
-corresponds to every EIMT in 
+corresponds to every EIMT in
 \EVtable{\Leo}{i}.
 We will proceed by cases,
 where the cases are \Leo{} operations.
@@ -2138,7 +2194,7 @@ there is at least one corresponding Marpa Earley item.
 Therefore, \Marpa{} performs its scan operation on a complete set
 of correct operands.
 
-Comparing the Marpa pseudocode (section \ref{p:scan-op}), 
+Comparing the Marpa pseudocode (section \ref{p:scan-op}),
 with the Earley scanning operation (section \ref{d:scan})
 and using
 Observations~\ref{o:confirmed-AHFA-complete}
@@ -2202,7 +2258,7 @@ Therefore \Marpa{},
 when creating Earley items of generation $\var{n}+1$
 while traversing \EVtable{\Marpa}{i},
 can rely
-on the inner induction hypothesis for 
+on the inner induction hypothesis for
 the completeness of Earley items in
 in generation \var{n}.
 
@@ -2254,7 +2310,7 @@ in the case where there is a Leo reduction.
 In Section \ref{s:leo-consistent},
 we found that where \Leo{} would create
 the EIMT $[\Vdr{top}, \Vorig{top}]$,
-Marpa adds 
+Marpa adds
 $[\Vah{top}, \Vorig{top}]$
 such that $\Vdr{top} \in \Vah{top}$.
 Since \Vdr{top} is a completed rule,
@@ -2537,7 +2593,7 @@ Earley set \Vloc{j}.
 For Leo reduction,
 we note that by its definition,
 duplicate attempts at Leo reduction cannot occur.
-Let \var{max-AHFA} be the maximum number of 
+Let \var{max-AHFA} be the maximum number of
 dotted rules in any AHFA state.
 From the pseudo-code of Sections \ref{p:reduce-one-lhs}
 and \ref{p:leo-op},
@@ -2558,7 +2614,7 @@ Therefore, the number of attempts
 to add scans
 must be less than equal to \bigsize{\Etable{\var{j} \subtract 1}},
 the number
-of actual Earley items at 
+of actual Earley items at
 $\Vloc{j} \subtract 1$.
 \begin{equation*}
 \var{scan-tries} \le \bigsize{\Etable{\var{j} \subtract 1}}
@@ -2623,7 +2679,7 @@ a dotted rule cannot appear in every AHFA state.
 Then $\Vsize{matching} < \size{\Cfa}$,
 where \Vsize{\Cfa} is the number of AHFA states,
 a constant that depends on \Cg.
-From the foregoing, we know that 
+From the foregoing, we know that
 \begin{equation*}
 \var{reduction-tries} < \var{max-AHFA} \times \size{\Cfa} \times \bigsize{\Vtable{j}}
 \end{equation*}
@@ -2669,7 +2725,7 @@ For a context-free grammar,
 
 \begin{proof}
 By Theorem \ref{t:es-count},
-the size of the Earley set at \Vloc{i} 
+the size of the Earley set at \Vloc{i}
 is $\order{\var{i}}$.
 Summing over the length of the input,
 $\Vsize{\Cw} = \var{n}$,
@@ -2711,7 +2767,7 @@ $\var{other-tries} = \order{\var{n}^2}$.
 \begin{sloppypar}
 Reconsidering \var{reduction-tries}
 for the case of ambiguous grammars,
-we see that in the worst case the memoization of 
+we see that in the worst case the memoization of
 $\mymathop{transitions}(\Vloc{i}, \Vsym{lhs})$
 accomplishes nothing,
 because every item in
@@ -2818,7 +2874,7 @@ For any context-free grammar,
 if \Marpa{} tracks links for
 evaluation purposes,
 it runs in $\order{\var{n}^3}$ space.
-Without links, 
+Without links,
 \Marpa{} runs in
 $\order{\var{n}^2}$ space.
 \end{theorem}
@@ -2840,7 +2896,7 @@ up to this point,
 the traditional input stream model
 has been assumed.
 As implemented,
-Marpa generalizes the idea of 
+Marpa generalizes the idea of
 input streams beyond the traditional
 model.
 
@@ -2936,13 +2992,13 @@ Define $\mymathop{future}(\Vloc{i})$ as
     \begin{array}{l}
     \exists [\Vsym{t}, \Vloc{start}, \var{length}]
     \quad \text{such that} \\
-    \qquad (\var{j} = \var{start} + \var{length} \, \land 
+    \qquad (\var{j} = \var{start} + \var{length} \, \land
 	\var{start} \le \Vloc{i})
     \end{array}
 \right\rbrace.
 \end{equation*}
 The restrictions are that,
-for all \Vloc{i}, 
+for all \Vloc{i},
 $0 \le i < \size{\Cw}$,
 we require that
 there be a constant \var{c} such that
