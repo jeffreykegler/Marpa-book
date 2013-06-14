@@ -549,6 +549,7 @@ for example,
 Predicted, confirmed and completed dotted rules
 are also called, respectively,
 \dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
+A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
 
 A traditional Earley item (type \type{EIMT}) is a duple
 \[
@@ -814,10 +815,16 @@ at \Ves{i}
 if and only if, for every dotted rule \Vdr{d2} in an Earley item
 in \Ves{i},
 \begin{gather*}
-    \Postdot{\Vdr{d}} \neq \Lambda \quad \text{and} \\
+    \Penult{\Vdr{d}} \neq \Lambda \quad \text{and} \\
     \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2}.
 \end{gather*}
-In the previous definition,
+If \Vdr{d} is Leo unique, then the symbol $\Postdot{\var{d}}$ is
+also said to be \dfn{Leo unique}.
+In cases where a symbol \Vsym{transition} is Leo unique in \Ves{i},
+we can speak of the dotted rule for \Vsym{transition},
+and the rule for \Vsym{transition},
+because there can be only one of each.
+In the previous definitions,
 it is important to emphasize that \Vdr{d2} ranges over all the dotted
 rules of Earley set \Ves{i},
 even those which are ineligible for Leo memoization.
@@ -845,31 +852,21 @@ so that even including expansion of the Leo sequence
 for evaluation, the time and space complexity of
 the sequence remains \On{}.
 
-The memoization targets what I have been
-calling ``potential right-recursions''.
-In Leo's original algorithm, any quasi-complete dotted rule
+Recall that we
+call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{d} \neq \Lambda$.
+In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
-A dotted rule is quasi-complete
-if and only if
-for some \Vsym{lhs}, \Vstr{rhs},
-it is \Vdr{quasi} such that
-\begin{gather*}
-\Vdr{quasi} = \Vsym{lhs} \de \Vstr{before} \mydot \Vsym{A} \cat \Vstr{nullable} \\
-\text{where} \quad \Vstr{nullable} \destar \epsilon.
-\end{gather*}
-Less formally, a dotted rule is quasi-complete if the dot is before the last non-nullable symbol.
-
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
-For \Marpa{} to consider a rule \Vrule{candidate} a potential right recursion
-and memoize it, \Vrule{candidate} must be, not just quasi-complete,
-but right-recursive.
+For \Marpa{} to consider a dotted rule $\Vdr{candidate} = [\Vrule{candidate}, \var{i}]$ for Leo memoization,
+\Vdr{candidate} must be a penult and
+\Vrule{candidate} must be right-recursive.
 
 By restricting Leo memoization to right-recursive rules,
 \Marpa{} incurs the cost of Leo memoization only in cases
 where Leo sequences could be infinitely
 long.
 This more careful targeting of the memoization is for efficiency reasons.
-If all quasi-complete rules are memoized,
+If all penults are memoized,
 many memoizations will be performed where
 the longest potential Leo sequence is short,
 and the payoff is therefore very limited.
@@ -878,6 +875,15 @@ non-right-recursive rules
 which generate Leo sequences long enough to 
 justify inclusion in the Leo memoizations.
 Such cases are unusual, but do occur.
+
+Omission of a memoization does not affect correctness,
+so \Marpa{}'s restriction of Leo memoization
+leaves the correctness results of Leo\cite{Leo1991} intact.
+However,
+we will need to account more carefully for
+the effect on complexity, and will
+do so in the complexity results later
+in this \doc{}.
 
 Implementing Leo memoization requires
 adding Leo reduction as a new basic operation,
@@ -1378,7 +1384,9 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 \begin{algorithmic}[1]
 \Procedure{Memoize transitions}{\Vloc{i}}
 \For{every \Vsym{postdot}, a postdot symbol of $\Vtable{i}$}
-\If{postdot transition is unique by rule}
+\If{\Vsym{postdot} is Leo eligible}
+\State Note: \Vsym{postdot} is ``Leo eligible" if it is
+\State \hspace\algorithmicindent  Leo unique and its rule is right recursive
 \State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
 \State \hspace\algorithmicindent to an LIM
 \Else
@@ -1393,19 +1401,39 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 
 \subsection{Memoize transitions}
 
-The \var{transitions} table for Earley set \Vloc{i}
+We will call the Earley set at \Vloc{i},
+\Ves{i}.
+The \var{transitions} table for \Ves{i}
 is built once all EIMs have been
-added to Earley set \Vloc{i}.
+added to \Ves{i}.
 This can be done in
-a single pass over Earley set \Vloc{i},
+a single pass over \Ves{i},
 in \Oc{} time per EIM.
 The inclusive time and space are charged to the
 Earley items being examined.
-Overhead is charged to the Earley set at \Vloc{i}.
+Overhead is charged to \Ves{i}.
 
 In setting up the \var{transitions} table for the current Earley set,
 the Leo items must be created.
-This can be done in \Oc{} time per Earley set,
+A transition symbol \Vsym{transition}
+is Leo eligible if it is Leo unique
+and its rule is right recursive.
+(If \Vsym{transition} is Leo unique in \Ves{i}, it will be the
+postdot symbol of only one rule in \Ves{i}.)
+Whether a rule is right recursive is a property of
+the grammar and can be precomputed,
+as can all the requirements for Leo uniqueness,
+except the determination that there is only one dotted
+rule in \Ves{i} whose postdot symbol is 
+\Vsym{transition}.
+This can be done
+in a single pass over \Ves{i}
+that notes the postdot symbols encountered
+and whether any has been enountered twice.
+The cost will be \Oc{} time per EIM.
+
+The actual creation of the Leo items
+can be done in \Oc{} time per Earley set,
 since the number of Leo items is at most
 the number of symbols in
 \Vsymset{vocab},
