@@ -2843,17 +2843,18 @@ Let the constant \var{c} be the number
 of dotted rules.
 Suppose, for a reductio, that a Leo sequence is of length
 $\var{c}+1$, but does not contain a right recursion.
-The same dotted rule must appear twice in the Leo sequence.
 
-Translating the sequence into a derivation,
-where the duplicated dotted rule is $\Vdr{d} = [ \Vsym{A} \de \Vstr{rhs}, \Vloc{j} ]$,
-we obtain
+The same dotted rule must appear twice in the Leo sequence.
+Where the duplicated dotted rule is $\Vdr{d} = [ \Vsym{A} \de \Vstr{rhs}, \var{dot-position} ]$,
+part of the derivation implied by the Leo sequence
+must take the form
 \begin{equation*}
 \begin{split}
-& \Vsym{A} \destar \Vstr{rhs} \\
-& \qquad \destar \Vstr{pre} \cat \Vsym{A} \cat \Vstr{nullable} \\
-& \qquad \destar \Vstr{pre} \cat \Vstr{rhs} \\
-& \text{where} \quad \Vstr{nullable} \destar \epsilon.
+& \Vstr{pre1} \cat \Vsym{A} \cat \Vstr{nullable1} \destar \Vstr{pre1} \cat \Vstr{rhs} \\
+& \qquad \destar \Vstr{pre1} \cat \Vstr{pre2} \cat \Vsym{A} \cat \Vstr{nullable2} \\
+& \qquad \destar \Vstr{pre1} \cat \Vstr{pre2} \cat \Vstr{rhs} \\
+& \text{where} \quad \Vstr{nullable1} \destar \epsilon \\
+& \text{and} \quad \Vstr{nullable2} \destar \epsilon.
 \end{split}
 \end{equation*}
 But note that in this derivation,
@@ -2897,7 +2898,7 @@ with \var{c1} others,
 where \var{c1} is a constant that depends on \Cg.
 By Theorem \ref{t:marpa-O-leo},
 when EIMT's are replaced with EIM's,
-the number of EIM's \Marpa{} required is at worst,
+the number of EIM's \Marpa{} requires is at worst,
 $\var{c2}$ times the number of EIMT's,
 where \var{c2} is a constant that depends on \Cg.
 Therefore the number of EIM's per Earley set
@@ -2958,10 +2959,14 @@ By Theorem \ref{t:O1-time-per-eim},
 and Theorem \ref{t:ambiguous-tries}.
 \end{proof}
 
+In what follows,
+traditionally only the $\order{\var{n}^2}$ result has been stated.
+We also state a result that includes the space required to track links
+because the links are necessary for evaluation,
+which in actual practice is usually the objective of parsing.
 \begin{theorem}
 For any context-free grammar,
-if \Marpa{} tracks links for
-evaluation purposes,
+if \Marpa{} tracks links,
 it runs in $\order{\var{n}^3}$ space.
 Without links,
 \Marpa{} runs in
@@ -2969,12 +2974,14 @@ $\order{\var{n}^2}$ space.
 \end{theorem}
 
 \begin{proof}
-The bound including links is
-by Theorem \ref{t:O1-links-per-eim},
-and Theorem \ref{t:ambiguous-tries}.
 The bound without links is
 by Theorem \ref{t:O1-space-per-eim}
 and Theorem \ref{t:eim-count}.
+To include links, we require constant space to record
+every attempt to add an Earley item.
+The bound of $\order{\var{n}^3}$ is obtained
+from Theorem \ref{t:O1-links-per-eim},
+and Theorem \ref{t:ambiguous-tries}.
 \end{proof}
 
 \section{The Marpa Input Model}
