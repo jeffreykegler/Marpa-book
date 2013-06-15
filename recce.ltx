@@ -2831,6 +2831,40 @@ we have
 \end{sloppypar}
 \end{proof}
 
+\begin{theorem}\label{t:leo-right-recursion}
+Either a Leo sequence contains a right recursion
+or its length is less than \var{c},
+where \var{c} is a constant which depends
+on the grammar.
+\end{theorem}
+
+\begin{proof}
+Let the constant \var{c} be the number
+of dotted rules.
+Suppose, for a reductio, that a Leo sequence is of length
+$\var{c}+1$, but does not contain a right recursion.
+The same dotted rule must appear twice in the Leo sequence.
+
+Translating the sequence into a derivation,
+where the duplicated dotted rule is $\Vdr{d} = [ \Vsym{A} \de \Vstr{rhs}, \Vloc{j} ]$,
+we obtain
+\begin{equation*}
+\begin{split}
+& \Vsym{A} \destar \Vstr{rhs} \\
+& \qquad \destar \Vstr{pre} \cat \Vsym{A} \cat \Vstr{nullable} \\
+& \qquad \destar \Vstr{pre} \cat \Vstr{rhs} \\
+& \text{where} \quad \Vstr{nullable} \destar \epsilon.
+\end{split}
+\end{equation*}
+But note that in this derivation,
+\Vsym{A} right-derives itself,
+so that the derivation is, by definition,
+a right recursion.
+This is contrary to the assumption for the reductio.
+We therefore conclude that the length of a Leo sequence with no
+right recursion must be less than or equal to \var{c}.
+\end{proof}
+
 \subsection{The complexity results}
 We are now in a position to show
 specific time and space complexity results.
@@ -2847,25 +2881,45 @@ the number of traditional Earley items produced by
 \begin{equation*}
 \order{\Vsize{\Cw}} = \order{\var{n}}.
 \end{equation*}
+\Marpa{} may produce more Earley items than \Leo{}
+for two reasons:
+First, \Marpa{} does not apply Leo memoization to Leo sequences
+which do not contain right recursion.
+Second, \Marpa{}'s Earley items group dotted rules into
+states and this has the potential to increase the number
+of Earley items.
+
+By Theorem \ref{t:leo-right-recursion},
+not memoizing right recursion may, worst case,
+replace one EIMT in
+\Leo{}
+with \var{c1} others,
+where \var{c1} is a constant that depends on \Cg.
 By Theorem \ref{t:marpa-O-leo},
-the number of EIM's \Marpa{} will require for the same parse
-is, worst case, $\var{c} \times \order{\var{n}}$,
-where \var{c} is a constant that depends on \Cg.
+when EIMT's are replaced with EIM's,
+the number of EIM's \Marpa{} required is at worst,
+$\var{c2}$ times the number of EIMT's,
+where \var{c2} is a constant that depends on \Cg.
+Therefore the number of EIM's per Earley set
+for an LR-regular grammar in a \Marpa{} parse
+is less than
+\begin{equation*}
+    \var{c1} \times \var{c2} \times \order{\var{n}} = \order{\var{n}}.
+\end{equation*}
+
 LR-regular grammar are unambiguous, so that
 by Theorem \ref{t:tries-O-eims},
 the number of attempts that \Marpa{} will make to add
-EIM's is on the order of
-\begin{equation*}
-    \var{d} \times \var{c} \times \order{\var{n}}
-\end{equation*}
-where \var{d} is a constant that depends on \Cg.
+EIM's is less than or equal to
+\var{c3} times the number of EIM's,
+where \var{c3} is a constant that depends on \Cg.
 Therefore,
 by Theorems \ref{t:O1-time-per-eim}
 and \ref{t:O1-links-per-eim},
 the time and space complexity of \Marpa{} for LR-regular
 grammars is
 \begin{equation*}
-    \var{d} \times \var{c} \times \order{\var{n}}
+    \var{c3} \times \order{\var{n}}
     = \order{\var{n}}.\qedhere
 \end{equation*}
 \end{proof}
