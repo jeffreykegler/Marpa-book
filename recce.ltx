@@ -97,6 +97,7 @@
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
 \newcommand{\Postdot}[1]{\mymathop{Postdot}(#1)}
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
+\newcommand{\LHS}[1]{\mymathop{LHS}(#1)}
 \newcommand{\RightRecursive}[1]{\mymathop{Right-Recursive}(#1)}
 \newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
 \newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
@@ -508,6 +509,8 @@ then
 %
 \begin{gather*}
 %
+\LHS{\Vdr{x}} \defined \Vsym{A} \\
+%
 \Postdot{\Vdr{x}} \defined
 \begin{cases}
 \Vsym{next}, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \mydot \var{next} \cat \var{post}]$} \\
@@ -523,13 +526,17 @@ then
 %
 \Penult{\Vdr{x}} \defined
 \begin{cases}
-\Vsym{next}, \quad
-\text{if $\Postdot{\Vdr{x}} = \var{next}$} \\
-\qquad \text{and $\Vstr{post} \destar \epsilon$} \\
-\text{$\Lambda$, otherwise}
+\Vsym{next}, \quad \text{if} \\
+\qquad \Postdot{\Vdr{x}} = \var{next} \\
+\qquad \land \quad \Vstr{post} \destar \epsilon \\
+\qquad \land \quad \neg (\Vsym{next} \destar \epsilon) \\
+\Lambda, \quad \text{otherwise}
 \end{cases}
+%
 \end{gather*}
 
+Note that $\Penult{\Vdr{x}}$
+is never a nullable symbol.
 The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
