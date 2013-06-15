@@ -989,18 +989,44 @@ and Leo eligibility as
 & \qquad \land \LeoUnique{\Ves{current},\Vdr{x}}.
 \end{split}
 \end{equation*}
+For convenience, we define a relation that is
+true if \Vlimt{pred} is the LIMT predecessor of
+an EIMT, and false otherwise:
+\begin{equation*}
+\begin{split}
+& \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \defined \\
+& \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
+& \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
+& \qquad \land \Vlimt{pred} \in \Ves{bottom-origin}
+\end{split}
+\end{equation*}
 
+We are now ready to define an inference rule which holds if
+a LIMT predecessor can be found for an EIMT \Veimt{bottom}
 \begin{equation*}
 \inference{
-    % \begin{array}{c}
-    % \Veimt{component} = \bigl[
-     % \Vdr{component}, \Vorig{component} \bigr] \\
-    % \Penult{Vdr{component}} = \Vsym{transition} \\
-    % \Vdr{component} = [ \Vrule{component}, \Vorig{component} ] \\
-    % \RightRecursive{\Vrule{component}}
-    % \end{array}
+    \begin{array}{c}
+    \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
+    \Veimt{bottom} = [ \Vdr{bottom}, Vloc{bottom} ] \\
+    \Veimt{bottom} \in \Ves{current} \\
+    \LeoEligible{\Vdr{bottom}}
+    \end{array}
 }{
-    \bigl\{ \Vlimt{memo} \bigm| \Vlimt{memo} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] \bigr\}
+    \bigset{ [ \Vdr{pred}, \Penult{\Vdr{bottom}}, \Vorig{pred} ] }
+}
+\end{equation*}
+and another which holds if there is no predecessor LIMT
+for \Veimt{bottom},
+\begin{equation*}
+\inference{
+    \begin{array}{c}
+    \neg \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
+    \Veimt{bottom} = [ \Vdr{bottom}, Vloc{bottom} ] \\
+    \Veimt{bottom} \in \Ves{current} \\
+    \LeoEligible{\Vdr{bottom}}
+    \end{array}
+}{
+    \bigset{ [ \Next(Vdr{bottom}), \LHS{\Vdr{bottom}}, \Vloc{bottom} ] }
 }
 \end{equation*}
 
