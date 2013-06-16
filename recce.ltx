@@ -573,6 +573,7 @@ then
 %
 \end{gather*}
 
+A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
 Note that $\Penult{\Vdr{x}}$
 is never a nullable symbol.
 The \dfn{initial dotted rule} is
@@ -599,7 +600,6 @@ for example,
 Predicted, confirmed and completed dotted rules
 are also called, respectively,
 \dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
-A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
 
 A traditional Earley item (type \type{EIMT}) is a duple
 \[
@@ -622,9 +622,9 @@ An Earley parser builds a table of Earley sets,
 Earley sets are of type \type{ES}.
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
-Especially in cases where the Earley set is not
-named by location,
-the type designator \type{ES} is often omitted to avoid clutter.
+The type designator \type{ES} is often omitted to avoid clutter,
+especially in cases where the Earley set is not
+named by location.
 
 At points,
 we will need to compare the Earley sets
@@ -638,7 +638,7 @@ For example,
 in \Marpa's table of Earley sets.
 In contexts where it is clear which recognizer is
 intended,
-\Vtable{k} will be Earley set \Vloc{k}
+\Vtable{k}, or \Ves{k}, will symbolize Earley set \Vloc{k}
 in that recognizer's table of Earley sets.
 If \Ees{\var{working}} is an Earley set,
 $\size{\Ees{\var{working}}}$ is the number of Earley items
@@ -657,16 +657,12 @@ of Earley items in all the Earley sets of
 a \Marpa{} parse.
 
 Recall that
+there was a unique acceptance symbol,
+\Vsym{accept}, in \Cg{}.
+The input \Cw{} is accepted if and only if,
+for some \Vstr{rhs},
 \begin{equation*}
-\Vrule{accept} \defined [ \Vsym{accept} \de \Vsym{start} ].
-\end{equation*}
-Let
-\begin{equation*}
-\Vdr{accept} \defined [ \Vsym{accept} \de \Vsym{start} \mydot ].
-\end{equation*}
-The input \Cw{} is accepted if and only if
-\begin{equation*}
-[\Vdr{accept}, 0] \in \bigEtable{\Vsize{\Cw}}
+\bigl[[\Vsym{accept} \de \Vstr{rhs} \mydot], 0\bigr] \in \bigEtable{\Vsize{\Cw}}
 \end{equation*}
 
 \section{Operations of the Earley algorithm}
