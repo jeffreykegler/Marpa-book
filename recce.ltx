@@ -303,16 +303,16 @@ Type names are often used in the text
 as a convenient way to refer to
 their type.
 
-Where \Vsymset{abcde} is non-empty set of symbols,
-let $\var{abcde}^\ast$ be the set of all strings
+Where \Vsymset{vocab} is non-empty set of symbols,
+let $\var{vocab}^\ast$ be the set of all strings
 (type \type{STR}) formed
 from those symbols.
 Where \Vstr{s} is a string,
 let \size{\Vstr{s}} be its length, counted in symbols.
-Let $\var{abcde}^+$ be
+Let $\var{vocab}^+$ be
 \begin{equation*}
 \bigl\{ \Vstr{x}
-\bigm| \var{x} \in \Vsymset{abcde} \land \Vsize{\Vstr{x}} > 0
+\bigm| \Vstr{x} \in \var{vocab}* \land \Vsize{\Vstr{x}} > 0
 \bigr\}.
 \end{equation*}
 
@@ -323,10 +323,9 @@ where \Cg{} is the 3-tuple
 \begin{equation*}
     (\Vsymset{vocab}, \var{rules}, \Vsym{accept}).
 \end{equation*}
-Here \Vsymset{vocab} is a set of symbols,
-$\Vsym{accept} \in \var{vocab}$.
+Here $\Vsym{accept} \in \var{vocab}$.
 Call the language of \var{g}, $\myL{\Cg}$,
-where $\myL{\Cg} \in \var{vocab}^\ast$.
+where $\myL{\Cg} \subseteq \var{vocab}^\ast$.
 
 \Vruleset{rules} is a set of rules (type \type{RULE}),
 where a rule is a duple
@@ -337,7 +336,7 @@ such that
 \quad \Vstr{rhs} \in \var{vocab}^+.
 \end{equation*}
 \Vsym{lhs} is referred to as the left hand side (LHS)
-of \Vrule{r}.
+of \Vrule{r}, $\LHS{\Vrule{r}}$.
 \Vstr{rhs} is referred to as the right hand side (RHS)
 of \Vrule{r}.
 This definition follows \cite{AH2002},
@@ -351,17 +350,32 @@ states that \Vstr{x} derives \Vstr{y} in one or more steps;
 and $\Vstr{x} \destar \Vstr{y}$
 states that \Vstr{x} derives \Vstr{y} in zero or more steps.
 
-Without loss of generality,
+We say that symbol \Vsym{x} is \dfn{nullable} if and only if
+$\Vsym{x} \destar \epsilon$.
+\Vsym{x} is \dfn{nonnull} if and only if it is not nullable.
+Following Aycock and Horspool\cite{AH2002},
+all nullable symbols in grammar \Cg are nulling -- every symbol
+which can derive the null string always derives the null string.
+It is shown in \cite{AH2002} how to do this without losing generality
+or the ability to efficiently evaluate a semantics that is
+defined in terms of an original grammar that includes symbols which
+are both nullable and non-nulling,
+empty rules, etc.
+
+Also without loss of generality,
 it is assumed
 that there is a dedicated acceptance rule, \Vrule{accept}
 and a dedicated acceptance symbol, \Vsym{accept}
 such that
-for every rule $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
-\begin{gather*}
-\Vrule{accept} = [ \Vsym{accept} \de \Vstr{rhs-accept} ], \\
-\Vsym{accept} \notin \Vstr{rhs} \quad \text{and} \\
-\Vsym{accept} = \Vsym{lhs} \implies \Vrule{accept} = \Vrule{x}.
-\end{gather*}
+for all \Vrule{x}, where $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
+\begin{equation*}
+\begin{split}
+& \exists \Vstr{rhs-accept} \mid \\
+& \qquad \Vrule{accept} = [ \Vsym{accept} \de \Vstr{rhs-accept} ] \\
+& \qquad \land \Vsym{accept} \notin \Vstr{rhs} \\
+& \qquad \land (\Vsym{accept} = \Vsym{lhs} \implies \Vrule{accept} = \Vrule{x}).
+\end{split}
+\end{equation*}
 
 The symbol \Vsym{x} \dfn{right-derives} \Vsym{y} if and
 only if
