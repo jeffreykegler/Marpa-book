@@ -90,7 +90,6 @@
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\sym{\Cw[\var{#1}]}}}
-\newcommand{\CEw}[1]{\ensuremath{\sym{\Cw[#1]}}}
 \newcommand{\Crules}{\var{rules}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
 \newcommand{\Next}[1]{\mymathop{Next}(#1)}
@@ -676,8 +675,8 @@ is the set of the Earley items
 that is that operation's \dfn{result}.
 The Earley sets correspond to parse locations,
 and for any Earley operation there is a
-current parse location and
-therefore a current Earley set.
+current parse location, \Vloc{current}, and
+a current Earley set, \Ves{current}.
 In this section,
 the current Earley set will be \Vloc{current}.
 
@@ -715,10 +714,12 @@ place in Earley set 0.
 \inference{
     \begin{array}{c}
 	\Vloc{current} > 0 \\
-	\var{token} = \CEw{\var{current} \subtract 1}
+	\Vloc{previous} = \Vloc{current} \subtract 1
 	\\[3pt]
-	\Veimt{predecessor} \in \Etable{\var{current} \subtract 1} \\
+	\Vsym{token} = \Cw\bigl[\Vloc{previous}\bigr]
+	\\[3pt]
 	\Veimt{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+	\Veimt{predecessor} \in \Ves{previous} \\
 	\Postdot{\Vdr{before}} = \Vsym{token}
     \end{array}
 }{
