@@ -378,30 +378,44 @@ for all \Vrule{x}, where $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
 \end{split}
 \end{equation*}
 
-The rightmost non-null symbol of a string,
+
+We define rightmost non-null symbol of a string and of a rule
+as
 \begin{equation*}
 \begin{split}
-\RightNN{\Vstr{x}} \defined & \Vsym{rnn} \mid \\
-& \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
-& \land \Vstr{post} \destar \epsilon \\
-& \land \neg \Vsym{rnn} \destar \epsilon.
+& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \mid \\
+& \qquad \text{for some} \quad \Vstr{pre}, \Vstr{post}, \\
+& \qquad \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
+& \qquad \land \Vstr{post} \destar \epsilon \\
+& \qquad \land \neg \Vsym{rnn} \destar \epsilon,
+\end{split}
+\end{equation*}
+and the rightmost non-null symbol of a rule as
+\begin{equation*}
+\begin{split}
+& \RightNN{\Vrule{x}} \defined \Vsym{rnn} \mid \\
+& \qquad \text{for some} \quad \Vsym{lhs}, \Vstr{rhs} \\
+& \qquad \Vrule{x} = [ \Vsym{lhs} \de \Vstr{rhs} ] \\
+& \qquad \land \Vsym{rnn} = \RightNN{\Vstr{rhs}}.
 \end{split}
 \end{equation*}
 The symbol \Vsym{x} \dfn{right-derives} \Vsym{y} if and
 only if
-\begin{gather*}
-\Vsym{x} \deplus \Vstr{before} \cat \Vsym{y} \cat \Vstr{nullable} \\
-\text{where} \quad \Vstr{nullable} \destar \epsilon.
-\end{gather*}
-If \Vsym{x} right-derives itself, \Vsym{x} is \dfn{right-recursive},
-$\RightRecursive{\Vsym{x}}$.
-and the derivation itself is called a \dfn{right recursion}.
-If a rule \Vrule{r} is used in a right recursion,
-that rule is \dfn{right-recursive},
-$\RightRecursive{\Vrule{r}}$.
-If a rule is the only rule in a right recursion,
-the right recursion is \dfn{direct},
-otherwise the right recursion is \dfn{indirect}.
+$\Vsym{x} \deplus \Vstr{new}$ and
+$\Vsym{y} = \RightNN{\Vstr{new}}$.
+Symbol \Vsym{x} is \dfn{right recursive},
+$\RightRecursive{\Vsym{x}}$,
+if and only if \Vsym{x}
+right-derives itself.
+A rule \Vrule{x} is \dfn{right recursive},
+$\RightRecursive{\Vrule{x}}$,
+if and only if
+$\LHS{\Vrule{x}} = \RightNN{\Vrule{x}}$
+or $\RightNN{\Vrule{x}}$ right-derives $\LHS{\Vrule{x}}$.
+A derivation is a \dfn{right recursion} if and only if
+the same symbol is
+the rightmost non-nulling symbol of two different
+derivation steps.
 
 The definition of \Cg{} does not sharply distinguish terminals
 from non-terminals.
@@ -417,7 +431,7 @@ as a result of these definitions,
 sentential forms will be of type \type{STR}.
 
 Let the input to
-the parse be \Cw{} such that $\Cw \in \var{vocab}^\ast$.
+the parse be \Cw{} such that $\Cw \in \var{vocab}^+$.
 Locations in the input will be of type \type{LOC}.
 Let \Vsize{w} be the length of the input, counted in symbols.
 When we state our complexity results later,
@@ -426,6 +440,15 @@ where $\var{n} = \Vsize{w}$.
 Let \CVw{i} be character \var{i}
 of the input,
 $0 \le \Vloc{i} < \Vsize{w}$.
+
+The alert reader may have noticed that the previous definition
+of \Cw{} did not allow zero-length inputs.
+To simplify the mathematics, we exclude null parses
+and trivial grammars from consideration.
+In its implementations,
+the Marpa parser
+deals with null parses and trivial grammars as special cases.
+(Trivial grammars are those that recognize only the null string.)
 
 In this \doc{},
 \Earley{} will refer to the Earley's original
@@ -446,22 +469,13 @@ when parsing \Cg{}.
 
 We have already noted
 that no rules of \Cg{}
-have a zero-length RHS.
-Further, no rule can be nullable
-and all symbols must be either nulling or non-nullable --
-no symbol can be a proper nullable.
+have a zero-length RHS,
+and that all symbols must be either nulling or non-nullable.
 These restrictions follow Aycock and Horspool\cite{AH2002}.
 The elimination of empty rules and proper nullables
 is done by rewriting the grammar.
 \cite{AH2002} shows how to do this
 without loss of generality.
-
-\cite{AH2002} allowed
-a single empty start rule
-to deal with null parses.
-Marpa eliminates the need for empty rules in its grammars
-by treating null parses and trivial grammars as special cases.
-(Trivial grammars are those that recognize only the null string.)
 
 Because Marpa claims to be a practical parser,
 it is important to emphasize
