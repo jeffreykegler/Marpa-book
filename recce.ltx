@@ -99,6 +99,7 @@
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
 \newcommand{\LHS}[1]{\mymathop{LHS}(#1)}
 \newcommand{\RightRecursive}[1]{\mymathop{Right-Recursive}(#1)}
+\newcommand{\RightNN}[1]{\mymathop{Right-NN}(#1)}
 \newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
 \newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
 \newcommand{\myL}[1]{\mymathop{L}(#1)}
@@ -318,7 +319,7 @@ Let $\var{vocab}^+$ be
 
 In this \doc{} we use,
 without loss of generality,
-the grammar \Cg,
+the grammar \Cg{},
 where \Cg{} is the 3-tuple
 \begin{equation*}
     (\Vsymset{vocab}, \var{rules}, \Vsym{accept}).
@@ -354,7 +355,7 @@ We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
 \Vsym{x} is \dfn{nonnull} if and only if it is not nullable.
 Following Aycock and Horspool\cite{AH2002},
-all nullable symbols in grammar \Cg are nulling -- every symbol
+all nullable symbols in grammar \Cg{} are nulling -- every symbol
 which can derive the null string always derives the null string.
 It is shown in \cite{AH2002} how to do this without losing generality
 or the ability to efficiently evaluate a semantics that is
@@ -377,6 +378,15 @@ for all \Vrule{x}, where $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
 \end{split}
 \end{equation*}
 
+The rightmost non-null symbol of a string,
+\begin{equation*}
+\begin{split}
+\RightNN{\Vstr{x}} \defined & \Vsym{rnn} \mid \\
+& \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
+& \land \Vstr{post} \destar \epsilon \\
+& \land \neg \Vsym{rnn} \destar \epsilon.
+\end{split}
+\end{equation*}
 The symbol \Vsym{x} \dfn{right-derives} \Vsym{y} if and
 only if
 \begin{gather*}
@@ -429,7 +439,7 @@ as described in~\cite{AH2002}.
 this \doc{}.
 Where $\alg{Recce}$ is a recognizer,
 $\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
-when parsing \Cg.
+when parsing \Cg{}.
 
 \section{Rewriting the grammar}
 \label{s:rewrite}
@@ -1715,7 +1725,7 @@ The maximum number of Earley items that must be tracked
 in each PSL is
 the number of AHFA states,
 \Vsize{\Cfa},
-which is a constant depending on \Cg.
+which is a constant depending on \Cg{}.
 \end{sloppypar}
 
 It would take more than \Oc{} time
@@ -1981,7 +1991,7 @@ so that
 The possibilities for \Vah{x} are finite,
 since the number of AHFA states is a constant,
 $\size{\Cfa}$,
-which depends on \Cg.
+which depends on \Cg{}.
 Since duplicate EIM's are never added to an Earley set,
 the maximum size of Earley set \Vloc{i} is therefore
 \begin{equation*}
@@ -2727,7 +2737,7 @@ Even in the worst case,
 a dotted rule cannot appear in every AHFA state.
 Then $\Vsize{matching} < \size{\Cfa}$,
 where \Vsize{\Cfa} is the number of AHFA states,
-a constant that depends on \Cg.
+a constant that depends on \Cg{}.
 From the foregoing, we know that
 \begin{equation*}
 \var{reduction-tries} < \var{max-AHFA} \times \size{\Cfa} \times \bigsize{\Vtable{j}}
@@ -2745,13 +2755,13 @@ and then adding
 \var{initial-tries},
 is tedious.
 But since \var{max-AHFA} and \size{\Cfa} are both constants
-that depend only on \Cg,
+that depend only on \Cg{},
 it is clear that there is a constant \var{c}
 such that
 \begin{equation*}
 \var{tries} < \var{c} \times \Rtablesize{\Marpa}
 \end{equation*}
-where \var{c} is a constant that depends on \Cg.\qedhere
+where \var{c} is a constant that depends on \Cg{}.\qedhere
 \end{sloppypar}
 \end{proof}
 
@@ -2909,12 +2919,12 @@ not memoizing right recursion may, worst case,
 replace one EIMT in
 \Leo{}
 with \var{c1} others,
-where \var{c1} is a constant that depends on \Cg.
+where \var{c1} is a constant that depends on \Cg{}.
 By Theorem \ref{t:marpa-O-leo},
 when EIMT's are replaced with EIM's,
 the number of EIM's \Marpa{} requires is at worst,
 $\var{c2}$ times the number of EIMT's,
-where \var{c2} is a constant that depends on \Cg.
+where \var{c2} is a constant that depends on \Cg{}.
 Therefore the number of EIM's per Earley set
 for an LR-regular grammar in a \Marpa{} parse
 is less than
@@ -2927,7 +2937,7 @@ by Theorem \ref{t:tries-O-eims},
 the number of attempts that \Marpa{} will make to add
 EIM's is less than or equal to
 \var{c3} times the number of EIM's,
-where \var{c3} is a constant that depends on \Cg.
+where \var{c3} is a constant that depends on \Cg{}.
 Therefore,
 by Theorems \ref{t:O1-time-per-eim}
 and \ref{t:O1-links-per-eim},
@@ -2953,7 +2963,7 @@ EIM's is
 \begin{equation*}
 \var{c} \times \order{\var{n}^2},
 \end{equation*}
-where \var{c} is a constant that depends on \Cg.
+where \var{c} is a constant that depends on \Cg{}.
 Therefore,
 by Theorems \ref{t:O1-time-per-eim}
 and \ref{t:O1-links-per-eim},
