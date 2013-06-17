@@ -856,14 +856,25 @@ We will call these memoized sequences, Leo sequences.
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
+Define containment of a dotted rule in a Earley set
+of EIMT's as
+\begin{equation*}
+\begin{split}
+& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \Veimt{b}, \Vorig{j} \mid  \\
+& \qquad \Veimt{b} = [ \Vdr{d}, \Vorig{j} ] 
+  \land \Veimt{b} \in \Ves{i},
+\end{split}
+\end{equation*}
 A dotted rule \Vdr{d} is \dfn{Leo unique} in the Earley set
 at \Ves{i}
-if and only if, for every dotted rule \Vdr{d2} in an Earley item
-in \Ves{i},
-\begin{gather*}
-    \Penult{\Vdr{d}} \neq \Lambda \quad \text{and} \\
-    \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2}.
-\end{gather*}
+if and only if,
+\begin{equation*}
+\begin{split}
+&    \Penult{\Vdr{d}} \neq \Lambda \\
+&    \land \forall \Vdr{2} \mymathop{Contains}(\Ves{i}, \Vdr{dr2}) \implies \\
+&    \qquad \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2}.
+\end{split}
+\end{equation*}
 If \Vdr{d} is Leo unique, then the symbol $\Postdot{\var{d}}$ is
 also said to be \dfn{Leo unique}.
 In cases where a symbol \Vsym{transition} is Leo unique in \Ves{i},
@@ -990,23 +1001,22 @@ it is applicable.
 
 \subsection{Leo memoization}
 
-We first define containment of a dotted rule in an Earley set as
+We define uniqueness of a penult in an Earley set as
 \begin{equation*}
 \begin{split}
-& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \Vah{a}, \Veim{b}, \Vorig{j} \mid  \\
-& \qquad \Vdr{d} \in \Vah{a}  
-  \land \Veim{b} = [ \Vah{a}, \Vorig{j} ] 
-  \land \Veim{b} \in \Ves{i},
+& \mymathop{Penult-Unique}(\Vsym{penult},\Ves{i}) \defined \\
+& \qquad \forall \Vdr{y} \Bigl( \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})  \\
+& \qquad \qquad \land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
+& \qquad \qquad \implies \Vdr{x} = \Vdr{y} \Bigr),
 \end{split}
 \end{equation*}
+We define
 Leo uniqueness as
 \begin{equation*}
 \begin{split}
 & \LeoUnique{\Vdr{x},\Vloc{current}} \defined \mymathop{Contains}(\Ves{current}, \Vdr{x})  \\
 & \qquad \land \Penult{\Vdr{x}} \neq \Lambda \\
-& \qquad \land \forall \Vdr{y} \Bigl( \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})  \\
-& \qquad \qquad \qquad \land \Penult{\Vdr{x}} = \Penult{Vdr{y}} \bigr) \\
-& \qquad \qquad\implies \Vdr{x} = \Vdr{y} \Bigr),
+& \qquad \land \mymathop{Penult-Unique}({\Penult{\Vdr{x}}}, \Ves{current})
 \end{split}
 \end{equation*}
 and Leo eligibility as
