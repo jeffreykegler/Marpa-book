@@ -378,43 +378,34 @@ for all \Vrule{x}, where $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
 \end{equation*}
 
 
-We define rightmost non-null symbol of a string and of a rule
+We define rightmost non-null symbol of a string
 as
 \begin{equation*}
 \begin{split}
-& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \mid \\
-& \qquad \text{for some} \quad \Vstr{pre}, \Vstr{post}, \\
-& \qquad \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
-& \qquad \land \Vstr{post} \destar \epsilon \\
-& \qquad \land \neg \Vsym{rnn} \destar \epsilon,
+& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \quad \text{such that} \quad
+ \exists \, \Vstr{pre}, \Vstr{post} \mid \\
+& \qquad \qquad \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
+& \qquad \qquad \land \Vstr{post} \destar \epsilon \\
+& \qquad \qquad \land \neg (\Vsym{rnn} \destar \epsilon).
 \end{split}
 \end{equation*}
-and the rightmost non-null symbol of a rule as
+We define the rightmost non-null symbol of a rule as
 \begin{equation*}
-\begin{split}
-& \RightNN{\Vrule{x}} \defined \Vsym{rnn} \mid \\
-& \qquad \text{for some} \quad \Vsym{lhs}, \Vstr{rhs} \\
-& \qquad \Vrule{x} = [ \Vsym{lhs} \de \Vstr{rhs} ] \\
-& \qquad \land \Vsym{rnn} = \RightNN{\Vstr{rhs}}.
-\end{split}
+\RightNN{[\Vsym{lhs} \de \Vstr{rhs}]} \defined \RightNN{\Vstr{rhs}}.
 \end{equation*}
-The symbol \Vsym{x} \dfn{right-derives} \Vsym{y} if and
-only if
-$\Vsym{x} \deplus \Vstr{new}$ and
-$\Vsym{y} = \RightNN{\Vstr{new}}$.
-Symbol \Vsym{x} is \dfn{right recursive},
-$\RightRecursive{\Vsym{x}}$,
-if and only if \Vsym{x}
-right-derives itself.
-A rule \Vrule{x} is \dfn{right recursive},
-$\RightRecursive{\Vrule{x}}$,
+A rule \Vrule{x} is \dfn{directly right-recursive}
 if and only if
-$\LHS{\Vrule{x}} = \RightNN{\Vrule{x}}$
-or $\RightNN{\Vrule{x}}$ right-derives $\LHS{\Vrule{x}}$.
-A derivation is a \dfn{right recursion} if and only if
-the same symbol is
-the rightmost non-nulling symbol of two different
-derivation steps.
+\begin{equation*}
+\LHS{\Vrule{x}} = \RightNN{\Vrule{x}}.
+\end{equation*}
+\Vrule{x} is \dfn{indirectly right-recursive}
+if and only if 
+\begin{equation*}
+\exists \, \Vstr{y} \mid \RightNN{\Vrule{x}} \deplus \Vstr{y} \land \RightNN{\Vstr{y}} = \LHS{\Vrule{x}}.
+\end{equation*}
+\Vrule{x} is \dfn{right recursive},
+$\RightRecursive{\Vrule{x}}$,
+if and only if is either directly or indirectly right-recursive.
 
 The definition of \Cg{} does not sharply distinguish terminals
 from non-terminals.
@@ -860,22 +851,22 @@ Define containment of a dotted rule in a Earley set
 of EIMT's as
 \begin{equation*}
 \begin{split}
-& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \Veimt{b}, \Vorig{j} \mid  \\
+& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \, \Veimt{b}, \Vorig{j} \mid  \\
 & \qquad \Veimt{b} = [ \Vdr{d}, \Vorig{j} ] 
-  \land \Veimt{b} \in \Ves{i},
+  \land \Veimt{b} \in \Ves{i}.
 \end{split}
 \end{equation*}
 A dotted rule \Vdr{d} is \dfn{Leo unique} in the Earley set
 at \Ves{i}
-if and only if,
+if and only if
 \begin{equation*}
 \begin{split}
 &    \Penult{\Vdr{d}} \neq \Lambda \\
-&    \land \forall \Vdr{2} \mymathop{Contains}(\Ves{i}, \Vdr{dr2}) \implies \\
-&    \qquad \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2}.
+&    \land \forall \, \Vdr{d2} \bigl( \mymathop{Contains}(\Ves{i}, \Vdr{d2}) \implies \\
+&    \qquad \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2} \bigr).
 \end{split}
 \end{equation*}
-If \Vdr{d} is Leo unique, then the symbol $\Postdot{\var{d}}$ is
+If \Vdr{d} is Leo unique, then the symbol $\Postdot{\Vdr{d}}$ is
 also said to be \dfn{Leo unique}.
 In cases where a symbol \Vsym{transition} is Leo unique in \Ves{i},
 we can speak of the dotted rule for \Vsym{transition},
@@ -948,12 +939,6 @@ adding a new premise to the Earley reduction
 operation,
 and extending the Earley sets to memoize Earley
 items as LIMT's.
-In this \doc,
-where an Earley set is one of the domains of a relation,
-the other domains will be restricted to either
-Leo items or Earley items,
-and which is intended will be clear from
-the context.
 
 \subsection{Leo reduction}
 
@@ -1005,9 +990,9 @@ We define uniqueness of a penult in an Earley set as
 \begin{equation*}
 \begin{split}
 & \mymathop{Penult-Unique}(\Vsym{penult},\Ves{i}) \defined \\
-& \qquad \forall \Vdr{y} \Bigl( \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})  \\
-& \qquad \qquad \land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
-& \qquad \qquad \implies \Vdr{x} = \Vdr{y} \Bigr),
+& \qquad \forall \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y}) 
+\land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
+& \qquad \qquad \implies \Vdr{x} = \Vdr{y}.
 \end{split}
 \end{equation*}
 We define
