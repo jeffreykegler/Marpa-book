@@ -2856,38 +2856,44 @@ we have
 \end{proof}
 
 \begin{theorem}\label{t:leo-right-recursion}
-Either a Leo sequence contains a right recursion
-or its length is less than \var{c},
+Either
+a right derivation has a step
+that uses a right recursive rule,
+or it has length is at most \var{c},
 where \var{c} is a constant which depends
 on the grammar.
 \end{theorem}
 
 \begin{proof}
 Let the constant \var{c} be the number
-of dotted rules.
-Suppose, for a reductio, that a Leo sequence is of length
-$\var{c}+1$, but does not contain a right recursion.
+of symbols.
+Assume, for a reductio, that a right derivation
+expands to a 
+Leo sequence of length
+$\var{c}+1$, but that none of its steps uses a right recursive rule.
 
-The same dotted rule must appear twice in the Leo sequence.
-Where the duplicated dotted rule is $\Vdr{d} = [ \Vsym{A} \de \Vstr{rhs}, \var{dot-position} ]$,
-part of the derivation implied by the Leo sequence
-must take the form
+Because it is of length $\var{c}+1$,
+the same symbol must appear twice as the rightmost symbol of
+a derivation step.
+(Since for the purposes of these
+complexity results we ignore nulling symbols,
+the rightmost symbol of a string will also be its rightmost
+non-nulling symbol.)
+So part of the rightmost derivation must take the form
 \begin{equation*}
-\begin{split}
-& \Vstr{pre1} \cat \Vsym{A} \cat \Vstr{nullable1} \destar \Vstr{pre1} \cat \Vstr{rhs} \\
-& \qquad \destar \Vstr{pre1} \cat \Vstr{pre2} \cat \Vsym{A} \cat \Vstr{nullable2} \\
-& \qquad \destar \Vstr{pre1} \cat \Vstr{pre2} \cat \Vstr{rhs} \\
-& \text{where} \quad \Vstr{nullable1} \destar \epsilon \\
-& \text{and} \quad \Vstr{nullable2} \destar \epsilon.
-\end{split}
+\Vstr{earlier-prefix} \cat \Vsym{A} \deplus \Vstr{later-prefix} \cat \Vsym{A}.
 \end{equation*}
-But note that in this derivation,
-\Vsym{A} right-derives itself,
-so that the derivation is, by definition,
-a right recursion.
+But the first step of this derivation sequence must use a rule of the
+form
+\begin{equation*}
+\Vsym{A} \de \Vstr{rhs-prefix} \cat \Vsym{rightmost},
+\end{equation*}
+where $\Vsym{rightmost} \deplus \Vsym{A}$.
+Such a rule is right recursive by definition.
 This is contrary to the assumption for the reductio.
-We therefore conclude that the length of a Leo sequence with no
-right recursion must be less than or equal to \var{c}.
+We therefore conclude that the length of a right derivation with no
+step that uses a right recursive rule,
+must be less than or equal to \var{c}.
 \end{proof}
 
 \subsection{The complexity results}
@@ -2914,12 +2920,21 @@ Second, \Marpa{}'s Earley items group dotted rules into
 states and this has the potential to increase the number
 of Earley items.
 
+It can be seen from its construction that
+every Leo sequence corresponds to a right derivation,
+with a step for each memoized Earley item.
+By theorem \ref{t:leo-singleton},
+each such Earley item corresponds one-to-one with
+a dotted rule,
+and therefore with a rule.
 By Theorem \ref{t:leo-right-recursion},
-not memoizing right recursion may, worst case,
-replace one EIMT in
-\Leo{}
-with \var{c1} others,
+a right derivation without a step using a right
+recursive rule is of length at most \var{c1},
 where \var{c1} is a constant that depends on \Cg{}.
+Therefore not memoizing right recursion rules could
+cause one EIMT in
+\Leo{}
+to be replaced with at most \var{c1} others,
 By Theorem \ref{t:marpa-O-leo},
 when EIMT's are replaced with EIM's,
 the number of EIM's \Marpa{} requires is at worst,
