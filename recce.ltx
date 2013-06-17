@@ -2920,21 +2920,41 @@ Second, \Marpa{}'s Earley items group dotted rules into
 states and this has the potential to increase the number
 of Earley items.
 
-It can be seen from its construction that
-every Leo sequence corresponds to a right derivation,
-with a step for each memoized Earley item.
 By theorem \ref{t:leo-singleton},
-each such Earley item corresponds one-to-one with
-a dotted rule,
-and therefore with a rule.
+the definition of an EIMT,
+and the construction of a Leo sequence,
+it can be seen that a Leo sequence
+corresponds step-for-step with a
+right derivation.
+It can therefore be seen that 
+the number of EIMT's in the Leo sequence
+and the number of right derivation steps
+in its corresponding right derivation
+will be the same.
+
+Consider one EIMT that is memoized in \Leo{}.
+By theorem \ref{t:leo-singleton} it corresponds to
+a single dotted rule, and therefore a single rule.
+If not memoized because it is not a right recursion,
+this EIMT will be expanded to a sequence
+of EIMT's.
+How long will this sequence of non-memoized EIMT's
+be, if we still continue to memoize EIMT's
+which correspond to right recursive rules?
+The EIMT sequence, which was formerly a memoized Leo sequence,
+will correspond to a right
+derivation that does not include
+any steps that use right recursive rules.
 By Theorem \ref{t:leo-right-recursion},
-a right derivation without a step using a right
-recursive rule is of length at most \var{c1},
+such a 
+right derivation can be
+of length at most \var{c1},
 where \var{c1} is a constant that depends on \Cg{}.
-Therefore not memoizing right recursion rules could
-cause one EIMT in
-\Leo{}
-to be replaced with at most \var{c1} others,
+As noted, this right derivation has
+the same length as its corresponding EIMT sequence,
+so that each EIMT not memoized in \Marpa{} will expand
+to at most \var{c1} EIMT's.
+
 By Theorem \ref{t:marpa-O-leo},
 when EIMT's are replaced with EIM's,
 the number of EIM's \Marpa{} requires is at worst,
@@ -2998,28 +3018,41 @@ By Theorem \ref{t:O1-time-per-eim},
 and Theorem \ref{t:ambiguous-tries}.
 \end{proof}
 
-In what follows,
-traditionally only the $\order{\var{n}^2}$ result has been stated.
-We also state a result that includes the space required to track links
-because the links are necessary for evaluation,
-which in actual practice is usually the objective of parsing.
-\begin{theorem}
+\begin{theorem}\label{t:cfg-space}
 For any context-free grammar,
-if \Marpa{} tracks links,
-it runs in $\order{\var{n}^3}$ space.
-Without links,
-\Marpa{} runs in
-$\order{\var{n}^2}$ space.
+\Marpa{} runs in $\order{\var{n}^2}$ space,
+if it does not tracks links.
 \end{theorem}
 
 \begin{proof}
-The bound without links is
-by Theorem \ref{t:O1-space-per-eim}
+By Theorem \ref{t:O1-space-per-eim}
 and Theorem \ref{t:eim-count}.
-To include links, we require constant space to record
-every attempt to add an Earley item.
-The bound of $\order{\var{n}^3}$ is obtained
-from Theorem \ref{t:O1-links-per-eim},
+\end{proof}
+
+Traditionally only the space result stated for a parsing algorithm
+is that 
+without links, as in \ref{t:cfg-space}.
+This is sufficiently relevant
+if the parser is only used as a recognizer.
+In practice, however, 
+algorithms like \Marpa{}
+are typically used in anticipation
+of an evaluation phase,
+for which links are necessary.
+
+\begin{theorem}
+For any context-free grammar,
+\Marpa{} runs in $\order{\var{n}^3}$ space,
+including the space for tracking links.
+\end{theorem}
+
+\begin{proof}
+One link is required to record
+each attempt to add an Earley item.
+Each link requires \Oc{} space.
+The bound of $\order{\var{n}^3}$ results
+from these two observations,
+Theorem \ref{t:O1-links-per-eim},
 and Theorem \ref{t:ambiguous-tries}.
 \end{proof}
 
