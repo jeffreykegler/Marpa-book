@@ -2831,25 +2831,26 @@ and by Theorem \ref{t:tries-O-eims},
 so that
 $\var{other-tries} = \order{\var{n}^2}$.
 
-\begin{sloppypar}
 Reconsidering \var{reduction-tries}
 for the case of ambiguous grammars,
-we see that in the worst case the memoization of
-$\mymathop{transitions}(\Vloc{i}, \Vsym{lhs})$
-accomplishes nothing,
-because every item in
-Earley set \Vloc{i} is returned,
-and
-the number of attempts to add EIM reductions
-at location \Vloc{j} becomes
+we need to look again at the triple
 \begin{equation*}
-\bigsize{\EVtable{\Marpa}{i}}
-\times \bigsize{\EVtable{\Marpa}{j}}
+[\Veim{predecessor}, \Vloc{component-origin}, \Vsym{transition}].
 \end{equation*}
-In the worst case $\var{i} \simeq \var{j}$,
+For unambiguous grammars we could assume that the relationship
+of \Veim{predecessor} to \Vloc{component-origin} was one-to-one,
+but in an unambiguous grammar we must allow it to be many-to-one.
+Worst case, every EIM in \Ves{component-origin} is a possible
+match, so that the number of possible combinations is
+now
+\begin{equation*}
+\bigsize{\Vtable{component-origin}} \times \Vsize{symbols} \times \bigsize{\Vtable{j}}.
+\end{equation*}
+
+In the worst case $\var{component-origin} \simeq \var{j}$,
 so that by Theorem \ref{t:es-count},
 \begin{equation*}
-\bigsize{\EVtable{\Marpa}{i}}
+\bigsize{\EVtable{\Marpa}{component-origin}}
 \times \bigsize{\EVtable{\Marpa}{j}} = \order{\var{j}^2}
 \end{equation*}
 Adding \var{other-tries}
@@ -2860,7 +2861,6 @@ we have
 \! \sum\limits_{\Vloc{j}=0}^{n}{\order{\var{j}^2}} = \order{\var{n}^3}.
 \qedhere
 \end{equation*}
-\end{sloppypar}
 \end{proof}
 
 \begin{theorem}\label{t:leo-right-recursion}
