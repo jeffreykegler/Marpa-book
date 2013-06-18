@@ -2693,10 +2693,20 @@ in the scan and reduction operations.
 \end{equation*}
 
 The final and most complicated case is Earley reduction.
+Recall that \Ves{j} is the current Earley set.
 \Marpa{} attempts to add an Earley reduction result
-once for every each pair
+once for every triple
 \begin{equation*}
-[\Veim{predecessor}, \Vsym{lhs}],
+[\Veim{predecessor}, \Vorig{component}, \Vsym{transition}]
+\end{equation*}
+such that $\exists \, \Veim{component}, \Vah{component}$ where
+\begin{equation*}
+\begin{split}
+& \Veim{component} \in \Ves{j} \\
+ \land \quad & \Veim{component} = [ \Vah{component}, \Vorig{component} ] \\
+ \land \quad & \Vdr{component} \in \Vah{component} \\
+ \land \quad & \Vsym{transition} = \LHS{\Vdr{component}},
+\end{split}
 \end{equation*}
 where \Vsym{lhs} is the LHS
 of a completed rule in the AHFA state
