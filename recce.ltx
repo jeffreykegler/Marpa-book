@@ -2705,55 +2705,41 @@ such that $\exists \, \Veim{component}, \Vah{component}$ where
 & \Veim{component} \in \Ves{j} \\
  \land \quad & \Veim{component} = [ \Vah{component}, \Vorig{component} ] \\
  \land \quad & \Vdr{component} \in \Vah{component} \\
- \land \quad & \Vsym{transition} = \LHS{\Vdr{component}},
+ \land \quad & \Vsym{transition} = \LHS{\Vdr{component}}.
 \end{split}
 \end{equation*}
-where \Vsym{lhs} is the LHS
-of a completed rule in the AHFA state
-of a component EIM in the current Earley set,
-and \Veim{predecessor} is an EIM
-in the Earley set that is origin of the component EIM.
-The number of possibilities for \Vsym{lhs}
-is less than or equal to
-$\var{max-AHFA} \times \bigsize{\Vtable{j}}$,
-where \var{max-AHFA} is the maximum number of completed rules in
-an AHFA state,
-and $\bigsize{\Vtable{j}}$ is the number of Earley items
-in the current Earley set.
-
-Here the memoization of $\mymathop{transitions}$
-plays a role.
-Because it uses $\mymathop{transitions}$,
-Marpa makes a reduction attempt for
-only those \Veim{predecessor}'s whose AHFA state
-contains a dotted rule with a postdot symbol
-that matches the transition symbol.
-Call this number \Vsize{matching}.
-The number of reduction attempts will be less than
+We can see that that in this triple the relationship between
+\Veim{predecessor} and \Vorig{component} must be one-to-one,
+because otherwise there would be two different derivations of
+the Earley reduction for this case,
+contrary to the assumption that the grammar in unambiguous.
+It suffices thereforce to consider the number of possible choices
+of the pair
 \begin{equation*}
-\var{max-AHFA} \times \Vsize{matching} \times \bigsize{\Vtable{j}}
+[\Vorig{component}, \Vsym{transition}]
+\end{equation*}
+\Vorig{component} came from $\Veimt{component} \in \Ves{j}$,
+and therefore there is at most 
+$\bigsize{\Vtable{j}}$ choices for \Vorig{component}.
+The number of possibilities for \Vsym{lhs} is limited
+by the number of symbols,
+call it \size{\var{symbols}},
+which is a constant that depends on the grammar \Cg{}.
+The number of reduction attempts will therefore be at most
+\begin{equation*}
+\var{reduction-tries} <= \Vsize{symbols} \times \bigsize{\Vtable{j}}.
 \end{equation*}
 
-Since by assumption
-\Cg{} is unambiguous,
-we know that all attempts to add duplicate
-EIM's will be for predecessors
-that have the same dotted rule.
-(If this were not the case,
-the two dotted rules would produce different
-derivations, contrary to the assumption that
-the grammar is unambiguous.)
-Even in the worst case,
-a dotted rule cannot appear in every AHFA state.
-Then $\Vsize{matching} < \size{\Cfa}$,
-where \Vsize{\Cfa} is the number of AHFA states,
-a constant that depends on \Cg{}.
-From the foregoing, we know that
+Summing, we have
 \begin{equation*}
-\var{reduction-tries} < \var{max-AHFA} \times \size{\Cfa} \times \bigsize{\Vtable{j}}
+\begin{alignedat}{2}
+& \bigsize{\Vtable{0}} & \quad &  \text{initial EIM's} \\
++ \; & a &&  \text{LIM's} \\
++ \; &  a &&  \text{scanned EIM's} \\
++ \; &  a &&  \text{predicted EIM's} \\
++ \; &  \sum\limits_{i=0}^{n}{\Vsize{symbols} \times \bigsize{\Vtable{j}}} &&  \text{reduction EIM's}.
+\end{alignedat}
 \end{equation*}
-
-\begin{sloppypar}
 The arithmetic for
 summing \var{scan-tries},
 \var{leo-tries},
@@ -2772,7 +2758,6 @@ such that
 \var{tries} < \var{c} \times \Rtablesize{\Marpa}
 \end{equation*}
 where \var{c} is a constant that depends on \Cg{}.\qedhere
-\end{sloppypar}
 \end{proof}
 
 As a reminder,
