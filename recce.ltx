@@ -3160,33 +3160,34 @@ then we have both of
 The correctness results hold for Marpa input streams,
 but to preserve the time complexity bounds,
 restrictions must be imposed.
-Let \size{\var{s}} be the cardinality
-of the set \var{s}.
-Define $\mymathop{future}(\Vloc{i})$ as
+In stating them,
+let it be understood that
 \begin{equation*}
-\left\lbrace \, \Vloc{j} \, \middle|
-    \begin{array}{l}
-    \exists [\Vsym{t}, \Vloc{start}, \var{length}]
-    \quad \text{such that} \\
-    \qquad (\var{j} = \var{start} + \var{length} \, \land
-	\var{start} \le \Vloc{i})
-    \end{array}
-\right\rbrace.
+	\token{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \in \var{tokens}
 \end{equation*}
-The restrictions are that,
-for all \Vloc{i},
-$0 \le i < \size{\Cw}$,
-we require that
-there be a constant \var{c} such that
-\begin{gather}
+We require that,
+for some constant \var{c},
+possibly dependant on the grammar \Cg{},
+that every token length be less than \var{c},
+\begin{equation}
 \label{e:restriction1}
-\bigl| \mymathop{future}(\Vloc{i}) \bigr| < \var{c} \quad \text{and} \\
+\forall \, \token{[\Vsym{x}, \Vloc{x}, length]},
+\; \var{length} < \var{c},
+\end{equation}
+and that
+the cardinality of the set of tokens starting at any
+one location
+be less than \var{c},
+\begin{equation}
 \label{e:restriction2}
- \Bigl| \bigl\{
-	[ \Vsym{x}, \Vloc{x}, \var{length} ]
-	\bigm| \Vloc{x} = \Vloc{i}
-    \bigr\} \Bigr| < \var{c}
-\end{gather}
+ \forall \Vloc{i}, \;
+ \Bigl|
+ \bigl \lbrace
+	\token{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \bigm|
+	\Vloc{x} = \Vloc{i}
+  \bigr \rbrace
+  \Bigr| < \var{c}
+\end{equation}
 Restrictions \ref{e:restriction1}
 and \ref{e:restriction2}
 impose little or no obstacle
