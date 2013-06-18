@@ -2730,32 +2730,44 @@ The number of reduction attempts will therefore be at most
 \var{reduction-tries} <= \Vsize{symbols} \times \bigsize{\Vtable{j}}.
 \end{equation*}
 
-Summing, we have
+Summing
+\begin{multline*}
+\var{tries} =
+\var{scan-tries} +
+\var{leo-tries} + \\
+\var{predict-tries} +
+\var{reduction-tries} +
+\var{initial-tries},
+\end{multline*}
+we have
 \begin{equation*}
 \begin{alignedat}{2}
-& \bigsize{\Vtable{0}} & \quad &  \text{initial EIM's} \\
-+ \; & a &&  \text{LIM's} \\
-+ \; &  a &&  \text{scanned EIM's} \\
-+ \; &  a &&  \text{predicted EIM's} \\
-+ \; &  \sum\limits_{i=0}^{n}{\Vsize{symbols} \times \bigsize{\Vtable{j}}} &&  \text{reduction EIM's}.
+& \bigsize{\Vtable{0}} & \quad &
+\qquad \text{initial EIM's} \\
++ \; & \sum\limits_{i=0}^{n}{
+\var{max-AHFA} \times \bigsize{\Vtable{j}}
+} &&
+\qquad \text{LIM's} \\
++ \; & 2 \times \sum\limits_{i=1}^{n}{
+\bigsize{\Etable{\var{j} \subtract 1}}
+} &&
+\qquad \text{scanned EIM's} \\
++ \; & 2 \times \sum\limits_{i=0}^{n}{\Vsize{symbols} \times \bigsize{\Vtable{j}}} &&
+\qquad \text{reduction EIM's},
 \end{alignedat}
 \end{equation*}
-The arithmetic for
-summing \var{scan-tries},
-\var{leo-tries},
-\var{predict-tries}
-and
-\var{reduction-tries}
-over the Earley sets,
-and then adding
-\var{initial-tries},
-is tedious.
-But since \var{max-AHFA} and \size{\Cfa} are both constants
+where \var{prediction-tries} is accounted for by counting the scanned and predicted
+EIM attempts twice.
+But since \var{max-AHFA} and \Vsize{symbols} are both constants
 that depend only on \Cg{},
 it is clear that there is a constant \var{c}
 such that
 \begin{equation*}
-\var{tries} < \var{c} \times \Rtablesize{\Marpa}
+\var{tries} <= \var{c} \times \sum\limits_{i=0}^{n}{\bigsize{\Vtable{j}}},
+\end{equation*}
+and
+\begin{equation*}
+\var{tries} <= \var{c} \times \Rtablesize{\Marpa},
 \end{equation*}
 where \var{c} is a constant that depends on \Cg{}.\qedhere
 \end{proof}
