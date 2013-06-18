@@ -39,6 +39,7 @@
 \newcommand{\cfg}{CFG}
 
 \newcommand{\de}{\rightarrow}
+\newcommand{\derives}{\Rightarrow}
 \newcommand{\destar}
     {\mathrel{\mbox{$\:\stackrel{\!{\ast}}{\Rightarrow\!}\:$}}}
 \newcommand{\deplus}
@@ -343,7 +344,7 @@ This definition follows \cite{AH2002},
 which departs from tradition by disallowing an empty RHS.
 
 The rules imply the traditional rewriting system,
-in which $\Vstr{x} \de \Vstr{y}$
+in which $\Vstr{x} \derives \Vstr{y}$
 states that \Vstr{x} derives \Vstr{y} in exactly one step;
 $\Vstr{x} \deplus \Vstr{y}$
 states that \Vstr{x} derives \Vstr{y} in one or more steps;
@@ -947,10 +948,10 @@ items as LIMT's.
     \begin{array}{c}
     \Veimt{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vorig{component} \bigr] \\
-    \Veimt{component} \in \Vtable{current} \\[3pt]
-	\Vlimt{predecessor} \in \Etable{\Vorig{component}} \\
-	\Vlimt{predecessor} = [ \Vdr{top}, \Vsym{lhs}, \Vorig{top} ]
+    , \Vloc{component-origin} \bigr] \\
+    \Veimt{component} \in \Ves{current} \\[3pt]
+	\Vlimt{predecessor} = [ \Vdr{top}, \Vsym{lhs}, \Vorig{top} ] \\
+	\Vlimt{predecessor} \in \Ves{component-orig} \\
     \end{array}
 }{
     \bigset{ [ \Vdr{top}, \Vorig{top} ] }
@@ -974,15 +975,15 @@ are \Vlimt{predecessor} and \Vsym{lhs}.
 
 Earley reduction still applies, with an additional premise:
 \begin{multline*}
-\forall \Vlimt{x} \in \Etable{\Vorig{component}} \mid \\
-	(\Vlimt{x} = [ \Vdr{x}, \Vsym{x}, \Vorig{x} ] \implies \Vsym{x} \ne \Vsym{lhs})
+\neg \exists \, \Vlimt{x} \; \mid \; \Vlimt{x} \in \Ves{component-orig} \\
+	\land \Vlimt{x} = [ \Vdr{x}, \Vsym{lhs}, \Vorig{x} ]
 \end{multline*}
 The additional premise
 prevents Earley reduction from being applied
 where there is an LIMT with \Vsym{lhs} as its transition symbol.
-This reflects the fact that, in \Leo{},
-Leo reduction replaces Earley reduction if and only when
-it is applicable.
+This reflects the fact that
+Leo reduction replaces Earley reduction if and only if
+there is a Leo memoization.
 
 \subsection{Leo memoization}
 
@@ -990,7 +991,7 @@ We define uniqueness of a penult in an Earley set as
 \begin{equation*}
 \begin{split}
 & \mymathop{Penult-Unique}(\Vsym{penult},\Ves{i}) \defined \\
-& \qquad \forall \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y}) 
+& \qquad \forall \, \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y}) 
 \land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
 & \qquad \qquad \implies \Vdr{x} = \Vdr{y}.
 \end{split}
@@ -1008,7 +1009,7 @@ and Leo eligibility as
 \begin{equation*}
 \begin{split}
 & \LeoEligible{\Vdr{x},\Vloc{current}} \defined \\
-& \qquad \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
+& \qquad \exists \, \Vrule{x}, \Vorig{x} \; \mid \; \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
 & \qquad \land \RightRecursive{\Vrule{x}} \\
 & \qquad \land \LeoUnique{\Ves{current},\Vdr{x}}.
 \end{split}
@@ -1019,9 +1020,11 @@ an EIMT, and false otherwise:
 \begin{equation*}
 \begin{split}
 & \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \defined \\
-& \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
-& \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-& \qquad \land \Vlimt{pred} \in \Ves{bottom-origin}
+& \qquad \exists \Ves{bottom-origin}, \Vdr{bottom}, \Vdr{pred}, \\
+& \qquad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \quad \text{such that}  \\
+& \qquad \qquad \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
+& \qquad \qquad \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
+& \qquad \qquad \qquad \land \Vlimt{pred} \in \Ves{bottom-origin} 
 \end{split}
 \end{equation*}
 
@@ -1036,7 +1039,7 @@ a LIMT predecessor can be found for an EIMT \Veimt{bottom}
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
-    \bigset{ [ \Vdr{pred}, \Penult{\Vdr{bottom}}, \Vorig{pred} ] }
+    \left \lbrace [ \Vdr{pred}, \Penult{\Vdr{bottom}}, \Vorig{pred} ] \right \rbrace
 }
 \end{equation*}
 and another which holds if there is no predecessor LIMT
@@ -1050,7 +1053,7 @@ for \Veimt{bottom},
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
-    \bigset{ [ \Next{\Vdr{bottom}}, \LHS{\Vdr{bottom}}, \Vloc{bottom} ] }
+    \bigset{ [ \Next{\Vdr{bottom}}, \Penult{\Vdr{bottom}}, \Vloc{bottom} ] }
 }
 \end{equation*}
 
