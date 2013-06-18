@@ -1154,7 +1154,8 @@ The initial AHFA state is a confirmed AHFA state.
 (In \cite{AH2002} confirmed states are called ``kernel states'',
 and predicted states are called ``non-kernel states''.)
 
-An AHFA is not a partition of the dotted
+The states of an AHFA
+are not a partition of the dotted
 rules --
 a single dotted rule can occur
 in more than one AHFA state.
@@ -1198,7 +1199,7 @@ Suppose, for a reduction to absurdity,
 that the AHFA state contains another dotted rule,
 \Vdr{other}, that is, that
 \begin{equation*}
-\Vdr{other} \in \Vah{result}.
+\Vdr{other} \in \Vah{result},
 \end{equation*}
 where $\Vdr{complete} \neq \Vdr{other}$.
 Let \Vrule{o} be the rule of \Vdr{other},
@@ -1210,10 +1211,10 @@ AHFA construction never places a prediction in the same
 AHFA state as a completion, so
 \Vdr{other} is not a prediction.
 Therefore, $\var{op} > 0$.
-To show this outer reduction to absurdity, we first prove that
-by an inner reductio that
+To show this outer reduction to absurdity, we first prove
+by a first inner reductio that
 $\Vrule{c} \neq \Vrule{o}$,
-then by another inner reductio that
+then by a second inner reductio that
 $\Vrule{c} = \Vrule{o}$.
 
 Assume, for the first inner reductio,
@@ -1267,7 +1268,6 @@ we have both
 $\Vrule{c} \neq \Vrule{o}$
 and $\Vrule{c} = \Vrule{o}$,
 which completes the outer reduction to absurdity.
-
 For the outer reductio, we assumed that
 \Vdr{other}
 was a second dotted rule in \Vah{result},
@@ -1321,7 +1321,7 @@ We can charge time and space to the parse itself,
 as long as the total time and space charged is \Oc.
 Afterwards, this resource can be re-charged to
 the initial Earley item, which is present in all parses.
-Soft and hard failures use
+Soft and hard failures of the recognizer use
 worst-case \Oc{} resource,
 and are charged to the parse.
 
@@ -1344,7 +1344,21 @@ ignoring resource usage by called procedures.
 Inclusive time or space includes
 resource usage by called procedures.
 Caller-included time and space is charged to
-a procedure's direct or indirect caller.
+a procedure's caller.
+The caller to which a resource charge is passed may
+in turn charge the resource to its own caller.
+
+Earley sets may be represented by \Ves{i},
+where \var{i} is the Earley set's locaiton \Vloc{i}.
+The two notations should be regarded as interchangeable.
+The actual implementation of either
+should be the equivalent of a pointer to 
+a data structure containing,
+at a minium,
+the Earley items,
+a memoization of the Earley set's location as an integer,
+and a per-set-list.
+Per-set-lists will be described in Section \cite{s:per-set-lists}.
 
 \begin{algorithm}[h]
 \caption{Marpa Top-level}
@@ -1699,7 +1713,7 @@ briefly outlined in both
 The data structures used are not named in either source,
 and in this \doc{} they will be called ``per-Earley set lists'',
 or PSL's.
-PSL's are the subject of the next section.
+PSL's are the subject of Section \cite{s:per-set-lists}
 
 The resource used by \call{Add EIM Pair}{}
 is always caller-included.
@@ -1716,6 +1730,7 @@ to each \Veim{confirmed}
 remains \Oc.
 
 \subsection{Per-set lists}
+\label{s:per-set-lists}
 
 \begin{sloppypar}
 A per-set list (PSL) is kept in each Earley set.
