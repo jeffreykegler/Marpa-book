@@ -102,6 +102,8 @@
 \newcommand{\RightNN}[1]{\mymathop{Right-NN}(#1)}
 \newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
 \newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
+\newcommand{\ID}[1]{\mymathop{ID}(#1)}
+\newcommand{\PSL}[2]{\mymathop{PSL}[#1][#2]}
 \newcommand{\myL}[1]{\mymathop{L}(#1)}
 \newcommand\Etable[1]{\ensuremath{\mymathop{table}[#1]}}
 \newcommand\bigEtable[1]{\ensuremath{\mymathop{table}\bigl[#1\bigr]}}
@@ -1411,7 +1413,7 @@ including which tokens are acceptable during the scanning phase.
 \caption{Initialization}
 \begin{algorithmic}[1]
 \Procedure{Initial}{}
-\State \Call{Add EIM pair}{$0, \ah{start}, 0$}
+\State \Call{Add EIM pair}{$0_{ES}, \ah{start}, 0$}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1432,7 +1434,7 @@ and can be charged to the parse.
 \For{each $\Veim{predecessor} \in \var{transitions}((\var{i} \subtract 1),\var{a})$}
 \State $[\Vah{from}, \Vloc{origin}] \gets \Veim{predecessor}$
 \State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{a})$
-\State \Call{Add EIM pair}{$\Vloc{i}, \Vah{to}, \Vloc{origin}$}
+\State \Call{Add EIM pair}{$\Ves{i}, \Vah{to}, \Vloc{origin}$}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -1507,7 +1509,7 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 \caption{Memoize transitions}
 \begin{algorithmic}[1]
 \Procedure{Memoize transitions}{\Vloc{i}}
-\For{every \Vsym{postdot}, a postdot symbol of $\Vtable{i}$}
+\For{every \Vsym{postdot}, a postdot symbol of $\Ves{i}$}
 \If{\Vsym{postdot} is Leo eligible}
 \State Note: \Vsym{postdot} is ``Leo eligible" if it is
 \State \hspace\algorithmicindent  Leo unique and its rule is right recursive
@@ -1525,8 +1527,6 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 
 \subsection{Memoize transitions}
 
-We will call the Earley set at \Vloc{i},
-\Ves{i}.
 The \var{transitions} table for \Ves{i}
 is built once all EIMs have been
 added to \Ves{i}.
@@ -1546,8 +1546,8 @@ is Leo eligible if it is Leo unique
 and its rule is right recursive.
 (If \Vsym{transition} is Leo unique in \Ves{i}, it will be the
 postdot symbol of only one rule in \Ves{i}.)
-whether a rule is right recursive is a property of
-the grammar and can be precomputed,
+Whether a rule is right recursive can be precomputed
+from the grammar,
 with the resource is charged to the parse.
 Similarly, with one exception,
 all the requirements to determine Leo uniqueness
@@ -1560,7 +1560,7 @@ the determination that there is only one dotted
 rule in \Ves{i} whose postdot symbol is
 \Vsym{transition}.
 This can be done
-in a single pass over \Ves{i}
+in a single pass over the EIM's of \Ves{i}
 that notes the postdot symbols as they are encountered
 and whether any is enountered twice.
 The cost will be \Oc{} time per EIM,
@@ -1625,7 +1625,7 @@ Overhead is \Oc{} and caller-included.
 \Procedure{Earley reduction operation}{\Vloc{i}, \Veim{from}, \Vsym{trans}}
 \State $[\Vah{from}, \Vloc{origin}] \gets \Veim{from}$
 \State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{trans})$
-\State \Call{Add EIM pair}{\Vloc{i}, \Vah{to}, \Vloc{origin}}
+\State \Call{Add EIM pair}{\Ves{i}, \Vah{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1647,7 +1647,7 @@ attempt.
 \Procedure{Leo reduction operation}{\Vloc{i}, \Vlim{from}}
 \State $[\Vah{from}, \Vsym{trans}, \Vloc{origin}] \gets \Vlim{from}$
 \State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{trans})$
-\State \Call{Add EIM pair}{\Vloc{i}, \Vah{to}, \Vloc{origin}}
+\State \Call{Add EIM pair}{\Ves{i}, \Vah{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1664,7 +1664,7 @@ attempt.
 \begin{algorithm}[h]
 \caption{Add EIM pair}\label{a:pair}
 \begin{algorithmic}[1]
-\Procedure{Add EIM pair}{$\Vloc{i},\Vah{confirmed}, \Vloc{origin}$}
+\Procedure{Add EIM pair}{$\Ves{i},\Vah{confirmed}, \Vloc{origin}$}
 \State $\Veim{confirmed} \gets [\Vah{confirmed}, \Vloc{origin}]$
 \State $\Vah{predicted} \gets \GOTO(\Vah{confirmed}, \epsilon)$
 \If{\Veim{confirmed} is new}
@@ -1694,46 +1694,54 @@ We show that time is also \Oc{}
 by singling out the two non-trivial cases:
 checking that an Earley item is new,
 and adding it to the Earley set.
-It becomes clear
-that an Earley item can be added to the current
+\Marpa check whether an Earley item is new
+in \Oc{} time
+by using a data structure that called PSL.
+PSL's are the subject of Section \ref{s:per-set-lists}.
+An Earley item can be added to the current
 set in \Oc{} time
 if Earley set is seen as a linked
 list, to the head of which the new Earley item is added.
 
-Earley items are only added if they are new,
-and showing that this check can be performed in \Oc{} time
-per EIM,
-and therefore per call to \call{Add EIM pair}{},
-is more complicated.
-A data structure that allows this
-to be checked in \Oc{} time is very
-briefly outlined in both
-\cite[p. 97]{Earley1970} and
-\cite[Vol. 1, pages 326-327]{AU1972}.
-The data structures used are not named in either source,
-and in this \doc{} they will be called ``per-Earley set lists'',
-or PSL's.
-PSL's are the subject of Section \ref{s:per-set-lists}.
-
 The resource used by \call{Add EIM Pair}{}
 is always caller-included.
-The time and space for an EIM attempt
-is always charged against \Veim{confirmed},
-including the time and space used
-to add or to attempt to add \Veim{predicted}.
-This means that no time or space is ever charged
+No time or space is ever charged
 to a predicted Earley item.
 At most one attempt to add a \Veim{predicted} will
 be made per attempt to add a \Veim{confirmed},
 so that the total resource charged
-to each \Veim{confirmed}
 remains \Oc.
 
 \subsection{Per-set lists}
 \label{s:per-set-lists}
 
-\begin{sloppypar}
-A per-set list (PSL) is kept in each Earley set.
+In the general case,
+where \var{x} is an arbitrary datum,
+it is not possible to search based
+on the duple $[\Ves{i}, x]$ in \Oc{} time.
+Within \Marpa, however, there are specific cases
+where it is desirable to do exactly that,
+taking advantage of special properties of the search.
+In particular, it can often be arranged that there is
+a link direct to the Earley set \Ves{i},
+and that $0 <= \var{x} < \var{c}$,
+where \var{c} is a constant of reasonable size.
+
+The data structure used for these special purpose searches
+is a PSL.
+Data structures identical to or very similar to PSL's are
+briefly outlined in both
+\cite[p. 97]{Earley1970} and
+\cite[Vol. 1, pages 326-327]{AU1972}.
+But neither source gives them a name.
+In this \doc{} they are called ``per-Earley set lists'',
+or PSL's.
+
+Each per-set list (PSL) is simply a fixed-length array of
+integers, indexed by an integer.
+A PSL is kept,
+as the name suggests,
+in each Earley set.
 While \Marpa{} is building a new Earley set,
 \EVtable{\Marpa}{j},
 the PSL for every previous Earley set, \Vloc{i},
@@ -1743,46 +1751,51 @@ The maximum number of Earley items that must be tracked
 in each PSL is
 the number of AHFA states,
 \Vsize{\Cfa},
-which is a constant depending on \Cg{}.
-\end{sloppypar}
+which is a constant of reasonable size
+that depends on \Cg{}.
 
 It would take more than \Oc{} time
 to clear and rebuild the PSL's each time
 that a new Earley set is started.
-This can be avoided by ``dating'' each PSL
+This overhead is avoided by ``time-stamping'' each PSL
 entry with the Earley set
 that was current when that PSL
 entry was last updated.
 
-Let $\mymathop{PSL}(\Vloc{l}, \Vah{a})$
-be the entry for \Vah{a} in the PSL for Earley set \Vloc{l}.
-Consider the case where Marpa is building \EVtable{\Marpa}{j}
+As before,
+where \Ves{i} is an Earley set,
+let \Vloc{i} be its location,
+and vice versa.
+\Vloc{i} is an integer which is
+assigned as Earley sets are created.
+Let $\ID{\Vah{x}}$ be the integer ID of an AHFA state.
+Numbering the AHFA states from 0 on up as they are created
+is an easy way to create $\ID{\Vah{x}}$.
+Let $\PSL{\Ves{x}}{\var{y}}$
+be the entry for integer \var{y} in the PSL in
+the Earley set at \Vloc{x}.
+
+Consider the case where Marpa is building \Ves{j}
 and wants to check whether Earley item \Veim{x} is new,
 where $\Veim{x} = [ \Vah{x}, \Vorig{x} ]$.
 To check if \Veim{x} is new,
-Marpa checks $\mymathop{PSL}(\Vloc{x}, \Vah{x})$.
-Let the ``date'' for that PSL entry be \Vloc{p},
-that is,
+Marpa checks
 \begin{equation*}
-    \mymathop{PSL}(\Vloc{x}, \Vah{x}) = \Vloc{p}.
+\var{time-stamp} = \PSL{\Ves{x}}{\ID{\Vah{x}}}
 \end{equation*}
-(If the entry has never been used,
-we assume that $\Vloc{p} = \Lambda$.)
-If $\Vloc{p} \ne \Lambda \land \Vloc{p} = \Vloc{j}$,
+If the entry has never been used,
+we assume that $\var{time-stamp} = \Lambda$.
+If $\var{time-stamp} \ne \Lambda \land \var{time-stamp} = \Vloc{j}$,
 then \Veim{x} is not new,
 and will not be added to the Earley set.
 
-If $\Vloc{p} = \Lambda \lor \Vloc{p} \ne \Vloc{j}$,
+If $\Vloc{p} = \Lambda \lor \var{time-stamp} \ne \Vloc{j}$,
 then \Veim{x} is new.
 \Veim{x} is added to the Earley set,
-and the PSL's ``date'' is updated to \Vloc{j},
-that is,
+and a new time-stamp is set, as follow:
 \begin{equation*}
-    \mymathop{PSL}(\Vloc{x}, \Vah{x}) \gets \Vloc{j}.
+\PSL{\Ves{x}}{\ID{\Vah{x}}} \gets \Vloc{j}.
 \end{equation*}
-As implemented,
-Marpa uses PSL's to check if EIM's are new,
-and for several other purposes.
 
 \subsection{Complexity summary}
 
@@ -1917,6 +1930,14 @@ will be heavily used in the following proofs.
 For convenience, they are restated here.
 
 \begin{observation}
+Every dotted rule is an element of one
+or more AHFA states, that is,
+\begin{equation*}
+\forall \, \Vdr{x} \, \exists \, \Vah{y} \; \mid \; \Vdr{x} \in \Vah{y}.
+\end{equation*}
+\end{observation}
+
+\begin{observation}
 \label{o:confirmed-AHFA-consistent}
 AHFA confirmation is consistent.  That is,
 for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} where
@@ -1935,13 +1956,13 @@ there exists \Vdr{from} such that
 \begin{observation}
 \label{o:confirmed-AHFA-complete}
 AHFA confirmation is complete.  That is,
-for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{from} where
+for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{from}, \Vdr{to}, if
 \begin{gather*}
 \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \quad \text{and} \\
 \Vdr{from} \in \Vah{from} \quad \text{and} \\
 \Postdot{\Vdr{from}} = \Vsym{t},
 \end{gather*}
-there exists \Vdr{to} such that
+then
 \begin{gather*}
 \Next{\Vdr{from}} = \Vdr{to} \quad \text{and} \\
 \Vdr{to} \in \Vah{to}.
