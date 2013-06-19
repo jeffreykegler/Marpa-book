@@ -2046,7 +2046,15 @@ Marpa's Earley sets are correct.
 
 \begin{sloppypar}
 The proof
-is by double induction.
+is by triple induction,
+that is, induction with a depth down to 3 levels.
+We number the levels of induction from
+outermost to innermost,
+0, 1 and 2.
+The level 0 induction is usually called the outer induction.
+The level 1 induction is usually called the inner induction.
+The level 2 induction is referred to by its number.
+
 The outer induction is on the Earley sets.
 The outer induction hypothesis is that all Earley sets
 \EVtable{\Marpa}{i},
@@ -2328,7 +2336,7 @@ that
 the number of Earley items is \On{},
 so a traversal of them must terminate.
 
-Consider, for the purposes of an inner induction,
+Consider, for the purposes of the level 2 induction,
 the reductions of \Leo{} to occur in generations.
 Let the scanned Earley items be generation 0.
 An EIMT produced by a reduction is generation $\var{n} + 1$
@@ -2337,7 +2345,7 @@ Predicted Earley items do not need to be assigned generations.
 In Marpa grammars they can never contain completions,
 and therefore can never act as the component of a reduction.
 
-The induction hypothesis for the inner induction
+The induction hypothesis for the level 2 induction
 is that for some \var{n},
 the Earley items of \EVtable{\Marpa}{i} for generations 0 through \var{n}
 are complete and consistent.
@@ -2347,7 +2355,7 @@ In Section \ref{s:scan-complete},
 we showed that generation 0 is complete --
 it contains Earley items
 corresponding to all of the generation 0 EIMT's of \Leo.
-This is the basis of the inner induction.
+This is the basis of the level 2 induction.
 
 Since we stipulated that \Marpa{} adds Earley items
 at the end of each set,
@@ -2356,15 +2364,13 @@ Therefore \Marpa{},
 when creating Earley items of generation $\var{n}+1$
 while traversing \EVtable{\Marpa}{i},
 can rely
-on the inner induction hypothesis for
-the completeness of Earley items in
+on the level 2 induction hypothesis for
+the completeness of Earley items
 in generation \var{n}.
 
 Let
-\begin{equation*}
-\Veim{working} = [\Vah{working}, \Vorig{working}]
-\end{equation*}
-be the Earley item in \EVtable{\Marpa}{i}
+$\Veim{working} \in \Ves{i}$
+be the Earley item
 currently being considered as a potential component for
 an Earley reduction operation.
 From the pseudocode, we see
@@ -2397,7 +2403,8 @@ as well as one corresponding
 to every prediction that results from
 an Earley reduction result
 of generation $\var{n}+1$ in \EVtable{\Leo}{i}.
-This shows the case of reduction completeness.
+This shows the level 2 induction
+and the case of reduction completeness.
 
 \subsubsection{Leo reduction is complete}
 \label{s:leo-complete}
@@ -3132,20 +3139,18 @@ The size of the input, \size{\Cw},
 is the maximum over
 \var{tokens} of $\Vloc{start}+\var{length}$.
 
-\begin{sloppypar}
 Multiple tokens can start at a single location.
 (This is how \Marpa{} supports ambiguous tokens.)
-Tokens may have multiple lengths.
 The variable-length,
 ambiguous and overlapping tokens
 of \Marpa{}
 bend the conceptual framework of ``parse location''
 beyond its breaking point,
-and a new term for parse location is introduced,
-the \dfn{earleme}.
-Token length is measured in earlemes,
-and the start and end location of a token is indicated in earlemes.
-\end{sloppypar}
+and a new term for parse location is needed.
+Start and end of tokens are described in terms
+of \dfn{earleme} locations,
+or simply \dfn{earlemes}.
+Token length is also measured in earlemes.
 
 Like standard parse locations, earlemes start at 0,
 and run up to \size{\Cw}.
