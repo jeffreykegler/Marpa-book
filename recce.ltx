@@ -1,7 +1,7 @@
 % Copyright 2013 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
-\documentclass[12pt]{amsart}
+\documentclass[12pt,draft]{amsart}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{url}
@@ -744,7 +744,6 @@ of the scanning operation.
 }
 \end{equation*}
 
-\begin{sloppypar}
 \Veimt{component} is called
 the component of the reduction operation.\footnote{
 The term ``component'' comes from Irons \cite{Irons}.
@@ -753,7 +752,6 @@ The term ``component'' comes from Irons \cite{Irons}.
 of the reduction operation.
 \Vsym{lhs} is the transition symbol
 of the reduction operation.
-\end{sloppypar}
 
 \Veimt{predecessor} and
 \Veimt{component} are the operands of the reduction
@@ -908,9 +906,15 @@ call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{d} \neq \Lambda$.
 In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
-For \Marpa{} to consider a dotted rule $\Vdr{candidate} = [\Vrule{candidate}, \var{i}]$ for Leo memoization,
+For \Marpa{} to consider a dotted rule
+\begin{equation*}
+\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
+\end{equation*}
+\begin{sloppypar}
+for Leo memoization,
 \Vdr{candidate} must be a penult and
 \Vrule{candidate} must be right-recursive.
+\end{sloppypar}
 
 By restricting Leo memoization to right-recursive rules,
 \Marpa{} incurs the cost of Leo memoization only in cases
@@ -1022,11 +1026,11 @@ an EIMT, and false otherwise:
 \begin{equation*}
 \begin{split}
 & \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \defined \\
-& \qquad \exists \Ves{bottom-origin}, \Vdr{bottom}, \Vdr{pred}, \\
-& \qquad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \quad \text{such that}  \\
-& \qquad \qquad \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
-& \qquad \qquad \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-& \qquad \qquad \qquad \land \Vlimt{pred} \in \Ves{bottom-origin} 
+& \quad \exists \Ves{bottom-origin}, \Vdr{bottom}, \Vdr{pred}, \\
+& \quad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \quad \text{such that}  \\
+& \quad \qquad \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
+& \quad \qquad \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
+& \quad \qquad \qquad \land \Vlimt{pred} \in \Ves{bottom-origin} 
 \end{split}
 \end{equation*}
 
@@ -1044,8 +1048,8 @@ a LIMT predecessor can be found for an EIMT \Veimt{bottom}
     \left \lbrace [ \Vdr{pred}, \Penult{\Vdr{bottom}}, \Vorig{pred} ] \right \rbrace
 }
 \end{equation*}
-and another which holds if there is no predecessor LIMT
-for \Veimt{bottom},
+and another, which holds if
+\Veimt{bottom} has no predecessor LIMT,
 \begin{equation*}
 \inference{
     \begin{array}{c}
@@ -1130,6 +1134,7 @@ but \Marpa{} incorporates them,
 and \Marpa{} also changes its Leo items to use AHFA states.
 Marpa's Leo items (LIM's) are triples
 of the form
+\end{sloppypar}
 \begin{equation*}
 [\Vah{top}, \Vsym{transition}, \Vorig{top}],
 \end{equation*}
@@ -1137,7 +1142,6 @@ where \Vsym{transition} and \Vorig{top}
 are as in the traditional Leo items,
 and \Vah{top} is an AHFA state.
 A Marpa Leo item has type \type{LIM}.
-\end{sloppypar}
 
 \cite{AH2002} also defines
 a partial transition function for
@@ -1421,10 +1425,8 @@ including which tokens are acceptable during the scanning phase.
 \subsection{Initialization}
 \label{p:initial-op}
 
-\begin{sloppypar}
 Inclusive time and space is \Oc{}
-and can be charged to the parse.
-\end{sloppypar}
+and is charged to the parse.
 
 \begin{algorithm}[h]
 \caption{Marpa Scan pass}
@@ -1443,7 +1445,6 @@ and can be charged to the parse.
 \subsection{Scan pass}
 \label{p:scan-op}
 
-\begin{sloppypar}
 \var{transitions} is a set of tables, one per Earley set.
 The tables in the set are indexed by symbol.
 Symbol indexing is \Oc, since the number of symbols
@@ -1462,7 +1463,6 @@ and retrieved in \Oc{} time.
 Inclusive time and space can be charged to the
 \Veim{predecessor}.
 Overhead is charged to the Earley set at \Vloc{i}.
-\end{sloppypar}
 
 \begin{algorithm}[h]
 \caption{Reduction pass}
@@ -1939,50 +1939,51 @@ or more AHFA states, that is,
 
 \begin{observation}
 \label{o:confirmed-AHFA-consistent}
-AHFA confirmation is consistent.  That is,
-for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} where
-\begin{gather*}
-\GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \quad \text{and} \\
-\Vdr{to} \in \Vah{to},
-\end{gather*}
-there exists \Vdr{from} such that
-\begin{gather*}
-    \Vdr{from} \in \Vah{from} \quad \text{and} \\
-    \Vsym{t} = \Postdot{\Vdr{from}} \quad \text{and} \\
-    \Next{\Vdr{from}} = \Vdr{to}.
-\end{gather*}
+AHFA confirmation is consistent.
+That is,
+for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} such that
+\begin{equation*}
+\begin{split}
+& \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \\
+\qquad \qquad \land \quad & \Vdr{to} \in \Vah{to}, \\
+\intertext{there exists \Vdr{from} such that}
+& \Vdr{from} \in \Vah{from} \\
+\qquad \qquad \land \quad & \Vsym{t} = \Postdot{\Vdr{from}} \\
+\qquad \qquad \land \quad & \Next{\Vdr{from}} = \Vdr{to}. \\
+\end{split}
+\end{equation*}
 \end{observation}
 
 \begin{observation}
 \label{o:confirmed-AHFA-complete}
-AHFA confirmation is complete.  That is,
-for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{from}, \Vdr{to}, if
-\begin{gather*}
-\GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \quad \text{and} \\
-\Vdr{from} \in \Vah{from} \quad \text{and} \\
-\Postdot{\Vdr{from}} = \Vsym{t},
-\end{gather*}
-then
-\begin{gather*}
-\Next{\Vdr{from}} = \Vdr{to} \quad \text{and} \\
-\Vdr{to} \in \Vah{to}.
-\end{gather*}
+AHFA confirmation is complete.
+That is,
+for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{from}, \Vdr{to} if
+\begin{equation*}
+\begin{split}
+& \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \\
+\qquad \land \quad & \Vdr{from} \in \Vah{from} \\
+\qquad \land \quad & \Postdot{\Vdr{from}} = \Vsym{t}, \\
+\qquad \land \quad & \Next{\Vdr{from}} = \Vdr{to} \\
+\end{split}
+\end{equation*}
+then $\Vdr{to} \in \Vah{to}$.
 \end{observation}
 
 \begin{sloppypar}
 \begin{observation}
 \label{o:predicted-AHFA-consistent}
 AHFA prediction is consistent.  That is,
-for all \Vah{from}, \Vah{to}, \Vdr{to} where
-\begin{gather*}
-\GOTO(\Vah{from}, \epsilon) = \Vah{to} \quad \text{and} \\
-\Vdr{to} \in \Vah{to},
-\end{gather*}
-there exists \Vdr{from} such that
-\begin{gather*}
-    \Vdr{from} \in \Vah{from} \quad \text{and} \\
-    \Vdr{to} \in \Predict{\Vdr{from}}.
-\end{gather*}
+for all \Vah{from}, \Vah{to}, \Vdr{to} such that
+\begin{equation*}
+\begin{split}
+& \GOTO(\Vah{from}, \epsilon) = \Vah{to} \\
+\qquad \qquad \land \quad & \Vdr{to} \in \Vah{to}, \\
+\intertext{there exists \Vdr{from} such that}
+& \Vdr{from} \in \Vah{from} \\
+\qquad \qquad \land \quad & \Vdr{to} \in \Predict{\Vdr{from}}.
+\end{split}
+\end{equation*}
 \end{observation}
 \end{sloppypar}
 
@@ -1990,15 +1991,14 @@ there exists \Vdr{from} such that
 \label{o:predicted-AHFA-complete}
 AHFA prediction is complete.  That is,
 for all \Vah{from}, \Vah{to}, \Vdr{from}, \Vdr{to}, if
-\begin{gather*}
-\GOTO(\Vah{from}, \epsilon) = \Vah{to} \quad \text{and} \\
-\Vdr{from} \in \Vah{from} \quad \text{and} \\
-\Vdr{to} \in \Predict{\Vdr{from}},
-\end{gather*}
-then
 \begin{equation*}
-\Vdr{to} \in \Vah{to}.
+\begin{split}
+& \GOTO(\Vah{from}, \epsilon) = \Vah{to} \\
+\qquad \land \quad & \Vdr{from} \in \Vah{from} \\
+\qquad \land \quad & \Vdr{to} \in \Predict{\Vdr{from}}, \\
+\end{split}
 \end{equation*}
+then $\Vdr{to} \in \Vah{to}$.
 \end{observation}
 
 \section{Marpa is correct}
@@ -2044,7 +2044,6 @@ the maximum size of Earley set \Vloc{i} is therefore
 Marpa's Earley sets are correct.
 \end{theorem}
 
-\begin{sloppypar}
 The proof
 is by triple induction,
 that is, induction with a depth down to 3 levels.
@@ -2064,7 +2063,6 @@ and therefore correct.
 We leave it as an exercise to show, as the
 basis of the induction, that
 \EEtable{\Marpa}{0} is complete and consistent.
-\end{sloppypar}
 
 To show the outer induction step, we show first
 consistency, then completeness.
@@ -2121,7 +2119,6 @@ and since \EVtable{\Marpa}{i} is consistent by the inner induction,
 \EVtable{\Marpa}{i} remains consistent after
 \Veim{confirmed} is added.
 
-\begin{sloppypar}
 For predictions,
 if $\Vah{confirmed} \ne \Lambda$, let
 \begin{equation*}
@@ -2146,12 +2143,10 @@ Consistency is invariant under union and,
 since \EVtable{\Marpa}{i} is consistent by the inner induction,
 \EVtable{\Marpa}{i} remains consistent after
 \Veim{predicted} is added.
-\end{sloppypar}
 
 \subsubsection{Earley reduction is consistent}
 \label{s:reduction-consistent}
 
-\begin{sloppypar}
 We next show consistency for Marpa's reduction operation,
 in the case where there is no Leo reduction.
 There will be two cause EIM's, \Veim{predecessor}
@@ -2164,7 +2159,6 @@ From \Veim{component}, we will find zero or more transition
 symbols, \Vsym{lhs}.
 From this point,  the argument is very similar to
 that for the case of the scanning operation.
-\end{sloppypar}
 
 Let
 \begin{equation*}
@@ -2192,7 +2186,6 @@ whether or not a \Veim{predicted} is added.
 \subsubsection{Leo reduction is consistent}
 \label{s:leo-consistent}
 
-\begin{sloppypar}
 We now show consistency for Marpa's reduction operation,
 in the case where there is a Leo reduction.
 If there is a Leo reduction, it is signaled by the
@@ -2231,7 +2224,6 @@ The consistency of
 once \Veim{leo} is added,
 follows by the invariance
 of consistency under union.
-\end{sloppypar}
 
 \subsubsection{Marpa's Earley sets are consistent}
 \label{s:sets-consistent}
@@ -2274,7 +2266,6 @@ and Earley predictions.
 \subsubsection{Scanning is complete}
 \label{s:scan-complete}
 
-\begin{sloppypar}
 For scanning, the Marpa pseudocode shows
 that a scan is attempted for every
 pair
@@ -2289,7 +2280,6 @@ and \Vsym{token} is the token scanned at \Vloc{i}.
 returned by $\mymathop{transitions}()$.
 This is a memoization for efficiency
 and we will ignore it.)
-\end{sloppypar}
 
 By the preliminary definitions, we know that \Vsym{token}
 is the same in both \Earley{} and \Leo.
@@ -2409,7 +2399,6 @@ and the case of reduction completeness.
 \subsubsection{Leo reduction is complete}
 \label{s:leo-complete}
 
-\begin{sloppypar}
 We now show completeness for Marpa's reduction operation,
 in the case where there is a Leo reduction.
 In Section \ref{s:leo-consistent},
@@ -2422,12 +2411,10 @@ Since \Vdr{top} is a completed rule,
 there are no predictions.
 This shows the case immediately,
 by the definition of completeness.
-\end{sloppypar}
 
 \subsubsection{Prediction is complete}
 \label{s:prediction-complete}
 
-\begin{sloppypar}
 Predictions result only from items in the same Earley set.
 In Sections \ref{s:scan-complete},
 \ref{s:reduction-complete}
@@ -2437,10 +2424,8 @@ for every prediction that would result
 from an item added to \EVtable{\Leo}{i},
 a corresponding prediction
 was added to \EVtable{\Marpa}{i}.
-\end{sloppypar}
 
 \subsubsection{Finishing the proof}
-\begin{sloppypar}
 Having shown the cases in Sections
 \ref{s:scan-complete},
 \ref{s:reduction-complete},
@@ -2455,7 +2440,6 @@ which is the step of the outer induction.
 Having shown its step, we have the outer induction,
 and the theorem.
 \qedsymbol
-\end{sloppypar}
 
 \subsection{Marpa is correct}
 
@@ -2754,13 +2738,15 @@ such that $\exists \, \Veim{component}, \Vah{component}$ where
  \land \quad & \Vsym{transition} = \LHS{\Vdr{component}}.
 \end{split}
 \end{equation*}
+\begin{sloppypar}
 We can see that that in this triple the relationship between
 \Veim{predecessor} and \Vorig{component} must be one-to-one,
 because otherwise there would be two different derivations of
 the Earley reduction for this case,
 contrary to the assumption that the grammar in unambiguous.
-It suffices thereforce to consider the number of possible choices
+It suffices therefore to consider the number of possible choices
 of the pair
+\end{sloppypar}
 \begin{equation*}
 [\Vorig{component}, \Vsym{transition}]
 \end{equation*}
@@ -3060,12 +3046,10 @@ the time and space complexity of \Marpa{}
 for unambiguous grammars is \order{\var{n}^2}.
 \end{proof}
 
-\begin{sloppypar}
 \begin{theorem}
 For any context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ time.
 \end{theorem}
-\end{sloppypar}
 
 \begin{proof}
 By Theorem \ref{t:O1-time-per-eim},
