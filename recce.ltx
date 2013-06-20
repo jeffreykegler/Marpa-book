@@ -1596,7 +1596,7 @@ To show that
 \begin{equation*}
 \var{transitions}(\Vloc{origin},\Vsym{lhs})
 \end{equation*}
-can be done in \Oc{} time,
+can be traversed in \Oc{} time,
 we note
 that the number of symbols is a constant
 and assume that \Vloc{origin} is implemented
@@ -1689,7 +1689,7 @@ We show that time is also \Oc{}
 by singling out the two non-trivial cases:
 checking that an Earley item is new,
 and adding it to the Earley set.
-\Marpa check whether an Earley item is new
+\Marpa{} checks whether an Earley item is new
 in \Oc{} time
 by using a data structure that called PSL.
 PSL's are the subject of Section \ref{s:per-set-lists}.
@@ -1712,35 +1712,38 @@ remains \Oc.
 
 In the general case,
 where \var{x} is an arbitrary datum,
-it is not possible to search based
-on the duple $[\Ves{i}, x]$ in \Oc{} time.
+it is not possible 
+to use duple $[\Ves{i}, x]$
+as a search key and expect the search to use
+\Oc{} time.
 Within \Marpa, however, there are specific cases
-where it is desirable to do exactly that,
+where it is desirable to do exactly that.
+This is accomplished by
 taking advantage of special properties of the search.
-In particular, it can often be arranged that there is
-a link direct to the Earley set \Ves{i},
-and that $0 <= \var{x} < \var{c}$,
-where \var{c} is a constant of reasonable size.
 
-The data structure used for these special purpose searches
-is a PSL.
+If it can be arranged that there is
+a link direct to the Earley set \Ves{i},
+and that $0 \leq \var{x} < \var{c}$,
+where \var{c} is a constant of reasonable size,
+then a search can be made in \Oc{} time,
+using a data structure called a PSL.
 Data structures identical to or very similar to PSL's are
 briefly outlined in both
 \cite[p. 97]{Earley1970} and
 \cite[Vol. 1, pages 326-327]{AU1972}.
 But neither source gives them a name.
-In this \doc{} they are called ``per-Earley set lists'',
-or PSL's.
+The term PSL
+(``per-Earley set list'')
+is new
+with this \doc{}.
 
-Each per-set list (PSL) is simply a fixed-length array of
-integers, indexed by an integer.
-A PSL is kept,
-as the name suggests,
-in each Earley set.
+A PSL is a fixed-length array of
+integers, indexed by an integer,
+and kept as part of each Earley set.
 While \Marpa{} is building a new Earley set,
-\EVtable{\Marpa}{j},
+\Ves{j},
 the PSL for every previous Earley set, \Vloc{i},
-tracks the Earley items in \EVtable{\Marpa}{j} that have \Vloc{i}
+tracks the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
@@ -1840,7 +1843,7 @@ or to attempts to add predicted Earley items.
 \subsection{Nulling symbols}
 \label{s:nulling}
 
-As noted, Marpa grammars,
+Recall that Marpa grammars,
 without loss of generality,
 contain neither empty rules or
 properly nullable symbols.
@@ -1934,7 +1937,7 @@ or more AHFA states, that is,
 
 \begin{observation}
 \label{o:confirmed-AHFA-consistent}
-AHFA confirmation is consistent.
+AHFA confirmation is consistent with respect to the dotted rules.
 That is,
 for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} such that
 \begin{equation*}
@@ -1951,49 +1954,55 @@ for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} such that
 
 \begin{observation}
 \label{o:confirmed-AHFA-complete}
-AHFA confirmation is complete.
+AHFA confirmation is complete with respect to the dotted rules.
 That is,
-for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{from}, \Vdr{to} if
+for all \Vah{from}, \Vsym{t}, \Vdr{from}, \Vdr{to} if
 \begin{equation*}
 \begin{split}
-& \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to} \\
-\qquad \land \quad & \Vdr{from} \in \Vah{from} \\
+& \Vdr{from} \in \Vah{from} \\
 \qquad \land \quad & \Postdot{\Vdr{from}} = \Vsym{t}, \\
 \qquad \land \quad & \Next{\Vdr{from}} = \Vdr{to} \\
+\intertext{then there exists \Vah{to} such that }
+& \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to}  \\
+\qquad \land \quad & \Vdr{to} \in \Vah{to}. \\
 \end{split}
 \end{equation*}
-then $\Vdr{to} \in \Vah{to}$.
 \end{observation}
 
-\begin{sloppypar}
 \begin{observation}
 \label{o:predicted-AHFA-consistent}
-AHFA prediction is consistent.  That is,
+AHFA prediction is consistent with respect to the dotted rules.
+That is,
 for all \Vah{from}, \Vah{to}, \Vdr{to} such that
 \begin{equation*}
-\begin{split}
-& \GOTO(\Vah{from}, \epsilon) = \Vah{to} \\
-\qquad \qquad \land \quad & \Vdr{to} \in \Vah{to}, \\
-\intertext{there exists \Vdr{from} such that}
-& \Vdr{from} \in \Vah{from} \\
-\qquad \qquad \land \quad & \Vdr{to} \in \Predict{\Vdr{from}}.
-\end{split}
+ \GOTO(\Vah{from}, \epsilon) = \Vah{to} 
+\, \land  \,
+ \Vdr{to} \in \Vah{to}, 
+\end{equation*}
+there exists \Vdr{from} such that
+\begin{equation*}
+ \Vdr{from} \in \Vah{from} 
+\, \land  \,
+ \Vdr{to} \in \Predict{\Vdr{from}}.
 \end{equation*}
 \end{observation}
-\end{sloppypar}
 
 \begin{observation}
 \label{o:predicted-AHFA-complete}
-AHFA prediction is complete.  That is,
-for all \Vah{from}, \Vah{to}, \Vdr{from}, \Vdr{to}, if
+AHFA prediction is complete with respect to the dotted rules.
+That is,
+for all \Vah{from}, \Vdr{from}, \Vdr{to}, if
 \begin{equation*}
-\begin{split}
-& \GOTO(\Vah{from}, \epsilon) = \Vah{to} \\
-\qquad \land \quad & \Vdr{from} \in \Vah{from} \\
-\qquad \land \quad & \Vdr{to} \in \Predict{\Vdr{from}}, \\
-\end{split}
+ \Vdr{from} \in \Vah{from} 
+\, \land \,
+\Vdr{to} \in \Predict{\Vdr{from}},
 \end{equation*}
-then $\Vdr{to} \in \Vah{to}$.
+then there exists \Vah{to} such that
+\begin{equation*}
+\Vdr{to} \in \Vah{to}
+\, \land  \,
+\GOTO(\Vah{from}, \epsilon) = \Vah{to}
+\end{equation*}
 \end{observation}
 
 \section{Marpa is correct}
@@ -2799,7 +2808,7 @@ each \Veim{component} are
 
 The number of reduction attempts will therefore be at most
 \begin{equation*}
-\var{reduction-tries} <= \Vsize{fa} \times \Vsize{symbols} \times \bigsize{\Ves{j}}.
+\var{reduction-tries} \leq \Vsize{fa} \times \Vsize{symbols} \times \bigsize{\Ves{j}}.
 \end{equation*}
 
 Summing
@@ -2839,11 +2848,11 @@ if we collect the terms of the summation,
 we will find a constant \var{c}
 such that
 \begin{equation*}
-\var{tries} <= \var{c} \times \sum\limits_{i=0}^{n}{\bigsize{\Vtable{j}}},
+\var{tries} \leq \var{c} \times \sum\limits_{i=0}^{n}{\bigsize{\Vtable{j}}},
 \end{equation*}
 and
 \begin{equation*}
-\var{tries} <= \var{c} \times \Rtablesize{\Marpa},
+\var{tries} \leq \var{c} \times \Rtablesize{\Marpa},
 \end{equation*}
 where \var{c} is a constant that depends on \Cg{}.\qedhere
 \end{proof}
