@@ -2909,27 +2909,37 @@ and by Theorem \ref{t:tries-O-eims},
 so that
 $\var{other-tries} = \order{\var{n}^2}$.
 
-Reconsidering \var{reduction-tries}
+\begin{sloppypar}
+Looking again at \var{reduction-tries}
 for the case of ambiguous grammars,
 we need to look again at the triple
 \begin{equation*}
-[\Veim{predecessor}, \Vloc{component-origin}, \Vsym{transition}].
+[\Veim{predecessor}, \Vsym{transition}, \Veim{component}].
 \end{equation*}
-For unambiguous grammars we could assume that the relationship
-of \Veim{predecessor} to \Vloc{component-origin} was one-to-one,
-but in an unambiguous grammar we must allow it to be many-to-one.
-Worst case, every EIM in \Ves{component-origin} is a possible
-match, so that the number of possible combinations is
-now
+We did not use the fact that the grammar was unambigous in counting
+the possibilities for \Vsym{transition} or \Veim{component}, but
+we did make use of it in determining the count of possibilities
+for \Veim{predecessor}.
+We know still know that
 \begin{equation*}
-\bigsize{\Vtable{component-origin}} \times \Vsize{symbols} \times \bigsize{\Vtable{j}}.
+\Veim{predecessor} \in \Ves{component-origin},
 \end{equation*}
+where 
+\Vloc{component-origin} is the origin of \Veim{component}.
+Worst case, every EIM in \Ves{component-origin} is a possible
+match, so that
+the number of possibilities for \Veim{predecessor} now grows to
+\size{\Ves{component-origin}}, and
+\begin{equation*}
+\var{reduction-tries} =
+\bigsize{\Ves{component-origin}} \times \Vsize{symbols} \times \bigsize{\Ves{j}}.
+\end{equation*}
+\end{sloppypar}
 
 In the worst case $\var{component-origin} \simeq \var{j}$,
 so that by Theorem \ref{t:es-count},
 \begin{equation*}
-\bigsize{\EVtable{\Marpa}{component-origin}}
-\times \bigsize{\EVtable{\Marpa}{j}} = \order{\var{j}^2}
+\size{\Ves{component-origin}} \times \size{\Ves{j}} = \order{\var{j}^2}.
 \end{equation*}
 Adding \var{other-tries}
 and summing over the Earley sets,
