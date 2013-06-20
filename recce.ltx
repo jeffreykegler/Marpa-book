@@ -1,7 +1,7 @@
 % Copyright 2013 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
-\documentclass[12pt,draft]{amsart}
+\documentclass[12pt]{amsart}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{url}
@@ -2021,12 +2021,10 @@ and a parse location \Vloc{i},
 \end{theorem}
 
 \begin{proof}
-In this context \Vloc{i} is to be treated
-as an integer, the ordinal of Earley set \Vloc{i}.
 EIM's have the form $[\Vah{x}, \Vorig{x}]$.
 \Vorig{x} is the origin of the EIM,
 which in Marpa cannot be after the current
-Earley set \Vloc{i},
+Earley set  at \Vloc{i},
 so that
 \begin{equation*}
 0 \le \Vorig{x} \le \Vloc{i}.
@@ -2038,7 +2036,7 @@ which depends on \Cg{}.
 Since duplicate EIM's are never added to an Earley set,
 the maximum size of Earley set \Vloc{i} is therefore
 \begin{equation*}
-\Vloc{i} \times \size{\Cfa} = \order{\var{i}}.\qedhere
+\Vloc{i} \times \size{\Cfa} = \order{\Vloc{i}}.\qedhere
 \end{equation*}
 \end{proof}
 
@@ -2051,12 +2049,12 @@ Marpa's Earley sets are correct.
 The proof
 is by triple induction,
 that is, induction with a depth down to 3 levels.
-We number the levels of induction from
-outermost to innermost,
-0, 1 and 2.
+We number the levels of induction
+0, 1 and 2,
+starting with the outermost.
 The level 0 induction is usually called the outer induction.
 The level 1 induction is usually called the inner induction.
-The level 2 induction is referred to by its number.
+Level 2 induction is referred to by number.
 
 The outer induction is on the Earley sets.
 The outer induction hypothesis is that all Earley sets
@@ -2335,7 +2333,7 @@ the Earley set is an ordered set,
 and that new Earley items are added at the end.
 From Theorem \ref{t:es-count}, we know
 that
-the number of Earley items is \On{},
+the number of Earley items is finite,
 so a traversal of them must terminate.
 
 Consider, for the purposes of the level 2 induction,
@@ -2400,6 +2398,7 @@ we see that a Earley reduction result of
 generation $\var{n}+1$
 will be added to
 \EVtable{\Marpa}{i} corresponding to every Earley reduction result
+in generation $\var{n}+1$
 of \EVtable{\Leo}{i},
 as well as one corresponding
 to every prediction that results from
@@ -2497,10 +2496,10 @@ the previous two equalities.
 For the complexity proofs,
 we consider only Marpa grammars without nulling
 symbols.
-When we examined correctness,
-we showed that this rewrite
+We showed that this rewrite
 is without loss of generality
-in Section \ref{s:nulling}.
+in Section \ref{s:nulling},
+when we examined correctness.
 For complexity we must also show that
 the rewrite and its reversal can be done
 in amortized \Oc{} time and space
@@ -2991,9 +2990,9 @@ form
 where $\Vsym{rightmost} \deplus \Vsym{A}$.
 Such a rule is right recursive by definition.
 This is contrary to the assumption for the reductio.
-We therefore conclude that the length of a right derivation with no
-step that uses a right recursive rule,
-must be less than or equal to \var{c}.
+We therefore conclude that the length of a right derivation
+must be less than or equal to \var{c},
+unless at least one step of that derivation uses a right recursive rule.
 \end{proof}
 
 \subsection{The complexity results}
@@ -3145,12 +3144,7 @@ including the space for tracking links.
 \end{theorem}
 
 \begin{proof}
-One link is required to record
-each attempt to add an Earley item.
-Each link requires \Oc{} space.
-The bound of $\order{\var{n}^3}$ results
-from these two observations,
-Theorem \ref{t:O1-links-per-eim},
+By Theorem \ref{t:O1-links-per-eim},
 and Theorem \ref{t:ambiguous-tries}.
 \end{proof}
 
@@ -3255,11 +3249,11 @@ let it be understood that
 \end{equation*}
 We require that,
 for some constant \var{c},
-possibly dependant on the grammar \Cg{},
+possibly dependent on the grammar \Cg{},
 that every token length be less than \var{c},
 \begin{equation}
 \label{e:restriction1}
-\forall \, \token{[\Vsym{x}, \Vloc{x}, length]},
+\forall \, \token{[\Vsym{x}, \Vloc{x}, \var{length}]},
 \; \var{length} < \var{c},
 \end{equation}
 and that
