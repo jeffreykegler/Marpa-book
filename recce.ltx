@@ -2736,43 +2736,75 @@ in the scan and reduction operations.
 
 The final and most complicated case is Earley reduction.
 Recall that \Ves{j} is the current Earley set.
+Consider the number of reductions attempted.
 \Marpa{} attempts to add an Earley reduction result
 once for every triple
 \begin{equation*}
-[\Veim{predecessor}, \Vorig{component}, \Vsym{transition}]
+[\Veim{predecessor}, \Vsym{transition}, \Veim{component}].
 \end{equation*}
-such that $\exists \, \Veim{component}, \Vah{component}$ where
+where
 \begin{equation*}
 \begin{split}
-& \Veim{component} \in \Ves{j} \\
- \land \quad & \Veim{component} = [ \Vah{component}, \Vorig{component} ] \\
- \land \quad & \Vdr{component} \in \Vah{component} \\
- \land \quad & \Vsym{transition} = \LHS{\Vdr{component}}.
+& \Veim{component} = [ \Vah{component}, \Vloc{component-origin} ]  \\
+\land \quad & \Vdr{component} \in \Vah{component} \\
+ \land \quad & \Vsym{transition} = \LHS{\Vdr{component}}. \\
 \end{split}
 \end{equation*}
+
+We now put an upper bound on number of possible values of this triple.
+The number of possibilities for \Vsym{transition} is clearly at most
+\size{\var{symbols}},
+the number of symbols in \Cg{}.
+We have $\Veim{component} \in \Ves{j}$,
+and therefore there are at most 
+$\bigsize{\Ves{j}}$ choices for \Veim{component}.
+
 \begin{sloppypar}
-We can see that that in this triple the relationship between
-\Veim{predecessor} and \Vorig{component} must be one-to-one,
-because otherwise there would be two different derivations of
-the Earley reduction for this case,
-contrary to the assumption that the grammar in unambiguous.
-It suffices therefore to consider the number of possible choices
-of the pair
+We can show that the number of possible choices of 
+\Veim{predecessor} is at most
+the number of AHFA states, \Vsize{fa}, by a reductio.
+Suppose, for the reduction,
+there were more than \Vsize{fa} possible choices of \Veim{predecessor}.
+Then there are two possible choices of \Veim{predecessor} with
+the same AHFA state.
+Call these \Veim{choice1} and \Veim{choice2}.
+We know, by the definition of Earley reduction, that
+$\Veim{predecessor} \in \Ves{j}$,
+and therefore we have
+$\Veim{choice1} \in \Ves{j}$ and
+$\Veim{choice2} \in \Ves{j}$.
+Since all EIM's in an Earley set must differ,
+and
+\Veim{choice1} and \Veim{choice2} both have the same
+AHFA state,
+they must differ in their origin.
+But two different origins would produce two different derivations for the
+reduction, which would mean that the parse was ambiguous.
+This is contrary to the assumption for the theorem
+that the grammar is unambiguous.
+This shows the reductio
+and that the number of choices for \Veim{predecessor},
+compatible with \Vorig{component}, is as most \Vsize{fa}.
+\end{sloppypar}
+
+\begin{sloppypar}
+Collecting the results we see that the possibilities for 
+each \Veim{component} are
 \begin{equation*}
-[\Vorig{component}, \Vsym{transition}].
+\begin{alignedat}{2}
+& \Vsize{fa} &&
+\qquad \text{choices of \Veim{predecessor}} \\
+\times \; & \Vsize{symbols} &&
+\qquad \text{choices of \Vsym{transition}} \\
+\times \; & \size{\Ves{j}} &&
+\qquad \text{choices of \Veim{component}} \\
+\end{alignedat}
 \end{equation*}
 \end{sloppypar}
 
-\Vorig{component} came from $\Veimt{component} \in \Ves{j}$,
-and therefore there are at most 
-$\bigsize{\Vtable{j}}$ choices for \Vorig{component}.
-The number of possibilities for \Vsym{lhs} is limited
-by the number of symbols,
-call it \size{\var{symbols}},
-which is a constant that depends on the grammar \Cg{}.
 The number of reduction attempts will therefore be at most
 \begin{equation*}
-\var{reduction-tries} <= \Vsize{symbols} \times \bigsize{\Vtable{j}}.
+\var{reduction-tries} <= \Vsize{fa} \times \Vsize{symbols} \times \bigsize{\Ves{j}}.
 \end{equation*}
 
 Summing
@@ -2799,7 +2831,7 @@ the size of the input,
 \bigsize{\Etable{\var{j} \subtract 1}}
 } &&
 \qquad \text{scanned EIM's} \\
-+ \; & 2 \times \sum\limits_{i=0}^{n}{\Vsize{symbols} \times \bigsize{\Vtable{j}}} &&
++ \; & 2 \times \sum\limits_{i=0}^{n}{\Vsize{fa} \times \Vsize{symbols} \times \bigsize{\Ves{j}}} &&
 \qquad \text{reduction EIM's}.
 \end{alignedat}
 \end{equation*}
