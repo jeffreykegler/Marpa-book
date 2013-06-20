@@ -98,6 +98,7 @@
 \newcommand{\Postdot}[1]{\mymathop{Postdot}(#1)}
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
 \newcommand{\LHS}[1]{\mymathop{LHS}(#1)}
+\newcommand{\RHS}[1]{\mymathop{RHS}(#1)}
 \newcommand{\RightRecursive}[1]{\mymathop{Right-Recursive}(#1)}
 \newcommand{\RightNN}[1]{\mymathop{Right-NN}(#1)}
 \newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
@@ -156,14 +157,15 @@ to unite the improvements
 to Earley's algorithm found in
 Joop Leo's 1991 paper
 to those in Aycock and Horspool's 2002 paper.
-Also new with Marpa is that
-full knowledge of the state of the parse,
-including the list of acceptable tokens,
-is available when tokens are scanned.
-Advantageous for error detection,
-this foreknowledge also
-allows ``Ruby Slippers'' parsing --
-alteration of the input in reaction
+Marpa tracks the full state of the parse,
+at it proceeds,
+in a form convenient for the application.
+This greatly improves error detection
+and enables event-driven parsing.
+One such technique is
+``Ruby Slippers'' parsing,
+in which
+the input is altered in response
 to the parser's expectations.
 \end{abstract}
 
@@ -173,8 +175,8 @@ to the parser's expectations.
 
 Despite the promise of general context-free parsing,
 and the strong academic literature behind it,
-it has never been incorporated into a tool
-as highly available as yacc\cite{Johnson} or
+it has never been incorporated into a highly available tool
+like those that exist for LALR\cite{Johnson} or
 regular expressions.
 The Marpa project was intended
 to take the best results from the literature
@@ -185,6 +187,8 @@ Marpa::XS\cite{Marpa-XS},
 a stable version of this tool,
 was uploaded to the CPAN Perl archive
 on Solstice Day in 2011.
+This paper describes the algorithm of Marpa::R2\cite{Marpa-R2},
+a later version.
 
 As implemented,
 Marpa parses,
@@ -339,9 +343,12 @@ such that
 \quad \Vstr{rhs} \in \var{vocab}^+.
 \end{equation*}
 \Vsym{lhs} is referred to as the left hand side (LHS)
-of \Vrule{r}, $\LHS{\Vrule{r}}$.
+of \Vrule{r}.
 \Vstr{rhs} is referred to as the right hand side (RHS)
 of \Vrule{r}.
+The LHS and RHS of \Vrule{r} may also be
+referred to as 
+$\LHS{\Vrule{r}}$ and $\RHS{\Vrule{r}}$, respectively.
 This definition follows \cite{AH2002},
 which departs from tradition by disallowing an empty RHS.
 
@@ -368,15 +375,13 @@ empty rules, etc.
 Also without loss of generality,
 it is assumed
 that there is a dedicated acceptance rule, \Vrule{accept}
-and a dedicated acceptance symbol, \Vsym{accept}
+and a dedicated acceptance symbol, $\Vsym{accept} = \LHS{\Vrule{accept}}$,
 such that
-for all \Vrule{x}, where $\Vrule{x} = [\Vsym{lhs} \de \Vstr{rhs}]$,
+for all \Vrule{x},
 \begin{equation*}
 \begin{split}
-& \exists \Vstr{rhs-accept} \mid \\
-& \qquad \Vrule{accept} = [ \Vsym{accept} \de \Vstr{rhs-accept} ] \\
-& \qquad \land \Vsym{accept} \notin \Vstr{rhs} \\
-& \qquad \land (\Vsym{accept} = \Vsym{lhs} \implies \Vrule{accept} = \Vrule{x}).
+& \Vsym{accept} \notin \RHS{\Vrule{x}} \\
+\land \quad & (\Vsym{accept} = \LHS{\Vrule{x}} \implies \Vrule{accept} = \Vrule{x}).
 \end{split}
 \end{equation*}
 
@@ -671,8 +676,6 @@ The Earley sets correspond to parse locations,
 and for any Earley operation there is a
 current parse location, \Vloc{current}, and
 a current Earley set, \Ves{current}.
-In this section,
-the current Earley set will be \Vloc{current}.
 
 Each location starts with an empty Earley set.
 For the purposes of this description of
@@ -878,9 +881,7 @@ it is important to emphasize that \Vdr{d2} ranges over all the dotted
 rules of Earley set \Ves{i},
 even those which are ineligible for Leo memoization.
 
-Each Leo sequence, if fully expanded,
-would contain \On{} items,
-where \var{n} is the length of the sequence.
+Let \var{n} be the length of a Leo sequence.
 In \Earley, each such sequence would be expanded in every
 Earley set that is the origin of an EIMT included in the
 sequence, and the total number of EIMT's would be
@@ -901,8 +902,9 @@ so that even including expansion of the Leo sequence
 for evaluation, the time and space complexity of
 the sequence remains \On{}.
 
+\begin{sloppypar}
 Recall that we
-call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{d} \neq \Lambda$.
+call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
@@ -910,7 +912,6 @@ For \Marpa{} to consider a dotted rule
 \begin{equation*}
 \Vdr{candidate} = [\Vrule{candidate}, \var{i}]
 \end{equation*}
-\begin{sloppypar}
 for Leo memoization,
 \Vdr{candidate} must be a penult and
 \Vrule{candidate} must be right-recursive.
@@ -929,16 +930,15 @@ One future extension might be to identify
 non-right-recursive rules
 which generate Leo sequences long enough to
 justify inclusion in the Leo memoizations.
-Such cases are unusual, but do occur.
+Such cases are unusual, but may occur.
 
 Omission of a memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
-leaves the correctness results of Leo\cite{Leo1991} intact.
-However,
-we will need to account more carefully for
-the effect on complexity, and will
-do so in the complexity results later
-in this \doc{}.
+preserves the correctness as shown in Leo\cite{Leo1991}.
+Later in this \doc{} we will
+show that this change also leaves
+the complexity results of 
+Leo\cite{Leo1991} intact.
 
 Implementing the Leo logic requires
 adding Leo reduction as a new basic operation,
@@ -1040,6 +1040,7 @@ a LIMT predecessor can be found for an EIMT \Veimt{bottom}
 \inference{
     \begin{array}{c}
     \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
+    \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vorig{pred} ] \\
     \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom} ] \\
     \Veimt{bottom} \in \Ves{current} \\
     \LeoEligible{\Vdr{bottom}}
@@ -1054,12 +1055,12 @@ and another, which holds if
 \inference{
     \begin{array}{c}
     \neg \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
-    \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom} ] \\
+    \Veimt{bottom} = [ \Vdr{bottom}, \Vorig{bottom} ] \\
     \Veimt{bottom} \in \Ves{current} \\
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
-    \bigset{ [ \Next{\Vdr{bottom}}, \Penult{\Vdr{bottom}}, \Vloc{bottom} ] }
+    \bigset{ [ \Next{\Vdr{bottom}}, \Penult{\Vdr{bottom}}, \Vorig{bottom} ] }
 }
 \end{equation*}
 
@@ -1182,7 +1183,7 @@ reduction be
 \begin{equation*}
 \Veim{result} = [\Vah{result}, \Vorig{result}]
 \end{equation*}
-Let the Earley set that contains \Veim{result} be called
+Let the Earley set that contains \Veim{result} be
 \Ves{i}.
 Since \Veim{result} is the result of a Leo reduction
 we know, from the definition of a Leo reduction,
@@ -1304,11 +1305,6 @@ We will show that,
 to each Earley item actually added,
 or to each attempt to add a duplicate Earley item,
 we can charge amortized \Oc{} time and space.
-In Section \ref{s:complexity},
-we will characterize
-the order of magnitude of the actual Earley items
-and of attempts to add Earley items,
-and their relationship to each other.
 
 At points, it will not be immediately
 convenient to speak of
@@ -1320,7 +1316,8 @@ In those circumstances,
 we speak of charging time and space
 \begin{itemize}
 \item to the parse; or
-\item to the Earley set.
+\item to the Earley set; or
+\item to the current procedure's caller.
 \end{itemize}
 
 We can charge time and space to the parse itself,
@@ -1341,18 +1338,24 @@ If an Earley set is empty,
 the parse must fail,
 and the time can be charged to the parse.
 
-When discussing each procedure, we will state whether
-the time and space we are charging is inclusive, exclusive
-or caller-included.
+In a procedure,
+resource can be ``caller-included''.
+Caller-included resource is not accounted for in
+the current procedure,
+but passed upward to the procedure's caller,
+to be accounted for there.
+A procedure to which caller-included resource is passed will
+sometimes pass the resource upward to its own caller,
+although of course the top-level procedure does not do this.
+
+For each procedure, we will state whether
+the time and space we are charging is inclusive or exclusive.
 The exclusive time or space of a procedure is that
 which it uses directly,
-ignoring resource usage by called procedures.
+ignoring resource charges passed up from called procedures.
 Inclusive time or space includes
-resource usage by called procedures.
-Caller-included time and space is charged to
-a procedure's caller.
-The caller to which a resource charge is passed may
-in turn charge the resource to its own caller.
+resource passed upward to the
+current procedure from called procedures.
 
 Earley sets may be represented by \Ves{i},
 where \var{i} is the Earley set's locaiton \Vloc{i}.
@@ -1468,8 +1471,9 @@ Overhead is charged to the Earley set at \Vloc{i}.
 \caption{Reduction pass}
 \begin{algorithmic}[1]
 \Procedure{Reduction pass}{\Vloc{i}}
-\State Note: This loop must include items added
-\State \hspace{2.5em} by \Call{Reduce one LHS}{}
+\State Note: \Vtable{i} may include EIM's added by
+\State \hspace{2.5em} by \Call{Reduce one LHS}{} and
+\State \hspace{2.5em} the loop must traverse these
 \For{each Earley item $\Veim{work} \in \Vtable{i}$}
 \State $[\Vah{work}, \Vloc{origin}] \gets \Veim{work}$
 \State $\Vsymset{lh-sides} \gets$ a set containing the LHS
@@ -1510,11 +1514,11 @@ Overhead may be charged to the Earley set at \Vloc{i}.
 \begin{algorithmic}[1]
 \Procedure{Memoize transitions}{\Vloc{i}}
 \For{every \Vsym{postdot}, a postdot symbol of $\Ves{i}$}
-\If{\Vsym{postdot} is Leo eligible}
 \State Note: \Vsym{postdot} is ``Leo eligible" if it is
 \State \hspace\algorithmicindent  Leo unique and its rule is right recursive
+\If{\Vsym{postdot} is Leo eligible}
 \State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
-\State \hspace\algorithmicindent to an LIM
+\State \hspace\algorithmicindent to a LIM
 \Else
 \State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
 \State \hspace\algorithmicindent to the set of EIM's that have
@@ -1539,41 +1543,32 @@ Inclusive time and space are charged to the
 Earley items being examined.
 Overhead is charged to \Ves{i}.
 
-In setting up the \var{transitions} table for the current Earley set,
-the Leo items must be created.
+We now look at the resource used in the Leo processing.
 A transition symbol \Vsym{transition}
 is Leo eligible if it is Leo unique
 and its rule is right recursive.
 (If \Vsym{transition} is Leo unique in \Ves{i}, it will be the
 postdot symbol of only one rule in \Ves{i}.)
-Whether a rule is right recursive can be precomputed
+All but one of the determinations needed to decide
+if \Vsym{transition} is Leo eligible can be precomputed
 from the grammar,
-with the resource is charged to the parse.
-Similarly, with one exception,
-all the requirements to determine Leo uniqueness
-can be precomputed,
-and the resource is charged to the parse.
+and the resource to do this is charged to the parse.
+The precomputation, for example,
+for every rule, determines if it is right recursive.
 
-The one part of the testing for
-Leo eligibility that cannot be precomputed from the grammar, is
-the determination that there is only one dotted
+One part of the test for
+Leo eligibility cannot be done as a precomputation.
+This is the determination whether there is only one dotted
 rule in \Ves{i} whose postdot symbol is
 \Vsym{transition}.
 This can be done
 in a single pass over the EIM's of \Ves{i}
 that notes the postdot symbols as they are encountered
 and whether any is enountered twice.
-The cost will be \Oc{} time per EIM,
-and can be charged to the Earley item being examined.
-
-The actual creation of the Leo items
-can be done in \Oc{} time per Earley set,
-since the number of Leo items is at most
-the number of symbols in
-\Vsymset{vocab},
-which is a constant depending on \Cg{}.
-The resource to create Leo items
-may be charged to the Earley set.
+The time and space,
+including that for the creation of a LIM if necessary,
+will be \Oc{} time per EIM examined,
+and can be charged to EIM being examined.
 
 \begin{algorithm}[h]
 \caption{Reduce one LHS symbol}
