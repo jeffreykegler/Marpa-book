@@ -49,48 +49,50 @@
         {\Rightarrow\!}\:$}}}
 
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
+\newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
+\newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
 \newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
+
+\newcommand{\Vbool}[1]{\Tvar{#1}{BOOL}}
+\newcommand{\Vdr}[1]{\Tvar{#1}{DR}}
+\newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
+\newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
+\newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
+\newcommand{\Ves}[1]{\Tvar{#1}{ES}}
+\newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
+\newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
+\newcommand{\Vrule}[1]{\Tvar{#1}{RULE}}
+\newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
+\newcommand{\Vstr}[1]{\Tvar{#1}{STR}}
+\newcommand{\Vsym}[1]{\Tvar{#1}{SYM}}
+\newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
+\newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
+\newcommand{\Vtoken}[1]{\Tvar{#1}{TOKEN}}
+
+\newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
+
+% types to be deleted with A&H LR(0) stuff
 \newcommand{\ah}[1]{#1_{AH}}
 \newcommand{\Vah}[1]{\ensuremath{\var{#1}_{AH}}}
-\newcommand{\bool}[1]{\var{#1}_{BOOL}}
-\newcommand{\Vbool}[1]{\ensuremath{\bool{#1}}}
-\newcommand{\dr}[1]{#1_{DR}}
-\newcommand{\Vdr}[1]{\ensuremath{\var{#1}_{DR}}}
-\newcommand{\Vdrset}[1]{\ensuremath{\var{#1}_{\set{DR}}}}
-\newcommand{\eim}[1]{#1_{EIM}}
-\newcommand{\Veim}[1]{\ensuremath{\var{#1}_{EIM}}}
 \newcommand{\Veimt}[1]{\ensuremath{\var{#1}_{EIMT}}}
-\newcommand{\Veimset}[1]{\ensuremath{\var{#1}_{\set{EIM}}}}
 \newcommand{\Veimtset}[1]{\ensuremath{\var{#1}_{\set{EIMT}}}}
-\newcommand{\Ees}[1]{\ensuremath{#1_{ES}}}
-\newcommand{\Vlim}[1]{\ensuremath{\var{#1}_{LIM}}}
 \newcommand{\Vlimt}[1]{\ensuremath{\var{#1}_{LIMT}}}
-\newcommand{\Eloc}[1]{\ensuremath{{#1}_{LOC}}}
-\newcommand{\Vloc}[1]{\Eloc{\var{#1}}}
-\newcommand{\Ves}[1]{\Ees{\var{#1}}}
-\newcommand{\Vrule}[1]{\ensuremath{\var{#1}_{\var{RULE}}}}
-\newcommand{\Vruleset}[1]{\ensuremath{\var{#1}_{\set{\var{RULE}}}}}
-\newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
-\newcommand{\Vstr}[1]{\ensuremath{\var{#1}_{\var{STR}}}}
-\newcommand{\sym}[1]{#1_{\var{SYM}}}
-\newcommand{\Vsym}[1]{\ensuremath{\var{#1}_{\var{SYM}}}}
-\newcommand{\Vorig}[1]{\ensuremath{\var{#1}_{ORIG}}}
-\newcommand{\symset}[1]{#1_{\lbrace \var{SYM} \rbrace} }
-\newcommand{\Vsymset}[1]{\ensuremath{\var{#1}_{\set{\var{SYM}}}}}
-\newcommand{\term}[1]{#1_{TERM}}
-\newcommand{\token}[1]{#1_{TOK}}
 
 \newcommand{\alg}[1]{\ensuremath{\textsc{#1}}}
-\newcommand{\AH}{\ensuremath{\alg{AH}}}
 \newcommand{\Earley}{\ensuremath{\alg{Earley}}}
 \newcommand{\Leo}{\ensuremath{\alg{Leo}}}
 \newcommand{\Marpa}{\ensuremath{\alg{Marpa}}}
 
+% TODO to be deleted with A&H LR(0) stuff
+\newcommand{\AH}{\ensuremath{\alg{AH}}}
+
+% TODO to be deleted with A&H LR(0) stuff
 \newcommand{\Cfa}{\var{fa}}
+
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
-\newcommand{\CVw}[1]{\ensuremath{\sym{\Cw[\var{#1}]}}}
+\newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
 \newcommand{\Crules}{\var{rules}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
 \newcommand{\Next}[1]{\mymathop{Next}(#1)}
@@ -286,8 +288,8 @@ This \doc{} will
 use subscripts to indicate commonly occurring types.
 \begin{center}
 \begin{tabular}{ll}
-$\var{X}_T$ & The variable \var{X} of type $T$ \\
-$\var{set-one}_\set{T}$ & The variable \var{set-one} of type set of $T$ \\
+\Tvar{X}{T} & The variable \var{X} of type \var{T} \\
+\Tvarset{set-one}{T} & The variable \var{set-one} of type ``set of \var{T}'' \\
 $\var{SYM}$ & The type for a symbol \\
 \Vsym{a} & The variable \var{a} of type $\var{SYM}$ \\
 \Vsymset{set-two} & The variable \var{set-two}, a set of symbols \\
@@ -638,9 +640,9 @@ In contexts where it is clear which recognizer is
 intended,
 \Vtable{k}, or \Ves{k}, will symbolize Earley set \Vloc{k}
 in that recognizer's table of Earley sets.
-If \Ees{\var{working}} is an Earley set,
-$\size{\Ees{\var{working}}}$ is the number of Earley items
-in \Ees{\var{working}}.
+If \var{working} is an Earley set,
+$\Vsize{working}$ is the number of Earley items
+in \var{working}.
 
 \Rtablesize{\alg{Recce}} is the total number
 of Earley items in all Earley sets for \alg{Recce},
@@ -3245,7 +3247,7 @@ restrictions must be imposed.
 In stating them,
 let it be understood that
 \begin{equation*}
-	\token{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \in \var{tokens}
+	\Vtoken{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \in \var{tokens}
 \end{equation*}
 We require that,
 for some constant \var{c},
@@ -3253,7 +3255,7 @@ possibly dependent on the grammar \Cg{},
 that every token length be less than \var{c},
 \begin{equation}
 \label{e:restriction1}
-\forall \, \token{[\Vsym{x}, \Vloc{x}, \var{length}]},
+\forall \, \Vtoken{[\Vsym{x}, \Vloc{x}, \var{length}]},
 \; \var{length} < \var{c},
 \end{equation}
 and that
@@ -3265,7 +3267,7 @@ be less than \var{c},
  \forall \Vloc{i}, \;
  \Bigl|
  \bigl \lbrace
-	\token{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \bigm|
+	\Vtoken{[ \Vsym{x}, \Vloc{x}, \var{length} ]} \bigm|
 	\Vloc{x} = \Vloc{i}
   \bigr \rbrace
   \Bigr| < \var{c}
