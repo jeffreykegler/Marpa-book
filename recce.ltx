@@ -141,7 +141,7 @@
 
 \author{Jeffrey Kegler}
 \thanks{%
-Copyright \copyright\ 2013 Jeffrey Kegler.
+Copyright \copyright\ 2019 Jeffrey Kegler.
 }
 \thanks{%
 This document is licensed under
@@ -151,20 +151,20 @@ a Creative Commons Attribution-NoDerivs 3.0 United States License.
 \begin{abstract}
 The Marpa recognizer is described.
 Marpa is
-a practical and fully implemented
+a fully implemented
 algorithm for the recognition,
 parsing and evaluation of context-free grammars.
-The Marpa recognizer is the first
-to unite the improvements
+The Marpa recognizer includes the first
+practical implementation
+of the improvements
 to Earley's algorithm found in
-Joop Leo's 1991 paper
-to those in Aycock and Horspool's 2002 paper.
+Joop Leo's 1991 paper.
 Marpa tracks the full state of the parse,
-at it proceeds,
-in a form convenient for the application.
-This greatly improves error detection
-and enables event-driven parsing.
-One such technique is
+at run-time,
+in a form accessible by the application.
+This greatly improves error detection;
+enables event-driven parsing;
+and allows techniques such as
 ``Ruby Slippers'' parsing,
 in which
 the input is altered in response
@@ -175,9 +175,9 @@ to the parser's expectations.
 
 \section{Introduction}
 
-Despite the promise of general context-free parsing,
-and the strong academic literature behind it,
-it has never been incorporated into a highly available tool
+Despite a strong academic literature,
+general context-free parsing
+has never been incorporated into a highly available tool
 like those that exist for LALR\cite{Johnson} or
 regular expressions.
 The Marpa project was intended
@@ -206,15 +206,16 @@ If a grammar is in a class of grammar currently in practical use,
 Marpa parses it in linear time.
 
 Error-detection properties,
-extremely important,
+although extremely important,
 have been overlooked in the past.
 Marpa breaks new ground in this respect.
 Marpa has the immediate error detection property,
-but goes well beyond that:
-it is fully aware of the state of the parse,
+and goes well beyond it.
+Marpa is fully aware of the state of the parse,
 and can report this to the user while tokens are
 being scanned.
 
+As one example,
 Marpa allows the lexer to check its list
 of acceptable tokens before a token is scanned.
 Because rejection of tokens is easily and
@@ -224,6 +225,7 @@ approach.
 Error detection is no longer
 an act of desperation,
 but a parsing technique in its own right.
+
 If a token is rejected,
 the lexer is free to create a new token
 in the light of the parser's expectations.
@@ -241,7 +243,8 @@ short-comings on the fly.
 The author has implemented an HTML parser\cite{Marpa-HTML},
 based on a grammar that assumes that all start
 and end tags are present.
-Such an HTML grammar is too simple even to describe perfectly
+Such an HTML grammar is too simple
+to describe even perfectly
 standard-conformant HTML,
 but the lexical analyzer is
 programmed to supply start and end tags as requested by the parser.
@@ -260,8 +263,6 @@ Sections \ref{s:earley} and \ref{s:earley-ops}
 introduce Earley's algorithm.
 Section \ref{s:leo} describes Leo's modification
 to Earley's algorithm.
-Section \ref{s:AHFA} describes the modifications
-proposed by Aycock and Horspool.
 Section \ref{s:pseudocode} presents the pseudocode
 for Marpa's recognizer.
 Section
@@ -285,7 +286,7 @@ generalizes Marpa's input model.
 We assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
 This \doc{} will
-use subscripts to indicate commonly occurring types.
+use subscripts to indicate variable types.
 \begin{center}
 \begin{tabular}{ll}
 \Tvar{X}{T} & The variable \var{X} of type \var{T} \\
@@ -350,7 +351,7 @@ of \Vrule{r}.
 of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as 
-$\LHS{\Vrule{r}}$ and $\RHS{\Vrule{r}}$, respectively.
+$\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
 This definition follows \cite{AH2002},
 which departs from tradition by disallowing an empty RHS.
 
@@ -388,12 +389,12 @@ for all \Vrule{x},
 \end{equation*}
 
 
-We define rightmost non-null symbol of a string
+We define the rightmost non-null symbol of a string
 as
 \begin{equation*}
 \begin{split}
-& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \quad \text{such that} \quad
- \exists \, \Vstr{pre}, \Vstr{post} \mid \\
+& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \quad \text{such that} \\
+& \qquad \exists \, \Vstr{pre}, \Vstr{post} \mid \\
 & \qquad \qquad \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
 & \qquad \qquad \land \Vstr{post} \destar \epsilon \\
 & \qquad \qquad \land \neg (\Vsym{rnn} \destar \epsilon).
@@ -455,9 +456,6 @@ In this \doc{},
 recognizer\cite{Earley1970}.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
-\AH{} will refer to the Aycock and Horspool's revision
-of \Earley{}
-as described in~\cite{AH2002}.
 \Marpa{} will refer to the parser described in
 this \doc{}.
 Where $\alg{Recce}$ is a recognizer,
@@ -489,7 +487,7 @@ semantics for the new rule can be defined to pass its operands
 up to a parent rule as a list.
 Where needed, the original semantics
 of a pre-existing parent rule can
-be ``wrapped'' to reassemble these lists
+be ``wrappered'' to reassemble these lists
 into operands that are properly formed
 for that original semantics.
 
@@ -514,12 +512,18 @@ one being used for the parse,
 and the one to which
 his semantics are applied.
 
+Translation from the rewritten grammar is
+efficient enough to be done ``on the fly''.
+This allows run-time event-driven semantics
+to be written in terms of the original grammar.
+
 \section{Earley's algorithm}
 \label{s:earley}
 
 Let $\Vrule{r} \in \Crules$
 be a rule,
-and $\Vsize{r}$ the length of its RHS.
+and let $\Vsize{r}$
+be the length of its RHS.
 A dotted rule (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
 where $0 \le \var{pos} \le \size{\Vrule{r}}$.
 The position, \var{pos}, indicates the extent to which
@@ -537,6 +541,10 @@ is the dotted rule with the dot at
 $\var{pos} = 2$,
 between \Vsym{Y} and \Vsym{Z}.
 
+We consider the size of a grammar, \Vsize{g}, to be the 
+number of distinct dotted rules it allows.
+\Vsize{g} is a constant that depends on \var{g}.
+
 If we let \Vdr{x} be a dotted rule, such that
 \begin{equation*}
 \Vdr{x} =
@@ -545,24 +553,24 @@ If we let \Vdr{x} be a dotted rule, such that
 \end{equation*}
 then
 %
-\begin{gather*}
-%
-\LHS{\Vdr{x}} \defined \Vsym{A} \\
-%
-\Postdot{\Vdr{x}} \defined
+\begin{equation*}
+\begin{alignedat}{3}
+& \LHS{\Vdr{x}} && \defined && \quad
+\Vsym{A} \\
+& \Postdot{\Vdr{x}} && \defined && \quad
 \begin{cases}
 \Vsym{next}, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \mydot \var{next} \cat \var{post}]$} \\
 \Lambda, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \cat \var{next} \cat \var{post} \mydot]$}
 \end{cases} \\
 %
-\Next{\Vdr{x}} \defined
+& \Next{\Vdr{x}} && \defined && \quad
 \begin{cases}
 [\var{A} \de \var{pre} \cat \var{next} \mydot \var{post}],  \\
 \qquad \text{if $\Postdot{\Vdr{x}} = \var{next}$} \\
 \text{$\Lambda$, otherwise}
 \end{cases} \\
 %
-\Penult{\Vdr{x}} \defined
+& \Penult{\Vdr{x}} && \defined && \quad
 \begin{cases}
 \Vsym{next}, \quad \text{if} \\
 \qquad \Postdot{\Vdr{x}} = \var{next} \\
@@ -571,7 +579,8 @@ then
 \Lambda, \quad \text{otherwise}
 \end{cases}
 %
-\end{gather*}
+\end{alignedat}
+\end{equation*}
 
 A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
 Note that $\Penult{\Vdr{x}}$
@@ -601,7 +610,7 @@ Predicted, confirmed and completed dotted rules
 are also called, respectively,
 \dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
 
-A traditional Earley item (type \type{EIMT}) is a duple
+A Earley item (type \type{EIM}) is a duple
 \[
     [\Vdr{dotted-rule}, \Vorig{x}]
 \]
@@ -717,17 +726,17 @@ place in Earley set 0.
 	\\[3pt]
 	\Vsym{token} = \Cw\bigl[\Vloc{previous}\bigr]
 	\\[3pt]
-	\Veimt{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-	\Veimt{predecessor} \in \Ves{previous} \\
+	\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+	\Veim{predecessor} \in \Ves{previous} \\
 	\Postdot{\Vdr{before}} = \Vsym{token}
     \end{array}
 }{
     \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] }
 }
 \end{equation*}
-\Veimt{predecessor}
+\Veim{predecessor}
 and \Vsym{token} are the operands of an Earley scan.
-\Veimt{predecessor} is called the predecessor of the scanning operation.
+\Veim{predecessor} is called the predecessor of the scanning operation.
 The token, \Vsym{token}, is the transition symbol
 of the scanning operation.
 
@@ -736,12 +745,12 @@ of the scanning operation.
 \begin{equation*}
 \inference{
     \begin{array}{c}
-    \Veimt{component} = \bigl[
+    \Veim{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
     , \Vloc{component-orig} \bigr] \\
-    \Veimt{component} \in \Ves{current} \\[3pt]
-    \Veimt{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-    \Veimt{predecessor} \in \Ves{component-orig} \\
+    \Veim{component} \in \Ves{current} \\[3pt]
+    \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+    \Veim{predecessor} \in \Ves{component-orig} \\
     \Postdot{\Vdr{before}} = \Vsym{lhs} \\
     \end{array}
 }{
@@ -749,49 +758,46 @@ of the scanning operation.
 }
 \end{equation*}
 
-\Veimt{component} is called
+\Veim{component} is called
 the component of the reduction operation.\footnote{
 The term ``component'' comes from Irons \cite{Irons}.
 }
-\Veimt{predecessor} is the predecessor
+\Veim{predecessor} is the predecessor
 of the reduction operation.
 \Vsym{lhs} is the transition symbol
 of the reduction operation.
 
-\Veimt{predecessor} and
-\Veimt{component} are the operands of the reduction
+\Veim{predecessor} and
+\Veim{component} are the operands of the reduction
 operation.
 In some contexts, it is convenient to treat the transition
 symbol
 as an operand,
 so that the operands
-are \Veimt{predecessor} and \Vsym{lhs}.
+are \Veim{predecessor} and \Vsym{lhs}.
 
 \subsection{Prediction}
 \label{d:prediction}
 \begin{equation*}
 \inference{
     \begin{array}{c}
-	\Veimt{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ] \\
-	\Veimt{predecessor} \in \Ves{current}
+	\Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ] \\
+	\Veim{predecessor} \in \Ves{current} \\
+	\bigl[ \Vsym{L} \de \Vstr{rh} \bigr] \in \Crules  \\
+	\bigl( \exists \, \Vstr{z} \mid
+	\Postdot{\Vdr{predecessor}} \destar \Vsym{L} \cat \Vstr{z} \bigr)
     \end{array}
 }{
-  \left\{
-  \begin{aligned}
-  & \Bigl[ \bigl[ \Vsym{L} \de \mydot \Vstr{rh} \bigr],
+  \Bigl\{
+  \bigl[ \left[ \Vsym{L} \de \mydot \Vstr{rh} \right],
   \Vloc{current}
-  \Bigr]
-  \quad \text{such that} \\
-  & \qquad \bigl[ \Vsym{L} \de \Vstr{rh} \bigr] \in \Crules  \\
-  & \qquad \land \bigl( \exists \, \Vstr{z} \mid
-  \Postdot{\Vdr{predecessor}} \destar \Vsym{L} \cat \Vstr{z} \bigr)
-  \end{aligned}
-  \right\}
+  \bigr]
+  \Bigr\}
 }
 \end{equation*}
 A prediction operation can add several Earley items
 to Earley set \Vloc{current}.
-\Veimt{predecessor} is called the predecessor of the prediction operation,
+\Veim{predecessor} is called the predecessor of the prediction operation,
 and is its only operand.
 
 \subsection{Causation}
@@ -822,21 +828,18 @@ Earley set, using what Leo called
 ``transitive items''.
 In this \doc{} Leo's ``transitive items''
 will be called Leo items.
-Leo items in the form that Marpa uses
-will be type \type{LIM}.
-``Traditional'' Leo items,
-that is, those of the form used in Leo's paper\cite{Leo1991},
-will be type \type{LIMT}.
+Leo items
+will have type \type{LIM}.
 
 In each Earley set, there is at most one Leo item per symbol.
-A traditional Leo item (LIMT) is the triple
+A Leo item (LIM) is the triple
 \begin{equation*}
 [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
 \end{equation*}
 where \Vsym{transition} is the transition symbol,
 and
 \begin{equation*}
-\Veimt{top} = [\Vdr{top}, \Vorig{top}]
+\Veim{top} = [\Vdr{top}, \Vorig{top}]
 \end{equation*}
 is the Earley item to be added on reductions over
 \Vsym{transition}.
@@ -847,7 +850,7 @@ Leo items only memoize unambiguous (or
 deterministic) sequences,
 so that the top of the sequence can represent
 the entire sequence --
-the only role the other EIMT's in the sequence
+the only role the other EIM's in the sequence
 play in the parse is to derive the top EIMT.
 We will call these memoized sequences, Leo sequences.
 
@@ -857,9 +860,11 @@ Define containment of a dotted rule in a Earley set
 of EIMT's as
 \begin{equation*}
 \begin{split}
-& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \exists \, \Veimt{b}, \Vorig{j} \mid  \\
-& \qquad \Veimt{b} = [ \Vdr{d}, \Vorig{j} ] 
-  \land \Veimt{b} \in \Ves{i}.
+& \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \\
+& \qquad \exists \, \Veimt{b}, \Vorig{j} \; \mid  \\
+& \qquad\qquad \Veimt{b} = [ \Vdr{d}, \Vorig{j} ]
+\; \land \; \Veimt{b} \in \Ves{i}.
+\\
 \end{split}
 \end{equation*}
 A dotted rule \Vdr{d} is \dfn{Leo unique} in the Earley set
@@ -868,28 +873,36 @@ if and only if
 \begin{equation*}
 \begin{split}
 &    \Penult{\Vdr{d}} \neq \Lambda \\
-&    \land \forall \, \Vdr{d2} \bigl( \mymathop{Contains}(\Ves{i}, \Vdr{d2}) \implies \\
-&    \qquad \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}} \implies \Vdr{d} = \Vdr{d2} \bigr).
 \end{split}
 \end{equation*}
-If \Vdr{d} is Leo unique, then the symbol $\Postdot{\Vdr{d}}$ is
-also said to be \dfn{Leo unique}.
-In cases where a symbol \Vsym{transition} is Leo unique in \Ves{i},
-we can speak of the dotted rule for \Vsym{transition},
-and the rule for \Vsym{transition},
-because there can be only one of each.
-In the previous definitions,
-it is important to emphasize that \Vdr{d2} ranges over all the dotted
+and, for all \Vdr{d2},
+\begin{equation*}
+\begin{split}
+&    \mymathop{Contains}(\Ves{i}, \Vdr{d2}) \land
+\Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}}
+\\
+&    \qquad \qquad \implies \Vdr{d} = \Vdr{d2}.
+\end{split}
+\end{equation*}
+It is important to emphasize that \Vdr{d2} ranges over all the dotted
 rules of Earley set \Ves{i},
 even those which are ineligible for Leo memoization.
 
+If \Vdr{d} is Leo unique, then the symbol $\Postdot{\Vdr{d}}$ is
+also said to be \dfn{Leo unique}.
+Similarly,
+in cases where a dotted rule is Leo unique in \Ves{i},
+we can speak of the
+\dfn{Leo unique}
+rule for \Vsym{transition}.
+
 Let \var{n} be the length of a Leo sequence.
 In \Earley, each such sequence would be expanded in every
-Earley set that is the origin of an EIMT included in the
-sequence, and the total number of EIMT's would be
+Earley set that is the origin of an EIM included in the
+sequence, and the total number of EIM's would be
 \order{\var{n}^2}.
 
-With Leo memoization, a single EIMT stands in for the sequence.
+With Leo memoization, a single EIM stands in for the sequence.
 There are \Oc{} Leo items per Earley set,
 so the cost of the sequence is \Oc{} per Earley set,
 or \On{} for the entire sequence.
@@ -897,8 +910,8 @@ If, at evaluation time,
 it is desirable to expand the Leo sequence,
 only those items actually involved in the parse
 need to be expanded.
-All the EIMT's of a potential right-recursion
-will be in one Earley set and the number of EIMT's
+All the EIM's of a potential right-recursion
+will be in one Earley set and the number of EIM's
 will be \On{},
 so that even including expansion of the Leo sequence
 for evaluation, the time and space complexity of
