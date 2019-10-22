@@ -94,7 +94,7 @@
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
 \newcommand{\Crules}{\var{rules}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
-\newcommand{\Next}[1]{\mymathop{Next}(#1)}
+\newcommand{\Next}{\mymathop{Next}}
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
 \newcommand{\Postdot}[1]{\mymathop{Postdot}(#1)}
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
@@ -563,7 +563,7 @@ then
 \Lambda, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \cat \var{next} \cat \var{post} \mydot]$}
 \end{cases} \\
 %
-& \Next{\Vdr{x}} && \defined && \quad
+& \Next(\Vdr{x}) && \defined && \quad
 \begin{cases}
 [\var{A} \de \var{pre} \cat \var{next} \mydot \var{post}],  \\
 \qquad \text{if $\Postdot{\Vdr{x}} = \var{next}$} \\
@@ -731,7 +731,7 @@ place in Earley set 0.
 	\Postdot{\Vdr{before}} = \Vsym{token}
     \end{array}
 }{
-    \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] }
+    \bigset{ [ \Next(\Vdr{before}), \Vorig{predecessor} ] }
 }
 \end{equation*}
 \Veim{predecessor}
@@ -754,7 +754,7 @@ of the scanning operation.
     \Postdot{\Vdr{before}} = \Vsym{lhs} \\
     \end{array}
 }{
-    \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] }
+    \bigset{ [ \Next(\Vdr{before}), \Vorig{predecessor} ] }
 }
 \end{equation*}
 
@@ -1088,7 +1088,7 @@ and another, which holds if
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
-    \bigset{ [ \Next{\Vdr{bottom}}, \Penult{\Vdr{bottom}}, \Vorig{bottom} ] }
+    \bigset{ [ \Next(\Vdr{bottom}), \Penult{\Vdr{bottom}}, \Vorig{bottom} ] }
 }
 \end{equation*}
 
@@ -1146,20 +1146,21 @@ the parse must fail,
 and the time can be charged to the parse.
 
 In a procedure,
-resource can be ``caller-included''.
+resource
+can be ``caller-included''.
 Caller-included resource is not accounted for in
 the current procedure,
 but passed upward to the procedure's caller,
 to be accounted for there.
 A procedure to which caller-included resource is passed will
 sometimes pass the resource upward to its own caller,
-although of course the top-level procedure does not do this.
+although of course the top-level procedure must not do this.
 
 For each procedure, we will state whether
 the time and space we are charging is inclusive or exclusive.
 The exclusive time or space of a procedure is that
 which it uses directly,
-ignoring resource charges passed up from called procedures.
+and ignores resource charges passed up from called procedures.
 Inclusive time or space includes
 resource passed upward to the
 current procedure from called procedures.
@@ -1189,8 +1190,8 @@ Per-set-lists will be described in Section \ref{s:per-set-lists}.
 \EndIf
 \State \Call{Reduction pass}{\var{i}}
 \EndFor
-\For{every $[\Vah{x}, 0] \in \Etable{\Vsize{w}}$}
-\If{$\Vdr{accept} \in \Vah{x}$}
+\For{every $[\Vdr{x}, 0] \in \Etable{\Vsize{w}}$}
+\If{$\Vdr{accept} = \Vdr{x}$}
 \State accept \Cw{} and return
 \EndIf
 \EndFor
@@ -1227,7 +1228,7 @@ including which tokens are acceptable during the scanning phase.
 \caption{Initialization}
 \begin{algorithmic}[1]
 \Procedure{Initial}{}
-\State \Call{Add EIM pair}{$0_{ES}, \ah{start}, 0$}
+\State \Call{Add Predictions}{$0_{ES}, \Vsym{accept}$}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1244,9 +1245,9 @@ and is charged to the parse.
 \Procedure{Scan pass}{$\Vloc{i},\Vsym{a}$}
 \State Note: Each pass through this loop is an EIM attempt
 \For{each $\Veim{predecessor} \in \var{transitions}((\var{i} \subtract 1),\var{a})$}
-\State $[\Vah{from}, \Vloc{origin}] \gets \Veim{predecessor}$
-\State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{a})$
-\State \Call{Add EIM pair}{$\Ves{i}, \Vah{to}, \Vloc{origin}$}
+\State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{predecessor}$
+\State $\Vdr{to} \gets \Next(\Vdr{from}, \Vsym{a})$
+\State \Call{Add confirmed EIM}{$\Ves{i}, \Vdr{to}, \Vloc{origin}$}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -1263,9 +1264,9 @@ since the number of Earley sets grows with
 the length of the parse,
 it cannot be assumed that Earley sets can be indexed by location
 in \Oc{} time.
-For the operation $\var{transitions}(\Vloc{l}, \Vsym{s})$
+For the operation $\var{transitions}(\ell_{\var{LOC}}, \Vsym{s})$
 to be in \Oc{} time,
-\Vloc{l} must represent a link directly to the Earley set.
+$\ell_{\var{LOC}}$ must represent a link directly to the Earley set.
 In the case of scanning,
 the lookup is always in the previous Earley set,
 which can easily be tracked in \Oc{} space
@@ -1278,11 +1279,10 @@ Overhead is charged to the Earley set at \Vloc{i}.
 \caption{Reduction pass}
 \begin{algorithmic}[1]
 \Procedure{Reduction pass}{\Vloc{i}}
-\State Note: \Vtable{i} may include EIM's added by
-\State \hspace{2.5em} by \Call{Reduce one LHS}{} and
-\State \hspace{2.5em} the loop must traverse these
+\State Note: \Vtable{i} is modified during traversal
+\State \hspace{2.5em} by \Call{Reduce one LHS}{}
 \For{each Earley item $\Veim{work} \in \Vtable{i}$}
-\State $[\Vah{work}, \Vloc{origin}] \gets \Veim{work}$
+\State $[\Vdr{work}, \Vloc{origin}] \gets \Veim{work}$
 \State $\Vsymset{lh-sides} \gets$ a set containing the LHS
 \State \hspace\algorithmicindent of every completed rule in \Veim{work}
 \For{each $\Vsym{lhs} \in \Vsymset{lh-sides}$}
@@ -1310,11 +1310,9 @@ some of the time required by
 and therefore charged to this procedure.
 Inclusive time from \call{Reduce one LHS}{}
 is \Oc{} per call,
-as will be seen in section \ref{p:reduce-one-lhs},
-and is charged to the \Veim{work}
-that is current
-during that call to \call{Reduce one LHS}{}.
-Overhead may be charged to the Earley set at \Vloc{i}.
+as will be seen in section \ref{p:reduce-one-lhs}.
+Overhead is \Oc{}
+and is charged to the Earley set at \Vloc{i}.
 
 \begin{algorithm}[h]
 \caption{Memoize transitions}
@@ -1345,7 +1343,9 @@ We first look at the resource,
 excluding the processing of Leo items.
 The non-Leo processing can be done in
 a single pass over \Ves{i},
-in \Oc{} time per EIM.
+in \Oc{} time for each EIM
+added to
+$\var{transitions}(\Vloc{i},\Vsym{postdot})$.
 Inclusive time and space are charged to the
 Earley items being examined.
 Overhead is charged to \Ves{i}.
@@ -1360,8 +1360,9 @@ All but one of the determinations needed to decide
 if \Vsym{transition} is Leo eligible can be precomputed
 from the grammar,
 and the resource to do this is charged to the parse.
-The precomputation, for example,
-for every rule, determines if it is right recursive.
+As one example,
+precomputation, for every rule,
+can determine if it is right recursive.
 
 One part of the test for
 Leo eligibility cannot be done as a precomputation.
@@ -1388,8 +1389,8 @@ and can be charged to EIM being examined.
 \State Perform a \Call{Leo reduction operation}{}
 \State \hspace\algorithmicindent for operands \Vloc{i}, \Vlim{pim}
 \Else
-\State Perform a \Call{Earley reduction operation}{}
-\State \hspace\algorithmicindent for operands \Vloc{i}, \Veim{pim}, \Vsym{lhs}
+\State Perform an \Call{Earley reduction operation}{}
+\State \hspace\algorithmicindent for operands \Vloc{i}, \Veim{pim}
 \EndIf
 \EndFor
 \EndProcedure
@@ -1424,10 +1425,10 @@ Overhead is \Oc{} and caller-included.
 \begin{algorithm}[h]
 \caption{Earley reduction operation}
 \begin{algorithmic}[1]
-\Procedure{Earley reduction operation}{\Vloc{i}, \Veim{from}, \Vsym{trans}}
-\State $[\Vah{from}, \Vloc{origin}] \gets \Veim{from}$
-\State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{trans})$
-\State \Call{Add EIM pair}{\Ves{i}, \Vah{to}, \Vloc{origin}}
+\Procedure{Earley reduction operation}{\Vloc{i}, \Veim{from}}
+\State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{from}$
+\State $\Vdr{to} \gets \Next(\Vdr{from})$
+\State \Call{Add confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1436,7 +1437,7 @@ Overhead is \Oc{} and caller-included.
 \label{p:reduction-op}
 
 \begin{sloppypar}
-Exclusive time and space is clearly \Oc.
+Exclusive time and space is \Oc.
 \call{Earley reduction operation}{} is always
 called as part of an EIM attempt,
 and inclusive time and space is charged to the EIM
@@ -1447,9 +1448,9 @@ attempt.
 \caption{Leo reduction operation}
 \begin{algorithmic}[1]
 \Procedure{Leo reduction operation}{\Vloc{i}, \Vlim{from}}
-\State $[\Vah{from}, \Vsym{trans}, \Vloc{origin}] \gets \Vlim{from}$
-\State $\Vah{to} \gets \GOTO(\Vah{from}, \Vsym{trans})$
-\State \Call{Add EIM pair}{\Ves{i}, \Vah{to}, \Vloc{origin}}
+\State $[\Vdr{from}, \Vsym{trans}, \Vloc{origin}] \gets \Vlim{from}$
+\State $\Vdr{to} \gets \Next(\Vdr{from})$
+\State \Call{Add confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1457,33 +1458,30 @@ attempt.
 \subsection{Leo reduction operation}
 \label{p:leo-op}
 
-Exclusive time and space is clearly \Oc.
+Exclusive time and space is \Oc.
 \call{Leo reduction operation}{} is always
 called as part of an EIM attempt,
 and inclusive time and space is charged to the EIM
 attempt.
 
 \begin{algorithm}[h]
-\caption{Add EIM pair}\label{a:pair}
+\caption{Add confirmed EIM}\label{a:pair}
 \begin{algorithmic}[1]
-\Procedure{Add EIM pair}{$\Ves{i},\Vah{confirmed}, \Vloc{origin}$}
-\State $\Veim{confirmed} \gets [\Vah{confirmed}, \Vloc{origin}]$
-\State $\Vah{predicted} \gets \GOTO(\Vah{confirmed}, \epsilon)$
-\If{\Veim{confirmed} is new}
+\Procedure{Add confirmed EIM}{$\Ves{i},\Vdr{confirmed}, \Vloc{origin}$}
+\State $\Veim{confirmed} \gets [\Vdr{confirmed}, \Vloc{origin}]$
+\If{\Veim{confirmed} is new in \Ves{i}}
 \State Add \Veim{confirmed} to \Vtable{i}
 \EndIf
-\If{$\Vah{predicted} \neq \Lambda$}
-\State $\Veim{predicted} \gets [\Vah{predicted}, \Vloc{i}]$
-\If{\Veim{predicted} is new}
-\State Add \Veim{predicted} to \Vtable{i}
-\EndIf
+\State $\Vsym{postdot} \gets \Postdot{\Vdr{confirmed}}$
+\If{$\Vsym{postdot} \neq \Lambda$}
+\State \Call{Add predictions}{\Ves{i}, \Vsym{postdot}}
 \EndIf
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Adding a pair of Earley items}
-\label{p:add-eim-pair}
+\subsection{Adding a confirmed Earley item}
+\label{p:add-confirmed-eim}
 
 This operation adds a confirmed EIM
 item and, if it exists, the EIM for
@@ -1505,7 +1503,7 @@ set in \Oc{} time
 if Earley set is seen as a linked
 list, to the head of which the new Earley item is added.
 
-The resource used by \call{Add EIM Pair}{}
+The resource used by \call{Add Confirmed EIM}{}
 is always caller-included.
 No time or space is ever charged
 to a predicted Earley item.
@@ -1635,7 +1633,7 @@ is \Oc{} if links are included,
 zero otherwise.
 \end{observation}
 
-As noted in Section \ref{p:add-eim-pair},
+As noted in Section \ref{p:add-confirmed-eim},
 the time and space used by predicted Earley items
 and attempts to add them is charged elsewhere.
 
@@ -1754,7 +1752,7 @@ for all \Vah{from}, \Vsym{t}, \Vah{to}, \Vdr{to} such that
 \intertext{there exists \Vdr{from} such that}
 & \Vdr{from} \in \Vah{from} \\
 \qquad \qquad \land \quad & \Vsym{t} = \Postdot{\Vdr{from}} \\
-\qquad \qquad \land \quad & \Next{\Vdr{from}} = \Vdr{to}. \\
+\qquad \qquad \land \quad & \Next(\Vdr{from}) = \Vdr{to}. \\
 \end{split}
 \end{equation*}
 \end{observation}
@@ -1768,7 +1766,7 @@ for all \Vah{from}, \Vsym{t}, \Vdr{from}, \Vdr{to} if
 \begin{split}
 & \Vdr{from} \in \Vah{from} \\
 \qquad \land \quad & \Postdot{\Vdr{from}} = \Vsym{t}, \\
-\qquad \land \quad & \Next{\Vdr{from}} = \Vdr{to} \\
+\qquad \land \quad & \Next(\Vdr{from}) = \Vdr{to} \\
 \intertext{then there exists \Vah{to} such that }
 & \GOTO(\Vah{from}, \Vsym{t}) = \Vah{to}  \\
 \qquad \land \quad & \Vdr{to} \in \Vah{to}. \\
@@ -1934,7 +1932,7 @@ if $\Vah{confirmed} \ne \Lambda$, let
 \Vah{predicted} = \GOTO(\Vah{confirmed}, \epsilon)
 \end{equation*}
 If $\Vah{predicted} = \Lambda$,
-the pseudocode of Section \ref{p:add-eim-pair} shows
+the pseudocode of Section \ref{p:add-confirmed-eim} shows
 that we do nothing.
 If we do nothing,
 since \EVtable{\Marpa}{i} is consistent by the inner
@@ -2118,7 +2116,7 @@ we see that a Earley item will be added to
 \EVtable{\Marpa}{i} corresponding to every scanned Earley item
 of \EVtable{\Leo}{i}.
 We also see,
-from the pseudocode of Section \ref{p:add-eim-pair},
+from the pseudocode of Section \ref{p:add-confirmed-eim},
 that the \Marpa{} scanning operation will
 add to \EVtable{\Marpa}{i}
 an Earley item for
