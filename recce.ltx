@@ -77,7 +77,6 @@
 \newcommand{\Vah}[1]{\ensuremath{\var{#1}_{AH}}}
 \newcommand{\Veimt}[1]{\ensuremath{\var{#1}_{EIMT}}}
 \newcommand{\Veimtset}[1]{\ensuremath{\var{#1}_{\set{EIMT}}}}
-\newcommand{\Vlimt}[1]{\ensuremath{\var{#1}_{LIMT}}}
 
 \newcommand{\alg}[1]{\ensuremath{\textsc{#1}}}
 \newcommand{\Earley}{\ensuremath{\alg{Earley}}}
@@ -159,6 +158,7 @@ practical implementation
 of the improvements
 to Earley's algorithm found in
 Joop Leo's 1991 paper.
+In addition,
 Marpa tracks the full state of the parse,
 at run-time,
 in a form accessible by the application.
@@ -851,19 +851,19 @@ deterministic) sequences,
 so that the top of the sequence can represent
 the entire sequence --
 the only role the other EIM's in the sequence
-play in the parse is to derive the top EIMT.
+play in the parse is to derive the top EIM.
 We will call these memoized sequences, Leo sequences.
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
 Define containment of a dotted rule in a Earley set
-of EIMT's as
+of EIM's as
 \begin{equation*}
 \begin{split}
 & \mymathop{Contains}(\Ves{i}, \Vdr{d}) \defined \\
-& \qquad \exists \, \Veimt{b}, \Vorig{j} \; \mid  \\
-& \qquad\qquad \Veimt{b} = [ \Vdr{d}, \Vorig{j} ]
-\; \land \; \Veimt{b} \in \Ves{i}.
+& \qquad \exists \, \Veim{b}, \Vorig{j} \; \mid  \\
+& \qquad\qquad \Veim{b} = [ \Vdr{d}, \Vorig{j} ]
+\; \land \; \Veim{b} \in \Ves{i}.
 \\
 \end{split}
 \end{equation*}
@@ -941,11 +941,12 @@ If all penults are memoized,
 many memoizations will be performed where
 the longest potential Leo sequence is short,
 and the payoff is therefore very limited.
-One future extension might be to identify
+
+A future extension might be to identify
 non-right-recursive rules
 which generate Leo sequences long enough to
 justify inclusion in the Leo memoizations.
-Such cases are unusual, but may occur.
+Such cases would be unusual, but may occur.
 
 Omission of a memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
@@ -960,29 +961,29 @@ adding Leo reduction as a new basic operation,
 adding a new premise to the Earley reduction
 operation,
 and extending the Earley sets to memoize Earley
-items as LIMT's.
+items as LIM's.
 
 \subsection{Leo reduction}
 
 \begin{equation*}
 \inference{
     \begin{array}{c}
-    \Veimt{component} = \bigl[
+    \Veim{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
     , \Vloc{component-origin} \bigr] \\
-    \Veimt{component} \in \Ves{current} \\[3pt]
-	\Vlimt{predecessor} = [ \Vdr{top}, \Vsym{lhs}, \Vorig{top} ] \\
-	\Vlimt{predecessor} \in \Ves{component-orig} \\
+    \Veim{component} \in \Ves{current} \\[3pt]
+	\Vlim{predecessor} = [ \Vdr{top}, \Vsym{lhs}, \Vorig{top} ] \\
+	\Vlim{predecessor} \in \Ves{component-orig} \\
     \end{array}
 }{
     \bigset{ [ \Vdr{top}, \Vorig{top} ] }
 }
 \end{equation*}
 The new Leo reduction operation resembles the Earley reduction
-operation, except that it looks for an LIMT,
-instead of a predecessor EIMT.
-\Vlimt{predecessor} and
-\Veimt{component} are the operands of the Leo reduction
+operation, except that it looks for an LIM,
+instead of a predecessor EIM.
+\Vlim{predecessor} and
+\Veim{component} are the operands of the Leo reduction
 operation.
 \Vsym{lhs} is the transition symbol
 of the Leo reduction.
@@ -990,24 +991,31 @@ As with Earley reduction,
 it may be convenient to treat the transition
 symbol as an operand,
 so that the operands
-are \Vlimt{predecessor} and \Vsym{lhs}.
+are \Vlim{predecessor} and \Vsym{lhs}.
 
 \subsection{Changes to Earley reduction}
 
 Earley reduction still applies, with an additional premise:
-\begin{multline*}
-\neg \exists \, \Vlimt{x} \; \mid \; \Vlimt{x} \in \Ves{component-orig} \\
-	\land \Vlimt{x} = [ \Vdr{x}, \Vsym{lhs}, \Vorig{x} ]
-\end{multline*}
+\begin{equation*}
+\begin{split}
+& \neg \exists \, \Vlim{x} \; \mid \\
+&  \qquad \Vlim{x} \in \Ves{component-orig} \\
+&	\qquad \qquad  \land \Vlim{x} = [ \Vdr{x}, \Vsym{lhs}, \Vorig{x} ]
+\end{split}
+\end{equation*}
 The additional premise
 prevents Earley reduction from being applied
-where there is an LIMT with \Vsym{lhs} as its transition symbol.
+where there is an LIM with \Vsym{lhs} as its transition symbol.
 This reflects the fact that
 Leo reduction replaces Earley reduction if and only if
 there is a Leo memoization.
 
-\subsection{Leo memoization}
+\subsection{Leo memoization operations}
 
+Finally, we define two new operations for
+the creation of LIM's or,
+in other words,
+for Leo memoization.
 We define uniqueness of a penult in an Earley set as
 \begin{equation*}
 \begin{split}
@@ -1017,47 +1025,52 @@ We define uniqueness of a penult in an Earley set as
 & \qquad \qquad \implies \Vdr{x} = \Vdr{y}.
 \end{split}
 \end{equation*}
-We define
-Leo uniqueness as
+We define the
+Leo uniqueness of a dotted rule within an Earley set as
 \begin{equation*}
 \begin{split}
-& \LeoUnique{\Vdr{x},\Vloc{current}} \defined \mymathop{Contains}(\Ves{current}, \Vdr{x})  \\
-& \qquad \land \Penult{\Vdr{x}} \neq \Lambda \\
-& \qquad \land \mymathop{Penult-Unique}({\Penult{\Vdr{x}}}, \Ves{current})
+& \LeoUnique{\Vdr{x},\Vloc{current}} \defined \\
+& \qquad \mymathop{Contains}(\Ves{current}, \Vdr{x})  \\
+& \qquad \qquad \land \Penult{\Vdr{x}} \neq \Lambda \\
+& \qquad \qquad \land \mymathop{Penult-Unique}({\Penult{\Vdr{x}}}, \Ves{current})
 \end{split}
 \end{equation*}
-and Leo eligibility as
+and defined the Leo eligibility
+of a dotted rule within an Earley set as
 \begin{equation*}
 \begin{split}
 & \LeoEligible{\Vdr{x},\Vloc{current}} \defined \\
-& \qquad \exists \, \Vrule{x}, \Vorig{x} \; \mid \; \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
-& \qquad \land \RightRecursive{\Vrule{x}} \\
-& \qquad \land \LeoUnique{\Ves{current},\Vdr{x}}.
+& \qquad \exists \, \Vrule{x}, \Vorig{x} \; \mid \\
+& \qquad \qquad \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
+& \qquad \qquad \quad \land \RightRecursive{\Vrule{x}} \\
+& \qquad \qquad \quad \land \LeoUnique{\Ves{current},\Vdr{x}}.
 \end{split}
 \end{equation*}
 For convenience, we define a relation that is
-true if \Vlimt{pred} is the LIMT predecessor of
-an EIMT, and false otherwise:
+true if \Vlim{pred} is the LIM predecessor of
+an EIM, and false otherwise:
 \begin{equation*}
 \begin{split}
-& \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \defined \\
-& \quad \exists \Ves{bottom-origin}, \Vdr{bottom}, \Vdr{pred}, \\
-& \quad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \quad \text{such that}  \\
-& \quad \qquad \qquad \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
-& \quad \qquad \qquad \land \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-& \quad \qquad \qquad \land \Vlimt{pred} \in \Ves{bottom-origin} 
+& \mymathop{LIM-Predecessor}({\Vlim{pred},\Veim{bottom}}) \defined \\
+& \qquad \exists \; \Ves{bottom-origin}, \\
+& \qquad \qquad \qquad \Vdr{bottom}, \Vdr{pred}, \\
+& \qquad \qquad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \\
+& \qquad \text{such that}  \\
+& \qquad \qquad \quad \Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
+& \qquad \qquad \land \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
+& \qquad \qquad \land \Vlim{pred} \in \Ves{bottom-origin} 
 \end{split}
 \end{equation*}
 
 We are now ready to define an inference rule which holds if
-a LIMT predecessor can be found for an EIMT \Veimt{bottom}
+a LIM predecessor can be found for an EIM \Veim{bottom}
 \begin{equation*}
 \inference{
     \begin{array}{c}
-    \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
-    \Vlimt{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vorig{pred} ] \\
-    \Veimt{bottom} = [ \Vdr{bottom}, \Vloc{bottom} ] \\
-    \Veimt{bottom} \in \Ves{current} \\
+    \mymathop{LIM-Predecessor}({\Vlim{pred},\Veim{bottom}}) \\
+    \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vorig{pred} ] \\
+    \Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom} ] \\
+    \Veim{bottom} \in \Ves{current} \\
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
@@ -1065,13 +1078,13 @@ a LIMT predecessor can be found for an EIMT \Veimt{bottom}
 }
 \end{equation*}
 and another, which holds if
-\Veimt{bottom} has no predecessor LIMT,
+\Veim{bottom} has no predecessor LIMT,
 \begin{equation*}
 \inference{
     \begin{array}{c}
-    \neg \mymathop{LIMT-Predecessor}({\Vlimt{pred},\Veimt{bottom}}) \\
-    \Veimt{bottom} = [ \Vdr{bottom}, \Vorig{bottom} ] \\
-    \Veimt{bottom} \in \Ves{current} \\
+    \neg \mymathop{LIMT-Predecessor}({\Vlim{pred},\Veim{bottom}}) \\
+    \Veim{bottom} = [ \Vdr{bottom}, \Vorig{bottom} ] \\
+    \Veim{bottom} \in \Ves{current} \\
     \LeoEligible{\Vdr{bottom}}
     \end{array}
 }{
@@ -1079,230 +1092,9 @@ and another, which holds if
 }
 \end{equation*}
 
-\section{The Aycock-Horspool finite automaton}
-\label{s:AHFA}
-\label{s:end-prelim}
-
-In this \doc{} a
-``split LR(0) $\epsilon$-DFA''
-as described by Aycock and Horspool\cite{AH2002},
-will be called an Aycock-Horspool Finite Automaton,
-or AHFA.
-This section will
-summarize the ideas
-from \cite{AH2002}
-that are central to Marpa.
-
-Aycock and Horspool based their AHFA's
-on a few observations.
-\begin{itemize}
-\item
-In practice, Earley items sharing the same origin,
-but having different dotted rules,
-often appear together in the same Earley set.
-\item
-There is in the literature a method
-for associating groups of dotted rules that often appear together
-when parsing.
-This method is the LR(0) DFA used in the much-studied
-LALR and LR parsers.
-\item
-The LR(0) items that are the components of LR(0)
-states are, exactly, dotted rules.
-\item
-By taking into account symbols that derive the
-null string, the LR(0) DFA could be turned into an
-LR(0) $\epsilon$-DFA,
-which would be even more effective
-at grouping dotted rules that often occur together
-into a single DFA state.
-\end{itemize}
-
-AHFA states are, in effect,
-a shorthand
-for groups of dotted rules that occur together frequently.
-Aycock and Horspool realized that,
-by changing Earley items to track AHFA states
-instead of individual dotted rules,
-the size of Earley sets could be reduced,
-and Earley's algorithm made faster in practice.
-
-As a reminder,
-the original Earley items (EIMT's)
-were duples, $[\Vdr{x}, \Vorig{x}]$,
-where \Vdr{x} is a dotted rule.
-An Aycock-Horspool Earley item is a duple
-\begin{equation*}
-[\Vah{y}, \Vorig{y}],
-\end{equation*}
-where $\Vah{y}$ is an AHFA state.
-
-\Marpa{} uses
-Earley items of the form
-created by Aycock and Horspool.
-A Marpa Earley item has type \type{EIM},
-and a Marpa Earley item is often referred to as an EIM.
-
-\begin{sloppypar}
-Aycock and Horspool did not consider
-Leo's modifications,
-but \Marpa{} incorporates them,
-and \Marpa{} also changes its Leo items to use AHFA states.
-Marpa's Leo items (LIM's) are triples
-of the form
-\end{sloppypar}
-\begin{equation*}
-[\Vah{top}, \Vsym{transition}, \Vorig{top}],
-\end{equation*}
-where \Vsym{transition} and \Vorig{top}
-are as in the traditional Leo items,
-and \Vah{top} is an AHFA state.
-A Marpa Leo item has type \type{LIM}.
-
-\cite{AH2002} also defines
-a partial transition function for
-pairs of AHFA state and symbol,
-\begin{equation*}
-\GOTO: \Cfa, (\epsilon \cup \var{vocab}) \mapsto \Cfa.
-\end{equation*}
-$\GOTO(\Vah{from}, \epsilon)$ is a
-\dfn{null transition}.
-(AHFA's are not fully deterministic.)
-If \Vah{predicted} is the result of a null transition,
-it is called a \dfn{predicted} AHFA state.
-If an AHFA state is not a \dfn{predicted} AFHA state,
-it is called a \dfn{confirmed} AHFA state.
-The initial AHFA state is a confirmed AHFA state.
-(In \cite{AH2002} confirmed states are called ``kernel states'',
-and predicted states are called ``non-kernel states''.)
-
-The states of an AHFA
-are not a partition of the dotted
-rules --
-a single dotted rule can occur
-in more than one AHFA state.
-In combining
-the improvements of Leo~\cite{Leo1991} and
-Aycock and Horspool\cite{AH2002},
-the following theorem is crucial.
-
 \begin{theorem}\label{t:leo-singleton}
-If a Marpa Earley item (EIM) is the result of a
-Leo reduction,
-then its AHFA state contains only one dotted rule.
+TODO: DELETED.
 \end{theorem}
-
-\begin{proof}
-Let the EIM that is the result of the Leo
-reduction be
-\begin{equation*}
-\Veim{result} = [\Vah{result}, \Vorig{result}]
-\end{equation*}
-Let the Earley set that contains \Veim{result} be
-\Ves{i}.
-Since \Veim{result} is the result of a Leo reduction
-we know, from the definition of a Leo reduction,
-that
-\begin{equation*}
-\Vdr{complete} \in \Vah{result}
-\end{equation*}
-where
-\Vdr{complete} is a completed rule.
-Let \Vrule{c} be the rule of \Vdr{complete},
-and \var{cp} its dot position,
-\begin{equation*}
-\Vdr{complete} = [ \Vrule{c}, \var{cp} ].
-\end{equation*}
-$\var{cp} > 0$ because, in \Marpa{}
-grammars, completions are never
-predictions.
-
-Suppose, for a reduction to absurdity,
-that the AHFA state contains another dotted rule,
-\Vdr{other}, that is, that
-\begin{equation*}
-\Vdr{other} \in \Vah{result},
-\end{equation*}
-where $\Vdr{complete} \neq \Vdr{other}$.
-Let \Vrule{o} be the rule of \Vdr{other},
-and \var{op} its dot position,
-\begin{equation*}
-\Vdr{other} = [ \Vrule{o}, \var{op} ].
-\end{equation*}
-AHFA construction never places a prediction in the same
-AHFA state as a completion, so
-\Vdr{other} is not a prediction.
-Therefore, $\var{op} > 0$.
-To show this outer reduction to absurdity, we first prove
-by a first inner reductio that
-$\Vrule{c} \neq \Vrule{o}$,
-then by a second inner reductio that
-$\Vrule{c} = \Vrule{o}$.
-
-Assume, for the first inner reductio,
-that
-$\Vrule{c} = \Vrule{o}$.
-By the construction of an AHFA
-state,
-both \Vdr{complete} and \Vdr{other}
-resulted from the same series
-of transitions.
-But the same series of transitions over the
-same rule would result in the same dot position,
-$\var{cp} = \var{op}$,
-so that if $\Vrule{c} = \Vrule{o}$,
-$\Vdr{complete} = \Vdr{other}$,
-which is contrary to the assumption for the outer reductio.
-This shows the first inner reductio.
-
-Next, we assume for the second inner reductio that
-$\Vrule{c} \ne \Vrule{o}$.
-Since both \Vdr{complete} and \Vdr{other}
-are in the same EIM
-and neither is a prediction,
-both must result from transitions,
-and their transitions must have been from the same Earley set.
-Since they are in the same AHFA state,
-by the AHFA construction,
-that transition must have been
-over the same transition symbol,
-call it \Vsym{transition}.
-But Leo uniqueness applies to \Vdr{complete},
-and requires that the transition
-over \Vsym{transition} be unique in \Ves{i}.
-
-But if $\Vrule{c} \ne \Vrule{o}$,
-\Vsym{transition} was the transition symbol
-of two different dotted rules,
-and the Leo uniqueness requirement does not hold.
-The conclusion that the Leo uniqueness requirement
-both does and does not hold
-is a contradiction,
-which shows the second inner reductio.
-Since the assumption for
-the second inner reductio was that
-$\Vrule{c} \ne \Vrule{o}$,
-we conclude that
-$\Vrule{c} = \Vrule{o}$.
-
-By the two inner reductio's,
-we have both
-$\Vrule{c} \neq \Vrule{o}$
-and $\Vrule{c} = \Vrule{o}$,
-which completes the outer reduction to absurdity.
-For the outer reductio, we assumed that
-\Vdr{other}
-was a second dotted rule in \Vah{result},
-such that
-$\Vdr{other} \neq \Vdr{complete}$.
-We can therefore conclude that
-\begin{equation*}
-\Vdr{other} \in \Vah{result} \implies \Vdr{other} = \Vdr{complete}.
-\end{equation*}
-If \Vdr{complete} is a dotted rule
-in the AHFA state of a Leo reduction EIM,
-then it must be the only dotted rule in that AHFA state.
-\end{proof}
 
 \section{The Marpa Recognizer}
 \label{s:recce}
@@ -2232,7 +2024,9 @@ to \EVtable{\Leo}{j}.
 Because the \Marpa{} LIM is correct,
 using Observations \ref{o:confirmed-AHFA-consistent}
 and \ref{o:confirmed-AHFA-complete}
-and Theorem \ref{t:leo-singleton},
+and Theorem 
+% TODO DELETE
+DELETED,
 we see that \Vah{top} is the singleton set
 $\set{ \Vdr{top} }$.
 From Section \ref{p:leo-op}, we see
@@ -3034,7 +2828,7 @@ Second, \Marpa{}'s Earley items group dotted rules into
 states and this has the potential to increase the number
 of Earley items.
 
-By theorem \ref{t:leo-singleton},
+By theorem TODO-DELETED,
 the definition of an EIMT,
 and the construction of a Leo sequence,
 it can be seen that a Leo sequence
@@ -3047,7 +2841,7 @@ in its corresponding right derivation
 will be the same.
 
 Consider one EIMT that is memoized in \Leo{}.
-By theorem \ref{t:leo-singleton} it corresponds to
+By theorem DELETED it corresponds to
 a single dotted rule, and therefore a single rule.
 If not memoized because it is not a right recursion,
 this EIMT will be expanded to a sequence
