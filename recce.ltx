@@ -1465,7 +1465,7 @@ and inclusive time and space is charged to the EIM
 attempt.
 
 \begin{algorithm}[h]
-\caption{Add confirmed EIM}\label{a:pair}
+\caption{Add confirmed EIM}\label{a:confirmed}
 \begin{algorithmic}[1]
 \Procedure{Add confirmed EIM}{$\Ves{i},\Vdr{confirmed}, \Vloc{origin}$}
 \State $\Veim{confirmed} \gets [\Vdr{confirmed}, \Vloc{origin}]$
@@ -1511,6 +1511,26 @@ At most one attempt to add a \Veim{predicted} will
 be made per attempt to add a \Veim{confirmed},
 so that the total resource charged
 remains \Oc.
+
+\begin{algorithm}[h]
+\caption{Add predictions}\label{a:predictions}
+\begin{algorithmic}[1]
+\Procedure{Add Predictions}{$\Ves{i},\Vsym{lhs}$}
+\State Note: \var{rules} is the set of grammar rules
+\State Set $\var{lhs-rules} \gets \left \lbrace \Vrule{r} \mid \var{r} \in \var{rules} \land \LHS{\var{r}} = \Vsym{lhs} \right \rbrace$
+\For{ $[ \Vsym{lhs} \de \Vstr{rhs} ] \in \var{lhs-rules}$ }
+\State $\Vdr{predict} \gets [ \Vsym{lhs} \de \mydot \Vstr{rhs} ]$
+\State $\Veim{predict} \gets [ \Vdr{predict}, \Ves{i} ]$
+\If{\Veim{predict} is new in \Ves{i}}
+\State Add \Veim{predict} to \Vtable{i}
+\EndIf
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Adding Earley predictions}
+\label{p:add-predictions}
 
 \subsection{Per-set lists}
 \label{s:per-set-lists}
