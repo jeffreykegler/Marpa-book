@@ -350,7 +350,7 @@ of \Vrule{r}.
 \Vstr{rhs} is referred to as the right hand side (RHS)
 of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
-referred to as 
+referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
 This definition follows \cite{AH2002},
 which departs from tradition by disallowing an empty RHS.
@@ -410,7 +410,7 @@ if and only if
 \LHS{\Vrule{x}} = \RightNN{\Vrule{x}}.
 \end{equation*}
 \Vrule{x} is \dfn{indirectly right-recursive}
-if and only if 
+if and only if
 \begin{equation*}
 \exists \, \Vstr{y} \mid \RightNN{\Vrule{x}} \deplus \Vstr{y} \land \RightNN{\Vstr{y}} = \LHS{\Vrule{x}}.
 \end{equation*}
@@ -541,7 +541,7 @@ is the dotted rule with the dot at
 $\var{pos} = 2$,
 between \Vsym{Y} and \Vsym{Z}.
 
-We consider the size of a grammar, \Vsize{g}, to be the 
+We consider the size of a grammar, \Vsize{g}, to be the
 number of distinct dotted rules it allows.
 \Vsize{g} is a constant that depends on \var{g}.
 
@@ -953,7 +953,7 @@ so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
 Later in this \doc{} we will
 show that this change also leaves
-the complexity results of 
+the complexity results of
 Leo\cite{Leo1991} intact.
 
 Implementing the Leo logic requires
@@ -1020,7 +1020,7 @@ We define uniqueness of a penult in an Earley set as
 \begin{equation*}
 \begin{split}
 & \mymathop{Penult-Unique}(\Vsym{penult},\Ves{i}) \defined \\
-& \qquad \forall \, \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y}) 
+& \qquad \forall \, \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})
 \land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
 & \qquad \qquad \implies \Vdr{x} = \Vdr{y}.
 \end{split}
@@ -1058,7 +1058,7 @@ an EIM, and false otherwise:
 & \qquad \text{such that}  \\
 & \qquad \qquad \quad \Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
 & \qquad \qquad \land \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-& \qquad \qquad \land \Vlim{pred} \in \Ves{bottom-origin} 
+& \qquad \qquad \land \Vlim{pred} \in \Ves{bottom-origin}
 \end{split}
 \end{equation*}
 
@@ -1169,7 +1169,7 @@ Earley sets may be represented by \Ves{i},
 where \var{i} is the Earley set's location \Vloc{i}.
 The two notations should be regarded as interchangeable.
 The actual implementation of either
-should be the equivalent of a pointer to 
+should be the equivalent of a pointer to
 a data structure containing,
 at a minimum,
 the Earley items,
@@ -1522,7 +1522,9 @@ remains \Oc.
 \State $\Vdr{predict} \gets [ \Vsym{lhs} \de \mydot \Vstr{rhs} ]$
 \State $\Veim{predict} \gets [ \Vdr{predict}, \Ves{i} ]$
 \If{\Veim{predict} is new in \Ves{i}}
+\label{line:predictions-50}
 \State Add \Veim{predict} to \Vtable{i}
+\State \Call{Add predictions}{\Ves{i}, $\Postdot{\Vdr{predict}}$}
 \EndIf
 \EndFor
 \EndProcedure
@@ -1532,12 +1534,43 @@ remains \Oc.
 \subsection{Adding Earley predictions}
 \label{p:add-predictions}
 
+Time and space used by
+\call{Add predictions}{} is caller-included.
+The exclusive time and space of
+\call{Add predictions}{} is \Oc{}.
+However,
+\call{Add predictions}{} is called recursively,
+so that inclusive time and space
+includes the
+child calls
+of \call{Add predictions}{}.
+
+From line
+\ref{line:predictions-50}
+it can be seen that the number of child calls
+for any call
+of \call{Add predictions}{}
+is limited
+to the number of predictions in \Ves{i}.
+Predictions, like any EIM, must be unique in \Ves{i},
+and the number of possible predictions is
+the same as the number of rules in the grammar \var{g}.
+The number of rules in \var{g}
+is a constant depending on \var{g}.
+Therefore the number of child calls whose time and space
+is caller-included is \Oc{}.
+From this we can conclude that inclusive time and space
+charged by
+any call of
+of \call{Add predictions}{}
+is \Oc{}.
+
 \subsection{Per-set lists}
 \label{s:per-set-lists}
 
 In the general case,
 where \var{x} is an arbitrary datum,
-it is not possible 
+it is not possible
 to use duple $[\Ves{i}, x]$
 as a search key and expect the search to use
 \Oc{} time.
@@ -1800,13 +1833,13 @@ AHFA prediction is consistent with respect to the dotted rules.
 That is,
 for all \Vah{from}, \Vah{to}, \Vdr{to} such that
 \begin{equation*}
- \GOTO(\Vah{from}, \epsilon) = \Vah{to} 
+ \GOTO(\Vah{from}, \epsilon) = \Vah{to}
 \, \land  \,
- \Vdr{to} \in \Vah{to}, 
+ \Vdr{to} \in \Vah{to},
 \end{equation*}
 there exists \Vdr{from} such that
 \begin{equation*}
- \Vdr{from} \in \Vah{from} 
+ \Vdr{from} \in \Vah{from}
 \, \land  \,
  \Vdr{to} \in \Predict{\Vdr{from}}.
 \end{equation*}
@@ -1818,7 +1851,7 @@ AHFA prediction is complete with respect to the dotted rules.
 That is,
 for all \Vah{from}, \Vdr{from}, \Vdr{to}, if
 \begin{equation*}
- \Vdr{from} \in \Vah{from} 
+ \Vdr{from} \in \Vah{from}
 \, \land \,
 \Vdr{to} \in \Predict{\Vdr{from}},
 \end{equation*}
@@ -2042,7 +2075,7 @@ to \EVtable{\Leo}{j}.
 Because the \Marpa{} LIM is correct,
 using Observations \ref{o:confirmed-AHFA-consistent}
 and \ref{o:confirmed-AHFA-complete}
-and Theorem 
+and Theorem
 % TODO DELETE
 DELETED,
 we see that \Vah{top} is the singleton set
@@ -2586,11 +2619,11 @@ The number of possibilities for \Vsym{transition} is clearly at most
 \size{\var{symbols}},
 the number of symbols in \Cg{}.
 We have $\Veim{component} \in \Ves{j}$,
-and therefore there are at most 
+and therefore there are at most
 $\bigsize{\Ves{j}}$ choices for \Veim{component}.
 
 \begin{sloppypar}
-We can show that the number of possible choices of 
+We can show that the number of possible choices of
 \Veim{predecessor} is at most
 the number of AHFA states, \Vsize{fa}, by a reductio.
 Suppose, for the reduction,
@@ -2618,7 +2651,7 @@ compatible with \Vorig{component}, is as most \Vsize{fa}.
 \end{sloppypar}
 
 \begin{sloppypar}
-Collecting the results we see that the possibilities for 
+Collecting the results we see that the possibilities for
 each \Veim{component} are
 \begin{equation*}
 \begin{alignedat}{2}
@@ -2754,7 +2787,7 @@ We know still know that
 \begin{equation*}
 \Veim{predecessor} \in \Ves{component-origin},
 \end{equation*}
-where 
+where
 \Vloc{component-origin} is the origin of \Veim{component}.
 Worst case, every EIM in \Ves{component-origin} is a possible
 match, so that
@@ -2794,7 +2827,7 @@ on the grammar.
 Let the constant \var{c} be the number
 of symbols.
 Assume, for a reductio, that a right derivation
-expands to a 
+expands to a
 Leo sequence of length
 $\var{c}+1$, but that none of its steps uses a right recursive rule.
 
@@ -2852,7 +2885,7 @@ and the construction of a Leo sequence,
 it can be seen that a Leo sequence
 corresponds step-for-step with a
 right derivation.
-It can therefore be seen that 
+It can therefore be seen that
 the number of EIMT's in the Leo sequence
 and the number of right derivation steps
 in its corresponding right derivation
@@ -2872,7 +2905,7 @@ will correspond to a right
 derivation that does not include
 any steps that use right recursive rules.
 By Theorem \ref{t:leo-right-recursion},
-such a 
+such a
 right derivation can be
 of length at most \var{c1},
 where \var{c1} is a constant that depends on \Cg{}.
@@ -2954,11 +2987,11 @@ and Theorem \ref{t:eim-count}.
 \end{proof}
 
 Traditionally only the space result stated for a parsing algorithm
-is that 
+is that
 without links, as in \ref{t:cfg-space}.
 This is sufficiently relevant
 if the parser is only used as a recognizer.
-In practice, however, 
+In practice, however,
 algorithms like \Marpa{}
 are typically used in anticipation
 of an evaluation phase,
