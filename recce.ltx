@@ -1236,8 +1236,19 @@ including which tokens are acceptable during the scanning phase.
 \subsection{Initialization}
 \label{p:initial-op}
 
-Inclusive time and space is \Oc{}
-and is charged to the parse.
+From section
+\ref{p:add-predictions} we know that the resources
+charged by
+\call{Add Predictions}{} at caller included and
+that \call{Add Predictions}{}
+passes up a time and space charge of \Oc{}.
+Overhead from this call is \Oc{},
+so that total inclusive time and space
+for \call{Initial}{}
+is $\Oc{} + \Oc{} = \Oc{}$.
+The inclusive time and space resource used
+by \call{Initial}{}
+is charged to the parse.
 
 \begin{algorithm}[h]
 \caption{Marpa Scan pass}
@@ -1247,7 +1258,7 @@ and is charged to the parse.
 \For{each $\Veim{predecessor} \in \var{transitions}((\var{i} \subtract 1),\var{a})$}
 \State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{predecessor}$
 \State $\Vdr{to} \gets \Next(\Vdr{from}, \Vsym{a})$
-\State \Call{Add confirmed EIM}{$\Ves{i}, \Vdr{to}, \Vloc{origin}$}
+\State \Call{Attempt confirmed EIM}{$\Ves{i}, \Vdr{to}, \Vloc{origin}$}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -1428,7 +1439,7 @@ Overhead is \Oc{} and caller-included.
 \Procedure{Earley reduction operation}{\Vloc{i}, \Veim{from}}
 \State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{from}$
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
-\State \Call{Add confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
+\State \Call{Attempt confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1450,7 +1461,7 @@ attempt.
 \Procedure{Leo reduction operation}{\Vloc{i}, \Vlim{from}}
 \State $[\Vdr{from}, \Vsym{trans}, \Vloc{origin}] \gets \Vlim{from}$
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
-\State \Call{Add confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
+\State \Call{Attempt confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1465,16 +1476,16 @@ and inclusive time and space is charged to the EIM
 attempt.
 
 \begin{algorithm}[h]
-\caption{Add confirmed EIM}\label{a:confirmed}
+\caption{Attempt confirmed EIM}\label{a:confirmed}
 \begin{algorithmic}[1]
-\Procedure{Add confirmed EIM}{$\Ves{i},\Vdr{confirmed}, \Vloc{origin}$}
-\State $\Veim{confirmed} \gets [\Vdr{confirmed}, \Vloc{origin}]$
+\Procedure{Attempt confirmed EIM}{$\Ves{i},\Vdr{dr}, \Vloc{origin}$}
+\State $\Veim{confirmed} \gets [\Vdr{dr}, \Vloc{origin}]$
 \If{\Veim{confirmed} is new in \Ves{i}}
 \State Add \Veim{confirmed} to \Vtable{i}
-\EndIf
-\State $\Vsym{postdot} \gets \Postdot{\Vdr{confirmed}}$
+\State $\Vsym{postdot} \gets \Postdot{\Vdr{dr}}$
 \If{$\Vsym{postdot} \neq \Lambda$}
 \State \Call{Add predictions}{\Ves{i}, \Vsym{postdot}}
+\EndIf
 \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -1557,13 +1568,17 @@ and the number of possible predictions is
 the same as the number of rules in the grammar \var{g}.
 The number of rules in \var{g}
 is a constant depending on \var{g}.
-Therefore the number of child calls whose time and space
-is caller-included is \Oc{}.
-From this we can conclude that inclusive time and space
-charged by
-any call of
+Therefore the number of caller-included child calls
+of \call{Add predictions}{}
+whose time and space
+must be included in this call of
 of \call{Add predictions}{}
 is \Oc{}.
+From this we can conclude that inclusive time and space
+charged by
+any call
+of \call{Add predictions}{}
+is $\Oc{} \times \Oc{} = \Oc{}$.
 
 \subsection{Per-set lists}
 \label{s:per-set-lists}
