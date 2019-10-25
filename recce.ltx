@@ -674,6 +674,34 @@ for some \Vstr{rhs},
 \bigl[[\Vsym{accept} \de \Vstr{rhs} \mydot], 0\bigr] \in \bigEtable{\Vsize{\Cw}}
 \end{equation*}
 
+The following theorem will prove useful.
+
+\begin{theorem}\label{t:es-size}
+The maximum size of an Earley set at \Vloc{i}
+is \order{\var{i}}.
+\end{theorem}
+
+\begin{proof}
+The size of an Earley set is the number of EIM's
+that it contains.
+Each EIM is of the form
+$[ \Vdr{x}, \Vloc{x} ]$.
+Recall that
+the number of dotted rules is a \Vsize{g},
+a constant depending on the grammar.
+The possible values of \Vloc{x} range from
+0 to \Vloc{i}.
+Therefore the number of possible Earley items
+in \Ves{i} is
+is $\Vloc{i} \times \Oc{}$.
+It follows by the definition of the size of an
+Earley set that the maximum size of the Earley
+set at \Vloc{i} is
+\begin{equation*}
+\Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
+\end{equation*}
+\end{proof}
+
 \section{Operations of the Earley algorithm}
 \label{s:earley-ops}
 
@@ -799,12 +827,6 @@ A prediction operation can add several Earley items
 to Earley set \Vloc{current}.
 \Veim{predecessor} is called the predecessor of the prediction operation,
 and is its only operand.
-
-\subsection{Causation}
-An operand of an operation is also called a \dfn{cause}
-of that operation,
-and the set of operands for an Earley operation
-is its \dfn{causation}.
 
 \section{The Leo algorithm}
 \label{s:leo}
@@ -1192,6 +1214,7 @@ Per-set-lists will be described in Section \ref{s:per-set-lists}.
 \EndFor
 \For{every $[\Vdr{x}, 0] \in \Etable{\Vsize{w}}$}
 \If{$\Vdr{accept} = \Vdr{x}$}
+\label{line:accept-loop}
 \State accept \Cw{} and return
 \EndIf
 \EndFor
@@ -1202,13 +1225,27 @@ Per-set-lists will be described in Section \ref{s:per-set-lists}.
 
 \subsection{Top-level code}
 
-Exclusive time and space for the loop over the Earley sets
-is charged to the Earley sets.
-Inclusive time and space for the final loop to
-check for \Vdr{accept} is charged to
-the Earley items at location \size{\Cw}.
-Overhead is charged to the parse.
-All these resource charges are obviously \Oc.
+Time and space for
+\call{Scan pass}{} 
+and
+\call{Reduction pass}{} 
+are accounted within those procedures,
+so that exclusive and inclusive time and space
+for
+\call{Main}{} 
+are identical.
+No exclusive space is used,
+and time is \Oc{} except for the accept loop
+starting at line \ref{line:accept-loop}.
+The time for the accept loop is
+$\Oc{} \times \var{accept-passes}$
+where 
+\var{accept-passes} is the number of passes
+made through the accept loop.
+\var{accept-passes} is limited by the number of
+EIM's in \Ves{\Vsize{w}}.
+
+% TODO: finish time for accept loop
 
 \subsection{Ruby Slippers parsing}
 This top-level code represents a significant change
