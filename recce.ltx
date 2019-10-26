@@ -1114,10 +1114,6 @@ and another, which holds if
 }
 \end{equation*}
 
-\begin{theorem}\label{t:leo-singleton}
-TODO: DELETED.
-\end{theorem}
-
 \section{The Marpa Recognizer}
 \label{s:recce}
 \label{s:pseudocode}
@@ -1244,8 +1240,10 @@ where
 made through the accept loop.
 \var{accept-passes} is limited by the number of
 EIM's in \Ves{\Vsize{w}}.
-
-% TODO: finish time for accept loop
+From Theorem \ref{t:es-size},
+we know that this is $\order{\Vsize{w}} = \On$.
+The inclusive time of \On{} is charged to
+the parse.
 
 \subsection{Ruby Slippers parsing}
 This top-level code represents a significant change
@@ -1276,7 +1274,7 @@ including which tokens are acceptable during the scanning phase.
 From section
 \ref{p:add-predictions} we know that the resources
 charged by
-\call{Add Predictions}{} at caller included and
+\call{Add Predictions}{} are caller included and
 that \call{Add Predictions}{}
 passes up a time and space charge of \Oc{}.
 Overhead from this call is \Oc{},
@@ -1291,11 +1289,12 @@ is charged to the parse.
 \caption{Marpa Scan pass}
 \begin{algorithmic}[1]
 \Procedure{Scan pass}{$\Vloc{i},\Vsym{a}$}
-\State Note: Each pass through this loop is an EIM attempt
 \For{each $\Veim{predecessor} \in \var{transitions}((\var{i} \subtract 1),\var{a})$}
+\label{line:scan-pass-35}
 \State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{predecessor}$
-\State $\Vdr{to} \gets \Next(\Vdr{from}, \Vsym{a})$
-\State \Call{Attempt confirmed EIM}{$\Ves{i}, \Vdr{to}, \Vloc{origin}$}
+\State $\Vdr{to} \gets \Next(\Vdr{from})$
+\State $\Veim{to} \gets [\Vdr{to}, \Vloc{origin}]$
+\State \Call{Attempt confirmed EIM}{$\Ves{i}, \Veim{to}$}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -1304,24 +1303,68 @@ is charged to the parse.
 \subsection{Scan pass}
 \label{p:scan-op}
 
+We first look at resource usage for 
+\var{transitions}.
 \var{transitions} is a set of tables, one per Earley set.
 The tables in the set are indexed by symbol.
-Symbol indexing is \Oc, since the number of symbols
+Symbol indexing is \Oc{}, since the number of symbols
 is a constant, but
 since the number of Earley sets grows with
 the length of the parse,
 it cannot be assumed that Earley sets can be indexed by location
 in \Oc{} time.
-For the operation $\var{transitions}(\ell_{\var{LOC}}, \Vsym{s})$
+For the operation $\var{transitions}(\ell_{\var{ES}}, \Vsym{s})$
 to be in \Oc{} time,
-$\ell_{\var{LOC}}$ must represent a link directly to the Earley set.
+$\ell_{\var{ES}}$ must represent a link directly to the Earley set.
 In the case of scanning,
 the lookup is always in the previous Earley set,
-which can easily be tracked in \Oc{} space
-and retrieved in \Oc{} time.
-Inclusive time and space can be charged to the
-\Veim{predecessor}.
-Overhead is charged to the Earley set at \Vloc{i}.
+which can easily retrieved in \Oc{} time,
+without using any additional space.
+
+Resource for the call of
+\call{Attempt confirmed EIM}{} is caller-included.
+In section \ref{p:add-confirmed-eim},
+we show that space is \Oc{} when
+\call{Attempt confirmed EIM}{} adds an Earley item,
+and that no space is used when
+\call{Attempt confirmed EIM}{} does not add an Earley item.
+In section \ref{p:add-confirmed-eim},
+we also show that time is \Oc{}
+for each call of
+\call{Attempt confirmed EIM}{}.
+
+The predecessor loop is the loop that begins
+at line \ref{line:scan-pass-35}.
+We have already examined the resource usage of \var{transition}
+and of the call of
+\call{Attempt confirmed EIM}{}.
+The other logic in the loop obviously uses no space and
+\Oc{} time.
+
+Having examining the resource usage of \var{transitions},
+\call{Attempt confirmed EIM}{},
+and of the other logic in the predecessor loop,
+we now can sum up the resource usage of one pass over
+the predecessor loop.
+When
+\call{Attempt confirmed EIM}{}
+adds an EIM,
+the space usage is $0 + 0 + \Oc = \Oc$.
+When \call{Attempt confirmed EIM}{}
+does not add an EIM,
+the space usage is zero.
+Time usage is always $\Oc + \Oc + \Oc = \Oc$.
+The time and space for each pass
+through the predecessor loop
+is charged to
+\Veim{to}.
+
+Overhead for the call to
+\call{Scan pass}{} uses no space
+and \Oc{} time.
+The overhead
+of \call{Scan pass}{}
+is charged to the Earley set at \Vloc{i}.
 
 \begin{algorithm}[h]
 \caption{Reduction pass}
@@ -1476,7 +1519,8 @@ Overhead is \Oc{} and caller-included.
 \Procedure{Earley reduction operation}{\Vloc{i}, \Veim{from}}
 \State $[\Vdr{from}, \Vloc{origin}] \gets \Veim{from}$
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
-\State \Call{Attempt confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
+\State $\Veim{to} \gets [\Vdr{to}, \Vorig{i}]$
+\State \Call{Attempt confirmed EIM}{\Ves{i}, \Veim{to}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1498,7 +1542,8 @@ attempt.
 \Procedure{Leo reduction operation}{\Vloc{i}, \Vlim{from}}
 \State $[\Vdr{from}, \Vsym{trans}, \Vloc{origin}] \gets \Vlim{from}$
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
-\State \Call{Attempt confirmed EIM}{\Ves{i}, \Vdr{to}, \Vloc{origin}}
+\State $\Veim{to} \gets [\Vdr{to}, \Vorig{i}]$
+\State \Call{Attempt confirmed EIM}{\Ves{i}, \Veim{to}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1515,50 +1560,81 @@ attempt.
 \begin{algorithm}[h]
 \caption{Attempt confirmed EIM}\label{a:confirmed}
 \begin{algorithmic}[1]
-\Procedure{Attempt confirmed EIM}{$\Ves{i},\Vdr{dr}, \Vloc{origin}$}
-\State $\Veim{confirmed} \gets [\Vdr{dr}, \Vloc{origin}]$
-\If{\Veim{confirmed} is new in \Ves{i}}
-\State Add \Veim{confirmed} to \Vtable{i}
+\Procedure{Attempt confirmed EIM}{$\Ves{i},\Veim{attempt}$}
+\If{\Veim{attempt} is new in \Ves{i}}
+\label{line:attempt-confirmed-40}
+\State Add \Veim{attempt} to \Vtable{i}
+\label{line:attempt-confirmed-45}
+\State $[\Vdr{dr}, \Vloc{origin}] \gets \Veim{attempt}$
 \State $\Vsym{postdot} \gets \Postdot{\Vdr{dr}}$
 \If{$\Vsym{postdot} \neq \Lambda$}
 \State \Call{Add predictions}{\Ves{i}, \Vsym{postdot}}
+\label{line:attempt-confirmed-85}
 \EndIf
 \EndIf
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Adding a confirmed Earley item}
+\subsection{Attempting a confirmed Earley item}
 \label{p:add-confirmed-eim}
 
-This operation adds a confirmed EIM
-item and, if it exists, the EIM for
-its null-transition.
-Inclusive time and space is charged to the
-calling procedure.
-Trivially, the space is \Oc{} per call.
+This operation attempts to add a confirmed EIM
+item and the EIMs for the predictions which
+result from it.
 
-We show that time is also \Oc{}
-by singling out the two non-trivial cases:
-checking that an Earley item is new,
-and adding it to the Earley set.
-\Marpa{} checks whether an Earley item is new
-in \Oc{} time
-by using a data structure called a PSL.
+If \Veim{attempt} is new,
+\Oc{} space is used directly at line
+\ref{line:attempt-confirmed-45}; and
+from section \ref{p:add-predictions},
+we know that \Oc{} space is used indirectly at line
+\ref{line:attempt-confirmed-85}.
+Therefore,
+the inclusive space used is
+$\Oc + \Oc = \Oc$ per call.
+If \Veim{attempt} is not new,
+inclusive space used is zero.
+
+Inclusive time used by each line is \Oc{},
+so that inclusive time for the call
+of
+\call{Add Confirmed EIM}{} is
+\Oc{}.
+In the case of lines
+\ref{line:attempt-confirmed-40},
+\ref{line:attempt-confirmed-45}, and
+\ref{line:attempt-confirmed-85}
+the claim that time is \Oc{}
+is non-trivial.
+
+At line \ref{line:attempt-confirmed-40},
+\Marpa{} checks whether an Earley item is new.
+The time used is \Oc{}
+because Marpa
+uses a data structure called a PSL.
 PSL's are the subject of Section \ref{s:per-set-lists}.
-An Earley item can be added to the current
-set in \Oc{} time
+
+At line
+\ref{line:attempt-confirmed-45},
+an Earley item is added to the current
+set.
+This can be done in \Oc{} time
 if Earley set is seen as a linked
 list, to the head of which the new Earley item is added.
 
-The resource used by \call{Add Confirmed EIM}{}
-is always caller-included.
-No time or space is ever charged
-to a predicted Earley item.
-At most one attempt to add a \Veim{predicted} will
-be made per attempt to add a \Veim{confirmed},
-so that the total resource charged
-remains \Oc.
+At line \ref{line:attempt-confirmed-85}.
+\call{Add predictions}{} is called.
+We know that the inclusive time is
+\Oc{},
+from section \ref{p:add-predictions}{}.
+
+{\bf Complexity Summary}:
+Inclusive time is always \Oc{}.
+When a \Veim{attempt} is new,
+inclusive space is \Oc{}.
+When \Veim{attempt} is not new,
+inclusive space is zero.
+Time and space are caller included.
 
 \begin{algorithm}[h]
 \caption{Add predictions}\label{a:predictions}
@@ -1567,11 +1643,13 @@ remains \Oc.
 \State Note: \var{rules} is the set of grammar rules
 \State Set $\var{lhs-rules} \gets \left \lbrace \Vrule{r} \mid \var{r} \in \var{rules} \land \LHS{\var{r}} = \Vsym{lhs} \right \rbrace$
 \For{ $[ \Vsym{lhs} \de \Vstr{rhs} ] \in \var{lhs-rules}$ }
+\label{line:predictions-35}
 \State $\Vdr{predict} \gets [ \Vsym{lhs} \de \mydot \Vstr{rhs} ]$
 \State $\Veim{predict} \gets [ \Vdr{predict}, \Ves{i} ]$
 \If{\Veim{predict} is new in \Ves{i}}
 \label{line:predictions-50}
 \State Add \Veim{predict} to \Vtable{i}
+\label{line:predictions-60}
 \State \Call{Add predictions}{\Ves{i}, $\Postdot{\Vdr{predict}}$}
 \EndIf
 \EndFor
@@ -1584,19 +1662,33 @@ remains \Oc.
 
 Time and space used by
 \call{Add predictions}{} is caller-included.
-The exclusive time and space of
+\Oc{} space is used in line
+\ref{line:predictions-60}.
+The number of passes in the loop beginning at
+line
+\ref{line:predictions-35}
+is limited by \Vsize{lhs-rules},
+which is less than or equal to the number of rules
+in the grammar.
+The number of rules in the grammar is a constant,
+so the exclusive time and space used by
 \call{Add predictions}{} is \Oc{}.
-However,
-\call{Add predictions}{} is called recursively,
-so that inclusive time and space
-includes the
-child calls
-of \call{Add predictions}{}.
+
+To find the inclusive time and space consumed
+by
+\call{Add predictions}{},
+we must take into account that it is called recursively.
+Therefore inclusive time and space must take into
+account all calls of
+\call{Add predictions}{}
+in the call tree below the current call of
+\call{Add predictions}{}.
 
 From line
 \ref{line:predictions-50}
 it can be seen that the number of child calls
-for any call
+in the call tree
+below any call
 of \call{Add predictions}{}
 is limited
 to the number of predictions in \Ves{i}.
@@ -1609,13 +1701,17 @@ Therefore the number of caller-included child calls
 of \call{Add predictions}{}
 whose time and space
 must be included in this call of
-of \call{Add predictions}{}
+\call{Add predictions}{}
 is \Oc{}.
 From this we can conclude that inclusive time and space
 charged by
 any call
 of \call{Add predictions}{}
 is $\Oc{} \times \Oc{} = \Oc{}$.
+
+{\bf Complexity summary}:
+Time and space is \Oc{},
+and is caller-included.
 
 \subsection{Per-set lists}
 \label{s:per-set-lists}
