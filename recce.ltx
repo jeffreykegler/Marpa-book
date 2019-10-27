@@ -1118,10 +1118,39 @@ and another, which holds if
 \label{s:recce}
 \label{s:pseudocode}
 
-\subsection{Complexity}
+\subsection{Pseudocode conventions}
 
-Alongside the pseudocode of this section
+Earley sets may be represented by \Ves{i},
+where \var{i} is the Earley set's location \Vloc{i}.
+The two notations should be regarded as interchangeable.
+The actual implementation of either
+should be the equivalent of a pointer to
+a data structure containing,
+at a minimum,
+the Earley items,
+a memoization of the Earley set's location as an integer,
+and a per-set-list.
+Per-set-lists will be described in Section \ref{s:per-set-lists}.
+
+The main purpose of the pseudocode is to
+support the proofs of this paper's claims.
+Therefore, alongside the pseudocode of this section
 are observations about its space and time complexity.
+
+Some readers will only be interested in
+the pseudocode itself, and will want to
+skip the complexity discussions.
+For their convenience,
+every complexity
+discussion occurs in a numbered section with ``Complexity''
+in the title,
+or in an unnumbered subsection that begins
+with the ``Complexity summary''
+or the the ``Complexity'' subheader.
+The first such subsection follows
+immediately.
+
+{\bf Complexity}:
 In what follows,
 we will charge all time and space resources
 to Earley items,
@@ -1182,18 +1211,6 @@ and ignores resource charges passed up from called procedures.
 Inclusive time or space includes
 resource passed upward to the
 current procedure from called procedures.
-
-Earley sets may be represented by \Ves{i},
-where \var{i} is the Earley set's location \Vloc{i}.
-The two notations should be regarded as interchangeable.
-The actual implementation of either
-should be the equivalent of a pointer to
-a data structure containing,
-at a minimum,
-the Earley items,
-a memoization of the Earley set's location as an integer,
-and a per-set-list.
-Per-set-lists will be described in Section \ref{s:per-set-lists}.
 
 \begin{algorithm}[h]
 \caption{Marpa Top-level}
@@ -1570,6 +1587,7 @@ attempt.
 \If{$\Vsym{postdot} \neq \Lambda$}
 \State \Call{Add predictions}{\Ves{i}, \Vsym{postdot}}
 \label{line:attempt-confirmed-85}
+\label{line:attempt-confirmed-last}
 \EndIf
 \EndIf
 \EndProcedure
@@ -1599,7 +1617,7 @@ Inclusive time used by each line is \Oc{},
 so that inclusive time for the call
 of
 \call{Add Confirmed EIM}{} is
-\Oc{}.
+$\sum_{\var{line}=1}^{\ref{line:attempt-confirmed-last}} = \Oc{}$.
 In the case of lines
 \ref{line:attempt-confirmed-40},
 \ref{line:attempt-confirmed-45}, and
