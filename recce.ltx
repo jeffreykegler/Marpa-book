@@ -1239,20 +1239,20 @@ current procedure from called procedures.
 \subsection{Top-level code}
 
 Time and space for
-\call{Scan pass}{} 
+\call{Scan pass}{}
 and
-\call{Reduction pass}{} 
+\call{Reduction pass}{}
 are accounted within those procedures,
 so that exclusive and inclusive time and space
 for
-\call{Main}{} 
+\call{Main}{}
 are identical.
 No exclusive space is used,
 and time is \Oc{} except for the accept loop
 starting at line \ref{line:accept-loop}.
 The time for the accept loop is
 $\Oc{} \times \var{accept-passes}$
-where 
+where
 \var{accept-passes} is the number of passes
 made through the accept loop.
 \var{accept-passes} is limited by the number of
@@ -1320,7 +1320,7 @@ is charged to the parse.
 \subsection{Scan pass}
 \label{p:scan-op}
 
-We first look at resource usage for 
+We first look at resource usage for
 \var{transitions}.
 \var{transitions} is a set of tables, one per Earley set.
 The tables in the set are indexed by symbol.
@@ -1538,20 +1538,36 @@ Overhead is \Oc{} and caller-included.
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
 \State $\Veim{to} \gets [\Vdr{to}, \Vorig{i}]$
 \State \Call{Attempt confirmed EIM}{\Ves{i}, \Veim{to}}
+\label{line:earley-reduction-last}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Earley Reduction operation}
+\subsection{Earley Reduction operation complexity}
 \label{p:reduction-op}
 
-\begin{sloppypar}
-Exclusive time and space is \Oc.
-\call{Earley reduction operation}{} is always
-called as part of an EIM attempt,
-and inclusive time and space is charged to the EIM
-attempt.
-\end{sloppypar}
+Inclusive space at line
+\ref{line:earley-reduction-last}
+is \Oc{}
+as shown in section \ref{p:add-confirmed-eim}.
+Inclusive space at all other lines is zero,
+so that total inclusive space is \Oc{}.
+
+For line
+\ref{line:earley-reduction-last}
+inclusive time is \Oc,
+as is shown in section \ref{p:add-confirmed-eim}.
+For the other lines, it is directly clear
+that inclusive time is \Oc.
+Therefore inclusive time for the
+\call{Earley reduction operation}{} is
+$\sum_{\var{line}=1}^{\ref{line:earley-reduction-last}} = \Oc{}$.
+
+{ \bf Summary }:
+For
+\call{Earley reduction operation}{} \Oc{} time
+and \Oc{} space
+is charged to \Veim{to}.
 
 \begin{algorithm}[h]
 \caption{Leo reduction operation}
@@ -1561,18 +1577,36 @@ attempt.
 \State $\Vdr{to} \gets \Next(\Vdr{from})$
 \State $\Veim{to} \gets [\Vdr{to}, \Vorig{i}]$
 \State \Call{Attempt confirmed EIM}{\Ves{i}, \Veim{to}}
+\label{line:leo-reduction-last}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Leo reduction operation}
+\subsection{Leo reduction operation complexity}
 \label{p:leo-op}
 
-Exclusive time and space is \Oc.
-\call{Leo reduction operation}{} is always
-called as part of an EIM attempt,
-and inclusive time and space is charged to the EIM
-attempt.
+Inclusive space at line
+\ref{line:leo-reduction-last}
+is \Oc{}
+as shown in section \ref{p:add-confirmed-eim}.
+Inclusive space at all other lines is zero,
+so that total inclusive space is \Oc{}.
+
+For line
+\ref{line:leo-reduction-last}
+inclusive time is \Oc,
+as is shown in section \ref{p:add-confirmed-eim}.
+For the other lines, it is directly clear
+that inclusive time is \Oc.
+Therefore inclusive time for the
+\call{Leo reduction operation}{} is
+$\sum_{\var{line}=1}^{\ref{line:leo-reduction-last}} = \Oc{}$.
+
+{ \bf Summary }:
+For
+\call{Leo reduction operation}{} \Oc{} time
+and \Oc{} space
+is charged to \Veim{to}.
 
 \begin{algorithm}[h]
 \caption{Attempt confirmed EIM}\label{a:confirmed}
