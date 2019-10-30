@@ -175,85 +175,50 @@ to the parser's expectations.
 
 \section{Introduction}
 
-Despite a strong academic literature,
-general context-free parsing
-has never been incorporated into a highly available tool
-like those that exist for LALR\cite{Johnson} or
+The Marpa project was intended to create
+a practical and highly available tool
+to generate and use general context-free
+parsers.
+Tools of this kind
+had long existed
+for LALR~\cite{Johnson} and
 regular expressions.
-The Marpa project was intended
-to take the best results from the literature
-on Earley parsing off the pages
-of the journals and bring them
-to a wider audience.
-Marpa::XS\cite{Marpa-XS},
-a stable version of this tool,
-was uploaded to the CPAN Perl archive
-on Solstice Day in 2011.
-This paper describes the algorithm of Marpa::R2\cite{Marpa-R2},
-a later version.
+But, despite an encouraging academic literature,
+no such tool had existed for context-free parsing.
 
-As implemented,
-Marpa parses,
-without exception,
-all context-free grammars.
-Time bounds are the best of Leo\cite{Leo1991}
-and Earley\cite{Earley1970}.
-The Leo bound,
-\On{} for LR-regular grammars,
-is especially relevant to
-Marpa's goal of being a practical parser:
-If a grammar is in a class of grammar currently in practical use,
-Marpa parses it in linear time.
+The first stable version of Marpa was uploaded to
+a public archive on Solstice Day 2011.
+This version describes the algorithm used
+in the most recent version of Marpa,
+Marpa::R2~\cite{Marpa-R2}.
+It is a simplification of the algorithm presented
+in the first version of this paper.
 
-Error-detection properties,
-although extremely important,
-have been overlooked in the past.
-Marpa breaks new ground in this respect.
-Marpa has the immediate error detection property,
-and goes well beyond it.
-Marpa is fully aware of the state of the parse,
-and can report this to the user while tokens are
-being scanned.
+\section{Introduction}
 
-As one example,
-Marpa allows the lexer to check its list
-of acceptable tokens before a token is scanned.
-Because rejection of tokens is easily and
-efficiently recoverable,
-the lexer is also free to take an event-driven
-approach.
-Error detection is no longer
-an act of desperation,
-but a parsing technique in its own right.
+While the presentation in this paper is theoretical,
+the approach is practical.
+The Marpa::R2 implementation has been widely available
+for some time,
+and has seen considerable use,
+including in production environments.
+Many of the ideas in the parsing literature
+satisfy theoretical criteria,
+but in practice turn out to face significant obstacles.
+An algorithm may be as fast as reported, but may turn
+out not to allow
+adequate error reporting.
+Or a modification may speed up the recognizer,
+but require additional processing at evaluation time,
+leaving no advantage to compensate for
+the additional complexity.
 
-If a token is rejected,
-the lexer is free to create a new token
-in the light of the parser's expectations.
-This approach can be described
-as making the parser's
-``wishes'' come true,
-and we have called this
-``Ruby Slippers Parsing''.
-
-One use of the Ruby Slippers technique is to
-parse with a clean
-but oversimplified grammar,
-programming the lexical analyzer to make up for the grammar's
-short-comings on the fly.
-The author has implemented an HTML parser\cite{Marpa-HTML},
-based on a grammar that assumes that all start
-and end tags are present.
-Such an HTML grammar is too simple
-to describe even perfectly
-standard-conformant HTML,
-but the lexical analyzer is
-programmed to supply start and end tags as requested by the parser.
-The result is a very simply and cleanly designed parser
-that parses very liberal HTML
-and accepts all input files,
-in the worst case
-treating them as highly defective HTML.
-
+Section
+\ref{s:features}
+describes the important features of Marpa
+and Section
+\ref{s:using-features}
+goes into details about their applications.
 Section
 \ref{s:preliminaries} describes the notation and conventions
 of this \doc.
@@ -278,6 +243,253 @@ its complexity results.
 Finally,
 section \ref{s:input}
 generalizes Marpa's input model.
+
+A full description of Marpa's relationship to
+prior work in parsing can be found in \cite{Timeline}.
+Readers may find it helpful to read 
+\cite{Timeline}
+before this paper.
+
+\section{Features}
+\label{s:features}
+
+\subsection{General context-free parsing}
+As implemented,
+Marpa parses
+all ``proper'' context-free grammars.
+The
+proper context-free grammars are those which
+are free of cycles,
+unproductive symbols,
+and
+inaccessible symbols.
+Worst case time bounds are never worse than
+those of Earley~\cite{Earley1970},
+and therefore never worse than $\order{\var{n}^3}$.
+
+\subsection{Linear time for practical grammars}
+Currently, the grammars suitable for practical
+use are thought to be a subset
+of the deterministic context-free grammars.
+Using a technique discovered by
+Leo~\cite{Leo1991},
+Marpa parses all of these in linear time.
+Leo's modification of Earley's algorithm is
+\On{} for LR-regular grammars.
+Leo's modification
+also parses many ambiguous grammars in linear
+time.
+
+\subsection{Left-eidetic}
+The original Earley algorithm kept full information
+about the parse ---
+including partial and fully
+recognized rule instances ---
+in its tables.
+At every parse location,
+before any symbols
+are scanned,
+Marpa's parse engine makes available
+its
+information about the state of the parse so far.
+This information is
+in useful form,
+and can be accessed efficiently.
+
+\subsection{Recoverable from read errors}
+When
+Marpa reads a token which it cannot accept,
+the error is fully recoverable.
+An application can try to read another
+token.
+The application can do this repeatedly
+as long as none of the tokens are accepted.
+Once the application provides
+a token that is accepted by the parser,
+parsing will continue
+as if the unsuccessful read attempts had never been made.
+
+\subsection{Ambiguous tokens}
+Marpa allows ambiguous tokens.
+These are often useful in natural language processing
+where, for example,
+the same word might be a verb or a noun.
+Use of ambiguous tokens can be combined with
+recovery from rejected tokens so that,
+for example, an application could react to the
+rejection of a token by reading two others.
+
+\section{Using the features}
+\label{s:using-features}
+
+\subsection{Error reporting}
+An obvious application of left-eideticism is error
+reporting.
+Marpa's abilities in this respect are
+ground-breaking.
+For example,
+users typically regard an ambiguity as an error
+in the grammar.
+Marpa, as currently implemented,
+can detect an ambiguity and report
+specifically where it occurred
+and what the alternatives were.
+
+\subsection{Event driven parsing}
+As implemented,
+Marpa::R2~\cite{Marpa-R2}
+allows the user to define ``events''.
+Events can be defined that trigger when a specified rule is complete,
+when a specified rule is predicted,
+when a specified symbol is nulled,
+when a user-specified lexeme has been scanned,
+or when a user-specified lexeme is about to be scanned.
+A mid-rule event can be defined by adding a nulling symbol
+at the desired point in the rule,
+and defining an event which triggers when the symbol is nulled.
+
+\subsection{Ruby slippers parsing}
+Left-eideticism, efficient error recovery,
+and the event mechanism can be combined to allow
+the application to change the input in response to
+feedback from the parser.
+In traditional parser practice,
+error detection is an act of desperation.
+In contrast,
+Marpa's error detection is so painless
+that it can be used as the foundation
+of new parsing techniques.
+
+For example,
+if a token is rejected,
+the lexer is free to create a new token
+in the light of the parser's expectations.
+This approach can be seen
+as making the parser's
+``wishes'' come true,
+and we have called it
+``Ruby Slippers Parsing''.
+
+One use of the Ruby Slippers technique is to
+parse with a clean
+but oversimplified grammar,
+programming the lexical analyzer to make up for the grammar's
+short-comings on the fly.
+As part of Marpa::R2~\cite{Marpa-R2},
+the author has implemented an HTML parser,
+based on a grammar that assumes that all start
+and end tags are present.
+Such an HTML grammar is too simple even to describe perfectly
+standard-conformant HTML,
+but the lexical analyzer is
+programmed to supply start and end tags as requested by the parser.
+The result is a simple and cleanly designed parser
+that parses very liberal HTML
+and accepts all input files,
+in the worst case
+treating them as highly defective HTML.
+
+\subsection{Ambiguity as a language design technique}
+In current practice, ambiguity is avoided in language design.
+This is very different from the practice in the languages humans choose
+when communicating with each other.
+Human languages exploit ambiguity in order to design highly flexible,
+powerfully expressive languages.
+For example,
+the language of this paper, English, is notoriously
+ambiguous.
+
+Ambiguity of course can present a problem.
+A sentence in an ambiguous
+language may have undesired meanings.
+But note that this is not a reason to ban potential ambiguity ---
+it is only a problem with actual ambiguity.
+
+Syntax errors, for example, are undesired, but nobody tries
+to design languages to make syntax errors impossible.
+A language in which every input was well-formed and meaningful
+would be cumbersome and even dangerous:
+all typos in such a language would be meaningful,
+and parser would never warn the user about errors, because
+there would be no such thing.
+
+With Marpa, ambiguity can be dealt with in the same way
+that syntax errors are dealt with in current practice.
+The language can be designed to be ambiguous,
+but any actual ambiguity can be detected
+and reported at parse time.
+This exploits Marpa's ability
+to report exactly where
+and what the ambiguity is.
+Marpa::R2 own parser description language, the SLIF,
+uses ambiguity in this way.
+
+\subsection{Auto-generated languages}
+\cite[pp. 6-7]{Culik1973} points out that the ability
+to efficiently parse LR-regular languages
+opens the way to auto-generated languages.
+In particular,
+\cite{Culik1973} notes that a parser which
+can parse any LR-regular language will be
+able to parse a language generated using syntax macros.
+
+\subsection{Second order languages}
+In the literature, the term ``second order language''
+is usually used to describe languages with features
+which are useful for second-order programming.
+True second-order languages --- languages which
+are auto-generated
+from other languages ---
+have not been seen as practical,
+since there was no guarantee that the auto-generated
+language could be efficiently parsed.
+
+With Marpa, this barrier is raised.
+As an example,
+Marpa::R2's own parser description language, the SLIF,
+allows ``precedenced rules''.
+Precedenced rules are specified in an extended BNF.
+The BNF extensions allow precedence and associativity
+to be specified for each RHS.
+
+Marpa::R2's precedenced rules are implemented as
+a true second order language.
+The SLIF representation of the precedenced rule
+is parsed to create a BNF grammar which is equivalent,
+and which has the desired precedence.
+Essentially,
+the SLIF does a standard textbook transformation.
+The transformation starts
+with a set of rules,
+each of which has a precedence and
+an associativity specified.
+The result of the transformation is a set of
+rules in pure BNF.
+The SLIF's advantage is that it is powered by Marpa,
+and therefore the SLIF can be certain that the grammar
+that it auto-generates will
+parse in linear time.
+
+Notationally, Marpa's precedenced rules
+are an improvement over
+similar features
+in LALR-based parser generators like
+yacc or bison.
+In the SLIF,
+there are two important differences.
+First, in the SLIF's precedenced rules,
+precedence is generalized, so that it does
+not depend on the operators:
+there is no need to identify operators,
+much less class them as binary, unary, etc.
+This more powerful and flexible precedence notation
+allows the definition of multiple ternary operators,
+and multiple operators with arity above three.
+
+Second, and more important, a SLIF user is guaranteed
+to get exactly the language that the precedenced rule specifies.
+The user of the yacc equivalent must hope their
+syntax falls within the limits of LALR.
 
 \section{Preliminaries}
 \label{s:preliminaries}
@@ -831,14 +1043,114 @@ and is its only operand.
 \section{The Leo algorithm}
 \label{s:leo}
 
-In \cite{Leo1991}, Joop Leo presented a method for
-dealing with right recursion in \On{} time.
-Leo shows that,
+\subsection{The history of a conjecture}
+
+Jay Earley~\cite[p. 60]{Earley1968}
+conjectured that \Earley{} could be
+modified to be \On{} for
+all deterministic context-free grammars (DCFG's).
+(The DCFG's are the union of the
+\var{LR}(\var{k})
+grammars for all \var{k}.)
+He gave no details of the method he had in mind.
+Earley left the field shortly thereafter ---
+by 1973 he had earned a second Ph.D. and
+was a practicing psychotherapist in California.
+
+In the late 1980's, Joop Leo
+also conjectured that
+Earley's algorithm could be modified to be linear for all
+DCFG's.
+Leo was initially unaware of Earley's earlier conjecture ---
+he discovered it in the course of writing up his
+discovery.
+Leo published his method in~\cite{Leo1991}.
+
+The problem both investigators noticed was that,
+while \Earley{} is \On{}
+for left recursion,
+and in fact very efficient,
+it is $\order{\var{n}^2}$ for right recursion.
+This is because all the EIM's necessary for a right
+recursion are created at every parse location
+where the right recursion might end.
+
+For simplicity,
+in the discussion of this section,
+we will assume that the grammar is unambiguous,
+or at least that it is not ambiguous in a way that affects
+the right recursion we are discussing.
+We will call each potential end location of a right recursion,
+an \dfn{EORR},
+and will will call
+the EIM's needed to represent the right recursion
+at an EORR, an \dfn{EORR set}.
+
+In \Earley,
+if the length of the right
+recursion at an EORR is \var{n}, then the EORR set contains \var{n} EIM's.
+The total number of EIM's in the EORR sets
+needed for a right recursion of length \var{n} is
+\[
+  \sum_{\var{i} = 1}^\var{n} \var{i} = \order{\var{n}^2}.
+\]
+Of these EIM's, only \var{n} will actually be needed ---
+the rest are useless.
+
+Leo's idea was to memoize the right recursions.
+With Leo memoization, each EORR set is represented by
+a pair of EIM's and a memo.
+There are \Oc{} Leo memos per Earley set,
+so the time and space complexity
+of an EORR set is \Oc{}.
+The time and space complexity of all the EORR
+sets in
+a right recursion of length \var{n} will
+be
+\[
+  \sum_{\var{i} = 1}^\var{n} 1 = \On.
+\]
+
+If, at evaluation time,
+it is desirable to expand the Leo memoizations,
+only the EORR set actually used in the parse
+needs to be expanded.
+All of the EIM's actually used in a right recursion
+will be in a single EORR set.
+The number of memoized
+EIM's that need to be expanded
+will be \On{},
+where \var{n} is the length of the recursion.
+As a result,
+even if the time and space
+required to expand Leo memoization
+during evaluation
+are taken into account,
+the time and space complexity of
+a right recursion become
+$\On{} = \On{} + \On{}$.
+
+In \cite{Leo1991}, Joop Leo
+showed that,
 with his modification, Earley's algorithm
 is \On{} for all LR-regular grammars.
-(LR-regular is LR where lookahead
+LR-regular is LR where lookahead
 is infinite length, but restricted to
-distinguishing between regular expressions.)
+distinguishing between regular expressions.
+Earley did not claim \On{} for LR-regular
+because LR-regular was not introduced
+to the literature until 1973~\cite{Culik1973}.
+Even in 1991, LR-regular was not well-known,
+which is why Leo only claims
+the weaker
+\var{LR}(\var{k})
+bound in
+his title.
+
+% TODO: Beginning of original material --
+% check for duplication
+
+\subsection{Leo's algorithm}
 
 Summarizing Leo's method,
 it consists of spotting potential right recursions
@@ -1317,10 +1629,11 @@ is charged to the parse.
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Scan pass}
-\label{p:scan-op}
+\subsection{Transitions table complexity}
+\label{p:transitions}
 
 We first look at resource usage for
+reading the transitions table,
 \var{transitions}.
 \var{transitions} is a set of tables, one per Earley set.
 The tables in the set are indexed by symbol.
@@ -1338,6 +1651,9 @@ the lookup is always in the previous Earley set,
 which can easily retrieved in \Oc{} time,
 without using any additional space.
 
+\subsection{Scan pass}
+\label{p:scan-op}
+
 Resource for the call of
 \call{Attempt confirmed EIM}{} is caller-included.
 In section \ref{p:add-confirmed-eim},
@@ -1350,9 +1666,11 @@ we also show that time is \Oc{}
 for each call of
 \call{Attempt confirmed EIM}{}.
 
+In section \ref{p:transitions}.
+we showed that the resource usage of \var{transition}
+is zero space and \Oc{} time.
 The predecessor loop is the loop that begins
 at line \ref{line:scan-pass-35}.
-We have already examined the resource usage of \var{transition}
 and of the call of
 \call{Attempt confirmed EIM}{}.
 The other logic in the loop obviously uses no space and
@@ -1394,7 +1712,7 @@ is charged to the Earley set at \Vloc{i}.
 \State $\Vsymset{lh-sides} \gets$ a set containing the LHS
 \State \hspace\algorithmicindent of every completed rule in \Veim{work}
 \For{each $\Vsym{lhs} \in \Vsymset{lh-sides}$}
-\State \Call{Reduce one LHS}{\Vloc{i}, \Vloc{origin}, \Vsym{lhs}}
+\State \Call{Reduce one LHS}{\Ves{i}, \Vloc{origin}, \Vsym{lhs}}
 \EndFor
 \EndFor
 \State \Call{Memoize transitions}{\Vloc{i}}
@@ -1426,23 +1744,47 @@ and is charged to the Earley set at \Vloc{i}.
 \caption{Memoize transitions}
 \begin{algorithmic}[1]
 \Procedure{Memoize transitions}{\Vloc{i}}
-\For{every \Vsym{postdot}, a postdot symbol of $\Ves{i}$}
+\State \Call{Memoize Leo transitions}{\Ves{i}}
+\State \Call{Memoize Earley transitions}{\Ves{i}}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h]
+\caption{Memoize Leo transitions}
+\begin{algorithmic}[1]
+\Procedure{Memoize transitions}{\Ves{i}}
+\State Set \Vsymset{eligibles} to the set of Leo-eligible
+\State \hspace\algorithmicindent postdot symbols in \Ves{i}
 \State Note: \Vsym{postdot} is ``Leo eligible" if it is
-\State \hspace\algorithmicindent  Leo unique and its rule is right recursive
-\If{\Vsym{postdot} is Leo eligible}
-\State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
+\State \hspace\algorithmicindent Leo unique; its rule is right recursive;
+\State \hspace\algorithmicindent and it is a postdot symbol in \Ves{i}
+\For{every \Vsym{eligible} in \Vsymset{eligibles}}
+\State Set $\var{transitions}(\Vloc{i},\Vsym{eligible})$
 \State \hspace\algorithmicindent to a LIM
-\Else
-\State Set $\var{transitions}(\Vloc{i},\Vsym{postdot})$
-\State \hspace\algorithmicindent to the set of EIM's that have
-\State \hspace\algorithmicindent \Vsym{postdot} as their postdot symbol
-\EndIf
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[h]
+\caption{Memoize Earley transitions}
+\begin{algorithmic}[1]
+\Procedure{Memoize Earley transitions}{\Ves{i}}
+\For{every \Veim{eim} in \Ves{i}}
+\State $\Vsym{postdot} \gets \Postdot{\Veim{i}}$
+\State If $\Vsym{postdot} = \Lambda$, try next \Veim{eim}
+\State If $\var{transitions}(\Vloc{i},\Vsym{postdot})$ does not contain a LIM
+\State \hspace\algorithmicindent try next \Veim{eim}
+\State Add \Veim{eim} to the set of EIMs
+\State \hspace\algorithmicindent in $\var{transitions}(\Vloc{i},\Vsym{postdot})$
 \EndFor
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 \subsection{Memoize transitions}
+\label{p:memoize-transitions}
 
 The \var{transitions} table for \Ves{i}
 is built once all EIMs have been
@@ -1489,9 +1831,10 @@ and can be charged to EIM being examined.
 \begin{algorithm}[h]
 \caption{Reduce one LHS symbol}
 \begin{algorithmic}[1]
-\Procedure{Reduce one LHS}{\Vloc{i}, \Vloc{origin}, \Vsym{lhs}}
+\Procedure{Reduce one LHS}{\Ves{i}, \Vloc{origin}, \Vsym{lhs}}
 \State Note: Each pass through this loop is an EIM attempt
 \For{each $\var{pim} \in \var{transitions}(\Vloc{origin},\Vsym{lhs})$}
+\label{line:reduce-one-lhs-20}
 \State \Comment \var{pim} is a ``postdot item'', either a LIM or an EIM
 \If{\var{pim} is a LIM, \Vlim{pim}}
 \State Perform a \Call{Leo reduction operation}{}
@@ -1501,34 +1844,51 @@ and can be charged to EIM being examined.
 \State \hspace\algorithmicindent for operands \Vloc{i}, \Veim{pim}
 \EndIf
 \EndFor
+\label{line:reduce-one-lhs-last}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Reduce one LHS}
+\subsection{``Reduce one LHS'' Complexity}
 \label{p:reduce-one-lhs}
 
-To show that
-\begin{equation*}
-\var{transitions}(\Vloc{origin},\Vsym{lhs})
-\end{equation*}
-can be traversed in \Oc{} time,
-we note
-that the number of symbols is a constant
-and assume that \Vloc{origin} is implemented
-as a link back to the Earley set,
-rather than as an integer index.
-This requires that \Veim{work}
-in \call{Reduction pass}{}
-carry a link
-back to its origin.
-As implemented, Marpa's
-Earley items have such links.
+None of the resource in the calls of
+\call{Leo reduction operation}{}
+and
+\call{Earley reduction operation}{}
+is caller-included,
+so that,
+for \call{Reduce one LHS symbol}{}
+inclusive and exclusive resource
+are the same.
+Also, none of the lines in 
+\call{Reduce one LHS symbol}{}
+use space.
 
+The \var{pim} loop is from line
+\ref{line:reduce-one-lhs-20}
+to line
+\ref{line:reduce-one-lhs-last}.
+All lines in the \var{pim} loop use \Oc{} time, so that
+time used by one pass through the \var{pim} loop is
+$\sum_{\var{line}=\ref{line:reduce-one-lhs-20}}
+^{\ref{line:reduce-one-lhs-last}} = \Oc{}$.
+To show that the time for line
+\ref{line:reduce-one-lhs-20} is \Oc{},
+we recall that,
+in section \ref{p:transitions}, we showed
+that
+$\var{transitions}(\Ves{origin},\Vsym{lhs})$
+can be traversed in \Oc{} time.
+
+{\bf Summary}:
+No space is charged.
 Inclusive time
-for the loop over the EIM attempts
-is charged to each EIM attempt.
-Overhead is \Oc{} and caller-included.
+for the \var{pim} loop
+is charged to the postdot item \Veim{pim} or \Vlim{pim}.
+The trivial amount of time outside
+the \var{pim} loop is \Oc{}
+and is caller-included.
 
 \begin{algorithm}[h]
 \caption{Earley reduction operation}
@@ -1765,7 +2125,49 @@ is $\Oc{} \times \Oc{} = \Oc{}$.
 Time and space is \Oc{},
 and is caller-included.
 
-\subsection{Per-set lists}
+\subsection{Complexity summary}
+
+For convenience, we collect and summarize here
+some of the observations of this section.
+
+\begin{observation}
+The time and space charged to an Earley item
+which is actually added to the Earley sets
+is \Oc.
+\end{observation}
+
+\begin{observation}
+The time charged to an attempt
+to add a duplicate Earley item to the Earley sets
+is \Oc.
+\end{observation}
+
+For evaluation purposes, \Marpa{} adds a link to
+each EIM that records each attempt to
+add that EIM,
+whether originally or as a duplicate.
+Traditionally, complexity results treat parsers
+as recognizers, and such costs are ignored.
+This will be an issue when the space complexity
+for unambiguous grammars is considered.
+
+\begin{observation}
+The space charged to an attempt
+to add a duplicate Earley item to the Earley sets
+is \Oc{} if links are included,
+zero otherwise.
+\end{observation}
+
+As noted in Section \ref{p:add-confirmed-eim},
+the time and space used by predicted Earley items
+and attempts to add them is charged elsewhere.
+
+\begin{observation}
+No space or time is charged to predicted Earley items,
+or to attempts to add predicted Earley items.
+\end{observation}
+
+\section{Per-set lists}
 \label{s:per-set-lists}
 
 In the general case,
@@ -1852,48 +2254,6 @@ and a new time-stamp is set, as follow:
 \begin{equation*}
 \PSL{\Ves{x}}{\ID{\Vah{x}}} \gets \Vloc{j}.
 \end{equation*}
-
-\subsection{Complexity summary}
-
-For convenience, we collect and summarize here
-some of the observations of this section.
-
-\begin{observation}
-The time and space charged to an Earley item
-which is actually added to the Earley sets
-is \Oc.
-\end{observation}
-
-\begin{observation}
-The time charged to an attempt
-to add a duplicate Earley item to the Earley sets
-is \Oc.
-\end{observation}
-
-For evaluation purposes, \Marpa{} adds a link to
-each EIM that records each attempt to
-add that EIM,
-whether originally or as a duplicate.
-Traditionally, complexity results treat parsers
-as recognizers, and such costs are ignored.
-This will be an issue when the space complexity
-for unambiguous grammars is considered.
-
-\begin{observation}
-The space charged to an attempt
-to add a duplicate Earley item to the Earley sets
-is \Oc{} if links are included,
-zero otherwise.
-\end{observation}
-
-As noted in Section \ref{p:add-confirmed-eim},
-the time and space used by predicted Earley items
-and attempts to add them is charged elsewhere.
-
-\begin{observation}
-No space or time is charged to predicted Earley items,
-or to attempts to add predicted Earley items.
-\end{observation}
 
 \section{Preliminaries to the theoretical results}
 \label{s:proof-preliminaries}
@@ -3338,6 +3698,22 @@ of Marpa's generalized input model.
 And with them,
 the complexity results for \Marpa{} stand.
 
+\section{Acknowledgments}
+\label{p:Acknowledgments}
+
+Ruslan Shvedov
+and
+Ruslan Zakirov
+made many useful suggestions
+that are incorporated in this paper.
+Many members of the Marpa community
+have helped me in many ways,
+and it is risky
+to single out one of them.
+But Ron Savage
+has been unstinting in
+his support.
+
 \bibliographystyle{plain}
 
 \begin{thebibliography}{10}
@@ -3352,6 +3728,18 @@ John~Aycock and R.~Nigel~Horspool.
 \newblock Practical Earley Parsing
 \newblock {\em The Computer Journal},
     Vol. 45, No. 6, 2002, pp. 620-630.
+
+\bibitem{Culik1973}
+{\v{C}}ulik, Karel and Cohen, Rina.
+\newblock LR-Regular grammars—an extension of LR (k) grammars.
+\newblock {\em Journal of Computer and System Sciences},
+  Vol. 7, No. 1, 1973,
+  pp. 66--96.
+
+\bibitem{Earley1968}
+J.~Earley.
+\newblock An Efficient Context-Free Parsing Algorithm.
+\newblock Ph.D. Thesis, Carnegie Mellon University, 1968
 
 \bibitem{Earley1970}
 J.~Earley.
@@ -3386,6 +3774,12 @@ Jeffrey~Kegler, 2013: Marpa-R2.
 \bibitem{Marpa-XS}
 Jeffrey~Kegler, 2011: Marpa-XS-1.002000.
 \newblock \url{http://search.cpan.org/dist/Marpa-XS/}.
+
+\bibitem{Timeline}
+Jeffrey~Kegler.
+\newblock Parsing:~a~timeline.
+\newblock Version 3.1, 2019.
+\newblock \url{https://jeffreykegler.github.io/personal/timeline_v3}.
 
 \bibitem{Leo1991}
 J.~M. I.~M. Leo.
