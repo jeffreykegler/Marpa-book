@@ -62,6 +62,8 @@
 \newcommand{\Ves}[1]{\Tvar{#1}{ES}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
+\newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
+\newcommand{\Vpimset}[1]{\Tvarset{#1}{PIM}}
 \newcommand{\Vrule}[1]{\Tvar{#1}{RULE}}
 \newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
 \newcommand{\Vstr}[1]{\Tvar{#1}{STR}}
@@ -1178,6 +1180,12 @@ and
 is the Earley item to be added on reductions over
 \Vsym{transition}.
 
+Sometimes it is useful to deal with sets
+which can contain both EIMs and LIMs.
+For reasons that will be clearer later,
+the union type of EIM and LIM is called a ``postdot items''.
+Postdot items have type \type{PIM}.
+
 Leo items memoize what would otherwise be sequences
 of Earley items.
 Leo items only memoize unambiguous (or
@@ -1601,7 +1609,7 @@ including which tokens are acceptable during the scanning phase.
 \label{p:initial-op}
 
 From section
-\ref{p:add-predictions} we know that the resources
+\ref{p:add-predictions-complexity} we know that the resources
 charged by
 \call{Add Predictions}{} are caller included and
 that \call{Add Predictions}{}
@@ -1656,12 +1664,12 @@ without using any additional space.
 
 Resource for the call of
 \call{Attempt confirmed EIM}{} is caller-included.
-In section \ref{p:add-confirmed-eim},
+In section \ref{p:add-confirmed-eim-complexity},
 we show that space is \Oc{} when
 \call{Attempt confirmed EIM}{} adds an Earley item,
 and that no space is used when
 \call{Attempt confirmed EIM}{} does not add an Earley item.
-In section \ref{p:add-confirmed-eim},
+In section \ref{p:add-confirmed-eim-complexity},
 we also show that time is \Oc{}
 for each call of
 \call{Attempt confirmed EIM}{}.
@@ -1715,7 +1723,8 @@ is charged to the Earley set at \Vloc{i}.
 \State \Call{Reduce one LHS}{\Ves{i}, \Vloc{origin}, \Vsym{lhs}}
 \EndFor
 \EndFor
-\State \Call{Memoize transitions}{\Vloc{i}}
+\State \Call{Memoize Leo transitions}{\Ves{i}}
+\State \Call{Memoize Earley transitions}{\Ves{i}}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -1741,64 +1750,39 @@ Overhead is \Oc{}
 and is charged to the Earley set at \Vloc{i}.
 
 \begin{algorithm}[h]
-\caption{Memoize transitions}
-\begin{algorithmic}[1]
-\Procedure{Memoize transitions}{\Vloc{i}}
-\State \Call{Memoize Leo transitions}{\Ves{i}}
-\State \Call{Memoize Earley transitions}{\Ves{i}}
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-\begin{algorithm}[h]
 \caption{Memoize Leo transitions}
 \begin{algorithmic}[1]
-\Procedure{Memoize transitions}{\Ves{i}}
-\State Set \Vsymset{eligibles} to the set of Leo-eligible
-\State \hspace\algorithmicindent postdot symbols in \Ves{i}
-\State Note: \Vsym{postdot} is ``Leo eligible" if it is
+\Procedure{Memoize Leo transitions}{\Ves{i}}
+\State Set \Veimset{eligibles} to the set of Leo-eligible
+\State \hspace\algorithmicindent EIMs symbols in \Ves{i}
+\State Note: \Veim{eligible} is ``Leo eligible" if it is
 \State \hspace\algorithmicindent Leo unique; its rule is right recursive;
-\State \hspace\algorithmicindent and it is a postdot symbol in \Ves{i}
-\For{every \Vsym{eligible} in \Vsymset{eligibles}}
-\State Set $\var{transitions}(\Vloc{i},\Vsym{eligible})$
-\State \hspace\algorithmicindent to a LIM
+\State \hspace\algorithmicindent and it is a postdot symbol in \Ves{i}.
+\For{every \Veim{eligible} in \Veimset{eligibles}}
+\State $[\Vdr{eligible}, \Vloc{eligible}] \gets \Veim{eligible}$
+\State $\Vsym{transition} \gets \LHS{\Vdr{eligible}}$
+\State $\Vpimset{predecessors} \gets \var{transitions}(\Vorig{eligible},\Vsym{transition})$
+\State Note: \Vpimset{predecessors} will contain at most one LIM.
+\For{every \Vlim{pred} in \Vpimset{predecessors}}
+\If{$\Vlim{pred} = \Lambda$}
+\State Set $\var{transitions}(\Vloc{i},\Vsym{transition})$
+\State \hspace\algorithmicindent to $\set{[\Vdr{eligible}, \Vsym{transition}, \Vorig{eligible}]}$
+\Else
+\State $[\Vdr{pred}, \Vsym{pred}, \Vorig{pred}] \gets \Vlim{pred}$
+\State Set $\var{transitions}(\Vloc{i},\Vsym{transition})$
+\State \hspace\algorithmicindent to $\set{[\Vdr{pred}, \Vsym{transition}, \Vorig{pred}]}$
+\EndIf
+\EndFor
 \EndFor
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\begin{algorithm}[h]
-\caption{Memoize Earley transitions}
-\begin{algorithmic}[1]
-\Procedure{Memoize Earley transitions}{\Ves{i}}
-\For{every \Veim{eim} in \Ves{i}}
-\State $\Vsym{postdot} \gets \Postdot{\Veim{i}}$
-\State If $\Vsym{postdot} = \Lambda$, try next \Veim{eim}
-\State If $\var{transitions}(\Vloc{i},\Vsym{postdot})$ does not contain a LIM
-\State \hspace\algorithmicindent try next \Veim{eim}
-\State Add \Veim{eim} to the set of EIMs
-\State \hspace\algorithmicindent in $\var{transitions}(\Vloc{i},\Vsym{postdot})$
-\EndFor
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
+\subsection{Memoize Leo transitions}
+\label{p:memoize-leo-transitions}
 
-\subsection{Memoize transitions}
-\label{p:memoize-transitions}
-
-The \var{transitions} table for \Ves{i}
-is built once all EIMs have been
-added to \Ves{i}.
-We first look at the resource,
-excluding the processing of Leo items.
-The non-Leo processing can be done in
-a single pass over \Ves{i},
-in \Oc{} time for each EIM
-added to
-$\var{transitions}(\Vloc{i},\Vsym{postdot})$.
-Inclusive time and space are charged to the
-Earley items being examined.
-Overhead is charged to \Ves{i}.
+\subsection{Complexity of Memoizing Leo transitions}
+\label{p:memoize-leo-transitions-complexity}
 
 We now look at the resource used in the Leo processing.
 A transition symbol \Vsym{transition}
@@ -1829,19 +1813,106 @@ will be \Oc{} time per EIM examined,
 and can be charged to EIM being examined.
 
 \begin{algorithm}[h]
+\caption{Memoize Earley transitions}
+\begin{algorithmic}[1]
+\Procedure{Memoize Earley transitions}{\Ves{i}}
+\For{every \Veim{eim} in \Ves{i}}
+\label{line:memoize-earley-transitions-10}
+\State $\Vsym{postdot} \gets \Postdot{\Veim{i}}$
+\State If $\Vsym{postdot} = \Lambda$, try next \Veim{eim}
+\State If $\var{transitions}(\Vloc{i},\Vsym{postdot})$ contains a LIM,
+\label{line:memoize-earley-transitions-50}
+\State \hspace\algorithmicindent try next \Veim{eim}
+\State Add \Veim{eim} to the set of EIMs
+\label{line:memoize-earley-transitions-70}
+\State \hspace\algorithmicindent in $\var{transitions}(\Vloc{i},\Vsym{postdot})$
+\EndFor
+\label{line:memoize-earley-transitions-last}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Memoize Earley transitions}
+\label{p:memoize-earley-transitions}
+
+\begin{sloppypar}
+At line
+\ref{line:memoize-earley-transitions-50},
+note that if
+$\var{transitions}(\Vloc{i},\Vsym{postdot})$
+contains a LIM,
+it is a singleton set containing only a LIM.
+The \var{transitions} table for \Ves{i}
+is built after all EIMs have been
+added to \Ves{i}.
+\end{sloppypar}
+
+\subsection{Complexity of Memoizing Earley transitions}
+\label{p:memoize-earley-transitions-complexity}
+
+Inclusive and exclusive resource are the same.
+\Oc{} space may be charged at line
+\ref{line:memoize-earley-transitions-70}.
+For the purposes of this complexity analysis,
+we will call loop starting at line 
+\ref{line:memoize-earley-transitions-10}
+is the ``EIM loop''.
+
+Every line in the EIM loop uses \Oc{} time.
+This is obvious except for 
+lines
+\ref{line:memoize-earley-transitions-50}
+and
+\ref{line:memoize-earley-transitions-70}.
+To show that line
+\ref{line:memoize-earley-transitions-50}
+is \Oc{},
+we recall,
+from section
+\ref{p:transitions},
+that reading the \var{transitions}
+table is \Oc{}.
+To show that line
+\ref{line:memoize-earley-transitions-50}
+is \Oc{},
+we note that adding an element to set can
+be \Oc{} if,
+for example,
+the set is implemented as a linked list.
+
+Therefore, each pass through the EIM loop
+uses 
+\begin{equation*}
+\sum_{\var{line}=\ref{line:memoize-earley-transitions-10}}
+^{\ref{line:memoize-earley-transitions-last}} \Oc{} = \Oc{}
+\end{equation*}
+time
+and \Oc{} space.
+
+{\bf Summary}:
+The inclusive \Oc{} time and space
+for 
+each pass through the EIM loop
+is charged to \Veim{eim}.
+There is no space overhead.
+The inclusive time overhead of \Oc{}
+is charged to \Ves{i}.
+
+\begin{algorithm}[h]
 \caption{Reduce one LHS symbol}
 \begin{algorithmic}[1]
 \Procedure{Reduce one LHS}{\Ves{i}, \Vloc{origin}, \Vsym{lhs}}
 \State Note: Each pass through this loop is an EIM attempt
-\For{each $\var{pim} \in \var{transitions}(\Vloc{origin},\Vsym{lhs})$}
+\For{each $\Vpim{trans} \in \var{transitions}(\Vloc{origin},\Vsym{lhs})$}
 \label{line:reduce-one-lhs-20}
-\State \Comment \var{pim} is a ``postdot item'', either a LIM or an EIM
-\If{\var{pim} is a LIM, \Vlim{pim}}
+\If{\Vpim{trans} is a LIM}
+\State Set $\Vlim{trans} \gets \Vpim{trans}$
 \State Perform a \Call{Leo reduction operation}{}
-\State \hspace\algorithmicindent for operands \Vloc{i}, \Vlim{pim}
+\State \hspace\algorithmicindent for operands \Vloc{i}, \Vlim{trans}
 \Else
+\State Set $\Veim{trans} \gets \Vpim{trans}$
 \State Perform an \Call{Earley reduction operation}{}
-\State \hspace\algorithmicindent for operands \Vloc{i}, \Veim{pim}
+\State \hspace\algorithmicindent for operands \Vloc{i}, \Veim{trans}
 \EndIf
 \EndFor
 \label{line:reduce-one-lhs-last}
@@ -1872,7 +1943,7 @@ to line
 All lines in the \var{pim} loop use \Oc{} time, so that
 time used by one pass through the \var{pim} loop is
 $\sum_{\var{line}=\ref{line:reduce-one-lhs-20}}
-^{\ref{line:reduce-one-lhs-last}} = \Oc{}$.
+^{\ref{line:reduce-one-lhs-last}} \Oc{} = \Oc{}$.
 To show that the time for line
 \ref{line:reduce-one-lhs-20} is \Oc{},
 we recall that,
@@ -1909,19 +1980,19 @@ and is caller-included.
 Inclusive space at line
 \ref{line:earley-reduction-last}
 is \Oc{}
-as shown in section \ref{p:add-confirmed-eim}.
+as shown in section \ref{p:add-confirmed-eim-complexity}.
 Inclusive space at all other lines is zero,
 so that total inclusive space is \Oc{}.
 
 For line
 \ref{line:earley-reduction-last}
 inclusive time is \Oc,
-as is shown in section \ref{p:add-confirmed-eim}.
+as is shown in section \ref{p:add-confirmed-eim-complexity}.
 For the other lines, it is directly clear
 that inclusive time is \Oc.
 Therefore inclusive time for the
 \call{Earley reduction operation}{} is
-$\sum_{\var{line}=1}^{\ref{line:earley-reduction-last}} = \Oc{}$.
+$\sum_{\var{line}=1}^{\ref{line:earley-reduction-last}} \Oc{} = \Oc{}$.
 
 { \bf Summary }:
 For
@@ -1948,19 +2019,19 @@ is charged to \Veim{to}.
 Inclusive space at line
 \ref{line:leo-reduction-last}
 is \Oc{}
-as shown in section \ref{p:add-confirmed-eim}.
+as shown in section \ref{p:add-confirmed-eim-complexity}.
 Inclusive space at all other lines is zero,
 so that total inclusive space is \Oc{}.
 
 For line
 \ref{line:leo-reduction-last}
 inclusive time is \Oc,
-as is shown in section \ref{p:add-confirmed-eim}.
+as is shown in section \ref{p:add-confirmed-eim-complexity}.
 For the other lines, it is directly clear
 that inclusive time is \Oc.
 Therefore inclusive time for the
 \call{Leo reduction operation}{} is
-$\sum_{\var{line}=1}^{\ref{line:leo-reduction-last}} = \Oc{}$.
+$\sum_{\var{line}=1}^{\ref{line:leo-reduction-last}} \Oc{} = \Oc{}$.
 
 { \bf Summary }:
 For
@@ -1988,8 +2059,8 @@ is charged to \Veim{to}.
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Attempting a confirmed Earley item}
-\label{p:add-confirmed-eim}
+\subsection{Complexity of attempting a confirmed Earley item}
+\label{p:add-confirmed-eim-complexity}
 
 This operation attempts to add a confirmed EIM
 item as well as the EIMs for the predictions which
@@ -1998,7 +2069,7 @@ result from it.
 If \Veim{attempt} is new,
 \Oc{} space is used directly at line
 \ref{line:attempt-confirmed-45}; and
-from section \ref{p:add-predictions},
+from section \ref{p:add-predictions-complexity},
 we know that \Oc{} space is used indirectly at line
 \ref{line:attempt-confirmed-85}.
 Therefore,
@@ -2011,7 +2082,7 @@ Inclusive time used by each line is \Oc{},
 so that inclusive time for the call
 of
 \call{Add Confirmed EIM}{} is
-$\sum_{\var{line}=1}^{\ref{line:attempt-confirmed-last}} = \Oc{}$.
+$\sum_{\var{line}=1}^{\ref{line:attempt-confirmed-last}} \Oc{} = \Oc{}$.
 In the case of lines
 \ref{line:attempt-confirmed-40},
 \ref{line:attempt-confirmed-45}, and
@@ -2038,9 +2109,9 @@ At line \ref{line:attempt-confirmed-85}.
 \call{Add predictions}{} is called.
 We know that the inclusive time is
 \Oc{},
-from section \ref{p:add-predictions}{}.
+from section \ref{p:add-predictions-complexity}{}.
 
-{\bf Complexity Summary}:
+{\bf Summary}:
 Inclusive time is always \Oc{}.
 When a \Veim{attempt} is new,
 inclusive space is \Oc{}.
@@ -2069,8 +2140,8 @@ Time and space are caller included.
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Adding Earley predictions}
-\label{p:add-predictions}
+\subsection{Complexity of Adding Earley predictions}
+\label{p:add-predictions-complexity}
 
 Time and space used by
 \call{Add predictions}{} is caller-included.
@@ -2121,7 +2192,7 @@ any call
 of \call{Add predictions}{}
 is $\Oc{} \times \Oc{} = \Oc{}$.
 
-{\bf Complexity summary}:
+{\bf Summary}:
 Time and space is \Oc{},
 and is caller-included.
 
@@ -2158,7 +2229,7 @@ is \Oc{} if links are included,
 zero otherwise.
 \end{observation}
 
-As noted in Section \ref{p:add-confirmed-eim},
+As noted in Section \ref{p:add-confirmed-eim-complexity},
 the time and space used by predicted Earley items
 and attempts to add them is charged elsewhere.
 
@@ -2545,7 +2616,7 @@ if $\Vah{confirmed} \ne \Lambda$, let
 \Vah{predicted} = \GOTO(\Vah{confirmed}, \epsilon)
 \end{equation*}
 If $\Vah{predicted} = \Lambda$,
-the pseudocode of Section \ref{p:add-confirmed-eim} shows
+the pseudocode of Section \ref{p:add-confirmed-eim-complexity} shows
 that we do nothing.
 If we do nothing,
 since \EVtable{\Marpa}{i} is consistent by the inner
@@ -2729,7 +2800,7 @@ we see that a Earley item will be added to
 \EVtable{\Marpa}{i} corresponding to every scanned Earley item
 of \EVtable{\Leo}{i}.
 We also see,
-from the pseudocode of Section \ref{p:add-confirmed-eim},
+from the pseudocode of Section \ref{p:add-confirmed-eim-complexity},
 that the \Marpa{} scanning operation will
 add to \EVtable{\Marpa}{i}
 an Earley item for
