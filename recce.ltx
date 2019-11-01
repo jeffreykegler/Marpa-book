@@ -1388,21 +1388,22 @@ of a dotted rule within an Earley set as
 & \qquad \qquad \quad \land \LeoUnique{\Ves{current},\Vdr{x}}.
 \end{split}
 \end{equation*}
-For convenience, we define a relation that is
-true if \Vlim{pred} is the LIM predecessor of
-an EIM, and false otherwise:
-\begin{equation*}
-\begin{split}
-& \mymathop{LIM-Predecessor}({\Vlim{pred},\Veim{bottom}}) \defined \\
-& \qquad \exists \; \Ves{bottom-origin}, \\
-& \qquad \qquad \qquad \Vdr{bottom}, \Vdr{pred}, \\
-& \qquad \qquad \qquad \Vloc{pred-origin}, \Vloc{bottom-origin} \\
-& \qquad \text{such that}  \\
-& \qquad \qquad \quad \Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
-& \qquad \qquad \land \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-& \qquad \qquad \land \Vlim{pred} \in \Ves{bottom-origin}
-\end{split}
-\end{equation*}
+We define
+the LIM predecessor of \Veim{eim} as follows:
+\begin{multline*}
+\mymathop{LIM-Predecessor}({\Veim{bottom}}) = \Vlim{pred} \quad \text{such that} \\
+\text{there exists} \qquad \Ves{bottom-origin}, \Vdr{bottom}, \\
+\qquad \Vdr{pred}, \Vloc{pred-origin}, \Vloc{bottom-origin} \\
+\end{multline*}
+where
+\begin{gather}
+\Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
+\text{and} \quad \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
+\text{and} \quad \Vlim{pred} \in \Ves{bottom-origin}
+\end{gather}
+There may not be a LIM predecessor for \Veim{bottom},
+in which case
+$\mymathop{LIM-Predecessor}({\Veim{bottom}}) = \Lambda$.
 
 We are now ready to define an inference rule which holds if
 a LIM predecessor can be found for an EIM \Veim{bottom}
@@ -1753,12 +1754,8 @@ and is charged to the Earley set at \Vloc{i}.
 \caption{Memoize Leo transitions}
 \begin{algorithmic}[1]
 \Procedure{Memoize Leo transitions}{\Ves{i}}
-\State Set \Veimset{eligibles} to the set of Leo-eligible
 \State \hspace\algorithmicindent EIMs symbols in \Ves{i}
-\State Note: \Veim{eligible} is ``Leo eligible" if it is
-\State \hspace\algorithmicindent Leo unique; its rule is right recursive;
-\State \hspace\algorithmicindent and it is a postdot symbol in \Ves{i}.
-\For{every \Veim{eligible} in \Veimset{eligibles}}
+\For{$\Veim{eligible} \in \LeoEligible{\Ves{i}}$}
 \State $[\Vdr{eligible}, \Vloc{eligible}] \gets \Veim{eligible}$
 \State $\Vsym{transition} \gets \LHS{\Vdr{eligible}}$
 \State $\Vpimset{predecessors} \gets \var{transitions}(\Vorig{eligible},\Vsym{transition})$
@@ -1780,6 +1777,15 @@ and is charged to the Earley set at \Vloc{i}.
 
 \subsection{Memoize Leo transitions}
 \label{p:memoize-leo-transitions}
+
+In the pseudocode for memoizing Leo transitions,
+$\LeoEligible{\Ves{i}}$ is the set of EIM's in \Ves{i}
+that are considered Leo eligible.
+In the Marpa algorithm,
+an EIM is Leo eligible if and only if
+it is a penult;
+its postdot symbol is unique in \Ves{i};
+the rule of the EIM is right recursive.
 
 \subsection{Complexity of Memoizing Leo transitions}
 \label{p:memoize-leo-transitions-complexity}
