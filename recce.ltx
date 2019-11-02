@@ -248,7 +248,7 @@ generalizes Marpa's input model.
 
 A full description of Marpa's relationship to
 prior work in parsing can be found in \cite{Timeline}.
-Readers may find it helpful to read 
+Readers may find it helpful to read
 \cite{Timeline}
 before this paper.
 
@@ -755,7 +755,7 @@ is the dotted rule with the dot at
 $\var{pos} = 2$,
 between \Vsym{Y} and \Vsym{Z}.
 
-We consider the size of a grammar, \Vsize{g}, to be the
+We consider the size of a grammar, \Vsize{\var{g}}, to be the
 number of distinct dotted rules it allows.
 \Vsize{g} is a constant that depends on \var{g}.
 
@@ -1860,12 +1860,12 @@ Inclusive and exclusive resource are the same.
 \Oc{} space may be charged at line
 \ref{line:memoize-earley-transitions-70}.
 For the purposes of this complexity analysis,
-we will call loop starting at line 
+we will call loop starting at line
 \ref{line:memoize-earley-transitions-10}
 is the ``EIM loop''.
 
 Every line in the EIM loop uses \Oc{} time.
-This is obvious except for 
+This is obvious except for
 lines
 \ref{line:memoize-earley-transitions-50}
 and
@@ -1887,7 +1887,7 @@ for example,
 the set is implemented as a linked list.
 
 Therefore, each pass through the EIM loop
-uses 
+uses
 \begin{equation*}
 \sum_{\var{line}=\ref{line:memoize-earley-transitions-10}}
 ^{\ref{line:memoize-earley-transitions-last}} \Oc{} = \Oc{}
@@ -1897,7 +1897,7 @@ and \Oc{} space.
 
 {\bf Summary}:
 The inclusive \Oc{} time and space
-for 
+for
 each pass through the EIM loop
 is charged to \Veim{eim}.
 There is no space overhead.
@@ -1938,7 +1938,7 @@ so that,
 for \call{Reduce one LHS symbol}{}
 inclusive and exclusive resource
 are the same.
-Also, none of the lines in 
+Also, none of the lines in
 \call{Reduce one LHS symbol}{}
 use space.
 
@@ -2250,7 +2250,7 @@ or to attempts to add predicted Earley items.
 In the general case,
 where \var{x} is an arbitrary datum,
 it is not possible
-to use duple $[\Ves{i}, x]$
+to use duple $[\Ves{i}, \var{x}]$
 as a search key and expect the search to use
 \Oc{} time.
 Within \Marpa, however, there are specific cases
@@ -2264,7 +2264,9 @@ and that $0 \leq \var{x} < \var{c}$,
 where \var{c} is a constant of reasonable size,
 then a search can be made in \Oc{} time,
 using a data structure called a PSL.
-Data structures identical to or very similar to PSL's are
+Data structures identical to,
+or very similar to,
+PSL's are
 briefly outlined in both
 \cite[p. 97]{Earley1970} and
 \cite[Vol. 1, pages 326-327]{AU1972}.
@@ -2279,58 +2281,110 @@ integers, indexed by an integer,
 and kept as part of each Earley set.
 While \Marpa{} is building a new Earley set,
 \Ves{j},
-the PSL for every previous Earley set, \Vloc{i},
+a PSL is kept for every previous Earley set ---
+that is, for every
+$\Vloc{i} < \Vloc{j}$.
+
+The PSL for \Ves{j}
 tracks the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
-the number of AHFA states,
-\Vsize{\Cfa},
-which is a constant of reasonable size
+the number of dotted rules,
+\Vsize{g}.
+\Vsize{g}
+is a constant of reasonable size
 that depends on \Cg{}.
 
 It would take more than \Oc{} time
-to clear and rebuild the PSL's each time
+to clear and rebuild the PSL's
+for all the Earley sets
+every time
 that a new Earley set is started.
 This overhead is avoided by ``time-stamping'' each PSL
 entry with the Earley set
 that was current when that PSL
 entry was last updated.
 
-As before,
-where \Ves{i} is an Earley set,
-let \Vloc{i} be its location,
-and vice versa.
-\Vloc{i} is an integer which is
-assigned as Earley sets are created.
-Let $\ID{\Vah{x}}$ be the integer ID of an AHFA state.
-Numbering the AHFA states from 0 on up as they are created
-is an easy way to create $\ID{\Vah{x}}$.
-Let $\PSL{\Ves{x}}{\var{y}}$
+Let $\ID{\Vdr{x}}$ be the integer ID of a dotted rule.
+One way to assign integer values
+to $\ID{\Vdr{x}}$ to list the rules
+in some arbitrary order,
+and then traverse the dot positions in
+the list, left-to-right within each rule,
+then top-to-bottom within the list.
+The number of dot positions
+within a rule \Vrule{r} is \Vsize{r}.
+
+Intuitively, the idea is avoid most re-computation
+of the PSL's by keeping timestamps with the PSL data.
+To illustrate the use of PSL's,
+we will consider the case
+where Marpa is building \Ves{j}
+and wants to check whether Earley item,
+\begin{equation*}
+\Veim{x} = [ \Vdr{x}, \Vorig{x} ],
+\end{equation*}
+is new,
+or if \Veim{x} needs to be added to the Earley sets.
+
+Let
+\begin{equation*}
+\var{psl-entry} = \PSL{\Ves{i}}{\var{y}}
+\end{equation*}
 be the entry for integer \var{y} in the PSL in
-the Earley set at \Vloc{x}.
-
-Consider the case where Marpa is building \Ves{j}
-and wants to check whether Earley item \Veim{x} is new,
-where $\Veim{x} = [ \Vah{x}, \Vorig{x} ]$.
-To check if \Veim{x} is new,
-Marpa checks
+the Earley set at \Vloc{x}, such that
 \begin{equation*}
-\var{time-stamp} = \PSL{\Ves{x}}{\ID{\Vah{x}}}
+\begin{alignedat}{3}
+& \var{psl-entry} && \defined && \quad
+\begin{cases}
+\Lambda, \quad \text{if the entry at $\var{psl-entry}$ has never been used,} \\
+[\var{time-stamp}, \Vbool{z}], \text{otherwise} \\
+\end{cases} \\
+%
+\end{alignedat}
 \end{equation*}
-If the entry has never been used,
-we assume that $\var{time-stamp} = \Lambda$.
-If $\var{time-stamp} \ne \Lambda \land \var{time-stamp} = \Vloc{j}$,
-then \Veim{x} is not new,
-and will not be added to the Earley set.
+Here \var{time-stamp} is a time stamp which will be used to
+avoid unnecessary re-computation,
+and \Vbool{z} is \var{true} if \Veim{x}
+is already present in \Ves{j},
+and \var{false} otherwise.
 
-If $\Vloc{p} = \Lambda \lor \var{time-stamp} \ne \Vloc{j}$,
-then \Veim{x} is new.
-\Veim{x} is added to the Earley set,
-and a new time-stamp is set, as follow:
+If
+\begin{multline*}
+\PSL{\Ves{i}}{\var{y}} = [\var{time-stamp}, \Vbool{exists}] \\
+ \text{such that} \quad
+ \var{time-stamp} \neq \Vloc{j} \\
+ \lor \; \Vbool{exists} = \var{false},
+\end{multline*}
+the \Veim{x} already exists,
+and should not be added to \Ves{j}.
+The psl entry for \Ves{i} and \Vdr{x},
+$\PSL{\Ves{x}}{\ID{\Vdr{x}}}$,
+is left as is.
+
+If \Veim{x} does not already exist,
+then  \Veim{x} is new.
+In this case,
+\Veim{x} is added to \Ves{j}, and
+the PSL entry is re-set, as follows:
 \begin{equation*}
-\PSL{\Ves{x}}{\ID{\Vah{x}}} \gets \Vloc{j}.
+\PSL{\Ves{x}}{\ID{\Vdr{x}}} \gets [\Vloc{j}, \var{true}].
 \end{equation*}
+
+The reader may notice that the above example could be simplified,
+because the data to be kept for EIM's is a single boolean.
+Further, this boolean is never set to \var{false}, so that
+if a PSL entry exists, its boolean may be assumed to be \var{true}.
+This means that an explicit boolean is not actually needed.
+A simpler approach, which omits the boolean,
+is the one that
+the Marpa implementation uses.
+
+It will not always be the case that the data that the PSL's need
+to track is limited to a single boolean.
+It is for this reason that
+the more complicated approach is illustrated above.
 
 \section{Preliminaries to the theoretical results}
 \label{s:proof-preliminaries}
