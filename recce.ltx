@@ -94,7 +94,11 @@
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
-\newcommand{\Crules}{\var{rules}}
+\newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
+\newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
+\newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
+\newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
+\newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
 \newcommand{\Next}{\mymathop{Next}}
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
@@ -103,7 +107,7 @@
 \newcommand{\LHS}[1]{\mymathop{LHS}(#1)}
 \newcommand{\RHS}[1]{\mymathop{RHS}(#1)}
 \newcommand{\RightRecursive}[1]{\mymathop{Right-Recursive}(#1)}
-\newcommand{\RightNN}[1]{\mymathop{Right-NN}(#1)}
+\newcommand{\Rightmost}[1]{\mymathop{Rightmost}(#1)}
 \newcommand{\LeoEligible}[1]{\mymathop{Leo-Eligible}(#1)}
 \newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
 \newcommand{\ID}[1]{\mymathop{ID}(#1)}
@@ -155,11 +159,11 @@ Marpa is
 a fully implemented
 algorithm for the recognition,
 parsing and evaluation of context-free grammars.
-The Marpa recognizer includes the first
+Marpa is an Earley parser
+whichb includes the first
 practical implementation
 of the improvements
-to Earley's algorithm found in
-Joop Leo's 1991 paper.
+in Joop Leo's 1991 paper.
 In addition,
 Marpa tracks the full state of the parse,
 at run-time,
@@ -196,8 +200,6 @@ Marpa::R2~\cite{Marpa-R2}.
 It is a simplification of the algorithm presented
 in the first version of this paper.
 
-\section{Introduction}
-
 While the presentation in this paper is theoretical,
 the approach is practical.
 The Marpa::R2 implementation has been widely available
@@ -220,7 +222,7 @@ Section
 describes the important features of Marpa
 and Section
 \ref{s:using-features}
-goes into details about their applications.
+goes into detail about their application.
 Section
 \ref{s:preliminaries} describes the notation and conventions
 of this \doc.
@@ -258,13 +260,15 @@ before this paper.
 \subsection{General context-free parsing}
 As implemented,
 Marpa parses
-all ``proper'' context-free grammars.
-The
-proper context-free grammars are those which
-are free of cycles,
-unproductive symbols,
-and
-inaccessible symbols.
+all context-free grammars
+except those with cycles\footnote{
+Earlier implementations of Marpa allowed cycles,
+but support was removed because these seem to be of
+no practical interest.
+Unproductive symbols can be implemented by
+defining ``unicorn'' terminals ---
+terminals which can never be found in the input.
+}
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
 and therefore never worse than $\order{\var{n}^3}$.
@@ -395,11 +399,11 @@ treating them as highly defective HTML.
 In current practice, ambiguity is avoided in language design.
 This is very different from the practice in the languages humans choose
 when communicating with each other.
-Human languages exploit ambiguity in order to design highly flexible,
-powerfully expressive languages.
 For example,
 the language of this paper, English, is notoriously
 ambiguous.
+Human languages exploit ambiguity in order to allow expression
+to be more flexible and powerful.
 
 Ambiguity of course can present a problem.
 A sentence in an ambiguous
@@ -408,12 +412,12 @@ But note that this is not a reason to ban potential ambiguity ---
 it is only a problem with actual ambiguity.
 
 Syntax errors, for example, are undesired, but nobody tries
-to design languages to make syntax errors impossible.
+to design languages that make syntax errors impossible.
 A language in which every input was well-formed and meaningful
-would be cumbersome and even dangerous:
-all typos in such a language would be meaningful,
-and parser would never warn the user about errors, because
-there would be no such thing.
+would be not just cumbersome, but dangerous.
+A parser would never warn the user about typos,
+because all typos in such a language would have unintended
+meanings.
 
 With Marpa, ambiguity can be dealt with in the same way
 that syntax errors are dealt with in current practice.
@@ -486,7 +490,7 @@ there is no need to identify operators,
 much less class them as binary, unary, etc.
 This more powerful and flexible precedence notation
 allows the definition of multiple ternary operators,
-and multiple operators with arity above three.
+and multiple operators with arity greater than three.
 
 Second, and more important, a SLIF user is guaranteed
 to get exactly the language that the precedenced rule specifies.
@@ -499,23 +503,8 @@ syntax falls within the limits of LALR.
 
 We assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
-This \doc{} will
-use subscripts to indicate variable types.
-\begin{center}
-\begin{tabular}{ll}
-\Tvar{X}{T} & The variable \var{X} of type \var{T} \\
-\Tvarset{set-one}{T} & The variable \var{set-one} of type ``set of \var{T}'' \\
-$\var{SYM}$ & The type for a symbol \\
-\Vsym{a} & The variable \var{a} of type $\var{SYM}$ \\
-\Vsymset{set-two} & The variable \var{set-two}, a set of symbols \\
-\end{tabular}
-\end{center}
-Subscripts may be omitted when the type
-is obvious from the context.
-The notation for
-constants is the same as that for variables.
-Multi-character variable names will be common,
-and operations will never be implicit.
+Multi-character variable names will be common and
+operations will never be implicit.
 \begin{center}
 \begin{tabular}{ll}
 Multiplication &  $\var{a} \times \var{b}$ \\
@@ -523,9 +512,30 @@ Concatenation & $\var{a} \cat \var{b}$ \\
 Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
 \end{tabular}
 \end{center}
+
+This paper will
+use subscripts to indicate commonly occurring types.
+\begin{center}
+\begin{tabular}{ll}
+$\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
+$\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type set of \type{T} \\
+\type{SYM} & The type for a symbol \\
+\type{STR} & The type for a string \\
+\type{EIM} & The type for an Earley item \\
+\Vsym{a} & A variable \var{a} of type \type{SYM} \\
+\Vstr{a} & A variable \var{a} of type \type{STR} \\
+\Veim{a} & A variable \var{a} of type \type{EIM} \\
+\Vsymset{set-two} & The variable \var{set-two}, a set of strings \\
+\Veimset{set-two} & The variable \var{set-two}, a set of Earley items
+\end{tabular}
+\end{center}
+The notation for
+constants is the same as that for variables.
 Type names are often used in the text
 as a convenient way to refer to
 their type.
+Subscripts may be omitted when the type
+is obvious from the context.
 
 Where \Vsymset{vocab} is non-empty set of symbols,
 let $\var{vocab}^\ast$ be the set of all strings
@@ -551,13 +561,45 @@ Here $\Vsym{accept} \in \var{vocab}$.
 Call the language of \var{g}, $\myL{\Cg}$,
 where $\myL{\Cg} \subseteq \var{vocab}^\ast$.
 
+Let the grammar \Cg{} be the 4-tuple
+\begin{equation*}
+    (\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}).
+\end{equation*}
+For convenience in refering to the elements of \Cg{},
+\begin{equation*}
+\begin{alignedat}{3}
+& \NT{\var{g}} && \defined && \quad \Vsymset{nt}, \\
+& \Term{\var{g}} && \defined && \quad \Vsymset{term}, \\
+& \Accept{\var{g}} && \defined && \quad \Vsym{accept}, \\
+& \Rules{\var{g}} && \defined && \quad \Vruleset{rules} \quad \text{and} \\
+& \Vocab{\var{g}} && \defined && \quad \Vsymset{nt} \cup \Vsymset{term}. \\
+\end{alignedat}
+\end{equation*}
+The type \type{RULE} will be defined shortly.
+\NT{\var{g}} is a set of symbols called non-terminals,
+and \Term{\var{g}} is a set of symbols called terminals.
+\Accept{\var{g}} is the \dfn{accept symbol},
+which in the parsing literature is often called
+the ``start symbol''.
+The accept symbol must be a non-terminal:
+$\Accept{\var{g}} \in \var{nt}$.
+\Vocab{\var{g}} is
+\dfn{vocabulary} of \Cg{}.
+
+A string of symbols from \Vocab{\var{g}}
+is called a \dfn{sentential form}.
+A string of symbols containing exclusively terminal symbols from \var{g}
+is also called a \dfn{sentence}.
+
 \Vruleset{rules} is a set of rules (type \type{RULE}),
 where a rule is a duple
-of the form $[\Vsym{lhs} \de \Vstr{rhs}]$,
+\begin{equation*}
+[\Vsym{lhs} \de \Vstr{rhs}]
+\end{equation*}
 such that
 \begin{equation*}
-\Vsym{lhs} \in \var{vocab} \quad \text{and}
-\quad \Vstr{rhs} \in \var{vocab}^+.
+\Vsym{lhs} \in \var{vocab} \; \land \;
+\Vstr{rhs} \in \var{vocab}^\ast.
 \end{equation*}
 \Vsym{lhs} is referred to as the left hand side (LHS)
 of \Vrule{r}.
@@ -566,8 +608,6 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
-This definition follows \cite{AH2002},
-which departs from tradition by disallowing an empty RHS.
 
 The rules imply the traditional rewriting system,
 in which $\Vstr{x} \derives \Vstr{y}$
@@ -580,116 +620,175 @@ states that \Vstr{x} derives \Vstr{y} in zero or more steps.
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
 \Vsym{x} is \dfn{nonnull} if and only if it is not nullable.
-Following Aycock and Horspool\cite{AH2002},
-all nullable symbols in grammar \Cg{} are nulling -- every symbol
-which can derive the null string always derives the null string.
-It is shown in \cite{AH2002} how to do this without losing generality
-or the ability to efficiently evaluate a semantics that is
-defined in terms of an original grammar that includes symbols which
-are both nullable and non-nulling,
-empty rules, etc.
 
-Also without loss of generality,
-it is assumed
-that there is a dedicated acceptance rule, \Vrule{accept}
-and a dedicated acceptance symbol, $\Vsym{accept} = \LHS{\Vrule{accept}}$,
-such that
-for all \Vrule{x},
-\begin{equation*}
-\begin{split}
-& \Vsym{accept} \notin \RHS{\Vrule{x}} \\
-\land \quad & (\Vsym{accept} = \LHS{\Vrule{x}} \implies \Vrule{accept} = \Vrule{x}).
-\end{split}
-\end{equation*}
-
-
-We define the rightmost non-null symbol of a string
-as
-\begin{equation*}
-\begin{split}
-& \RightNN{\Vstr{x}} \defined \Vsym{rnn} \quad \text{such that} \\
-& \qquad \exists \, \Vstr{pre}, \Vstr{post} \mid \\
-& \qquad \qquad \Vstr{x} = \Vstr{pre} \cat \Vsym{rnn} \cat \Vstr{post} \\
-& \qquad \qquad \land \Vstr{post} \destar \epsilon \\
-& \qquad \qquad \land \neg (\Vsym{rnn} \destar \epsilon).
-\end{split}
-\end{equation*}
-We define the rightmost non-null symbol of a rule as
-\begin{equation*}
-\RightNN{[\Vsym{lhs} \de \Vstr{rhs}]} \defined \RightNN{\Vstr{rhs}}.
-\end{equation*}
-A rule \Vrule{x} is \dfn{directly right-recursive}
-if and only if
-\begin{equation*}
-\LHS{\Vrule{x}} = \RightNN{\Vrule{x}}.
-\end{equation*}
-\Vrule{x} is \dfn{indirectly right-recursive}
-if and only if
-\begin{equation*}
-\exists \, \Vstr{y} \mid \RightNN{\Vrule{x}} \deplus \Vstr{y} \land \RightNN{\Vstr{y}} = \LHS{\Vrule{x}}.
-\end{equation*}
-\Vrule{x} is \dfn{right recursive},
-$\RightRecursive{\Vrule{x}}$,
-if and only if is either directly or indirectly right-recursive.
-
-The definition of \Cg{} does not sharply distinguish terminals
-from non-terminals.
-\Marpa{}'s implementations allow terminals to be the LHS
-of rules,
-and every symbol except \Vsym{accept} can be a terminal.
-The implementations have options that allow
-the user to reinstate
-the traditional restrictions,
-in part or in whole.
-Note that,
-as a result of these definitions,
-sentential forms will be of type \type{STR}.
-
-Let the input to
-the parse be \Cw{} such that $\Cw \in \var{vocab}^+$.
-Locations in the input will be of type \type{LOC}.
-Let \Vsize{w} be the length of the input, counted in symbols.
+By tradition, the input to the parse is written as \Cw{}.
+\Cw{} must be a sentence of \Cg{},
+that is,
+$\Cw \in \Term{\var{g}}^\ast$.
+\Vsize{w} will be the length of the input, counted in symbols.
 When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
-Let \CVw{i} be character \var{i}
-of the input,
+
+Locations in the input will be of type \type{LOC}.
+We represent
+the \var{i}'th character of the input
+by \CVw{i},
 $0 \le \Vloc{i} < \Vsize{w}$.
-
-The alert reader may have noticed that the previous definition
-of \Cw{} did not allow zero-length inputs.
-To simplify the mathematics, we exclude null parses
-and trivial grammars from consideration.
-In its implementations,
-the Marpa parser
-deals with null parses and trivial grammars as special cases.
-(Trivial grammars are those that recognize only the null string.)
-
-In this \doc{},
-\Earley{} will refer to the Earley's original
-recognizer\cite{Earley1970}.
-\Leo{} will refer to Leo's revision of \Earley{}
-as described in~\cite{Leo1991}.
-\Marpa{} will refer to the parser described in
-this \doc{}.
-Where $\alg{Recce}$ is a recognizer,
-$\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
-when parsing \Cg{}.
 
 \section{Rewriting the grammar}
 \label{s:rewrite}
 
-We have already noted
-that no rules of \Cg{}
-have a zero-length RHS,
-and that all symbols must be either nulling or non-nullable.
-These restrictions follow Aycock and Horspool\cite{AH2002}.
-The elimination of empty rules and proper nullables
-is done by rewriting the grammar.
-\cite{AH2002} shows how to do this
-without loss of generality.
+A parser that claims to be practical must accept
+grammars with nullable and nulling symbols
+and empty rules.
+But difficulties in handling these correctly
+have bedeviled previous attempts
+at Earley parsing.
 
-Because Marpa claims to be a practical parser,
+Marpa follows Aycock and Horspool\cite{AH2002} in using
+grammar rewrites to handle these issues.
+Marpa's grammar rewriting allows the user to specify
+their parse in terms of an external grammar.
+
+An {\bf external grammar} may be any cycle-free grammar.\footnote{
+As mentioned, earlier versions of Marpa lifted even the
+restriction on cycles,
+but there seems to be no use for cycles.
+}
+The external grammar is rewritten into an {\bf internal grammar}.
+This internal grammar is required to obey severe restrictions.
+
+\subsection{Semantics-safe rewriting}
+
+Many grammar rewriting schemes are possible,
+but for a parser to be useful,
+it must implement a semantics that is specified
+in terms of the external grammar.
+If the semantics cannot be efficiently recovered
+from a parse performed using an internal grammar,
+then that rewriting scheme is not useful in practice.
+
+The grammar rewrites in this paper are "semantics-safe".
+They allow the external rules and symbols to be reconstructed
+efficiently not just at evaluation time,
+but at run-time as well.
+Marpa's parsing and evaluation
+are performed
+in such a way that the internal grammar
+is invisible to
+the user.
+
+This rewrite can be undone easily.
+In fact,
+in the current implementation of Marpa,
+the reverse rewrite,
+from internal to external,
+is often done ``on the fly'',
+as the parse proceeds.
+This translation back and forth is
+efficient,
+and is done for error reporting, tracing,
+and in the implementation of Marpa::R2's event
+mechanism.
+
+For example,
+Marpa allows run-time events to be defined,
+including ``nulling events'' ---
+events which trigger when a symbol is nulled.
+In the internal grammar, there are no nullable
+symbols but, for event-triggering purposes,
+Marpa keeps track of where
+the nulling symbols would be.
+The recognizer runs on an internal grammar with
+no nullable symbols,
+but the nulling events that Marpa user are triggered
+and reported in terms of an external grammar which
+does allow nullable symbols.
+All of this works smoothly ---
+so smoothly that a standard Marpa programming technique is to
+add nulling symbols to a grammar which exist only for the
+purpose of generating events.
+
+The rest of this subsection will describe the restrictions
+that rewrites must follow in order to be ``semantics-safe''.
+Marpa's internal grammars have
+``brick'' and ``mortar'' symbols.
+Internal brick symbols correspond, many-to-one, to
+external symbols.
+Internal mortar symbols exist entirely for the purposes
+of the internal grammar.
+Only brick symbols have semantics attached to them.
+
+Assume that we have a parse, using internal symbols.
+We define a ``brick traversal'' from a ``root'' brick non-terminal instance.
+The ``brick traversal'' is pre-order
+and stops traversing any path when it hits
+a brick symbol instance other than the ``brick root''.
+In this way, it traces a subtree of the parse,
+where the root of the subtree is the brick root symbol instance,
+and the leaves of the subtree are a sequence of other brick
+symbol instances.
+The leaves of the subtree, as encountered in pre-order,
+constitute its ``brick frontier''.
+Mortar symbols will only occur in the interior of this ``brick'' subtree,
+never as its root or its leaf.
+
+An {\bf instance} of a symbol is a symbol matched with a substring
+of the input \Cw{}.
+An internal symbol instance \textbf{matches}
+an external symbol instance if and only if
+\begin{itemize}
+\item they have the same symbol;
+\item they have the same left location in \Cw{}; and
+\item they have the same right location in \Cw{}.
+\end{itemize}
+
+The {\bf terminal sequence} of a parse is the sequence
+of symbol instances for the terminals of a parse.
+
+For a rewrite to be ``safe'':
+\begin{itemize}
+\item Every brick symbol must translate to exactly one
+external symbol.
+\item Every terminal symbol instance must be a brick symbol.
+\item The internal and external input sequences must be the same length.
+\item The internal and external input sequences must allow
+a shared indexing
+scheme, which indexes the input symbols consecutively from
+left to right.
+\item
+For every index \var{i},
+the \var{i}'th symbol instance in the internal input sequence
+must match
+the \var{i}'th symbol instance in the external input sequence.
+\item Every brick traveral must translate to an external rule
+instance,
+and vice versa,
+as follows:
+\begin{itemize}
+\item The brick root symbol instance must match
+the LHS symbol instance of the external rule instance.
+\item
+The brick frontier must be the same length as
+the RHS of the rule.
+\item
+The brick frontier and the external rule RHS must allow a shared indexing
+scheme,
+which indexes both of them
+consecutively
+from left to right.
+\item
+For every index \var{i},
+the \var{i}'th
+instance in the brick frontier must
+match the \var{i}'th symbol instance
+of the external rule RHS.
+\end{itemize}
+\end{itemize}
+
+For Marpa to deliver on its
+claims to be a practical parser,
 it is important to emphasize
 that all grammar rewrites in this \doc{}
 are done in such a way that the semantics
@@ -704,6 +803,61 @@ of a pre-existing parent rule can
 be ``wrappered'' to reassemble these lists
 into operands that are properly formed
 for that original semantics.
+
+\subsection{Augmenting the grammar}
+
+It is assumed
+that there is a dedicated acceptance rule,
+such that for some symbol \Vsym{top},
+\begin{equation*}
+\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}].
+\end{equation*}
+It is also assumed that
+the only occurence of \Vsym{accept} in the
+grammar is as
+the LHS of \Vrule{accept} or, more formally,
+that
+\begin{equation*}
+\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept}
+\end{equation*}
+and that for every rule, \var{rule}, in \Cg{}
+\begin{equation*}
+\Vsym{accept} \notin \RHS{\Vrule{rule}}.
+\end{equation*}
+
+\subsection{Aycock-Horspool rewrites}
+
+The rewrite currently used by Marpa is an improvement over
+that of~\cite{AH2002}.
+Rules with proper nullables are identified
+and a new grammar is created
+in which the external grammar's rules are divided
+up so that no rule has more than two proper nullables.
+(A ``proper nullable'' is a nullable symbol which is not nulling.)
+This is similar to a rewrite into Chomsky form.
+
+The proper nullable symbol is then cloned into two others:
+one nulling and one telluric.
+All occurrences of the original proper nullable symbol are then replaced
+with one of the two new symbols,
+and new rules are created as necessary to ensure that all possible combinations
+of nulling and telluric symbols are accounted for.
+
+The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
+rewrite before replacing the proper nullables.
+As a result the number of rules in the internal grammar could be
+an exponential function of numbers in the external grammar.
+In our version, the worst case growth in the number of rules in linear.
+
+We have already noted
+that no rules of \Cg{}
+have a zero-length RHS,
+and that all symbols must be either nulling or non-nullable.
+These restrictions follow Aycock and Horspool\cite{AH2002}.
+The elimination of empty rules and proper nullables
+is done by rewriting the grammar.
+\cite{AH2002} shows how to do this
+without loss of generality.
 
 As implemented,
 the Marpa parser allows users to associate
@@ -731,10 +885,87 @@ efficient enough to be done ``on the fly''.
 This allows run-time event-driven semantics
 to be written in terms of the original grammar.
 
+\subsection{The Aycock-Horspool rewrite}
+
+Following Aycock and Horspool\cite{AH2002},
+all nullable symbols in grammar \Cg{} are nulling -- every symbol
+which can derive the null string always derives the null string.
+It is shown in \cite{AH2002} how to do this without losing generality
+or the ability to efficiently evaluate a semantics that is
+defined in terms of an original grammar that includes symbols which
+are both nullable and non-nulling,
+empty rules, etc.
+
+\subsection{Trivial grammars and null parses}
+
+Null parses are parse of zero length inputs.
+Marpa handles null parses by treating them
+as a special case.
+
+Trivial grammars are those which only accept
+zero length inputs.
+No Marpa internal grammar can be a trivial grammar.
+Trivial grammars are also handled as a special case.
+
+\section{Marpa internal grammar conventions}
+\label{s:marpa-specific}
+
+The conventions of this section describe
+Marpa internal grammars.
+Readers familiar with the parsing literature should
+note that notation and definitions in this section
+and in the rest of this paper may be simplified
+for dealing with Marpa internal grammars,
+and may not be appropriate for general,
+context-free grammars.
+
+\begin{itemize}
+\item Marpa internal grammars do not allow nulling or nullable symbols.
+\item Marpa internal grammars do not allow an empty RHS.
+That is, for every rule, \Vrule{r},
+$\size{\RHS{r}} \ge 1$.
+\item Where \Cw{} is the input of the parse,
+$\size{\Cw{}} \ge 1$.
+This is, a zero length parse input is not allowed.
+\end{itemize}
+
+We define the rightmost symbol of a string
+\Vstr{x}
+as \Vsym{rightmost} such that
+\begin{equation*}
+\exists \Vstr{pre} \; \mid \; \Vstr{x} = \Vstr{pre} \cat \Vsym{rightmost}
+\end{equation*}
+The rightmost symbol of a rule \Vrule{r} as
+$\Rightmost{\Vrule{r}}$.
+A rule \Vrule{x} is \dfn{directly right-recursive}
+if and only if
+\begin{equation*}
+\LHS{\Vrule{x}} = \Rightmost{\Vrule{x}}.
+\end{equation*}
+\Vrule{x} is \dfn{indirectly right-recursive}
+if and only if
+\begin{equation*}
+\exists \, \Vstr{y} \mid \Rightmost{\Vrule{x}} \deplus \Vstr{y} \land \Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
+\end{equation*}
+\Vrule{x} is \dfn{right recursive},
+$\RightRecursive{\Vrule{x}}$,
+if and only if is either directly or indirectly right-recursive.
+
+In this \doc{},
+\Earley{} will refer to the Earley's original
+recognizer\cite{Earley1970}.
+\Leo{} will refer to Leo's revision of \Earley{}
+as described in~\cite{Leo1991}.
+\Marpa{} will refer to the parser described in
+this \doc{}.
+Where $\alg{Recce}$ is a recognizer,
+$\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
+when parsing \Cg{}.
+
 \section{Earley's algorithm}
 \label{s:earley}
 
-Let $\Vrule{r} \in \Crules$
+Let $\Vrule{r} \in \Rules{\var{g}}$
 be a rule,
 and let $\Vsize{r}$
 be the length of its RHS.
@@ -1025,7 +1256,7 @@ are \Veim{predecessor} and \Vsym{lhs}.
     \begin{array}{c}
 	\Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ] \\
 	\Veim{predecessor} \in \Ves{current} \\
-	\bigl[ \Vsym{L} \de \Vstr{rh} \bigr] \in \Crules  \\
+	\bigl[ \Vsym{L} \de \Vstr{rh} \bigr] \in \Rules{\var{g}}  \\
 	\bigl( \exists \, \Vstr{z} \mid
 	\Postdot{\Vdr{predecessor}} \destar \Vsym{L} \cat \Vstr{z} \bigr)
     \end{array}
