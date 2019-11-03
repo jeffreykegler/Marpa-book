@@ -38,15 +38,27 @@
 
 \newcommand{\cfg}{CFG}
 
-\newcommand{\de}{\rightarrow}
-\newcommand{\derives}{\Rightarrow}
+\newcommand{\de}{\mathrel{::=}}
+\newcommand{\derives}{\mapsto}
+\newcommand{\nderives}[1]{
+\mathrel{%
+  \ifthenelse{\equal{#1}{}}{%
+    {\not\mapsto}%
+  }{%
+    {\mbox{$\:\stackrel{\!{#1}}{\not\mapsto\!}\:$}}%
+  }%
+}}%
+\newcommand{\xderives}[1]
+    {\mathrel{\mbox{$\:\stackrel{\!{#1}}{\mapsto\!}\:$}}}
 \newcommand{\destar}
-    {\mathrel{\mbox{$\:\stackrel{\!{\ast}}{\Rightarrow\!}\:$}}}
+    {\mathrel{\mbox{$\:\stackrel{\!{\ast}}{\mapsto\!}\:$}}}
+\newcommand{\ndestar}{\nderives{\ast}}
 \newcommand{\deplus}
-    {\mathrel{\mbox{$\:\stackrel{\!{+}}{\Rightarrow\!}\:$}}}
-\newcommand{\derivg}[1]{\mathrel{\mbox{$\:\Rightarrow\:$}}}
+    {\mathrel{\mbox{$\:\stackrel{\!{+}}{\mapsto\!}\:$}}}
+\newcommand{\ndeplus}{\nderives{+}}
+\newcommand{\derivg}[1]{\mathrel{\mbox{$\:\mapsto\:$}}}
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
-        {\Rightarrow\!}\:$}}}
+        {\mapsto\!}\:$}}}
 
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
@@ -60,6 +72,8 @@
 \newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
 \newcommand{\Ves}[1]{\Tvar{#1}{ES}}
+\newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
+\newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
 \newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
@@ -226,8 +240,11 @@ goes into detail about their application.
 Section
 \ref{s:preliminaries} describes the notation and conventions
 of this \doc.
-Section \ref{s:rewrite} deals with Marpa's
-grammar rewrites.
+Section \ref{s:external-grammars} deals with Marpa's external grammars ---
+the grammars which the users see.
+Section \ref{s:rewrite} explain how Marpa rewrites its external
+grammar into internal grammars.
+Section \ref{s:internal-grammars} describes Marpa's internal grammars.
 Sections \ref{s:earley} and \ref{s:earley-ops}
 introduce Earley's algorithm.
 Section \ref{s:leo} describes Leo's modification
@@ -258,16 +275,18 @@ before this paper.
 \label{s:features}
 
 \subsection{General context-free parsing}
+The Marpa algorithm is capable of parsing all
+context-free grammars.
 As implemented,
 Marpa parses
-all context-free grammars
-except those with cycles\footnote{
+all cycle-free context-free
+grammars.\footnote{
 Earlier implementations of Marpa allowed cycles,
-but support was removed because these seem to be of
-no practical interest.
-Unproductive symbols can be implemented by
-defining ``unicorn'' terminals ---
-terminals which can never be found in the input.
+but support for them
+was removed because
+practical interest seems to be non-existent.
+For more detail, see section
+\ref{s:external-grammars}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
@@ -499,7 +518,6 @@ syntax falls within the limits of LALR.
 
 \section{Preliminaries}
 \label{s:preliminaries}
-\label{s:start-prelim}
 
 We assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
@@ -550,11 +568,14 @@ Let $\var{vocab}^+$ be
 \bigr\}.
 \end{equation*}
 
-Let the grammar \Cg{} be the 4-tuple
+\section{External grammars}
+\label{s:external-grammars}
+
+Let the \dfn{external grammar} \Vext{g} be the 4-tuple
 \begin{equation*}
     (\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}).
 \end{equation*}
-For convenience in refering to the elements of \Cg{},
+For convenience in refering to the elements of \Vext{g},
 \begin{equation*}
 \begin{alignedat}{3}
 & \NT{\var{g}} && \defined && \quad \Vsymset{nt}, \\
@@ -573,12 +594,12 @@ the ``start symbol''.
 The accept symbol must be a non-terminal:
 $\Accept{\var{g}} \in \var{nt}$.
 \Vocab{\var{g}} is
-\dfn{vocabulary} of \Cg{}.
+the \dfn{vocabulary} of \Vext{g}.
 
 A string of symbols from \Vocab{\var{g}}
 is called a \dfn{sentential form}.
-A string of symbols containing exclusively terminal symbols from \var{g}
-is also called a \dfn{sentence}.
+A string of symbols from \Term{\var{g}}
+is called a \dfn{sentence}.
 
 \Vruleset{rules} is a set of rules (type \type{RULE}),
 where a rule is a duple
@@ -616,7 +637,7 @@ string, that is
 \Vsym{x} is \dfn{non-nullable} if and only if it is not nullable.
 
 By tradition, the input to the parse is written as \Cw{}.
-\Cw{} must be a sentence of \Cg{},
+\Cw{} must be a sentence of \Vext{g},
 that is,
 $\Cw \in \Term{\var{g}}^\ast$.
 \Vsize{w} will be the length of the input, counted in symbols.
@@ -624,20 +645,20 @@ When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
 
-The language of \var{g},
-\myL{\Cg},
+The language of \Vext{g},
+\myL{\var{g}},
 is the set of sentences that
-that \Accept{\var{g}} derives.
+that \Accept{\Vext{g}} derives.
 That is,
 \begin{equation*}
-\myL{\var{g}} =
+\myL{\Vext{g}} =
 \set{
 \quad
-\begin{split}
+\begin{aligned}
 & \Vstr{sentence} \; \mid \; \\
 & \quad \Accept{\var{g}} \destar \Vstr{sentence} \\
 & \quad \land \; \Vstr{sentence} \in \Term{\var{g}}
-\end{split}
+\end{aligned}
 \quad
 }
 \end{equation*}
@@ -647,6 +668,32 @@ We represent
 the \var{i}'th character of the input
 by \CVw{i},
 $0 \le \Vloc{i} < \Vsize{w}$.
+
+A \dfn{unproductive symbol}
+is one which never derives a sentence.
+That is, \Vsym{unprod} is unproductive if
+and only if, for all \Vstr{sentence}
+\begin{equation*}
+\Vstr{sentence} \in \Term{\var{g}}
+\;  \implies \;
+  \Vsym{unprod} \ndestar \Vstr{sentence}
+\end{equation*}
+In the current version of Marpa,
+unproductive symbols can be implemented by
+defining \dfn{unicorn} terminals ---
+terminals which can never be
+found in the input.\footnote{
+In the Marpa implementation,
+a terminal can be made into a unicorn by
+requiring that
+a terminal match the POSIX expression
+\texttt{[\char`^ \char`\\ D\char`\\ d]}
+indicates that the terminal
+must match a single character which
+is both a digit and a non-digit.
+Since this is not possible,
+the terminal will never match anything in the input.
+}
 
 \section{Rewriting the grammar}
 \label{s:rewrite}
@@ -919,8 +966,8 @@ zero length inputs.
 No Marpa internal grammar can be a trivial grammar.
 Trivial grammars are also handled as a special case.
 
-\section{Marpa internal grammar conventions}
-\label{s:marpa-specific}
+\section{Marpa internal grammars}
+\label{s:internal-grammars}
 
 The conventions of this section describe
 Marpa internal grammars.
