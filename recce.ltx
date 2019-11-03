@@ -112,7 +112,7 @@
 \newcommand{\LeoUnique}[1]{\mymathop{Leo-Unique}(#1)}
 \newcommand{\ID}[1]{\mymathop{ID}(#1)}
 \newcommand{\PSL}[2]{\mymathop{PSL}[#1][#2]}
-\newcommand{\myL}[1]{\mymathop{L}(#1)}
+\newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand\Etable[1]{\ensuremath{\mymathop{table}[#1]}}
 \newcommand\bigEtable[1]{\ensuremath{\mymathop{table}\bigl[#1\bigr]}}
 \newcommand\Rtable[1]{\ensuremath{\mymathop{table}[#1]}}
@@ -550,17 +550,6 @@ Let $\var{vocab}^+$ be
 \bigr\}.
 \end{equation*}
 
-In this \doc{} we use,
-without loss of generality,
-the grammar \Cg{},
-where \Cg{} is the 3-tuple
-\begin{equation*}
-    (\Vsymset{vocab}, \var{rules}, \Vsym{accept}).
-\end{equation*}
-Here $\Vsym{accept} \in \var{vocab}$.
-Call the language of \var{g}, $\myL{\Cg}$,
-where $\myL{\Cg} \subseteq \var{vocab}^\ast$.
-
 Let the grammar \Cg{} be the 4-tuple
 \begin{equation*}
     (\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}).
@@ -598,8 +587,8 @@ where a rule is a duple
 \end{equation*}
 such that
 \begin{equation*}
-\Vsym{lhs} \in \var{vocab} \; \land \;
-\Vstr{rhs} \in \var{vocab}^\ast.
+\Vsym{lhs} \in \NT{\var{g}} \; \land \;
+\Vstr{rhs} \in \Vocab{\var{g}}^\ast.
 \end{equation*}
 \Vsym{lhs} is referred to as the left hand side (LHS)
 of \Vrule{r}.
@@ -619,7 +608,12 @@ states that \Vstr{x} derives \Vstr{y} in zero or more steps.
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
-\Vsym{x} is \dfn{nonnull} if and only if it is not nullable.
+\Vsym{x} is \dfn{nulling} if and only if it always derives the null
+string, that is
+\begin{equation*}
+\forall \, \Vstr{y} \quad \Vsym{x} \destar \Vstr{y} \implies \Vstr{y} \destar \epsilon.
+\end{equation*}
+\Vsym{x} is \dfn{non-nullable} if and only if it is not nullable.
 
 By tradition, the input to the parse is written as \Cw{}.
 \Cw{} must be a sentence of \Cg{},
@@ -629,6 +623,24 @@ $\Cw \in \Term{\var{g}}^\ast$.
 When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
+
+The language of \var{g},
+\myL{\Cg},
+is the set of sentences that
+that \Accept{\var{g}} derives.
+That is,
+\begin{equation*}
+\myL{\var{g}} =
+\set{
+\quad
+\begin{split}
+& \Vstr{sentence} \; \mid \; \\
+& \quad \Accept{\var{g}} \destar \Vstr{sentence} \\
+& \quad \land \; \Vstr{sentence} \in \Term{\var{g}}
+\end{split}
+\quad
+}
+\end{equation*}
 
 Locations in the input will be of type \type{LOC}.
 We represent
