@@ -242,6 +242,8 @@ Section
 of this \doc.
 Section \ref{s:external-grammars} deals with Marpa's external grammars ---
 the grammars which the users see.
+Section \ref{s:improper} deals with the implementation of improper
+context free grammars.
 Section \ref{s:rewrite} explain how Marpa rewrites its external
 grammar into internal grammars.
 Section \ref{s:internal-grammars} describes Marpa's internal grammars.
@@ -286,7 +288,7 @@ but support for them
 was removed because
 practical interest seems to be non-existent.
 For more detail, see section
-\ref{s:external-grammars}.
+\ref{s:improper}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
@@ -627,6 +629,11 @@ states that \Vstr{x} derives \Vstr{y} in one or more steps;
 and $\Vstr{x} \destar \Vstr{y}$
 states that \Vstr{x} derives \Vstr{y} in zero or more steps.
 
+Every symbol derives itself in zero steps.
+The zero step derivation is call a \dfn{trivial derivation}.
+A derivation of more than zero steps
+is called a \dfn{non-trivial derivation}.
+
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
 \Vsym{x} is \dfn{nulling} if and only if it always derives the null
@@ -669,6 +676,26 @@ the \var{i}'th character of the input
 by \CVw{i},
 $0 \le \Vloc{i} < \Vsize{w}$.
 
+\section{Improper context free grammars}
+\label{s:improper}
+
+A \dfn{proper CFG} is a CFG with no
+\begin{itemize}
+\item No unproductive symbols;
+\item No inaccessible symbols; and
+\item No cycles.
+\end{itemize}
+A \dfn{improper CFG} is a CFG which is
+not proper.
+
+\subsection{Unproductive symbols}
+
+The current implementation of Marpa supports
+unproductive symbols.
+By default, Marpa reports unproductive symbols.
+The user may silence the error report
+by marking the unproductive symbol as a unicorn.
+
 A \dfn{unproductive symbol}
 is one which never derives a sentence.
 That is, \Vsym{unprod} is unproductive if
@@ -682,7 +709,8 @@ In the current version of Marpa,
 unproductive symbols can be implemented by
 defining \dfn{unicorn} terminals ---
 terminals which can never be
-found in the input.\footnote{
+found in the input.
+
 In the Marpa implementation,
 a terminal can be made into a unicorn by
 requiring that
@@ -693,7 +721,77 @@ must match a single character which
 is both a digit and a non-digit.
 Since this is not possible,
 the terminal will never match anything in the input.
-}
+
+Unproductive symbols in fact often prove useful in Marpa
+applications.
+Unproductive symbols can be
+used to implement an external lexer for a terminal by setting
+an event to trigger when that terminal is expected.
+In such a case, it is important to make sure the terminal
+in not recognized in the input, and this can be done by
+marking the terminal as unproductive, that is,
+as a unicorn.
+
+\subsection{Inaccessible symbols}
+
+The current implementation of Marpa supports inaccessible symbols.
+By default, they are reported as errors.
+This error can be silenced for the whole grammar, or symbol by symbol.
+
+An \dfn{inaccessible symbol} is one which can never be derived from
+the accept symbol.
+That is, \Vsym{noacc} is inaccessible in \Vext{g} if and only if
+\begin{equation*}
+\neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{g} \destar \Vstr{pre} \cat \Vsym{noacc} \cat \Vstr{post}.
+\end{equation*}
+
+Inaccessible symbols have been found useful in Marpa applications
+that use higher-level languages ---
+languages which generate other languages.
+Often the generated grammar consists of a ``custom''
+rules which vary,
+and ``boilerplate'' rules,
+which are the same in every generated grammar.
+It can be useful to have sections of the ``boilerplace''
+be optional,
+so that some of the ``boilerplate'' rules are only used
+if the ``custom'' rules call for them.
+If the custom rules do not call for a set of optional rules
+within the boilerplate,
+those boilerplate rules become inaccessible.
+
+Optional boilerplace can be implemented
+by silencing inaccessibility errors for the symbols in the optional boilerplate,
+Usually it is possible to locate a topmost symbol for
+each section of optional boilerplace,
+in which case the warning need only be silences for those
+topmost symbols.
+
+\subsection{Cycles}
+
+The current implementation of Marpa does not support cycles,
+but earlier implementation have.
+A \dfn{cycle} is a symbol which non-trivially
+derives a string which consists only of that
+symbol.
+A cycle is the parsing equivalent of an infinite loop.
+That is, \Vsym{cycle} is a cycle in \Vext{g} if and only if
+\begin{equation*}
+ \Vsym{cycle} \deplus \Vsym{cycle}.
+\end{equation*}
+
+Cycles are recursions but most recursions (and apparently all
+recursion of practical interest) are not cycles.
+In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
+That is, \Vsym{recurse} is recursive if and only if
+\begin{equation*}
+ \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
+\end{equation*}
+\Vsym{recurse} is a cycle only if
+both \Vstr{pre} and \Vstr{post} are the null string:
+\begin{equation*}
+ \Vstr{pre} = \Vstr{post} = \epsilon.
+\end{equation*}
 
 \section{Rewriting the grammar}
 \label{s:rewrite}
