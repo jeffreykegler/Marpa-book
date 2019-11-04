@@ -769,8 +769,13 @@ topmost symbols.
 
 \subsection{Cycles}
 
-The current implementation of Marpa does not support cycles,
-but earlier implementation have.
+Earlier implementations of Marpa have supported cycles,
+but the current implementation of Marpa does not.
+When the current implementation finds a cycle in a grammar,
+it print a message describing the cycle and throws
+a fatal error.
+This seems to be exactly the behavior users desire.
+
 A \dfn{cycle} is a symbol which non-trivially
 derives a string which consists only of that
 symbol.
@@ -793,8 +798,22 @@ both \Vstr{pre} and \Vstr{post} are the null string:
  \Vstr{pre} = \Vstr{post} = \epsilon.
 \end{equation*}
 
+There is no indication that cycles are of practical use.
+Nor does the theoretical literature suggest potential uses for
+them.
+Support for cycles did require complicated extra code,
+and it seems that Marpa will be better off
+without support of cycles.
+
+When Marpa did support cycles,
+it did so by cutting the cycle short during evaluation the first
+time the cycle symbol non-trivially derived itself.
+With proper precautions, the recognizer could tolerate cycles.
+
 \section{Rewriting the grammar}
 \label{s:rewrite}
+
+\subsection{The Aycock-Horspool parser}
 
 A parser that claims to be practical must accept
 grammars with nullable and nulling symbols
@@ -808,64 +827,82 @@ grammar rewrites to handle these issues.
 Marpa's grammar rewriting allows the user to specify
 their parse in terms of an external grammar.
 
-An {\bf external grammar} may be any cycle-free grammar.\footnote{
-As mentioned, earlier versions of Marpa lifted even the
-restriction on cycles,
-but there seems to be no use for cycles.
-}
-The external grammar is rewritten into an {\bf internal grammar}.
-This internal grammar is required to obey severe restrictions.
+Grammar rewriting was not the focus
+of \cite{AH2002} ---
+instead that paper focused on revising Earley's algorithm
+to use LR(0) states.
+The first version of Marpa \cite{Kegler2019}
+used the LR(0) states of \cite{AH2002},
+combining them with Joop Leo's improvements \cite{Leo1991}.
+
+Adding the LR(0) states to the first version of Marpa
+made its theory much more complex,
+in return for no complexity gains.
+All hope had to be for benefits to be seen in practice.
+Unfortunately, these did not emerge.
+Marpa's experience in using, developing and maintaining
+LR(0) states in Earley parsing showed these added
+greatly to the complexity of the code;
+were a real obstacle to the implementation of run-time features
+in the parser;
+and produced no real improvement in speed or in space requirements.
+
+On the other hand, 
+Aycock and Horspool's idea
+of using grammar rewriting
+to deal with
+with nullable symbols became
+fundamental to the Marpa algorithm.
+For this reason, the author considers Marpa to be a parser
+in the Aycock and Horspool lineage.
 
 \subsection{Semantics-safe rewriting}
 
-Many grammar rewriting schemes are possible,
-but for a parser to be useful,
-it must implement a semantics that is specified
-in terms of the external grammar.
-If the semantics cannot be efficiently recovered
-from a parse performed using an internal grammar,
-then that rewriting scheme is not useful in practice.
+We defined Marpa's external grammars in
+section \ref{s:external-grammars}.
+Recall that an external grammar may be any cycle-free grammar.
 
-The grammar rewrites in this paper are "semantics-safe".
-They allow the external rules and symbols to be reconstructed
-efficiently not just at evaluation time,
+Marpa's recognizer works using
+Marpa internal grammars.
+Marpa internal grammars are defined more carefully
+section \ref{s:internal-grammars}.
+The section describes the rewrite.
+
+Rewriting grammars is a common
+technique
+in the parsing literature,
+but many of these rewrites are almost totally without
+usefulness in practice.
+In the academic literature,
+a rewritten grammar will recognize the same language,
+but most of the time it will not preserve the semantics
+of the grammar.
+
+Very few people use CFG's in order to recognize a language.
+Almost always the user of a grammar-driven parser
+has attached a semantics to the rules and symbols
+of the grammar
+and that user wants the parser
+to implement their semantics.
+If the user's semantics is lost during a rewrite,
+then any parsing technique that relies on that rewrite cannot
+be the basis of a general-purpose practical parsing tool.
+
+Marpa's limits itself to using rewrites that
+are \dfn{semantics-safe}.
+We will state Marpa's defintion
+of semantics-safe more carefully below,
+but the intent is that
+semantics-safe rewrites
+allow the rules and symbols of the external grammar
+to be reconstructed from a parse using the internal grammar,
+not just at evaluation time,
 but at run-time as well.
-Marpa's parsing and evaluation
+In Marpa, parsing and evaluation
 are performed
 in such a way that the internal grammar
 is invisible to
 the user.
-
-This rewrite can be undone easily.
-In fact,
-in the current implementation of Marpa,
-the reverse rewrite,
-from internal to external,
-is often done ``on the fly'',
-as the parse proceeds.
-This translation back and forth is
-efficient,
-and is done for error reporting, tracing,
-and in the implementation of Marpa::R2's event
-mechanism.
-
-For example,
-Marpa allows run-time events to be defined,
-including ``nulling events'' ---
-events which trigger when a symbol is nulled.
-In the internal grammar, there are no nullable
-symbols but, for event-triggering purposes,
-Marpa keeps track of where
-the nulling symbols would be.
-The recognizer runs on an internal grammar with
-no nullable symbols,
-but the nulling events that Marpa user are triggered
-and reported in terms of an external grammar which
-does allow nullable symbols.
-All of this works smoothly ---
-so smoothly that a standard Marpa programming technique is to
-add nulling symbols to a grammar which exist only for the
-purpose of generating events.
 
 The rest of this subsection will describe the restrictions
 that rewrites must follow in order to be ``semantics-safe''.
@@ -982,7 +1019,7 @@ and that for every rule, \var{rule}, in \Cg{}
 \Vsym{accept} \notin \RHS{\Vrule{rule}}.
 \end{equation*}
 
-\subsection{Aycock-Horspool rewrites}
+\subsection{The Aycock-Horspool rewrite}
 
 The rewrite currently used by Marpa is an improvement over
 that of~\cite{AH2002}.
@@ -1016,34 +1053,6 @@ is done by rewriting the grammar.
 \cite{AH2002} shows how to do this
 without loss of generality.
 
-As implemented,
-the Marpa parser allows users to associate
-semantics with an original grammar
-that has none of the restrictions imposed
-on grammars in this \doc{}.
-The user of a Marpa parser
-may specify any context-free grammar,
-including one with properly nullable symbols,
-empty rules, etc.
-The user specifies his semantics in terms
-of this original, ``free-form'', grammar.
-Marpa implements the rewrites,
-and performs evaluation,
-in such a way as to keep them invisible to
-the user.
-From the user's point of view,
-the ``free-form'' of his grammar is the
-one being used for the parse,
-and the one to which
-his semantics are applied.
-
-Translation from the rewritten grammar is
-efficient enough to be done ``on the fly''.
-This allows run-time event-driven semantics
-to be written in terms of the original grammar.
-
-\subsection{The Aycock-Horspool rewrite}
-
 Following Aycock and Horspool\cite{AH2002},
 all nullable symbols in grammar \Cg{} are nulling -- every symbol
 which can derive the null string always derives the null string.
@@ -1052,6 +1061,39 @@ or the ability to efficiently evaluate a semantics that is
 defined in terms of an original grammar that includes symbols which
 are both nullable and non-nulling,
 empty rules, etc.
+
+\subsection{Removing nulling symbols}
+
+This rewrite can be undone easily.
+In fact,
+in the current implementation of Marpa,
+the reverse rewrite,
+from internal to external,
+is often done ``on the fly'',
+as the parse proceeds.
+This translation back and forth is
+efficient,
+and is done for error reporting, tracing,
+and in the implementation of Marpa::R2's event
+mechanism.
+
+For example,
+Marpa allows run-time events to be defined,
+including ``nulling events'' ---
+events which trigger when a symbol is nulled.
+In the internal grammar, there are no nullable
+symbols but, for event-triggering purposes,
+Marpa keeps track of where
+the nulling symbols would be.
+The recognizer runs on an internal grammar with
+no nullable symbols,
+but the nulling events that Marpa user are triggered
+and reported in terms of an external grammar which
+does allow nullable symbols.
+All of this works smoothly ---
+so smoothly that a standard Marpa programming technique is to
+add nulling symbols to a grammar which exist only for the
+purpose of generating events.
 
 \subsection{Trivial grammars and null parses}
 
@@ -4281,6 +4323,12 @@ Edgar~T.~Irons.
 Stephen~C. Johnson.
 \newblock Yacc: Yet another compiler-compiler.
 \newblock In {\em Unix Programmer's Manual Supplementary Documents 1}. 1986.
+
+\bibitem{Kegler2019}
+Jeffrey~Kegler.
+\newblock Marpa, A practical general parser: the recognizer.
+\newblock arXiv:1910.08129v1
+\newblock \url{https://arxiv.org/abs/1910.08129v1}
 
 \bibitem{Marpa-HTML}
 Jeffrey~Kegler, 2011: Marpa-HTML.
