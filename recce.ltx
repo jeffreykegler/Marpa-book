@@ -837,8 +837,9 @@ combining them with Joop Leo's improvements \cite{Leo1991}.
 
 Adding the LR(0) states to the first version of Marpa
 made its theory much more complex,
-in return for no complexity gains.
-All hope had to be for benefits to be seen in practice.
+and the change offered
+no complexity gains in terms of Landau notation.
+The hope was that benefits would be seen in practice.
 Unfortunately, these did not emerge.
 Marpa's experience in using, developing and maintaining
 LR(0) states in Earley parsing showed these added
@@ -847,7 +848,7 @@ were a real obstacle to the implementation of run-time features
 in the parser;
 and produced no real improvement in speed or in space requirements.
 
-On the other hand, 
+On the other hand,
 Aycock and Horspool's idea
 of using grammar rewriting
 to deal with
@@ -865,8 +866,8 @@ Recall that an external grammar may be any cycle-free grammar.
 Marpa's recognizer works using
 Marpa internal grammars.
 Marpa internal grammars are defined more carefully
-section \ref{s:internal-grammars}.
-The section describes the rewrite.
+in section \ref{s:internal-grammars}.
+This section describes the rewrite.
 
 Rewriting grammars is a common
 technique
@@ -874,19 +875,20 @@ in the parsing literature,
 but many of these rewrites are almost totally without
 usefulness in practice.
 In the academic literature,
-a rewritten grammar will recognize the same language,
+a rewritten grammar may recognize the same language,
 but most of the time it will not preserve the semantics
 of the grammar.
 
-Very few people use CFG's in order to recognize a language.
+Very few users of CFG's are
+content with recognizing a language.
 Almost always the user of a grammar-driven parser
-has attached a semantics to the rules and symbols
-of the grammar
+formulated that the rules and symbols of that grammar
+in terms of a semantics,
 and that user wants the parser
 to implement their semantics.
-If the user's semantics is lost during a rewrite,
-then any parsing technique that relies on that rewrite cannot
-be the basis of a general-purpose practical parsing tool.
+If a rewrite erases the user's semantics,
+then that rewrite cannot form an essential part
+of a general-purpose practical parsing tool.
 
 Marpa's limits itself to using rewrites that
 are \dfn{semantics-safe}.
@@ -903,17 +905,98 @@ are performed
 in such a way that the internal grammar
 is invisible to
 the user.
-
 The rest of this subsection will describe the restrictions
 that rewrites must follow in order to be ``semantics-safe''.
-Marpa's internal grammars have
-``brick'' and ``mortar'' symbols.
-Internal brick symbols correspond, many-to-one, to
+
+Consider an input \Cw{},
+an external grammar, \Vext{g},
+and the internal grammar that represents \Vext{g}, \Vint{g}.
+Consider the parse tree that results from a parse of \Cw{} by either
+\Vext{g} or \Vint{g}.
+Every node of the parse tree is a \dfn{symbol instance}.
+The symbol instances of the parse correspond one-to-one with 3-tuples
+of the form
+\begin{equation}
+[ \Vsym{s}, \Vloc{start}, \var{length} ].
+\end{equation}
+, we have
+where
+\begin{itemize}
+\item \Vsym{s} is the node's symbol;
+\item \Vloc{i} is either the location
+of the first character in \Cw{} that is derived from \Vsym{s}
+or is \Vsize{w}, the position after the last character of \Cw{};
+and
+\item \var{length} is the length of the sentence
+derived from \Vsym{s}.
+\end{itemize}
+
+If a parse tree is the product of an internal grammar,
+it is an \dfn{internal parse}.
+If a parse tree is the product of an external grammar,
+it is an \dfn{external  parse}.
+In what follows, we will want to match instances from an internal
+parse
+to instances of an external parse.
+An internal symbol instance \textbf{matches}
+an external symbol instance, and vice versa,
+if and only if their 3-tuples match.
+More formally, let \var{itree} be the parse from
+an internal grammar,
+and let \var{etree} be the parse from
+an external grammar.
+Let
+\begin{equation*}
+\var{inode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength} ]
+\end{equation*}
+be an instance in \var{itree}, and let
+\begin{equation*}
+\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength} ]
+\end{equation*}
+be an instance in \var{etree}.
+Then \var{inode} \dfn{matches} \var{enode},
+$\var{inode} = \var{enode},$
+if and only if
+\begin{equation*}
+\begin{split}
+& \Vsym{isym} = \Vsym{esym} \\
+\text{and} \quad & \Vloc{istart} = \Vloc{estart} \\
+\text{and} \quad & \var{ilength} = \var{elength}.
+\end{split}
+\end{equation*}
+
+In an internal grammar, there are
+brick and mortar symbols.
+Internal \dfn{brick} symbols correspond, many-to-one, to
 external symbols.
-Internal mortar symbols exist entirely for the purposes
+Internal \dfn{mortar} symbols exist entirely for the purposes
 of the internal grammar.
 Only brick symbols have semantics attached to them.
+All terminal symbols are bricks.
 
+Let \var{tree} be a parse tree creating using an
+internal grammar.
+If the symbol of an instance in \var{tree} is a brick,
+the instance is a \dfn{brick instance}.
+If the symbol of an instance in \var{tree} is a mortar symbol,
+the instance is a \dfn{mortar instance}.
+
+Intuitively, we require that we be able to identify,
+for each brick in an internal grammar,
+a ``brick subtree''.
+The root of a brick subtree must be a brick instance.
+The leaves of the brick subtree must be brick instances.
+All other nodes of the brick subtree must be mortar
+instances.
+
+For a terminal, \Vsym{term}, the brick subtree is trivial.
+The subtree consists of only one node,
+which corresponds to a brick instance.
+This single node is both the root and the only leaf
+of the subtree.
+
+In the
+to do a brick
 Assume that we have a parse, using internal symbols.
 We define a ``brick traversal'' from a ``root'' brick non-terminal instance.
 The ``brick traversal'' is pre-order
@@ -927,16 +1010,6 @@ The leaves of the subtree, as encountered in pre-order,
 constitute its ``brick frontier''.
 Mortar symbols will only occur in the interior of this ``brick'' subtree,
 never as its root or its leaf.
-
-An {\bf instance} of a symbol is a symbol matched with a substring
-of the input \Cw{}.
-An internal symbol instance \textbf{matches}
-an external symbol instance if and only if
-\begin{itemize}
-\item they have the same symbol;
-\item they have the same left location in \Cw{}; and
-\item they have the same right location in \Cw{}.
-\end{itemize}
 
 The {\bf terminal sequence} of a parse is the sequence
 of symbol instances for the terminals of a parse.
@@ -1031,11 +1104,11 @@ up so that no rule has more than two proper nullables.
 This is similar to a rewrite into Chomsky form.
 
 The proper nullable symbol is then cloned into two others:
-one nulling and one telluric.
+one nulling and one non-nullable.
 All occurrences of the original proper nullable symbol are then replaced
 with one of the two new symbols,
 and new rules are created as necessary to ensure that all possible combinations
-of nulling and telluric symbols are accounted for.
+of nulling and non-nullable symbols are accounted for.
 
 The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
 rewrite before replacing the proper nullables.
