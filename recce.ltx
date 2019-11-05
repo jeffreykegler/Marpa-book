@@ -894,7 +894,7 @@ Marpa's limits itself to using rewrites that
 are \dfn{semantics-safe}.
 We will state Marpa's defintion
 of semantics-safe more precisely
-in section \label{semantics-safe}.
+in section \ref{semantics-safe}.
 The intent behind
 semantics-safe rewrites
 is that they
@@ -932,12 +932,15 @@ and that for every rule, \var{rule}, in \Cg{}
 \end{equation*}
 
 The semantics for the augment rule are simple ---
-The semantics of \Vsym{top} are passed up to
+the semantics of \Vsym{top} are passed up to
 \Vsym{accept}.
-This is obviously semantics-safe,
-and in the Marpa implementation
-the semantics of the augmented rule
-are dealt with as a special case.
+This is obviously semantics-safe.
+In the Marpa implementation the general method
+described in section \ref{semantics-safe}
+for dealing with the semantics of rewritten rules
+is not applied to the augmented rule.
+Instead, the augmented rule is
+dealt with as a special case.
 
 \subsection{The Aycock-Horspool rewrite}
 
@@ -962,25 +965,6 @@ rewrite before replacing the proper nullables.
 As a result the number of rules in the internal grammar could be
 an exponential function of numbers in the external grammar.
 In our version, the worst case growth in the number of rules in linear.
-
-We have already noted
-that no rules of \Cg{}
-have a zero-length RHS,
-and that all symbols must be either nulling or non-nullable.
-These restrictions follow Aycock and Horspool\cite{AH2002}.
-The elimination of empty rules and proper nullables
-is done by rewriting the grammar.
-\cite{AH2002} shows how to do this
-without loss of generality.
-
-Following Aycock and Horspool\cite{AH2002},
-all nullable symbols in grammar \Cg{} are nulling -- every symbol
-which can derive the null string always derives the null string.
-It is shown in \cite{AH2002} how to do this without losing generality
-or the ability to efficiently evaluate a semantics that is
-defined in terms of an original grammar that includes symbols which
-are both nullable and non-nulling,
-empty rules, etc.
 
 \subsection{Removing nulling symbols}
 
