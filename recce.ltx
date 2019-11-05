@@ -857,8 +857,6 @@ fundamental to the Marpa algorithm.
 For this reason, the author considers Marpa to be a parser
 in the Aycock and Horspool lineage.
 
-\subsection{Semantics-safe rewriting}
-
 We defined Marpa's external grammars in
 section \ref{s:external-grammars}.
 Recall that an external grammar may be any cycle-free grammar.
@@ -867,7 +865,9 @@ Marpa's recognizer works using
 Marpa internal grammars.
 Marpa internal grammars are defined more carefully
 in section \ref{s:internal-grammars}.
-This section describes the rewrite.
+This section describes the rewrite
+from an external grammar
+to an internal grammar.
 
 Rewriting grammars is a common
 technique
@@ -893,9 +893,11 @@ of a general-purpose practical parsing tool.
 Marpa's limits itself to using rewrites that
 are \dfn{semantics-safe}.
 We will state Marpa's defintion
-of semantics-safe more carefully below,
-but the intent is that
+of semantics-safe more precisely
+in section \label{semantics-safe}.
+The intent behind
 semantics-safe rewrites
+is that they
 allow the rules and symbols of the external grammar
 to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
@@ -905,9 +907,130 @@ are performed
 in such a way that the internal grammar
 is invisible to
 the user.
-The rest of this subsection will describe the restrictions
-that rewrites must follow in order to be ``semantics-safe''.
+The next subsections describe the rewrites
+applied by Marpa.
 
+\subsection{Augmenting the grammar}
+
+It is assumed
+that there is a dedicated acceptance rule,
+such that for some symbol \Vsym{top},
+\begin{equation*}
+\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}].
+\end{equation*}
+It is also assumed that
+the only occurence of \Vsym{accept} in the
+grammar is as
+the LHS of \Vrule{accept} or, more formally,
+that
+\begin{equation*}
+\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept}
+\end{equation*}
+and that for every rule, \var{rule}, in \Cg{}
+\begin{equation*}
+\Vsym{accept} \notin \RHS{\Vrule{rule}}.
+\end{equation*}
+
+The semantics for the augment rule are simple ---
+The semantics of \Vsym{top} are passed up to
+\Vsym{accept}.
+This is obviously semantics-safe,
+and in the Marpa implementation
+the semantics of the augmented rule
+are dealt with as a special case.
+
+\subsection{The Aycock-Horspool rewrite}
+
+The rewrite currently used by Marpa is an improvement over
+that of~\cite{AH2002}.
+Rules with proper nullables are identified
+and a new grammar is created
+in which the external grammar's rules are divided
+up so that no rule has more than two proper nullables.
+(A ``proper nullable'' is a nullable symbol which is not nulling.)
+This is similar to a rewrite into Chomsky form.
+
+The proper nullable symbol is then cloned into two others:
+one nulling and one non-nullable.
+All occurrences of the original proper nullable symbol are then replaced
+with one of the two new symbols,
+and new rules are created as necessary to ensure that all possible combinations
+of nulling and non-nullable symbols are accounted for.
+
+The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
+rewrite before replacing the proper nullables.
+As a result the number of rules in the internal grammar could be
+an exponential function of numbers in the external grammar.
+In our version, the worst case growth in the number of rules in linear.
+
+We have already noted
+that no rules of \Cg{}
+have a zero-length RHS,
+and that all symbols must be either nulling or non-nullable.
+These restrictions follow Aycock and Horspool\cite{AH2002}.
+The elimination of empty rules and proper nullables
+is done by rewriting the grammar.
+\cite{AH2002} shows how to do this
+without loss of generality.
+
+Following Aycock and Horspool\cite{AH2002},
+all nullable symbols in grammar \Cg{} are nulling -- every symbol
+which can derive the null string always derives the null string.
+It is shown in \cite{AH2002} how to do this without losing generality
+or the ability to efficiently evaluate a semantics that is
+defined in terms of an original grammar that includes symbols which
+are both nullable and non-nulling,
+empty rules, etc.
+
+\subsection{Removing nulling symbols}
+
+This rewrite can be undone easily.
+In fact,
+in the current implementation of Marpa,
+the reverse rewrite,
+from internal to external,
+is often done ``on the fly'',
+as the parse proceeds.
+This translation back and forth is
+efficient,
+and is done for error reporting, tracing,
+and in the implementation of Marpa::R2's event
+mechanism.
+
+For example,
+Marpa allows run-time events to be defined,
+including ``nulling events'' ---
+events which trigger when a symbol is nulled.
+In the internal grammar, there are no nullable
+symbols but, for event-triggering purposes,
+Marpa keeps track of where
+the nulling symbols would be.
+The recognizer runs on an internal grammar with
+no nullable symbols,
+but the nulling events that Marpa user are triggered
+and reported in terms of an external grammar which
+does allow nullable symbols.
+All of this works smoothly ---
+so smoothly that a standard Marpa programming technique is to
+add nulling symbols to a grammar which exist only for the
+purpose of generating events.
+
+\subsection{Trivial grammars and null parses}
+
+Null parses are parse of zero length inputs.
+Marpa handles null parses by treating them
+as a special case.
+
+Trivial grammars are those which only accept
+zero length inputs.
+No Marpa internal grammar can be a trivial grammar.
+Trivial grammars are also handled as a special case.
+
+\subsection{Semantics-safe rewriting}
+\label{semantics-safe}
+
+This subsection describes the restrictions
+that rewrites must follow in order to be semantics-safe.
 Consider an input \Cw{},
 an external grammar, \Vext{g},
 and the internal grammar that represents \Vext{g}, \Vint{g}.
@@ -1054,130 +1177,13 @@ of the external rule RHS.
 \end{itemize}
 \end{itemize}
 
-For Marpa to deliver on its
-claims to be a practical parser,
-it is important to emphasize
-that all grammar rewrites in this \doc{}
-are done in such a way that the semantics
-of the original grammar can be reconstructed
-simply and efficiently at evaluation time.
-As one example,
-when a rewrite involves the introduction of new rule,
-semantics for the new rule can be defined to pass its operands
-up to a parent rule as a list.
+Semantics for a substree new rule can be defined to pass its operands
+up to a root node's rule as a list.
 Where needed, the original semantics
 of a pre-existing parent rule can
 be ``wrappered'' to reassemble these lists
 into operands that are properly formed
 for that original semantics.
-
-\subsection{Augmenting the grammar}
-
-It is assumed
-that there is a dedicated acceptance rule,
-such that for some symbol \Vsym{top},
-\begin{equation*}
-\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}].
-\end{equation*}
-It is also assumed that
-the only occurence of \Vsym{accept} in the
-grammar is as
-the LHS of \Vrule{accept} or, more formally,
-that
-\begin{equation*}
-\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept}
-\end{equation*}
-and that for every rule, \var{rule}, in \Cg{}
-\begin{equation*}
-\Vsym{accept} \notin \RHS{\Vrule{rule}}.
-\end{equation*}
-
-\subsection{The Aycock-Horspool rewrite}
-
-The rewrite currently used by Marpa is an improvement over
-that of~\cite{AH2002}.
-Rules with proper nullables are identified
-and a new grammar is created
-in which the external grammar's rules are divided
-up so that no rule has more than two proper nullables.
-(A ``proper nullable'' is a nullable symbol which is not nulling.)
-This is similar to a rewrite into Chomsky form.
-
-The proper nullable symbol is then cloned into two others:
-one nulling and one non-nullable.
-All occurrences of the original proper nullable symbol are then replaced
-with one of the two new symbols,
-and new rules are created as necessary to ensure that all possible combinations
-of nulling and non-nullable symbols are accounted for.
-
-The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
-rewrite before replacing the proper nullables.
-As a result the number of rules in the internal grammar could be
-an exponential function of numbers in the external grammar.
-In our version, the worst case growth in the number of rules in linear.
-
-We have already noted
-that no rules of \Cg{}
-have a zero-length RHS,
-and that all symbols must be either nulling or non-nullable.
-These restrictions follow Aycock and Horspool\cite{AH2002}.
-The elimination of empty rules and proper nullables
-is done by rewriting the grammar.
-\cite{AH2002} shows how to do this
-without loss of generality.
-
-Following Aycock and Horspool\cite{AH2002},
-all nullable symbols in grammar \Cg{} are nulling -- every symbol
-which can derive the null string always derives the null string.
-It is shown in \cite{AH2002} how to do this without losing generality
-or the ability to efficiently evaluate a semantics that is
-defined in terms of an original grammar that includes symbols which
-are both nullable and non-nulling,
-empty rules, etc.
-
-\subsection{Removing nulling symbols}
-
-This rewrite can be undone easily.
-In fact,
-in the current implementation of Marpa,
-the reverse rewrite,
-from internal to external,
-is often done ``on the fly'',
-as the parse proceeds.
-This translation back and forth is
-efficient,
-and is done for error reporting, tracing,
-and in the implementation of Marpa::R2's event
-mechanism.
-
-For example,
-Marpa allows run-time events to be defined,
-including ``nulling events'' ---
-events which trigger when a symbol is nulled.
-In the internal grammar, there are no nullable
-symbols but, for event-triggering purposes,
-Marpa keeps track of where
-the nulling symbols would be.
-The recognizer runs on an internal grammar with
-no nullable symbols,
-but the nulling events that Marpa user are triggered
-and reported in terms of an external grammar which
-does allow nullable symbols.
-All of this works smoothly ---
-so smoothly that a standard Marpa programming technique is to
-add nulling symbols to a grammar which exist only for the
-purpose of generating events.
-
-\subsection{Trivial grammars and null parses}
-
-Null parses are parse of zero length inputs.
-Marpa handles null parses by treating them
-as a special case.
-
-Trivial grammars are those which only accept
-zero length inputs.
-No Marpa internal grammar can be a trivial grammar.
-Trivial grammars are also handled as a special case.
 
 \section{Marpa internal grammars}
 \label{s:internal-grammars}
