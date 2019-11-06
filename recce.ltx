@@ -557,6 +557,12 @@ their type.
 Subscripts may be omitted when the type
 is obvious from the context.
 
+Where \var{set} is a set,
+Vsize{set} is the size of the set.
+Where \var{seq} is a sequence (ordered set),
+$\var{seq}[\var{i}]$ is its \var{i}'th element,
+$0 \le \var{i} \le \Vsize{seq}$.
+
 Where \Vsymset{vocab} is non-empty set of symbols,
 let $\var{vocab}^\ast$ be the set of all strings
 (type \type{STR}) formed
@@ -642,6 +648,8 @@ string, that is
 \forall \, \Vstr{y} \quad \Vsym{x} \destar \Vstr{y} \implies \Vstr{y} \destar \epsilon.
 \end{equation*}
 \Vsym{x} is \dfn{non-nullable} if and only if it is not nullable.
+\Vsym{x} is a \dfn{proper nullable} if and only if it is nullable,
+but not nulling.
 
 By tradition, the input to the parse is written as \Cw{}.
 \Cw{} must be a sentence of \Vext{g},
@@ -681,9 +689,9 @@ $0 \le \Vloc{i} < \Vsize{w}$.
 
 A \dfn{proper CFG} is a CFG with no
 \begin{itemize}
-\item No unproductive symbols;
-\item No inaccessible symbols; and
-\item No cycles.
+\item no unproductive symbols;
+\item no inaccessible symbols; and
+\item no cycles.
 \end{itemize}
 A \dfn{improper CFG} is a CFG which is
 not proper.
@@ -942,18 +950,20 @@ is not applied to the augmented rule.
 Instead, the augmented rule is
 dealt with as a special case.
 
-\subsection{The Aycock-Horspool rewrite}
+\subsection{Eliminating proper nullables}
 
-The rewrite currently used by Marpa is an improvement over
-that of~\cite{AH2002}.
-Rules with proper nullables are identified
+Recall that a proper nullable
+is a nullable symbol which is not nulling.
+Marpa eliminates proper nullables with an improved
+version of the rewrite in~\cite{AH2002}.
+In this rewrite,
+rules with proper nullables are identified
 and a new grammar is created
 in which the external grammar's rules are divided
 up so that no rule has more than two proper nullables.
-(A ``proper nullable'' is a nullable symbol which is not nulling.)
 This is similar to a rewrite into Chomsky form.
 
-The proper nullable symbol is then cloned into two others:
+Every proper nullable symbol is then cloned into two others:
 one nulling and one non-nullable.
 All occurrences of the original proper nullable symbol are then replaced
 with one of the two new symbols,
