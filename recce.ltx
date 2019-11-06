@@ -951,6 +951,7 @@ Instead, the augmented rule is
 dealt with as a special case.
 
 \subsection{Eliminating proper nullables}
+\label{eliminating-proper_nullables}
 
 Recall that a proper nullable
 is a nullable symbol which is not nulling.
@@ -978,44 +979,43 @@ In our version, the worst case growth in the number of rules in linear.
 
 \subsection{Removing nulling symbols}
 
-This rewrite can be undone easily.
-In fact,
-in the current implementation of Marpa,
-the reverse rewrite,
-from internal to external,
-is often done ``on the fly'',
-as the parse proceeds.
-This translation back and forth is
-efficient,
-and is done for error reporting, tracing,
-and in the implementation of Marpa::R2's event
-mechanism.
+After the rewrite of subsection
+\ref{eliminating-proper_nullables},
+all the nullable symbols in the grammar are also
+nulling symbols.
+Note that, if \Vext{g} is a grammar,
+and
+\var{g'} is \Vext{g}
+revised to eliminate
+all nulling symbols,
+that
+the language of the two grammars is the same: $\myL{\Vext{g}} = \myL{\var{g'}}$.
+Similarly,
+other than
+the presence and absence of the nodes for the nulling symbols themselves,
+the parse trees generated from \Vext{g} are the same as those generated from \var{g'}.
 
-For example,
-Marpa allows run-time events to be defined,
-including ``nulling events'' ---
-events which trigger when a symbol is nulled.
-In the internal grammar, there are no nullable
-symbols but, for event-triggering purposes,
-Marpa keeps track of where
-the nulling symbols would be.
-The recognizer runs on an internal grammar with
-no nullable symbols,
-but the nulling events that Marpa user are triggered
-and reported in terms of an external grammar which
-does allow nullable symbols.
-All of this works smoothly ---
-so smoothly that a standard Marpa programming technique is to
-add nulling symbols to a grammar which exist only for the
-purpose of generating events.
+Thus, Marpa may rewrite its grammars to eliminate nulling symbols.
+For the purposes of evaluation and run-time events,
+Marpa tracks the locations of the eliminated nulling symbols.
+
+A corner case is where eliminating nulling symbols from two distinct
+rules makes them identical.
+For theoretical purposes,
+and in this paper,
+we assume that a rewrite that involves creating
+new LHS symbols and adding some rules.
+It is more practical to consider rules whose
+tracked nulling symbols are different as distinct rules,
+and this is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
 
-Null parses are parse of zero length inputs.
+Null parses are parses of zero length inputs.
 Marpa handles null parses by treating them
 as a special case.
 
-Trivial grammars are those which only accept
+Trivial grammars are grammars which only accept
 zero length inputs.
 No Marpa internal grammar can be a trivial grammar.
 Trivial grammars are also handled as a special case.
@@ -1178,6 +1178,39 @@ of a pre-existing parent rule can
 be ``wrappered'' to reassemble these lists
 into operands that are properly formed
 for that original semantics.
+
+\subsection{Undoing the rewrite}
+
+This rewrite can be undone easily.
+In fact,
+in the current implementation of Marpa,
+the reverse rewrite,
+from internal to external,
+is often done ``on the fly'',
+as the parse proceeds.
+This translation back and forth is
+efficient,
+and is done for error reporting, tracing,
+and in the implementation of Marpa::R2's event
+mechanism.
+
+For example,
+Marpa allows run-time events to be defined,
+including ``nulling events'' ---
+events which trigger when a symbol is nulled.
+In the internal grammar, there are no nullable
+symbols but, for event-triggering purposes,
+Marpa keeps track of where
+the nulling symbols would be.
+The recognizer runs on an internal grammar with
+no nullable symbols,
+but the nulling events that Marpa user are triggered
+and reported in terms of an external grammar which
+does allow nullable symbols.
+All of this works smoothly ---
+so smoothly that a standard Marpa programming technique is to
+add nulling symbols to a grammar which exist only for the
+purpose of generating events.
 
 \section{Marpa internal grammars}
 \label{s:internal-grammars}
