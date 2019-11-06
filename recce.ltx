@@ -1025,18 +1025,26 @@ Trivial grammars are also handled as a special case.
 
 This subsection describes the restrictions
 that rewrites must follow in order to be semantics-safe.
-Consider an input \Cw{},
-an external grammar, \Vext{g},
-and the internal grammar that represents \Vext{g}, \Vint{g}.
-Consider the parse tree that results from a parse of \Cw{} by either
-\Vext{g} or \Vint{g}.
+Consider an input \Cw{} and
+an external grammar, \Vext{g}.
+Let \Vint{g} be the internal grammar that is
+the rewritten version of \Vext{g}.
+
+Let $\var{pt} = \var{tree}(\var{g},\Vstr{w})$
+be the parse tree that results from a parse of \Vstr{w}
+by a grammar \var{g}.
+If \var{g} is an internal grammar,
+\var{pt} is an \dfn{internal parse}.
+If \var{g} is an external grammar,
+\var{pt} is an \dfn{external parse}.
+
+which may be either an internal or an external grammar.
 Every node of the parse tree is a \dfn{symbol instance}.
 The symbol instances of the parse correspond one-to-one with 3-tuples
 of the form
-\begin{equation}
+\begin{equation*}
 [ \Vsym{s}, \Vloc{start}, \var{length} ].
-\end{equation}
-, we have
+\end{equation*}
 where
 \begin{itemize}
 \item \Vsym{s} is the node's symbol;
@@ -1047,40 +1055,6 @@ and
 \item \var{length} is the length of the sentence
 derived from \Vsym{s}.
 \end{itemize}
-
-If a parse tree is the product of an internal grammar,
-it is an \dfn{internal parse}.
-If a parse tree is the product of an external grammar,
-it is an \dfn{external  parse}.
-In what follows, we will want to match instances from an internal
-parse
-to instances of an external parse.
-An internal symbol instance \textbf{matches}
-an external symbol instance, and vice versa,
-if and only if their 3-tuples match.
-More formally, let \var{itree} be the parse from
-an internal grammar,
-and let \var{etree} be the parse from
-an external grammar.
-Let
-\begin{equation*}
-\var{inode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength} ]
-\end{equation*}
-be an instance in \var{itree}, and let
-\begin{equation*}
-\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength} ]
-\end{equation*}
-be an instance in \var{etree}.
-Then \var{inode} \dfn{matches} \var{enode},
-$\var{inode} = \var{enode},$
-if and only if
-\begin{equation*}
-\begin{split}
-& \Vsym{isym} = \Vsym{esym} \\
-\text{and} \quad & \Vloc{istart} = \Vloc{estart} \\
-\text{and} \quad & \var{ilength} = \var{elength}.
-\end{split}
-\end{equation*}
 
 In an internal grammar, there are
 brick and mortar symbols.
@@ -1112,64 +1086,65 @@ which corresponds to a brick instance.
 This single node is both the root and the only leaf
 of the subtree.
 
-In the
-to do a brick
-Assume that we have a parse, using internal symbols.
-We define a ``brick traversal'' from a ``root'' brick non-terminal instance.
-The ``brick traversal'' is pre-order
-and stops traversing any path when it hits
-a brick symbol instance other than the ``brick root''.
-In this way, it traces a subtree of the parse,
-where the root of the subtree is the brick root symbol instance,
-and the leaves of the subtree are a sequence of other brick
-symbol instances.
-The leaves of the subtree, as encountered in pre-order,
-constitute its ``brick frontier''.
-Mortar symbols will only occur in the interior of this ``brick'' subtree,
-never as its root or its leaf.
+For an instance of a non-terminal,
+call that non-terminal \Vsym{ilhs},
+the brick substree is the substree where \Vsym{ilhs}
+is the root,
+all of the leaves are brick nodes,
+and all other nodes are mortar nodes.
+For every non-terminal instance,
+there is only one such substree.
 
-The {\bf terminal sequence} of a parse is the sequence
-of symbol instances for the terminals of a parse.
+The leaves of the subtree, as encountered in a pre-order traversal,
+are a sequence that we call its \dfn{brick frontier}.
+As we encounter each leaf of the subtree, we restore the nulling
+symbols before and/or after them,
+creating instances and adding them to the brick frontier
+in the appropriate place.
+The new nulling instances are considered brick instances.
 
-For a rewrite to be ``safe'':
-\begin{itemize}
-\item Every brick symbol must translate to exactly one
-external symbol.
-\item Every terminal symbol instance must be a brick symbol.
-\item The internal and external input sequences must be the same length.
-\item The internal and external input sequences must allow
-a shared indexing
-scheme, which indexes the input symbols consecutively from
-left to right.
-\item
-For every index \var{i},
-the \var{i}'th symbol instance in the internal input sequence
-must match
-the \var{i}'th symbol instance in the external input sequence.
-\item Every brick traveral must translate to an external rule
-instance,
-and vice versa,
-as follows:
-\begin{itemize}
-\item The brick root symbol instance must match
-the LHS symbol instance of the external rule instance.
-\item
-The brick frontier must be the same length as
-the RHS of the rule.
-\item
-The brick frontier and the external rule RHS must allow a shared indexing
-scheme,
-which indexes both of them
-consecutively
-from left to right.
-\item
-For every index \var{i},
-the \var{i}'th
-instance in the brick frontier must
-match the \var{i}'th symbol instance
-of the external rule RHS.
-\end{itemize}
-\end{itemize}
+We are now in a position to define a semantics-safe
+rewrite more formally.
+In what follows, we will want to match instances from an internal
+parse
+to instances of an external parse of the same input.
+An internal symbol instance \textbf{matches}
+an external symbol instance, and vice versa,
+if and only if their 3-tuples match.
+More formally, let $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
+be the parse from
+an internal grammar,
+and let 
+$\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
+be the parse from
+an external grammar,
+where \Vint{g} is a rewrite of \Vext{g}.
+Let
+\begin{equation*}
+\var{inode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength} ]
+\end{equation*}
+be an instance in \var{itree}, and let
+\begin{equation*}
+\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength} ]
+\end{equation*}
+be an instance in \var{etree}.
+Then
+\begin{equation*}
+\begin{split}
+& \var{Instance-matches}(\var{inode},\var{enode}) \defined \\
+& \qquad \Vsym{isym} = \Vsym{esym} \\
+& \qquad \qquad \text{and} \quad \Vloc{istart} = \Vloc{estart} \\
+& \qquad \qquad \text{and} \quad \var{ilength} = \var{elength}.
+\end{split}
+\end{equation*}
+A rewrite is ``safe'', if and only if
+\var{Instance-matches} is a one-to-one correspondence
+(bijective function)
+between 
+instances in \var{etree}
+and brick instances in \var{itree}.
+
+\subsection{Undoing the rewrite}
 
 Semantics for a substree new rule can be defined to pass its operands
 up to a root node's rule as a list.
@@ -1178,8 +1153,6 @@ of a pre-existing parent rule can
 be ``wrappered'' to reassemble these lists
 into operands that are properly formed
 for that original semantics.
-
-\subsection{Undoing the rewrite}
 
 This rewrite can be undone easily.
 In fact,
