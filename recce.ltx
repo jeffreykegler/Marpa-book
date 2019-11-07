@@ -114,7 +114,7 @@
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\GOTO}{\mymathop{GOTO}}
-\newcommand{\Next}{\mymathop{Next}}
+\newcommand{\Next}[1]{\mymathop{Next}(#1)}
 \newcommand{\Predict}[1]{\mymathop{Predict}(#1)}
 \newcommand{\Postdot}[1]{\mymathop{Postdot}(#1)}
 \newcommand{\Penult}[1]{\mymathop{Penult}(#1)}
@@ -626,6 +626,12 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
+The size of \var{r}, $\size{\Vrule{r}}$,
+is the number of symbols on its RHS,
+so that
+\begin{equation*}
+\size{\Vrule{r}} = \size{\RHS{\var{r}}}.
+\end{equation*}
 
 The rules imply the traditional rewriting system,
 in which $\Vstr{x} \derives \Vstr{y}$
@@ -1245,12 +1251,25 @@ when parsing \Cg{}.
 \section{Earley's algorithm}
 \label{s:earley}
 
-Let $\Vrule{r} \in \Rules{\var{g}}$
-be a rule,
-and let $\Vsize{r}$
-be the length of its RHS.
+The definition of Earley's algorithm assumes that
+\Vint{g} is a Marpa internal grammar.
+Definitions of Earley's which are for more general CFG's
+and which therefore are more suitable for use
+as a reference can be found in many places,
+including
+\cite[pp. 320-321]{AU1972},
+\cite{AH2002},
+\cite{Earley1968},
+\cite{Earley1970},
+\cite{GJ2008}, and
+\cite{Leo1991}.
+
+Let $\Vrule{r} \in \Rules{\Vint{g}}$
+be a rule.
+Recall that $\Vsize{r}$
+is the length of the RHS of \var{r}.
 A dotted rule (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
-where $0 \le \var{pos} \le \size{\Vrule{r}}$.
+where $0 \le \var{pos} < \size{\Vrule{r}}$.
 The position, \var{pos}, indicates the extent to which
 the rule has been recognized,
 and is represented with a large raised dot,
@@ -1271,45 +1290,34 @@ number of distinct dotted rules it allows.
 \Vsize{g} is a constant that depends on \var{g}.
 
 If we let \Vdr{x} be a dotted rule, such that
-\begin{equation*}
-\Vdr{x} =
-\bigl[ [\Vsym{A} \de \Vstr{pre} \cat \Vsym{next} \cat \Vstr{post}],
-    \var{pos} \bigr],
-\end{equation*}
-then
-%
-\begin{equation*}
+\begin{gather*}
+\Vdr{x} = \bigl[ \Vrule{x}, \var{pos} \bigr], \\
+\intertext{then} \\
 \begin{alignedat}{3}
 & \LHS{\Vdr{x}} && \defined && \quad
-\Vsym{A} \\
+\LHS{\Vrule{x}} \\
 & \Postdot{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\Vsym{next}, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \mydot \var{next} \cat \var{post}]$} \\
-\Lambda, \quad \text{if $\var{x} = [\var{A} \de \var{pre} \cat \var{next} \cat \var{post} \mydot]$}
+\RHS{\Vrule{x}}[\var{pos}], \; \text{if $\var{pos} < \size{\Vrule{x}}$} \\
+\Lambda, \; \text{otherwise}
 \end{cases} \\
 %
-& \Next(\Vdr{x}) && \defined && \quad
+& \Next{\Vdr{x}} && \defined && \quad
 \begin{cases}
-[\var{A} \de \var{pre} \cat \var{next} \mydot \var{post}],  \\
-\qquad \text{if $\Postdot{\Vdr{x}} = \var{next}$} \\
-\text{$\Lambda$, otherwise}
+[\Vrule{x}, \var{pos}+1], \; \text{if $\var{pos} < \size{\Vrule{x}}$} \\
+\Lambda, \; \text{otherwise}
 \end{cases} \\
 %
 & \Penult{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\Vsym{next}, \quad \text{if} \\
-\qquad \Postdot{\Vdr{x}} = \var{next} \\
-\qquad \land \quad \Vstr{post} \destar \epsilon \\
-\qquad \land \quad \neg (\Vsym{next} \destar \epsilon) \\
+\Postdot{\Vdr{x}}, \; \text{if $\var{pos} = \size{\Vrule{x}}\subtract 1$} \\
 \Lambda, \quad \text{otherwise}
 \end{cases}
 %
 \end{alignedat}
-\end{equation*}
+\end{gather*}
 
 A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
-Note that $\Penult{\Vdr{x}}$
-is never a nullable symbol.
 The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
@@ -1354,11 +1362,9 @@ An Earley parser builds a table of Earley sets,
 0 \le \Vloc{i} \le \size{\Cw}.
 \end{equation*}
 Earley sets are of type \type{ES}.
+The type designator \type{ES} is often omitted to avoid clutter.
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
-The type designator \type{ES} is often omitted to avoid clutter,
-especially in cases where the Earley set is not
-named by location.
 
 At points,
 we will need to compare the Earley sets
@@ -1375,8 +1381,8 @@ intended,
 \Vtable{k}, or \Ves{k}, will symbolize Earley set \Vloc{k}
 in that recognizer's table of Earley sets.
 If \var{working} is an Earley set,
-$\Vsize{working}$ is the number of Earley items
-in \var{working}.
+$\size{\Ves{working}}$ is the number of Earley items
+in \Ves{working}.
 
 \Rtablesize{\alg{Recce}} is the total number
 of Earley items in all Earley sets for \alg{Recce},
@@ -1392,23 +1398,22 @@ a \Marpa{} parse.
 
 Recall that
 there was a unique acceptance symbol,
-\Vsym{accept}, in \Cg{}.
+\Accept{\Vint{g}}, in \Vint{g}.
 The input \Cw{} is accepted if and only if,
 for some \Vstr{rhs},
 \begin{equation*}
-\bigl[[\Vsym{accept} \de \Vstr{rhs} \mydot], 0\bigr] \in \bigEtable{\Vsize{\Cw}}
+\bigl[[\Accept{\Vint{g}} \de \Vstr{rhs} \mydot], 0\bigr] \in \bigEtable{\Vsize{\Cw}}
 \end{equation*}
 
 The following theorem will prove useful.
 
 \begin{theorem}\label{t:es-size}
-The maximum size of an Earley set at \Vloc{i}
-is \order{\var{i}}.
+The maximum size of an Earley set at {\upshape $\Vloc{i}$}
+is
+{\upshape $\order{\var{i}}$}.
 \end{theorem}
 
 \begin{proof}
-The size of an Earley set is the number of EIM's
-that it contains.
 Each EIM is of the form
 $[ \Vdr{x}, \Vloc{x} ]$.
 Recall that
@@ -1419,8 +1424,10 @@ The possible values of \Vloc{x} range from
 Therefore the number of possible Earley items
 in \Ves{i} is
 is $\Vloc{i} \times \Oc{}$.
-It follows by the definition of the size of an
-Earley set that the maximum size of the Earley
+Recall that the size of an Earley set is the number of EIM's
+that it contains.
+It follows 
+that the maximum size of the Earley
 set at \Vloc{i} is
 \begin{equation*}
 \Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
