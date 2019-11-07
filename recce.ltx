@@ -919,6 +919,7 @@ The next subsections describe the rewrites
 applied by Marpa.
 
 \subsection{Augmenting the grammar}
+\label{s:augmentation}
 
 It is assumed
 that there is a dedicated acceptance rule,
@@ -1177,81 +1178,48 @@ in \var{etree}
 and every instance of \var{etree} with exactly one
 in \var{btree}.
 
-\subsection{Undoing the rewrite}
-
-Semantics for a substree new rule can be defined to pass its operands
-up to a root node's rule as a list.
-Where needed, the original semantics
-of a pre-existing parent rule can
-be ``wrappered'' to reassemble these lists
-into operands that are properly formed
-for that original semantics.
-
-This rewrite can be undone easily.
-In fact,
-in the current implementation of Marpa,
-the reverse rewrite,
-from internal to external,
-is often done ``on the fly'',
-as the parse proceeds.
-This translation back and forth is
-efficient,
-and is done for error reporting, tracing,
-and in the implementation of Marpa::R2's event
-mechanism.
-
-For example,
-Marpa allows run-time events to be defined,
-including ``nulling events'' ---
-events which trigger when a symbol is nulled.
-In the internal grammar, there are no nullable
-symbols but, for event-triggering purposes,
-Marpa keeps track of where
-the nulling symbols would be.
-The recognizer runs on an internal grammar with
-no nullable symbols,
-but the nulling events that Marpa user are triggered
-and reported in terms of an external grammar which
-does allow nullable symbols.
-All of this works smoothly ---
-so smoothly that a standard Marpa programming technique is to
-add nulling symbols to a grammar which exist only for the
-purpose of generating events.
-
 \section{Marpa internal grammars}
 \label{s:internal-grammars}
 
-The conventions of this section describe
-Marpa internal grammars.
-Readers familiar with the parsing literature should
-note that notation and definitions in this section
-and in the rest of this paper may be simplified
-for dealing with Marpa internal grammars,
-and may not be appropriate for general,
-context-free grammars.
+The formal definition of
+a Marpa internal grammar is that of
+a Marpa external grammar,
+with two additional restrictions.
 
 \begin{itemize}
-\item Marpa internal grammars do not allow nulling or nullable symbols.
-\item Marpa internal grammars do not allow an empty RHS.
-That is, for every rule, \Vrule{r},
-$\size{\RHS{r}} \ge 1$.
-\item Where \Cw{} is the input of the parse,
-$\size{\Cw{}} \ge 1$.
-This is, a zero length parse input is not allowed.
+\item Marpa internal grammars are augmented.
+\item Marpa internal grammars do not allow nullable symbols.
 \end{itemize}
 
-We define the rightmost symbol of a string
-\Vstr{x}
-as \Vsym{rightmost} such that
+For details of grammar augmentation,
+see section \ref{s:augmentation}.
+From the restriction on nullable symbols,
+many consequences follows.
+Noteworthy among them:
+
+\begin{itemize}
+\item Marpa internal grammars do not allow nulling symbols.
+\item The input to a parse must be of length greater than one.
+\item The RHS of a rule can never be empty.
+\end{itemize}
+
+In the rest of this paper,
+unless otherwise stated,
+we will be assuming that our grammar are Marpa internal grammars.
+Their restrictions allow us
+to state many
+definitions more simply than we could if they had to apply
+to Marpa external grammars,
+or to CFG's in general.
+
+Let the rightmost symbol of a string be
 \begin{equation*}
-\exists \Vstr{pre} \; \mid \; \Vstr{x} = \Vstr{pre} \cat \Vsym{rightmost}
+\Rightmost{\Vstr{x}} \defined \Vstr{x}\bigl[\size{\Vstr{x}} \subtract 1\bigr]
 \end{equation*}
-The rightmost symbol of a rule \Vrule{r} as
-$\Rightmost{\Vrule{r}}$.
 A rule \Vrule{x} is \dfn{directly right-recursive}
 if and only if
 \begin{equation*}
-\LHS{\Vrule{x}} = \Rightmost{\Vrule{x}}.
+\LHS{\Vrule{x}} = \Rightmost{\RHS{\var{x}}}.
 \end{equation*}
 \Vrule{x} is \dfn{indirectly right-recursive}
 if and only if
@@ -1260,7 +1228,8 @@ if and only if
 \end{equation*}
 \Vrule{x} is \dfn{right recursive},
 $\RightRecursive{\Vrule{x}}$,
-if and only if is either directly or indirectly right-recursive.
+if and only if
+it is either directly or indirectly right-recursive.
 
 In this \doc{},
 \Earley{} will refer to the Earley's original
