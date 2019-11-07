@@ -1038,12 +1038,11 @@ If \var{g} is an internal grammar,
 If \var{g} is an external grammar,
 \var{pt} is an \dfn{external parse}.
 
-which may be either an internal or an external grammar.
 Every node of the parse tree is a \dfn{symbol instance}.
-The symbol instances of the parse correspond one-to-one with 3-tuples
+The symbol instances of the parse correspond one-to-one with 4-tuples
 of the form
 \begin{equation*}
-[ \Vsym{s}, \Vloc{start}, \var{length} ].
+[ \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} ].
 \end{equation*}
 where
 \begin{itemize}
@@ -1054,7 +1053,23 @@ or is \Vsize{w}, the position after the last character of \Cw{};
 and
 \item \var{length} is the length of the sentence
 derived from \Vsym{s}.
+\item \var{depth} is the ``brick depth'',
+which will be defined below.
 \end{itemize}
+
+The ``brick depth'' of an instance in a external grammar is
+the depth of the node of the instance measured in the traditional way --
+the distance in nodes to the root.
+In an internal grammar, the brick depth is the distance of the node
+in brick nodes.
+
+In more detail,
+the root instance of an internal grammar is a special case -- its
+brick depth is undefined.
+Since an internal grammar is augmented, the root instance must
+have only one child, a brick instance whose brick depth is defined to be zero.
+For all other brick nodes, the brick depth is one plus the brick depth of its parent node.
+For mortar nodes, the brick depth is the brick depth of its parent node.
 
 In an internal grammar, there are
 brick and mortar symbols.
@@ -1072,36 +1087,42 @@ the instance is a \dfn{brick instance}.
 If the symbol of an instance in \var{tree} is a mortar symbol,
 the instance is a \dfn{mortar instance}.
 
-Intuitively, we require that we be able to identify,
-for each brick in an internal grammar,
-a ``brick subtree''.
-The root of a brick subtree must be a brick instance.
-The leaves of the brick subtree must be brick instances.
-All other nodes of the brick subtree must be mortar
-instances.
+The ``brick depth'' of an instance in a external grammar is
+the depth of the node of the instance measured in the traditional way --
+the distance in nodes to the root.
+In an internal grammar, the brick depth is the distance of the node
+in brick nodes.
 
-For a terminal, \Vsym{term}, the brick subtree is trivial.
-The subtree consists of only one node,
-which corresponds to a brick instance.
-This single node is both the root and the only leaf
-of the subtree.
+In more detail,
+the root instance of an internal grammar is a special case -- its
+brick depth is undefined.
+Since an internal grammar is augmented, the root instance must
+have only one child, a brick instance whose brick depth is defined to be zero.
+For all other brick nodes, the brick depth is one plus the brick depth of its parent node.
+For mortar nodes, the brick depth is the brick depth of its parent node.
 
-For an instance of a non-terminal,
-call that non-terminal \Vsym{ilhs},
-the brick substree is the substree where \Vsym{ilhs}
-is the root,
-all of the leaves are brick nodes,
-and all other nodes are mortar nodes.
-For every non-terminal instance,
-there is only one such substree.
+For evaluation, it is useful to convert the internal parse tree to
+a \dfn{brick tree}.
+To create a brick tree, we traverse the internal parse tree in pre-order,
+ignoring internal nodes,
+and creating instances for the brick nodes.
+Note that this implies that the root node (the one for \Accept{\Vint{g}}) is ignored.
 
-The leaves of the subtree, as encountered in a pre-order traversal,
-are a sequence that we call its \dfn{brick frontier}.
-As we encounter each leaf of the subtree, we restore the nulling
-symbols before and/or after them,
-creating instances and adding them to the brick frontier
-in the appropriate place.
-The new nulling instances are considered brick instances.
+When a brick node is encountered that is marked with memoized
+nulling symbols,
+new instances (``nulling instances'') must be created for the nulling symbols.
+Let \var{marked} be the marked node.
+The nulling instances have the form
+\begin{equation*}
+[ \Vsym{nulling}, \Vloc{bound}, 0, \var{depth} ]
+\end{equation*}
+where \Vsym{sym} is the memoized nulling symbol,
+\var{depth} is the same as the depth of \var{marked},
+and \var{bound} is the location of the nulling symbol.
+\var{bound} will be either the start or the location
+immediately after
+\var{marked}.
+Nulling instances are brick instances.
 
 We are now in a position to define a semantics-safe
 rewrite more formally.
@@ -1111,38 +1132,50 @@ to instances of an external parse of the same input.
 An internal symbol instance \textbf{matches}
 an external symbol instance, and vice versa,
 if and only if their 3-tuples match.
-More formally, let $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
-be the parse from
-an internal grammar,
-and let 
+More formally,
+let 
 $\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
 be the parse from
 an external grammar,
-where \Vint{g} is a rewrite of \Vext{g}.
+let $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
+be the parse from
+an internal grammar,
+where \Vint{g} is a rewrite of \Vext{g},
+and let \var{btree} be the brick tree
+produced from \var{itree}.
 Let
 \begin{equation*}
-\var{inode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength} ]
+\var{bnode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength}, \var{idepth} ]
 \end{equation*}
-be an instance in \var{itree}, and let
+be an instance in \var{btree}, and let
 \begin{equation*}
-\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength} ]
+\var{bnode} = [ \Vsym{bsym}, \Vloc{bstart}, \var{blength}, \var{bdepth} ]
 \end{equation*}
-be an instance in \var{etree}.
-Then
+be an instance in \var{btree}.
+Let
 \begin{equation*}
 \begin{split}
-& \var{Instance-matches}(\var{inode},\var{enode}) \defined \\
-& \qquad \Vsym{isym} = \Vsym{esym} \\
-& \qquad \qquad \text{and} \quad \Vloc{istart} = \Vloc{estart} \\
-& \qquad \qquad \text{and} \quad \var{ilength} = \var{elength}.
+& \var{Instance-matches}(\var{bnode},\var{enode}) \defined \\
+& \qquad \Vsym{bsym} = \Vsym{esym} \\
+& \qquad \qquad \text{and} \quad \Vloc{bstart} = \Vloc{estart} \\
+& \qquad \qquad \text{and} \quad \var{blength} = \var{elength} \\
+& \qquad \qquad \text{and} \quad \var{blength} = \var{elength} \\
 \end{split}
 \end{equation*}
-A rewrite is ``safe'', if and only if
-\var{Instance-matches} is a one-to-one correspondence
-(bijective function)
-between 
-instances in \var{etree}
-and brick instances in \var{itree}.
+A rewrite is ``safe'', if and only if the relation
+defined by
+\var{Instance-matches}
+is a one-to-one correspondence
+(bijection)
+between  the
+the instances in \var{btree}
+to the instances in \var{etree}.
+In other words,
+if \var{Instance-matches}
+matches every instance of \var{btree} with exactly one
+in \var{etree}
+and every instance of \var{etree} with exactly one
+in \var{btree}.
 
 \subsection{Undoing the rewrite}
 
