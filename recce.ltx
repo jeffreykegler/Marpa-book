@@ -247,8 +247,10 @@ context free grammars.
 Section \ref{s:rewrite} explain how Marpa rewrites its external
 grammar into internal grammars.
 Section \ref{s:internal-grammars} describes Marpa's internal grammars.
-Sections \ref{s:earley} and \ref{s:earley-ops}
-introduce Earley's algorithm.
+Section \ref{s:earley-table} describes the data structures used
+in parsing Marpa internal grammars.
+Section \ref{s:earley}
+describes Earley's algorithm.
 Section \ref{s:leo} describes Leo's modification
 to Earley's algorithm.
 Section \ref{s:pseudocode} presents the pseudocode
@@ -1248,14 +1250,15 @@ Where $\alg{Recce}$ is a recognizer,
 $\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
 when parsing \Cg{}.
 
-\section{Earley's algorithm}
-\label{s:earley}
+\section{Earley tables}
+\label{s:earley-table}
 
-The definition of Earley's algorithm assumes that
+This section assumes that
 \Vint{g} is a Marpa internal grammar.
 Definitions of Earley's which are for more general CFG's
 and which therefore are more suitable for use
-as a reference can be found in many places,
+as a reference,
+can be found in many places,
 including
 \cite[pp. 320-321]{AU1972},
 \cite{AH2002},
@@ -1355,14 +1358,25 @@ For convenience, the type \type{ORIG} will be a synonym
 for \type{LOC}, indicating that the variable designates
 the origin element of an Earley item.
 
+A \dfn{parse item} is either an Earley or a Leo item.
+Leo items will be defined in section \ref{s:leo}.
+Parse items are of type \type{PIM}.
+
+Within Marpa,
+an Earley set is defined as a set of \dfn{parse items}.
+Earley sets are of type \type{ES}.
+The type designator \type{ES} is often omitted to avoid clutter.
+
 An Earley parser builds a table of Earley sets,
 \begin{equation*}
 \EVtable{\Earley}{i},
 \quad \text{where} \quad
 0 \le \Vloc{i} \le \size{\Cw}.
 \end{equation*}
-Earley sets are of type \type{ES}.
-The type designator \type{ES} is often omitted to avoid clutter.
+This table is called an \dfn{Earley table}.
+Earley set 0 is the initial Earley set,
+and Earley set $\Vloc{i}+1$ describes the state of
+the parse after processing the input at location \Vloc{i}.
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
 
@@ -1434,110 +1448,101 @@ set at \Vloc{i} is
 \end{equation*}
 \end{proof}
 
-\section{Operations of the Earley algorithm}
-\label{s:earley-ops}
+\section{The Earley algorithm}
+\label{s:earley}
 
-In this section,
-each Earley operation is shown in the form of
-an inference rule,
-the conclusion of which
-is the set of the Earley items
-that is that operation's \dfn{result}.
-The Earley sets correspond to parse locations,
-and for any Earley operation there is a
-current parse location, \Vloc{current}, and
-a current Earley set, \Ves{current}.
+In this section we will assume a parse
+with \Vint{g} is its grammar and \Vstr{w} is its
+input.
+The Earley algorithm, \Earley{},
+is the closure on the empty set
+of the Initialization,
+Scanning,
+Earley Reduction,
+and Prediction operations, as described
+in this section.
 
-Each location starts with an empty Earley set.
-For the purposes of this description of
-\Earley{}, the order of the
-Earley operations
-when building an
-Earley set is non-deterministic.
-After each Earley operation is performed,
-its result is unioned with the
-current Earley set.
-When no more Earley items
-can be added, the Earley set is
-complete.
-The Earley sets are built in
-order from 0 to \Vsize{w}.
+\Vint{g} must be a Marpa internal grammar.
+Note also that all parse items are unioned into
+their Earley set.
+No parse item is added to an Earley set twice.
 
-\subsection{Initialization}
-\label{d:initial}
+\subsection{Initialization operation}
+\label{d:initialization}
+
+Union
 \begin{equation*}
-\inference{
-   \Vloc{current} = 0
-}{
     \Bigset{\bigl[ [ \Vsym{accept} \de \mydot \Vsym{start} ], 0 \bigr]}
-}
 \end{equation*}
-Earley {\bf initialization} has no operands
-and only takes
-place in Earley set 0.
+into Earley set 0.
 
-\subsection{Scanning}
-\label{d:scan}
+\subsection{Scanning operation}
+\label{d:scanning}
+
+Where
 \begin{equation*}
-\inference{
-    \begin{array}{c}
-	\Vloc{current} > 0 \\
-	\Vloc{previous} = \Vloc{current} \subtract 1
-	\\[3pt]
-	\Vsym{token} = \Cw\bigl[\Vloc{previous}\bigr]
-	\\[3pt]
-	\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-	\Veim{predecessor} \in \Ves{previous} \\
-	\Postdot{\Vdr{before}} = \Vsym{token}
-    \end{array}
-}{
-    \bigset{ [ \Next(\Vdr{before}), \Vorig{predecessor} ] }
-}
+          \Vsym{token} = \var{w}[\var{i}]
 \end{equation*}
-\Veim{predecessor}
-and \Vsym{token} are the operands of an Earley scan.
-\Veim{predecessor} is called the predecessor of the scanning operation.
-The token, \Vsym{token}, is the transition symbol
-of the scanning operation.
+is a token in the input at \Vloc{i}, if there is
+a \Veim{predecessor} such that
+\begin{equation*}
+\begin{split}
+& \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+& \qquad \text{and} \quad \Veim{predecessor} \in \Ves{i} \\
+& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token}, \\
+\end{split}
+\end{equation*}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
+\intertext{into $(\var{i}+1)_\var{ES}$.}
+\end{align*}
+\end{gather*}
 
-\subsection{Reduction}
+\Veim{predecessor} is the \dfn{predecessor}
+of the Scanning operation.
+\Vsym{token} is the \dfn{transition symbol}
+of the Scanning operation.
+
+\subsection{Earley Reduction operation}
 \label{d:reduction}
+
+Where
 \begin{equation*}
-\inference{
-    \begin{array}{c}
     \Veim{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vloc{component-orig} \bigr] \\
-    \Veim{component} \in \Ves{current} \\[3pt]
-    \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-    \Veim{predecessor} \in \Ves{component-orig} \\
-    \Postdot{\Vdr{before}} = \Vsym{lhs} \\
-    \end{array}
-}{
-    \bigset{ [ \Next(\Vdr{before}), \Vorig{predecessor} ] }
-}
+    , \Vorig{component} \bigr]
 \end{equation*}
+is a completion in the input at \Vloc{i}, if there is
+a \Veim{predecessor} such that
+\begin{equation*}
+\begin{split}
+& \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+& \qquad \text{and} \quad \Veim{predecessor} \in \Ves{i} \\
+& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs}, \\
+\end{split}
+\end{equation*}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
+\intertext{into $(\var{i}+1)_\var{ES}$.}
+\end{align*}
+\end{gather*}
 
 \Veim{component} is called
-the component of the reduction operation.\footnote{
+the \dfn{component} of the Earley Reduction operation.\footnote{
 The term ``component'' comes from Irons \cite{Irons}.
 }
-\Veim{predecessor} is the predecessor
-of the reduction operation.
-\Vsym{lhs} is the transition symbol
-of the reduction operation.
-
-\Veim{predecessor} and
-\Veim{component} are the operands of the reduction
-operation.
-In some contexts, it is convenient to treat the transition
-symbol
-as an operand,
-so that the operands
-are \Veim{predecessor} and \Vsym{lhs}.
+\Veim{predecessor} is the \dfn{predecessor}
+of the Earley reduction operation.
+\Vsym{lhs} is the \dfn{transition symbol}
+of the Earley reduction operation.
 
 \subsection{Prediction}
 \label{d:prediction}
+
 \begin{equation*}
 \inference{
     \begin{array}{c}
@@ -1555,10 +1560,10 @@ are \Veim{predecessor} and \Vsym{lhs}.
   \Bigr\}
 }
 \end{equation*}
-A prediction operation can add several Earley items
-to Earley set \Vloc{current}.
-\Veim{predecessor} is called the predecessor of the prediction operation,
-and is its only operand.
+
+Note that a prediction operation can add several Earley items
+to Earley set \Vloc{i}.
+\Veim{predecessor} is called the \dfn{predecessor} of the prediction operation.
 
 \section{The Leo algorithm}
 \label{s:leo}
@@ -3181,7 +3186,7 @@ Otherwise, let
 $\Veim{confirmed} = [\Vah{confirmed}, \Vloc{i}]$.
 We see that \Veim{confirmed} is consistent with respect
 to \EVtable{\Leo}{i},
-by the definition of Earley scanning (Section~\ref{d:scan})
+by the definition of Earley scanning (Section~\ref{d:scanning})
 and Observation~\ref{o:confirmed-AHFA-consistent}.
 Consistency is invariant under union,
 and since \EVtable{\Marpa}{i} is consistent by the inner induction,
@@ -3370,7 +3375,7 @@ Therefore, \Marpa{} performs its scan operation on a complete set
 of correct operands.
 
 Comparing the Marpa pseudocode (section \ref{p:scan-op}),
-with the Earley scanning operation (section \ref{d:scan})
+with the Earley scanning operation (section \ref{d:scanning})
 and using
 Observations~\ref{o:confirmed-AHFA-complete}
 and \ref{o:predicted-AHFA-complete},
