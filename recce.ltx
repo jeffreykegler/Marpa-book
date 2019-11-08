@@ -1480,18 +1480,19 @@ into Earley set 0.
 \label{d:scanning}
 
 Where
-\begin{equation*}
+\begin{equation}
           \Vsym{token} = \var{w}[\var{i}]
-\end{equation*}
+\end{equation}
 is a token in the input at \Vloc{i}, if there is
-a \Veim{predecessor} such that
-\begin{equation*}
-\begin{split}
-& \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-& \qquad \text{and} \quad \Veim{predecessor} \in \Ves{i} \\
-& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token}, \\
-\end{split}
-\end{equation*}
+a
+\begin{equation}
+\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+\end{equation}
+such that
+\begin{align}
+& \quad \Veim{predecessor} \in \Ves{i} \\
+& \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token},
+\end{align}
 then union
 \begin{gather*}
 \begin{align*}
@@ -1509,20 +1510,21 @@ of the Scanning operation.
 \label{d:reduction}
 
 Where
-\begin{equation*}
+\begin{equation}
     \Veim{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
     , \Vorig{component} \bigr]
-\end{equation*}
+\end{equation}
 is a completion in the input at \Vloc{i}, if there is
-a \Veim{predecessor} such that
-\begin{equation*}
-\begin{split}
-& \Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-& \qquad \text{and} \quad \Veim{predecessor} \in \Ves{i} \\
-& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs}, \\
-\end{split}
-\end{equation*}
+a
+\begin{equation}
+\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ]
+\end{equation}
+such that
+\begin{align}
+& \quad \Veim{predecessor} \in \Ves{i} \\
+& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs},
+\end{align}
 then union
 \begin{gather*}
 \begin{align*}
@@ -1543,30 +1545,31 @@ of the Earley reduction operation.
 \subsection{Prediction}
 \label{d:prediction}
 
-\begin{equation*}
-\inference{
-    \begin{array}{c}
-	\Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ] \\
-	\Veim{predecessor} \in \Ves{current} \\
-	\bigl[ \Vsym{L} \de \Vstr{rh} \bigr] \in \Rules{\var{g}}  \\
-	\bigl( \exists \, \Vstr{z} \mid
-	\Postdot{\Vdr{predecessor}} \destar \Vsym{L} \cat \Vstr{z} \bigr)
-    \end{array}
-}{
-  \Bigl\{
-  \bigl[ \left[ \Vsym{L} \de \mydot \Vstr{rh} \right],
-  \Vloc{current}
-  \bigr]
-  \Bigr\}
-}
-\end{equation*}
+Where
+\begin{equation}
+          \Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ]
+\end{equation}
+is an incompletion in the input at \Vloc{i}, and
+there is a
+\begin{equation}
+\Vrule{predict} \in \Rules{\Vint{g}}
+\end{equation}
+such that
+\begin{equation}
+\LHS{\Vrule{predict}} = \Postdot{\Vdr{predecessor}}
+\end{equation}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \Bigset{ \bigl[ [ \Vrule{predict}, 0 ], \Vloc{i} \bigr] } \\
+\intertext{into $\Ves{i}$.}
+\end{align*}
+\end{gather*}
 
-Note that a prediction operation can add several Earley items
-to Earley set \Vloc{i}.
 \Veim{predecessor} is called the \dfn{predecessor} of the prediction operation.
 
 \section{The Leo algorithm}
-\label{s:leo}
+\label{s:leo-items}
 
 \subsection{The history of a conjecture}
 
@@ -1653,7 +1656,7 @@ during evaluation
 are taken into account,
 the time and space complexity of
 a right recursion become
-$\On{} = \On{} + \On{}$.
+$\On{} + \On{} = \On{}$.
 
 In \cite{Leo1991}, Joop Leo
 showed that,
@@ -1672,11 +1675,6 @@ the weaker
 bound in
 his title.
 
-% TODO: Beginning of original material --
-% check for duplication
-
-\subsection{Leo's algorithm}
-
 Summarizing Leo's method,
 it consists of spotting potential right recursions
 and memoizing them.
@@ -1689,6 +1687,9 @@ In this \doc{} Leo's ``transitive items''
 will be called Leo items.
 Leo items
 will have type \type{LIM}.
+Every parse item (\type{PIM})
+is either
+an Earley item or a Leo item.
 
 In each Earley set, there is at most one Leo item per symbol.
 A Leo item (LIM) is the triple
@@ -1702,12 +1703,6 @@ and
 \end{equation*}
 is the Earley item to be added on reductions over
 \Vsym{transition}.
-
-Sometimes it is useful to deal with sets
-which can contain both EIMs and LIMs.
-For reasons that will be clearer later,
-the union type of EIM and LIM is called a ``postdot items''.
-Postdot items have type \type{PIM}.
 
 Leo items memoize what would otherwise be sequences
 of Earley items.
@@ -1749,7 +1744,7 @@ and, for all \Vdr{d2},
 &    \qquad \qquad \implies \Vdr{d} = \Vdr{d2}.
 \end{split}
 \end{equation*}
-It is important to emphasize that \Vdr{d2} ranges over all the dotted
+It is important to notice that \Vdr{d2} ranges over all the dotted
 rules of Earley set \Ves{i},
 even those which are ineligible for Leo memoization.
 
@@ -1761,65 +1756,8 @@ we can speak of the
 \dfn{Leo unique}
 rule for \Vsym{transition}.
 
-Let \var{n} be the length of a Leo sequence.
-In \Earley, each such sequence would be expanded in every
-Earley set that is the origin of an EIM included in the
-sequence, and the total number of EIM's would be
-\order{\var{n}^2}.
-
-With Leo memoization, a single EIM stands in for the sequence.
-There are \Oc{} Leo items per Earley set,
-so the cost of the sequence is \Oc{} per Earley set,
-or \On{} for the entire sequence.
-If, at evaluation time,
-it is desirable to expand the Leo sequence,
-only those items actually involved in the parse
-need to be expanded.
-All the EIM's of a potential right-recursion
-will be in one Earley set and the number of EIM's
-will be \On{},
-so that even including expansion of the Leo sequence
-for evaluation, the time and space complexity of
-the sequence remains \On{}.
-
-\begin{sloppypar}
-Recall that we
-call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
-In Leo's original algorithm, any penult
-was treated as a potential right-recursion.
-\Marpa{} applies the Leo memoizations in more restricted circumstances.
-For \Marpa{} to consider a dotted rule
-\begin{equation*}
-\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
-\end{equation*}
-for Leo memoization,
-\Vdr{candidate} must be a penult and
-\Vrule{candidate} must be right-recursive.
-\end{sloppypar}
-
-By restricting Leo memoization to right-recursive rules,
-\Marpa{} incurs the cost of Leo memoization only in cases
-where Leo sequences could be infinitely
-long.
-This more careful targeting of the memoization is for efficiency reasons.
-If all penults are memoized,
-many memoizations will be performed where
-the longest potential Leo sequence is short,
-and the payoff is therefore very limited.
-
-A future extension might be to identify
-non-right-recursive rules
-which generate Leo sequences long enough to
-justify inclusion in the Leo memoizations.
-Such cases would be unusual, but may occur.
-
-Omission of a memoization does not affect correctness,
-so \Marpa{}'s restriction of Leo memoization
-preserves the correctness as shown in Leo\cite{Leo1991}.
-Later in this \doc{} we will
-show that this change also leaves
-the complexity results of
-Leo\cite{Leo1991} intact.
+\section{The Leo algorithm}
+\label{s:leo}
 
 Implementing the Leo logic requires
 adding Leo reduction as a new basic operation,
@@ -1958,7 +1896,48 @@ and another, which holds if
 }
 \end{equation*}
 
-\section{The Marpa Recognizer}
+\section{The Marpa algorithm}
+
+\begin{sloppypar}
+Recall that we
+call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
+In Leo's original algorithm, any penult
+was treated as a potential right-recursion.
+\Marpa{} applies the Leo memoizations in more restricted circumstances.
+For \Marpa{} to consider a dotted rule
+\begin{equation*}
+\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
+\end{equation*}
+for Leo memoization,
+\Vdr{candidate} must be a penult and
+\Vrule{candidate} must be right-recursive.
+\end{sloppypar}
+
+By restricting Leo memoization to right-recursive rules,
+\Marpa{} incurs the cost of Leo memoization only in cases
+where Leo sequences could be infinitely
+long.
+This more careful targeting of the memoization is for efficiency reasons.
+If all penults are memoized,
+many memoizations will be performed where
+the longest potential Leo sequence is short,
+and the payoff is therefore very limited.
+
+A future extension might be to identify
+non-right-recursive rules
+which generate Leo sequences long enough to
+justify inclusion in the Leo memoizations.
+Such cases would be unusual, but may occur.
+
+Omission of a memoization does not affect correctness,
+so \Marpa{}'s restriction of Leo memoization
+preserves the correctness as shown in Leo\cite{Leo1991}.
+Later in this \doc{} we will
+show that this change also leaves
+the complexity results of
+Leo\cite{Leo1991} intact.
+
+\section{Pseudocode for the Marpa algorithm}
 \label{s:recce}
 \label{s:pseudocode}
 
