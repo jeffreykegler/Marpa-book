@@ -231,13 +231,14 @@ goes into detail about their application.
 Section
 \ref{s:preliminaries} describes the notation and conventions
 of this \doc.
-Section \ref{s:external-grammars} deals with Marpa's external grammars ---
+Section \ref{s:CFGs} defines context-free grammars.
+Section \ref{s:EXTs} introduces Marpa's external grammars ---
 the grammars which the users see.
-Section \ref{s:improper} deals with the implementation of improper
-context free grammars.
+Section \ref{s:improper} describes Marpa's
+implementation of improper context free grammars.
 Section \ref{s:rewrite} explain how Marpa rewrites its external
-grammar into internal grammars.
-Section \ref{s:internal-grammars} describes Marpa's internal grammars.
+grammars into internal grammars, and
+section \ref{s:INTs} describes Marpa's internal grammars.
 Section \ref{s:earley-table} describes the data structures used
 in parsing Marpa internal grammars.
 Section \ref{s:earley}
@@ -544,8 +545,12 @@ Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
 \end{center}
 
 This paper will
-use subscripts to indicate commonly occurring types.
-\begin{center}
+use subscripts to indicate commonly occurring types,
+as shown in
+Table~\ref{tab:type-notation} on
+page~\pageref{tab:type-notation}.
+\begin{table}[tb]
+\centering
 \begin{tabular}{ll}
 $\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
 $\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type set of \type{T} \\
@@ -558,7 +563,9 @@ $\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type set of \type{
 \Vsymset{set-two} & The variable \var{set-two}, a set of strings \\
 \Veimset{set-two} & The variable \var{set-two}, a set of Earley items
 \end{tabular}
-\end{center}
+\caption{Type notations}
+\label{tab:type-notation}
+\end{table}
 Type names are often used in the text
 as a convenient way to refer to
 their type.
@@ -584,8 +591,8 @@ Let $\var{vocab}^+$ be
 \bigr\}.
 \end{equation*}
 
-\section{External grammars}
-\label{s:external-grammars}
+\section{Context-free grammars}
+\label{s:CFGs}
 
 A \dfn{context free grammar} (type \type{CFG}) is a 4-tuple
 \begin{equation}
@@ -602,7 +609,7 @@ For convenience in refering to the elements of a CFG,
 & \Vocab{\Vcfg{g}} && \defined && \quad \Vsymset{nt} \cup \Vsymset{term},
 \end{alignedat}
 \end{equation*}
-where \Vcfg{g} is the CFG of 
+where \Vcfg{g} is the CFG of
 \eqref{e:cfg}.
 The type \type{RULE} will be defined shortly.
 \NT{\var{g}} is a set of symbols called non-terminals,
@@ -649,12 +656,16 @@ so that
 The rules imply the traditional rewriting system,
 in which
 \begin{align*}
-\Vstr{x} \derives & \; \Vstr{y} &&
-\text{states that \Vstr{x} derives \Vstr{y} in exactly one step.} \\
-\Vstr{x} \deplus & \; \Vstr{y} &&
-\text{states that \Vstr{x} derives \Vstr{y} in one or more steps.} \\
-\Vstr{x} \destar & \; \Vstr{y} &&
-\text{states that \Vstr{x} derives \Vstr{y} in zero or more steps.}
+\Vstr{x} \derives & \; \Vstr{y} \quad \defined &&
+\text{\Vstr{x} derives \Vstr{y} in exactly one step.} \\
+\Vstr{x} \deplus & \; \Vstr{y} \quad \defined &&
+\text{\Vstr{x} derives \Vstr{y} in one or more steps.} \\
+\Vstr{x} \destar & \; \Vstr{y} \quad \defined &&
+\text{\Vstr{x} derives \Vstr{y} in zero or more steps.} \\
+\Vstr{x} \xderives{\var{n}} & \; \Vstr{y} \quad \defined &&
+\text{\Vstr{x} derives \Vstr{y} in exactly \var{n} steps.} \\
+\Vstr{x} \xderives{0} & \; \Vstr{y} \quad \defined &&
+\text{\Vstr{x} derives \Vstr{y} in exactly 0 steps.}
 \end{align*}
 
 Every symbol derives itself in zero steps.
@@ -706,6 +717,80 @@ the \var{i}'th character of the input
 by \CVw{i},
 $0 \le \Vloc{i} < \Vsize{w}$.
 
+\section{External grammars}
+\label{s:EXTs}
+
+An \dfn{external grammar} (type \type{EXT}) is cycle-free CFG.
+A CFG is \dfn{cycle-free} if it contains no cycles.
+A \dfn{cycle string}, or \dfn{cycle} is a sentential form of length 1
+which non-trivially derives itself.
+Intuitively, a cycle is the parsing equivalent of an infinite loop.
+
+If \Vstr{cycle} is a cycle,
+then $\size{\Vstr{cycle}} = 1$,
+so that $\Vstr{cycle} = \Vsym{cycle}$.
+The symbol \Vsym{cycle} is a \dfn{cycle symbol}.
+A \dfn{cycle derivation} is any derivation of the form
+\begin{equation*}
+\label{eq:cycle}
+ \Vsym{cycle} \deplus \Vsym{cycle}.
+\end{equation*}
+Cycle symbols and cycle derivations are also often called
+simply ``cycles''.
+
+Let \var{n} be the number of times the cycle string,
+$\Vstr{cycle} = \Vsym{cycle}$,
+occurs at a step in the cycle derivation.
+(By the definition of a cycle derivation, $\var{n} \ge 2$.)
+Then the \dfn{cycle depth} of that derivation is $\var{n}-1$.
+Intuitively, the cycle depth is the number of times the cycle
+string returns to itself.
+
+It follows that
+a cycle of cycle depth 1 begins and ends with the
+cycle string, but does not derive the cycle string
+in any of its intermediate steps.
+That is, the cycle
+\begin{equation*}
+ \Vsym{cycle} \xderives{\var{a}} \Vstr{x} \xderives{\var{b}} \Vsym{cycle} \\
+\end{equation*}
+is of depth 1, if and only if
+for all \Vstr{x},
+\begin{equation*}
+\Vstr{x} \neq \Vsym{cycle}
+\quad \text{or} \quad \var{a} = 0
+\quad \text{or} \quad \var{b} = 0.
+\end{equation*}
+
+Earlier implementations of Marpa have supported cycles,
+but the current implementation of Marpa does not.
+When the current implementation finds a cycle in a grammar,
+it print a message describing the cycle and throws
+a fatal error.
+This seems to be exactly the behavior users desire.
+
+Cycles are recursions but most recursions (and apparently all
+recursion of practical interest) are not cycles.
+In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
+That is, \Vsym{recurse} is recursive if and only if
+\begin{equation*}
+ \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
+\end{equation*}
+\Vsym{recurse} is a cycle only if
+both \Vstr{pre} and \Vstr{post} are the null string:
+\begin{equation*}
+ \Vstr{pre} = \Vstr{post} = \epsilon.
+\end{equation*}
+
+There is no indication that cycles are of practical use.
+Nor does the theoretical literature suggest potential uses for
+them.
+Support for cycles did require complicated extra code,
+and it seems that Marpa will be better off
+without support of cycles.
+When Marpa did support cycles,
+it did so by cutting the cycle short at cycle depth 1.
+
 \section{Improper context free grammars}
 \label{s:improper}
 
@@ -717,6 +802,8 @@ A \dfn{proper CFG} is a CFG with no
 \end{itemize}
 A \dfn{improper CFG} is a CFG which is
 not proper.
+We discussed Marpa's handling of cycles earlier
+(section \ref{s:EXTs}, p. \pageref{s:EXTs}).
 
 \subsection{Unproductive symbols}
 
@@ -749,7 +836,9 @@ found in the input.
 In the Marpa implementation,
 a terminal can be made into a unicorn by
 requiring that
-a terminal match the POSIX expression
+a terminal match something that never occurs
+in the input.
+The POSIX expression
 \texttt{[\char`^ \char`\\ D\char`\\ d]}
 indicates that the terminal
 must match a single character which
@@ -757,21 +846,20 @@ is both a digit and a non-digit.
 Since this is not possible,
 the terminal will never match anything in the input.
 
-Unproductive symbols in fact often prove useful in Marpa
+Unproductive symbols often prove useful in Marpa
 applications.
 Unproductive symbols can be
 used to implement an external lexer for a terminal by setting
 an event to trigger when that terminal is expected.
-In such a case, it is important to make sure the terminal
-in not recognized in the input, and this can be done by
-marking the terminal as unproductive, that is,
-as a unicorn.
+In such a case, it is convenient to make sure the terminal
+cannot be not recognized in the input.
 
 \subsection{Inaccessible symbols}
 
 The current implementation of Marpa supports inaccessible symbols.
 By default, they are reported as errors.
-This error can be silenced for the whole grammar, or symbol by symbol.
+This error can be silenced for the whole grammar,
+or for individual symbols.
 
 An \dfn{inaccessible symbol} is one which can never be derived from
 the accept symbol.
@@ -799,55 +887,8 @@ Optional boilerplace can be implemented
 by silencing inaccessibility errors for the symbols in the optional boilerplate,
 Usually it is possible to locate a topmost symbol for
 each section of optional boilerplace,
-in which case the warning need only be silences for those
+in which case the warning need only be silenced for those
 topmost symbols.
-
-\subsection{Cycles}
-
-Earlier implementations of Marpa have supported cycles,
-but the current implementation of Marpa does not.
-When the current implementation finds a cycle in a grammar,
-it print a message describing the cycle and throws
-a fatal error.
-This seems to be exactly the behavior users desire.
-
-A \dfn{cycle} is a symbol which non-trivially
-derives a string which consists only of that
-symbol.
-A cycle is the parsing equivalent of an infinite loop.
-That is, \Vsym{cycle} is a cycle in \Vext{g} if and only if
-\begin{equation*}
- \Vsym{cycle} \deplus \Vsym{cycle}.
-\end{equation*}
-
-Cycles are recursions but most recursions (and apparently all
-recursion of practical interest) are not cycles.
-In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
-That is, \Vsym{recurse} is recursive if and only if
-\begin{equation*}
- \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
-\end{equation*}
-\Vsym{recurse} is a cycle only if
-both \Vstr{pre} and \Vstr{post} are the null string:
-\begin{equation*}
- \Vstr{pre} = \Vstr{post} = \epsilon.
-\end{equation*}
-
-There is no indication that cycles are of practical use.
-Nor does the theoretical literature suggest potential uses for
-them.
-Support for cycles did require complicated extra code,
-and it seems that Marpa will be better off
-without support of cycles.
-
-When Marpa did support cycles,
-it did so by cutting the cycle short during evaluation the first
-time the cycle symbol non-trivially derived itself.
-With proper precautions, the recognizer could tolerate cycles.
-
-\subsection{External grammars}
-
-An \dfn{external grammar} (type \type{EXT}) is cycle-free CFG.
 
 \section{Rewriting the grammar}
 \label{s:rewrite}
@@ -863,12 +904,30 @@ at Earley parsing.
 
 Marpa follows Aycock and Horspool\cite{AH2002} in using
 grammar rewrites to handle these issues.
+Marpa's recognizer works using
+Marpa internal grammars, but
 Marpa's grammar rewriting allows the user to specify
 their parse in terms of an external grammar.
+In Marpa, parsing, evaluation and
+run-time events are performed
+in such a way that the internal grammar
+is invisible to
+the user.
+This section describes the rewrite
+from an external grammar
+to an internal grammar.
+
+We defined Marpa's external grammars in
+section \ref{s:EXTs}.
+Recall that an external grammar may be any cycle-free grammar.
+Marpa internal grammars are described by construction
+in this section.
+They will be defined more carefully
+in section \ref{s:INTs} (p. \pageref{s:INTs}).
 
 Grammar rewriting was not the focus
 of \cite{AH2002} ---
-instead that paper focused on revising Earley's algorithm
+instead that paper centered on revising Earley's algorithm
 to use LR(0) states.
 The first version of Marpa \cite{Kegler2019}
 used the LR(0) states of \cite{AH2002},
@@ -879,6 +938,7 @@ made its theory much more complex,
 and the change offered
 no complexity gains in terms of Landau notation.
 The hope was that benefits would be seen in practice.
+
 Unfortunately, these did not emerge.
 Marpa's experience in using, developing and maintaining
 LR(0) states in Earley parsing showed these added
@@ -886,27 +946,12 @@ greatly to the complexity of the code;
 were a real obstacle to the implementation of run-time features
 in the parser;
 and produced no real improvement in speed or in space requirements.
-
 On the other hand,
 Aycock and Horspool's idea
 of using grammar rewriting
 to deal with
 with nullable symbols became
 fundamental to the Marpa algorithm.
-For this reason, the author considers Marpa to be a parser
-in the Aycock and Horspool lineage.
-
-We defined Marpa's external grammars in
-section \ref{s:external-grammars}.
-Recall that an external grammar may be any cycle-free grammar.
-
-Marpa's recognizer works using
-Marpa internal grammars.
-Marpa internal grammars are defined more carefully
-in section \ref{s:internal-grammars}.
-This section describes the rewrite
-from an external grammar
-to an internal grammar.
 
 Rewriting grammars is a common
 technique
@@ -921,17 +966,17 @@ of the grammar.
 Very few users of CFG's are
 content with recognizing a language.
 Almost always the user of a grammar-driven parser
-formulated that the rules and symbols of that grammar
+formulated the rules and symbols of that grammar
 in terms of a semantics,
 and that user wants the parser
-to implement their semantics.
-If a rewrite erases the user's semantics,
+to preserve their semantics.
+If a rewrite scrambles the user's semantics,
 then that rewrite cannot form an essential part
 of a general-purpose practical parsing tool.
 
 Marpa's limits itself to using rewrites that
 are \dfn{semantics-safe}.
-We will state Marpa's defintion
+We will state Marpa's definition
 of semantics-safe more precisely
 in section \ref{semantics-safe}.
 The intent behind
@@ -941,12 +986,13 @@ allow the rules and symbols of the external grammar
 to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
 but at run-time as well.
-In Marpa, parsing and evaluation
-are performed
-in such a way that the internal grammar
-is invisible to
-the user.
-The next subsections describe the rewrites
+Sections
+\ref{s:augmentation} (p. \pageref{s:augmentation}),
+\ref{eliminating-proper_nullables} (p. \pageref{eliminating-proper_nullables}),
+\ref{s:removing-nulling-symbols} (p. \pageref{s:removing-nulling-symbols})
+and
+\ref{s:trivial-grammars} (p. \pageref{s:trivial-grammars})
+describe the rewrites
 applied by Marpa.
 
 \subsection{Augmenting the grammar}
@@ -975,7 +1021,9 @@ The semantics for the augment rule are simple ---
 the semantics of \Vsym{top} are passed up to
 \Vsym{accept}.
 This is obviously semantics-safe.
-In the Marpa implementation the general method
+
+In the Marpa implementation,
+the general method
 described in section \ref{semantics-safe}
 for dealing with the semantics of rewritten rules
 is not applied to the augmented rule.
@@ -1010,6 +1058,7 @@ an exponential function of numbers in the external grammar.
 In our version, the worst case growth in the number of rules in linear.
 
 \subsection{Removing nulling symbols}
+\label{s:removing-nulling-symbols}
 
 After the rewrite of subsection
 \ref{eliminating-proper_nullables},
@@ -1042,6 +1091,7 @@ tracked nulling symbols are different as distinct rules,
 and this is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
+\label{s:trivial-grammars}
 
 Null parses are parses of zero length inputs.
 Marpa handles null parses by treating them
@@ -1165,7 +1215,7 @@ An internal symbol instance \textbf{matches}
 an external symbol instance, and vice versa,
 if and only if their 3-tuples match.
 More formally,
-let 
+let
 $\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
 be the parse from
 an external grammar,
@@ -1210,7 +1260,7 @@ and every instance of \var{etree} with exactly one
 in \var{btree}.
 
 \section{Marpa internal grammars}
-\label{s:internal-grammars}
+\label{s:INTs}
 
 The formal definition of
 a Marpa internal grammar is that of
@@ -1463,7 +1513,7 @@ in \Ves{i} is
 is $\Vloc{i} \times \Oc{}$.
 Recall that the size of an Earley set is the number of EIM's
 that it contains.
-It follows 
+It follows
 that the maximum size of the Earley
 set at \Vloc{i} is
 \begin{equation*}
