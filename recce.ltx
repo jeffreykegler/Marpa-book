@@ -756,29 +756,28 @@ A \dfn{cycle derivation} is any derivation of the form
 Cycle symbols and cycle derivations are also often called
 simply ``cycles''.
 
-Let \var{n} be the number of times the cycle string,
-$\Vstr{cycle} = \Vsym{cycle}$,
-occurs at a step in the cycle derivation.
-(By the definition of a cycle derivation, $\var{n} \ge 2$.)
-Then the \dfn{cycle depth} of that derivation is $\var{n}-1$.
 Intuitively, the cycle depth is the number of times the cycle
 string returns to itself.
-
+More formally, if \Vstrset{d} is the derivation sequence
+of the cycle derivation
+$\Vsym{cycle} \xderives{\var{n}} \Vsym{cycle}$
+then the cycle depth is
+\begin{equation}
+\left| \;
+\left\lbrace \;
+\var{i}
+\; \middle| \;
+\begin{split}
+& 1 \le \var{i} \le \var{n} \quad \text{and} \; \\
+& \; \var{d}[\var{i}] = \Vsym{cycle}
+\end{split}
+\; \right\rbrace
+\; \right|
+\end{equation}
 It follows that
 a cycle of cycle depth 1 begins and ends with the
 cycle string, but does not derive the cycle string
 in any of its intermediate steps.
-That is, the cycle
-\begin{equation*}
- \Vsym{cycle} \xderives{\var{a}} \Vstr{x} \xderives{\var{b}} \Vsym{cycle} \\
-\end{equation*}
-is of depth 1, if and only if
-for all \Vstr{x},
-\begin{equation*}
-\Vstr{x} \neq \Vsym{cycle}
-\quad \text{or} \quad \var{a} = 0
-\quad \text{or} \quad \var{b} = 0.
-\end{equation*}
 
 Earlier implementations of Marpa have supported cycles,
 but the current implementation of Marpa does not.
