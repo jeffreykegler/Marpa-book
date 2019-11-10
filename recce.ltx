@@ -1439,6 +1439,8 @@ for example,
 Predicted, confirmed and completed dotted rules
 are also called, respectively,
 \dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
+A rule which is not a completion is called an
+\dfn{incompletion}.
 
 A Earley item (type \type{EIM}) is a duple
 \[
@@ -1459,7 +1461,6 @@ Parse items are of type \type{PIM}.
 Within Marpa,
 an Earley set is defined as a set of \dfn{parse items}.
 Earley sets are of type \type{ES}.
-The type designator \type{ES} is often omitted to avoid clutter.
 
 An Earley parser builds a table of Earley sets,
 \begin{equation*}
@@ -1468,15 +1469,12 @@ An Earley parser builds a table of Earley sets,
 0 \le \Vloc{i} \le \size{\Cw}.
 \end{equation*}
 This table is called an \dfn{Earley table}.
-Earley set 0 is the initial Earley set,
-and Earley set $\Vloc{i}+1$ describes the state of
+Earley set 0 is the initial Earley set.
+Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
 
-At points,
-we will need to compare the Earley sets
-produced by the different recognizers.
 \EVtable{\alg{Recce}}{i} will be
 the Earley set at \Vloc{i}
 in the table of Earley sets of
@@ -1591,7 +1589,8 @@ then union
 \begin{gather*}
 \begin{align*}
 & \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into $(\var{i}+1)_\var{ES}$.}
+\intertext{into $(\var{i}+1)_\var{ES}$, the Earley
+set at location $\var{i}+1$.}
 \end{align*}
 \end{gather*}
 
@@ -1607,7 +1606,7 @@ Where
 \begin{equation}
     \Veim{component} = \bigl[
      [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vorig{component} \bigr]
+    , \Vorig{origin} \bigr]
 \end{equation}
 is a completion in the input at \Vloc{i}, if there is
 a
@@ -1616,14 +1615,14 @@ a
 \end{equation}
 such that
 \begin{align}
-& \quad \Veim{predecessor} \in \Ves{i} \\
+& \quad \Veim{predecessor} \in \Ves{origin} \\
 & \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs},
 \end{align}
 then union
 \begin{gather*}
 \begin{align*}
 & \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into $(\var{i}+1)_\var{ES}$.}
+\intertext{into \Ves{i}.}
 \end{align*}
 \end{gather*}
 
@@ -1698,10 +1697,8 @@ recursion are created at every parse location
 where the right recursion might end.
 
 For simplicity,
-in the discussion of this section,
-we will assume that the grammar is unambiguous,
-or at least that it is not ambiguous in a way that affects
-the right recursion we are discussing.
+in the discussion of this subsection,
+we will assume that the grammar is unambiguous.
 We will call each potential end location of a right recursion,
 an \dfn{EORR},
 and will will call
@@ -1761,7 +1758,7 @@ is infinite length, but restricted to
 distinguishing between regular expressions.
 Earley did not claim \On{} for LR-regular
 because LR-regular was not introduced
-to the literature until 1973~\cite{Culik1973}.
+to the literature until 1973\cite{Culik1973}.
 Even in 1991, LR-regular was not well-known,
 which is why Leo only claims
 the weaker
