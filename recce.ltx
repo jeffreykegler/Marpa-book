@@ -5,11 +5,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{url}
-
-% This is now a "paper", but may be a chapter
-% or something else someday
-% This command will make any such change easier.
-\newcommand{\doc}{paper}
+\usepackage{amssymb}
 
 \newcommand{\todo}[1]{\par{\large\bf Todo: #1}\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -231,7 +227,7 @@ and Section
 goes into detail about their application.
 Section
 \ref{s:preliminaries} describes the notation and conventions
-of this \doc.
+of this paper.
 Section \ref{s:CFGs} defines context-free grammars.
 Section \ref{s:EXTs} introduces Marpa's external grammars ---
 the grammars which the users see.
@@ -268,13 +264,17 @@ generalizes Marpa's input model.
 
 Readers uninterested in the proofs of Marpa's
 complexity and correctness claims may skip
+those parts marked with a black star:
+$\bigstar$.
+These include
 sections \ref{s:proof-preliminaries},
 \ref{s:correct},
 and \ref{s:complexity},
 as well as those parts of the pseudocode description
 (section \ref{s:pseudocode})
 which deal with complexity.
-They should, however, avoid the temptation to skip over
+Theory-averse readers should,
+however, avoid the temptation to skip over
 the earlier sections ---
 not only do these contain essential definitions,
 they often discuss implementation details
@@ -1252,18 +1252,19 @@ Let
 & \qquad \Vsym{bsym} = \Vsym{esym} \\
 & \qquad \qquad \text{and} \quad \Vloc{bstart} = \Vloc{estart} \\
 & \qquad \qquad \text{and} \quad \var{blength} = \var{elength} \\
-& \qquad \qquad \text{and} \quad \var{blength} = \var{elength} \\
+& \qquad \qquad \text{and} \quad \var{bdepth} = \var{edepth} \\
 \end{split}
 \end{equation*}
-A rewrite is ``safe'', if and only if the relation
+A rewrite is semantics-safe, if and only if the relation
 defined by
 \var{Instance-matches}
 is a one-to-one correspondence
 (bijection)
 between  the
 the instances in \var{btree}
-to the instances in \var{etree}.
+and the instances in \var{etree}.
 In other words,
+a rewrite is semantics-safe,
 if \var{Instance-matches}
 matches every instance of \var{btree} with exactly one
 in \var{etree}
@@ -1284,10 +1285,15 @@ with two additional restrictions.
 \end{itemize}
 
 For details of grammar augmentation,
-see section \ref{s:augmentation}.
-From the restriction on nullable symbols,
-many consequences follows.
-Noteworthy among them:
+see section
+\ref{s:augmentation} (p. \pageref{s:augmentation}).
+
+The notations for CFGs
+\ref{s:CFGs} (p.  \pageref{s:CFGs})
+carry over to internal grammars,
+although with the changes imposed
+by the restricted form of INT's.
+Noteworthy among these changes:
 
 \begin{itemize}
 \item Marpa internal grammars do not allow nulling symbols.
@@ -1297,39 +1303,44 @@ Noteworthy among them:
 
 In the rest of this paper,
 unless otherwise stated,
-we will be assuming that our grammar are Marpa internal grammars.
-Their restrictions allow us
-to state many
+we will be assuming that the grammar
+we are discussing
+is a Marpa internal grammar.
+The restrictions imposed on INT's allow us
+to state some
 definitions more simply than we could if they had to apply
-to Marpa external grammars,
-or to CFG's in general.
+to EXT's, or to CFG's.
 
-Let the rightmost symbol of a string be
-\begin{equation*}
-\Rightmost{\Vstr{x}} \defined \Vstr{x}\bigl[\size{\Vstr{x}} \subtract 1\bigr]
-\end{equation*}
-A rule \Vrule{x} is \dfn{directly right-recursive}
-if and only if
-\begin{equation*}
-\LHS{\Vrule{x}} = \Rightmost{\RHS{\var{x}}}.
-\end{equation*}
-\Vrule{x} is \dfn{indirectly right-recursive}
-if and only if
-\begin{equation*}
-\exists \, \Vstr{y} \mid \Rightmost{\Vrule{x}} \deplus \Vstr{y} \land \Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
-\end{equation*}
-\Vrule{x} is \dfn{right recursive},
+Let \Vint{g} be an internal grammar.
+A rule \Vrule{x},
+$\Vrule{x} \in \Rules{\Vint{g}}$,
+is \dfn{right-recursive},
 $\RightRecursive{\Vrule{x}}$,
 if and only if
-it is either directly or indirectly right-recursive.
+\begin{equation}
+\label{eq:right-recursive}
+\exists \, \Vstr{y} \mid \Rightmost{\Vrule{x}} \deplus \Vstr{y} \land \Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
+\end{equation}
+\Vrule{x} is \dfn{directly right-recursive}
+if the derivation of \Vstr{y} in
+\eqref{eq:right-recursive}
+is of length 1,
+in which case
+\eqref{eq:right-recursive}
+is equivalent to
+\begin{equation*}
+\label{eq:direct-right-recursive}
+\LHS{\Vrule{x}}  = \Rightmost{\RHS{\Vrule{x}}}.
+\end{equation*}
 
-In this \doc{},
+In this paper,
 \Earley{} will refer to the Earley's original
 recognizer\cite{Earley1970}.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
-\Marpa{} will refer to the parser described in
-this \doc{}.
+\Marpa{} will refer to the recognizer described in
+this paper, and implemented in
+Marpa::R2~\cite{Marpa-R2}.
 Where $\alg{Recce}$ is a recognizer,
 $\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
 when parsing \Cg{}.
@@ -1337,11 +1348,9 @@ when parsing \Cg{}.
 \section{Earley tables}
 \label{s:earley-table}
 
-This section assumes that
-\Vint{g} is a Marpa internal grammar.
-Definitions of Earley's which are for more general CFG's
-and which therefore are more suitable for use
-as a reference,
+The definitions of this section
+assume that \Vint{g} is a Marpa internal grammar.
+Definitions of Earley's for more general CFG's
 can be found in many places,
 including
 \cite[pp. 320-321]{AU1972},
@@ -1404,7 +1413,8 @@ If we let \Vdr{x} be a dotted rule, such that
 \end{alignedat}
 \end{gather*}
 
-A \dfn{penult} is a dotted rule \Vdr{d} such that $\Penult{\var{d}} \neq \Lambda$.
+A dotted rule, \Vdr{d},
+is a \dfn{penult} if it is such that $\Penult{\var{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
@@ -1767,7 +1777,7 @@ the right recursion is unambiguous.
 Potential right recursions are memoized by
 Earley set, using what Leo called
 ``transitive items''.
-In this \doc{} Leo's ``transitive items''
+In this paper Leo's ``transitive items''
 will be called Leo items.
 Leo items
 will have type \type{LIM}.
@@ -2017,7 +2027,7 @@ Such cases would be unusual, but may occur.
 Omission of a memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
-Later in this \doc{} we will
+Later in this paper we will
 show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
@@ -2861,7 +2871,7 @@ But neither source gives them a name.
 The term PSL
 (``per-Earley set list'')
 is new
-with this \doc{}.
+with this paper.
 
 A PSL is a fixed-length array of
 integers, indexed by an integer,
@@ -2986,7 +2996,7 @@ properly nullable symbols.
 This corresponds directly
 to a grammar rewrite in the \Marpa{} implementation,
 and its reversal during \Marpa's evaluation phase.
-For the correctness and complexity proofs in this \doc{},
+For the correctness and complexity proofs in this paper,
 we assume an additional rewrite,
 this time to eliminate nulling symbols.
 
@@ -4289,7 +4299,7 @@ and Theorem \ref{t:ambiguous-tries}.
 \section{The Marpa Input Model}
 \label{s:input}
 
-In this \doc{},
+In this paper,
 up to this point,
 the traditional input stream model
 has been assumed.
