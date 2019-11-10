@@ -1439,7 +1439,7 @@ for example,
 Predicted, confirmed and completed dotted rules
 are also called, respectively,
 \dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
-A rule which is not a completion is called an
+A dotted rule which is not a completion is called an
 \dfn{incompletion}.
 
 A Earley item (type \type{EIM}) is a duple
@@ -1453,6 +1453,24 @@ It is sometimes called the ``parent''.)
 For convenience, the type \type{ORIG} will be a synonym
 for \type{LOC}, indicating that the variable designates
 the origin element of an Earley item.
+
+When a dotted rule concept is applied to an EIM,
+it is the same as applying that concept to the EIM's
+dotted rule.
+For example, if
+for some \Vorig{x},
+\begin{equation*}
+\begin{gathered}
+\Veim{x} = [\Vdr{x}, \Vorig{x}],
+\\
+\text{then} \;
+\Penult{\Veim{x}} \equiv \Penult{\Vdr{x}}.
+\end{gathered}
+\end{equation*}
+Similarly,
+an EIM is a penult if its dotted rule is a penult,
+an EIM is a prediction if its dotted rule is a prediction,
+etc. etc.
 
 A \dfn{parse item} is either an Earley or a Leo item.
 Leo items will be defined in section \ref{s:leo}.
@@ -1807,39 +1825,29 @@ We will call these memoized sequences, Leo sequences.
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
-An EIM \Veim{uniq} is \dfn{Leo unique} in \Ves{i},
-\begin{gather*}
-\LeoUnique{\Veim{uniq},\Ves{i}}, \\
-\Veim{uniq} = [\Vdr{uniq}, \Vloc{uniq}]
-\end{gather*}
+An EIM \Veim{uniq} such that
+\begin{equation*}
+\Veim{uniq} \in \Ves{i}
+\quad \text{and} \quad \Penult{\Veim{uniq}} \neq \Lambda,
+\end{equation*}
+is \dfn{Leo unique} in \Ves{i},
+\begin{equation*}
+\LeoUnique{\Veim{uniq}, \Ves{i}},
+\end{equation*}
 if and only if,
 for all \Veim{other},
 such that
 \begin{equation*}
-\Veim{other} = [\Vdr{other}, \Vloc{other}]
-\quad \text{and} \quad
-\Veim{other} \in \Ves{i},
+\quad \Veim{other} \in \Ves{i}
 \end{equation*}
 we have
 \begin{equation*}
-\begin{aligned}
-& \Veim{uniq} \in \Ves{i} \\
-\text{and} \quad & \Penult{\Vdr{d}} \neq \Lambda \\
-\text{and} \quad & \Postdot{\Vdr{d}} = \Postdot{\Vdr{d2}}
-\implies \Vdr{d} = \Vdr{d2}.
-\end{aligned}
+\Penult{\Veim{uniq}} = \Postdot{\Veim{other}}
+\implies \Veim{uniq} = \Veim{other}.
 \end{equation*}
-It is important to notice that \Vdr{d2} ranges over all the dotted
-rules of Earley set \Ves{i},
-even those which are ineligible for Leo memoization.
-
-If \Vdr{d} is Leo unique, then the symbol $\Postdot{\Vdr{d}}$ is
-also said to be \dfn{Leo unique}.
-Similarly,
-in cases where a dotted rule is Leo unique in \Ves{i},
-we can speak of the
-\dfn{Leo unique}
-rule for \Vsym{transition}.
+It is important to notice that \Veim{other} ranges over all the
+EIMs of Earley set \Ves{i},
+even those which are not penults.
 
 \section{The Leo algorithm}
 \label{s:leo}
