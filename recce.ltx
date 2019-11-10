@@ -82,6 +82,7 @@
 \newcommand{\Vrule}[1]{\Tvar{#1}{RULE}}
 \newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
 \newcommand{\Vstr}[1]{\Tvar{#1}{STR}}
+\newcommand{\Vstrset}[1]{\Tvarset{#1}{STR}}
 \newcommand{\Vsym}[1]{\Tvar{#1}{SYM}}
 \newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
@@ -673,6 +674,23 @@ The zero step derivation is call a \dfn{trivial derivation}.
 A derivation of more than zero steps
 is called a \dfn{non-trivial derivation}.
 
+We regard a derivation as equivalent to a sequence of strings,
+called its \dfn{derivation sequence}.
+Where
+\begin{equation*}
+\var{d} = \Vstr{first} \destar \Vstr{last}
+\end{equation*}
+is a derivation and
+\Vstrset{dseq} is the derivation sequence of \var{d},
+then saying that
+\begin{equation*}
+\var{dseq}[\var{i}] = \Vstr{s}
+\end{equation*}
+is equivalent to saying that
+\begin{equation*}
+\var{d} = \Vstr{first} \xderives{\var{i}} \Vstr{s} \destar \Vstr{last}.
+\end{equation*}
+
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
 \Vsym{x} is \dfn{nulling} if and only if it always derives the null
@@ -1053,9 +1071,10 @@ of nulling and non-nullable symbols are accounted for.
 
 The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
 rewrite before replacing the proper nullables.
-As a result the number of rules in the internal grammar could be
-an exponential function of numbers in the external grammar.
-In our version, the worst case growth in the number of rules in linear.
+As a result the number of rules in the post-rewrite grammar of \cite{AH2002}
+could be an exponential function of the rule count
+in the pre-rewrite grammar of \cite{AH2002}.
+In our version, the worst case growth in the number of rules is linear.
 
 \subsection{Removing nulling symbols}
 \label{s:removing-nulling-symbols}
@@ -1078,29 +1097,32 @@ the parse trees generated from \Vext{g} are the same as those generated from \va
 
 Thus, Marpa may rewrite its grammars to eliminate nulling symbols.
 For the purposes of evaluation and run-time events,
-Marpa tracks the locations of the eliminated nulling symbols.
+Marpa records the locations of the eliminated nulling symbols.
 
-A corner case is where eliminating nulling symbols from two distinct
+A corner case occurs when eliminating nulling symbols from two distinct
 rules makes them identical.
-For theoretical purposes,
-and in this paper,
+In this paper,
 we assume that a rewrite that involves creating
-new LHS symbols and adding some rules.
-It is more practical to consider rules whose
-tracked nulling symbols are different as distinct rules,
-and this is what the Marpa implementation does.
+a new LHS symbol for each rule that must remain distinct;
+and adding new rules to derive the new LHS symbols from the original ones.
+Less clean theoretically,
+but easier in practice,
+is to have the implementation regard rules as distinct,
+even when they differ only in their recorded nulling symbols.
+This is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
 \label{s:trivial-grammars}
 
 Null parses are parses of zero length inputs.
-Marpa handles null parses by treating them
+The Marpa implementation
+handles null parses by treating them
 as a special case.
 
 Trivial grammars are grammars which only accept
 zero length inputs.
 No Marpa internal grammar can be a trivial grammar.
-Trivial grammars are also handled as a special case.
+Trivial grammars are handled as a special case.
 
 \subsection{Semantics-safe rewriting}
 \label{semantics-safe}
@@ -1136,22 +1158,8 @@ and
 \item \var{length} is the length of the sentence
 derived from \Vsym{s}.
 \item \var{depth} is the ``brick depth'',
-which will be defined below.
+defined below~(p.~\pageref{loc:brick-depth}).
 \end{itemize}
-
-The ``brick depth'' of an instance in a external grammar is
-the depth of the node of the instance measured in the traditional way --
-the distance in nodes to the root.
-In an internal grammar, the brick depth is the distance of the node
-in brick nodes.
-
-In more detail,
-the root instance of an internal grammar is a special case -- its
-brick depth is undefined.
-Since an internal grammar is augmented, the root instance must
-have only one child, a brick instance whose brick depth is defined to be zero.
-For all other brick nodes, the brick depth is one plus the brick depth of its parent node.
-For mortar nodes, the brick depth is the brick depth of its parent node.
 
 In an internal grammar, there are
 brick and mortar symbols.
@@ -1169,7 +1177,9 @@ the instance is a \dfn{brick instance}.
 If the symbol of an instance in \var{tree} is a mortar symbol,
 the instance is a \dfn{mortar instance}.
 
-The ``brick depth'' of an instance in a external grammar is
+The
+\dfn{brick depth}~\label{loc:brick-depth}
+of an instance in a external grammar is
 the depth of the node of the instance measured in the traditional way --
 the distance in nodes to the root.
 In an internal grammar, the brick depth is the distance of the node
@@ -1188,12 +1198,13 @@ a \dfn{brick tree}.
 To create a brick tree, we traverse the internal parse tree in pre-order,
 ignoring internal nodes,
 and creating instances for the brick nodes.
-Note that this implies that the root node (the one for \Accept{\Vint{g}}) is ignored.
+Note that this implies that the root node (the node
+whose symbol is \Accept{\Vint{g}}) is ignored.
 
 When a brick node is encountered that is marked with memoized
 nulling symbols,
 new instances (``nulling instances'') must be created for the nulling symbols.
-Let \var{marked} be the marked node.
+Let \var{marked} be the node for which there are recorded nulling instances.
 The nulling instances have the form
 \begin{equation*}
 [ \Vsym{nulling}, \Vloc{bound}, 0, \var{depth} ]
@@ -1201,7 +1212,8 @@ The nulling instances have the form
 where \Vsym{sym} is the memoized nulling symbol,
 \var{depth} is the same as the depth of \var{marked},
 and \var{bound} is the location of the nulling symbol.
-\var{bound} will be either the start or the location
+\var{bound} will be either the start of \var{marked},
+or the location
 immediately after
 \var{marked}.
 Nulling instances are brick instances.
@@ -1213,7 +1225,7 @@ parse
 to instances of an external parse of the same input.
 An internal symbol instance \textbf{matches}
 an external symbol instance, and vice versa,
-if and only if their 3-tuples match.
+if and only if their 4-tuples match.
 More formally,
 let
 $\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
