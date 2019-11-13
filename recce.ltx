@@ -25,6 +25,7 @@
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
 
+\newcommand{\Aref}[1]{(A\ref{#1}:\pageref{#1})}
 \newcommand{\Sref}[1]{(S\ref{#1}:\pageref{#1})}
 \newcommand{\Eref}[1]{(E\ref{#1}:\pageref{#1})}
 
@@ -72,6 +73,7 @@
 \newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
 \newcommand{\Ves}[1]{\Tvar{#1}{ES}}
+\newcommand{\Vesset}[1]{\Tvarset{#1}{ES}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
@@ -232,7 +234,9 @@ where {\it X} is the reference type,
 {\it n} is the number of the referent,
 and
 {\it p} is a page reference.
-Reference types are ``E'' (equation),
+Reference types are
+``A'' (algorithm),
+``E'' (equation),
 and ``S'' (section).
 For example
 \Eref{e:cfg} refers to equation
@@ -263,7 +267,7 @@ in parsing Marpa internal grammars.
 describes Earley's algorithm.
 \Sref{s:leo} describes Leo's modification
 to Earley's algorithm.
-\Sref{s:marpa}
+\Sref{s:algorithm}
 describes the Marpa algorithm.
 \Sref{s:per-set-lists} describes Marpa's
 per-set lists.
@@ -604,9 +608,9 @@ as a convenient way to refer to
 their type.
 
 Multi-character variable names will be common.
-Concatenation of strings and symbols may be implicit,
-when the angle bracket notation is sued.
-Otherwise, operations will never be implicit.
+When the angle bracket notation is used,
+concatenation of strings and symbols may be implicit.
+Otherwise, operations are never implicit.
 \begin{center}
 \begin{tabular}{ll}
 Multiplication &  $\var{a} \times \var{b}$ \\
@@ -1610,141 +1614,6 @@ set at \Vloc{i} is
 \end{equation*}
 \end{proof}
 
-\section{The Earley algorithm}
-\label{s:earley}
-
-In this section we will assume a parse
-with \Vint{g} is its grammar and \Vstr{w} is its
-input.
-The Earley algorithm, \Earley{},
-is the closure on the empty set
-of the Initialization,
-Scanning,
-Earley Reduction,
-and Prediction operations, as described
-in this section.
-
-\Vint{g} must be a Marpa internal grammar.
-Note also that all parse items are unioned into
-their Earley set.
-No parse item is added to an Earley set twice.
-
-\subsection{Initialization operation}
-\label{d:initialization}
-
-Union
-\begin{equation*}
-    \Bigset{\bigl[ [ \Vsym{accept} \de \mydot \Vsym{start} ], 0 \bigr]}
-\end{equation*}
-into Earley set 0.
-
-\subsection{Scanning operation}
-\label{d:scanning}
-
-Where
-\begin{equation}
-          \Vsym{token} = \var{w}[\var{i}]
-\end{equation}
-is a token in the input at \Vloc{i}, if there is
-a
-\begin{equation}
-\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-\end{equation}
-such that
-\begin{align}
-& \quad \Veim{predecessor} \in \Ves{i} \\
-& \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token},
-\end{align}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into $(\var{i}+1)_\var{ES}$, the Earley
-set at location $\var{i}+1$.}
-\end{align*}
-\end{gather*}
-
-\Veim{predecessor} is the \dfn{predecessor}
-of the Scanning operation.
-\Vsym{token} is the \dfn{transition symbol}
-of the Scanning operation.
-
-We also call \Vsym{token}
-the \dfn{component} of the Scanning operation,
-and call
-\Veim{predecessor} a \dfn{predecessor} of
-\Vsym{token}.
-We call \Vsym{token} a \dfn{successor} of
-\Veim{predecessor}.
-
-\subsection{Earley Reduction operation}
-\label{d:reduction}
-
-Where
-\begin{equation}
-    \Veim{component} = \bigl[
-     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vorig{origin} \bigr]
-\end{equation}
-is a completion in the input at \Vloc{i}, if there is
-a
-\begin{equation}
-\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ]
-\end{equation}
-such that
-\begin{align}
-& \quad \Veim{predecessor} \in \Ves{origin} \\
-& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs},
-\end{align}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into \Ves{i}.}
-\end{align*}
-\end{gather*}
-
-\Veim{component} is called
-the \dfn{component} of the Earley Reduction operation.\footnote{
-The term ``component'' comes from Irons \cite{Irons}.
-}
-\Veim{predecessor} is the \dfn{predecessor}
-of the Earley reduction operation.
-\Vsym{lhs} is the \dfn{transition symbol}
-of the Earley reduction operation.
-We also call
-\Veim{predecessor} a \dfn{predecessor} of
-\Veim{component};
-and call
-\Veim{component} a \dfn{successor} of
-\Veim{predecessor}.
-
-\subsection{Prediction}
-\label{d:prediction}
-
-Where
-\begin{equation}
-          \Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ]
-\end{equation}
-is an incompletion in the input at \Vloc{i}, and
-there is a
-\begin{equation}
-\Vrule{predict} \in \Rules{\Vint{g}}
-\end{equation}
-such that
-\begin{equation}
-\LHS{\Vrule{predict}} = \Postdot{\Vdr{predecessor}}
-\end{equation}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \Bigset{ \bigl[ [ \Vrule{predict}, 0 ], \Vloc{i} \bigr] } \\
-\intertext{into $\Ves{i}$.}
-\end{align*}
-\end{gather*}
-
-\Veim{predecessor} is called the \dfn{predecessor} of the prediction operation.
-
 \section{The Leo algorithm}
 \label{s:leo-items}
 
@@ -2089,7 +1958,195 @@ and another, which holds if
 \end{equation*}
 
 \section{The Marpa algorithm}
-\label{s:marpa}
+\label{s:algorithm}
+
+For the purpose of defining the Marpa algorithm,
+let \Vint{g} be a Marpa internal grammar,
+and let \Vesset{esets} be the Earley table.
+
+The top-level view of the Earley algorithm is
+show in \Aref{a:marpa}.
+
+We define the function
+$\var{PredictOne}(\Vsym{top})$
+as
+\begin{equation*}
+\left\lbrace
+\begin{aligned}
+& \bigl[
+\left[
+\Vsym{predicted}
+\de
+\mydot
+\Vstr{rhs}
+\right],
+0
+\bigr]
+\quad \text{such that} \quad \\
+& \quad \left[\Vsym{predicted} \de \Vstr{rhs} \right] \in \Rules{\Vint{g}} \\
+& \qquad \land \quad
+\Vsym{top} \destar \Vsym{predicted} \Vstr{suffix} \\
+\end{aligned}
+\right\rbrace
+\end{equation*}
+
+\begin{algorithm}[tb]
+\caption{The Marpa Algorithm}
+\label{a:marpa}
+\begin{algorithmic}[1]
+\Procedure{Main}{}
+\State \Call{Initializer}{{}} \Comment Creates Earley set 0
+\For{ $\var{i}, 1 \le \var{i} \le \Vsize{w}$ }
+\State \Comment At this point, $\Ves{x}$ is complete, for $0 \le \var{x} < \var{i}$
+\State $\Ves{i} \gets \Call{Scanner}{\var{i}}$
+\If{$\size{\Ves{i}} = 0$}
+\State return \Comment \Cw{} will be rejected
+\EndIf
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Reducer}{\var{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Predicter}{\var{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Memoizer}{\var{i}}$
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\section{The Earley algorithm}
+\label{s:earley}
+
+In this section we will assume a parse
+with \Vint{g} is its grammar and \Vstr{w} is its
+input.
+The Earley algorithm, \Earley{},
+is the closure on the empty set
+of the Initialization,
+Scanning,
+Earley Reduction,
+and Prediction operations, as described
+in this section.
+
+\Vint{g} must be a Marpa internal grammar.
+Note also that all parse items are unioned into
+their Earley set.
+No parse item is added to an Earley set twice.
+
+\subsection{Initialization operation}
+\label{d:initialization}
+
+Union
+\begin{equation*}
+    \Bigset{\bigl[ [ \Vsym{accept} \de \mydot \Vsym{start} ], 0 \bigr]}
+\end{equation*}
+into Earley set 0.
+
+\subsection{Scanning operation}
+\label{d:scanning}
+
+Where
+\begin{equation}
+          \Vsym{token} = \var{w}[\var{i}]
+\end{equation}
+is a token in the input at \Vloc{i}, if there is
+a
+\begin{equation}
+\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
+\end{equation}
+such that
+\begin{align}
+& \quad \Veim{predecessor} \in \Ves{i} \\
+& \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token},
+\end{align}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
+\intertext{into $(\var{i}+1)_\var{ES}$, the Earley
+set at location $\var{i}+1$.}
+\end{align*}
+\end{gather*}
+
+\Veim{predecessor} is the \dfn{predecessor}
+of the Scanning operation.
+\Vsym{token} is the \dfn{transition symbol}
+of the Scanning operation.
+
+We also call \Vsym{token}
+the \dfn{component} of the Scanning operation,
+and call
+\Veim{predecessor} a \dfn{predecessor} of
+\Vsym{token}.
+We call \Vsym{token} a \dfn{successor} of
+\Veim{predecessor}.
+
+\subsection{Earley Reduction operation}
+\label{d:reduction}
+
+Where
+\begin{equation}
+    \Veim{component} = \bigl[
+     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
+    , \Vorig{origin} \bigr]
+\end{equation}
+is a completion in the input at \Vloc{i}, if there is
+a
+\begin{equation}
+\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ]
+\end{equation}
+such that
+\begin{align}
+& \quad \Veim{predecessor} \in \Ves{origin} \\
+& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs},
+\end{align}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
+\intertext{into \Ves{i}.}
+\end{align*}
+\end{gather*}
+
+\Veim{component} is called
+the \dfn{component} of the Earley Reduction operation.\footnote{
+The term ``component'' comes from Irons \cite{Irons}.
+}
+\Veim{predecessor} is the \dfn{predecessor}
+of the Earley reduction operation.
+\Vsym{lhs} is the \dfn{transition symbol}
+of the Earley reduction operation.
+We also call
+\Veim{predecessor} a \dfn{predecessor} of
+\Veim{component};
+and call
+\Veim{component} a \dfn{successor} of
+\Veim{predecessor}.
+
+\subsection{Prediction}
+\label{d:prediction}
+
+Where
+\begin{equation}
+          \Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ]
+\end{equation}
+is an incompletion in the input at \Vloc{i}, and
+there is a
+\begin{equation}
+\Vrule{predict} \in \Rules{\Vint{g}}
+\end{equation}
+such that
+\begin{equation}
+\LHS{\Vrule{predict}} = \Postdot{\Vdr{predecessor}}
+\end{equation}
+then union
+\begin{gather*}
+\begin{align*}
+& \; \Bigset{ \bigl[ [ \Vrule{predict}, 0 ], \Vloc{i} \bigr] } \\
+\intertext{into $\Ves{i}$.}
+\end{align*}
+\end{gather*}
+
+\Veim{predecessor} is called the \dfn{predecessor} of the prediction operation.
+
+\section{Marpa Changes}
+\label{s:changes}
 
 \begin{sloppypar}
 Recall that we
