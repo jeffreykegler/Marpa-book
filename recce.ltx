@@ -1537,17 +1537,60 @@ an Earley set is defined as a set of \dfn{parse items}.
 Earley sets are of type \type{ES}.
 
 An Earley parser builds a table of Earley sets,
+which is called
+a \dfn{parse table},
+or an \dfn{Earley table}.
+An Earley table
+is a sequence of Earley sets,
+such that
 \begin{equation*}
-\EVtable{\Earley}{i},
-\quad \text{where} \quad
-0 \le \Vloc{i} \le \size{\Cw}.
+\size{\Vesset{table}} = \size{\Vstr{w}},
 \end{equation*}
-This table is called an \dfn{Earley table}.
+where \Vstr{w} is the input of the parse.
+and \Vesset{table} is the parse table.
 Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
+
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
+Where \Vloc{i} is an integer location,
+the notation \Ves{i} represents an Earley set, so that
+if \Vesset{table}
+is the parse table,
+\begin{equation*}
+\Ves{i} = \Vesset{table}[\Vloc{i}].
+\end{equation*}
+
+Whenever helpful,
+we will allow ourselves
+to go back and forth between integer location,
+\Vloc{i},
+and Earley set,
+\Ves{i}.
+One way of thinking of this
+in implementation terms,
+is to assume that we have an array of pointers to
+Earley sets that we
+can index with \Vloc{i}, so that we can go from
+\Ves{i} to \Vloc{i} using pointer arithmetic,
+from from \Vloc{i} to \Ves{i} using indexing.\footnote{
+The implementation of Marpa::R2\cite{Marpa-R2} is more complicated
+than this.
+It builds Earley sets as a linked list of structures,
+and stores the \Vloc{i} in an integer field.
+The array for indexing is created on an ``as needed''
+basis.
+Earley sets are stored internally as pointers,
+so that
+indexing by \Vloc{i} is only necessary
+when a user wants to refer to specific Earley sets
+for debugging and tracing.
+This means that,
+under normal circumstances,
+the array of Earley
+sets never needs to be resized.
+}
 
 \EVtable{\alg{Recce}}{i} will be
 the Earley set at \Vloc{i}
@@ -1961,17 +2004,17 @@ and another, which holds if
 \label{s:algorithm}
 
 For the purpose of defining the Marpa algorithm,
-let \Vint{g} be a Marpa internal grammar,
+let \Vint{g} be a Marpa internal grammar used in the parse,
+let \Vstr{w} be the input of the parse,
 and let \Vesset{esets} be the Earley table.
 
 The top-level view of the Earley algorithm is
 show in \Aref{a:marpa}.
 
-We define the function
-$\var{PredictOne}(\Vsym{top})$
-as
-\begin{equation*}
-\left\lbrace
+We let
+\begin{align*}
+& \var{PredictOne}(\Vsym{top}, \Vloc{i}) \defined \\
+& \qquad \left\lbrace
 \begin{aligned}
 & \bigl[
 \left[
@@ -1980,14 +2023,102 @@ as
 \mydot
 \Vstr{rhs}
 \right],
-0
-\bigr]
-\quad \text{such that} \quad \\
-& \quad \left[\Vsym{predicted} \de \Vstr{rhs} \right] \in \Rules{\Vint{g}} \\
-& \qquad \land \quad
+\Vloc{i}
+\bigr] \\
+& \quad \text{such that for some \Vstr{suffix},} \\
+& \qquad \left[\Vsym{predicted} \de \Vstr{rhs} \right] \in \Rules{\Vint{g}} \\
+& \qquad \quad \land \quad
 \Vsym{top} \destar \Vsym{predicted} \Vstr{suffix} \\
 \end{aligned}
 \right\rbrace
+\end{align*}
+
+\subsection{Initializer operation}
+\label{s:initializer}
+
+\begin{equation*}
+\var{Initializer}() \defined \var{PredictOne}(\Accept{\Vint{g}}, 0)
+\end{equation*}
+
+\subsection{Scanner operation}
+\label{d:scanner}
+
+\begin{align*}
+& \var{Scanner}(\Ves{i}) \defined \\
+& \qquad \Bigl\lbrace
+\bigl [
+\left[
+\Vsym{lhs}
+\de
+\Vstr{prefix}
+\Vsym{token}
+\mydot
+\Vstr{suffix}
+\right],
+\Vloc{origin}
+\bigr]
+\Bigr\rbrace
+\end{align*}
+such that
+\begin{equation*}
+\begin{aligned}
+& \Vsym{token} = \Vstr{w}[\Vloc{i} \subtract 1] \\
+\land \quad & \bigl[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{token} \Vstr{suffix}
+\right], \Vloc{origin} \bigr]\\
+& \qquad \in \Ves{(\Vloc{i}\subtract 1)}.
+\end{aligned}
+\end{equation*}
+
+\subsection{Reducer operation}
+\label{d:reducer}
+
+Let
+\begin{align*}
+& \var{Earley-reducer}(\Ves{i}) \defined \\
+& \qquad \Bigl\lbrace
+\bigl [
+\left[
+\Vsym{lhs}
+\de
+\Vstr{prefix}
+\Vsym{completed}
+\mydot
+\Vstr{suffix}
+\right],
+\Vloc{origin}
+\bigr]
+\Bigr\rbrace
+\end{align*}
+such that
+\begin{equation*}
+\begin{aligned}
+& \bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
+\right], \Vloc{predecessor} \bigr]
+\in \Ves{i} \\
+\land \quad & \bigl[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{completed} \Vstr{suffix}
+\right], \Vloc{origin} \bigr]\\
+& \qquad \in \Ves{predecessor}.
+\end{aligned}
+\end{equation*}
+
+Also, let
+\begin{equation*}
+\var{Leo-reducer}(\Ves{i}) \defined
+\Bigl\lbrace
+\bigl(
+\left[ \Vdr{top}, \Vloc{top} \right]
+\bigr)_\var{EIM}
+\Bigr\rbrace
+\end{equation*}
+such that
+\begin{equation*}
+\begin{gathered}
+\Bigl(\bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
+\right], \Vloc{predecessor} \bigr]\Bigr)_\var{EIM}
+\in \Ves{i} \\
+\land \quad \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
+\in \Ves{predecessor}.
+\end{gathered}
 \end{equation*}
 
 \begin{algorithm}[tb]
@@ -1995,16 +2126,16 @@ as
 \label{a:marpa}
 \begin{algorithmic}[1]
 \Procedure{Main}{}
-\State \Call{Initializer}{{}} \Comment Creates Earley set 0
-\For{ $\var{i}, 1 \le \var{i} \le \Vsize{w}$ }
+\State $\Ves{(0)} \gets \Call{Initializer}{{}}$
+\For{ $\Ves{i}, 1 \le \var{i} \le \Vsize{w}$ }
 \State \Comment At this point, $\Ves{x}$ is complete, for $0 \le \var{x} < \var{i}$
-\State $\Ves{i} \gets \Call{Scanner}{\var{i}}$
+\State $\Ves{i} \gets \Call{Scanner}{\Ves{i}}$
 \If{$\size{\Ves{i}} = 0$}
 \State return \Comment \Cw{} will be rejected
 \EndIf
-\State $\Ves{i} \gets \Ves{i} \cup \Call{Reducer}{\var{i}}$
-\State $\Ves{i} \gets \Ves{i} \cup \Call{Predicter}{\var{i}}$
-\State $\Ves{i} \gets \Ves{i} \cup \Call{Memoizer}{\var{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Reducer}{\Ves{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Predicter}{\Ves{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Memoizer}{\Ves{i}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -2012,112 +2143,6 @@ as
 
 \section{The Earley algorithm}
 \label{s:earley}
-
-In this section we will assume a parse
-with \Vint{g} is its grammar and \Vstr{w} is its
-input.
-The Earley algorithm, \Earley{},
-is the closure on the empty set
-of the Initialization,
-Scanning,
-Earley Reduction,
-and Prediction operations, as described
-in this section.
-
-\Vint{g} must be a Marpa internal grammar.
-Note also that all parse items are unioned into
-their Earley set.
-No parse item is added to an Earley set twice.
-
-\subsection{Initialization operation}
-\label{d:initialization}
-
-Union
-\begin{equation*}
-    \Bigset{\bigl[ [ \Vsym{accept} \de \mydot \Vsym{start} ], 0 \bigr]}
-\end{equation*}
-into Earley set 0.
-
-\subsection{Scanning operation}
-\label{d:scanning}
-
-Where
-\begin{equation}
-          \Vsym{token} = \var{w}[\var{i}]
-\end{equation}
-is a token in the input at \Vloc{i}, if there is
-a
-\begin{equation}
-\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ] \\
-\end{equation}
-such that
-\begin{align}
-& \quad \Veim{predecessor} \in \Ves{i} \\
-& \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{token},
-\end{align}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into $(\var{i}+1)_\var{ES}$, the Earley
-set at location $\var{i}+1$.}
-\end{align*}
-\end{gather*}
-
-\Veim{predecessor} is the \dfn{predecessor}
-of the Scanning operation.
-\Vsym{token} is the \dfn{transition symbol}
-of the Scanning operation.
-
-We also call \Vsym{token}
-the \dfn{component} of the Scanning operation,
-and call
-\Veim{predecessor} a \dfn{predecessor} of
-\Vsym{token}.
-We call \Vsym{token} a \dfn{successor} of
-\Veim{predecessor}.
-
-\subsection{Earley Reduction operation}
-\label{d:reduction}
-
-Where
-\begin{equation}
-    \Veim{component} = \bigl[
-     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vorig{origin} \bigr]
-\end{equation}
-is a completion in the input at \Vloc{i}, if there is
-a
-\begin{equation}
-\Veim{predecessor} = [ \Vdr{before}, \Vorig{predecessor} ]
-\end{equation}
-such that
-\begin{align}
-& \quad \Veim{predecessor} \in \Ves{origin} \\
-& \qquad \text{and} \quad \Postdot{\Vdr{before}} = \Vsym{lhs},
-\end{align}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \bigset{ [ \Next{\Vdr{before}}, \Vorig{predecessor} ] } \\
-\intertext{into \Ves{i}.}
-\end{align*}
-\end{gather*}
-
-\Veim{component} is called
-the \dfn{component} of the Earley Reduction operation.\footnote{
-The term ``component'' comes from Irons \cite{Irons}.
-}
-\Veim{predecessor} is the \dfn{predecessor}
-of the Earley reduction operation.
-\Vsym{lhs} is the \dfn{transition symbol}
-of the Earley reduction operation.
-We also call
-\Veim{predecessor} a \dfn{predecessor} of
-\Veim{component};
-and call
-\Veim{component} a \dfn{successor} of
-\Veim{predecessor}.
 
 \subsection{Prediction}
 \label{d:prediction}
