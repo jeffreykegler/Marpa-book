@@ -26,8 +26,10 @@
 \newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
 
 \newcommand{\Aref}[1]{(A\ref{#1}:\pageref{#1})}
-\newcommand{\Sref}[1]{(S\ref{#1}:\pageref{#1})}
 \newcommand{\Eref}[1]{(E\ref{#1}:\pageref{#1})}
+\newcommand{\Sref}[1]{(S\ref{#1}:\pageref{#1})}
+\newcommand{\Tref}[1]{(T\ref{#1}:\pageref{#1})}
+\newcommand{\Thref}[1]{(Th\ref{#1}:\pageref{#1})}
 
 % I use hyphens in variable names,
 % so I need to ensure that subtraction is
@@ -277,43 +279,6 @@ Finally,
 section \Sref{s:input}
 generalizes Marpa's input model.
 
-Readers uninterested in the proofs of Marpa's
-complexity and correctness claims may wish to skip
-mathematical material when it is abstract,
-in the sense of not being
-directly relevant to implementation.
-Within a numbered section,
-a black star ($\bigstar$)
-indicates the start of an abstract passage,
-which will continue to the end of that
-numbered section.
-
-Readers mainly interested in implementation should
-avoid the temptation to also skip over
-the early sections ---
-not only do these present
-contain definitions,
-and describe matters of notation
-which are essential,
-they often discuss implementation details
-as well.
-
-Readers may also want to consider that the proofs
-in this paper are not of the technical kind ---
-exercises in pure mathematics which provide little
-intuitive insight.
-Instead, this paper's proofs
-lend themselves to being read as
-explanations of
-why Marpa is correct,
-and why it meets
-its complexity claims.
-The arguments in the proofs of this paper
-were essential for the author
-in developing Marpa,
-and they can have much to say to
-an implementer.
-
 A full description of Marpa's relationship to
 prior work in parsing can be found in \cite{Timeline}.
 Readers may find it helpful to read
@@ -344,13 +309,13 @@ and therefore never worse than $\order{\var{n}^3}$.
 \subsection{Linear time for practical grammars}
 Currently, the grammars suitable for practical
 use are thought to be a subset
-of the deterministic context-free grammars.
-Using a technique discovered by
-Leo~\cite{Leo1991},
-Marpa parses all of these in linear time.
-Leo's modification of Earley's algorithm is
-\On{} for LR-regular grammars.
-Leo's modification
+of the deterministic context-free grammars (DCFG's).
+\Marpa{} uses a technique discovered by
+Leo~\cite{Leo1991}
+to run in
+\On{} time for LR-regular grammars,
+a superset of the the DCFG's.
+\Marpa{}
 also parses many ambiguous grammars in linear
 time.
 
@@ -363,7 +328,7 @@ in its tables.
 At every parse location,
 before any symbols
 are scanned,
-Marpa's parse engine makes available
+\Marpa{}'s parse engine makes available
 its
 information about the state of the parse so far.
 This information is
@@ -372,7 +337,7 @@ and can be accessed efficiently.
 
 \subsection{Recoverable from read errors}
 When
-Marpa reads a token which it cannot accept,
+\Marpa{} reads a token which it cannot accept,
 the error is fully recoverable.
 An application can attempt to read another
 token,
@@ -383,7 +348,7 @@ parsing will continue
 as if the unsuccessful read attempts had never been made.
 
 \subsection{Ambiguous tokens}
-Marpa allows ambiguous tokens.
+\Marpa{} allows ambiguous tokens.
 These are often useful in natural language processing
 where, for example,
 the same word might be a verb or a noun.
@@ -398,12 +363,12 @@ rejection of a token by reading two others.
 \subsection{Error reporting}
 An obvious application of left-eideticism is error
 reporting.
-Marpa's abilities in this respect are
+\Marpa{}'s abilities in this respect are
 ground-breaking.
 For example,
 users typically regard an ambiguity as an error
 in the grammar.
-Marpa, as currently implemented,
+\Marpa{}, as currently implemented,
 can detect an ambiguity and report
 specifically where it occurred
 and what the alternatives were.
@@ -429,7 +394,7 @@ feedback from the parser.
 In traditional parser practice,
 error detection is an act of desperation.
 In contrast,
-Marpa's error detection is so painless
+\Marpa{}'s error detection is so painless
 that it can be used as the foundation
 of new parsing techniques.
 
@@ -478,7 +443,9 @@ language may have undesired meanings.
 But note that this is not a reason to ban potential ambiguity ---
 it is only a problem with actual ambiguity.
 
-Syntax errors, for example, are undesired, but nobody tries
+Consider, for comparison purposes,
+the standard treatment of syntax errors.
+Syntax errors are undesired, but nobody tries
 to design languages that make syntax errors impossible.
 A language in which every input was well-formed and meaningful
 would be not just cumbersome, but dangerous.
@@ -486,15 +453,16 @@ A parser would never warn the user about typos,
 because all typos in such a language would have unintended
 meanings.
 
-With Marpa, ambiguity can be dealt with in the same way
+With \Marpa{}, ambiguity can be dealt with in the same way
 that syntax errors are dealt with in current practice.
-The language can be designed to be ambiguous,
-but any actual ambiguity can be detected
+A \Marpa{}-powered
+language can be designed to allow ambiguity,
+and any actual ambiguity will be detected
 and reported at parse time.
-This exploits Marpa's ability
+This exploits \Marpa{}'s ability
 to report exactly where
 and what the ambiguity is.
-Marpa::R2 own parser description language, the SLIF,
+Marpa::R2's own parser description language, the SLIF,
 uses ambiguity in this way.
 
 \subsection{Auto-generated languages}
@@ -531,7 +499,7 @@ The SLIF representation of the precedenced rule
 is parsed to create a BNF grammar which is equivalent,
 and which has the desired precedence.
 Essentially,
-the SLIF does a standard textbook transformation.
+the SLIF does a standard parsing textbook transformation.
 The transformation starts
 with a set of rules,
 each of which has a precedence and
@@ -539,9 +507,9 @@ an associativity specified.
 The result of the transformation is a set of
 rules in pure BNF.
 The SLIF's advantage is that it is powered by Marpa,
-and therefore the SLIF can be certain that the grammar
+and therefore the SLIF can ensure that the grammar
 that it auto-generates will
-parse in linear time.
+be parsed in linear time.
 
 Notationally, Marpa's precedenced rules
 are an improvement over
@@ -573,14 +541,14 @@ as well as Earley's algorithm.
 This paper will
 use subscripts to indicate commonly occurring types,
 as shown in
-Table~\ref{tab:type-notation} on
-page~\pageref{tab:type-notation}.
+\Tref{tab:type-notation}
 \begin{table}[tb]
 \centering
 \caption{Type notations}
 \begin{tabular}{ll}
+\hline
 $\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
-$\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type set of \type{T} \\
+$\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
 \type{SYM} & The type for a symbol \\
 \type{STR} & The type for a string \\
 \type{EIM} & The type for an Earley item \\
@@ -593,38 +561,55 @@ $\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type set of \type{
 \Vrule{a} & A variable \var{a} of type \type{RULE} \\
 \Vsymset{set-two} & The variable \var{set-two}, a set of strings \\
 \Vstrset{strings} & The variable \var{strings}, a set of strings \\
-\Veimset{set-two} & The variable \var{set-two}, a set of Earley items \\
-\Vruleset{set-two} & The variable \var{set-two}, a set of grammar rules
+\Veimset{set-three} & The variable \var{set-three}, a set of Earley items \\
+\Vruleset{set-four} & The variable \var{set-four}, a set of grammar rules \\
+\hline
 \end{tabular}
 \label{tab:type-notation}
 \end{table}
 Subscripts may be omitted when the type
 is obvious from the context.
-Note that symbols and strings have special notation,
-that uses angle bracket as an alternative to
-the subscripting the type name.
-The type names are often used in the text
+Symbols and strings
+have an alternate type notation,
+which uses angle bracket as an alternative to
+the subscripting.
+Type names are often used in the text
 as a convenient way to refer to
 their type.
 
 Multi-character variable names will be common.
 When the angle bracket notation is used,
 concatenation of strings and symbols may be implicit.
-Otherwise, operations are never implicit.
-\begin{center}
+Otherwise, operations are never implicit
+\Tref{tab:op-notation}.
+\begin{table}[tb]
+\centering
+\caption{Selected operator notations}
 \begin{tabular}{ll}
+\hline
 Multiplication &  $\var{a} \times \var{b}$ \\
 Concatenation & $\var{a} \cat \var{b}$ \\
 Concatenation & $\Vstr{a} \Vsym{b}$ \\
-Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$
+Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
+\hline
 \end{tabular}
-\end{center}
+\label{tab:op-notation}.
+\end{table}
 
 Where \var{set} is a set,
 \Vsize{set} is the size of the set.
 Where \var{seq} is a sequence (ordered set),
 $\var{seq}[\var{i}]$ is its \var{i}'th element,
 $0 \le \var{i} \le \Vsize{seq}$.
+We will write
+\var{s}[\var{a} \ldots \var{z}]
+for the subsequence
+\[
+    \var{s}[\var{a}], \;\;
+    \var{s}[\var{a}+1], \;\;
+    \ldots \;\;
+    \var{s}[\var{z}].
+\]
 
 Where \Vsymset{vocab} is non-empty set of symbols,
 let $\var{vocab}^\ast$ be the set of all strings
