@@ -7,6 +7,9 @@
 \usepackage{url}
 \usepackage{amssymb}
 
+\delimitershortfall=0pt
+\delimiterfactor=1100
+
 \newcommand{\todo}[1]{\par{\large\bf Todo: #1}\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
@@ -136,9 +139,8 @@
 \newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand\Etable[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand\bigEtable[1]{\ensuremath{\mymathop{table}\bigl[#1\bigr]}}
 \newcommand\Rtable[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand\Rtablesize[1]{\ensuremath{\bigl| \mymathop{table}[#1] \bigr|}}
+\newcommand\Rtablesize[1]{\ensuremath{\left| \mymathop{table}[#1] \right|}}
 \newcommand\Vtable[1]{\Etable{\var{#1}}}
 \newcommand\EEtable[2]{\ensuremath{\mymathop{table}[#1,#2]}}
 \newcommand\EVtable[2]{\EEtable{#1}{\var{#2}}}
@@ -239,10 +241,12 @@ and
 Reference types are
 ``A'' (algorithm),
 ``E'' (equation),
-and ``S'' (section).
+``S'' (section),
+``T'' (table), and
+``Th'' (theorem).
 For example
-\Eref{e:cfg} refers to equation
-\ref{e:cfg} on page \pageref{e:cfg},
+\Eref{e:restriction1} refers to equation
+\ref{e:restriction1} on page \pageref{e:restriction1},
 and
 \Sref{s:features} refers to
 section \ref{s:features}
@@ -619,39 +623,51 @@ Where \Vstr{s} is a string,
 \size{\Vstr{s}} is its length, counted in symbols.
 Let $\var{vocab}^+$ be
 \begin{equation*}
-\bigl\{ \Vstr{x}
-\bigm| \Vstr{x} \in \var{vocab}^\ast \land \Vsize{\Vstr{x}} > 0
-\bigr\}.
+\left\{ \Vstr{x}
+\; \middle| \;
+\Vstr{x} \in \var{vocab}^\ast
+\; \land \;
+\Vsize{\Vstr{x}} > 0
+\right\}.
 \end{equation*}
 
 \section{Context-free grammars}
 \label{s:CFGs}
 
-A \dfn{context free grammar} (type \type{CFG}) is a 4-tuple
+A \dfn{context free grammar} is type \type{CFG}.
+Let
 \begin{equation}
-\label{e:cfg}
-    [\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}].
+\var{g} = [\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}]
 \end{equation}
-For convenience in refering to the elements of a CFG,
+be a 4-tuple.
+\var{g} is a CFG, \Vcfg{g},
+if and only if
+\begin{gather*}
+\Vsymset{nt} \cup \Vsymset{term} = \emptyset, \quad \text{and} \\
+\Accept{\var{accept}} \in \Vsymset{nt}, \quad \text{and} \\
+\text{\Vruleset{rules} is a set of elements of type \type{RULE}.}
+\end{gather*}
+We will define type \type{RULE} shortly.
+For convenience,
+for a CFG, \Vcfg{g},
+we write
+\Vcfg{g} (type \type{CFG}) is a 4-tuple
 \begin{equation*}
 \begin{alignedat}{3}
 & \NT{\Vcfg{g}} && \defined && \quad \Vsymset{nt}, \\
 & \Term{\Vcfg{g}} && \defined && \quad \Vsymset{term}, \\
 & \Accept{\Vcfg{g}} && \defined && \quad \Vsym{accept}, \\
-& \Rules{\Vcfg{g}} && \defined && \quad \Vruleset{rules} \quad \text{and} \\
-& \Vocab{\Vcfg{g}} && \defined && \quad \Vsymset{nt} \cup \Vsymset{term},
+& \Rules{\Vcfg{g}} && \defined && \quad \Vruleset{rules}, \quad \text{and} \\
+& \Vocab{\Vcfg{g}} && \defined && \quad \Vsymset{nt} \cup \Vsymset{term}.
 \end{alignedat}
 \end{equation*}
-where \Vcfg{g} is the CFG of
-\Eref{e:cfg}.
-The type \type{RULE} will be defined shortly.
-\NT{\var{g}} is a set of symbols called non-terminals,
-and \Term{\var{g}} is a set of symbols called terminals.
+The elements of the set \NT{\var{g}}, are non-terminal symbols,
+or simply \dfn{non-terminals}.
+The elements of the set \Term{\var{g}}, are terminal symbols,
+or simply \dfn{terminals}.
 \Accept{\var{g}} is the \dfn{accept symbol},
-which in the parsing literature is often called
+and in the parsing literature is often called
 the ``start symbol''.
-The accept symbol must be a non-terminal:
-$\Accept{\var{g}} \in \var{nt}$.
 \Vocab{\var{g}} is
 the \dfn{vocabulary} of \Vext{g}.
 
@@ -660,12 +676,11 @@ is called a \dfn{sentential form}.
 A string of symbols from \Term{\var{g}}
 is called a \dfn{sentence}.
 
-\Vruleset{rules} is a set of rules
-where a rule
+A rule
 (type \type{RULE})
 is a duple
 \begin{equation*}
-[\Vsym{lhs} \de \Vstr{rhs}]
+\left[ \Vsym{lhs} \de \Vstr{rhs} \right]
 \end{equation*}
 such that
 \begin{equation*}
@@ -702,7 +717,7 @@ in which
 \end{align*}
 
 Every symbol derives itself in zero steps.
-The zero step derivation is call a \dfn{trivial derivation}.
+The zero step derivation is called a \dfn{trivial derivation}.
 A derivation of more than zero steps
 is called a \dfn{non-trivial derivation}.
 
@@ -753,9 +768,11 @@ That is,
 \set{
 \quad
 \begin{aligned}
-& \Vstr{sentence} \; \mid \; \\
-& \quad \Accept{\Vcfg{g}} \destar \Vstr{sentence} \\
-& \quad \land \; \Vstr{sentence} \in \Term{\Vcfg{g}}
+& \Vstr{sentence} \quad \text{such that} \\
+& \qquad \begin{aligned}
+               & \Accept{\Vcfg{g}} \destar \Vstr{sentence} \\
+      \land \quad & \Vstr{sentence} \in \Term{\Vcfg{g}}
+      \end{aligned}
 \end{aligned}
 \quad
 }
@@ -788,29 +805,6 @@ A \dfn{cycle derivation} is any derivation of the form
 Cycle symbols and cycle derivations are also often called
 simply ``cycles''.
 
-Intuitively, the cycle depth is the number of times the cycle
-string returns to itself.
-More formally, if \Vstrset{d} is the derivation sequence
-of the cycle derivation
-$\Vsym{cycle} \xderives{\var{n}} \Vsym{cycle}$
-then the cycle depth is
-\begin{equation}
-\left| \;
-\left\lbrace \;
-\var{i}
-\; \middle| \;
-\begin{aligned}
-& 1 \le \var{i} \le \var{n} \quad \text{and} \; \\
-& \; \var{d}[\var{i}] = \Vsym{cycle}
-\end{aligned}
-\; \right\rbrace
-\; \right|
-\end{equation}
-It follows that
-a cycle of cycle depth 1 begins and ends with the
-cycle string, but does not derive the cycle string
-in any of its intermediate steps.
-
 Earlier implementations of Marpa have supported cycles,
 but the current implementation of Marpa does not.
 When the current implementation finds a cycle in a grammar,
@@ -818,8 +812,8 @@ it print a message describing the cycle and throws
 a fatal error.
 This seems to be exactly the behavior users desire.
 
-Cycles are recursions but most recursions (and apparently all
-recursion of practical interest) are not cycles.
+Cycles are recursions but most recursions
+are not cycles.
 In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
 That is, \Vsym{recurse} is recursive if and only if
 \begin{equation*}
@@ -835,10 +829,32 @@ There is no indication that cycles are of practical use.
 Nor does the theoretical literature suggest potential uses for
 them.
 Support for cycles did require complicated extra code,
-and it seems that Marpa will be better off
-without support of cycles.
+and removing the support of cycles seems to be cost-free.
+
 When Marpa did support cycles,
 it did so by cutting the cycle short at cycle depth 1.
+Intuitively, the cycle depth is the number of times the cycle
+string returns to itself.
+More formally, if \Vstrset{d} is the derivation sequence
+of the cycle derivation
+$\Vsym{cycle} \xderives{\var{n}} \Vsym{cycle}$
+then the cycle depth is
+\begin{equation}
+\left| \;
+\left\lbrace \;
+\var{i}
+\quad \middle| \quad
+\begin{gathered}
+1 \le \var{i} \le \var{n} \quad \text{and} \; \\
+\var{d}[\var{i}] = \Vsym{cycle}
+\end{gathered}
+\; \right\rbrace
+\; \right|
+\end{equation}
+It follows that
+a cycle of cycle depth 1 begins and ends with the
+cycle string, but does not derive the cycle string
+in any of its intermediate steps.
 
 \section{Improper context free grammars}
 \label{s:improper}
@@ -858,9 +874,10 @@ We discussed Marpa's handling of cycles earlier
 
 The current implementation of Marpa supports
 unproductive symbols.
-By default, Marpa reports unproductive symbols.
-The user may silence the error report
-by marking the unproductive symbol as a unicorn.
+By default, Marpa treats an unproductive symbols
+as a fatal error,
+but the user may bypass the fatal error
+by marking the unproductive symbol as a ``unicorn''.
 
 A \dfn{productive symbol}
 is one which derives a sentence.
@@ -868,47 +885,74 @@ That is, \Vsym{prod} is productive if
 and only if, for some \Vstr{sentence},
 \begin{equation*}
 \Vstr{sentence} \in \Term{\var{g}}^\ast
-\;  \implies \;
+\;  \land \;
   \Vsym{prod} \destar \Vstr{sentence}
 \end{equation*}
-Note that this definition implies that all nullable
+The empty string is a sentence,
+and therefore that all nullable
 symbols are productive.
 
 A symbol is \dfn{unproductive} if it is not
 productive.
 In the current version of Marpa,
 unproductive symbols can be implemented by
-defining \dfn{unicorn} terminals ---
-terminals which can never be
+defining \dfn{unicorn} terminals.
+A unicorn terminal is a terminal symbol
+which can never be
 found in the input.
 
 In the Marpa implementation,
 a terminal can be made into a unicorn by
 requiring that
-a terminal match something that never occurs
-in the input.
-The POSIX expression
+a terminal match a regular expression that does not match
+any string in $\Vocab{\Vint{g}}^\ast$.
+For example,
+the POSIX expression
 \texttt{[\char`^ \char`\\ D\char`\\ d]}
 indicates that the terminal
 must match a single character which
 is both a digit and a non-digit.
-Since this is not possible,
-the terminal will never match anything in the input.
+This is, of course, not possible
+and therefore any terminal required to match that POSIX expression
+will never match anything in the input.
 
 Unproductive symbols often prove useful in Marpa
 applications.
-Unproductive symbols can be
-used to implement an external lexer for a terminal by setting
-an event to trigger when that terminal is expected.
-In such a case, it is convenient to make sure the terminal
-cannot be not recognized in the input.
+One example of the utility of unproductive symbols
+is interaction with custom lexers.
+Marpa allows custom lexers, and these can feed lexemes
+to the parser under application control,
+observe the result,
+and react accordingly.
+The custom lexer can hand control back to Marpa's
+own lexer at any point.
+
+It is often convenient for Marpa to use its internal lexer
+in most situations,
+switching over to custom lexer only at certain points.
+To do this, unicorn terminals can
+be defined and placed in the grammar at points where the
+custom lexer should take over.
+Marpa will never recognize a unicorn in the input,
+but it does keep track of when unicorns are expected.
+Marpa can be configured to trigger a run-time event
+when the unicorn is expected.
+The application will receive control when the event occurs,
+and it can then invoke the custom lexer.
 
 \subsection{Inaccessible symbols}
 
 The current implementation of Marpa supports inaccessible symbols.
-By default, they are reported as errors.
-This error can be silenced for the whole grammar,
-or for individual symbols.
+The user can specify \Marpa{}'s treatment
+of inaccessible symbols:
+inaccessible symbols can be silently ignored,
+they can be reported as warnings,
+or they can be treated as fatal errors.
+Treatment of inaccessible symbols can be specified
+symbol by symbol,
+and the default treatment can also be specified.
+The ``factory default'' is
+to report inaccessible symbols are reported as warnings.
 
 An \dfn{inaccessible symbol} is one which can never be derived from
 the accept symbol.
@@ -1416,7 +1460,7 @@ number of distinct dotted rules it allows.
 
 If we let \Vdr{x} be a dotted rule, such that
 \begin{gather*}
-\Vdr{x} = \bigl[ \Vrule{x}, \var{pos} \bigr], \\
+\Vdr{x} = \left[ \Vrule{x}, \var{pos} \right], \\
 \intertext{then} \\
 \begin{alignedat}{3}
 & \LHS{\Vdr{x}} && \defined && \quad
@@ -1496,7 +1540,7 @@ of the dotted rule of the EIM.
 For example, let
 \begin{equation*}
 \Veim{x} = [\Vdr{x}, \Vorig{x}] =
-\Veim{x} = \bigl[[\Vrule{x}, \var{pos}], \Vorig{x} \bigr].
+\Veim{x} = \left[[\Vrule{x}, \var{pos}], \Vorig{x} \right].
 \end{equation*}
 Then
 \begin{equation*}
@@ -1597,7 +1641,7 @@ of Earley items in all Earley sets for \alg{Recce},
 \begin{equation*}
 \Rtablesize{\alg{Recce}} =
      \sum\limits_{\Vloc{i}=0}^{\size{\Cw}}
-	{\bigsize{\EVtable{\alg{Recce}}{i}}}.
+	{\size{\EVtable{\alg{Recce}}{i}}}.
 \end{equation*}
 For example,
 \Rtablesize{\Marpa} is the total number
@@ -1610,7 +1654,8 @@ there was a unique acceptance symbol,
 The input \Cw{} is accepted if and only if,
 for some \Vstr{rhs},
 \begin{equation*}
-\bigl[[\Accept{\Vint{g}} \de \Vstr{rhs} \mydot], 0\bigr] \in \bigEtable{\Vsize{\Cw}}
+\left[[\Accept{\Vint{g}} \de \Vstr{rhs} \mydot], 0\right]
+\in \Etable{\Vsize{\Cw}}
 \end{equation*}
 
 The following theorem will prove useful.
@@ -2001,7 +2046,7 @@ We let
 & \var{PredictOne}(\Vsym{top}, \Vloc{i}) \defined \\
 & \qquad \left\lbrace
 \begin{aligned}
-& \bigl[
+& \left[
 \left[
 \Vsym{predicted}
 \de
@@ -2009,7 +2054,7 @@ We let
 \Vstr{rhs}
 \right],
 \Vloc{i}
-\bigr] \\
+\right] \\
 & \quad \text{such that for some \Vstr{suffix},} \\
 & \qquad \left[\Vsym{predicted} \de \Vstr{rhs} \right] \in \Rules{\Vint{g}} \\
 & \qquad \quad \land \quad
@@ -2031,7 +2076,7 @@ We let
 \begin{align*}
 & \var{Scanner}(\Ves{i}) \defined \\
 & \qquad \Bigl\lbrace
-\bigl [
+\left [
 \left[
 \Vsym{lhs}
 \de
@@ -2041,15 +2086,15 @@ We let
 \Vstr{suffix}
 \right],
 \Vloc{origin}
-\bigr]
+\right]
 \Bigr\rbrace
 \end{align*}
 such that
 \begin{equation*}
 \begin{aligned}
 & \Vsym{token} = \Vstr{w}[\Vloc{i} \subtract 1] \\
-\land \quad & \bigl[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{token} \Vstr{suffix}
-\right], \Vloc{origin} \bigr]\\
+\land \quad & \left[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{token} \Vstr{suffix}
+\right], \Vloc{origin} \right]\\
 & \qquad \in \Ves{(\Vloc{i}\subtract 1)}.
 \end{aligned}
 \end{equation*}
@@ -2738,8 +2783,8 @@ be less than \var{c},
   \bigr \rbrace
   \Bigr| < \var{c}
 \end{equation}
-Restrictions \ref{e:restriction1}
-and \ref{e:restriction2}
+Restrictions \Eref{e:restriction1}
+and \Eref{e:restriction2}
 impose little or no obstacle
 to the practical use
 of Marpa's generalized input model.
