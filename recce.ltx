@@ -28,10 +28,10 @@
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
 
-\newcommand{\Aref}[1]{(A\ref{#1}:\pageref{#1})}
-\newcommand{\Eref}[1]{(E\ref{#1}:\pageref{#1})}
-\newcommand{\Sref}[1]{(S\ref{#1}:\pageref{#1})}
-\newcommand{\Tref}[1]{(T\ref{#1}:\pageref{#1})}
+\newcommand{\Aref}[1]{(a\ref{#1}:\pageref{#1})}
+\newcommand{\Eref}[1]{(e\ref{#1}:\pageref{#1})}
+\newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})}
+\newcommand{\Tref}[1]{(t\ref{#1}:\pageref{#1})}
 \newcommand{\Thref}[1]{(Th\ref{#1}:\pageref{#1})}
 
 % I use hyphens in variable names,
@@ -239,10 +239,10 @@ where {\it X} is the reference type,
 and
 {\it p} is a page reference.
 Reference types are
-``A'' (algorithm),
-``E'' (equation),
-``S'' (section),
-``T'' (table), and
+``a'' (algorithm),
+``e'' (equation),
+``s'' (section),
+``t'' (table), and
 ``Th'' (theorem).
 For example
 \Eref{e:restriction1} refers to equation
@@ -889,7 +889,7 @@ and only if, for some \Vstr{sentence},
   \Vsym{prod} \destar \Vstr{sentence}
 \end{equation*}
 The empty string is a sentence,
-and therefore that all nullable
+and therefore all nullable
 symbols are productive.
 
 A symbol is \dfn{unproductive} if it is not
@@ -952,23 +952,23 @@ Treatment of inaccessible symbols can be specified
 symbol by symbol,
 and the default treatment can also be specified.
 The ``factory default'' is
-to report inaccessible symbols are reported as warnings.
+to report inaccessible symbols as warnings.
 
 An \dfn{inaccessible symbol} is one which can never be derived from
 the accept symbol.
 That is, \Vsym{noacc} is inaccessible in \Vext{g} if and only if
 \begin{equation*}
-\neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{g} \destar \Vstr{pre} \cat \Vsym{noacc} \cat \Vstr{post}.
+\neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{g} \destar \Vstr{pre} \Vsym{noacc} \Vstr{post}.
 \end{equation*}
 
 Inaccessible symbols have been found useful in Marpa applications
 that use higher-level languages ---
 languages which generate other languages.
-Often the generated grammar consists of a ``custom''
+Often the generated grammar consists of ``custom''
 rules which vary,
 and ``boilerplate'' rules,
 which are the same in every generated grammar.
-It can be useful to have sections of the ``boilerplace''
+It can be useful to have sections of the ``boilerplate''
 be optional,
 so that some of the ``boilerplate'' rules are only used
 if the ``custom'' rules call for them.
@@ -977,7 +977,7 @@ within the boilerplate,
 those boilerplate rules become inaccessible.
 
 Optional boilerplace can be implemented
-by silencing inaccessibility errors for the symbols in the optional boilerplate,
+by silencing inaccessibility errors for the symbols in the optional boilerplate.
 Usually it is possible to locate a topmost symbol for
 each section of optional boilerplace,
 in which case the warning need only be silenced for those
@@ -1006,17 +1006,17 @@ run-time events are performed
 in such a way that the internal grammar
 is invisible to
 the user.
-This section describes the rewrite
-from an external grammar
-to an internal grammar.
 
 We defined Marpa's external grammars in
-section \ref{s:EXTs}.
+\Sref{s:EXTs}.
 Recall that an external grammar may be any cycle-free grammar.
 Marpa internal grammars are described by construction
 in this section.
 They will be defined more carefully
-in section \ref{s:INTs} (p. \pageref{s:INTs}).
+in \Sref{s:INTs}.
+This section describes the rewrite
+from an external grammar
+to an internal grammar.
 
 Grammar rewriting was not the focus
 of \cite{AH2002} ---
@@ -1032,11 +1032,12 @@ and the change offered
 no complexity gains in terms of Landau notation.
 The hope was that benefits would be seen in practice.
 
-Unfortunately, these did not emerge.
+Unfortunately, these benefits did not emerge.
 Marpa's experience in using, developing and maintaining
-LR(0) states in Earley parsing showed these added
+LR(0) states in \Marpa{}'s early versions showed
+that LR(0) states added
 greatly to the complexity of the code;
-were a real obstacle to the implementation of run-time features
+were an obstacle to the implementation of run-time features
 in the parser;
 and produced no real improvement in speed or in space requirements.
 On the other hand,
@@ -1053,7 +1054,7 @@ but many of these rewrites are almost totally without
 usefulness in practice.
 In the academic literature,
 a rewritten grammar may recognize the same language,
-but most of the time it will not preserve the semantics
+but often it will not preserve the semantics
 of the grammar.
 
 Very few users of CFG's are
@@ -1064,14 +1065,11 @@ in terms of a semantics,
 and that user wants the parser
 to preserve their semantics.
 If a rewrite scrambles the user's semantics,
-then that rewrite cannot form an essential part
-of a general-purpose practical parsing tool.
+then that rewrite cannot play an essential role
+in a general-purpose practical parsing tool.
 
-Marpa's limits itself to using rewrites that
+Marpa restricts itself to using rewrites that
 are \dfn{semantics-safe}.
-We will state Marpa's definition
-of semantics-safe more precisely
-in section \ref{semantics-safe}.
 The intent behind
 semantics-safe rewrites
 is that they
@@ -1086,29 +1084,29 @@ and
 \Sref{s:trivial-grammars}
 describe the rewrites
 applied by Marpa.
+We will state Marpa's definition
+of semantics-safe more precisely
+in section \Sref{semantics-safe}.
 
 \subsection{Augmenting the grammar}
 \label{s:augmentation}
 
-It is assumed
-that there is a dedicated acceptance rule,
-such that for some symbol \Vsym{top},
-\begin{equation*}
-\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}].
-\end{equation*}
-It is also assumed that
-the only occurence of \Vsym{accept} in the
-grammar is as
-the LHS of \Vrule{accept} or, more formally,
-that
-\begin{equation*}
-\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept}
-\end{equation*}
-and that for every rule, \var{rule}, in \Cg{}
-\begin{equation*}
-\Vsym{accept} \notin \RHS{\Vrule{rule}}.
-\end{equation*}
+Let \Vint{g} be a Marpa internal grammar
+such that $\Vsym{accept} = \Accept{\Vint{g}}$.
+There must be
+a dedicated acceptance rule for \Vint{g},
+\begin{gather*}
+\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}], \\
+\intertext{such that}
+\Vsym{top} \in \NT{\Vint{g}}, \\
+\Vrule{accept} \in \Rules{\Vint{g}}, \\
+\intertext{and for all \Vrule{r}, $\var{r} \in \Rules{\Vint{g}}$,}
+\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept} \\
+\text{and} \quad \Vsym{accept} \notin \RHS{\Vrule{r}}.
+\end{gather*}
 
+The dedicated acceptance rule is also called
+the \dfn{augment rule}.
 The semantics for the augment rule are simple ---
 the semantics of \Vsym{top} are passed up to
 \Vsym{accept}.
@@ -1116,7 +1114,7 @@ This is obviously semantics-safe.
 
 In the Marpa implementation,
 the general method
-described in section \ref{semantics-safe}
+described in section \Sref{semantics-safe}
 for dealing with the semantics of rewritten rules
 is not applied to the augmented rule.
 Instead, the augmented rule is
