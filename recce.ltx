@@ -30,6 +30,7 @@
 
 \newcommand{\Aref}[1]{(a\ref{#1}:\pageref{#1})}
 \newcommand{\Eref}[1]{(e\ref{#1}:\pageref{#1})}
+\newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})}
 \newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})}
 \newcommand{\Tref}[1]{(t\ref{#1}:\pageref{#1})}
 \newcommand{\Thref}[1]{(Th\ref{#1}:\pageref{#1})}
@@ -241,16 +242,21 @@ and
 Reference types are
 ``a'' (algorithm),
 ``e'' (equation),
-``s'' (section),
+``s'' (section)
+``L'' (a location within a section,
+where {\it n} is the section number),
 ``t'' (table), and
 ``Th'' (theorem).
 For example
 \Eref{e:restriction1} refers to equation
-\ref{e:restriction1} on page \pageref{e:restriction1},
-and
+\ref{e:restriction1} on page \pageref{e:restriction1};
 \Sref{s:features} refers to
 section \ref{s:features}
-on page \pageref{s:features}.
+on page \pageref{s:features};
+and
+\Lref{loc:brick-depth} refers
+to page \pageref{loc:brick-depth}
+inside section \ref{loc:brick-depth}.
 
 \Sref{s:features}
 describes the important features of Marpa
@@ -606,7 +612,7 @@ Where \var{seq} is a sequence (ordered set),
 $\var{seq}[\var{i}]$ is its \var{i}'th element,
 $0 \le \var{i} \le \Vsize{seq}$.
 We will write
-\var{s}[\var{a} \ldots \var{z}]
+$\var{s}[\var{a} \ldots \var{z}]$
 for the subsequence
 \[
     \var{s}[\var{a}], \;\;
@@ -615,12 +621,20 @@ for the subsequence
     \var{s}[\var{z}].
 \]
 
-Where \Vsymset{vocab} is non-empty set of symbols,
+Let \Vsymset{vocab} be a non-empty set of symbols.
+Symbols are of type \type{SYM}.
+Let \Tvar{x}{SYM} be a symbol.
+More commonly we write
+\Tvar{x}{SYM} as \Vsym{x}.
+
 let $\var{vocab}^\ast$ be the set of all strings
 (type \type{STR}) formed
 from those symbols.
-Where \Vstr{s} is a string,
-\size{\Vstr{s}} is its length, counted in symbols.
+Let \Tvar{s}{STR} be a string.
+More commonly we write
+\Tvar{s}{STR} as \Vstr{s}.
+\size{\Vstr{s}} is the length of \Vstr{s},
+counted in symbols.
 Let $\var{vocab}^+$ be
 \begin{equation*}
 \left\{ \Vstr{x}
@@ -630,6 +644,14 @@ Let $\var{vocab}^+$ be
 \Vsize{\Vstr{x}} > 0
 \right\}.
 \end{equation*}
+
+Typing in this paper is not strict.
+As one example,
+we will move freely between strings, and their equivalent sequences of symbols.
+As another example,
+when it is convenient,
+we will treat strings of length 1 as symbols,
+and symbols as strings of length 1.
 
 \section{Context-free grammars}
 \label{s:CFGs}
@@ -778,11 +800,39 @@ That is,
 }
 \end{equation*}
 
+Above we defined ``sentence'' and ``sentential form''
+more broadly than in some of the tradition.
+When we wish to refer only to the sentences and sentential forms
+allowed by a grammar, \Vcfg{g}, we will refer specifically to that
+grammar.
+Thus a ``sentence of \Vcfg{g}'' will be some \Vstr{sentence}
+such that
+\begin{equation*}
+\Accept{\Vcfg{g}} \destar \Vstr{sentence} \; \land \; \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast,
+\end{equation*}
+and a
+``sentential form of \Vcfg{g}''.
+will be some \Vstr{sf}
+such that
+\begin{equation*}
+\Accept{\Vcfg{g}} \destar \Vstr{sf} \; \land \; \Vstr{sf} \in \Vocab{\Vcfg{g}}^\ast,
+\end{equation*}
+
 Locations in the input will be of type \type{LOC}.
 We represent
-the \var{i}'th character of the input
-by \CVw{i},
-$0 \le \Vloc{i} < \Vsize{w}$.
+the \var{i}'th character of the input,
+$0 \le \Vloc{i} < \Vsize{w}$,
+by \sym{\var{w}[\var{i}]},
+and
+\begin{equation*}
+\str{\var{w}[\var{a} \ldots \var{z}]} \defined
+\str{\lbrace
+    \var{w}[\var{a}], \;\;
+    \var{w}[\var{a}+1], \;\;
+    \ldots \;\;
+    \var{w}[\var{z}].
+\rbrace}
+\end{equation*}
 
 \section{External grammars}
 \label{s:EXTs}
@@ -1078,7 +1128,7 @@ to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
 but at run-time as well.
 \Sref{s:augmentation},
-\Sref{eliminating-proper_nullables},
+\Sref{s:eliminating-proper_nullables},
 \Sref{s:removing-nulling-symbols},
 and
 \Sref{s:trivial-grammars}
@@ -1121,13 +1171,13 @@ Instead, the augmented rule is
 dealt with as a special case.
 
 \subsection{Eliminating proper nullables}
-\label{eliminating-proper_nullables}
+\label{s:eliminating-proper_nullables}
 
 Recall that a proper nullable
 is a nullable symbol which is not nulling.
 Marpa eliminates proper nullables with an improved
 version of the rewrite in~\cite{AH2002}.
-In this rewrite,
+In \Marpa{}'s rewrite,
 rules with proper nullables are identified
 and a new grammar is created
 in which the external grammar's rules are divided
@@ -1137,8 +1187,8 @@ This is similar to a rewrite into Chomsky form.
 Every proper nullable symbol is then cloned into two others:
 one nulling and one non-nullable.
 All occurrences of the original proper nullable symbol are then replaced
-with one of the two new symbols,
-and new rules are created as necessary to ensure that all possible combinations
+with one of the two new symbols.
+New rules are created as necessary to ensure that all possible combinations
 of nulling and non-nullable symbols are accounted for.
 
 The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
@@ -1151,13 +1201,13 @@ In our version, the worst case growth in the number of rules is linear.
 \subsection{Removing nulling symbols}
 \label{s:removing-nulling-symbols}
 
-After the rewrite of subsection
-\ref{eliminating-proper_nullables},
+After the rewrite of
+\Sref{s:eliminating-proper_nullables},
 all the nullable symbols in the grammar are also
 nulling symbols.
-Note that, if \Vext{g} is a grammar,
+Note that, if \Vext{g} is an external grammar,
 and
-\var{g'} is \Vext{g}
+if \var{g'} is \Vext{g}
 revised to eliminate
 all nulling symbols,
 that
@@ -1179,8 +1229,8 @@ a new LHS symbol for each rule that must remain distinct;
 and adding new rules to derive the new LHS symbols from the original ones.
 Less clean theoretically,
 but easier in practice,
-is to have the implementation regard rules as distinct,
-even when they differ only in their recorded nulling symbols.
+is to have the implementation treat rules as distinct
+even if they differ only in their recorded nulling symbols.
 This is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
@@ -1191,9 +1241,11 @@ The Marpa implementation
 handles null parses by treating them
 as a special case.
 
-Trivial grammars are grammars which only accept
+\dfn{Degenerate grammars} are grammars which do not accept any string.
+\dfn{Trivial grammars} are grammars which only accept
 zero length inputs.
 No Marpa internal grammar can be a trivial grammar.
+A degenerate grammar is treated as a fatal error.
 Trivial grammars are handled as a special case.
 
 \subsection{Semantics-safe rewriting}
@@ -1214,7 +1266,7 @@ If \var{g} is an internal grammar,
 If \var{g} is an external grammar,
 \var{pt} is an \dfn{external parse}.
 
-Every node of the parse tree is a \dfn{symbol instance}.
+Every node of \var{pt} is a \dfn{symbol instance}.
 The symbol instances of the parse correspond one-to-one with 4-tuples
 of the form
 \begin{equation*}
@@ -1223,14 +1275,11 @@ of the form
 where
 \begin{itemize}
 \item \Vsym{s} is the node's symbol;
-\item \Vloc{i} is either the location
-of the first character in \Cw{} that is derived from \Vsym{s}
-or is \Vsize{w}, the position after the last character of \Cw{};
-and
-\item \var{length} is the length of the sentence
+\item \Vloc{i} is the location
+of the first character in \Cw{} that is derived from \Vsym{s}.
 derived from \Vsym{s}.
-\item \var{depth} is the ``brick depth'',
-defined below~(p.~\pageref{loc:brick-depth}).
+\item \var{depth}
+is the ``brick depth''~\Sref{loc:brick-depth}.
 \end{itemize}
 
 In an internal grammar, there are
