@@ -121,6 +121,7 @@
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
+\newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
@@ -1510,7 +1511,7 @@ Let $\Vrule{r} \in \Rules{\Vint{g}}$
 be a rule.
 Recall that $\Vsize{r}$
 is the length of the RHS of \var{r}.
-A dotted rule (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
+A \dfn{dotted rule} (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
 where $0 \le \var{pos} \le \size{\Vrule{r}}$.
 The position, \var{pos}, indicates the extent to which
 the rule has been recognized,
@@ -1526,10 +1527,24 @@ is a rule,
 is the dotted rule with the dot at
 $\var{pos} = 2$,
 between \Vsym{Y} and \Vsym{Z}.
+\DottedRules{\Vcfg{g}} is the set of dotted rules
+in \Vcfg{g}, that is,
+\begin{align*}
+& \DottedRules{\Vcfg{g}} \defined \\
+& \qquad \qquad \left\lbrace \;
+\begin{aligned}
+& \hspace{0pt} [ \Vrule{r}, \var{pos} ] \quad \text{such that} \; \\
+& \begin{aligned}
+         & \Vrule{r} \in \Rules{\Vint{g}} \\
+\qquad \land \quad & 0 \le \var{pos} \le \size{\RHS{\Vrule{r}}} \\
+\end{aligned} \\
+\end{aligned}
+\; \right\rbrace .
+\end{align*}
 
 We consider the size of a grammar, \Vsize{\var{g}}, to be the
-number of distinct dotted rules it allows.
-\Vsize{g} is a constant that depends on \var{g}.
+number of distinct dotted rules it allows,
+$\size{\Vcfg{g}} = \size{\var{Dottted-Rules}[\var{g}]}$.
 
 If we let \Vdr{x} be a dotted rule, such that
 \begin{gather*}
@@ -1938,27 +1953,23 @@ and let \Vesset{esets} be the Earley table.
 The top-level view of the Earley algorithm is
 shown in \Aref{a:marpa}.
 
-We let
-\begin{align*}
-& \var{PredictOne}(\Vsym{top}, \Vloc{i}) \defined \\
-& \qquad \left\lbrace
-\begin{aligned}
-& \left[
-\left[
-\Vsym{predicted}
-\de
-\mydot
-\Vstr{rhs}
-\right],
-\Vloc{i}
-\right] \\
-& \quad \text{such that for some \Vstr{suffix},} \\
-& \qquad \left[\Vsym{predicted} \de \Vstr{rhs} \right] \in \Rules{\Vint{g}} \\
-& \qquad \quad \land \quad
-\Vsym{top} \destar \Vsym{predicted} \Vstr{suffix} \\
-\end{aligned}
-\right\rbrace
-\end{align*}
+Let \var{PredictDR1} be the relation defined by the set
+\begin{equation*}
+\left\lbrace \quad
+\begin{gathered}
+\left[ \Vdr{cause}, \left[ \Vrule{predicted}, 0 \right] \right] \quad \text{such that} \\
+\Vdr{cause} \in \DottedRules{\Vint{g}}, \\
+\Vrule{predicted} \in \Rules{\Vint{g}}, \\
+\Postdot{\Vdr{cause}} \neq \Lambda, \; \text{and} \\
+\LHS{\Vrule{predicted}} = \Postdot{\Vdr{cause}}.
+\end{gathered}
+\quad \right\rbrace
+\end{equation*}
+Let \var{PredictDR} be the closure of
+\var{PredictDR1}:
+\begin{equation*}
+\var{PredictDR}(\Vint{g}) \defined \var{PredictDR1}(\Vint{g})^\ast.
+\end{equation*}
 
 \subsection{Initializer operation}
 \label{s:initializer}
