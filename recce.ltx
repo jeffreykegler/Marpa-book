@@ -1750,32 +1750,44 @@ where the right recursion might end.
 For simplicity,
 in the discussion of this subsection,
 we will assume that the grammar is unambiguous.
-We will call each potential end location of a right recursion,
-an \dfn{EORR},
-and will will call
-the EIM's needed to represent the right recursion
-at an EORR, an \dfn{EORR set}.
+Consider one right recursion,
+and the set of EIM's in it.
+We will the subset of these EIM's that are part of a single Earley set,
+a ``right recursion edge'', or \dfn{RR edge}.
+All of the EIM's in an RR edge will have the same end location.
 
-In \Earley,
-if the length of the right
-recursion at an EORR is \var{n}, then the EORR set contains \var{n} EIM's.
-The total number of EIM's in the EORR sets
+As an Earley parse proceeds through a right recursion,
+the potential length of the recursion grows.
+The actual length of the right recursion will not be known
+until the Earley parser finds the end of the right recursion,
+which can be arbitrarily long.
+
+At the first RR edge, the potential length is 1,
+and the RR edge contains 1 EIM.
+at the second RR edge, the potential length is 2,
+and the RR edge contains 2 EIM's.
+If the potential length of the right
+recursion at an RR edge is \var{n},
+then the RR edge contains \var{n} EIM's.
+The total number of EIM's in the RR edges
 needed for a right recursion of length \var{n} is
 \[
   \sum_{\var{i} = 1}^\var{n} \var{i} = \order{\var{n}^2}.
 \]
-Of these EIM's, only \var{n} will actually be needed ---
-the rest are useless.
+Whne the end of the right recursion is found,
+and its actual length is known,
+only the EIM's in the last RR edge will be used.
+Therefore, only \var{n} EIM's are actually used in the parse ---
+the other EIM's are useless.
 
 Leo's idea was to memoize the right recursions.
-With Leo memoization, each EORR set is represented by
+With Leo memoization, each RR edge is represented by
 a pair of EIM's and a memo.
 There are \Oc{} Leo memos per Earley set,
 so the time and space complexity
-of an EORR set is \Oc{}.
-The time and space complexity of all the EORR
-sets in
-a right recursion of length \var{n} will
+of an RR edge is \Oc{}.
+The time and space complexity of all the RR edges
+in a right recursion of length \var{n} will
 be
 \[
   \sum_{\var{i} = 1}^\var{n} 1 = \On.
@@ -1783,10 +1795,8 @@ be
 
 If, at evaluation time,
 it is desirable to expand the Leo memoizations,
-only the EORR set actually used in the parse
+only the RR edge actually used in the parse
 needs to be expanded.
-All of the EIM's actually used in a right recursion
-will be in a single EORR set.
 The number of memoized
 EIM's that need to be expanded
 will be \On{},
@@ -1809,7 +1819,7 @@ is infinite length, but restricted to
 distinguishing between regular expressions.
 Earley did not claim \On{} for LR-regular
 because LR-regular was not introduced
-to the literature until 1973\cite{Culik1973}.
+to the literature until 1973~\cite{Culik1973}.
 Even in 1991, LR-regular was not well-known,
 which is why Leo only claims
 the weaker
