@@ -1713,7 +1713,7 @@ for some \Vstr{rhs},
 \end{gather*}
 
 \section{The Leo algorithm}
-\label{s:leo-items}
+\label{s:leo}
 
 \subsection{The history of a conjecture}
 
@@ -1847,11 +1847,13 @@ is either
 an Earley item or a Leo item.
 
 In each Earley set, there is at most one Leo item per symbol.
-A Leo item (LIM) is the triple
+A Leo item (LIM) is a triple.
+Let
 \begin{equation*}
-[ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
+\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
 \end{equation*}
-where \Vsym{transition} is the transition symbol,
+be a Leo item.
+\Vsym{transition} is the transition symbol of \Vlim{x},
 and
 \begin{equation*}
 \Veim{top} = [\Vdr{top}, \Vorig{top}]
@@ -1884,17 +1886,17 @@ is \dfn{Leo unique} in \Ves{i},
 \LeoUnique{\Veim{uniq}, \Ves{i}},
 \end{equation*}
 if and only if,
-for all \Veim{other},
+for all \Veim{x},
 such that
 \begin{equation*}
-\quad \Veim{other} \in \Ves{i}
+\quad \Veim{x} \in \Ves{i}
 \end{equation*}
 we have
 \begin{equation*}
-\Penult{\Veim{uniq}} = \Postdot{\Veim{other}}
-\implies \Veim{uniq} = \Veim{other}.
+\Penult{\Veim{uniq}} = \Postdot{\Veim{x}}
+\implies \Veim{uniq} = \Veim{x}.
 \end{equation*}
-It is important to notice that \Veim{other} ranges over all the
+It is important to notice that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{i},
 even those which are not penults.
 
@@ -1925,146 +1927,6 @@ if and only if, for some \Vdr{top}, \Vloc{top},
 \end{gathered}
 \end{equation*}
 
-\subsection{The Leo algorithm}
-\label{s:leo}
-
-Implementing the Leo logic requires
-adding Leo reduction as a new basic operation,
-adding a new premise to the Earley reduction
-operation,
-and extending the Earley sets to memoize Earley
-items as LIM's.
-
-\subsection{Leo reduction}
-
-\begin{equation*}
-\inference{
-    \begin{array}{c}
-    \Veim{component} = \bigl[
-     [ \Vsym{lhs} \de \Vstr{rhs} \mydot ]
-    , \Vloc{component-origin} \bigr] \\
-    \Veim{component} \in \Ves{current} \\[3pt]
-	\Vlim{predecessor} = [ \Vdr{top}, \Vsym{lhs}, \Vorig{top} ] \\
-	\Vlim{predecessor} \in \Ves{component-orig} \\
-    \end{array}
-}{
-    \bigset{ [ \Vdr{top}, \Vorig{top} ] }
-}
-\end{equation*}
-The new Leo reduction operation resembles the Earley reduction
-operation, except that it looks for an LIM,
-instead of a predecessor EIM.
-\Vlim{predecessor} and
-\Veim{component} are the operands of the Leo reduction
-operation.
-\Vsym{lhs} is the transition symbol
-of the Leo reduction.
-As with Earley reduction,
-it may be convenient to treat the transition
-symbol as an operand,
-so that the operands
-are \Vlim{predecessor} and \Vsym{lhs}.
-
-\subsection{Changes to Earley reduction}
-
-Earley reduction still applies, with an additional premise:
-\begin{equation*}
-\begin{split}
-& \neg \exists \, \Vlim{x} \; \mid \\
-&  \qquad \Vlim{x} \in \Ves{component-orig} \\
-&	\qquad \qquad  \land \Vlim{x} = [ \Vdr{x}, \Vsym{lhs}, \Vorig{x} ]
-\end{split}
-\end{equation*}
-The additional premise
-prevents Earley reduction from being applied
-where there is an LIM with \Vsym{lhs} as its transition symbol.
-This reflects the fact that
-Leo reduction replaces Earley reduction if and only if
-there is a Leo memoization.
-
-\subsection{Leo memoization operations}
-
-Finally, we define two new operations for
-the creation of LIM's or,
-in other words,
-for Leo memoization.
-We define uniqueness of a penult in an Earley set as
-\begin{equation*}
-\begin{split}
-& \mymathop{Penult-Unique}(\Vsym{penult},\Ves{i}) \defined \\
-& \qquad \forall \, \Vdr{y} \bigl( \mymathop{Contains}(\Ves{current}, \Vdr{y})
-\land \Vsym{penult} = \Penult{\Vdr{y}} \bigr) \\
-& \qquad \qquad \implies \Vdr{x} = \Vdr{y}.
-\end{split}
-\end{equation*}
-We define the
-Leo uniqueness of a dotted rule within an Earley set as
-\begin{equation*}
-\begin{split}
-& \LeoUnique{\Vdr{x},\Vloc{current}} \defined \\
-& \qquad \mymathop{Contains}(\Ves{current}, \Vdr{x})  \\
-& \qquad \qquad \land \Penult{\Vdr{x}} \neq \Lambda \\
-& \qquad \qquad \land \mymathop{Penult-Unique}({\Penult{\Vdr{x}}}, \Ves{current})
-\end{split}
-\end{equation*}
-and defined the Leo eligibility
-of a dotted rule within an Earley set as
-\begin{equation*}
-\begin{split}
-& \LeoEligible{\Vdr{x},\Vloc{current}} \defined \\
-& \qquad \exists \, \Vrule{x}, \Vorig{x} \; \mid \\
-& \qquad \qquad \Vdr{x} = [ \Vrule{x}, \Vorig{i} ] \\
-& \qquad \qquad \quad \land \RightRecursive{\Vrule{x}} \\
-& \qquad \qquad \quad \land \LeoUnique{\Ves{current},\Vdr{x}}.
-\end{split}
-\end{equation*}
-We define
-the LIM predecessor of \Veim{eim} as follows:
-\begin{multline*}
-\mymathop{LIM-Predecessor}({\Veim{bottom}}) = \Vlim{pred} \quad \text{such that} \\
-\text{there exists} \qquad \Ves{bottom-origin}, \Vdr{bottom}, \\
-\qquad \Vdr{pred}, \Vloc{pred-origin}, \Vloc{bottom-origin} \\
-\end{multline*}
-where
-\begin{gather}
-\Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom-origin} ] \\
-\text{and} \quad \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vloc{pred-origin} ] \\
-\text{and} \quad \Vlim{pred} \in \Ves{bottom-origin}
-\end{gather}
-There may not be a LIM predecessor for \Veim{bottom},
-in which case
-$\mymathop{LIM-Predecessor}({\Veim{bottom}}) = \Lambda$.
-
-We are now ready to define an inference rule which holds if
-a LIM predecessor can be found for an EIM \Veim{bottom}
-\begin{equation*}
-\inference{
-    \begin{array}{c}
-    \mymathop{LIM-Predecessor}({\Vlim{pred},\Veim{bottom}}) \\
-    \Vlim{pred} = [ \Vdr{pred}, \LHS{\Vdr{bottom}}, \Vorig{pred} ] \\
-    \Veim{bottom} = [ \Vdr{bottom}, \Vloc{bottom} ] \\
-    \Veim{bottom} \in \Ves{current} \\
-    \LeoEligible{\Vdr{bottom}}
-    \end{array}
-}{
-    \left \lbrace [ \Vdr{pred}, \Penult{\Vdr{bottom}}, \Vorig{pred} ] \right \rbrace
-}
-\end{equation*}
-and another, which holds if
-\Veim{bottom} has no predecessor LIMT,
-\begin{equation*}
-\inference{
-    \begin{array}{c}
-    \neg \mymathop{LIMT-Predecessor}({\Vlim{pred},\Veim{bottom}}) \\
-    \Veim{bottom} = [ \Vdr{bottom}, \Vorig{bottom} ] \\
-    \Veim{bottom} \in \Ves{current} \\
-    \LeoEligible{\Vdr{bottom}}
-    \end{array}
-}{
-    \bigset{ [ \Next(\Vdr{bottom}), \Penult{\Vdr{bottom}}, \Vorig{bottom} ] }
-}
-\end{equation*}
-
 \section{The Marpa algorithm}
 \label{s:algorithm}
 
@@ -2074,7 +1936,7 @@ let \Vstr{w} be the input of the parse,
 and let \Vesset{esets} be the Earley table.
 
 The top-level view of the Earley algorithm is
-show in \Aref{a:marpa}.
+shown in \Aref{a:marpa}.
 
 We let
 \begin{align*}
