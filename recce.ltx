@@ -1258,7 +1258,11 @@ an external grammar, \Vext{g}.
 Let \Vint{g} be the internal grammar that is
 the rewritten version of \Vext{g}.
 
-Let $\var{pt} = \var{tree}(\var{g},\Vstr{w})$
+Let
+\begin{equation}
+\label{e:parse-tree}
+\var{pt} = \var{tree}(\var{g},\Vstr{w})
+\end{equation}
 be the parse tree that results from a parse of \Vstr{w}
 by a grammar \var{g}.
 If \var{g} is an internal grammar,
@@ -1274,12 +1278,12 @@ of the form
 \end{equation*}
 where
 \begin{itemize}
-\item \Vsym{s} is the node's symbol;
+\item \Vsym{s} is the node's symbol.
 \item \Vloc{i} is the location
 of the first character in \Cw{} that is derived from \Vsym{s}.
 derived from \Vsym{s}.
 \item \var{depth}
-is the ``brick depth''~\Sref{loc:brick-depth}.
+is the ``brick depth''~\Lref{loc:brick-depth}.
 \end{itemize}
 
 In an internal grammar, there are
@@ -1291,11 +1295,10 @@ of the internal grammar.
 Only brick symbols have semantics attached to them.
 All terminal symbols are bricks.
 
-Let \var{tree} be a parse tree creating using an
-internal grammar.
-If the symbol of an instance in \var{tree} is a brick,
+Recall \var{pt} from \Eref{e:parse-tree}.
+If the symbol of an instance in \var{pt} is a brick,
 the instance is a \dfn{brick instance}.
-If the symbol of an instance in \var{tree} is a mortar symbol,
+If the symbol of an instance in \var{pt} is a mortar symbol,
 the instance is a \dfn{mortar instance}.
 
 The
@@ -1303,16 +1306,18 @@ The
 of an instance in a external grammar is
 the depth of the node of the instance measured in the traditional way --
 the distance in nodes to the root.
-In an internal grammar, the brick depth is the distance of the node
+In an internal grammar, the brick depth is more complicated.
+Intuitively, it is the distance of the node
 in brick nodes.
-
-In more detail,
-the root instance of an internal grammar is a special case -- its
-brick depth is undefined.
-Since an internal grammar is augmented, the root instance must
+More formally,
+\begin{itemize}
+\item The brick depth of the root instance of an internal grammar is undefined.
+\item Since an internal grammar is augmented, the root instance must
 have only one child, a brick instance whose brick depth is defined to be zero.
-For all other brick nodes, the brick depth is one plus the brick depth of its parent node.
-For mortar nodes, the brick depth is the brick depth of its parent node.
+\item For all other brick nodes,
+the brick depth is one plus the brick depth of its parent node.
+\item For mortar nodes, the brick depth is the brick depth of its parent node.
+\end{itemize}
 
 For evaluation, it is useful to convert the internal parse tree to
 a \dfn{brick tree}.
@@ -1322,21 +1327,34 @@ and creating instances for the brick nodes.
 Note that this implies that the root node (the node
 whose symbol is \Accept{\Vint{g}}) is ignored.
 
-When a brick node is encountered that is marked with memoized
+When, while constructing a brick tree,
+a brick node is encountered that is marked with memoized
 nulling symbols,
-new instances (``nulling instances'') must be created for the nulling symbols.
-Let \var{marked} be the node for which there are recorded nulling instances.
-The nulling instances have the form
+new instances must be created for the nulling symbols.
+The new instances are called \dfn{nulling instances}.
+
+Let \var{marked} be a node in a parse tree.
+Assume that \var{marked} has
+one or more recorded parsing instances.
+Recorded with each nulling instance will be whether it occurs
+before or after \var{marked}.
+In the brick tree, each nulling instance takes the form
 \begin{equation*}
 [ \Vsym{nulling}, \Vloc{bound}, 0, \var{depth} ]
 \end{equation*}
-where \Vsym{sym} is the memoized nulling symbol,
-\var{depth} is the same as the depth of \var{marked},
-and \var{bound} is the location of the nulling symbol.
-\var{bound} will be either the start of \var{marked},
-or the location
+where
+\begin{itemize}
+\item \Vsym{nulling} is the memoized nulling symbol.
+\item \Vloc{bound} is the location of the nulling symbol.
+If the nulling instance occurs before \var{marked},
+\var{bound} is the start location of \var{marked}.
+If the nulling instance occurs after \var{marked},
+\var{bound}
+is the location
 immediately after
 \var{marked}.
+\item \var{depth} is the same as the depth of \var{marked}.
+\end{itemize}
 Nulling instances are brick instances.
 
 We are now in a position to define a semantics-safe
@@ -1360,29 +1378,33 @@ and let \var{btree} be the brick tree
 produced from \var{itree}.
 Let
 \begin{equation*}
-\var{bnode} = [ \Vsym{isym}, \Vloc{istart}, \var{ilength}, \var{idepth} ]
+\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength}, \var{edepth} ]
 \end{equation*}
-be an instance in \var{btree}, and let
+be an instance in \var{etree}, and let
 \begin{equation*}
 \var{bnode} = [ \Vsym{bsym}, \Vloc{bstart}, \var{blength}, \var{bdepth} ]
 \end{equation*}
 be an instance in \var{btree}.
-Let
+Let \var{Instance-matches} be the relation defined by the set
 \begin{equation*}
-\begin{split}
-& \var{Instance-matches}(\var{bnode},\var{enode}) \defined \\
-& \qquad \Vsym{bsym} = \Vsym{esym} \\
-& \qquad \qquad \text{and} \quad \Vloc{bstart} = \Vloc{estart} \\
-& \qquad \qquad \text{and} \quad \var{blength} = \var{elength} \\
-& \qquad \qquad \text{and} \quad \var{bdepth} = \var{edepth} \\
-\end{split}
+\left\lbrace \;
+\begin{aligned}
+& [ \var{enode},\var{bnode} ] \quad \text{such that} \\
+& \qquad \Vsym{esym} = \Vsym{bsym} \\
+& \qquad \text{and} \quad \Vloc{estart} = \Vloc{bstart} \\
+& \qquad \text{and} \quad \var{elength} = \var{blength} \\
+& \qquad \text{and} \quad \var{edepth} = \var{bdepth}
+\end{aligned}
+\; \right\rbrace
 \end{equation*}
+
+\begin{sloppypar}
 A rewrite is semantics-safe, if and only if the relation
 defined by
 \var{Instance-matches}
 is a one-to-one correspondence
 (bijection)
-between  the
+between
 the instances in \var{btree}
 and the instances in \var{etree}.
 In other words,
@@ -1392,6 +1414,7 @@ matches every instance of \var{btree} with exactly one
 in \var{etree}
 and every instance of \var{etree} with exactly one
 in \var{btree}.
+\end{sloppypar}
 
 \section{Marpa internal grammars}
 \label{s:INTs}
@@ -1403,11 +1426,11 @@ with two additional restrictions.
 
 \begin{itemize}
 \item Marpa internal grammars are augmented.
+For details of grammar augmentation,
+see \Sref{s:augmentation}.
 \item Marpa internal grammars do not allow nullable symbols.
 \end{itemize}
 
-For details of grammar augmentation,
-see \Sref{s:augmentation}.
 
 The notations for CFGs \Sref{s:CFGs}
 carry over to internal grammars,
@@ -1436,10 +1459,13 @@ A rule \Vrule{x},
 $\Vrule{x} \in \Rules{\Vint{g}}$,
 is \dfn{right-recursive},
 $\RightRecursive{\Vrule{x}}$,
-if and only if
+if and only if, for some \Vstr{y}
 \begin{equation}
 \label{eq:right-recursive}
-\exists \, \Vstr{y} \mid \Rightmost{\Vrule{x}} \deplus \Vstr{y} \land \Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
+\begin{gathered}
+\Rightmost{\Vrule{x}} \deplus \Vstr{y} \quad \text{and} \\
+\Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
+\end{gathered}
 \end{equation}
 \Vrule{x} is \dfn{directly right-recursive}
 if the derivation of \Vstr{y} in
@@ -1485,17 +1511,17 @@ be a rule.
 Recall that $\Vsize{r}$
 is the length of the RHS of \var{r}.
 A dotted rule (type \type{DR}) is a duple, $[\Vrule{r}, \var{pos}]$,
-where $0 \le \var{pos} < \size{\Vrule{r}}$.
+where $0 \le \var{pos} \le \size{\Vrule{r}}$.
 The position, \var{pos}, indicates the extent to which
 the rule has been recognized,
 and is represented with a large raised dot,
 so that if
 \begin{equation*}
-[\Vsym{A} \de \Vsym{X} \cat \Vsym{Y} \cat \Vsym{Z}]
+[\Vsym{A} \de \Vsym{X} \Vsym{Y} \Vsym{Z}]
 \end{equation*}
 is a rule,
 \begin{equation*}
-[\Vsym{A} \de \var{X} \cat \var{Y} \mydot \var{Z}]
+[\Vsym{A} \de \Vsym{X} \Vsym{Y} \mydot \Vsym{Z}]
 \end{equation*}
 is the dotted rule with the dot at
 $\var{pos} = 2$,
@@ -1544,7 +1570,7 @@ other than the initial dotted rule,
 with a dot position of zero,
 for example,
 \begin{equation*}
-\Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{alpha} ].
+\Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{rhs} ].
 \end{equation*}
 A \dfn{confirmed dotted rule}
 is the initial dotted rule,
@@ -1554,7 +1580,7 @@ A \dfn{completed dotted rule} is a dotted rule with its dot
 position after the end of its RHS,
 for example,
 \begin{equation*}
-\Vdr{completed} = [\Vsym{A} \de \Vstr{alpha} \mydot ].
+\Vdr{completed} = [\Vsym{A} \de \Vstr{rhs} \mydot ].
 \end{equation*}
 Predicted, confirmed and completed dotted rules
 are also called, respectively,
@@ -1564,7 +1590,7 @@ A dotted rule which is not a completion is called an
 
 A Earley item (type \type{EIM}) is a duple
 \[
-    [\Vdr{dotted-rule}, \Vorig{x}]
+    [\Vdr{dotted}, \Vorig{x}]
 \]
 of dotted rule and origin.
 (The origin is the location where recognition of the rule
@@ -1587,7 +1613,7 @@ of the dotted rule of the EIM.
 For example, let
 \begin{equation*}
 \Veim{x} = [\Vdr{x}, \Vorig{x}] =
-\Veim{x} = \left[[\Vrule{x}, \var{pos}], \Vorig{x} \right].
+\left[[\Vrule{x}, \var{pos}], \Vorig{x} \right].
 \end{equation*}
 Then
 \begin{equation*}
@@ -1596,12 +1622,13 @@ Then
 \Postdot{\Veim{x}} = \Postdot{\Vdr{x}} \\
 \LHS{\Veim{x}} = \LHS{\Vdr{x}} = \LHS{\Vrule{x}} \\
 \RHS{\Veim{x}} = \RHS{\Vdr{x}} = \RHS{\Vrule{x}} \\
-\text{etc., etc.}
 \end{gathered}
 \end{equation*}
-Similarly we also say that
-an EIM is a penult if its dotted rule is a penult,
-an EIM is a prediction if its dotted rule is a prediction,
+and so forth.
+
+Similarly, we say that
+an EIM is a \dfn{penult} if its dotted rule is a penult,
+an EIM is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
 A \dfn{parse item} is either an Earley or a Leo item.
@@ -1617,8 +1644,8 @@ which is called
 a \dfn{parse table},
 or an \dfn{Earley table}.
 An Earley table
-is a sequence of Earley sets,
-such that
+is a sequence of Earley sets.
+If \Vesset{table} is an Earley table, then
 \begin{equation*}
 \size{\Vesset{table}} = \size{\Vstr{w}},
 \end{equation*}
@@ -1643,29 +1670,9 @@ we will allow ourselves
 to go back and forth between integer location,
 \Vloc{i},
 and Earley set,
-\Ves{i}.
-One way of thinking of this
-in implementation terms,
-is to assume that we have an array of pointers to
-Earley sets that we
-can index with \Vloc{i}, so that we can go from
-\Ves{i} to \Vloc{i} using pointer arithmetic,
-from from \Vloc{i} to \Ves{i} using indexing.\footnote{
-The implementation of Marpa::R2\cite{Marpa-R2} is more complicated
-than this.
-It builds Earley sets as a linked list of structures,
-and stores the \Vloc{i} in an integer field.
-The array for indexing is created on an ``as needed''
-basis.
-Earley sets are stored internally as pointers,
-so that
-indexing by \Vloc{i} is only necessary
-when a user wants to refer to specific Earley sets
-for debugging and tracing.
-This means that,
-under normal circumstances,
-the array of Earley
-sets never needs to be resized.
+\Ves{i}.\footnote{
+For a discussion of this from the implementation
+point of view, see \Sref{s:es-indexing}.
 }
 
 \EVtable{\alg{Recce}}{i} will be
@@ -1700,39 +1707,10 @@ there was a unique acceptance symbol,
 \Accept{\Vint{g}}, in \Vint{g}.
 The input \Cw{} is accepted if and only if,
 for some \Vstr{rhs},
-\begin{equation*}
-\left[[\Accept{\Vint{g}} \de \Vstr{rhs} \mydot], 0\right]
-\in \Etable{\Vsize{\Cw}}
-\end{equation*}
-
-The following theorem will prove useful.
-
-\begin{theorem}\label{t:es-size}
-The maximum size of an Earley set at {\upshape $\Vloc{i}$}
-is
-{\upshape $\order{\var{i}}$}.
-\end{theorem}
-
-\begin{proof}
-Each EIM is of the form
-$[ \Vdr{x}, \Vloc{x} ]$.
-Recall that
-the number of dotted rules is a \Vsize{g},
-a constant depending on the grammar.
-The possible values of \Vloc{x} range from
-0 to \Vloc{i}.
-Therefore the number of possible Earley items
-in \Ves{i} is
-is $\Vloc{i} \times \Oc{}$.
-Recall that the size of an Earley set is the number of EIM's
-that it contains.
-It follows
-that the maximum size of the Earley
-set at \Vloc{i} is
-\begin{equation*}
-\Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
-\end{equation*}
-\end{proof}
+\begin{gather*}
+\Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
+\left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
+\end{gather*}
 
 \section{The Leo algorithm}
 \label{s:leo-items}
@@ -2289,6 +2267,43 @@ show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
 
+\section{Implementation}
+\label{s:implementation}
+
+\subsection{Earley set indexing}
+\label{s:es-indexing}
+
+In our theoretical discussions,
+we assumed that we could efficiently convert between
+an Earley set location as an integer
+(\Vloc{i} or \Ves{i}),
+and an Earley set as data structure including the PIM's.
+Marpa::R2\cite{Marpa-R2}
+builds Earley sets as a linked list of structures,
+and stores the \Vloc{i} in an integer field.
+An array for indexing is created on an ``as needed''
+basis.
+
+Earley sets are stored internally as pointers.
+These pointers are sufficient even for the run-time
+event mechanism.
+In practice,
+indexing by \Vloc{i} only becomes necessary
+during run-time for run-time tracing and debugging.
+In normal usage, there creation of the array of
+Earley sets on an ``as needed'' basis means that it
+is created once,
+after the parse is complete.
+The Earley sets will never be changed after this point
+and therefore the array of Earley sets will never need to be resized.\footnote{
+In this discussion a parse is said to be ``complete'' when it is ready to be evaluated.
+This becomes relevant when an application takes advantage of
+Marpa::R2's ability to resume an already evaluated
+parse, reading more input.
+Each of these is, in fact, a separate parse,
+and we take this point of view when discussing per-parse resource.
+}
+
 \section{Per-set lists}
 \label{s:per-set-lists}
 
@@ -2431,8 +2446,40 @@ to track is limited to a single boolean.
 It is for this reason that
 the more complicated approach is illustrated above.
 
+\section{Marpa recognizer correctness}
+\label{s:correctness}
+
 \section{Marpa recognizer complexity}
 \label{s:complexity}
+
+The following theorem will prove useful.
+
+\begin{theorem}\label{t:es-size}
+The maximum size of an Earley set at {\upshape $\Vloc{i}$}
+is
+{\upshape $\order{\var{i}}$}.
+\end{theorem}
+
+\begin{proof}
+Each EIM is of the form
+$[ \Vdr{x}, \Vloc{x} ]$.
+Recall that
+the number of dotted rules is a \Vsize{g},
+a constant depending on the grammar.
+The possible values of \Vloc{x} range from
+0 to \Vloc{i}.
+Therefore the number of possible Earley items
+in \Ves{i} is
+is $\Vloc{i} \times \Oc{}$.
+Recall that the size of an Earley set is the number of EIM's
+that it contains.
+It follows
+that the maximum size of the Earley
+set at \Vloc{i} is
+\begin{equation*}
+\Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
+\end{equation*}
+\end{proof}
 
 \subsection{Complexity of each Earley item}
 
