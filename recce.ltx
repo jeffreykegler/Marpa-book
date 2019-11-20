@@ -276,8 +276,6 @@ grammars into internal grammars, and
 \Sref{s:INTs} describes Marpa's internal grammars.
 \Sref{s:earley-table} describes the data structures used
 in parsing Marpa internal grammars.
-\Sref{s:earley}
-describes Earley's algorithm.
 \Sref{s:leo} describes Leo's modification
 to Earley's algorithm.
 \Sref{s:algorithm}
@@ -2062,7 +2060,7 @@ such that
 \end{aligned}
 \end{equation*}
 
-Also, let
+Also,
 \begin{equation*}
 \var{Leo-reducer}(\Ves{i}) \defined
 \Bigl\lbrace
@@ -2080,6 +2078,14 @@ such that
 \land \quad \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
 \in \Ves{predecessor}.
 \end{gathered}
+\end{equation*}
+
+Then
+\begin{equation*}
+\var{Reducer}(\Ves{i}) \defined
+\var{Earley-reducer}(\Ves{i})
+\cup
+\var{Leo-reducer}(\Ves{i})
 \end{equation*}
 
 \begin{algorithm}[tb]
@@ -2102,34 +2108,10 @@ such that
 \end{algorithmic}
 \end{algorithm}
 
-\section{The Earley algorithm}
-\label{s:earley}
-
 \subsection{Prediction}
 \label{d:prediction}
 
-Where
-\begin{equation}
-          \Veim{predecessor} = [ \Vdr{predecessor}, \Vorig{predecessor} ]
-\end{equation}
-is an incompletion in the input at \Vloc{i}, and
-there is a
-\begin{equation}
-\Vrule{predict} \in \Rules{\Vint{g}}
-\end{equation}
-such that
-\begin{equation}
-\LHS{\Vrule{predict}} = \Postdot{\Vdr{predecessor}}
-\end{equation}
-then union
-\begin{gather*}
-\begin{align*}
-& \; \Bigset{ \bigl[ [ \Vrule{predict}, 0 ], \Vloc{i} \bigr] } \\
-\intertext{into $\Ves{i}$.}
-\end{align*}
-\end{gather*}
-
-\Veim{predecessor} is called the \dfn{predecessor} of the prediction operation.
+TODO.
 
 \section{Marpa Changes}
 \label{s:changes}
@@ -2157,7 +2139,7 @@ This more careful targeting of the memoization is for efficiency reasons.
 If all penults are memoized,
 many memoizations will be performed where
 the longest potential Leo sequence is short,
-and the payoff is therefore very limited.
+and the payoff is therefore limited.
 
 A future extension might be to identify
 non-right-recursive rules
@@ -2225,7 +2207,7 @@ This is accomplished by
 taking advantage of special properties of the search.
 
 If it can be arranged that there is
-a link direct to the Earley set \Ves{i},
+a direct link to the Earley set \Ves{i},
 and that $0 \leq \var{x} < \var{c}$,
 where \var{c} is a constant of reasonable size,
 then a search can be made in \Oc{} time,
@@ -2244,21 +2226,23 @@ with this paper.
 
 A PSL is a fixed-length array of
 integers, indexed by an integer,
-and kept as part of each Earley set.
+and kept as part of the structure
+that implements each Earley set.
 While \Marpa{} is building a new Earley set,
 \Ves{j},
 a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-The PSL for \Ves{j}
-tracks the Earley items in \Ves{j} that have \Vloc{i}
+While \Marpa{} is adding EIM's to \Ves{j},
+the PSL for \Ves{i}
+keeps track of the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
 the number of dotted rules,
 \Vsize{g}.
-\Vsize{g}
+Recall that \Vsize{g}
 is a constant of reasonable size
 that depends on \Cg{}.
 
@@ -2272,15 +2256,12 @@ entry with the Earley set
 that was current when that PSL
 entry was last updated.
 
-Let $\ID{\Vdr{x}}$ be the integer ID of a dotted rule.
-One way to assign integer values
-to $\ID{\Vdr{x}}$ to list the rules
-in some arbitrary order,
-and then traverse the dot positions in
-the list, left-to-right within each rule,
-then top-to-bottom within the list.
-The number of dot positions
-within a rule \Vrule{r} is \Vsize{r}.
+Let $\ID{\Vdr{x}}$ be the unique integer ID of a dotted rule.
+One way to create a unique integer value
+for every dotted rule is create an arbitrary but fixed order
+for the rules;
+sort the dotted rules into a sequence by dot position with rule;
+and then number the elements of the sorted sequence consecutively.
 
 Intuitively, the idea is avoid most re-computation
 of the PSL's by keeping timestamps with the PSL data.
