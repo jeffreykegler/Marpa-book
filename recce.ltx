@@ -607,6 +607,12 @@ for the subsequence
     \ldots \;\;
     \var{s}[\var{z}].
 \]
+As a special case, if
+$\var{j} < \var{i}$ then
+\[
+\var{s}[\var{i} \ldots \var{j}] = \epsilon
+\]
+In this case, the values of \var{i} and \var{j} may be negative.
 
 Let \Vsymset{vocab} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -650,7 +656,6 @@ Pseudo-values may not be used in any other operation.
 $\Lambda$ is the only pseudo-value in this paper,
 and $\var{x} = \Lambda$ can be read as
 ``the value of \var{x} does not exist''.
-Following the above rules for pseudo-values,
 $\Lambda$ compares unequal to any non-pseudo-value,
 and equal to itself,
 $\Lambda = \Lambda$.
@@ -866,10 +871,14 @@ they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
 
 Locations in the input will be of type \type{LOC}.
-We represent
+A string can be seen as sequence of symbols,
+and we use sequence index
+to represent individual symbols of a string,
+and subsequence notation
+to represent substrings.
+Thus,
 the \var{i}'th character of the input,
-$0 \le \Vloc{i} < \Vsize{w}$,
-by \sym{\var{w}[\var{i}]},
+is \sym{\var{w}[\var{i}]};
 and
 \begin{equation*}
 \str{\var{w}[\var{a} \ldots \var{z}]} \defined
@@ -877,8 +886,8 @@ and
     \var{w}[\var{a}], \;\;
     \var{w}[\var{a}+1], \;\;
     \ldots \;\;
-    \var{w}[\var{z}].
-\rbrace}
+    \var{w}[\var{z}]
+\rbrace}.
 \end{equation*}
 
 \section{External grammars}
@@ -2387,6 +2396,27 @@ the more complicated approach is illustrated above.
 
 \section{Marpa recognizer correctness}
 \label{s:correctness}
+
+Following the tradition,
+we seek to convince ourselves that our parser is ``correct'',
+by showing that the strings the parser accepts are all, and only,
+the sentences in the language of its grammar.
+That is, we seek to show that
+for every grammar \Vint{g} and every string \Vstr{w},
+$\Vstr{w} \in \Term{\Vint{g}}^\ast$,
+\begin{equation*}
+\begin{gathered}
+\left(
+  \exists \Vstr{x} \;
+\middle| \;
+  \left[ \Accept{\Vint{g}} ::= \Vstr{x} \mydot
+  \right] \in \Ves{(\Vsize{w})}
+\right)
+\\
+\equiv \;
+\Accept{\Vint{g}} \destar \Vstr{w}.
+\end{gathered}
+\end{equation*}
 
 \section{Marpa recognizer complexity}
 \label{s:complexity}
