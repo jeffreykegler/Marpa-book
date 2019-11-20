@@ -1146,7 +1146,8 @@ Let \Vint{g} be a Marpa internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
 There must be
 a dedicated acceptance rule for \Vint{g},
-\begin{gather*}
+\begin{gather}
+\label{e:acceptance_rule}
 \Vrule{accept} = [\Vsym{accept} \de \Vsym{top}], \\
 \intertext{such that}
 \Vsym{top} \in \NT{\Vint{g}}, \\
@@ -1154,7 +1155,7 @@ a dedicated acceptance rule for \Vint{g},
 \intertext{and for all \Vrule{r}, $\var{r} \in \Rules{\Vint{g}}$,}
 \LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept} \\
 \text{and} \quad \Vsym{accept} \notin \RHS{\Vrule{r}}.
-\end{gather*}
+\end{gather}
 
 The dedicated acceptance rule is also called
 the \dfn{augment rule}.
@@ -1987,9 +1988,18 @@ is
 \subsection{Initializer operation}
 \label{s:initializer}
 
+Recall from \Eref{e:acceptance_rule} the acceptance rule of \Vint{g},
+\Vrule{accept}.
+Then
 \begin{equation*}
-\var{Initializer}() \defined \var{PredictOne}(\Accept{\Vint{g}}, 0)
+\var{Initializer}() \defined
+\left\lbrace \;
+\Veim{start}
+\; \right\rbrace \cup 
+\var{Predict}(\Veim{start}, (0)_\type{loc}) \\
 \end{equation*}
+where
+$\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
 
 \subsection{Scanner operation}
 \label{d:scanner}
