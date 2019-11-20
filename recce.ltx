@@ -99,22 +99,10 @@
 
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 
-% types to be deleted with A&H LR(0) stuff
-\newcommand{\ah}[1]{#1_{AH}}
-\newcommand{\Vah}[1]{\ensuremath{\var{#1}_{AH}}}
-\newcommand{\Veimt}[1]{\ensuremath{\var{#1}_{EIMT}}}
-\newcommand{\Veimtset}[1]{\ensuremath{\var{#1}_{\set{EIMT}}}}
-
 \newcommand{\alg}[1]{\ensuremath{\textsc{#1}}}
 \newcommand{\Earley}{\ensuremath{\alg{Earley}}}
 \newcommand{\Leo}{\ensuremath{\alg{Leo}}}
 \newcommand{\Marpa}{\ensuremath{\alg{Marpa}}}
-
-% TODO to be deleted with A&H LR(0) stuff
-\newcommand{\AH}{\ensuremath{\alg{AH}}}
-
-% TODO to be deleted with A&H LR(0) stuff
-\newcommand{\Cfa}{\var{fa}}
 
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
@@ -652,6 +640,51 @@ when it is convenient,
 we will treat strings of length 1 as symbols,
 and symbols as strings of length 1.
 
+Variables of any type may be set to a pseudo-value.
+Variables of any type may also be compared to 
+pseudo-value and 
+pseudo-values may be compared to themselves
+and each other.
+Pseudo-values may not be used in any other operation.
+
+$\Lambda$ is the only pseudo-value in this paper,
+and $\var{x} = \Lambda$ can be read as
+``the value of \var{x} does not exist''.
+Following the above rules for pseudo-values,
+$\Lambda$ compares unequal to any non-pseudo-value,
+and equal to itself,
+$\Lambda = \Lambda$.
+
+If a logical conjunction contains comparisons involving pseudo-values,
+the conjunction is expected to be read as if it was ordered so
+that all the comparisons involving a pseudo-value are evaluated
+first.
+If a comparison involving a pseudo-value renders one of the terms of the
+conjunction false,
+none of the other terms of the conjunction are evaluated.
+This allows us to consider a logical conjunction well-defined,
+even if one of its terms is not in all cases defined.
+
+For example,
+consider the logical conjunction
+\begin{equation*}
+\label{e:logical-conjunction}
+\var{b} = [ 1, 2 ] \quad \text{and} \quad \var{f}(\var{a})
+\end{equation*}
+when both \var{a} and \var{b} are non-existent,
+$\var{a} = \var{b} = \Lambda$.
+In this case $\var{f}(\var{a}) = \var{f}(\Lambda)$
+and 
+$\var{f}(\Lambda)$
+is not well-defined.
+But the term $\var{b} = [ 1, 2 ]$ renders
+\Eref{e:logical-conjunction}
+false,
+and we consider 
+\Eref{e:logical-conjunction} as a whole always to be well-defined,
+even if there are cases when
+$\var{f}(\var{a})$ is not well-defined.
+
 \section{Context-free grammars}
 \label{s:CFGs}
 
@@ -692,11 +725,6 @@ the ``start symbol''.
 \Vocab{\var{g}} is
 the \dfn{vocabulary} of \Vext{g}.
 
-A string of symbols from \Vocab{\var{g}}
-is called a \dfn{sentential form}.
-A string of symbols from \Term{\var{g}}
-is called a \dfn{sentence}.
-
 A rule
 (type \type{RULE})
 is a duple
@@ -722,28 +750,62 @@ so that
 \size{\Vrule{r}} = \size{\RHS{\var{r}}}.
 \end{equation*}
 
-The rules imply the traditional rewriting system,
-in which
-\begin{align*}
-\Vstr{x} \derives & \; \Vstr{y} \quad \defined &&
-\text{\Vstr{x} derives \Vstr{y} in exactly one step.} \\
-\Vstr{x} \deplus & \; \Vstr{y} \quad \defined &&
-\text{\Vstr{x} derives \Vstr{y} in one or more steps.} \\
-\Vstr{x} \destar & \; \Vstr{y} \quad \defined &&
-\text{\Vstr{x} derives \Vstr{y} in zero or more steps.} \\
-\Vstr{x} \xderives{\var{n}} & \; \Vstr{y} \quad \defined &&
-\text{\Vstr{x} derives \Vstr{y} in exactly \var{n} steps.} \\
-\Vstr{x} \xderives{0} & \; \Vstr{y} \quad \defined &&
-\text{\Vstr{x} derives \Vstr{y} in exactly 0 steps.}
-\end{align*}
+A grammar describes a rewriting system.
+We consider
+\begin{equation*}
+\Vstr{prefix}\Vsym{lhs}\Vstr{suffix} \derives \Vstr{prefix}\Vstr{rhs}\Vstr{suffix}
+\end{equation*}
+a valid rewrite step of \Vcfg{f} if and only if
+\begin{gather*}
+\Vstr{prefix} \in \Vocab{\Vcfg{g}}, \\
+\Vstr{suffix} \in \Vocab{\Vcfg{g}}, \quad \text{and} \\
+[\Vsym{lhs} \de \Vstr{rhs}] \in \Rules{\Vcfg{g}}.
+\end{gather*}
 
-Every symbol derives itself in zero steps.
-The zero step derivation is called a \dfn{trivial derivation}.
-A derivation of more than zero steps
-is called a \dfn{non-trivial derivation}.
+A sequence of iterated rewrite steps of \Vcfg{g}, such that
+\begin{equation}
+\label{e:derivation}
+\Vstr{s1} \derives \Vstr{s2} \derives \Vstr{s3} \ldots \Vstr{s-n}
+\end{equation}
+is called a \dfn{derivation} of \Vcfg{g},
+and a rewrite step that is part of a derivation is called
+a \dfn{derivation step}.
 
-We regard a derivation as equivalent to a sequence of strings,
-called its \dfn{derivation sequence}.
+The sequence of strings in a derivation, its sequence of strings
+is called its \dfn{derivation sequence}.
+The derivation sequence of \Eref{e:derivation} is
+\begin{equation*}
+\Vstr{s1}, \Vstr{s2}, \Vstr{s3} \ldots \Vstr{s-n}.
+\end{equation*}
+
+We explicitly indicate that some \Vstr{x} derives \Vstr{y} in \var{k} steps
+by writing
+\begin{equation*}
+\Vstr{x} \xderives{\var{k}} \Vstr{y}.
+\end{equation*}
+Writing $\Vstr{x} \xderives{1} \Vstr{y}$ is equivalent
+to writing $\Vstr{x} \derives \Vstr{y}$.
+
+By convention,
+every string derives itself in zero steps.
+\begin{equation*}
+\Vstr{x} = \Vstr{y} \implies \Vstr{x} \xderives{0} \Vstr{x}.
+\end{equation*}
+A derivation of zero steps is called a
+\dfn{trivial derivation}.
+A derivation of more than zero steps is called a
+\dfn{non-trivial derivation}.
+
+We write
+\begin{equation*}
+\Vstr{x} \deplus \Vstr{y}
+\end{equation*}
+to say that \Vstr{x} derives \Vstr{y} in one or more steps.
+We write
+\begin{equation*}
+\Vstr{x} \destar \Vstr{y}
+\end{equation*}
+to say that \Vstr{x} derives \Vstr{y} in zero or more steps.
 Where
 \begin{equation*}
 \var{d} = \Vstr{first} \destar \Vstr{last}
@@ -758,6 +820,32 @@ is equivalent to saying that
 \begin{equation*}
 \var{d} = \Vstr{first} \xderives{\var{i}} \Vstr{s} \destar \Vstr{last}.
 \end{equation*}
+Note that, as a result of the above definitions,
+$\epsilon \xderives{0} \epsilon$ and 
+$\epsilon \destar \epsilon$.
+
+A \dfn{sentential form} is a string which can be derived from the start
+symbol, \Accept{\Vcfg{g}}.
+If the sentential form \Vstr{sf} is a string of terminals,
+then \Vstr{sf} is a \dfn{sentence} of \Vcfg{g}.
+The language of \Vcfg{g},
+\myL{\var{g}},
+is the set of sentences of \Vcfg{g}.
+That is,
+\begin{equation*}
+\myL{\Vcfg{g}} \defined
+\set{
+\quad
+\begin{aligned}
+& \Vstr{sentence} \quad \text{such that} \\
+& \qquad \begin{aligned}
+  & \Accept{\Vcfg{g}} \destar \Vstr{sentence} \quad \text{and} \\
+  & \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast.
+  \end{aligned}
+\end{aligned}
+\quad
+}
+\end{equation*}
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -770,52 +858,12 @@ string, that is, for all \Vstr{y}
 \Vsym{x} is a \dfn{proper nullable} if and only if it is nullable,
 but not nulling.
 
-By tradition, the input to the parse is written as \Cw{}.
-\Cw{} must be a sentence of \Vcfg{g},
-that is,
-$\Cw \in \Term{\var{g}}^\ast$.
+By tradition, the input to the parse is written as \Cw{},
+where $\Cw \in \Term{\var{g}}^\ast$.
 \Vsize{w} will be the length of the input, counted in symbols.
 When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
-
-The language of \Vcfg{g},
-\myL{\var{g}},
-is the set of sentences that
-that \Accept{\Vcfg{g}} derives.
-That is,
-\begin{equation*}
-\myL{\Vcfg{g}} \defined
-\set{
-\quad
-\begin{aligned}
-& \Vstr{sentence} \quad \text{such that} \\
-& \qquad \begin{aligned}
-               & \Accept{\Vcfg{g}} \destar \Vstr{sentence} \\
-      \land \quad & \Vstr{sentence} \in \Term{\Vcfg{g}}
-      \end{aligned}
-\end{aligned}
-\quad
-}
-\end{equation*}
-
-Above we defined ``sentence'' and ``sentential form''
-more broadly than in some of the tradition.
-When we wish to refer only to the sentences and sentential forms
-allowed by a grammar, \Vcfg{g}, we will refer specifically to that
-grammar.
-Thus a ``sentence of \Vcfg{g}'' will be some \Vstr{sentence}
-such that
-\begin{equation*}
-\Accept{\Vcfg{g}} \destar \Vstr{sentence} \; \land \; \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast,
-\end{equation*}
-and a
-``sentential form of \Vcfg{g}''.
-will be some \Vstr{sf}
-such that
-\begin{equation*}
-\Accept{\Vcfg{g}} \destar \Vstr{sf} \; \land \; \Vstr{sf} \in \Vocab{\Vcfg{g}}^\ast,
-\end{equation*}
 
 Locations in the input will be of type \type{LOC}.
 We represent
@@ -2111,7 +2159,9 @@ Then
 \subsection{Prediction}
 \label{d:prediction}
 
-TODO.
+\begin{equation*}
+\var{Predicter}(\Ves{i}) \quad \defined \quad \bigcup_{\textstyle \var{eim}\in\Ves{i}} \var{Predict}(\Veim{eim}, \Vloc{i})
+\end{equation*}
 
 \section{Marpa Changes}
 \label{s:changes}
@@ -2298,19 +2348,21 @@ is already present in \Ves{j},
 and \var{false} otherwise.
 
 If
-\begin{multline*}
-\PSL{\Ves{i}}{\var{y}} = [\var{time-stamp}, \Vbool{exists}] \\
- \text{such that} \quad
- \var{time-stamp} \neq \Vloc{j} \\
- \lor \; \Vbool{exists} = \var{false},
-\end{multline*}
-the \Veim{x} already exists,
-and should not be added to \Ves{j}.
-The psl entry for \Ves{i} and \Vdr{x},
-$\PSL{\Ves{x}}{\ID{\Vdr{x}}}$,
-is left as is.
+\begin{equation*}
+\PSL{\Ves{i}}{\var{y}} = [\Vloc{j}, \var{true}], \\
+\end{equation*}
+the \Veim{x} already exists.
+The duplicate \Veim{x}
+should not be added to \Ves{j},
+and the psl entry
+$\PSL{\Ves{x}}{\ID{\Vdr{x}}}$
+should be left as is.
 
-If \Veim{x} does not already exist,
+If
+\begin{equation*}
+\PSL{\Ves{i}}{\var{y}} = \Lambda \  \lor \ 
+\PSL{\Ves{i}}{\var{y}} \neq [\Vloc{j}, \var{true}],
+\end{equation*}
 then  \Veim{x} is new.
 In this case,
 \Veim{x} is added to \Ves{j}, and
@@ -2370,90 +2422,6 @@ set at \Vloc{i} is
 
 \subsection{Complexity of each Earley item}
 
-\begin{theorem}\label{t:O1-time-per-eim}
-All time in \Marpa{} can be allocated
-to the Earley items,
-in such a way that each Earley item,
-and each attempt to
-add a duplicate Earley item,
-requires \Oc{} time.
-\end{theorem}
-
-\begin{theorem}\label{t:O1-space-per-eim}
-All space in \Marpa{} can be allocated
-to the Earley items,
-in such a way that each Earley item
-requires \Oc{} space and,
-if links are not considered,
-each attempt to add a duplicate
-Earley item adds no additional space.
-\end{theorem}
-
-\begin{theorem}\label{t:O1-links-per-eim}
-If links are considered,
-all space in \Marpa{} can be allocated
-to the Earley items
-in such a way that each Earley item
-and each attempt to
-add a duplicate Earley item
-requires \Oc{} space.
-\end{theorem}
-
-\begin{proof}[Proof of Theorems
-\ref{t:O1-time-per-eim},
-\ref{t:O1-space-per-eim},
-and \ref{t:O1-links-per-eim}]
-Omitted.
-\end{proof}
-
-\subsection{Delete this?}
-
-\begin{theorem}\label{t:tries-O-eims}
-For an unambiguous grammar,
-the number of attempts to add
-Earley items will be less than or equal to
-\begin{equation*}
-\textup{
-    $\var{c} \times \Rtablesize{\Marpa}$,
-}
-\end{equation*}
-where \var{c} is a constant
-that depends on the grammar.
-\end{theorem}
-
-\begin{proof}
-Omitted.
-\end{proof}
-
-As a reminder,
-we follow tradition by
-stating complexity results in terms of \var{n},
-setting $\var{n} = \Vsize{\Cw}$,
-the length of the input.
-
-\begin{theorem}\label{t:eim-count}
-For a context-free grammar,
-\begin{equation*}
-\textup{
-    $\Rtablesize{\Marpa} = \order{\var{n}^2}$.
-}
-\end{equation*}
-\end{theorem}
-
-\begin{proof}
-By Theorem \ref{t:es-size},
-the size of the Earley set at \Vloc{i}
-is $\order{\var{i}}$.
-Summing over the length of the input,
-$\Vsize{\Cw} = \var{n}$,
-the number of EIM's in all of \Marpa's Earley sets
-is
-\begin{equation*}
-\sum\limits_{\Vloc{i}=0}^{\var{n}}{\order{\var{i}}}
-= \order{\var{n}^2}.\qedhere
-\end{equation*}
-\end{proof}
-
 \begin{theorem}\label{t:ambiguous-tries}
 For a context-free grammar,
 the number of attempts to add
@@ -2461,66 +2429,7 @@ Earley items is $\order{\var{n}^3}$.
 \end{theorem}
 
 \begin{proof}
-Reexamining the proof of Theorem \ref{t:tries-O-eims},
-we see that the only bound that required
-the assumption that \Cg{} was unambiguous
-was \var{reduction-tries},
-the count of the number of attempts to
-add Earley reductions.
-Let \var{other-tries}
-be attempts to add EIM's other than
-as the result of Earley reductions.
-By Theorem \ref{t:eim-count},
-\begin{equation*}
-\Rtablesize{\Marpa} = \order{\var{n}^2},
-\end{equation*}
-and by Theorem \ref{t:tries-O-eims},
-\begin{equation*}
-\var{other-tries} \le \var{c} \times \Rtablesize{\Marpa},
-\end{equation*}
-so that
-$\var{other-tries} = \order{\var{n}^2}$.
-
-\begin{sloppypar}
-Looking again at \var{reduction-tries}
-for the case of ambiguous grammars,
-we need to look again at the triple
-\begin{equation*}
-[\Veim{predecessor}, \Vsym{transition}, \Veim{component}].
-\end{equation*}
-We did not use the fact that the grammar was unambigous in counting
-the possibilities for \Vsym{transition} or \Veim{component}, but
-we did make use of it in determining the count of possibilities
-for \Veim{predecessor}.
-We know still know that
-\begin{equation*}
-\Veim{predecessor} \in \Ves{component-origin},
-\end{equation*}
-where
-\Vloc{component-origin} is the origin of \Veim{component}.
-Worst case, every EIM in \Ves{component-origin} is a possible
-match, so that
-the number of possibilities for \Veim{predecessor} now grows to
-\size{\Ves{component-origin}}, and
-\begin{equation*}
-\var{reduction-tries} =
-\bigsize{\Ves{component-origin}} \times \Vsize{symbols} \times \bigsize{\Ves{j}}.
-\end{equation*}
-\end{sloppypar}
-
-In the worst case $\var{component-origin} \simeq \var{j}$,
-so that by Theorem \ref{t:es-size},
-\begin{equation*}
-\size{\Ves{component-origin}} \times \size{\Ves{j}} = \order{\var{j}^2}.
-\end{equation*}
-Adding \var{other-tries}
-and summing over the Earley sets,
-we have
-\begin{equation*}
-\order{\var{n}^2} +
-\! \sum\limits_{\Vloc{j}=0}^{n}{\order{\var{j}^2}} = \order{\var{n}^3}.
-\qedhere
-\end{equation*}
+Omitted.
 \end{proof}
 
 \begin{theorem}\label{t:leo-right-recursion}
@@ -2583,20 +2492,7 @@ For every unambiguous grammar,
 \end{theorem}
 
 \begin{proof}
-By assumption, \Cg{} is unambiguous, so that
-by Theorem \ref{t:tries-O-eims},
-and Theorem \ref{t:eim-count},
-the number of attempts that \Marpa{} will make to add
-EIM's is
-\begin{equation*}
-\var{c} \times \order{\var{n}^2},
-\end{equation*}
-where \var{c} is a constant that depends on \Cg{}.
-Therefore,
-by Theorems \ref{t:O1-time-per-eim}
-and \ref{t:O1-links-per-eim},
-the time and space complexity of \Marpa{}
-for unambiguous grammars is \order{\var{n}^2}.
+Omitted.
 \end{proof}
 
 \begin{theorem}
@@ -2605,8 +2501,7 @@ For every context-free grammar,
 \end{theorem}
 
 \begin{proof}
-By Theorem \ref{t:O1-time-per-eim},
-and Theorem \ref{t:ambiguous-tries}.
+Omitted.
 \end{proof}
 
 \begin{theorem}\label{t:cfg-space}
@@ -2616,8 +2511,7 @@ if it does not track links.
 \end{theorem}
 
 \begin{proof}
-By Theorem \ref{t:O1-space-per-eim}
-and Theorem \ref{t:eim-count}.
+Omitted.
 \end{proof}
 
 Traditionally only the space result stated for a parsing algorithm
@@ -2638,8 +2532,7 @@ including the space for tracking links.
 \end{theorem}
 
 \begin{proof}
-By Theorem \ref{t:O1-links-per-eim},
-and Theorem \ref{t:ambiguous-tries}.
+Omitted.
 \end{proof}
 
 \section{The Marpa Input Model}
@@ -2764,7 +2657,7 @@ be less than \var{c},
   \bigr \rbrace
   \Bigr| < \var{c}
 \end{equation}
-Restrictions \Eref{e:restriction1}
+\Eref{e:restriction1}
 and \Eref{e:restriction2}
 impose little or no obstacle
 to the practical use
