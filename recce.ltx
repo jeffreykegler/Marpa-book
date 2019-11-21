@@ -78,7 +78,8 @@
 \newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
 \newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
-\newcommand{\Ves}[1]{\Tvar{#1}{ES}}
+\newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
+\newcommand{\Ves}[1]{\es{\var{#1}}}
 \newcommand{\Vesset}[1]{\Tvarset{#1}{ES}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
@@ -134,6 +135,12 @@
 \newcommand\Vtable[1]{\Etable{\var{#1}}}
 \newcommand\EEtable[2]{\ensuremath{\mymathop{table}[#1,#2]}}
 \newcommand\EVtable[2]{\EEtable{#1}{\var{#2}}}
+
+\newcommand\entail[2]{\ensuremath{{\mathcal{#1}}\models\left(#2\right)}}
+\newcommand\Mentail[1]{\entail{M}{#1}}
+\newcommand\Eentail[1]{\entail{E}{#1}}
+\newcommand\Lentail[1]{\entail{L}{#1}}
+\newcommand\gentail[1]{\ensuremath{\var{g}\vdash\left(#1\right)}}
 
 % I want to use 'call' outside of pseudocode
 \newcommand\call[2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
@@ -647,8 +654,8 @@ we will treat strings of length 1 as symbols,
 and symbols as strings of length 1.
 
 Variables of any type may be set to a pseudo-value.
-Variables of any type may also be compared to 
-pseudo-value and 
+Variables of any type may also be compared to
+pseudo-value and
 pseudo-values may be compared to themselves
 and each other.
 Pseudo-values may not be used in any other operation.
@@ -679,13 +686,13 @@ consider the logical conjunction
 when both \var{a} and \var{b} are non-existent,
 $\var{a} = \var{b} = \Lambda$.
 In this case $\var{f}(\var{a}) = \var{f}(\Lambda)$
-and 
+and
 $\var{f}(\Lambda)$
 is not well-defined.
 But the term $\var{b} = [ 1, 2 ]$ renders
 \Eref{e:logical-conjunction}
 false,
-and we consider 
+and we consider
 \Eref{e:logical-conjunction} as a whole always to be well-defined,
 even if there are cases when
 $\var{f}(\var{a})$ is not well-defined.
@@ -826,7 +833,7 @@ is equivalent to saying that
 \var{d} = \Vstr{first} \xderives{\var{i}} \Vstr{s} \destar \Vstr{last}.
 \end{equation*}
 Note that, as a result of the above definitions,
-$\epsilon \xderives{0} \epsilon$ and 
+$\epsilon \xderives{0} \epsilon$ and
 $\epsilon \destar \epsilon$.
 
 A \dfn{sentential form} is a string which can be derived from the start
@@ -2050,7 +2057,7 @@ Then
 \var{Initializer}() \defined
 \left\lbrace \;
 \Veim{start}
-\; \right\rbrace \cup 
+\; \right\rbrace \cup
 \var{Predict}(\Veim{start}, (0)_\type{loc}) \\
 \end{equation*}
 where
@@ -2369,7 +2376,7 @@ should be left as is.
 
 If
 \begin{equation*}
-\PSL{\Ves{i}}{\var{y}} = \Lambda \  \lor \ 
+\PSL{\Ves{i}}{\var{y}} = \Lambda \;\; \lor \;\;
 \PSL{\Ves{i}}{\var{y}} \neq [\Vloc{j}, \var{true}],
 \end{equation*}
 then  \Veim{x} is new.
@@ -2404,19 +2411,52 @@ the sentences in the language of its grammar.
 That is, we seek to show that
 for every grammar \Vint{g} and every string \Vstr{w},
 $\Vstr{w} \in \Term{\Vint{g}}^\ast$,
-\begin{equation*}
+\begin{equation}
+\label{e:marpa-correct}
 \begin{gathered}
 \left(
   \exists \Vstr{x} \;
 \middle| \;
   \left[ \Accept{\Vint{g}} ::= \Vstr{x} \mydot
-  \right] \in \Ves{(\Vsize{w})}
+  \right] \in \es{ \left( \Vsize{w} \right) }
 \right)
 \\
 \equiv \;
 \Accept{\Vint{g}} \destar \Vstr{w}.
 \end{gathered}
+\end{equation}
+
+\Eref{e:marpa-correct} states the equivalence of two statement in quite distinct
+notation.
+The right hand side of the equivalent states a syntactic derivation.
+The left hand side asserts the existence of a parse item
+in \Marpa{}'s Earley sets.
+The equivalence of the two statements,
+can seem far from obvious.
+The proof in this paper will adopt a intermediate notation that
+highlights the symmetry between the two notations,
+and makes the equivalence
+of \Eref{e:marpa-correct}
+seem more plausible.
+It is hoped in this way to produce a proof whose details
+provide insight into
+why and how \Marpa{} works.
+
+If
+\begin{equation*}
+\begin{gathered}
+\Veim{x} = [ [ Vrule{x}, \var{pos} ]_\type{DR}, \Vloc{orig} ] \quad \text{and} \\
+\Veim{x} \in \Ves{i}
+\intertext{then we write}
+\Eentail{\Vrule{x}, \var{pos}, \Vloc{orig}, \Ves{i}}.
+\end{gathered}
 \end{equation*}
+
+
+\Mentail{1,2,3,4}
+\Lentail{1,2,3,4}
+\Eentail{1,2,3,4}
+\gentail{1,2,3,4}
 
 \section{Marpa recognizer complexity}
 \label{s:complexity}
