@@ -6,6 +6,7 @@
 \usepackage{algpseudocode}
 \usepackage{url}
 \usepackage{amssymb}
+\allowdisplaybreaks[4]
 
 \delimitershortfall=0pt
 \delimiterfactor=1100
@@ -1960,15 +1961,10 @@ An EIM \Veim{uniq} such that
 \quad \text{and} \quad \Penult{\Veim{uniq}} \neq \Lambda,
 \end{equation*}
 is \dfn{Leo unique} in \Ves{i},
-\begin{equation*}
 \LeoUnique{\Veim{uniq}, \Ves{i}},
-\end{equation*}
 if and only if,
-for all \Veim{x},
-such that
-\begin{equation*}
-\quad \Veim{x} \in \Ves{i}
-\end{equation*}
+for all
+$\Veim{x} \in \Ves{i}$
 we have
 \begin{equation*}
 \Penult{\Veim{uniq}} = \Postdot{\Veim{x}}
@@ -1984,24 +1980,20 @@ even those which are not penults.
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
 for LIMs.
-Let EIM \Veim{successor} and \Ves{i} be such that
+Let \Veim{successor} be such that
 \begin{equation*}
-\begin{gathered}
-\Veim{successor} = [ \Vdr{successor}, \Vloc{origin} ] \\
-\quad \text{and} \quad \Veim{successor} \in \Ves{i} \\
-\quad \text{and} \quad \Penult{\Veim{successor}} \neq \Lambda.
-\end{gathered}
+\Veim{successor} = [ \Vdr{successor}, \Vorig{successor} ].
 \end{equation*}
 We say that \Vlim{predecessor}
-is the \dfn{Leo predcessor} of \Veim{successor} in \Ves{i},
+is the \dfn{Leo predcessor} of \Veim{successor},
 \begin{equation*}
-\Vlim{predecessor} = \LIMPredecessor{\Veim{successor}, \Ves{i}},
+\Vlim{predecessor} = \LIMPredecessor{\Veim{successor}},
 \end{equation*}
-if and only if, for some \Vdr{top}, \Vloc{top},
+if and only if, for some \Vdr{top}, \Vorig{top},
 \begin{equation*}
 \begin{gathered}
-\Vlim{predecessor} = [\Vdr{top}, \LHS{\Veim{successor}}, \Vloc{top}] \\
-\quad \text{and} \quad \Vlim{predecessor} \in \Ves{origin}.
+\Vlim{predecessor} = [\Vdr{top}, \LHS{\Veim{successor}}, \Vorig{top}] \\
+\quad \text{and} \quad \Vlim{predecessor} \in \es{\left( \Vorig{successor} \right)}.
 \end{gathered}
 \end{equation*}
 
@@ -2154,6 +2146,56 @@ Then
 \var{Leo-reducer}(\Ves{i})
 \end{equation*}
 
+\subsection{Prediction}
+\label{d:prediction}
+
+\begin{equation*}
+\var{Predicter}(\Ves{i}) \quad \defined \quad \bigcup_{\textstyle \var{eim}\in\Ves{i}} \var{Predict}(\Veim{eim}, \Vloc{i})
+\end{equation*}
+
+\subsection{Memoizer operation}
+\label{d:memoizer}
+
+Let
+\begin{align*}
+& \LeoEligible{\Ves{i}} \defined \\
+& \qquad \qquad \left\lbrace \;\;
+\begin{gathered}
+\Veim{eligible} \;\; \text{such that} \\
+\Veim{eligible} \in \LeoUnique{\Ves{i}} \;\; \text{and} \\
+\RightRecursive{\Veim{eligible}}
+\end{gathered}
+\;\; \right\rbrace,
+\\
+\displaybreak[3]
+& \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
+& \qquad \qquad \left\lbrace \;\;
+\begin{gathered}
+\left[ \Vdr{base}, \LHS{\Veim{base}}, \Vorig{base} \right]_\type{LIM} \quad \text{such that} \\
+\Veim{base} \in \LeoEligible{\Ves{i}}, \\
+\Veim{base} = [ \Vdr{base}, \Vorig{base} ], \;\; \text{and} \\
+\LIMPredecessor{\Veim{base}} = \Lambda \\
+\end{gathered}
+\;\; \right\rbrace,
+\\
+\displaybreak[3]
+& \text{and $\mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined$} \\
+& \qquad \qquad \left\lbrace \;\;
+\begin{gathered}
+\left[ \Vdr{pred}, \LHS{\Veim{base}}, \Vorig{pred} \right]_\type{LIM} \quad \text{such that} \\
+\Veim{base} \in \LeoEligible{\Ves{i}}, \\
+\Vlim{pred} = \LIMPredecessor{\Veim{base}}, \quad \text{and} \\
+\Vlim{pred} = [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] \\
+\end{gathered}
+\;\; \right\rbrace .
+\\
+\displaybreak[3]
+& \text{Then $\var{Memoizer}(\Ves{i}) \defined$} \\
+& \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
+\cup
+\var{Extend-Leo-Chain}(\Ves{i})
+\end{align*}
+
 \begin{algorithm}[tb]
 \caption{The Marpa Algorithm}
 \label{a:marpa}
@@ -2173,13 +2215,6 @@ Then
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
-\subsection{Prediction}
-\label{d:prediction}
-
-\begin{equation*}
-\var{Predicter}(\Ves{i}) \quad \defined \quad \bigcup_{\textstyle \var{eim}\in\Ves{i}} \var{Predict}(\Veim{eim}, \Vloc{i})
-\end{equation*}
 
 \section{Marpa Changes}
 \label{s:changes}
