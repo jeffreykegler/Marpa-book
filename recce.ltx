@@ -2295,6 +2295,76 @@ Each of these is, in fact, a separate parse,
 and we take this point of view when discussing per-parse resource.
 }
 
+\subsection{Pointers}
+\label{s:pointers}
+
+The \Marpa{} implementation tracks the reasons for
+the creation of every PIM, with one \dfn{reason}
+for every attempt to create that PIM.
+EIM and LIM reasons
+and therefore for every reason for it to exist.
+Link pairs are so no named because they typically
+are duples, but that is not always the
+
+LIMs memoize Leo chains,
+which are deterministic,
+and an LIM will always have exactly one reason.
+Let \Vlim{lim} be a LIM.
+The LIM reason for \Vlim{lim}, is always a duple, $[\Vlim{previous}, \Veim{memoized}]$,
+where \Vlim{previous} is the previous link in the Leo chain,
+and \Veim{memoized} is the predecessor of the EIMs
+that this LIM memoizes.
+The previous link of \Vlim{link} can be written
+$\mymathop{Previous-link}(\Vlim{link})$;
+and the previous link of \Vlim{link} can be written
+$\mymathop{TODO}(\Vlim{link})$.
+
+The initial EIM has no link pairs.
+The link pairs of predicted EIMs have only
+one reason for an EIM to be
+cause and predecessor
+for every attempt to create an EIM.
+This is called the EIM's \dfn{link pair}.
+of every EIM.
+
+\subsection{Restoring memoized items}
+\label{s:restoring}
+
+With each EIM
+the \Marpa{} implementation stores pointers back to
+the its causes and predecessors.
+For those EIMs created by Leo reduction,
+the \Marpa{} implementation also stores pointers
+to the  Leo link and the base item.
+With each LIM,
+call it \Vlim{link}
+the \Marpa{} implementation stores
+a pointer to the previous link,
+$\mymathop{Previous-link}(\Vlim{link})$;
+and a pointer to the EIM that it memoizes,
+$\mymathop{Memoized}(\Vlim{link})$.
+
+TODO
+
+\begin{align*}
+& \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
+& \qquad \begin{cases}
+\text{$\emptyset$, if $\Vlim{link} = \Lambda$} \\
+\text{$\mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base})$, otherwise}
+\end{cases}
+\\
+& \mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base}) \defined \\
+& \qquad \qquad \left\lbrace \;\;
+\begin{gathered}
+\Veim{new-base} \cup
+\mymathop{Unhide}(\Vlim{prev-link}, \Veim{new-base})
+\quad \text{where} \\
+\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM} \\
+\Vlim{link} = [ \Vdr{link}, \Vsym{link}, \Vorig{link} ] \\
+\end{gathered}
+\;\; \right\rbrace .
+\end{align*}
+
 \section{Per-set lists}
 \label{s:per-set-lists}
 
