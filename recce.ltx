@@ -2299,33 +2299,56 @@ and we take this point of view when discussing per-parse resource.
 \label{s:pointers}
 
 The \Marpa{} implementation tracks the reasons for
-the creation of every PIM, with one \dfn{reason}
+the creation of every PIM, with one \dfn{PIM reason}
 for every attempt to create that PIM.
-EIM and LIM reasons
-and therefore for every reason for it to exist.
-Link pairs are so no named because they typically
-are duples, but that is not always the
+When it will not create confusion,
+PIM reasons are called simply, reasons.
 
 LIMs memoize Leo chains,
 which are deterministic,
 and an LIM will always have exactly one reason.
-Let \Vlim{lim} be a LIM.
-The LIM reason for \Vlim{lim}, is always a duple, $[\Vlim{previous}, \Veim{memoized}]$,
+The PIM reason of a LIM is also called a LIM reason.
+Let \Vlim{link} be a LIM.
+The LIM reason for \Vlim{link}, is always a duple, $[\Vlim{previous}, \Veim{memoized}]$,
 where \Vlim{previous} is the previous link in the Leo chain,
-and \Veim{memoized} is the predecessor of the EIMs
-that this LIM memoizes.
+and \Veim{source} is the penult EIM for which
+\Vlim{link} stands in.
 The previous link of \Vlim{link} can be written
 $\mymathop{Previous-link}(\Vlim{link})$;
-and the previous link of \Vlim{link} can be written
-$\mymathop{TODO}(\Vlim{link})$.
+and the source of \Vlim{link} can be written
+$\mymathop{Source}(\Vlim{link})$.
 
-The initial EIM has no link pairs.
-The link pairs of predicted EIMs have only
-one reason for an EIM to be
-cause and predecessor
-for every attempt to create an EIM.
-This is called the EIM's \dfn{link pair}.
-of every EIM.
+The PIM reason of a EIM is also called a EIM reason.
+Reasons for EIM's vary in number and form.
+The initial EIM has no reasons.
+All other EIM's will have at least one reason.
+
+Predicted EIM's may have multiple EIM reasons.
+Each EIM reason for a prediction, will be a singleton,
+with the prediction's cause.
+
+Scanned EIM's will have a reason for every attempt to create them.
+Let \Veim{scanned} be a scanned EIM.
+The reasons of \Veim{scanned}
+will be duples, $[\Veim{pred}, \var{token}]$,
+where \Veim{pred} is a predecessor of \Veim{scanned},
+and \var{token} is a duple consisting of the token
+symbol and its value.
+
+Reduced EIM's will have a reason for every attempt to create them.
+Let \Veim{reduced} be a reduced EIM.
+Reasons are always duples, but their contents vary according
+to whether the attempt they record was an Earley reduction
+or a Leo reduction.
+Attempts may be either
+For an Earley reduction attempt to create \Veim{reduced}
+the reason will a duple, $[\Veim{pred}, \Veim{cause}]$,
+where \Veim{pred} is a predecessor of \Veim{reduced},
+and \Veim{cause} is a cause of \Veim{reduced}.
+For a Leo reduction attempt to create \Veim{reduced},
+the reason will a duple, $[\Vlim{link}, \Veim{base}]$,
+where \Vlim{link} is a Leo link of the Leo reduction,
+and \Veim{base} is a base of the Leo reduction.
 
 \subsection{Restoring memoized items}
 \label{s:restoring}
