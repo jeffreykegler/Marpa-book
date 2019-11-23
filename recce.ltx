@@ -109,33 +109,37 @@
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
-\newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
-\newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
-\newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
-\newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
-\newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
+\newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
+\newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
+\newcommand{\EEtable}[2]{\ensuremath{\mymathop{table}[#1,#2]}}
+\newcommand{\Etable}[1]{\ensuremath{\mymathop{table}[#1]}}
+\newcommand{\EVtable}[2]{\EEtable{#1}{\var{#2}}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
-\newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
-\newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
-\newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}(#1)}}
-\newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
-\newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
-\newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
-\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}(#1)}}
-\newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}(#1)}}
+\newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
+\newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
-\newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
-\newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
-\newcommand\Etable[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand\Rtable[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand\Rtablesize[1]{\ensuremath{\left| \mymathop{table}[#1] \right|}}
-\newcommand\Vtable[1]{\Etable{\var{#1}}}
-\newcommand\EEtable[2]{\ensuremath{\mymathop{table}[#1,#2]}}
-\newcommand\EVtable[2]{\EEtable{#1}{\var{#2}}}
+\newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
+\newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
+\newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
+\newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}(#1)}}
+\newcommand{\Predecessor}[1]{\ensuremath{\mymathop{Predecessor}(#1)}}
+\newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
+\newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{Previous-Link}(#1)}}
+\newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
+\newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
+\newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}(#1)}}
+\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}(#1)}}
+\newcommand{\Rtable}[1]{\ensuremath{\mymathop{table}[#1]}}
+\newcommand{\Rtablesize}[1]{\ensuremath{\left| \mymathop{table}[#1] \right|}}
+\newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
+\newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
+\newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
+\newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
+\newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
 \newcommand\entail[2]{\ensuremath{{\mathcal{#1}}\models\left(#2\right)}}
 \newcommand\Mentail[1]{\entail{M}{#1}}
@@ -2314,26 +2318,55 @@ where \Vlim{previous} is the previous link in the Leo chain,
 and \Veim{source} is the penult EIM for which
 \Vlim{link} stands in.
 The previous link of \Vlim{link} can be written
-$\mymathop{Previous-link}(\Vlim{link})$;
+\PreviousLink{\Vlim{link}};
 and the source of \Vlim{link} can be written
-$\mymathop{Source}(\Vlim{link})$.
+\Source{\Vlim{link}}.
 
-The PIM reason of a EIM is also called a EIM reason.
 Reasons for EIM's vary in number and form.
 The initial EIM has no reasons.
 All other EIM's will have at least one reason.
+The PIM reason of a EIM is also called a EIM reason.
+
+EIM reasons are either Earley reasons or Leo reasons.
+Every EIM Earley reason is a duple of cause and
+predecessor.
+The cause of an EIM Earley reason may be $\Lambda$,
+a token duple, or an EIM completion.
+The predecessor of an EIM Earley reason is always an incomplete EIM.
+
+A Leo reason of an EIM is always a duple.
+Let \Veim{complete} be an EIM,
+and let
+$[\Vlim{link}, \Veim{source}]$ be a Leo reason for \Veim{complete}.
+\Vlim{previous} is the Leo link of \Veim{complete},
+and
+\Veim{source} is the EIM \dfn{source} of the Leo reduction.
+The source is always an EIM completion.
+The Leo link is either a LIM, or $\Lambda$.
+We can write the Leo link of \Veim{complete} as
+$\mymathop{Previous-link}(\Veim{complete})$;
+and we can write the source of \Veim{complete} as
+$\mymathop{Source}(\Veim{complete})$.
+
+When \var{eim} is an EIM,
+The cause of \Veim{eim} can be written
+\Cause{\Veim{eim}};
+the predecessor of \Veim{eim} can be written
+\Predecessor{\Veim{eim}}.
 
 Predicted EIM's may have multiple EIM reasons.
-Each EIM reason for a prediction, will be a singleton,
-with the prediction's cause.
+Predictions do not have a useful cause so that,
+if \Veim{predict} is a prediction,
+$\Cause{\Veim{predict}} = \Lambda$.
 
 Scanned EIM's will have a reason for every attempt to create them.
 Let \Veim{scanned} be a scanned EIM.
-The reasons of \Veim{scanned}
-will be duples, $[\Veim{pred}, \var{token}]$,
-where \Veim{pred} is a predecessor of \Veim{scanned},
-and \var{token} is a duple consisting of the token
-symbol and its value.
+The cause of \Veim{scanned} is always a duple representing a token,
+so that $\Cause{\Veim{scanned}} = [ \Vsym{token}, \var{value} ]$,
+where \Vsym{token} is the \dfn{token symbol} and
+where \var{value} is the \dfn{token value}.
+The token value is irrelevant to parsing --- it exists 
+in order to be passed on to the semantics.
 
 Reduced EIM's will have a reason for every attempt to create them.
 Let \Veim{reduced} be a reduced EIM.
@@ -2345,27 +2378,10 @@ For an Earley reduction attempt to create \Veim{reduced}
 the reason will a duple, $[\Veim{pred}, \Veim{cause}]$,
 where \Veim{pred} is a predecessor of \Veim{reduced},
 and \Veim{cause} is a cause of \Veim{reduced}.
-For a Leo reduction attempt to create \Veim{reduced},
-the reason will a duple, $[\Vlim{link}, \Veim{base}]$,
-where \Vlim{link} is a Leo link of the Leo reduction,
-and \Veim{base} is a base of the Leo reduction.
 
 \subsection{Restoring memoized items}
 \label{s:restoring}
 
-With each EIM
-the \Marpa{} implementation stores pointers back to
-the its causes and predecessors.
-For those EIMs created by Leo reduction,
-the \Marpa{} implementation also stores pointers
-to the  Leo link and the base item.
-With each LIM,
-call it \Vlim{link}
-the \Marpa{} implementation stores
-a pointer to the previous link,
-$\mymathop{Previous-link}(\Vlim{link})$;
-and a pointer to the EIM that it memoizes,
-$\mymathop{Memoized}(\Vlim{link})$.
 
 TODO
 
