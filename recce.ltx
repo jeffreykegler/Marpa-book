@@ -2303,81 +2303,77 @@ and we take this point of view when discussing per-parse resource.
 \label{s:pointers}
 
 The \Marpa{} implementation tracks the reasons for
-the creation of every PIM, with one \dfn{PIM reason}
-for every attempt to create that PIM.
-When it will not create confusion,
-PIM reasons are called simply, reasons.
+the creations of PIM.
+These are used in evaluation.
+The reasons are tracked in \dfn{link pairs}
+with one link pair for every attempt to create
+a PIM, with one exception.
 
-LIMs memoize Leo chains,
-which are deterministic,
-and an LIM will always have exactly one reason.
-The PIM reason of a LIM is also called a LIM reason.
-Let \Vlim{link} be a LIM.
-The LIM reason for \Vlim{link}, is always a duple, $[\Vlim{previous}, \Veim{memoized}]$,
-where \Vlim{previous} is the previous link in the Leo chain,
-and \Veim{source} is the penult EIM for which
-\Vlim{link} stands in.
-The previous link of \Vlim{link} can be written
-\PreviousLink{\Vlim{link}};
-and the source of \Vlim{link} can be written
-\Source{\Vlim{link}}.
+The one exception is the initial EIM.
+The initial EIM has no link pairs,
+because the reason for its creation is the
+same in every parse.
 
-Reasons for EIM's vary in number and form.
-The initial EIM has no reasons.
-All other EIM's will have at least one reason.
-The PIM reason of a EIM is also called a EIM reason.
+Conceptually, a link pair is a duple,
+$[ \var{predecessor}, \var{cause} ]$.
+Link pairs are so called because they
+are implemented as a pairs of pointers,
+or ``links''.
+One of the pointers may be null.
+The conceptual equivalent of a null pointer element
+in a link pair
+is a $\Lambda$ element in the duple.
 
-EIM reasons are either Earley reasons or Leo reasons.
-Every EIM Earley reason is a duple of cause and
-predecessor.
-The cause of an EIM Earley reason may be $\Lambda$,
-a token duple, or an EIM completion.
-The predecessor of an EIM Earley reason is always an incomplete EIM.
+Predicted EIM's have one or more link pairs.
+Even in an unambiguous parse,
+a predicted EIM may have more than one link pair.
+The prediction element is always an incomplete EIM.
+The cause element is always $\Lambda$.
 
-A Leo reason of an EIM is always a duple.
-Let \Veim{complete} be an EIM,
-and let
-$[\Vlim{link}, \Veim{source}]$ be a Leo reason for \Veim{complete}.
-\Vlim{previous} is the Leo link of \Veim{complete},
-and
-\Veim{source} is the EIM \dfn{source} of the Leo reduction.
-The source is always an EIM completion.
-The Leo link is either a LIM, or $\Lambda$.
-We can write the Leo link of \Veim{complete} as
-$\mymathop{Previous-link}(\Veim{complete})$;
-and we can write the source of \Veim{complete} as
-$\mymathop{Source}(\Veim{complete})$.
+Scanned EIM's will have a link pair for every attempt to create them.
+In an unambiguous parse, a scanned EIM will always have exactly one link pair
+pair.
+In an ambiguous parse, a scanned EIM will have one or more link pairs.
+The predecessor of a scanned EIM is an incomplete EIM.
+The cause of a scanned EIM is a token,
+which conceptually is
+the duple $[ \Vsym{token}, \var{token-value} ]$,
+where \Vsym{token} is a token symbol,
+and \var{token-value} is the token's value.
 
-When \var{eim} is an EIM,
-The cause of \Veim{eim} can be written
-\Cause{\Veim{eim}};
-the predecessor of \Veim{eim} can be written
-\Predecessor{\Veim{eim}}.
-
-Predicted EIM's may have multiple EIM reasons.
-Predictions do not have a useful cause so that,
-if \Veim{predict} is a prediction,
-$\Cause{\Veim{predict}} = \Lambda$.
-
-Scanned EIM's will have a reason for every attempt to create them.
-Let \Veim{scanned} be a scanned EIM.
-The cause of \Veim{scanned} is always a duple representing a token,
-so that $\Cause{\Veim{scanned}} = [ \Vsym{token}, \var{value} ]$,
-where \Vsym{token} is the \dfn{token symbol} and
-where \var{value} is the \dfn{token value}.
+The implementation of the token is a pointer to a structure
+containing a pointer to the token symbol,
+and a pointer to the token value,
+which is a value of arbitrary type.\footnote{
+In C language,
+these can be implemented as a so-called ``void pointers''.}
 The token value is irrelevant to parsing --- it exists 
 in order to be passed on to the semantics.
 
-Reduced EIM's will have a reason for every attempt to create them.
-Let \Veim{reduced} be a reduced EIM.
-Reasons are always duples, but their contents vary according
-to whether the attempt they record was an Earley reduction
-or a Leo reduction.
-Attempts may be either
-For an Earley reduction attempt to create \Veim{reduced}
-the reason will a duple, $[\Veim{pred}, \Veim{cause}]$,
-where \Veim{pred} is a predecessor of \Veim{reduced},
-and \Veim{cause} is a cause of \Veim{reduced}.
+Reduced EIM's will have a link pair for every attempt to create them.
+In an unambiguous parse, a reduced EIM will always have exactly one link pair.
+In an ambiguous parse, a reduced EIM will have one or more link pairs.
+The cause of a reduced EIM will always be
+a completed EIM.
+The predecessor of a reduced EIM varies depending on whether the attempt
+to create the reduced EIM was a Leo reduction or an Earley reduction.
+For an Earley reduction attempt,
+the predecessor will be an incomplete EIM.
+For a Leo reduction attempt,
+the predecessor will be either a LIM,
+or $\Lambda$.
+
+A LIM always has exactly one link pair.
+That is because LIMs memoize Leo chains,
+which are deterministic.
+In the link pair for a LIM,
+the ``cause'' is more often called the \dfn{source} of the LIM.
+In the link pair for a LIM,
+the ``predecessor'' is more often called the \dfn{previous link} of the LIM.
+The source of the link pair of a LIM is the EIM for which it ``stands in''.
+The source EIM will always be a penult in the same Earley set as the LIM.
+The previous link of the link pair of a LIM is either
+another LIM, or $\Lambda$.
 
 \subsection{Restoring memoized items}
 \label{s:restoring}
