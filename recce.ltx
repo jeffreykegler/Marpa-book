@@ -2303,36 +2303,35 @@ and we take this point of view when discussing per-parse resource.
 \label{s:pointers}
 
 The \Marpa{} implementation tracks the reasons for
-the creations of PIM.
-These are used in evaluation.
-The reasons are tracked in \dfn{link pairs}
-with one link pair for every attempt to create
-a PIM, with one exception.
+attempts to create a PIM.
+The reasons are tracked in \dfn{link pairs},
+and are essential for efficient evaluation.
+There is one link pair for every attempt to create a PIM,
+with one exception.
 
-The one exception is the initial EIM.
-The initial EIM has no link pairs,
-because the reason for its creation is the
+The one exception just referred to is the initial EIM.
+The initial EIM has no link pairs.
+The reason for its creation is the
 same in every parse.
 
-Conceptually, a link pair is a duple,
+Conceptually, a link pair is a duple of \dfn{predecessor}
+and \dfn{cause},
 $[ \var{predecessor}, \var{cause} ]$.
-Link pairs are so called because they
-are implemented as a pairs of pointers,
-or ``links''.
-One of the pointers may be null.
+Link pairs are so called because the elements of the pairs
+are implemented as pointers, which are used as ``links``
+to other data.
+One of the pointers may be null,
 The conceptual equivalent of a null pointer element
-in a link pair
 is a $\Lambda$ element in the duple.
 
 Predicted EIM's have one or more link pairs.
 Even in an unambiguous parse,
 a predicted EIM may have more than one link pair.
-The prediction element is always an incomplete EIM.
+The predecessor is always an incomplete EIM.
 The cause element is always $\Lambda$.
 
-Scanned EIM's will have a link pair for every attempt to create them.
-In an unambiguous parse, a scanned EIM will always have exactly one link pair
-pair.
+In an unambiguous parse, a scanned EIM will always have
+exactly one link pair.
 In an ambiguous parse, a scanned EIM will have one or more link pairs.
 The predecessor of a scanned EIM is an incomplete EIM.
 The cause of a scanned EIM is a token,
@@ -2346,7 +2345,7 @@ containing a pointer to the token symbol,
 and a pointer to the token value,
 which is a value of arbitrary type.\footnote{
 In C language,
-these can be implemented as a so-called ``void pointers''.}
+these can be implemented as so-called ``void pointers''.}
 The token value is irrelevant to parsing --- it exists 
 in order to be passed on to the semantics.
 
@@ -2378,14 +2377,12 @@ another LIM, or $\Lambda$.
 \subsection{Restoring memoized items}
 \label{s:restoring}
 
-
-TODO
-
+Let
 \begin{align*}
 & \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
 & \qquad \begin{cases}
 \text{$\emptyset$, if $\Vlim{link} = \Lambda$} \\
-\text{$\mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base})$, otherwise}
+\text{$\mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base})$, otherwise},
 \end{cases}
 \\
 & \mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base}) \defined \\
@@ -2399,6 +2396,18 @@ TODO
 \end{gathered}
 \;\; \right\rbrace .
 \end{align*}
+
+Then the set of memoized EIMs in \Ves{i} is
+\begin{equation*}
+\left\lbrace
+\begin{gathered}
+\Veim{virtual} \quad \text{such that} \\
+\Veim{virtual} \in \mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base}) \quad \text{where} \\
+\text{$\left[ (\Vlim{link}, \Veim{base}) \right]$ is a link pair of \Veim{physical}} \\
+\text{and $\Veim{physical} \in \Ves{i}$}
+\end{gathered}
+\right\rbrace
+\end{equation*}
 
 \section{Per-set lists}
 \label{s:per-set-lists}
