@@ -73,32 +73,33 @@
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
 \newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
 
+\newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
+\newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
+\newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vbool}[1]{\Tvar{#1}{BOOL}}
 \newcommand{\Vcfg}[1]{\Tvar{#1}{CFG}}
 \newcommand{\Vdr}[1]{\Tvar{#1}{DR}}
 \newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
 \newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
-\newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
+\newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
 \newcommand{\Vesset}[1]{\Tvarset{#1}{ES}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
-\newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
+\newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
+\newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
 \newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
 \newcommand{\Vpimset}[1]{\Tvarset{#1}{PIM}}
 \newcommand{\Vrule}[1]{\Tvar{#1}{RULE}}
 \newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
-\newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
 \newcommand{\Vstr}[1]{\str{\var{#1}}}
 \newcommand{\Vstrset}[1]{\Tvarset{#1}{STR}}
-\newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vsym}[1]{\sym{\var{#1}}}
 \newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
-\newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
 \newcommand{\Vtoken}[1]{\Tvar{#1}{TOKEN}}
-
+\newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 
 \newcommand{\alg}[1]{\ensuremath{\textsc{#1}}}
@@ -2374,39 +2375,62 @@ The source EIM will always be a penult in the same Earley set as the LIM.
 The previous link of the link pair of a LIM is either
 another LIM, or $\Lambda$.
 
+Because a LIM has exactly one link pair,
+we can define
+\PreviousLink{\Vlim{$\ell$}} as the previous link of \Vlim{$\ell$},
+and
+\Source{\Vlim{$\ell$}} as the source EIM link of \Vlim{$\ell$}.
+
 \subsection{Restoring memoized items}
 \label{s:restoring}
 
-Let
-\begin{align*}
-& \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
-& \qquad \begin{cases}
-\text{$\emptyset$, if $\Vlim{link} = \Lambda$} \\
-\text{$\mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base})$, otherwise},
-\end{cases}
-\\
-& \mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base}) \defined \\
-& \qquad \qquad \left\lbrace \;\;
-\begin{gathered}
-\Veim{new-base} \cup
-\mymathop{Unhide}(\Vlim{prev-link}, \Veim{new-base})
-\quad \text{where} \\
-\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM} \\
-\Vlim{link} = [ \Vdr{link}, \Vsym{link}, \Vorig{link} ] \\
-\end{gathered}
-\;\; \right\rbrace .
-\end{align*}
+Let \Ves{physical} be an Earley set as produced by \Marpa{},
+and let \Vves{virtual} be \Ves{physical} with its Leo memoized
+items restored.
+We will call \Ves{physical} a \dfn{physical} Earley set, and
+we will call \Vves{virtual} a \dfn{virtual} Earley set
+(type \type{VES}).
 
-Then the set of memoized EIMs in \Ves{i} is
+To show how an physical Earley set is restored,
+we will need a few definitions.
+Let $\mymathop{Unhide}(\Vlim{link}, \Veim{base})$
+be defined as
+\begin{equation}
+\label{e:unhide}
+\left\lbrace \;\;
+\begin{gathered}
+\mymathop{Unhide}(\PreviousLink{\Vlim{link}}, \Veim{new-base}) \\
+\qquad \cup \quad \set{\Veim{new-base}} \\
+\text{where} \\
+\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM} \;\; \text{and} \\
+[ \Vdr{link}, \Vsym{link}, \Vorig{link} ] = \Vlim{link}
+\end{gathered}
+\;\; \right\rbrace,
+\end{equation}
+when $\Vlim{link} \neq \Lambda$.
+Let
+$\mymathop{Unhide}(\Vlim{link}, \Veim{base})$ be defined
+as the emptyset when
+$\Vlim{link} = \Lambda$.
+In \Eref{e:unhide},
+\Veim{new-base} is created with a single link pair,
+the the cause is \Veim{base}, and the predecessor
+is \Source{\Vlim{link}}.
+
+Then the set of memoized EIMs in \Ves{i}, $\mymathop{Memoized}(\Ves{i})$ is
 \begin{equation*}
 \left\lbrace
 \begin{gathered}
 \Veim{virtual} \quad \text{such that} \\
-\Veim{virtual} \in \mymathop{Hidden-EIMs}(\Vlim{link}, \Veim{base}) \quad \text{where} \\
+\Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \quad \text{where} \\
 \text{$\left[ (\Vlim{link}, \Veim{base}) \right]$ is a link pair of \Veim{physical}} \\
 \text{and $\Veim{physical} \in \Ves{i}$}
 \end{gathered}
 \right\rbrace
+\end{equation*}
+Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
+\begin{equation*}
+\Ves{i} \;\; \cup \;\; \mymathop{Memoized}(\Ves{i}).
 \end{equation*}
 
 \section{Per-set lists}
