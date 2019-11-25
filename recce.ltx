@@ -6,6 +6,7 @@
 \usepackage{algpseudocode}
 \usepackage{url}
 \usepackage{amssymb}
+\theoremstyle{definition}
 \allowdisplaybreaks[4]
 
 \delimitershortfall=0pt
@@ -151,7 +152,7 @@
 % I want to use 'call' outside of pseudocode
 \newcommand\call[2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
 
-\newtheorem{theorem}{Theorem}[section]
+\newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 
 \theoremstyle{definition}
@@ -2725,6 +2726,7 @@ We are now in a position to show
 specific time and space complexity results.
 
 \begin{theorem}
+This theorem and its proof are adapted from Lemma 1 of \cite{Leo1991a}.
 Let
 \upshape{\Vint{g}}
 be an
@@ -2801,7 +2803,19 @@ $\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}]$.
 We assume, for a reductio, that
 \var{j}, $1 \le \var{j} \le \var{len}$
 is the smallest integer such that
-$\var{sfseqA}[\var{j}] \neq \var{sfseqB}[\var{j}]$.
+\begin{equation}
+\label{e:left-congruence12a}
+\var{sfseqA}[\var{j}] \neq \var{sfseqB}[\var{j}]
+\end{equation}
+so that
+\begin{equation}
+\label{e:left-congruence12b}
+\begin{gathered}
+\forall \var{i} \mid 1 \le \var{i} < \var{j}
+\implies
+\var{sfseqA}[\var{i}] = \var{sfseqB}[\var{i}].
+\end{gathered}
+\end{equation}
 
 From \Eref{e:left-congruence10a}
 and \Eref{e:left-congruence10b} we know that
@@ -2811,20 +2825,32 @@ With this, we can write
 \begin{equation}
 \label{e:left-congruence15a}
 \begin{aligned}
-& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqA}[\var{j}]\Vstr{suffixA} \\
+& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqA}[\var{j}]\cat\Vstr{suffixA} \\
 & \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
-& \qquad \xderives{R} \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixA}
+& \qquad \xderives{R} \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixA} \\
 \end{aligned}
+\end{equation}
+where
+\begin{equation}
+\label{e:left-congruence15a1}
+\Vstr{preA}\Vsym{rhsA}\Vstr{postA} =
+\var{sfseqA}[\var{j}\subtract 1]
 \end{equation}
 and
 \begin{equation}
 \label{e:left-congruence15b}
 \begin{aligned}
-& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
+& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\cat\Vstr{suffixB} \\
 & \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB} \\
 & \qquad \xderives{R} \Vstr{preB}\Vsym{rhsB}\Vstr{postB}\Vstr{suffixB} \\
-& \qquad = \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixB} \\
+& \qquad = \var{sfseqB}[\var{j}\subtract 1]\cat\Vstr{suffixB}
 \end{aligned}
+\end{equation}
+where
+\begin{equation}
+\label{e:left-congruence15b1}
+\Vstr{preB}\Vsym{rhsB}\Vstr{postB} =
+\var{sfseqB}[\var{j}\subtract 1].
 \end{equation}
 Since $\pi$ is a left congruence,
 \begin{equation}
@@ -2848,31 +2874,24 @@ that
 \label{e:left-congruence25b}
 \Vstr{rhsA} = \Vstr{rhsB} \;\; \text{and} \\
 \label{e:left-congruence25c}
-\Vstr{preA}\Vstr{rhsA} = \Vstr{preB}\Vstr{rhsB}.
-\end{gather}
-and
-From
-\Eref{e:left-congruence25b} and
-\Eref{e:left-congruence25c},
-we have
-\begin{equation}
-\label{e:left-congruence28}
 \Vstr{preA} = \Vstr{preB}.
-\end{equation}
-Recall from
-\Eref{e:left-congruence15b}
+\end{gather}
+Combining
+\Eref{e:left-congruence12b},
+\Eref{e:left-congruence15a1}, and
+\Eref{e:left-congruence15b1},
+we have
 \begin{equation}
 \label{e:left-congruence30}
 \begin{split}
-& \Vstr{preB}\Vsym{rhsB}\Vstr{postB}\Vstr{suffixB} \\
-& \qquad = \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixB} \\
+& \Vstr{preA}\Vsym{rhsA}\Vstr{postA} \\
+& \quad = \var{sfseqA}[\var{j}\subtract 1] \\
+& \quad = \var{sfseqB}[\var{j}\subtract 1] \\
+& \quad = \Vstr{preB}\Vsym{rhsB}\Vstr{postB},
 \end{split}
 \end{equation}
-From
-\Eref{e:left-congruence25b},
-\Eref{e:left-congruence28}, and
-\Eref{e:left-congruence30}
-we have
+and from
+\Eref{e:left-congruence30} we have
 \begin{equation}
 \label{e:left-congruence33}
 \Vstr{postA} = \Vstr{postB}.
@@ -2883,51 +2902,58 @@ from \Eref{e:left-congruence15b} that
 \begin{equation}
 \label{e:left-congruence35}
 \begin{aligned}
-& \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
-& \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB}
+& \var{sfseqB}[\var{j}]\cat\Vstr{suffixB} \\
+& \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB},
 \end{aligned}
 \end{equation}
-From \Eref{e:left-congruence35},
-\Eref{e:left-congruence25a},
-\Eref{e:left-congruence28}, and
-\Eref{e:left-congruence33},
-we have
+so that 
 \begin{equation}
-\label{e:left-congruence40}
-\begin{aligned}
-& \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
-& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixB}
-\end{aligned}
-\end{equation}
-and therefore
-\begin{equation}
-\label{e:left-congruence42}
-\var{sfseqB}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}.
-\end{equation}
-
-Recall from
-\Eref{e:left-congruence15a}
-\begin{equation}
-\label{e:left-congruence45}
-\begin{aligned}
-& \var{sfseqA}[\var{j}]\Vstr{suffixA} \\
-& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
-\end{aligned}
+\label{e:left-congruence36}
+\var{sfseqB}[\var{j}] = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}.
 \end{equation}
 From
-\Eref{e:left-congruence40} and
-\Eref{e:left-congruence45}, we have
+\Eref{e:left-congruence25a},
+\Eref{e:left-congruence25c},
+\Eref{e:left-congruence33},
+and
+\Eref{e:left-congruence36}, we have
+\begin{equation}
+\label{e:left-congruence38}
+\var{sfseqB}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}.
+\end{equation}
+Recall
+from \Eref{e:left-congruence15a} that
+\begin{equation}
+\label{e:left-congruence39}
+\begin{aligned}
+& \var{sfseqA}[\var{j}]\cat\Vstr{suffixB} \\
+& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixB},
+\end{aligned}
+\end{equation}
+so that
+\begin{equation}
+\label{e:left-congruence40}
+\var{sfseqA}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}.
+\end{equation}
+
+from \Eref{e:left-congruence38}
+and \Eref{e:left-congruence40}
+we have
 \begin{equation}
 \label{e:left-congruence50}
 \var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}].
 \end{equation}
-This contradicts our assumption for the reductio,
+This contradicts
+\Eref{e:left-congruence12a},
+our assumption for the reductio,
 and allows us to conclude that
-for all \var{k},
-$1 \le \var{k} \le \var{len}$,
 \begin{equation}
 \label{e:left-congruence52}
-\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}].
+\begin{gathered}
+\forall \var{j} \mid 1 \le \var{j} < \var{len}
+\implies
+\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{J}].
+\end{gathered}
 \end{equation}
 
 If $\var{lenA} > \var{lenB}$,
@@ -2971,6 +2997,44 @@ we have \Eref{e:left-congruence4}
 and the theorem.
 
 \end{proof}
+
+\begin{theorem}
+This theorem and its proof are adapted from Lemma 2 of \cite{Leo1991a}.
+Let
+\Vint{g}
+be an
+unambiguous grammar,
+If
+\begin{align}
+\label{e:equal-prefix1}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
+                  & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+                  & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A} \\
+                  & \destar \Vstr{input1}\Vstr{input2}\Vstr{input3A} \\
+\end{aligned}
+\\
+\intertext{and}
+\label{e:equal-prefix2}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3B} \\
+                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3B} \\
+                  & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vstr{input2}\Vstr{input3B} \\
+                  & \destar \Vstr{input1}\Vstr{input2}\Vstr{input3B} \\
+\end{aligned}
+\end{align}
+and
+\begin{equation}
+\label{e:equal-prefix3}
+\Vstr{beforeA}\Vsym{lhs} \xderives{R\ast}
+\Vstr{beforeB}\Vsym{lhs}
+\end{equation}
+then
+\begin{equation}
+\label{e:equal-prefix4}
+\Vstr{beforeA} = \Vstr{beforeB}
+\end{equation}
+\end{theorem}
 
 \begin{theorem}
 For every LRR grammar,
