@@ -2725,6 +2725,39 @@ unless at least one step of that derivation uses a right recursive rule.
 We are now in a position to show
 specific time and space complexity results.
 
+We say that a grammar, \Vint{g} is LR($\pi$) for a partition $\pi$,
+if, given
+\begin{align}
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{prefix1}\Vsym{lhs1}\Vstr{suffix1} \\
+& \xderives{R} \Vstr{prefix1}\Vstr{rhs}\Vstr{suffix1}
+\end{aligned}
+\;\; \text{and}
+\\
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{prefix2}\Vsym{lhs2}\Vstr{suffix3} \\
+& \xderives{R} \Vstr{prefix1}\Vstr{rhs}\Vstr{suffix2}
+\end{aligned}
+\;\; \text{and}
+\\
+\Vstr{suffix1} \equiv \Vstr{suffix2} ( \text{mod $\pi$} )
+\end{align}
+then we have
+\begin{gather*}
+\Vsym{lhs1} =
+\Vsym{lhs2},
+\\
+\Vstr{prefix1} =
+\Vstr{prefix2}, \;\; \text{and} 
+\\
+\Vstr{suffix3} =
+\Vstr{suffix2}.
+\end{gather*}
+We say that an LR($\pi$) grammar is LR-regular (LRR),
+if $\pi$ is a regular partition.\footnote{
+This definition follows \cite{Culik1973}[p. 70].
+}
+
 \begin{theorem}
 This theorem and its proof are adapted from Lemma 1 of \cite{Leo1991a}.
 Let
@@ -2794,9 +2827,13 @@ Expand part of \Eref{e:left-congruence2} into
 where $\Vstr{sfB} = \var{sfseqB}[\var{lenB}]$.
 Let \var{len} be the smaller of \var{lenA} and \var{lenB}.
 
-We seek to show that for all \var{k},
-$\var{k} \le \var{len}$, we have
-$\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}]$.
+We seek to show
+\begin{equation}
+\label{e:left-congruence11}
+\forall \var{k} \;\; ( 1 \le \var{k} \le \var{len}
+\implies
+\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}] ).
+\end{equation}
 We assume, for a reductio, that
 \var{j}, $1 \le \var{j} \le \var{len}$
 is the smallest integer such that
@@ -2807,11 +2844,9 @@ is the smallest integer such that
 so that
 \begin{equation}
 \label{e:left-congruence12b}
-\begin{gathered}
-\forall \var{i} \mid 1 \le \var{i} < \var{j}
+\forall \var{i} \;\; ( 1 \le \var{i} \le \var{j}
 \implies
-\var{sfseqA}[\var{i}] = \var{sfseqB}[\var{i}].
-\end{gathered}
+\var{sfseqA}[\var{i}] = \var{sfseqB}[\var{i}] ).
 \end{equation}
 
 From \Eref{e:left-congruence10a}
@@ -2849,10 +2884,24 @@ where
 \Vstr{preB}\Vsym{rhsB}\Vstr{postB} =
 \var{sfseqB}[\var{j}\subtract 1].
 \end{equation}
-Since $\pi$ is a left congruence,
+From \Eref{e:left-congruence12b}
+we know that
 \begin{equation}
-\Vstr{suffixA} \equiv \Vstr{suffixB} (\text{mod $\pi$})
+\label{e:left-congruence18}
+\var{sfseqA}[\var{j}\subtract 1] = \var{sfseqB}[\var{j}\subtract 1],
 \end{equation}
+so that from
+\Eref{e:left-congruence15a1},
+\Eref{e:left-congruence15b1}, and
+\Eref{e:left-congruence18},
+\begin{equation}
+\label{e:left-congruence19}
+\Vstr{preA}\Vsym{rhsA}\Vstr{postA} =
+\Vstr{preB}\Vsym{rhsB}\Vstr{postB}
+\end{equation}
+
+Since $\pi$ is a left congruence,
+\Eref{e:left-congruence3}
 implies
 \begin{equation}
 \label{e:left-congruence20a}
@@ -2860,16 +2909,19 @@ implies
 \end{equation}
 and since \Vint{g} is
 $LR(\pi)$
-we know
-from \Eref{e:left-congruence15a},
-\Eref{e:left-congruence15b} and
-\Eref{e:left-congruence20a}
-that
+we know that it must use a single production to reduce
+a single handle in
+\Eref{e:left-congruence19}
+in the two derivations,
+\Eref{e:left-congruence15a}
+and \Eref{e:left-congruence15b},
+so that
+Therefore
 \begin{gather}
 \label{e:left-congruence25a}
-\Vstr{lhsA} = \Vstr{lhsB} \;\; \text{and} \\
+\Vstr{lhsA} = \Vstr{lhsB}, \\
 \label{e:left-congruence25b}
-\Vstr{rhsA} = \Vstr{rhsB} \;\; \text{and} \\
+\Vstr{rhsA} = \Vstr{rhsB}, \;\; \text{and} \\
 \label{e:left-congruence25c}
 \Vstr{preA} = \Vstr{preB}.
 \end{gather}
@@ -2933,7 +2985,7 @@ so that
 \var{sfseqA}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}.
 \end{equation}
 
-from \Eref{e:left-congruence38}
+From \Eref{e:left-congruence38}
 and \Eref{e:left-congruence40}
 we have
 \begin{equation}
@@ -2949,11 +3001,11 @@ and allows us to conclude that
 \begin{gathered}
 \forall \var{j} \mid 1 \le \var{j} < \var{len}
 \implies
-\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{J}].
+\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}].
 \end{gathered}
 \end{equation}
 
-If $\var{lenA} > \var{lenB}$,
+If $\var{lenA} \ge \var{lenB}$,
 \begin{equation}
 \label{e:left-congruence55a}
 \begin{aligned}
@@ -2963,7 +3015,7 @@ If $\var{lenA} > \var{lenB}$,
 & \qquad = \Vstr{sfB}\Vstr{suffixA}
 \end{aligned}
 \end{equation}
-And if $\var{lenB} > \var{lenA}$,
+And if $\var{lenB} \ge \var{lenA}$,
 \begin{equation}
 \label{e:left-congruence55b}
 \begin{aligned}
@@ -3001,6 +3053,11 @@ Let
 \Vint{g}
 be an
 unambiguous grammar,
+and let
+\begin{gather*}
+[ \Vsym{lhs} \de \Vstr{rhs1}\Vstr{rhs2} ] \in \Rules{\Vint{g}} \\
+\text{where $\Vstr{rhs2} \neq \epsilon$}.
+\end{gather*}
 If
 \begin{align}
 \label{e:equal-prefix1}
@@ -3034,7 +3091,7 @@ then
 \end{theorem}
 
 \begin{proof}
-We assume that
+We assume, for a reductio, that
 \Eref{e:equal-prefix1},
 \Eref{e:equal-prefix2}, and
 \Eref{e:equal-prefix3}
@@ -3077,24 +3134,27 @@ we have
 \label{e:equal-prefix10e}
                   & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
 \end{align}
-In \Eref{e:equal-prefix10c}, since $\Vstr{input3} \in \Term{\Vint{g}}^\ast$, we have a right
+In \Eref{e:equal-prefix10b}, since $\Vstr{input3A} \in \Term{\Vint{g}}^\ast$, we have a right
 derivation
 \begin{equation}
 \label{e:equal-prefix15}
 \Vstr{rhs2} \xderives{R\ast} \Vstr{shim}\Vsym{lhs}.
 \end{equation}
 In an unambiguous grammar, a right derivation must be unique,
-so we can insert
-\Eref{e:equal-prefix15} into
-\Eref{e:equal-prefix1}
-and write
+so we can combine
+\Eref{e:equal-prefix15} and
+\Eref{e:equal-prefix1} into a single derivation,
+writing
 \begin{align}
 \label{e:equal-prefix20a}
-& \Accept{\Vint{g}} \\
+& \Accept{\Vint{g}}
+\\
 \label{e:equal-prefix20b}
-& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
+\\
 \label{e:equal-prefix20c}
-& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}\Vsym{lhs}\Vstr{input3A} \\
+& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}\Vsym{lhs}\Vstr{input3A}
+\\
 \label{e:equal-prefix20d}
 & \qquad
 \begin{aligned}
@@ -3102,15 +3162,42 @@ and write
 & \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \end{aligned}
 \\
-\label{e:equal-prefix20e}
 & \qquad
 \begin{aligned}
 & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+\label{e:equal-prefix20e}
 & \qquad \qquad \Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
 \end{aligned}
 \\
 \label{e:equal-prefix20f}
 & \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}.
+\end{align}
+
+Note
+from the derivation from \Eref{e:equal-prefix20e}
+to \Eref{e:equal-prefix20f},
+we have that
+\begin{equation}
+\label{e:equal-prefix30}
+\Vstr{shim}\Vstr{rhs1} \destar \epsilon
+\end{equation}
+Using \Eref{e:equal-prefix30} with
+the derivation from \Eref{e:equal-prefix20b}
+to \Eref{e:equal-prefix20d},
+we get
+\begin{align}
+\label{e:equal-prefix35a}
+& \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
+\\
+\label{e:equal-prefix35b}
+\xderives{R\ast} &
+\begin{aligned}
+& \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+& \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
+\end{aligned}
+\\
+\label{e:equal-prefix35c}
+\derives & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \end{align}
 
 \end{proof}
