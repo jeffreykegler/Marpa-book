@@ -2347,7 +2347,7 @@ and a pointer to the token value,
 which is a value of arbitrary type.\footnote{
 In C language,
 these can be implemented as so-called ``void pointers''.}
-The token value is irrelevant to parsing --- it exists 
+The token value is irrelevant to parsing --- it exists
 in order to be passed on to the semantics.
 
 Reduced EIM's will have a link pair for every attempt to create them.
@@ -2725,6 +2725,254 @@ We are now in a position to show
 specific time and space complexity results.
 
 \begin{theorem}
+Let
+\upshape{\Vint{g}}
+be an
+\upshape{$LR(\pi)$}
+grammar,
+where the partition
+\upshape{$\pi$}
+is a left congruence
+of
+\upshape{$\Term{\Vint{g}}^\ast$}.
+If
+\upshape{
+\begin{align}
+\label{e:left-congruence1}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{sfA}\Vstr{suffixA} \\
+                  & \qquad \destar \Vstr{prefix}\Vstr{suffixA}
+\end{aligned}
+\\
+\intertext{and}
+\label{e:left-congruence2}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{sfB}\Vstr{suffixB} \\
+                  & \qquad \destar \Vstr{prefix}\Vstr{suffixB},
+\end{aligned}
+\end{align}
+and
+\begin{equation}
+\label{e:left-congruence3}
+\Vstr{suffixA} \equiv \Vstr{suffixB} (\text{mod $\pi$})
+\end{equation}
+then
+\begin{equation}
+\label{e:left-congruence4}
+\Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
+\;; \text{or} \;;
+\Vstr{sfB} \xderives{R\ast} \Vstr{sfA}
+\end{equation}
+}
+
+\end{theorem}
+
+\begin{proof}
+Assume that
+\Eref{e:left-congruence1},
+\Eref{e:left-congruence2}, and
+\Eref{e:left-congruence3} hold.
+Expand part of \Eref{e:left-congruence1} and
+\Eref{e:left-congruence2} into
+\begin{equation}
+\label{e:left-congruence10a}
+\begin{aligned}
+& \Vstr{sfA} = \var{sfseqA}[\var{lenA}]\Vstr{suffixA} \\
+& \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtract 1]\Vstr{suffixA} \\
+& \qquad \xderives{R} \ldots \\
+& \qquad \xderives{R} \var{sfseqA}[1\Vstr{suffixA}] = \Vstr{prefix}\Vstr{suffixA}
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\label{e:left-congruence10b}
+\begin{aligned}
+& \Vstr{sfB} = \var{sfseqB}[\var{lenB}]\Vstr{suffixA} \\
+& \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtract 1]\Vstr{suffixA} \\
+& \qquad \xderives{R} \ldots \\
+& \qquad \xderives{R} \var{sfseqB}[1]\Vstr{suffixB} = \Vstr{prefix}\Vstr{suffixB}
+\end{aligned}
+\end{equation}
+and let \var{len} be the smaller of \var{lenA} and \var{lenB}.
+
+We seek to show that for all \var{k},
+$\var{k} \le \var{len}$, we have
+$\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}]$.
+We assume, for a reductio, that
+\var{j}, $1 \le \var{j} \le \var{len}$
+is the smallest integer such that
+$\var{sfseqA}[\var{j}] \neq \var{sfseqB}[\var{j}]$.
+
+From \Eref{e:left-congruence10a}
+and \Eref{e:left-congruence10b} we know that
+$\var{sfseqA}[1] = \var{sfseqB}[1] = \Vstr{prefix}$,
+so that $\var{j} > 1$.
+With this, we can write
+\begin{equation}
+\label{e:left-congruence15a}
+\begin{aligned}
+& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqA}[\var{j}]\Vstr{suffixA} \\
+& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
+& \qquad \xderives{R} \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixA}
+\end{aligned}
+\end{equation}
+and
+\begin{equation}
+\label{e:left-congruence15b}
+\begin{aligned}
+& \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
+& \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB} \\
+& \qquad \xderives{R} \Vstr{preB}\Vsym{rhsB}\Vstr{postB}\Vstr{suffixB} \\
+& \qquad = \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixB} \\
+\end{aligned}
+\end{equation}
+Since $\pi$ is a left congruence,
+\begin{equation}
+\Vstr{suffixA} \equiv \Vstr{suffixB} (\text{mod $\pi$})
+\end{equation}
+implies
+\begin{equation}
+\label{e:left-congruence20a}
+\Vstr{postA}\Vstr{suffixA} \equiv \Vstr{postA}\Vstr{suffixB} (\text{mod $\pi$}),
+\end{equation}
+and since \Vint{g} is
+$LR(\pi)$
+we know
+from \Eref{e:left-congruence15a},
+\Eref{e:left-congruence15b} and
+\Eref{e:left-congruence20a}
+that
+\begin{gather}
+\label{e:left-congruence25a}
+\Vstr{lhsA} = \Vstr{lhsB} \;\; \text{and} \\
+\label{e:left-congruence25b}
+\Vstr{rhsA} = \Vstr{rhsB} \;\; \text{and} \\
+\label{e:left-congruence25c}
+\Vstr{preA}\Vstr{rhsA} = \Vstr{preB}\Vstr{rhsB}.
+\end{gather}
+and
+From
+\Eref{e:left-congruence25b} and
+\Eref{e:left-congruence25c},
+we have
+\begin{equation}
+\label{e:left-congruence28}
+\Vstr{preA} = \Vstr{preB}.
+\end{equation}
+Recall from
+\Eref{e:left-congruence15b}
+\begin{equation}
+\label{e:left-congruence30}
+\begin{split}
+& \Vstr{preB}\Vsym{rhsB}\Vstr{postB}\Vstr{suffixB} \\
+& \qquad = \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixB} \\
+\end{split}
+\end{equation}
+From
+\Eref{e:left-congruence25b},
+\Eref{e:left-congruence28}, and
+\Eref{e:left-congruence30}
+we have
+\begin{equation}
+\label{e:left-congruence33}
+\Vstr{postA} = \Vstr{postB}.
+\end{equation}
+
+Recall
+from \Eref{e:left-congruence15b} that
+\begin{equation}
+\label{e:left-congruence35}
+\begin{aligned}
+& \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
+& \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB}
+\end{aligned}
+\end{equation}
+From \Eref{e:left-congruence35},
+\Eref{e:left-congruence25a},
+\Eref{e:left-congruence28}, and
+\Eref{e:left-congruence33},
+we have
+\begin{equation}
+\label{e:left-congruence40}
+\begin{aligned}
+& \var{sfseqB}[\var{j}]\Vstr{suffixB} \\
+& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixB}
+\end{aligned}
+\end{equation}
+and therefore
+\begin{equation}
+\label{e:left-congruence42}
+\var{sfseqB}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}.
+\end{equation}
+
+Recall from
+\Eref{e:left-congruence15a}
+\begin{equation}
+\label{e:left-congruence45}
+\begin{aligned}
+& \var{sfseqA}[\var{j}]\Vstr{suffixA} \\
+& \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
+\end{aligned}
+\end{equation}
+From
+\Eref{e:left-congruence40} and
+\Eref{e:left-congruence45}, we have
+\begin{equation}
+\label{e:left-congruence50}
+\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}].
+\end{equation}
+This contradicts our assumption for the reductio,
+and allows us to conclude that
+for all \var{k},
+$1 \le \var{k} \le \var{len}$,
+\begin{equation}
+\label{e:left-congruence52}
+\var{sfseqA}[\var{k}] = \var{sfseqB}[\var{k}].
+\end{equation}
+
+If $\var{lenA} > \var{lenB}$,
+\begin{equation}
+\label{e:left-congruence55a}
+\begin{aligned}
+& \Vstr{sfA}\Vstr{suffixA} = \var{sfseqA}[\var{lenA}]\Vstr{suffixA} \\
+& \qquad \xderives{R\ast} \var{sfseqA}[\var{lenB}]\Vstr{suffixA} \\
+& \qquad = \var{sfseqB}[\var{lenB}]\Vstr{suffixA} \\
+& \qquad = \Vstr{sfB}\Vstr{suffixA}
+\end{aligned}
+\end{equation}
+And if $\var{lenB} > \var{lenA}$,
+\begin{equation}
+\label{e:left-congruence55b}
+\begin{aligned}
+& \Vstr{sfB}\Vstr{suffixB} = \var{sfseqB}[\var{lenB}]\Vstr{suffixB} \\
+& \qquad \xderives{R\ast} \var{sfseqB}[\var{lenA}]\Vstr{suffixB} \\
+& \qquad = \var{sfseqA}[\var{lenA}]\Vstr{suffixB} \\
+& \qquad = \Vstr{sfA}\Vstr{suffixB}
+\end{aligned}
+\end{equation}
+
+From
+\Eref{e:left-congruence55a}
+we conclude
+\begin{equation}
+\label{e:left-congruence60a}
+\Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
+\end{equation}
+and from
+\Eref{e:left-congruence55b}
+we conclude
+\begin{equation}
+\label{e:left-congruence60b}
+\Vstr{sfB} \xderives{R\ast} \Vstr{sfA}
+\end{equation}
+From \Eref{e:left-congruence60a}
+and \Eref{e:left-congruence60b}
+we have \Eref{e:left-congruence4}
+and the theorem.
+
+\end{proof}
+
+\begin{theorem}
 For every LRR grammar,
 \Marpa{} runs in $\On{}$ time and space.
 \end{theorem}
@@ -2948,7 +3196,7 @@ John~Aycock and R.~Nigel~Horspool.
 
 \bibitem{Culik1973}
 {\v{C}}ulik, Karel and Cohen, Rina.
-\newblock LR-Regular grammars—an extension of LR (k) grammars.
+\newblock LR-Regular grammars --- an extension of LR~(k) grammars.
 \newblock {\em Journal of Computer and System Sciences},
   Vol. 7, No. 1, 1973,
   pp. 66--96.
@@ -3009,6 +3257,11 @@ J.~M. I.~M. Leo.
 \newblock A general context-free parsing algorithm running in linear time on
   every {LR($k$)} grammar without using lookahead.
 \newblock {\em Theoretical Computer Science}, 82:165--176, 1991.
+
+\bibitem{Leo1991a}
+J.~M. I.~M. Leo.
+\newblock Addendum.
+\newblock An undated 2-page addendum to \cite{Leo1991}.
 
 \end{thebibliography}
 
