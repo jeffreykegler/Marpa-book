@@ -3036,6 +3036,88 @@ then
 \end{equation}
 \end{theorem}
 
+\begin{proof}
+We assume that
+\Eref{e:equal-prefix1},
+\Eref{e:equal-prefix2}, and
+\Eref{e:equal-prefix3}
+are all true,
+but that
+\Eref{e:equal-prefix4} is false.
+If
+\begin{equation}
+\label{e:equal-prefix5}
+\Vstr{beforeA}\Vsym{lhs} \xderives{(0)}
+\Vstr{beforeB}\Vsym{lhs},
+\end{equation}
+we have
+\Vstr{beforeA} = \Vstr{beforeB}
+directly from
+\Eref{e:equal-prefix5},
+which contradicts our assumption.
+For the rest of this proof, therefore,
+we assume  that
+\begin{equation}
+\label{e:equal-prefix8}
+\Vstr{beforeA}\Vsym{lhs} \xderives{R+}
+\Vstr{beforeB}\Vsym{lhs}.
+\end{equation}
+
+Combining
+\Eref{e:equal-prefix1},
+\Eref{e:equal-prefix2}, and
+\Eref{e:equal-prefix8},
+we have
+\begin{align}
+\label{e:equal-prefix10a}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
+\label{e:equal-prefix10b}
+                  & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+\label{e:equal-prefix10c}
+                  & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3A} \\
+\label{e:equal-prefix10d}
+                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+\label{e:equal-prefix10e}
+                  & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
+\end{align}
+In \Eref{e:equal-prefix10c}, since $\Vstr{input3} \in \Term{\Vint{g}}^\ast$, we have a right
+derivation
+\begin{equation}
+\label{e:equal-prefix15}
+\Vstr{rhs2} \xderives{R\ast} \Vstr{shim}\Vsym{lhs}.
+\end{equation}
+In an unambiguous grammar, a right derivation must be unique,
+so we can insert
+\Eref{e:equal-prefix15} into
+\Eref{e:equal-prefix1}
+and write
+\begin{align}
+\label{e:equal-prefix20a}
+& \Accept{\Vint{g}} \\
+\label{e:equal-prefix20b}
+& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+\label{e:equal-prefix20c}
+& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}\Vsym{lhs}\Vstr{input3A} \\
+\label{e:equal-prefix20d}
+& \qquad
+\begin{aligned}
+& \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+& \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
+\end{aligned}
+\\
+\label{e:equal-prefix20e}
+& \qquad
+\begin{aligned}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+& \qquad \qquad \Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
+\end{aligned}
+\\
+\label{e:equal-prefix20f}
+& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}.
+\end{align}
+
+\end{proof}
+
 \begin{theorem}
 For every LRR grammar,
 \Marpa{} runs in $\On{}$ time and space.
