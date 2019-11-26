@@ -3173,14 +3173,17 @@ writing
 & \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}.
 \end{align}
 
-Note
-from the derivation from \Eref{e:equal-prefix20e}
+From the derivation from \Eref{e:equal-prefix20e}
 to \Eref{e:equal-prefix20f},
 we have that
 \begin{equation}
 \label{e:equal-prefix30}
-\Vstr{shim}\Vstr{rhs1} \destar \epsilon
+\Vstr{shim}\Vstr{rhs1} \destar \epsilon.
 \end{equation}
+(Note that
+\Eref{e:equal-prefix30}
+is not necessarily a right-derivation.)
+
 Using \Eref{e:equal-prefix30} with
 the derivation from \Eref{e:equal-prefix20b}
 to \Eref{e:equal-prefix20d},
@@ -3190,16 +3193,74 @@ we get
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \\
 \label{e:equal-prefix35b}
-\xderives{R\ast} &
-\begin{aligned}
-& \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+\xderives{R\ast} \;\;
+& \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}
+\\
+\nonumber
 & \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
-\end{aligned}
 \\
 \label{e:equal-prefix35c}
-\derives & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
+\derives \;\;
+& \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}.
 \end{align}
+The derivation from \Eref{e:equal-prefix35a}
+to \Eref{e:equal-prefix35c}
+is a cycle, which can only happen if
+\Vint{g} is ambiguous.
+This is contrary to assumption,
+which gives us the reductio
+and the theorem.
+\end{proof}
 
+\begin{theorem}
+This theorem and its proof are adapted from the ``Theorem'' of \cite{Leo1991a}.
+Let
+\Vint{g}
+be an LR($\pi$)
+grammar,
+with $\pi$ a left congruence of $\Term{Vint{g}}^\ast$.
+and let
+\begin{gather*}
+[ \Vsym{lhs} \de \Vstr{rhs1}\Vstr{rhs2} ] \in \Rules{\Vint{g}} \\
+\text{where $\Vstr{rhs2} \neq \epsilon$}.
+\end{gather*}
+Let \var{input1},
+\var{input2},
+\var{input3A} and
+\var{input3B} be elements
+of $\Term{Vint{g}}^\ast$.
+If
+\begin{align}
+\label{e:addendum-theorem1}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
+                  & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
+                  & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A} \\
+                  & \destar \Vstr{input1}\Vstr{input2}\Vstr{input3A} \\
+\end{aligned}
+\\
+\intertext{and}
+\label{e:addendum-theorem2}
+& \begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3B} \\
+                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3B} \\
+                  & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vstr{input2}\Vstr{input3B} \\
+                  & \destar \Vstr{input1}\Vstr{input2}\Vstr{input3B} \\
+\end{aligned}
+\end{align}
+and
+\begin{equation}
+\label{e:addendum-theorem3}
+\Vstr{input3A} \equiv \Vstr{input3B} ( \text{mod $\pi$} )
+\end{equation}
+then
+\begin{equation}
+\label{e:addendum-theorem4}
+\Vstr{beforeA} = \Vstr{beforeB}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
 \end{proof}
 
 \begin{theorem}
