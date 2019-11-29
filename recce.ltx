@@ -770,15 +770,20 @@ so that
 
 A grammar describes a rewriting system.
 We consider
-\begin{equation*}
+\begin{equation}
+\label{e:rewrite-step}
 \Vstr{prefix}\Vsym{lhs}\Vstr{suffix} \derives \Vstr{prefix}\Vstr{rhs}\Vstr{suffix}
-\end{equation*}
+\end{equation}
 a valid rewrite step of \Vcfg{f} if and only if
 \begin{gather*}
 \Vstr{prefix} \in \Vocab{\Vcfg{g}}, \\
 \Vstr{suffix} \in \Vocab{\Vcfg{g}}, \quad \text{and} \\
 [\Vsym{lhs} \de \Vstr{rhs}] \in \Rules{\Vcfg{g}}.
 \end{gather*}
+The valid rewrite step of
+\Eref{e:rewrite-step}
+is a \dfn{right rewrite step} if
+and only if \Vsym{lhs} is the rightmost non-terminal.
 
 A sequence of iterated rewrite steps of \Vcfg{g}, such that
 \begin{equation}
@@ -788,6 +793,10 @@ A sequence of iterated rewrite steps of \Vcfg{g}, such that
 is called a \dfn{derivation} of \Vcfg{g},
 and a rewrite step that is part of a derivation is called
 a \dfn{derivation step}.
+A derivation is a \dfn{right derviation} if and only if
+all of its rewrite steps are right rewrite steps.
+A rewrite step that is part of a right derivation is a
+right rewrite step.
 
 The sequence of strings in a derivation, its sequence of strings
 is called its \dfn{derivation sequence}.
@@ -841,6 +850,23 @@ is equivalent to saying that
 Note that, as a result of the above definitions,
 $\epsilon \xderives{0} \epsilon$ and
 $\epsilon \destar \epsilon$.
+
+We write
+\begin{equation*}
+\Vstr{x} \xderives{R} \Vstr{y}.
+\end{equation*}
+to say that \Vstr{x} right derives \Vstr{y}.
+The ``$R$'' superscript may be combined with any of the other superscripts
+so that, for example,
+\begin{equation*}
+\Vstr{x} \xderives{R+} \Vstr{y}
+\end{equation*}
+states that that \Vstr{x} right derives \Vstr{y} in one or more steps;
+and
+\begin{equation*}
+\Vstr{x} \xderives{R(\var{k}} \Vstr{y}
+\end{equation*}
+states that that \Vstr{x} right derives \Vstr{y} in \var{k} steps;
 
 A \dfn{sentential form} is a string which can be derived from the start
 symbol, \Accept{\Vcfg{g}}.
