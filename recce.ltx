@@ -2880,8 +2880,8 @@ and
 \Eref{e:handle-unique-15d} from \Eref{e:handle-unique-30}.
 \end{proof}
 
-\begin{theorem}
-\label{th:addendum-lemma1}
+\begin{lemma}
+\label{lm:addendum-lemma1}
 This theorem and its proof are adapted from Lemma 1 of \cite{Leo1991a}.
 Let
 \Vint{g}
@@ -2919,7 +2919,7 @@ then
 \;\; \text{or} \;\;
 \Vstr{sfB} \xderives{R\ast} \Vstr{sfA}
 \end{equation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 Assume that
@@ -3121,7 +3121,7 @@ Then
 \begin{equation}
 \begin{gathered}
 \label{e:left-congruence60}
-\Vstr{sfA} \xderives{R\ast} \Vstr{sfB} 
+\Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
 \;\; \text{or} \;\;
 \Vstr{sfB} \xderives{R\ast} \Vstr{sfA} \\
 \because \Eref{e:left-congruence55a}, \Eref{e:left-congruence55b}
@@ -3133,8 +3133,8 @@ and the theorem.
 
 \end{proof}
 
-\begin{theorem}
-\label{th:addendum-lemma2}
+\begin{lemma}
+\label{lm:addendum-lemma2}
 This theorem and its proof are adapted from Lemma 2 of \cite{Leo1991a}.
 Let
 \Vint{g}
@@ -3170,7 +3170,7 @@ and
 \begin{gathered}
 \Vstr{beforeA}\Vsym{lhs} \xderives{R\ast}
 \Vstr{beforeB}\Vsym{lhs} \\
-\Vstr{beforeB}\Vsym{lhs} \xderives{R\ast}
+\text{or} \;\; \Vstr{beforeB}\Vsym{lhs} \xderives{R\ast}
 \Vstr{beforeA}\Vsym{lhs}
 \end{gathered}
 \end{equation}
@@ -3179,7 +3179,7 @@ then
 \label{e:equal-prefix4}
 \Vstr{beforeA} = \Vstr{beforeB}
 \end{equation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 We assume, for a reductio, that
@@ -3215,11 +3215,12 @@ we assume  that
 \Vstr{beforeB}\Vsym{lhs}.
 \end{equation}
 
-Combining
+In an unambiguous grammar like \Vint{g},
+a right derivation is unique, so that we can combine
 \Eref{e:equal-prefix1},
 \Eref{e:equal-prefix2}, and
-\Eref{e:equal-prefix8},
-we have
+\Eref{e:equal-prefix8}
+into
 \begin{align}
 \label{e:equal-prefix10a}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
@@ -3311,6 +3312,7 @@ and the theorem.
 \end{proof}
 
 \begin{theorem}
+\label{th:incompletion-bound}
 This theorem and its proof are adapted from
 \cite[``Theorem'']{Leo1991a}
 and
@@ -3336,10 +3338,9 @@ Let \var{input1},
 \var{input3B} be elements
 of $\Term{\Vint{g}}^\ast$.
 
-Let $\var{j} = \size{\Vstr{input1}}$,
+Let $\var{j} = \size{\Vstr{input1}}$.
 If two distinct derivations both put incomplete EIM's into
 \Ves{j}, they have the form
-If
 \begin{align}
 \label{e:incompletion-bound-1}
 & \begin{aligned}
@@ -3379,29 +3380,31 @@ Since an LRR grammar is
 an LR($\pi$) grammar where
 $\pi$ is a left congruence of $\Term{\Vint{g}}^\ast$,
 we can use
-\Thref{th:addendum-lemma1}.
-Setting
+\Thref{lm:addendum-lemma1}.
+We set equivalents between the variables of this
+theorem and
+\Thref{lm:addendum-lemma1} as follows:
 
 \begin{table}[h]
 \begin{tabular}{l l}
-\multicolumn{1}{c}{The value for \Thref{th:addendum-lemma1}} &
-  \multicolumn{1}{c}{to, in this theorem} \\
-$\Vstr{sfA}$ & $\Vstr{prefixA}\Vsym{lhs}$ \\
+\multicolumn{1}{c}{\Thref{lm:addendum-lemma1}} &
+  \multicolumn{1}{c}{this theorem} \\
+$\Vstr{sfA}$ & $\Vstr{beforeA}\Vsym{lhs}$ \\
 $\Vstr{suffixA}$ & $\Vstr{input3A}$ \\
-$\Vstr{sfB}$ & $\Vstr{prefixB}\Vsym{lhs}$ \\
+$\Vstr{sfB}$ & $\Vstr{beforeB}\Vsym{lhs}$ \\
 $\Vstr{suffixB}$ & $\Vstr{input3B}$ \\
 $\Vstr{prefix}$ & $\Vstr{input1}\Vstr{input2}$ \\
 \end{tabular}
 \end{table}
 
-we have
+\Thref{lm:addendum-lemma1} tells us that
 \begin{equation}
 \label{e:incompletion-bound-10}
 \begin{gathered}
-\Vstr{prefixA}\Vsym{lhs} \xderives{R\ast} \Vstr{prefixB}\Vsym{lhs}
+\Vstr{beforeA}\Vsym{lhs} \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}
 \\
 \text{or} \;\;
-\Vstr{prefixB}\Vsym{lhs} \xderives{R\ast} \Vstr{prefixA}\Vsym{lhs}
+\Vstr{beforeB}\Vsym{lhs} \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}
 \end{gathered}
 \end{equation}
 
@@ -3409,11 +3412,11 @@ From
 \Eref{e:incompletion-bound-1},
 \Eref{e:incompletion-bound-2},
 \Eref{e:incompletion-bound-10}, and
-and \Thref{th:addendum-lemma2},
+\Thref{lm:addendum-lemma2},
 we have
 \begin{equation}
 \label{e:incompletion-bound-15}
-\Vstr{prefixA} = \Vstr{prefixB}
+\Vstr{beforeA} = \Vstr{beforeB}
 \end{equation}
 From
 \Eref{e:incompletion-bound-1},
@@ -3451,6 +3454,7 @@ and only one
 \end{equation}
 for each cell of the partition.
 Therefore the maximum number of incompletions at \Ves{j} is
+less than
 \begin{equation}
 \label{e:incompletion-bound-80}
 \var{c} = \size{\Vint{g}} \times \size{\pi},
@@ -3464,6 +3468,30 @@ $\size{\pi}$ is a constant.
 Therefore \var{c} in
 \Eref{e:incompletion-bound-80}
 is the constant required by the theorem.
+\end{proof}
+
+\begin{theorem}
+\label{th:completion-bound}
+This theorem and its proof are adapted from
+\cite[``Theorem'']{Leo1991a}
+and
+\cite[Lemma 4.7, p. 173]{Leo1991}.
+Let
+\Vint{g}
+be an unambiguous
+grammar.
+Let \var{complete} be the number of complete Earley items
+in an arbitrary Earley set \Ves{j},
+and let \var{incomplete} be the number of incomplete Earley items.
+There are constants \var{c1}, \var{c2} such
+that
+\begin{equation*}
+\var{complete} < (\var{c1} \times \var{incomplete} + \var{c2}).
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+TODO
 \end{proof}
 
 \begin{theorem}
