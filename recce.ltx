@@ -6,6 +6,8 @@
 \usepackage{algpseudocode}
 \usepackage{url}
 \usepackage{amssymb}
+\usepackage{varioref}
+\usepackage{hyperref}
 \allowdisplaybreaks[4]
 
 \delimitershortfall=0pt
@@ -29,14 +31,20 @@
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
 
-\newcommand{\Aref}[1]{(a\ref{#1}:\pageref{#1})}
-\newcommand{\Eref}[1]{(e\ref{#1}:\pageref{#1})}
-\newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})}
-\newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})}
-\newcommand{\Tref}[1]{(t\ref{#1}:\pageref{#1})}
-\newcommand{\Dfref}[1]{(Df\ref{#1}:\pageref{#1})}
-\newcommand{\Lmref}[1]{(Lm\ref{#1}:\pageref{#1})}
-\newcommand{\Thref}[1]{(Th\ref{#1}:\pageref{#1})}
+\newcommand{\colonpageref}[1]{%
+\vrefpagenum{\temprefpage}{#1}%
+ \ifthenelse{\equal{\temprefpage}{\thepage}}%
+  {}{:\pageref{#1}}%
+}
+
+\newcommand{\Aref}[1]{(a\ref{#1}\colonpageref{#1})}
+\newcommand{\Eref}[1]{(e\ref{#1}\colonpageref{#1})}
+\newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
+\newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})} % always include page
+\newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
+\newcommand{\Dfref}[1]{(Df\ref{#1}\colonpageref{#1})}
+\newcommand{\Lmref}[1]{(Lm\ref{#1}\colonpageref{#1})}
+\newcommand{\Thref}[1]{(Th\ref{#1}\colonpageref{#1})}
 
 % I use hyphens in variable names,
 % so I need to ensure that subtraction is
@@ -44,6 +52,7 @@
 \newcommand{\subtract}{\,-\,}
 
 \newcommand{\var}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\boldvar}[1]{\ensuremath{\textbf{#1}}}
 
 \newcommand{\cfg}{CFG}
 
@@ -98,6 +107,7 @@
 \newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
 \newcommand{\Vstr}[1]{\str{\var{#1}}}
 \newcommand{\Vstrset}[1]{\Tvarset{#1}{STR}}
+\newcommand{\Vterm}[1]{\str{\boldvar{#1}}}
 \newcommand{\Vsym}[1]{\sym{\var{#1}}}
 \newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
 \newcommand{\Vtoken}[1]{\Tvar{#1}{TOKEN}}
@@ -250,43 +260,45 @@ where {\it n} is the section number),
 ``Lm'' (lemma).
 ``Th'' (theorem).
 For example
-\Eref{e:restriction1} refers to equation
-\ref{e:restriction1} on page \pageref{e:restriction1};
-\Sref{s:features} refers to
-section \ref{s:features}
-on page \pageref{s:features};
+\Eref{e-restriction1} refers to equation
+\ref{e-restriction1} on page \pageref{e-restriction1};
+\Sref{s-features} refers to
+section \ref{s-features}
+on page \pageref{s-features};
 and
-\Lref{loc:brick-depth} refers
-to page \pageref{loc:brick-depth}
-inside section \ref{loc:brick-depth}.
+\Lref{loc-brick-depth} refers
+to page \pageref{loc-brick-depth}
+inside section \ref{loc-brick-depth}.
+Where the page reference would be to the current page,
+it is omitted.
 
-\Sref{s:features}
+\Sref{s-features}
 describes the important features of Marpa
 and
-\Sref{s:using-features}
+\Sref{s-using-features}
 goes into detail about their application.
-\Sref{s:preliminaries} describes the notation and conventions
+\Sref{s-preliminaries} describes the notation and conventions
 of this paper.
-\Sref{s:CFGs} defines context-free grammars.
-\Sref{s:EXTs} introduces Marpa's external grammars ---
+\Sref{s-CFGs} defines context-free grammars.
+\Sref{s-EXTs} introduces Marpa's external grammars ---
 the grammars which the users see.
-\Sref{s:improper} describes Marpa's
+\Sref{s-improper} describes Marpa's
 implementation of improper context free grammars.
-\Sref{s:rewrite} explain how Marpa rewrites its external
+\Sref{s-rewrite} explain how Marpa rewrites its external
 grammars into internal grammars, and
-\Sref{s:INTs} describes Marpa's internal grammars.
-\Sref{s:earley-table} describes the data structures used
+\Sref{s-INTs} describes Marpa's internal grammars.
+\Sref{s-earley-table} describes the data structures used
 in parsing Marpa internal grammars.
-\Sref{s:leo} describes Leo's modification
+\Sref{s-leo} describes Leo's modification
 to Earley's algorithm.
-\Sref{s:algorithm}
+\Sref{s-algorithm}
 describes the Marpa algorithm.
-\Sref{s:per-set-lists} describes Marpa's
+\Sref{s-per-set-lists} describes Marpa's
 per-set lists.
-while \Sref{s:complexity} contains
+while \Sref{s-complexity} contains
 its complexity results.
 Finally,
-section \Sref{s:input}
+section \Sref{s-input}
 generalizes Marpa's input model.
 
 A full description of Marpa's relationship to
@@ -296,7 +308,7 @@ Readers may find it helpful to read
 before this paper.
 
 \section{Features}
-\label{s:features}
+\label{s-features}
 
 \subsection{General context-free parsing}
 The Marpa algorithm is capable of parsing all
@@ -310,7 +322,7 @@ but support for them
 was removed because
 practical interest seems to be non-existent.
 For more detail, see section
-\ref{s:improper}.
+\ref{s-improper}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
@@ -368,7 +380,7 @@ for example, an application could react to the
 rejection of a token by reading two others.
 
 \section{Using the features}
-\label{s:using-features}
+\label{s-using-features}
 
 \subsection{Error reporting}
 An obvious application of left-eideticism is error
@@ -424,7 +436,18 @@ but oversimplified grammar,
 programming the lexical analyzer to make up for the grammar's
 short-comings on the fly.
 As part of Marpa::R2~\cite{Marpa-R2},
-the author has implemented an HTML parser,
+the author\footnote{
+We refer to the author both as ``the author''
+and as ``we'', despite this paper having a single author.
+The use of ``we''
+follows the tradition in which a mathematician
+speaks as a representative of a community of inquiry,
+one which includes the reader.
+The author refers to himself as such in those cases
+where the reference only makes sense
+as being to a specific individual.
+}
+has implemented an HTML parser,
 based on a grammar that assumes that all start
 and end tags are present.
 Such an HTML grammar is too simple even to describe perfectly
@@ -543,7 +566,7 @@ The user of the yacc equivalent must hope their
 syntax falls within the limits of LALR.
 
 \section{Preliminaries}
-\label{s:preliminaries}
+\label{s-preliminaries}
 
 We assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
@@ -651,60 +674,27 @@ Let $\var{vocab}^+$ be
 \right\}.
 \end{equation*}
 
-Typing in this paper is not strict.
-As one example,
+Typing is not strict.
+For example,
 we will move freely between strings, and their equivalent sequences of symbols.
 As another example,
 when it is convenient,
 we will treat strings of length 1 as symbols,
 and symbols as strings of length 1.
 
-Variables of any type may be set to a pseudo-value.
-Variables of any type may also be compared to
-pseudo-value and
-pseudo-values may be compared to themselves
-and each other.
-Pseudo-values may not be used in any other operation.
-
-$\Lambda$ is the only pseudo-value in this paper,
-and $\var{x} = \Lambda$ can be read as
-``the value of \var{x} does not exist''.
-$\Lambda$ compares unequal to any non-pseudo-value,
-and equal to itself,
-$\Lambda = \Lambda$.
-
-If a logical conjunction contains comparisons involving pseudo-values,
-the conjunction is expected to be read as if it was ordered so
-that all the comparisons involving a pseudo-value are evaluated
-first.
-If a comparison involving a pseudo-value renders one of the terms of the
-conjunction false,
-none of the other terms of the conjunction are evaluated.
-This allows us to consider a logical conjunction well-defined,
-even if one of its terms is not in all cases defined.
-
-For example,
-consider the logical conjunction
-\begin{equation*}
-\label{e:logical-conjunction}
-\var{b} = [ 1, 2 ] \quad \text{and} \quad \var{f}(\var{a})
-\end{equation*}
-when both \var{a} and \var{b} are non-existent,
-$\var{a} = \var{b} = \Lambda$.
-In this case $\var{f}(\var{a}) = \var{f}(\Lambda)$
-and
-$\var{f}(\Lambda)$
-is not well-defined.
-But the term $\var{b} = [ 1, 2 ]$ renders
-\Eref{e:logical-conjunction}
-false,
-and we consider
-\Eref{e:logical-conjunction} as a whole always to be well-defined,
-even if there are cases when
-$\var{f}(\var{a})$ is not well-defined.
+$\Lambda$, when used as a value,
+compares unequal to any integer or tuple.
+$\Lambda$ is often used as a special, reserved, value,
+to indicate ``non-standard''.\footnote{
+Often similar values are called ``undefined'' values,
+but the author considers this confusing in the extreme.
+This is taken to an extreme in programming languages.
+Haskell's ``undefined'' is, for example,
+as well-defined as any concept in mathematics.
+}
 
 \section{Context-free grammars}
-\label{s:CFGs}
+\label{s-CFGs}
 
 A \dfn{context free grammar} is type \type{CFG}.
 Let
@@ -771,7 +761,7 @@ so that
 A grammar describes a rewriting system.
 We consider
 \begin{equation}
-\label{e:rewrite-step}
+\label{e-rewrite-step}
 \Vstr{prefix}\Vsym{lhs}\Vstr{suffix} \derives \Vstr{prefix}\Vstr{rhs}\Vstr{suffix}
 \end{equation}
 a valid rewrite step of \Vcfg{f} if and only if
@@ -781,13 +771,13 @@ a valid rewrite step of \Vcfg{f} if and only if
 [\Vsym{lhs} \de \Vstr{rhs}] \in \Rules{\Vcfg{g}}.
 \end{gather*}
 The valid rewrite step of
-\Eref{e:rewrite-step}
+\Eref{e-rewrite-step}
 is a \dfn{right rewrite step} if
 and only if \Vsym{lhs} is the rightmost non-terminal.
 
 A sequence of iterated rewrite steps of \Vcfg{g}, such that
 \begin{equation}
-\label{e:derivation}
+\label{e-derivation}
 \Vstr{s1} \derives \Vstr{s2} \derives \Vstr{s3} \ldots \Vstr{s-n}
 \end{equation}
 is called a \dfn{derivation} of \Vcfg{g},
@@ -800,7 +790,7 @@ right rewrite step.
 
 The sequence of strings in a derivation, its sequence of strings
 is called its \dfn{derivation sequence}.
-The derivation sequence of \Eref{e:derivation} is
+The derivation sequence of \Eref{e-derivation} is
 \begin{equation*}
 \Vstr{s1}, \Vstr{s2}, \Vstr{s3} \ldots \Vstr{s-n}.
 \end{equation*}
@@ -870,26 +860,33 @@ states that that \Vstr{x} right derives \Vstr{y} in \var{k} steps;
 
 A \dfn{sentential form} is a string which can be derived from the start
 symbol, \Accept{\Vcfg{g}}.
-If the sentential form \Vstr{sf} is a string of terminals,
-then \Vstr{sf} is a \dfn{sentence} of \Vcfg{g}.
+If the sentential form \Vterm{sf} is a string of terminals,
+then \Vterm{sf} is a \dfn{sentence} of \Vcfg{g}.
 The language of \Vcfg{g},
 \myL{\var{g}},
 is the set of sentences of \Vcfg{g}.
 That is,
-\begin{equation*}
+\begin{equation}
+\label{e-L-g}
 \myL{\Vcfg{g}} \defined
 \set{
 \quad
 \begin{aligned}
-& \Vstr{sentence} \quad \text{such that} \\
+& \Vterm{sentence} \quad \text{such that} \\
 & \qquad \begin{aligned}
-  & \Accept{\Vcfg{g}} \destar \Vstr{sentence} \quad \text{and} \\
-  & \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast.
+  & \Accept{\Vcfg{g}} \destar \Vterm{sentence} \quad \text{and} \\
+  & \Vterm{sentence} \in \Term{\Vcfg{g}}^\ast.
   \end{aligned}
 \end{aligned}
 \quad
 }
-\end{equation*}
+\end{equation}
+Note that in
+\Eref{e-L-g},
+we wrote \Vterm{sentence} instead of \Vstr{sentence},
+As a reading aid,
+the variable name in a string which is an element of $\Term{\Vcfg{g}}^\ast$
+will often be written in boldface.
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -930,7 +927,9 @@ and
 \end{equation*}
 
 \section{External grammars}
-\label{s:EXTs}
+\label{s-EXTs}
+
+\subsection{Cycles}
 
 An \dfn{external grammar} (type \type{EXT}) is cycle-free CFG.
 A CFG is \dfn{cycle-free} if it contains no cycles.
@@ -1001,8 +1000,124 @@ a cycle of cycle depth 1 begins and ends with the
 cycle string, but does not derive the cycle string
 in any of its intermediate steps.
 
+\subsection{LR Grammars}
+
+\begin{definition}
+Let \Vstr{sf} be a sentential form of \Vcfg{g}.
+A \dfn{handle} is an ordered pair $[\Vrule{r}, \var{i}]$ such
+that
+\begin{gather}
+0 \le \var{i} \le \size{\Vstr{sf}}, \\
+\begin{aligned}
+\Accept{\var{g}} \xderives{R\ast} & \Vstr{stack}\Vsym{lhs}\Vterm{lookahead} \\
+   \xderives{R} & \Vstr{stack}\Vsym{rhs}\Vterm{lookahead} \\
+   = & \Vstr{sf},
+\end{aligned}
+\\
+\Vrule{r} = \var{lhs} \de \Vstr{rhs}, \;\; \text{and} \\
+\var{i} = \size{\Vstr{stack}\Vstr{rhs}}.
+\end{gather}
+\end{definition}
+
+Informally, an LR($\pi$) grammar is a grammar where two
+sentential forms that differ only in their lookaheads
+have the same handle,
+if those lookaheads are in the same block of $\pi$.
+More formally,
+
+\begin{definition}
+\label{df:LR}
+\begin{align}
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
+& \xderives{R} \Vstr{history1}\Vstr{rhs1}\Vstr{lookahead1} \\
+& = \Vstr{behind}\Vstr{lookahead1},
+\end{aligned}
+\\
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead2} \\
+& \xderives{R} \Vstr{history2}\Vstr{rhs2}\Vstr{lookahead2} \\
+& = \Vstr{behind}\Vstr{lookahead2},
+\end{aligned}
+\\
+\Vstr{lookahead1} \equiv \Vstr{lookahead2} ( \text{mod $\pi$} ),
+\end{align}
+
+We say that an LR($\pi$) grammar is LR-regular (LRR),
+if and only if $\pi$ is a finite regular partition.
+We say that an LR($\pi$) grammar is LR($\var{k}$),
+if and only if
+\begin{equation}
+\pi =
+\begin{gathered}
+\left\lbrace
+\left\lbrace
+\var{u}\var{v}
+\; \middle| \;
+\var{v} \in \Term{\var{g}}^\ast
+\right\rbrace
+\; \middle| \;
+(
+\var{u} \in \Term{\var{g}}^\ast \land \Vsize{u} = \var{k}
+)
+\right\rbrace
+\\
+\cup
+\left\lbrace
+\left\lbrace
+\var{u}
+\right\rbrace
+\; \middle|\;
+( \var{u} \in \Term{\var{g}}^\ast \land \Vsize{u} \le \var{k} )
+\right\rbrace
+\end{gathered}
+\end{equation}
+
+\end{definition}
+
+This theorem%
+\footnote{
+The statement of the theorem follows \cite[p. 70]{Culik1973}.
+}
+presents \Dfref{df:LR}
+in a way that is easier to apply.
+\begin{theorem}
+\label{th:LR}
+We say that a grammar, \Vint{g} is LR($\pi$) for a partition $\pi$,
+if, given
+\begin{gather}
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
+& \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead1},
+\end{aligned}
+\\
+\begin{aligned}
+\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead3} \\
+& \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead2},
+\end{aligned}
+\;\; \text{and}
+\\
+\Vstr{lookahead1} \equiv \Vstr{lookahead2} ( \text{mod $\pi$} )
+\end{gather}
+we have
+\begin{gather*}
+\Vsym{lhs1} =
+\Vsym{lhs2},
+\\
+\Vstr{history1} =
+\Vstr{history2}, \;\; \text{and}
+\\
+\Vstr{lookahead3} =
+\Vstr{lookahead2}.
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+Directly from \Dfref{df:LR}.
+\end{proof}
+
 \section{Improper context free grammars}
-\label{s:improper}
+\label{s-improper}
 
 A \dfn{proper CFG} is a CFG with no
 \begin{itemize}
@@ -1013,7 +1128,7 @@ A \dfn{proper CFG} is a CFG with no
 A \dfn{improper CFG} is a CFG which is
 not proper.
 We discussed Marpa's handling of cycles earlier
-(section \ref{s:EXTs}, p. \pageref{s:EXTs}).
+(section \ref{s-EXTs}, p. \pageref{s-EXTs}).
 
 \subsection{Unproductive symbols}
 
@@ -1129,7 +1244,7 @@ in which case the warning need only be silenced for those
 topmost symbols.
 
 \section{Rewriting the grammar}
-\label{s:rewrite}
+\label{s-rewrite}
 
 \subsection{The Aycock-Horspool parser}
 
@@ -1153,12 +1268,12 @@ is invisible to
 the user.
 
 We defined Marpa's external grammars in
-\Sref{s:EXTs}.
+\Sref{s-EXTs}.
 Recall that an external grammar may be any cycle-free grammar.
 Marpa internal grammars are described by construction
 in this section.
 They will be defined more carefully
-in \Sref{s:INTs}.
+in \Sref{s-INTs}.
 This section describes the rewrite
 from an external grammar
 to an internal grammar.
@@ -1222,11 +1337,11 @@ allow the rules and symbols of the external grammar
 to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
 but at run-time as well.
-\Sref{s:augmentation},
-\Sref{s:eliminating-proper_nullables},
-\Sref{s:removing-nulling-symbols},
+\Sref{s-augmentation},
+\Sref{s-eliminating-proper_nullables},
+\Sref{s-removing-nulling-symbols},
 and
-\Sref{s:trivial-grammars}
+\Sref{s-trivial-grammars}
 describe the rewrites
 applied by Marpa.
 We will state Marpa's definition
@@ -1234,14 +1349,14 @@ of semantics-safe more precisely
 in section \Sref{semantics-safe}.
 
 \subsection{Augmenting the grammar}
-\label{s:augmentation}
+\label{s-augmentation}
 
 Let \Vint{g} be a Marpa internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
 There must be
 a dedicated acceptance rule for \Vint{g},
 \begin{gather}
-\label{e:acceptance_rule}
+\label{e-acceptance_rule}
 \Vrule{accept} = [\Vsym{accept} \de \Vsym{top}], \\
 \intertext{such that}
 \Vsym{top} \in \NT{\Vint{g}}, \\
@@ -1267,7 +1382,7 @@ Instead, the augmented rule is
 dealt with as a special case.
 
 \subsection{Eliminating proper nullables}
-\label{s:eliminating-proper_nullables}
+\label{s-eliminating-proper_nullables}
 
 Recall that a proper nullable
 is a nullable symbol which is not nulling.
@@ -1295,10 +1410,10 @@ in the pre-rewrite grammar of \cite{AH2002}.
 In our version, the worst case growth in the number of rules is linear.
 
 \subsection{Removing nulling symbols}
-\label{s:removing-nulling-symbols}
+\label{s-removing-nulling-symbols}
 
 After the rewrite of
-\Sref{s:eliminating-proper_nullables},
+\Sref{s-eliminating-proper_nullables},
 all the nullable symbols in the grammar are also
 nulling symbols.
 Note that, if \Vext{g} is an external grammar,
@@ -1330,7 +1445,7 @@ even if they differ only in their recorded nulling symbols.
 This is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
-\label{s:trivial-grammars}
+\label{s-trivial-grammars}
 
 Null parses are parses of zero length inputs.
 The Marpa implementation
@@ -1356,7 +1471,7 @@ the rewritten version of \Vext{g}.
 
 Let
 \begin{equation}
-\label{e:parse-tree}
+\label{e-parse-tree}
 \var{pt} = \var{tree}(\var{g},\Vstr{w})
 \end{equation}
 be the parse tree that results from a parse of \Vstr{w}
@@ -1379,7 +1494,7 @@ where
 of the first character in \Cw{} that is derived from \Vsym{s}.
 derived from \Vsym{s}.
 \item \var{depth}
-is the ``brick depth''~\Lref{loc:brick-depth}.
+is the ``brick depth''~\Lref{loc-brick-depth}.
 \end{itemize}
 
 In an internal grammar, there are
@@ -1391,14 +1506,14 @@ of the internal grammar.
 Only brick symbols have semantics attached to them.
 All terminal symbols are bricks.
 
-Recall \var{pt} from \Eref{e:parse-tree}.
+Recall \var{pt} from \Eref{e-parse-tree}.
 If the symbol of an instance in \var{pt} is a brick,
 the instance is a \dfn{brick instance}.
 If the symbol of an instance in \var{pt} is a mortar symbol,
 the instance is a \dfn{mortar instance}.
 
 The
-\dfn{brick depth}~\label{loc:brick-depth}
+\dfn{brick depth}~\label{loc-brick-depth}
 of an instance in a external grammar is
 the depth of the node of the instance measured in the traditional way --
 the distance in nodes to the root.
@@ -1511,7 +1626,7 @@ in \var{btree}.
 \end{sloppypar}
 
 \section{Marpa internal grammars}
-\label{s:INTs}
+\label{s-INTs}
 
 The formal definition of
 a Marpa internal grammar is that of
@@ -1521,12 +1636,12 @@ with two additional restrictions.
 \begin{itemize}
 \item Marpa internal grammars are augmented.
 For details of grammar augmentation,
-see \Sref{s:augmentation}.
+see \Sref{s-augmentation}.
 \item Marpa internal grammars do not allow nullable symbols.
 \end{itemize}
 
 
-The notations for CFGs \Sref{s:CFGs}
+The notations for CFGs \Sref{s-CFGs}
 carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
@@ -1586,7 +1701,7 @@ $\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
 when parsing \Cg{}.
 
 \section{Earley tables}
-\label{s:earley-table}
+\label{s-earley-table}
 
 The definitions of this section
 assume that \Vint{g} is a Marpa internal grammar.
@@ -1740,7 +1855,7 @@ an EIM is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
 A \dfn{parse item} is either an Earley or a Leo item.
-Leo items will be defined in \Sref{s:leo}.
+Leo items will be defined in \Sref{s-leo}.
 Parse items are of type \type{PIM}.
 
 Within Marpa,
@@ -1780,7 +1895,7 @@ to go back and forth between integer location,
 and Earley set,
 \Ves{i}.\footnote{
 For a discussion of this from the implementation
-point of view, see \Sref{s:es-indexing}.
+point of view, see \Sref{s-es-indexing}.
 }
 
 \EVtable{\alg{Recce}}{i} will be
@@ -1821,7 +1936,7 @@ for some \Vstr{rhs},
 \end{gather*}
 
 \section{The Leo algorithm}
-\label{s:leo}
+\label{s-leo}
 
 \subsection{The history of a conjecture}
 
@@ -1938,7 +2053,7 @@ bound in
 his title.
 
 \subsection{Leo items}
-\label{s:LIMs}
+\label{s-LIMs}
 
 Summarizing Leo's method,
 it consists of spotting potential right recursions
@@ -1982,7 +2097,7 @@ play in the parse is to derive the top EIM.
 We will call these memoized sequences, Leo sequences.
 
 \subsection{Leo uniqueness}
-\label{s:leo-uniqueness}
+\label{s-leo-uniqueness}
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
@@ -2006,7 +2121,7 @@ EIMs of Earley set \Ves{i},
 even those which are not penults.
 
 \subsection{Leo predecessor}
-\label{s:leo-predecessor}
+\label{s-leo-predecessor}
 
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
@@ -2029,7 +2144,7 @@ if and only if, for some \Vdr{top}, \Vorig{top},
 \end{equation*}
 
 \section{The Marpa algorithm}
-\label{s:algorithm}
+\label{s-algorithm}
 
 For the purpose of defining the Marpa algorithm,
 let \Vint{g} be a Marpa internal grammar used in the parse,
@@ -2071,9 +2186,9 @@ is
 \end{align*}
 
 \subsection{Initializer operation}
-\label{s:initializer}
+\label{s-initializer}
 
-Recall from \Eref{e:acceptance_rule} the acceptance rule of \Vint{g},
+Recall from \Eref{e-acceptance_rule} the acceptance rule of \Vint{g},
 \Vrule{accept}.
 Then
 \begin{equation*}
@@ -2248,7 +2363,7 @@ Let
 \end{algorithm}
 
 \section{Marpa Changes}
-\label{s:changes}
+\label{s-changes}
 
 \begin{sloppypar}
 Recall that we
@@ -2290,10 +2405,10 @@ the complexity results of
 Leo\cite{Leo1991} intact.
 
 \section{Implementation}
-\label{s:implementation}
+\label{s-implementation}
 
 \subsection{Earley set indexing}
-\label{s:es-indexing}
+\label{s-es-indexing}
 
 In our theoretical discussions,
 we assumed that we could efficiently convert between
@@ -2327,7 +2442,7 @@ and we take this point of view when discussing per-parse resource.
 }
 
 \subsection{Pointers}
-\label{s:pointers}
+\label{s-pointers}
 
 The \Marpa{} implementation tracks the reasons for
 attempts to create a PIM.
@@ -2408,7 +2523,7 @@ and
 \Source{\Vlim{$\ell$}} as the source EIM link of \Vlim{$\ell$}.
 
 \subsection{Restoring memoized items}
-\label{s:restoring}
+\label{s-restoring}
 
 Let \Ves{physical} be an Earley set as produced by \Marpa{},
 and let \Vves{virtual} be \Ves{physical} with its Leo memoized
@@ -2422,7 +2537,7 @@ we will need a few definitions.
 Let $\mymathop{Unhide}(\Vlim{link}, \Veim{base})$
 be defined as
 \begin{equation}
-\label{e:unhide}
+\label{e-unhide}
 \left\lbrace \;\;
 \begin{gathered}
 \mymathop{Unhide}(\PreviousLink{\Vlim{link}}, \Veim{new-base}) \\
@@ -2438,7 +2553,7 @@ Let
 $\mymathop{Unhide}(\Vlim{link}, \Veim{base})$ be defined
 as the emptyset when
 $\Vlim{link} = \Lambda$.
-In \Eref{e:unhide},
+In \Eref{e-unhide},
 \Veim{new-base} is created with a single link pair,
 the the cause is \Veim{base}, and the predecessor
 is \Source{\Vlim{link}}.
@@ -2460,7 +2575,7 @@ Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
 \end{equation*}
 
 \section{Per-set lists}
-\label{s:per-set-lists}
+\label{s-per-set-lists}
 
 In the general case,
 where \var{x} is an arbitrary datum,
@@ -2603,7 +2718,7 @@ It is for this reason that
 the more complicated approach is illustrated above.
 
 \section{Marpa recognizer correctness}
-\label{s:correctness}
+\label{s-correctness}
 
 Following the tradition,
 we seek to convince ourselves that our parser is ``correct'',
@@ -2613,7 +2728,7 @@ That is, we seek to show that
 for every grammar \Vint{g} and every string \Vstr{w},
 $\Vstr{w} \in \Term{\Vint{g}}^\ast$,
 \begin{equation}
-\label{e:marpa-correct}
+\label{e-marpa-correct}
 \begin{gathered}
 \left(
   \exists \Vstr{x} \;
@@ -2627,7 +2742,7 @@ $\Vstr{w} \in \Term{\Vint{g}}^\ast$,
 \end{gathered}
 \end{equation}
 
-\Eref{e:marpa-correct} states the equivalence of two statement in quite distinct
+\Eref{e-marpa-correct} states the equivalence of two statement in quite distinct
 notation.
 The right hand side of the equivalent states a syntactic derivation.
 The left hand side asserts the existence of a parse item
@@ -2637,7 +2752,7 @@ can seem far from obvious.
 The proof in this paper will adopt a intermediate notation that
 highlights the symmetry between the two notations,
 and makes the equivalence
-of \Eref{e:marpa-correct}
+of \Eref{e-marpa-correct}
 seem more plausible.
 It is hoped in this way to produce a proof whose details
 provide insight into
@@ -2662,7 +2777,7 @@ then we write
 \gentail{1,2,3,4}
 
 \section{LRR complexity}
-\label{s:lrr-complexity}
+\label{s-lrr-complexity}
 
 The following theorem will prove useful.
 
@@ -2748,65 +2863,29 @@ unless at least one step of that derivation uses a right recursive rule.
 
 \subsection{The complexity results}
 
-\begin{definition}
-\label{df:LR}
-We say that a grammar, \Vint{g} is LR($\pi$) for a partition $\pi$,
-if, given
-\begin{align}
-\begin{aligned}
-\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{prefix1}\Vsym{lhs1}\Vstr{suffix1} \\
-& \xderives{R} \Vstr{prefix1}\Vstr{rhs}\Vstr{suffix1}
-\end{aligned}
-\;\; \text{and}
-\\
-\begin{aligned}
-\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{prefix2}\Vsym{lhs2}\Vstr{suffix3} \\
-& \xderives{R} \Vstr{prefix1}\Vstr{rhs}\Vstr{suffix2}
-\end{aligned}
-\;\; \text{and}
-\\
-\Vstr{suffix1} \equiv \Vstr{suffix2} ( \text{mod $\pi$} )
-\end{align}
-then we have
-\begin{gather*}
-\Vsym{lhs1} =
-\Vsym{lhs2},
-\\
-\Vstr{prefix1} =
-\Vstr{prefix2}, \;\; \text{and}
-\\
-\Vstr{suffix3} =
-\Vstr{suffix2}.
-\end{gather*}
-We say that an LR($\pi$) grammar is LR-regular (LRR),
-if $\pi$ is a regular partition.\footnote{
-This definition follows \cite[p. 70]{Culik1973}.
-}
-\end{definition}
-
 \begin{lemma}
 \label{lm:handle-unique}
 Let \Vint{g} be a LR($\pi$) grammar where $\pi$ is
 a left congruence.
 Let
 \begin{gather}
-\label{e:handle-unique-10a}
+\label{e-handle-unique-10a}
 \begin{aligned}
 & \Accept{\Vint{g}} \xderives{R\ast} \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
 & \qquad \xderives{R} \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixA},
 \end{aligned}
 \\
-\label{e:handle-unique-10b}
+\label{e-handle-unique-10b}
 \begin{aligned}
 & \Accept{\Vint{g}} \xderives{R\ast} \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB} \\
 & \qquad \xderives{R} \Vstr{preB}\Vsym{rhsB}\Vstr{postB}\Vstr{suffixB},
 \end{aligned}
 \\
-\label{e:handle-unique-10c}
+\label{e-handle-unique-10c}
 \Vstr{preA}\Vsym{rhsA}\Vstr{postA} =
 \Vstr{preB}\Vsym{rhsB}\Vstr{postB},
 \\
-\label{e:handle-unique-10d}
+\label{e-handle-unique-10d}
 \text{and} \;\;
 \Vstr{suffixA} \equiv \Vstr{suffixB} (\text{mod $\pi$}),
 \end{gather}
@@ -2824,27 +2903,27 @@ where
 \end{gather*}
 Then
 \begin{gather}
-\label{e:handle-unique-15a}
+\label{e-handle-unique-15a}
 \Vstr{lhsA} = \Vstr{lhsB},
 \\
-\label{e:handle-unique-15b}
+\label{e-handle-unique-15b}
 \Vstr{preA} = \Vstr{preB},
 \\
-\label{e:handle-unique-15c}
+\label{e-handle-unique-15c}
 \Vstr{rhsA} = \Vstr{rhsB},
 \;\; \text{and} \\
-\label{e:handle-unique-15d}
+\label{e-handle-unique-15d}
 \Vstr{postA} = \Vstr{postB}.
 \end{gather}
 \end{lemma}
 
 \begin{proof}
-Using \Eref{e:handle-unique-10c}
+Using \Eref{e-handle-unique-10c}
 we may rewrite
-\Eref{e:handle-unique-10b}
+\Eref{e-handle-unique-10b}
 to
 \begin{equation}
-\label{e:handle-unique-20}
+\label{e-handle-unique-20}
 \begin{aligned}
 & \Accept{\Vint{g}} \xderives{R\ast} \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB} \\
 & \qquad \xderives{R} \Vstr{preA}\Vsym{rhsA}\Vstr{postA}\Vstr{suffixB},
@@ -2853,57 +2932,57 @@ to
 We assumed for the theorem that
 \Vint{g} is a left congruence,
 so from
-\Eref{e:handle-unique-10d}
+\Eref{e-handle-unique-10d}
 we have
 \begin{equation}
-\label{e:handle-unique-23}
+\label{e-handle-unique-23}
 \Vstr{postA}\Vstr{suffixA} \equiv \Vstr{postA}\Vstr{suffixB} (\text{mod $\pi$}).
 \end{equation}
-\Vint{g} is LR and from the definition of LR \Dfref{df:LR},
-\Eref{e:handle-unique-10a},
-\Eref{e:handle-unique-20}, and
-\Eref{e:handle-unique-23}
+\Vint{g} is LR and from \Thref{df:LR},
+\Eref{e-handle-unique-10a},
+\Eref{e-handle-unique-20}, and
+\Eref{e-handle-unique-23}
 we conclude that
 \begin{gather}
-\label{e:handle-unique-26a}
+\label{e-handle-unique-26a}
 \Vsym{lhsA} =
 \Vsym{lhsB},
 \\
-\label{e:handle-unique-26b}
+\label{e-handle-unique-26b}
 \Vstr{preA} =
 \Vstr{preB}, \;\; \text{and}
 \\
-\label{e:handle-unique-26c}
+\label{e-handle-unique-26c}
 \Vstr{postA}\Vstr{suffixB} =
 \Vstr{postB}\Vstr{suffixB}.
 \end{gather}
 From
-\Eref{e:handle-unique-26c}, we know that
+\Eref{e-handle-unique-26c}, we know that
 \begin{equation}
-\label{e:handle-unique-30}
+\label{e-handle-unique-30}
 \Vstr{postA} = \Vstr{postB}
 \end{equation}
 and from
-\Eref{e:handle-unique-10c},
-\Eref{e:handle-unique-26b}, and
-\Eref{e:handle-unique-30},
+\Eref{e-handle-unique-10c},
+\Eref{e-handle-unique-26b}, and
+\Eref{e-handle-unique-30},
 we have
 \begin{equation}
-\label{e:handle-unique-33}
+\label{e-handle-unique-33}
 \Vstr{rhsA} = \Vstr{rhsB}.
 \end{equation}
 
 To show the theorem, we need
-\Eref{e:handle-unique-15a},
-\Eref{e:handle-unique-15b},
-\Eref{e:handle-unique-15c}, and
-\Eref{e:handle-unique-15d}.
+\Eref{e-handle-unique-15a},
+\Eref{e-handle-unique-15b},
+\Eref{e-handle-unique-15c}, and
+\Eref{e-handle-unique-15d}.
 We have
-\Eref{e:handle-unique-15a} from \Eref{e:handle-unique-26a};
-\Eref{e:handle-unique-15b} from \Eref{e:handle-unique-26b};
-\Eref{e:handle-unique-15c} from \Eref{e:handle-unique-33};
+\Eref{e-handle-unique-15a} from \Eref{e-handle-unique-26a};
+\Eref{e-handle-unique-15b} from \Eref{e-handle-unique-26b};
+\Eref{e-handle-unique-15c} from \Eref{e-handle-unique-33};
 and
-\Eref{e:handle-unique-15d} from \Eref{e:handle-unique-30}.
+\Eref{e-handle-unique-15d} from \Eref{e-handle-unique-30}.
 \end{proof}
 
 \begin{lemma}
@@ -2921,13 +3000,13 @@ of
 $\Term{\Vint{g}}^\ast$.
 If
 \begin{align}
-\label{e:left-congruence1}
+\label{e-left-congruence1}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{sfA}\Vstr{suffixA} \\
                   & \destar \Vstr{prefix}\Vstr{suffixA},
 \end{aligned}
 \\
-\label{e:left-congruence2}
+\label{e-left-congruence2}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{sfB}\Vstr{suffixB} \\
                   & \destar \Vstr{prefix}\Vstr{suffixB},
@@ -2935,12 +3014,12 @@ If
 \; \text{and}
 \end{align}
 \begin{equation}
-\label{e:left-congruence3}
+\label{e-left-congruence3}
 \Vstr{suffixA} \equiv \Vstr{suffixB} (\text{mod $\pi$}),
 \end{equation}
 then
 \begin{equation}
-\label{e:left-congruence4}
+\label{e-left-congruence4}
 \Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
 \;\; \text{or} \;\;
 \Vstr{sfB} \xderives{R\ast} \Vstr{sfA}
@@ -2949,12 +3028,12 @@ then
 
 \begin{proof}
 Assume that
-\Eref{e:left-congruence1},
-\Eref{e:left-congruence2}, and
-\Eref{e:left-congruence3} hold.
-Expand part of \Eref{e:left-congruence1} into
+\Eref{e-left-congruence1},
+\Eref{e-left-congruence2}, and
+\Eref{e-left-congruence3} hold.
+Expand part of \Eref{e-left-congruence1} into
 \begin{equation}
-\label{e:left-congruence10a}
+\label{e-left-congruence10a}
 \begin{aligned}
 & \var{sfseqA}[\var{lenA}]\cat\Vstr{suffixA} \\
 & \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtract 1]\cat\Vstr{suffixA} \\
@@ -2963,9 +3042,9 @@ Expand part of \Eref{e:left-congruence1} into
 & \text{where $\Vstr{sfA} = \var{sfseqA}[\var{lenA}]$.}
 \end{aligned}
 \end{equation}
-Expand part of \Eref{e:left-congruence2} into
+Expand part of \Eref{e-left-congruence2} into
 \begin{equation}
-\label{e:left-congruence10b}
+\label{e-left-congruence10b}
 \begin{aligned}
 & \var{sfseqB}[\var{lenB}]\cat\Vstr{suffixB} \\
 & \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtract 1]\cat\Vstr{suffixB} \\
@@ -2976,11 +3055,11 @@ Expand part of \Eref{e:left-congruence2} into
 \end{equation}
 
 Let \var{len} be the smaller of \var{lenA} and \var{lenB} in
-\Eref{e:left-congruence10a} and
-\Eref{e:left-congruence10b}.
+\Eref{e-left-congruence10a} and
+\Eref{e-left-congruence10b}.
 We seek to show
 \begin{equation}
-\label{e:left-congruence11}
+\label{e-left-congruence11}
 \forall \var{k} \; \left( \;
 1 \le \var{k} \le \var{len}
 \implies
@@ -2991,12 +3070,12 @@ We assume, for a reductio, that
 \var{j}, $1 \le \var{j} \le \var{len}$,
 is the smallest integer such that
 \begin{equation}
-\label{e:left-congruence12a}
+\label{e-left-congruence12a}
 \var{sfseqA}[\var{j}] \neq \var{sfseqB}[\var{j}]
 \end{equation}
 so that
 \begin{equation}
-\label{e:left-congruence12b}
+\label{e-left-congruence12b}
 \forall \var{i} \left( \;
 1 \le \var{i} \le \var{j}
 \implies
@@ -3004,13 +3083,13 @@ so that
 \; \right).
 \end{equation}
 
-From \Eref{e:left-congruence10a}
-and \Eref{e:left-congruence10b} we know that
+From \Eref{e-left-congruence10a}
+and \Eref{e-left-congruence10b} we know that
 $\var{sfseqA}[1] = \var{sfseqB}[1] = \Vstr{prefix}$,
 so that $\var{j} > 1$.
 With this, we can write
 \begin{equation}
-\label{e:left-congruence15a}
+\label{e-left-congruence15a}
 \begin{aligned}
 & \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqA}[\var{j}]\cat\Vstr{suffixA} \\
 & \qquad = \Vstr{preA}\Vsym{lhsA}\Vstr{postA}\Vstr{suffixA} \\
@@ -3019,13 +3098,13 @@ With this, we can write
 \end{equation}
 where
 \begin{equation}
-\label{e:left-congruence15a1}
+\label{e-left-congruence15a1}
 \Vstr{preA}\Vsym{rhsA}\Vstr{postA} =
 \var{sfseqA}[\var{j}\subtract 1]
 \end{equation}
 and
 \begin{equation}
-\label{e:left-congruence15b}
+\label{e-left-congruence15b}
 \begin{aligned}
 & \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\cat\Vstr{suffixB} \\
 & \qquad = \Vstr{preB}\Vsym{lhsB}\Vstr{postB}\Vstr{suffixB} \\
@@ -3035,78 +3114,78 @@ and
 \end{equation}
 where
 \begin{equation}
-\label{e:left-congruence15b1}
+\label{e-left-congruence15b1}
 \Vstr{preB}\Vsym{rhsB}\Vstr{postB} =
 \var{sfseqB}[\var{j}\subtract 1].
 \end{equation}
 Then
 \begin{gather}
-\label{e:left-congruence18}
+\label{e-left-congruence18}
 \begin{gathered}
 \var{sfseqA}[\var{j}\subtract 1] = \var{sfseqB}[\var{j}\subtract 1], \\
-\because \Eref{e:left-congruence12b}, \;\; \text{and}
+\because \Eref{e-left-congruence12b}, \;\; \text{and}
 \end{gathered}
 \\[5pt]
-\label{e:left-congruence19}
+\label{e-left-congruence19}
 \begin{gathered}
 \Vstr{preA}\Vsym{rhsA}\Vstr{postA} =
 \Vstr{preB}\Vsym{rhsB}\Vstr{postB} \\
-\because \Eref{e:left-congruence15a1},
-\Eref{e:left-congruence15b1},
-\Eref{e:left-congruence18}.
+\because \Eref{e-left-congruence15a1},
+\Eref{e-left-congruence15b1},
+\Eref{e-left-congruence18}.
 \end{gathered}
 \end{gather}
 
 Using
-\Eref{e:left-congruence3},
-\Eref{e:left-congruence15a},
-\Eref{e:left-congruence15a},
-\Eref{e:left-congruence19}, and
+\Eref{e-left-congruence3},
+\Eref{e-left-congruence15a},
+\Eref{e-left-congruence15a},
+\Eref{e-left-congruence19}, and
 \Lmref{lm:handle-unique} we
 have
 \begin{gather}
-\label{e:left-congruence25a}
+\label{e-left-congruence25a}
 \Vstr{lhsA} = \Vstr{lhsB}, \\
-\label{e:left-congruence25b}
+\label{e-left-congruence25b}
 \Vstr{preA} = \Vstr{preB}, \\
-\label{e:left-congruence25c}
+\label{e-left-congruence25c}
 \Vstr{rhsA} = \Vstr{rhsB}, \;\; \text{and} \\
-\label{e:left-congruence25d}
+\label{e-left-congruence25d}
 \Vstr{postA} = \Vstr{postB}.
 \end{gather}
 Therefore
 \begin{gather}
-\label{e:left-congruence30a}
+\label{e-left-congruence30a}
 \begin{gathered}
 \var{sfseqA}[\var{j}] = \Vstr{preA}\Vsym{lhsA}\Vstr{postA} \\
-\because \Eref{e:left-congruence15a},
+\because \Eref{e-left-congruence15a},
 \end{gathered}
 \\
-\label{e:left-congruence30b}
+\label{e-left-congruence30b}
 \begin{gathered}
 \var{sfseqB}[\var{j}] = \Vstr{preB}\Vsym{lhsB}\Vstr{postB} \\
-\because \Eref{e:left-congruence15b},
+\because \Eref{e-left-congruence15b},
 \;\; \text{and}
 \end{gathered}
 \\
-\label{e:left-congruence50}
+\label{e-left-congruence50}
 \begin{gathered}
 \var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}] \\
-\because \Eref{e:left-congruence25a},
-\Eref{e:left-congruence25b},
-\Eref{e:left-congruence25d},
-\Eref{e:left-congruence30a},
-\Eref{e:left-congruence30b}.
+\because \Eref{e-left-congruence25a},
+\Eref{e-left-congruence25b},
+\Eref{e-left-congruence25d},
+\Eref{e-left-congruence30a},
+\Eref{e-left-congruence30b}.
 \end{gathered}
 \end{gather}
 
-\Eref{e:left-congruence50}
+\Eref{e-left-congruence50}
 contradicts
-\Eref{e:left-congruence12a},
+\Eref{e-left-congruence12a},
 our assumption for the reductio,
 and allows us to conclude that
 \begin{equation}
-\label{e:left-congruence52}
+\label{e-left-congruence52}
 \begin{gathered}
 \forall \var{j} \mid 1 \le \var{j} < \var{len}
 \implies
@@ -3116,7 +3195,7 @@ and allows us to conclude that
 
 If $\var{lenA} \ge \var{lenB}$,
 \begin{equation}
-\label{e:left-congruence55a}
+\label{e-left-congruence55a}
 \begin{gathered}
 \begin{aligned}
 & \Vstr{sfA}\Vstr{suffixA} = \var{sfseqA}[\var{lenA}]\Vstr{suffixA} \\
@@ -3125,12 +3204,12 @@ If $\var{lenA} \ge \var{lenB}$,
 & \qquad = \Vstr{sfB}\Vstr{suffixA}
 \end{aligned}
 \\
-\because \Eref{e:left-congruence10a}, \Eref{e:left-congruence10b}.
+\because \Eref{e-left-congruence10a}, \Eref{e-left-congruence10b}.
 \end{gathered}
 \end{equation}
 Similarly, if $\var{lenB} \ge \var{lenA}$,
 \begin{equation}
-\label{e:left-congruence55b}
+\label{e-left-congruence55b}
 \begin{gathered}
 \begin{aligned}
 & \Vstr{sfB}\Vstr{suffixB} = \var{sfseqB}[\var{lenB}]\Vstr{suffixB} \\
@@ -3139,22 +3218,22 @@ Similarly, if $\var{lenB} \ge \var{lenA}$,
 & \qquad = \Vstr{sfA}\Vstr{suffixB}
 \end{aligned}
 \\
-\because \Eref{e:left-congruence10a}, \Eref{e:left-congruence10b}.
+\because \Eref{e-left-congruence10a}, \Eref{e-left-congruence10b}.
 \end{gathered}
 \end{equation}
 
 Then
 \begin{equation}
 \begin{gathered}
-\label{e:left-congruence60}
+\label{e-left-congruence60}
 \Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
 \;\; \text{or} \;\;
 \Vstr{sfB} \xderives{R\ast} \Vstr{sfA} \\
-\because \Eref{e:left-congruence55a}, \Eref{e:left-congruence55b}
+\because \Eref{e-left-congruence55a}, \Eref{e-left-congruence55b}
 \end{gathered}
 \end{equation}
-and from \Eref{e:left-congruence60}
-we have \Eref{e:left-congruence4}
+and from \Eref{e-left-congruence60}
+we have \Eref{e-left-congruence4}
 and the theorem.
 
 \end{proof}
@@ -3173,7 +3252,7 @@ and let
 \end{gather*}
 If
 \begin{align}
-\label{e:equal-prefix1}
+\label{e-equal-prefix1}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
                   & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
@@ -3182,7 +3261,7 @@ If
 \end{aligned}
 \\
 \intertext{and}
-\label{e:equal-prefix2}
+\label{e-equal-prefix2}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3B} \\
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3B} \\
@@ -3192,7 +3271,7 @@ If
 \end{align}
 and
 \begin{equation}
-\label{e:equal-prefix3}
+\label{e-equal-prefix3}
 \begin{gathered}
 \Vstr{beforeA}\Vsym{lhs} \xderives{R\ast}
 \Vstr{beforeB}\Vsym{lhs} \\
@@ -3202,19 +3281,19 @@ and
 \end{equation}
 then
 \begin{equation}
-\label{e:equal-prefix4}
+\label{e-equal-prefix4}
 \Vstr{beforeA} = \Vstr{beforeB}
 \end{equation}
 \end{lemma}
 
 \begin{proof}
 We assume, for a reductio, that
-\Eref{e:equal-prefix1},
-\Eref{e:equal-prefix2}, and
-\Eref{e:equal-prefix3}
+\Eref{e-equal-prefix1},
+\Eref{e-equal-prefix2}, and
+\Eref{e-equal-prefix3}
 are all true,
 but that
-\Eref{e:equal-prefix4} is false.
+\Eref{e-equal-prefix4} is false.
 By symmetry,
 we may assume that
 \[
@@ -3224,63 +3303,63 @@ we may assume that
 without loss of generality.
 If
 \begin{equation}
-\label{e:equal-prefix5}
+\label{e-equal-prefix5}
 \Vstr{beforeA}\Vsym{lhs} \xderives{(0)}
 \Vstr{beforeB}\Vsym{lhs},
 \end{equation}
 we have
 \Vstr{beforeA} = \Vstr{beforeB}
 directly from
-\Eref{e:equal-prefix5},
+\Eref{e-equal-prefix5},
 which contradicts our assumption.
 For the rest of this proof, therefore,
 we assume  that
 \begin{equation}
-\label{e:equal-prefix8}
+\label{e-equal-prefix8}
 \Vstr{beforeA}\Vsym{lhs} \xderives{R+}
 \Vstr{beforeB}\Vsym{lhs}.
 \end{equation}
 
 In an unambiguous grammar like \Vint{g},
 a right derivation is unique, so that we can combine
-\Eref{e:equal-prefix1},
-\Eref{e:equal-prefix2}, and
-\Eref{e:equal-prefix8}
+\Eref{e-equal-prefix1},
+\Eref{e-equal-prefix2}, and
+\Eref{e-equal-prefix8}
 into
 \begin{align}
-\label{e:equal-prefix10a}
+\label{e-equal-prefix10a}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
-\label{e:equal-prefix10b}
+\label{e-equal-prefix10b}
                   & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
-\label{e:equal-prefix10c}
+\label{e-equal-prefix10c}
                   & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3A} \\
-\label{e:equal-prefix10d}
+\label{e-equal-prefix10d}
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
-\label{e:equal-prefix10e}
+\label{e-equal-prefix10e}
                   & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
 \end{align}
-In \Eref{e:equal-prefix10b}, since $\Vstr{input3A} \in \Term{\Vint{g}}^\ast$, we have a right
+In \Eref{e-equal-prefix10b}, since $\Vstr{input3A} \in \Term{\Vint{g}}^\ast$, we have a right
 derivation
 \begin{equation}
-\label{e:equal-prefix15}
+\label{e-equal-prefix15}
 \Vstr{rhs2} \xderives{R\ast} \Vstr{shim}\Vsym{lhs}.
 \end{equation}
 In an unambiguous grammar, a right derivation must be unique,
 so we can combine
-\Eref{e:equal-prefix15} and
-\Eref{e:equal-prefix1} into a single derivation,
+\Eref{e-equal-prefix15} and
+\Eref{e-equal-prefix1} into a single derivation,
 writing
 \begin{align}
-\label{e:equal-prefix20a}
+\label{e-equal-prefix20a}
 & \Accept{\Vint{g}}
 \\
-\label{e:equal-prefix20b}
+\label{e-equal-prefix20b}
 & \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \\
-\label{e:equal-prefix20c}
+\label{e-equal-prefix20c}
 & \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}\Vsym{lhs}\Vstr{input3A}
 \\
-\label{e:equal-prefix20d}
+\label{e-equal-prefix20d}
 & \qquad
 \begin{aligned}
 & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
@@ -3290,46 +3369,46 @@ writing
 & \qquad
 \begin{aligned}
 & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
-\label{e:equal-prefix20e}
+\label{e-equal-prefix20e}
 & \qquad \qquad \Vstr{rhs1}\Vstr{input2}\Vstr{input3A}
 \end{aligned}
 \\
-\label{e:equal-prefix20f}
+\label{e-equal-prefix20f}
 & \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{input2}\Vstr{input3A}.
 \end{align}
 
-From the derivation from \Eref{e:equal-prefix20e}
-to \Eref{e:equal-prefix20f},
+From the derivation from \Eref{e-equal-prefix20e}
+to \Eref{e-equal-prefix20f},
 we have that
 \begin{equation}
-\label{e:equal-prefix30}
+\label{e-equal-prefix30}
 \Vstr{shim}\Vstr{rhs1} \destar \epsilon.
 \end{equation}
 (Note that
-\Eref{e:equal-prefix30}
+\Eref{e-equal-prefix30}
 is not necessarily a right-derivation.)
 
-Using \Eref{e:equal-prefix30} with
-the derivation from \Eref{e:equal-prefix20b}
-to \Eref{e:equal-prefix20d},
+Using \Eref{e-equal-prefix30} with
+the derivation from \Eref{e-equal-prefix20b}
+to \Eref{e-equal-prefix20d},
 we get
 \begin{align}
-\label{e:equal-prefix35a}
+\label{e-equal-prefix35a}
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \\
-\label{e:equal-prefix35b}
+\label{e-equal-prefix35b}
 \xderives{R\ast} \;\;
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}
 \\
 \nonumber
 & \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}
 \\
-\label{e:equal-prefix35c}
+\label{e-equal-prefix35c}
 \derives \;\;
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A}.
 \end{align}
-The derivation from \Eref{e:equal-prefix35a}
-to \Eref{e:equal-prefix35c}
+The derivation from \Eref{e-equal-prefix35a}
+to \Eref{e-equal-prefix35c}
 is a cycle, which can only happen if
 \Vint{g} is ambiguous.
 This is contrary to assumption,
@@ -3368,7 +3447,7 @@ Let $\var{j} = \size{\Vstr{input1}}$.
 If two distinct derivations both put incomplete EIM's into
 \Ves{j}, they have the form
 \begin{align}
-\label{e:incompletion-bound-1}
+\label{e-incompletion-bound-1}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vstr{input3A} \\
                   & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3A} \\
@@ -3377,7 +3456,7 @@ If two distinct derivations both put incomplete EIM's into
 \end{aligned}
 \\
 \intertext{and}
-\label{e:incompletion-bound-2}
+\label{e-incompletion-bound-2}
 & \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vstr{input3B} \\
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vstr{input3B} \\
@@ -3387,18 +3466,18 @@ If two distinct derivations both put incomplete EIM's into
 \end{align}
 
 Assume that
-\Eref{e:incompletion-bound-1} and
-\Eref{e:incompletion-bound-2}
+\Eref{e-incompletion-bound-1} and
+\Eref{e-incompletion-bound-2}
 are in the same cell of $\pi$,
 so that
 \begin{equation}
-\label{e:incompletion-bound-3}
+\label{e-incompletion-bound-3}
 \Vstr{input3A} \equiv \Vstr{input3B} ( \text{mod $\pi$} ),
 \end{equation}
 which, since $\pi$ is a left congruence,
 is the same as
 \begin{equation}
-\label{e:incompletion-bound-5}
+\label{e-incompletion-bound-5}
 \Vstr{input2}\Vstr{input3A} \equiv \Vstr{input2}\Vstr{input3B} ( \text{mod $\pi$} ),
 \end{equation}
 
@@ -3425,7 +3504,7 @@ $\Vstr{prefix}$ & $\Vstr{input1}\Vstr{input2}$ \\
 
 \Thref{lm:addendum-lemma1} tells us that
 \begin{equation}
-\label{e:incompletion-bound-10}
+\label{e-incompletion-bound-10}
 \begin{gathered}
 \Vstr{beforeA}\Vsym{lhs} \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}
 \\
@@ -3435,19 +3514,19 @@ $\Vstr{prefix}$ & $\Vstr{input1}\Vstr{input2}$ \\
 \end{equation}
 
 From
-\Eref{e:incompletion-bound-1},
-\Eref{e:incompletion-bound-2},
-\Eref{e:incompletion-bound-10}, and
+\Eref{e-incompletion-bound-1},
+\Eref{e-incompletion-bound-2},
+\Eref{e-incompletion-bound-10}, and
 \Thref{lm:addendum-lemma2},
 we have
 \begin{equation}
-\label{e:incompletion-bound-15}
+\label{e-incompletion-bound-15}
 \Vstr{beforeA} = \Vstr{beforeB}
 \end{equation}
 From
-\Eref{e:incompletion-bound-1},
-\Eref{e:incompletion-bound-2}, and
-\Eref{e:incompletion-bound-15},
+\Eref{e-incompletion-bound-1},
+\Eref{e-incompletion-bound-2}, and
+\Eref{e-incompletion-bound-15},
 we see that every derivation which adds an incompletion
 to \Ves{j} for the cell of $\pi$ containing \Vstr{input3} is
 of the form
@@ -3482,7 +3561,7 @@ for each cell of the partition.
 Therefore the maximum number of incompletions at \Ves{j} is
 less than
 \begin{equation}
-\label{e:incompletion-bound-80}
+\label{e-incompletion-bound-80}
 \var{c} = \size{\Vint{g}} \times \size{\pi},
 \end{equation}
 where
@@ -3492,7 +3571,7 @@ $\size{\Vint{g}}$ is a constant depending on \Vint{g},
 and, for any LRR grammar,
 $\size{\pi}$ is a constant.
 Therefore \var{c} in
-\Eref{e:incompletion-bound-80}
+\Eref{e-incompletion-bound-80}
 is the constant required by the theorem.
 \end{proof}
 
@@ -3530,7 +3609,7 @@ Omitted.
 \end{proof}
 
 \section{General complexity}
-\label{s:complexity}
+\label{s-complexity}
 
 \begin{theorem}
 For every unambiguous grammar,
@@ -3582,7 +3661,7 @@ Omitted.
 \end{proof}
 
 \section{The Marpa Input Model}
-\label{s:input}
+\label{s-input}
 
 In this paper,
 up to this point,
@@ -3685,7 +3764,7 @@ for some constant \var{c},
 possibly dependent on the grammar \Cg{},
 that every token length be less than \var{c},
 \begin{equation}
-\label{e:restriction1}
+\label{e-restriction1}
 \forall \, \Vtoken{[\Vsym{x}, \Vloc{x}, \var{length}]},
 \; \var{length} < \var{c},
 \end{equation}
@@ -3694,7 +3773,7 @@ the cardinality of the set of tokens starting at any
 one location
 be less than \var{c},
 \begin{equation}
-\label{e:restriction2}
+\label{e-restriction2}
  \forall \Vloc{i}, \;
  \Bigl|
  \bigl \lbrace
@@ -3703,8 +3782,8 @@ be less than \var{c},
   \bigr \rbrace
   \Bigr| < \var{c}
 \end{equation}
-\Eref{e:restriction1}
-and \Eref{e:restriction2}
+\Eref{e-restriction1}
+and \Eref{e-restriction2}
 impose little or no obstacle
 to the practical use
 of Marpa's generalized input model.
@@ -3764,6 +3843,11 @@ J.~Earley.
 Dirk~Grune and Ceriel~J.H Jacobs.
 \newblock {\em Parsing Techniques: A Practical Guide}.
 \newblock Springer, Amsterdam, 2008.
+
+\bibitem{Harrison1978}
+Michael~A.~Harrison.
+\newblock {\em Introduction to Formal Language Theory}.
+\newblock Addison-Wesley, 1978.
 
 \bibitem{Irons}
 Edgar~T.~Irons.
