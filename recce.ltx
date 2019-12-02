@@ -1663,30 +1663,99 @@ to state some
 definitions more simply than we could if they had to apply
 to EXT's, or to CFG's.
 
-Let \Vint{g} be an internal grammar.
-A rule \Vrule{x},
-$\Vrule{x} \in \Rules{\Vint{g}}$,
-is \dfn{right-recursive},
-$\RightRecursive{\Vrule{x}}$,
-if and only if, for some \Vstr{y}
+\begin{definition}
+\label{df:rr}
+Let \Vcfg{g} be an internal grammar.
+Let \Vstr{sf} be a sentential form of \var{g} non-trivially derived from
+\Vsym{rr}, so that
 \begin{equation}
-\label{eq:right-recursive}
+\label{e:rr}
+\Vsym{rr} \derives \Vstr{rhs} \destar \Vstr{sf}.
+\end{equation}
+The derivation of \Eref{e:rr}
+is \dfn{right-recursive} if and only if
+\begin{equation}
+\Rightmost{\Vstr{sf}} = \Vsym{rr}.
+\end{equation}
+We also say that the rule used in the first step of \Eref{e:rr},
+is \dfn{right-recursive},
+\begin{equation*}
+\RightRecursive{[\Vsym{rr} \de \Vstr{rhs}]}
+\end{equation*}
+and that the symbol $\Vsym{rr}$
+is \dfn{right-recursive},
+\begin{equation*}
+\RightRecursive{\Vsym{rr}}
+\end{equation*}
+\end{definition}
+\Dfref{df:rr} implies that, for any rule \var{r}, $\var{r} \in \Rules{\var{g}}$,
+we have
+\begin{equation}
 \begin{gathered}
-\Rightmost{\Vrule{x}} \deplus \Vstr{y} \quad \text{and} \\
-\Rightmost{\Vstr{y}} = \LHS{\Vrule{x}}.
+\RightRecursive{\var{r}} \implies \RightRecursive{\LHS{\var{r}}}.
 \end{gathered}
 \end{equation}
-\Vrule{x} is \dfn{directly right-recursive}
-if the derivation of \Vstr{y} in
-\Eref{eq:right-recursive}
-is of length 1,
-in which case
-\Eref{eq:right-recursive}
-is equivalent to
-\begin{equation*}
-\label{eq:direct-right-recursive}
-\LHS{\Vrule{x}}  = \Rightmost{\RHS{\Vrule{x}}}.
-\end{equation*}
+
+\begin{theorem}
+Let \Vcfg{g} be a grammar.
+If \Vrule{r} is a rule used in a step of a right recursive derivation,
+then \Vrule{r} is right recursive.
+\end{theorem}
+
+\begin{proof}
+Let \Vcfg{g} be a CFG.
+Note that for the case of a right recursion of length 1,
+the theorem is obviously true.
+We now consider the case of an arbitrarily chosen step
+in a right recursion in \var{g} of
+length 2 or more:
+\begin{align}
+\label{rr-proof-10a}
+\Vsym{rr1} \derives & \; \Vstr{rhs1} \\
+\label{rr-proof-10b}
+ \destar & \; \Vstr{preX} \Vsym{symX} \\
+\label{rr-proof-10c}
+ \derives & \; \Vstr{preX} \Vstr{rhsX} \\
+\label{rr-proof-10d}
+ \destar & \; \Vstr{preX} \Vstr{leftX} \Vsym{rr1}.
+\end{align}
+The arbitrarily chosen step is from 
+\Eref{rr-proof-10b} to
+\Eref{rr-proof-10c}
+and uses the rule $[ \Vsym{symX} \de \Vstr{rhs} ]$.
+We may ``pump'' the derivation of
+\Eref{rr-proof-10a}--\Eref{rr-proof-10d}
+produces another right recursion in \var{g}
+\begin{align}
+\nonumber
+\Vsym{rr1} \derives & \; \Vstr{rhs1} \\
+\label{rr-proof-20a}
+ \destar & \; \Vstr{preX} \Vsym{symX} \\
+\label{rr-proof-20b}
+ \derives & \; \Vstr{preX} \Vstr{rhsX} \\
+\nonumber
+ \destar & \; \Vstr{preX} \Vstr{leftX} \Vsym{rr1} \\
+\nonumber
+ \derives & \; \Vstr{preX} \Vstr{leftX} \Vstr{rhs1} \\
+\label{rr-proof-20c}
+ \destar & \; \Vstr{preX} \Vstr{leftX} \Vstr{preX} \Vsym{symX} \\
+\nonumber
+ \derives & \; \Vstr{preX} \Vstr{leftX} \Vstr{preX} \Vstr{rhsX} \\
+\nonumber
+ \destar & \; \Vstr{preX} \Vstr{leftX} \Vstr{preX} \Vstr{leftX} \Vsym{rr1}.
+\end{align}
+
+Isolating the derivation from \Eref{rr-proof-20a} to
+\Eref{rr-proof-20c} we have
+\begin{equation}
+ \Vsym{symX} \derives \Vstr{rhsX} \destar
+ \Vstr{leftX} \Vstr{preX} \Vsym{symX}
+\end{equation}
+so that 
+\begin{equation}
+\RightRecursive{[ \Vsym{symX} \de \Vstr{rhs} ]} \because \Dfref{df:rr}.
+\end{equation}
+\end{proof}
 
 In this paper,
 \Earley{} will refer to the Earley's original
