@@ -2015,16 +2015,31 @@ for some \Vstr{rhs},
 \end{gather*}
 
 \begin{definition}
-TODO
-
-An EIM
-\begin{equation}
+In the context of a CFG \Vcfg{g} and an input \Vstr{w},
+an EIM
+\begin{equation*}
+\label{e:earley-prop1}
 \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs}
-   \right], \Vorig{i} \right]
-\end{equation}
-the \dfn{Earley property}
-if
+   \right], \Vorig{i} \right] @ \Ves{j}
+\end{equation*}
+is \dfn{valid}
+if and only if
+there is some \Vstr{before}, \Vstr{after}
+such
+that
+\begin{gather*}
+\Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
+\Vstr{before} \destar \var{w}[0 ... (\var{i}\subtract 1)], \\
+\Vstr{rhs1} \destar \var{w}[\var{i} ... (\var{j}\subtract 1)], \\
+\text{and \Vstr{after} is productive.}
+\end{gather*}
+If, in addition,
+\begin{equation*}
+\Vstr{after} \destar \var{w}[\var{j} ... (\Vsize{w}\subtract 1)]
+\end{equation*}
+the EIM is \dfn{useful}.
 \end{definition}
+
 \section{The Leo algorithm}
 \label{s-leo}
 
@@ -2896,6 +2911,60 @@ set at \Vloc{i} is
 \begin{equation*}
 \Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
 \end{equation*}
+\end{proof}
+
+\begin{theorem}\label{th:ambiguous-links-pair}
+\footnote{This theorem and its proof are adapted from
+Lemma 4.6 in
+\cite[Vol. 1, p. 325-326]{AU1972}.
+}%
+Let \Vcfg{g} be a CFG.
+If there is an input \Vstr{w} such that a valid
+confirmed EIM has more than one link pair,
+then \var{g} is ambiguous.
+\end{theorem}
+
+\begin{proof}
+The proof proceeds by eliminating subcases within a reductio.
+For the reductio, we take the following conjunction
+\begin{gather}
+\label{e-ambiguous-links-pair-10a}
+\Veim{added} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
+\label{e-ambiguous-links-pair-10b}
+\text{$\Veim{added} @ \Ves{j}$ is valid,} \\
+\label{e-ambiguous-links-pair-10d}
+\text{\Veim{added} has more than one link pair, and} \\
+\label{e-ambiguous-links-pair-10e}
+\text{\var{g} is not ambiguous.}
+\end{gather}
+
+Confirmed EIMs are only added by the Scanner and the Completer.
+
+{\bf Subcase 1: The Scanner.}
+Assume that \Veim{added} was added by the scanner.
+Then
+\begin{equation}
+\left[ \left[ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} \right], \Vorig{i} \right] @ \es{(\var{j}\subtract 1)}
+\end{equation}
+must be the predecessor of
+the link pair,
+and $\Vsym{rhs2} = \var{w}[\var{j}\subtract 1]$
+must be the terminal symbol which is the cause
+of the link pair.
+This link pair must be unique, contrary to assumption
+\Eref{e-ambiguous-links-pair-10d}.
+This eliminates this subcase, and allows us to assume,
+for the rest of this proof,
+that \Veim{added} was added by the completer.
+
+{\bf The Completer.}
+Since \Veim{added} was added by the completer,
+if it has two link pairs
+it takes the form
+
+
+TODO.
+
 \end{proof}
 
 \subsection{Complexity of each Earley item}
@@ -3910,6 +3979,15 @@ John~Aycock and R.~Nigel~Horspool.
 \newblock Practical Earley Parsing
 \newblock {\em The Computer Journal},
     Vol. 45, No. 6, 2002, pp. 620-630.
+
+\bibitem{Brabrand2007}
+Claus~Brabrand, Robert~Giegerich and Anders~M{\"o}ller.
+\newblock {\em Analyzing ambiguity of context-free grammars.}
+\newblock 
+Proc. 12th International Conference on Implementation and Application of Automata,
+CIAA ’07,
+Prague, Czech Republic, July 2007.
+\newblock \url{http://www.brics.dk/~amoeller/papers/ambiguity/journal.pdf}
 
 \bibitem{Culik1973}
 {\v{C}}ulik, Karel and Cohen, Rina.
