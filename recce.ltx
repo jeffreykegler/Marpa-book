@@ -862,31 +862,32 @@ A \dfn{sentential form} is a string which can be derived from the start
 symbol, \Accept{\Vcfg{g}}.
 If the sentential form \Vterm{sf} is a string of terminals,
 then \Vterm{sf} is a \dfn{sentence} of \Vcfg{g}.
-The language of \Vcfg{g},
-\myL{\var{g}},
-is the set of sentences of \Vcfg{g}.
-That is,
+As a reading aid, when a string in double-angle-bracket form
+has been defined as a string of terminals,
+we will write it in boldface.
+
+Let \Vcfg{g} be a CFG and let $\Vstr{a} \in \Vocab{\var{g}}^\ast$.
+The \dfn{language} of \var{g} and \Vstr{a},
+is
 \begin{equation}
-\label{e-L-g}
-\myL{\Vcfg{g}} \defined
+\label{e-language}
+\myL{\Vcfg{g}, \Vstr{a}},
+\defined
 \set{
 \quad
 \begin{aligned}
-& \Vterm{sentence} \quad \text{such that} \\
+& \Vstr{sentence} \quad \text{such that} \\
 & \qquad \begin{aligned}
-  & \Accept{\Vcfg{g}} \destar \Vterm{sentence} \quad \text{and} \\
-  & \Vterm{sentence} \in \Term{\Vcfg{g}}^\ast.
+  & \Vstr{a} \destar \Vstr{sentence} \quad \text{and} \\
+  & \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast.
   \end{aligned}
 \end{aligned}
 \quad
 }
 \end{equation}
-Note that in
-\Eref{e-L-g},
-we wrote \Vterm{sentence} instead of \Vstr{sentence},
-As a reading aid,
-the variable name in a string which is an element of $\Term{\Vcfg{g}}^\ast$
-will often be written in boldface.
+The \dfn{language} of the grammar \Vcfg{g},
+\myL{\var{g}},
+is $\myL{\var{g}, \Accept{\var{g}}}$.
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -2467,6 +2468,28 @@ Let
 \end{algorithmic}
 \end{algorithm}
 
+\section{Parsing concepts}
+
+\subsection{Ambiguity}
+
+We say that a parse of input \Vstr{w1} using grammar Vcfg{g}
+is ambiguous, if there is more than one derivation tree for it.
+Most derivation trees allow more than one derivation,
+but for every derivation tree there is exactly one rightmost
+derivation.
+So a parse is ambiguous if and only if there is more than
+one rightmost derivation tree for \Vstr{w1}.
+A grammar is ambiguous if and only if there is some input
+for which the parse is ambiguous.
+
+We recognize two kinds of ambiguity:
+horizontal and vertical.
+
+\begin{definition}
+A parse is \dfn{vertically ambiguous} if and only if
+TODO
+\end{definition}
+
 \section{Marpa Changes}
 \label{s-changes}
 
@@ -3983,9 +4006,8 @@ John~Aycock and R.~Nigel~Horspool.
 \bibitem{Brabrand2007}
 Claus~Brabrand, Robert~Giegerich and Anders~M{\"o}ller.
 \newblock {\em Analyzing ambiguity of context-free grammars.}
-\newblock 
-Proc. 12th International Conference on Implementation and Application of Automata,
-CIAA ’07,
+\newblock Proc. 12th International Conference
+on Implementation and Application of Automata, CIAA ’07,
 Prague, Czech Republic, July 2007.
 \newblock \url{http://www.brics.dk/~amoeller/papers/ambiguity/journal.pdf}
 
