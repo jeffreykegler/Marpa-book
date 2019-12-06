@@ -4,8 +4,9 @@
 \documentclass[12pt]{amsart}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
-\usepackage{url}
 \usepackage{amssymb}
+\usepackage{mathtools}
+\usepackage{url}
 \usepackage{varioref}
 \usepackage{hyperref}
 \allowdisplaybreaks[4]
@@ -27,6 +28,7 @@
 \newcommand{\size}[1]{\ensuremath{\left | {#1} \right |}}
 \newcommand{\bigsize}[1]{\ensuremath{\bigl| {#1} \bigr|}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
+\newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\Oc}{\order{1}}
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
@@ -761,9 +763,11 @@ so that
 Where the choice of \Vcfg{g} is clear in context,
 and unless otherwise specified,
 \begin{align*}
-& \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}, \\
-& \text{\Vstr{str} and $\var{str}_\type{STR}$ will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$, and} \\
-& \text{\Vsym{sym} and $\var{sym}_\type{SYM}$ will imply that $\Vsym{sym} \in \Vocab{\var{g}}$.}
+& \text{\Vsym{sym} will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
+& \text{$\var{sym}_\type{SYM}$ will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
+& \text{\Vstr{str} will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$}, \\
+& \text{$\var{str}_\type{STR}$ will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$, and} \\
+& \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}. \\
 \end{align*}
 A \dfn{parse} is a duple $[\Vcfg{g}, \Vstr{w}]$ such that
 $\Vstr{w} \in \Term{\var{g}}^\ast$.
@@ -1829,6 +1833,9 @@ in \Vcfg{g}, that is,
 \end{aligned}
 \; \right\rbrace .
 \end{align*}
+Where the choice of \Vcfg{g} is clear in context,
+and unless otherwise specified,
+\Vdr{dr} will imply that $\var{dr} \in \DottedRules{\var{g}}$.
 
 We consider the size of a grammar, \Vsize{\var{g}}, to be the
 number of distinct dotted rules it allows,
@@ -2494,6 +2501,30 @@ for which the parse is ambiguous.
 
 We recognize two kinds of ambiguity:
 horizontal and vertical.
+
+\begin{definition}
+Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
+A \dfn{horizontal ambiguity} is a 5-tuple,
+\begin{equation}
+\begin{gathered}
+[ \Vdr{partition}, \Vloc{start}, \Vloc{overlap1}
+\Vloc{overlap2}, \Vloc{end} ]
+\\
+\text{where $\Vdr{partition} = [ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2} ]$}
+\end{gathered}
+\end{equation}
+
+The duple $[\var{overlap1}, \var{overlap2}]$ is
+called the \dfn{overlap}.
+The string
+$\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]$
+is also called the \dfn{overlap}.
+
+TODO
+$\overlap$ XXX
+TODO
+
+\end{definition}
 
 \begin{definition}
 A parse is \dfn{vertically ambiguous} if and only if
