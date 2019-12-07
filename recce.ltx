@@ -14,7 +14,7 @@
 \delimitershortfall=0pt
 \delimiterfactor=1100
 
-\newcommand{\todo}[1]{\par{\large\bf Todo: #1}\par}
+\newcommand{\TODO}[1]{\par{\large\bf TODO: #1}\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
 % For a type name, when it occurs in text
@@ -31,7 +31,6 @@
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\Oc}{\order{1}}
 \newcommand{\On}{\order{\var{n}}}
-\newcommand{\inference}[2]{\genfrac{}{}{1pt}{}{#1}{#2}}
 
 \newcommand{\colonpageref}[1]{%
 \vrefpagenum{\temprefpage}{#1}%
@@ -81,6 +80,18 @@
         {\mapsto\!}\:$}}}
 
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
+\newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
+\newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
+\newcommand{\boldRange}[3]{\textbf{#1[#2 \ldots #3]}}
+\newcommand{\boldRangeDecr}[3]{\textbf{#1[#2 \ldots %
+$(\textbf{#3}\subtract 1)$%
+]}%
+}
+\newcommand{\boldRangeSizeDecr}[3]{\textbf{#1[#2 \ldots %
+$(\left|\textbf{#3}\right|\subtract 1)$%
+]} }
+
+\newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
@@ -876,9 +887,13 @@ A \dfn{sentential form} is a string which can be derived from the start
 symbol, \Accept{\Vcfg{g}}.
 If the sentential form \Vterm{sf} is a string of terminals,
 then \Vterm{sf} is a \dfn{sentence} of \Vcfg{g}.
-As a reading aid, when a string in double-angle-bracket form
-has been defined as a string of terminals,
+When a string in double-angle-bracket form
+is a string of terminals,
 we will write it in boldface.
+Use of boldface for terminals is intended as a reading aid,
+and is not declarative.
+That we are justified in treating the elements of \Vterm{sf} as terminals must
+be shown elsewhere.
 
 Let \Vcfg{g} be a CFG and let $\Vstr{a} \in \Vocab{\var{g}}^\ast$.
 The \dfn{language} of \var{g} and \Vstr{a},
@@ -2047,13 +2062,13 @@ such
 that
 \begin{gather*}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
-\Vstr{before} \destar \var{w}[0 ... (\var{i}\subtract 1)], \\
-\Vstr{rhs1} \destar \var{w}[\var{i} ... (\var{j}\subtract 1)], \\
+\Vstr{before} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
+\Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
 \text{and \Vstr{after} is productive.}
 \end{gather*}
 If, in addition,
 \begin{equation*}
-\Vstr{after} \destar \var{w}[\var{j} ... (\Vsize{w}\subtract 1)]
+\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
 \end{equation*}
 the EIM is \dfn{useful}.
 \end{definition}
@@ -2499,32 +2514,174 @@ one rightmost derivation tree for \Vstr{w1}.
 A grammar is ambiguous if and only if there is some input
 for which the parse is ambiguous.
 
+We call a string of terminals derived from a sentential form
+its \dfn{frontier}.
+If a parse is unambiguous, the frontier of a sentential form
+form derives is unique, so that
+we can write the frontier of
+\Vstr{sf} as $\Vfrontier{sf}$.
+
 We recognize two kinds of ambiguity:
 horizontal and vertical.
 
 \begin{definition}
-Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
+\label{df:h-ambig}
+Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
+and let \var{gaul} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
+where $0 < \var{pos1} < \var{pos2}$,
+and $\var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
+indicating a rule whose RHS is partitioned
+into three parts.
+The 3-partitioned rule may be written as
+\begin{equation}
+\Vrule{r} = [ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} ],
+\end{equation}
+where 
+\begin{gather}
+\Vstr{rhs1} = (\RHS{\var{r}})[0 \ldots \var{pos1}\subtract 1], \\
+\Vstr{rhs2} = (\RHS{\var{r}})[\var{pos1} \ldots \var{pos2}\subtract 1], \;\; \text{and} \\
+\Vstr{rhs3} = (\RHS{\var{r}})[\var{pos2} \ldots \size{\RHS{\var{r}}}\subtract 1].
+\end{gather}
 A \dfn{horizontal ambiguity} is a 5-tuple,
 \begin{equation}
 \begin{gathered}
-[ \Vdr{partition}, \Vloc{start}, \Vloc{overlap1}
-\Vloc{overlap2}, \Vloc{end} ]
-\\
-\text{where $\Vdr{partition} = [ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2} ]$}
+[ \var{gaul}, \Vloc{origin}, \Vloc{overlap1}
+\Vloc{overlap2}, \Vloc{dot} ]
 \end{gathered}
 \end{equation}
+\begin{gather}
+\label{e:def-h-ambig-10a}
+\text{\Vsym{lhs} is accessible}, \\
+\Vstr{rhs1} \Vstr{rhs2} \destar \boldRangeDecr{w}{origin}{dot} \\
+\Vstr{rhs2} \destar \boldRangeDecr{w}{overlap1}{dot} \\
+\Vstr{rhs2} \destar \boldRangeDecr{w}{overlap2}{dot} \\
+\label{e:def-h-ambig-10e}
+\text{$\var{overlap1} \neq \var{overlap2}$, and} \\
+\text{\Vstr{rhs3} is productive}.
+\end{gather}
 
+\begin{sloppypar}
+\var{gaul} is called the \dfn{partitioned rule},
+\Vloc{orig} the \dfn{origin}, and
+\Vloc{dot} the \dfn{dot position}
+of the horizontal ambiguity.
 The duple $[\var{overlap1}, \var{overlap2}]$ is
-called the \dfn{overlap}.
+called its \dfn{overlap}.
 The string
 $\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]$
-is also called the \dfn{overlap}.
-
-TODO
-$\overlap$ XXX
-TODO
+is also called its \dfn{overlap}.
+\end{sloppypar}
 
 \end{definition}
+
+\begin{theorem}
+If a parse has a horizontal ambiguity,
+then it is ambiguous.
+\end{theorem}
+
+\begin{proof}
+We assume for a reductio that 
+$[\Vcfg{g}, \Vstr{w}]$ is an ambiguous parse,
+but with a horizontal ambiguity as stated in \Dfref{df:h-ambig}.
+Then the parse has the following right derivation
+\begin{align}
+\label{e:def-h-ambig-10-1-a}
+& \qquad \Accept{\var{g}} \\
+& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vterm{suffix} \\
+& \xderives{R} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vterm{suffix} \\
+& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \cat \boldRangeSizeDecr{w}{current}{w} \\
+\label{e:def-h-ambig-10-1-d}
+& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap1}{w} \\
+\label{e:def-h-ambig-10-1-e}
+& \xderives{R\ast} \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\
+\label{e:def-h-ambig-10-1-f}
+& \xderives{R\ast} \Vterm{w},
+\end{align}
+where $\Vterm{suffix} \in \Term{\var{g}}^\ast$.
+We have replaced the concatenation operator with the $\bigstar$ symbol
+at one point,
+for convenience in referring to that location in the following discussion.
+
+Since the parse is assumed to be unambiguous, the right derivation must be
+unique.
+The step which derives \Eref{e:def-h-ambig-10-1-d} in unique in its derivation
+as the first to produce a sentential form
+with no non-terminals to the right of $\bigstar$,
+but before the elimination of any non-terminals to the left of $\bigstar$.
+Therefore 
+\Eref{e:def-h-ambig-10-1-d}
+is a unique step of a unique derivation.
+
+Note that no assumption is made that any of
+\Vstr{prefix}, \Vstr{rhs1}, \Vstr{rhs2} and \Vstr{rhs3} contain 
+non-terminals.
+If they do not, the appropriate derivations are trivial and the
+appropriate sentential forms equal,
+and our claims about the presence
+and elimination of non-terminals are trivially or vacuously true.
+For example, if \Vstr{rhs1} contains no non-terminals,
+then the step from
+\Eref{e:def-h-ambig-10-1-d} to
+\Eref{e:def-h-ambig-10-1-e}
+is trivial and the sentential forms of
+\Eref{e:def-h-ambig-10-1-d} and
+\Eref{e:def-h-ambig-10-1-e}
+are identical,
+so that our claim that 
+\Eref{e:def-h-ambig-10-1-d} occurs prior to the elimination
+of any non-terminals in \Vstr{rhs1} is vacuously true.
+
+We go back
+to \Dfref{df:h-ambig}, and write a second right derivation for the parse.
+Because our parse is unambiguous, this derivation should be equivalent to the
+derivation from
+\Eref{e:def-h-ambig-10-1-a}
+to
+\Eref{e:def-h-ambig-10-1-f}.
+\begin{align}
+\label{e:def-h-ambig-10-2-a}
+& \qquad \Accept{\var{g}} \\
+& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vterm{suffix} \\
+\label{e:def-h-ambig-10-2-d}
+& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap2}{w} \\
+\label{e:def-h-ambig-10-2-f}.
+& \xderives{R\ast} \Vterm{w},
+\end{align}
+The step which derives
+the sentential form of \Eref{e:def-h-ambig-10-2-d}
+also the first to produce a sentential form
+with no non-terminals to the right of $\bigstar$,
+but before the elimination of any non-terminals to the left of $\bigstar$,
+and, since they result from the same steps of identical derivations,
+the two sentential forms \Eref{e:def-h-ambig-10-1-d}
+and \Eref{e:def-h-ambig-10-2-d} should be identical.
+But $\var{overlap1} \neq \var{overlap2}$
+\Eref{e:def-h-ambig-10e}
+and therefore
+\begin{equation}
+\label{e:def-h-ambig-50}
+\begin{gathered}
+\Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap1}{w} \\
+\neq \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap2}{w}
+\end{gathered}
+\end{equation}
+From 
+\Eref{e:def-h-ambig-50}
+we see that the
+derivation from
+\Eref{e:def-h-ambig-10-1-a}
+to
+\Eref{e:def-h-ambig-10-1-f}.
+is not the same as the derivation from
+\Eref{e:def-h-ambig-10-2-a}
+\Eref{e:def-h-ambig-10-2-f}.
+Since these are both right derviations,
+the parse must be ambiguous.
+This shows the reductio and the theorem.
+
+\TODO{TODO}
+
+\end{proof}
 
 \begin{definition}
 A parse is \dfn{vertically ambiguous} if and only if
