@@ -2048,6 +2048,7 @@ for some \Vstr{rhs},
 \end{gather*}
 
 \begin{definition}
+\label{df:EIM-valid}
 In the context of a CFG \Vcfg{g} and an input \Vstr{w},
 an EIM
 \begin{equation*}
@@ -2500,9 +2501,7 @@ Let
 \end{algorithmic}
 \end{algorithm}
 
-\section{Parsing concepts}
-
-\subsection{Ambiguity}
+\section{Ambiguity}
 
 We say that a parse of input \Vstr{w1} using grammar Vcfg{g}
 is ambiguous, if there is more than one derivation tree for it.
@@ -2552,11 +2551,15 @@ A \dfn{horizontal ambiguity} is a 5-tuple,
 \begin{gather}
 \label{e:def-h-ambig-10a}
 \text{\Vsym{lhs} is accessible}, \\
+\label{e:def-h-ambig-10b}
 \Vstr{rhs1} \Vstr{rhs2} \destar \boldRangeDecr{w}{origin}{dot} \\
+\label{e:def-h-ambig-10c}
 \Vstr{rhs2} \destar \boldRangeDecr{w}{overlap1}{dot} \\
+\label{e:def-h-ambig-10d}
 \Vstr{rhs2} \destar \boldRangeDecr{w}{overlap2}{dot} \\
 \label{e:def-h-ambig-10e}
 \text{$\var{overlap1} \neq \var{overlap2}$, and} \\
+\label{e:def-h-ambig-10f}
 \text{\Vstr{rhs3} is productive}.
 \end{gather}
 
@@ -2678,10 +2681,104 @@ is not the same as the derivation from
 Since these are both right derviations,
 the parse must be ambiguous.
 This shows the reductio and the theorem.
+\end{proof}
+
+\begin{definition}
+Consider two locations such that
+\begin{equation}
+\label{e:h-ambig-EIM-02}
+\Vloc{overlap1} \neq \Vloc{overlap2}.
+\end{equation}
+\label{df:h-ambig-EIM}
+An EIM is horizontally ambiguous if it is of the form
+\begin{equation}
+\label{e:h-ambig-EIM-05}
+\left[
+[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs3} ],
+\Vloc{origin}
+\right] @ \Vloc{dot}
+\end{equation}
+\Eref{e:h-ambig-EIM-05}
+has two link pairs.
+The predecessor in the first link pair is the valid EIM
+the valid EIM
+\begin{equation}
+\label{e:h-ambig-EIM-10a}
+\left[
+\begin{gathered}
+[ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} ], \\
+\Vloc{origin}
+\end{gathered}
+\right] @ \Vloc{overlap1},
+\end{equation}
+and its cause is the valid EIM
+\begin{equation}
+\label{e:h-ambig-EIM-10b}
+\left[
+  [ \Vsym{rhs2} \de \Vstr{children1} \mydot ], \var{overlap1}
+\right] @ \Vloc{dot}.
+\end{equation}
+The predecessor in the second link pair is the valid EIM
+\begin{equation}
+\label{e:h-ambig-EIM-20a}
+\left[
+\begin{gathered}
+[ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} ], \\
+\Vloc{origin}
+\end{gathered}
+\right] @ \Vloc{overlap2},
+\end{equation}
+and the cause of the second link pair is the valid EIM
+\begin{equation}
+\label{e:h-ambig-EIM-20b}
+\left[
+  [ \Vsym{rhs2} \de \Vstr{children2} \mydot ], \var{overlap2}
+\right] @ \Vloc{dot}.
+\end{equation}
+\end{definition}
+
+\begin{theorem}
+If a parse has a horizontally ambiguous EIM,
+then it is horizontally ambiguous.
+\end{theorem}
+
+\begin{proof}
+Assume that a parse,
+$[\Vcfg{g}, \Vstr{w}]$,
+has a horizontally ambiguous EIM \Dfref{df:h-ambig-EIM}.
+Let the 3-partitioned rule be
+\[
+[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \Vstr{rhs3} ].
+\]
+from \Dfref{df:h-ambig-EIM}.
+and let \Vloc{origin}, \Vloc{overlap1}, \Vloc{overlap2},
+\Vloc{dot} in 
+\Dfref{df:h-ambig} be their eponyms in
+\Dfref{df:h-ambig-EIM}.
+From the definition of validity
+\Dfref{df:EIM-valid}
+for the Earley item
+\Eref{e:h-ambig-EIM-05},
+we have
+\Eref{e:def-h-ambig-10a}
+\Eref{e:def-h-ambig-10b}
+and
+\Eref{e:def-h-ambig-10f}.
+From the validity of
+the EIM \Eref{e:h-ambig-EIM-10b}, we have
+\Eref{e:def-h-ambig-10c}
+and from the validity of
+the EIM \Eref{e:h-ambig-EIM-20b}, we have
+\Eref{e:def-h-ambig-10d}
+We have \Eref{e:def-h-ambig-10e} from
+\Eref{e:h-ambig-EIM-02}.
+The show all the elements
+in the definition of horizontal ambiguity \Dfref{df:h-ambig},
+and therefore a horizontally
+ambiguous EIM is also a horizontal ambiguity.
+\end{proof}
 
 \TODO{TODO}
-
-\end{proof}
 
 \begin{definition}
 A parse is \dfn{vertically ambiguous} if and only if
