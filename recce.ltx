@@ -84,8 +84,7 @@
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldRange}[3]{\textbf{#1[#2 \ldots #3]}}
 \newcommand{\boldRangeDecr}[3]{\textbf{#1[#2 \ldots %
-$(\textbf{#3}\subtract 1)$%
-]}%
+\textbf{($\textbf{#3}\subtract 1$)}]}%
 }
 \newcommand{\boldRangeSizeDecr}[3]{\textbf{#1[#2 \ldots %
 \textbf{($\left|\textbf{#3}\right|\subtract 1$)}%
@@ -2732,45 +2731,40 @@ This shows the theorem.
 
 \begin{definition}
 \label{df:v-ambig}
-Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
+Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
 A \dfn{vertical ambiguity} is a 4-tuple,
 \begin{equation}
 \label{e:def-v-ambig-10a}
-\begin{gathered}
-\left[ [ \var{lhs} \de \Vstr{rhs1} ],
- [ \var{lhs} \de \Vstr{rhs2} ],
-\Vloc{origin}, \Vloc{dot}
-\right]
-\end{gathered}
+\left[ \Vrule{r1}, \Vrule{r2}, \Vloc{origin}, \Vloc{dot} \right],
 \end{equation}
 such that
+\begin{gather}
+\var{r1} = [ \var{lhs} \de \Vstr{rhs1} ], \\
+\var{r2} = [ \var{lhs} \de \Vstr{rhs2} ], \\
+\var{rhs1} \neq \var{rhs2}, \\
+\label{e:def-v-ambig-15d}
+\var{rhs2} \destar \boldRangeDecr{w}{origin}{dot},
+\end{gather}
+and
 \begin{align}
 \label{e:def-v-ambig-20a}
 & \qquad \Accept{\var{g}} \\
 \label{e:def-v-ambig-20b}
-& \destar \Vstr{prefix} \Vsym{lhs} \cat \boldRangeSizeDecr{w}{(dot+1)}{w} \\
+& \destar \Vstr{prefix} \Vsym{lhs} \cat \boldRangeSizeDecr{w}{dot}{w} \\
 \label{e:def-v-ambig-20c}
-& \derives \Vstr{prefix} \Vstr{rhs1} \cat \boldRangeSizeDecr{w}{(dot+1)}{w} \\
+& \derives \Vstr{prefix} \Vstr{rhs1} \cat \boldRangeSizeDecr{w}{dot}{w} \\
 \label{e:def-v-ambig-20d}
 & \destar \;
 \begin{aligned}
 \Vstr{prefix} \cat \boldRangeDecr{w}{origin}{dot} \\
-\qquad \cat \boldRangeSizeDecr{w}{(dot+1)}{w}
+\qquad \cat \boldRangeSizeDecr{w}{dot}{w}
 \end{aligned}
 \\
 \label{e:def-v-ambig-20e}
 & = \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\
 \label{e:def-v-ambig-20f}
-& \destar \Vterm{w},
+& \destar \Vterm{w}.
 \end{align}
-where we also have that
-\begin{gather}
-\label{e:def-v-ambig-30a}
-\var{rhs1} \neq \var{rhs2}
-\;\; \text{and} \\
-\label{e:def-v-ambig-30b}
-\var{rhs2} \destar \boldRangeDecr{w}{origin}{dot},
-\end{gather}
 
 \var{r1} and \var{r2} are the \dfn{rules}
 of the vertical ambiguity,
@@ -2833,7 +2827,7 @@ to derive
 \Eref{e:th-v-ambig-10-2-c};
 \item
 using
-\Eref{e:def-v-ambig-30b}
+\Eref{e:def-v-ambig-15d}
 to derive
 \Eref{e:th-v-ambig-10-2-d};
 \item and letting the derivation of
