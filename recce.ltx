@@ -746,7 +746,7 @@ the ``start symbol''.
 \Vocab{\var{g}} is
 the \dfn{vocabulary} of \Vext{g}.
 
-A rule
+A \dfn{rule}
 (type \type{RULE})
 is a duple
 \begin{equation*}
@@ -764,12 +764,17 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
+
 The size of \var{r}, $\size{\Vrule{r}}$,
 is the number of symbols on its RHS,
 so that
 \begin{equation*}
 \size{\Vrule{r}} = \size{\RHS{\var{r}}}.
 \end{equation*}
+If $\size{Vrule{r}} = j$, then \Vrule{r}
+is an \dfn{empty rule}.
+If $\size{Vrule{r}} = 1$, then \Vrule{r}
+is a \dfn{unit rule}.
 
 Where the choice of \Vcfg{g} is clear in context,
 and unless otherwise specified,
@@ -2534,8 +2539,7 @@ horizontal and vertical.
 \label{df:h-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
 and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
-where $0 < \var{pos1} < \var{pos2}$,
-and $\var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
+where $0 \le \var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
 indicating a rule whose RHS is partitioned
 into three parts.
 The 3-partitioned rule may be written as
@@ -2593,17 +2597,30 @@ $\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]$
 is also called its \dfn{overlap}.
 \end{sloppypar}
 
+Note that if $\Vstr{rhs1} = \epsilon$, that
+$\var{overlap1} = \var{overlap2}$.
+Among other things, this implies that a unit rule
+cannot be the rule of a horizontally ambiguity.
+
 \end{definition}
 
 \begin{theorem}
 If a parse has a horizontal ambiguity,
-then it is ambiguous.
+then it and its grammar are ambiguous.
 \end{theorem}
 
 \begin{proof}
+Let $\var{p} = [\Vcfg{g}, \Vstr{w}]$ be a parse.
+We consider first the case where \var{p} contains a
+cycle.
+If \var{p} contains a cycle, it and its grammar are
+ambiguous, which shows the theorem directly.
+Therefore, for the rest of this proof, we assume that
+\var{p} is free of cycles.
+
 We assume for a reductio that
-$[\Vcfg{g}, \Vstr{w}]$ is an unambiguous parse,
-but with a horizontal ambiguity as stated in \Dfref{df:h-ambig}.
+\var{p} is unambiguous,
+but contains a horizontal ambiguity as defined in \Dfref{df:h-ambig}.
 Since the parse is unambiguous, we can write
 \[
 \Vstr{suffix} \destar \Vfrontier{suffix},
@@ -3027,11 +3044,11 @@ Almost always,
 this restriction in the theory is made
 without loss of its relevance to practice.
 
-For example, in cases where 
+For example, in cases where
 \Eref{e:EIM-valid-20d}
 in the definition of EIM validity
 is violated,
-the result would be that EIM's that were ``invalid'' 
+the result would be that EIM's that were ``invalid''
 in a pedantic sense would be
 physically present in the Earley sets.
 That these pedantically invalid EIM's should affect correctness
