@@ -2053,7 +2053,7 @@ In the context of a CFG \Vcfg{g} and an input \Vstr{w},
 an EIM
 \begin{equation*}
 \label{e:earley-prop1}
-\left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs}
+\left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i} \right] @ \Ves{j}
 \end{equation*}
 is \dfn{valid}
@@ -2061,15 +2061,19 @@ if and only if
 there is some \Vstr{before}, \Vstr{after}
 such
 that
-\begin{gather*}
+\begin{gather}
+\label{e:EIM-valid-20a}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
+\label{e:EIM-valid-20b}
 \Vstr{before} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
+\label{e:EIM-valid-20c}
 \Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
-\text{and \Vstr{after} is productive.}
-\end{gather*}
+\label{e:EIM-valid-20d}
+\text{and \Vstr{rhs2}\Vstr{after} is productive.}
+\end{gather}
 If, in addition,
 \begin{equation*}
-\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
+\Vstr{rhs2}\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
 \end{equation*}
 the EIM is \dfn{useful}.
 \end{definition}
@@ -2503,7 +2507,7 @@ Let
 
 \section{Ambiguity}
 
-We say that a parse of input \Vstr{w1} using grammar Vcfg{g}
+We say that a parse of input \Vstr{w1} using grammar \Vcfg{g}
 is ambiguous, if there is more than one derivation tree for it.
 Most derivation trees allow more than one derivation,
 but for every derivation tree there is exactly one rightmost
@@ -2518,7 +2522,10 @@ its \dfn{frontier}.
 If a parse is unambiguous, the frontier of a sentential form
 form derives is unique, so that
 we can write the frontier of
-\Vstr{sf} as $\Vfrontier{sf}$.
+\Vstr{sf} as $\Vfrontier{sf}$,
+where we will have that
+$\Vfrontier{sf} \in \Term{\var{g}}^\ast$
+for the current choice of \Vcfg{g}.
 
 We recognize two kinds of ambiguity:
 horizontal and vertical.
@@ -2526,7 +2533,7 @@ horizontal and vertical.
 \begin{definition}
 \label{df:h-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
-and let \var{gaul} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
+and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
 where $0 < \var{pos1} < \var{pos2}$,
 and $\var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
 indicating a rule whose RHS is partitioned
@@ -2544,27 +2551,35 @@ where
 A \dfn{horizontal ambiguity} is a 5-tuple,
 \begin{equation}
 \begin{gathered}
-[ \var{gaul}, \Vloc{origin}, \Vloc{overlap1}
+[ \var{gallia}, \Vloc{origin}, \Vloc{overlap1}
 \Vloc{overlap2}, \Vloc{dot} ]
 \end{gathered}
 \end{equation}
+such that
+\begin{align}
+\label{e:def-h-ambig-21a}
+& \qquad \Accept{\var{g}} \\
+& \destar \Vstr{prefix} \Vsym{lhs} \Vstr{suffix} \\
+& \derives \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vstr{suffix} \\
+& \destar \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \cat \boldRangeSizeDecr{w}{current}{w} \\
+\label{e:def-h-ambig-21d}
+& \destar \Vstr{prefix} \Vstr{rhs1} \cat \boldRangeSizeDecr{w}{overlap1}{w} \\
+\label{e:def-h-ambig-21e}
+& \destar \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\
+\label{e:def-h-ambig-21f}
+& \destar \Vterm{w},
+\end{align}
+and also such that
 \begin{gather}
-\label{e:def-h-ambig-10a}
-\text{\Vsym{lhs} is accessible}, \\
-\label{e:def-h-ambig-10b}
-\Vstr{rhs1} \Vstr{rhs2} \destar \boldRangeDecr{w}{origin}{dot} \\
-\label{e:def-h-ambig-10c}
-\Vstr{rhs2} \destar \boldRangeDecr{w}{overlap1}{dot} \\
-\label{e:def-h-ambig-10d}
-\Vstr{rhs2} \destar \boldRangeDecr{w}{overlap2}{dot} \\
-\label{e:def-h-ambig-10e}
-\text{$\var{overlap1} \neq \var{overlap2}$, and} \\
-\label{e:def-h-ambig-10f}
-\text{\Vstr{rhs3} is productive}.
+\label{e:def-h-ambig-30a}
+\Vstr{rhs2} \destar \boldRangeDecr{w}{overlap2}{dot}
+\;\; \text{and} \\
+\label{e:def-h-ambig-30b}
+\var{overlap1} \neq \var{overlap2}.
 \end{gather}
 
 \begin{sloppypar}
-\var{gaul} is called the \dfn{partitioned rule},
+\var{gallia} is called the \dfn{partitioned rule},
 \Vloc{orig} the \dfn{origin}, and
 \Vloc{dot} the \dfn{dot position}
 of the horizontal ambiguity.
@@ -2584,26 +2599,35 @@ then it is ambiguous.
 
 \begin{proof}
 We assume for a reductio that
-$[\Vcfg{g}, \Vstr{w}]$ is an ambiguous parse,
+$[\Vcfg{g}, \Vstr{w}]$ is an unambiguous parse,
 but with a horizontal ambiguity as stated in \Dfref{df:h-ambig}.
-Then the parse has the following right derivation
+Since the parse is unambiguous, we can write
+\[
+\Vstr{suffix} \destar \Vfrontier{suffix},
+\]
+where
+$\Vfrontier{suffix} \in \Term{\var{g}}^\ast$.
+Then we can rewrite
+\Eref{e:def-h-ambig-21a}--\Eref{e:def-h-ambig-21f}
+as the following right derivation
 \begin{align}
 \label{e:th-h-ambig-10-1-a}
 & \qquad \Accept{\var{g}} \\
 & \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vterm{suffix} \\
-& \xderives{R} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vterm{suffix} \\
+& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vfrontier{suffix} \\
+& \xderives{R} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vfrontier{suffix} \\
 & \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \cat \boldRangeSizeDecr{w}{current}{w} \\
 \label{e:th-h-ambig-10-1-d}
 & \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap1}{w} \\
 \label{e:th-h-ambig-10-1-e}
 & \xderives{R\ast} \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\
 \label{e:th-h-ambig-10-1-f}
-& \xderives{R\ast} \Vterm{w},
+& \xderives{R\ast} \Vterm{w}.
 \end{align}
-where $\Vterm{suffix} \in \Term{\var{g}}^\ast$.
-We have replaced the concatenation operator with the $\bigstar$ symbol
-at one point,
-for convenience in referring to that location in the following discussion.
+We have replaced the concatenation operator
+in \Eref{e:th-h-ambig-10-1-d}
+with the $\bigstar$ symbol
+for convenience in referring to that location.
 
 Since the parse is assumed to be unambiguous, the right derivation must be
 unique.
@@ -2616,10 +2640,10 @@ Therefore
 is a unique step of a unique derivation.
 
 Note that no assumption is made that any of
-\Vstr{prefix}, \Vstr{rhs1}, \Vstr{rhs2} and \Vstr{rhs3} contain
+\Vstr{prefix}, \Vstr{rhs1}, \Vstr{rhs2}, \Vstr{rhs3},
+and \Vstr{suffix} contain
 non-terminals.
-If they do not, the appropriate derivations are trivial and the
-appropriate sentential forms equal,
+If they do not, the derivations of terminal strings are trivial,
 and our claims about the presence
 and elimination of non-terminals are trivially or vacuously true.
 For example, if \Vstr{rhs1} contains no non-terminals,
@@ -2644,7 +2668,7 @@ to
 \begin{align}
 \label{e:th-h-ambig-10-2-a}
 & \qquad \Accept{\var{g}} \\
-& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vterm{suffix} \\
+& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vstr{suffix} \\
 \label{e:th-h-ambig-10-2-d}
 & \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap2}{w} \\
 \label{e:th-h-ambig-10-2-f}.
@@ -2657,9 +2681,10 @@ with no non-terminals to the right of $\bigstar$,
 but before the elimination of any non-terminals to the left of $\bigstar$,
 and, since they result from the same steps of identical derivations,
 the two sentential forms \Eref{e:th-h-ambig-10-1-d}
-and \Eref{e:th-h-ambig-10-2-d} should be identical.
+and \Eref{e:h-ambig-EIM-02}
+should be identical.
 But $\var{overlap1} \neq \var{overlap2}$
-\Eref{e:def-h-ambig-10e}
+\Eref{e:def-h-ambig-30b}
 and therefore
 \begin{equation}
 \label{e:th-h-ambig-50}
@@ -2872,12 +2897,16 @@ The EIM is \dfn{vertically ambiguous} if
 \Vloc{overlap1} = \Vloc{overlap2},
 \end{equation}
 and the EIM is
-\dfn{horizontally ambiguous} otherwise.
+\dfn{horizontally ambiguous} if
+\begin{equation}
+\label{e:h-ambig-EIM-03}
+\Vloc{overlap1} \neq \Vloc{overlap2}.
+\end{equation}
 \end{definition}
 
 \begin{theorem}
-If a parse has a horizontally ambiguous EIM,
-then it is horizontally ambiguous.
+If a partial parse has a horizontally ambiguous EIM,
+then its grammar is horizontally ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -2897,11 +2926,9 @@ From the definition of validity
 \Dfref{df:EIM-valid}
 for the Earley item
 \Eref{e:h-ambig-EIM-05},
-we have
-\Eref{e:def-h-ambig-10a}
-\Eref{e:def-h-ambig-10b}
-and
-\Eref{e:def-h-ambig-10f}.
+we have the accessibility and productivity
+of all the symbols involved
+in \Dfref{df:h-ambig-EIM}.
 From the validity of
 the EIM \Eref{e:h-ambig-EIM-10b}, we have
 \Eref{e:def-h-ambig-10c}
@@ -2909,8 +2936,8 @@ and from the validity of
 the EIM \Eref{e:h-ambig-EIM-20b}, we have
 \Eref{e:def-h-ambig-10d}
 We have \Eref{e:def-h-ambig-10e} from
-\Eref{e:h-ambig-EIM-02}.
-The show all the elements
+\Eref{e:h-ambig-EIM-03}.
+This shows all the elements
 in the definition of horizontal ambiguity \Dfref{df:h-ambig},
 and therefore a horizontally
 ambiguous EIM is also a horizontal ambiguity.
@@ -2962,6 +2989,35 @@ Leo\cite{Leo1991} intact.
 
 \section{Implementation}
 \label{s-implementation}
+
+\subsection{Unproductive symbols}
+
+Users using ``unicorns'' symbols
+might be concerned about the assumption for the
+theoretical results
+that \Marpa{}'s symbols are productive.
+Almost always,
+this restriction in the theory is made
+without loss of its relevance to practice.
+
+For example, in cases where 
+\Eref{e:EIM-valid-20d}
+in the definition of EIM validity
+is violated,
+the result would be that EIM's that were ``invalid'' 
+in a pedantic sense would be
+physically present in the Earley sets.
+That these pedantically invalid EIM's should affect correctness
+is, in fact,
+most likely exactly what the user intended.
+The effect of ``unicorns'' on time and space complexity tends
+to be insignificant in practical use.
+
+Users who are using ``unicorns'',
+who are concerned about the theoretical results,
+and who wish to be conservative,
+should consider evaluate their grammar treating
+``unicorns'' as if they were productive symbols.
 
 \subsection{Earley set indexing}
 \label{s-es-indexing}
