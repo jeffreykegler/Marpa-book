@@ -784,8 +784,6 @@ and unless otherwise specified,
 & \text{$\var{str}_\type{STR}$ will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$, and} \\
 & \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}. \\
 \end{align*}
-A \dfn{parse} is a duple $[\Vcfg{g}, \Vstr{w}]$ such that
-$\Vstr{w} \in \Term{\var{g}}^\ast$.
 
 A grammar describes a rewriting system.
 We consider
@@ -921,6 +919,12 @@ is
 The \dfn{language} of the grammar \Vcfg{g},
 \myL{\var{g}},
 is $\myL{\var{g}, \Accept{\var{g}}}$.
+
+A \dfn{parse} is a duple $[\Vcfg{g}, \Vterm{w}]$ such that
+$\Vterm{w} \in \myL{\var{g}}$.
+A \dfn{partial parse} is a duple $[\Vcfg{g}, \Vterm{prefix}]$ such that
+for some \Vterm{lookahead},
+$[\Vcfg{g}, \Vterm{prefix}\Vterm{lookahead}]$ is a parse.
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -2740,6 +2744,7 @@ A \dfn{vertical ambiguity} is a 4-tuple,
 such that
 \begin{gather}
 \var{r1} = [ \var{lhs} \de \Vstr{rhs1} ], \\
+\label{e:def-v-ambig-15b}
 \var{r2} = [ \var{lhs} \de \Vstr{rhs2} ], \\
 \var{rhs1} \neq \var{rhs2}, \\
 \label{e:def-v-ambig-15d}
@@ -2756,8 +2761,8 @@ and
 \label{e:def-v-ambig-20d}
 & \destar \;
 \begin{aligned}
-\Vstr{prefix} \cat \boldRangeDecr{w}{origin}{dot} \\
-\qquad \cat \boldRangeSizeDecr{w}{dot}{w}
+& \Vstr{prefix} \cat \boldRangeDecr{w}{origin}{dot} \\
+& \qquad \cat \boldRangeSizeDecr{w}{dot}{w}
 \end{aligned}
 \\
 \label{e:def-v-ambig-20e}
@@ -2829,8 +2834,7 @@ be identical to the derivation of
 \Eref{e:th-v-ambig-10-1-a};
 \item
 using the rule
-$[ \var{lhs} \de \Vstr{rhs2} ]$
-in \Eref{e:def-v-ambig-10a}
+\Eref{e:def-v-ambig-15b}
 to derive
 \Eref{e:th-v-ambig-10-2-c};
 \item
@@ -2846,25 +2850,47 @@ be identical to the derivation of
 \Eref{e:th-v-ambig-10-1-d};
 \end{itemize}
 
-Since the parse is assumed to be unambiguous,
+Since \var{p} is assumed to be unambiguous,
 the two right derivations
 \Eref{e:th-v-ambig-10-1-a}--\Eref{e:th-v-ambig-10-1-e}
 and
 \Eref{e:th-v-ambig-10-2-a}--\Eref{e:th-v-ambig-10-2-e}
 must be identical,
-and therefore the sentential forms at
+and therefore must be a sequence of identical sentential forms.
+
 \Eref{e:th-v-ambig-10-1-c} and
 \Eref{e:th-v-ambig-10-2-c}
-must be identical.
+must be sentential forms in the same position of their
+identical derivations.
+We know this
+because both result from the production of the \Vsym{lhs}
+the first time that \Vsym{lhs} is the rightmost non-terminal and
+the underived part of sentential form is $\Vstr{prefix}\Vsym{lhs}$.
+We know that this first time is the only time because otherwise
+\[
+\Vstr{prefix}\Vsym{lhs} \deplus \Vstr{prefix}\Vsym{lhs},
+\]
+in which case \var{p} contains a cycle,
+which is contrary to assumption for this case.
+Therefore
+\Eref{e:th-v-ambig-10-1-c} and
+\Eref{e:th-v-ambig-10-2-c} are sentential forms after the
+same step of identical derivations,
+and are therefore equal.
+
 But from the definition of vertical ambiguity,
 we have $\var{rhs1} \neq \var{rhs2}$,
 so that
 the sentential forms at
 \Eref{e:th-v-ambig-10-1-c} and
 \Eref{e:th-v-ambig-10-2-c}
-are not identical.
+are not equal.
 Therefore the two right derivations differ,
-and the parse is ambiguous.
+and \var{p} is ambiguous,
+which shows the reductio.
+Since \var{p} is ambiguous, its grammar, \Vcfg{g} must
+also be ambiguous.
+This shows the theorem.
 \end{proof}
 
 \begin{definition}
@@ -2878,8 +2904,9 @@ An EIM is \dfn{ambiguous} if it is of the form
 \right] @ \Vloc{dot}
 \end{equation}
 \Eref{e:h-ambig-EIM-05}
-has two link pairs.
-The predecessor in the first link pair is the valid EIM
+and has two valid link pairs.
+Without loss of generality,
+the predecessor in the first link pair is
 the valid EIM
 \begin{equation}
 \label{e:h-ambig-EIM-10a}
@@ -2897,7 +2924,8 @@ and its cause is the valid EIM
   [ \Vsym{rhs2} \de \Vstr{children1} \mydot ], \var{overlap1}
 \right] @ \Vloc{dot}.
 \end{equation}
-The predecessor in the second link pair is the valid EIM
+Also without loss of generality,
+the predecessor in the second link pair is the valid EIM
 \begin{equation}
 \label{e:h-ambig-EIM-20a}
 \left[
