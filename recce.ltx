@@ -2604,10 +2604,12 @@ Note that if $\Vstr{rhs1} = \epsilon$, that
 $\var{overlap1} = \var{overlap2}$.
 Among other things, this implies that a unit rule
 cannot be the rule of a horizontally ambiguity.
-
+A grammar is \dfn{horizontally ambiguous} if and only if it has a
+horizontally ambiguous parse.
 \end{definition}
 
 \begin{theorem}
+\label{th:h-ambig_g}
 If a parse has a horizontal ambiguity,
 then it and its grammar are ambiguous.
 \end{theorem}
@@ -2777,9 +2779,12 @@ and
 of the vertical ambiguity,
 \Vloc{orig} is its \dfn{origin}, and
 \Vloc{dot} is its \dfn{dot position}.
+A grammar is \dfn{vertically ambiguous} if and only if it has a
+vertically ambiguous parse.
 \end{definition}
 
 \begin{theorem}
+\label{th:v-ambig_g}
 If a parse has a vertical ambiguity,
 then it is ambiguous.
 \end{theorem}
@@ -2959,6 +2964,7 @@ and the EIM is
 \end{definition}
 
 \begin{theorem}
+\label{th:h-EIM-g-ambig}
 If a partial parse has a horizontally ambiguous EIM,
 then its grammar is horizontally ambiguous.
 \end{theorem}
@@ -3184,16 +3190,34 @@ we have
 \Eref{e:def-v-ambig-15c}.
 \end{proof}
 
-\TODO{}
-\TODO{TODO}
-
 \begin{theorem}
 If a partial parse has an ambiguous EIM,
 then its grammar is ambiguous.
 \end{theorem}
 
 \begin{proof}
-\TODO{TODO}
+From \Dfref{df:ambig-EIM}, we see that an ambiguous EIM
+is either a horizontally ambiguous EIM, or
+a vertically ambiguous EIM.
+We proceed by cases.
+
+If the ambiguous EIM is horizontally ambiguous then
+by \Thref{th:h-EIM-g-ambig}, the grammar is horizontally ambiguous.
+If a grammar is horizontally ambiguous then by
+\Dfref{df:h-ambig}
+it has a horizontally
+ambiguous parse.
+By \Thref{th:h-ambig_g},
+a grammar with a horizontal ambiguity is ambiguous.
+
+If the ambiguous EIM is vertically ambiguous then
+by \Thref{th:v-EIM-g-ambig}, the grammar is vertically ambiguous.
+If a grammar is horizontally ambiguous then by
+\Dfref{df:v-ambig}
+it has a vertically
+ambiguous parse.
+By \Thref{th:v-ambig_g},
+a grammar with a vertical ambiguity is ambiguous.
 \end{proof}
 
 \section{Marpa Changes}
