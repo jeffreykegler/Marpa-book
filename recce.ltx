@@ -120,6 +120,7 @@
 \newcommand{\Vstr}[1]{\str{\var{#1}}}
 \newcommand{\Vstrset}[1]{\Tvarset{#1}{STR}}
 \newcommand{\Vterm}[1]{\str{\boldvar{#1}}}
+\newcommand{\Vtermset}[1]{\Tvarset{\boldvar{#1}}{TERM}}
 \newcommand{\Vsym}[1]{\sym{\var{#1}}}
 \newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
 \newcommand{\Vtoken}[1]{\Tvar{#1}{TOKEN}}
@@ -829,7 +830,7 @@ to writing $\Vstr{x} \derives \Vstr{y}$.
 By convention,
 every string derives itself in zero steps.
 \begin{equation*}
-\Vstr{x} = \Vstr{y} \implies \Vstr{x} \xderives{0} \Vstr{x}.
+\Vstr{x} = \Vstr{y} \equiv \Vstr{x} \xderives{0} \Vstr{x}.
 \end{equation*}
 A derivation of zero steps is called a
 \dfn{trivial derivation}.
@@ -877,50 +878,69 @@ so that, for example,
 states that that \Vstr{x} right derives \Vstr{y} in one or more steps;
 and
 \begin{equation*}
-\Vstr{x} \xderives{R(\var{k}} \Vstr{y}
+\Vstr{x} \xderives{R(\var{k})} \Vstr{y}
 \end{equation*}
-states that that \Vstr{x} right derives \Vstr{y} in \var{k} steps;
+states that that \Vstr{x} right derives \Vstr{y} in \var{k} steps.
 
+Let \Vcfg{g} be a CFG.
 A \dfn{sentential form} is a string which can be derived from the start
 symbol, \Accept{\Vcfg{g}}.
 If the sentential form \Vterm{sf} is a string of terminals,
 then \Vterm{sf} is a \dfn{sentence} of \Vcfg{g}.
-When a string in double-angle-bracket form
-is a string of terminals,
-we will write it in boldface.
-Use of boldface for terminals is intended as a reading aid,
-and is not declarative.
-That we are justified in treating the elements of \Vterm{sf} as terminals must
-be shown elsewhere.
 
-Let \Vcfg{g} be a CFG and let $\Vstr{a} \in \Vocab{\var{g}}^\ast$.
+Let $\Vstr{a} \in \Vocab{\var{g}}^\ast$.
 The \dfn{language} of \var{g} and \Vstr{a},
 is
 \begin{equation}
 \label{e-language}
-\myL{\Vcfg{g}, \Vstr{a}},
+\myL{\Vcfg{g}, \Vstr{a}}
 \defined
 \set{
 \quad
 \begin{aligned}
-& \Vstr{sentence} \quad \text{such that} \\
+& \Vterm{sentence} \quad \text{such that} \\
 & \qquad \begin{aligned}
-  & \Vstr{a} \destar \Vstr{sentence} \quad \text{and} \\
-  & \Vstr{sentence} \in \Term{\Vcfg{g}}^\ast.
+  & \Vstr{a} \destar \Vterm{sentence} \\
+  & \land \Vterm{sentence} \in \Term{\Vcfg{g}}^\ast.
   \end{aligned}
 \end{aligned}
 \quad
 }
 \end{equation}
-The \dfn{language} of the grammar \Vcfg{g},
-\myL{\var{g}},
-is $\myL{\var{g}, \Accept{\var{g}}}$.
+The \dfn{language} of the grammar \Vcfg{g} is its set
+of sentential forms:
+\[
+\myL{\var{g}} \defined \myL{\var{g}, \Accept{\var{g}}}.
+\]
 
-A \dfn{parse} is a duple $[\Vcfg{g}, \Vterm{w}]$ such that
+When a string in double-angle-bracket form
+is a string of terminals,
+we will write it in boldface.
+Use of boldface for a terminal \Vterm{term} is intended as a reading aid ---
+it implies
+$\Vterm{term} \in \Vocab{\var{g}}^\ast$,
+but not that
+$\Vterm{term} \in \Term{\var{g}}^\ast$.
+That the string is composed entirely of terminals must be separately justified by assumption,
+implication or explicit claim.
+
+A \dfn{full parse} is a duple $[\Vcfg{g}, \Vterm{w}]$ such that
 $\Vterm{w} \in \myL{\var{g}}$.
 A \dfn{partial parse} is a duple $[\Vcfg{g}, \Vterm{prefix}]$ such that
-for some \Vterm{lookahead},
-$[\Vcfg{g}, \Vterm{prefix}\Vterm{lookahead}]$ is a parse.
+\[
+\left[\Vcfg{g}, \Vterm{prefix}\Vterm{lookahead}\right]
+\]
+is a parse
+for some \Vterm{lookahead}.
+A partial parse,
+$[\Vcfg{g}, \Vterm{prefix}]$
+is \dfn{consistent} with a full parse $[\Vcfg{g}, \Vterm{w}]$
+if and only if
+\[
+\exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
+\]
+When no confusion will arise, a full parse will often be called,
+simply, a \dfn{parse}.
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -960,86 +980,13 @@ and
 \rbrace}.
 \end{equation*}
 
-\section{External grammars}
-\label{s-EXTs}
-
-\subsection{Cycles}
-
-An \dfn{external grammar} (type \type{EXT}) is cycle-free CFG.
-A CFG is \dfn{cycle-free} if it contains no cycles.
-A \dfn{cycle string}, or \dfn{cycle} is a sentential form of length 1
-which non-trivially derives itself.
-Intuitively, a cycle is the parsing equivalent of an infinite loop.
-
-If \Vstr{cycle} is a cycle,
-then $\size{\Vstr{cycle}} = 1$,
-so that $\Vstr{cycle} = \Vsym{cycle}$.
-The symbol \Vsym{cycle} is a \dfn{cycle symbol}.
-A \dfn{cycle derivation} is any derivation of the form
-\begin{equation*}
-\label{eq:cycle}
- \Vsym{cycle} \deplus \Vsym{cycle}.
-\end{equation*}
-Cycle symbols and cycle derivations are also often called
-simply ``cycles''.
-
-Earlier implementations of Marpa have supported cycles,
-but the current implementation of Marpa does not.
-When the current implementation finds a cycle in a grammar,
-it print a message describing the cycle and throws
-a fatal error.
-This seems to be exactly the behavior users desire.
-
-Cycles are recursions but most recursions
-are not cycles.
-In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
-That is, \Vsym{recurse} is recursive if and only if
-\begin{equation*}
- \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
-\end{equation*}
-\Vsym{recurse} is a cycle only if
-both \Vstr{pre} and \Vstr{post} are the null string:
-\begin{equation*}
- \Vstr{pre} = \Vstr{post} = \epsilon.
-\end{equation*}
-
-There is no indication that cycles are of practical use.
-Nor does the theoretical literature suggest potential uses for
-them.
-Support for cycles did require complicated extra code,
-and removing the support of cycles seems to be cost-free.
-
-When Marpa did support cycles,
-it did so by cutting the cycle short at cycle depth 1.
-Intuitively, the cycle depth is the number of times the cycle
-string returns to itself.
-More formally, if \Vstrset{d} is the derivation sequence
-of the cycle derivation
-$\Vsym{cycle} \xderives{\var{n}} \Vsym{cycle}$
-then the cycle depth is
-\begin{equation}
-\left| \;
-\left\lbrace \;
-\var{i}
-\quad \middle| \quad
-\begin{gathered}
-1 \le \var{i} \le \var{n} \quad \text{and} \; \\
-\var{d}[\var{i}] = \Vsym{cycle}
-\end{gathered}
-\; \right\rbrace
-\; \right|
-\end{equation}
-It follows that
-a cycle of cycle depth 1 begins and ends with the
-cycle string, but does not derive the cycle string
-in any of its intermediate steps.
-
-\subsection{LR Grammars}
+\section{LR Grammars}
 
 \begin{definition}
 Let \Vstr{sf} be a sentential form of \Vcfg{g}.
-A \dfn{handle} is an ordered pair $[\Vrule{r}, \var{i}]$ such
-that
+A \dfn{handle} of \Vstr{sf} is an ordered pair $[\Vrule{r}, \var{i}]$ such
+that,
+for some $\Vterm{lookahead} \in \Term{\var{g}}^\ast$,
 \begin{gather}
 0 \le \var{i} \le \size{\Vstr{sf}}, \\
 \begin{aligned}
@@ -1052,6 +999,34 @@ that
 \var{i} = \size{\Vstr{stack}\Vstr{rhs}}.
 \end{gather}
 \end{definition}
+
+Let $\Vtermset{subsentences} = \Term{\var{g}}^\ast$.
+In this paper, a \dfn{partition}, call it $\pi$,
+is a set of non-empty subsets of \Vtermset{subsentences},
+such that the disjoint union of also \Vtermset{subsentences} is also $\pi$.
+That is, $\pi$ is some
+\begin{equation}
+\set{ \Vtermset{x} : \var{x} \in \var{subsentences} }
+\end{equation}
+such that
+\begin{gather}
+(\forall \var{x} \in \pi) \; : \; \var{x} \neq \emptyset, \\
+\var{subsentences} = \bigcup_{\Vtermset{X}\in\pi} \Vtermset{X},
+\end{gather}
+and
+\begin{gather}
+(\forall \Vtermset{x}, \Vtermset{y} \in \pi) \; : \; \var{x} \cap \var{y} = \emptyset \lor \var{x} = \var{y}
+\end{gather}
+Note that in this paper $\pi$ will usually, but not necessarily,
+be of finite cardinality.
+
+We call the elements of $\pi$, \dfn{cell}.
+When two subsentences, \Vterm{ss1} and \Vterm{ss2},
+are in the same block of $\pi$,
+we say that \var{ss1} and \var{ss2} are ``equivalent modulo $\pi$'', or
+\[
+\var{ss1} \equiv \var{ss2} \pmod\pi
+\]
 
 Informally, an LR($\pi$) grammar is a grammar where two
 sentential forms that differ only in their lookaheads
@@ -1149,6 +1124,75 @@ we have
 \begin{proof}
 Directly from \Dfref{df:LR}.
 \end{proof}
+
+\section{External grammars}
+\label{s-EXTs}
+
+\subsection{Cycles}
+
+An \dfn{external grammar} (type \type{EXT}) is cycle-free CFG.
+A CFG is \dfn{cycle-free} if it contains no cycles.
+A \dfn{cycle string}, or \dfn{cycle} is a sentential form
+which non-trivially derives itself.
+Intuitively, a cycle is the parsing equivalent of an infinite loop.
+A \dfn{cycle derivation} is any derivation of the form
+\begin{equation*}
+\label{eq:cycle}
+ \Vstr{cycle} \deplus \Vstr{cycle}.
+\end{equation*}
+Cycle strings and cycle derivations are also often called
+simply ``cycles''.
+
+Cycles are recursions but most recursions
+are not cycles.
+In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
+That is, \Vsym{recurse} is recursive if and only if
+\begin{equation*}
+ \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
+\end{equation*}
+\Vsym{recurse} is a cycle only if
+both \Vstr{pre} and \Vstr{post} are the null string:
+\begin{equation*}
+ \Vstr{pre} = \Vstr{post} = \epsilon.
+\end{equation*}
+
+Earlier implementations of Marpa have supported cycles,
+but the current implementation of Marpa does not.
+When the current implementation finds a cycle in a grammar,
+it print a message describing the cycle and throws
+a fatal error.
+This seems to be the behavior users desire.
+
+There is no indication that cycles are of practical use.
+Nor does the theoretical literature suggest potential uses for
+them.
+Support for cycles did require complicated extra code,
+and removing the support of cycles seems to be cost-free.
+
+When Marpa did support cycles,
+it did so by cutting the cycle short at cycle depth 1.
+Intuitively, the cycle depth is the number of times the cycle
+string returns to itself.
+More formally, if \Vstrset{d} is the derivation sequence
+of the cycle derivation
+$\Vstr{cycle} \xderives{\var{n}} \Vstr{cycle}$
+then the cycle depth is
+\begin{equation}
+\left| \;
+\left\lbrace \;
+\var{i}
+\quad \middle| \quad
+\begin{gathered}
+0 \le \var{i} \le \var{n} \quad \text{and} \; \\
+\var{d}[\var{i}] = \Vstr{cycle}
+\end{gathered}
+\; \right\rbrace
+\; \right|
+\end{equation}
+It follows that
+a cycle of cycle depth 1 begins and ends with the
+cycle string, but does not derive the cycle string
+in any of its intermediate steps.
 
 \section{Improper context free grammars}
 \label{s-improper}
