@@ -1008,7 +1008,7 @@ and where the elements of $\pi$ ``cover'' \var{phrases} in the sense that
 their union is equal to \var{phrases}.
 That is,
 \begin{gather}
-\pi \subseteq 2^\var{phrases}, \\
+\pi \subseteq \mathcal{P}(\var{phrases}), \\
 (\forall \var{x} \in \pi) \; : \; \var{x} \neq \emptyset, \\
 \var{phrases} = \bigcup_{\Vtermset{X}\in\pi} \Vtermset{X},
 \end{gather}
@@ -1048,7 +1048,7 @@ More formally,
 & = \Vstr{behind}\Vstr{lookahead2},
 \end{aligned}
 \\
-\Vstr{lookahead1} \equiv \Vstr{lookahead2} ( \text{mod $\pi$} ),
+\Vstr{lookahead1} \equiv \Vstr{lookahead2} \pmod \pi,
 \end{align}
 
 We say that an LR($\pi$) grammar is LR-regular (LRR)
@@ -1081,26 +1081,33 @@ if and only if
 \end{gathered}
 \end{equation}
 
+Every LR($\pi$) grammar is unambiguous.
+If a grammar is unambiguous then it is LR($\pi$)
+for the partition of infinite cardinality,
+\[
+\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}.
+\]
+
 \end{definition}
 
-This theorem%
-\footnote{
-The statement of the theorem follows \cite[p. 70]{Culik1973}.
-}
+\Thref{th:LR}
 presents \Dfref{df:LR}
 in a way that is easier to apply.
 \begin{theorem}
 \label{th:LR}
+\footnote{
+The statement of the theorem follows \cite[p. 70]{Culik1973}.
+}%
 A grammar, \Vcfg{g}, is LR($\pi$) for a partition $\pi$,
 if, given
 \begin{gather}
 \begin{aligned}
-\Accept{\cfg{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
+\Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
 & \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead1},
 \end{aligned}
 \\
 \begin{aligned}
-\Accept{\cfg{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead3} \\
+\Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead3} \\
 & \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead2},
 \end{aligned}
 \;\; \text{and}
