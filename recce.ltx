@@ -251,8 +251,7 @@ in the first version of this paper.
 While the presentation in this paper is theoretical,
 the approach is practical.
 The Marpa::R2 implementation has been widely available
-for some time,
-and has seen considerable use.
+and seen considerable use.
 
 In this paper,
 internal references will be of the form
@@ -284,6 +283,7 @@ inside section \ref{loc-brick-depth}.
 Where the page reference would be to the current page,
 it is omitted.
 
+% TODO Revise once chapters are settled
 \Sref{s-features}
 describes the important features of Marpa
 and
@@ -313,8 +313,11 @@ Finally,
 section \Sref{s-input}
 generalizes Marpa's input model.
 
-A full description of Marpa's relationship to
-prior work in parsing can be found in \cite{Timeline}.
+We assume familiarity with the theory of parsing,
+as well as Earley's algorithm.
+\cite{Timeline}
+contains a full description of Marpa's relationship to
+prior work.
 Readers may find it helpful to read
 \cite{Timeline}
 before this paper.
@@ -367,7 +370,7 @@ its
 information about the state of the parse so far.
 This information is
 in useful form,
-and can be accessed efficiently.
+and can be accessed efficiently during the parse.
 
 \subsection{Recoverable from read errors}
 When
@@ -409,7 +412,7 @@ and what the alternatives were.
 
 \subsection{Event driven parsing}
 As implemented,
-Marpa::R2~\cite{Marpa-R2}
+Marpa::R2\cite{Marpa-R2}
 allows the user to define ``events''.
 Events can be defined that trigger when a specified rule is complete,
 when a specified rule is predicted,
@@ -541,18 +544,17 @@ to be specified for each RHS.
 Marpa::R2's precedenced rules are implemented as
 a true second order language.
 The SLIF representation of the precedenced rule
-is parsed to create a BNF grammar which is equivalent,
-and which has the desired precedence.
-Essentially,
-the SLIF does a standard parsing textbook transformation.
-The transformation starts
-with a set of rules,
-each of which has a precedence and
-an associativity specified.
-The result of the transformation is a set of
-rules in pure BNF.
-The SLIF's advantage is that it is powered by Marpa,
-and therefore the SLIF can ensure that the grammar
+is parsed to auto-generate a pure BNF grammar which is equivalent,
+and which has the desired precedence and associativity.
+
+In creating the auto-generated BNF grammar,
+the SLIF does a standard parsing textbook transformation,
+translating explicitly specified precedence and associativity
+into pure BNF which implicitly implements
+that precedence and associativity
+Since the SLIF is powered by Marpa, which is
+linear for LRR,
+the SLIF can easily ensure that the grammar
 that it auto-generates will
 be parsed in linear time.
 
@@ -579,9 +581,6 @@ syntax falls within the limits of LALR.
 
 \section{Preliminaries}
 \label{s-preliminaries}
-
-We assume familiarity with the theory of parsing,
-as well as Earley's algorithm.
 
 This paper will
 use subscripts to indicate commonly occurring types,
@@ -616,8 +615,7 @@ Subscripts may be omitted when the type
 is obvious from the context.
 Symbols and strings
 have an alternate type notation,
-which uses angle bracket as an alternative to
-the subscripting.
+which uses angle brackets.
 Type names are often used in the text
 as a convenient way to refer to
 their type.
@@ -662,13 +660,13 @@ $\var{j} < \var{i}$ then
 \]
 In this case, the values of \var{i} and \var{j} may be negative.
 
-Let \Vsymset{vocab} be a non-empty set of symbols.
+Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
 Let \Tvar{x}{SYM} be a symbol.
 More commonly we write
 \Tvar{x}{SYM} as \Vsym{x}.
 
-let $\var{vocab}^\ast$ be the set of all strings
+let $\var{alphabet}^\ast$ be the set of all strings
 (type \type{STR}) formed
 from those symbols.
 Let \Tvar{s}{STR} be a string.
@@ -676,11 +674,11 @@ More commonly we write
 \Tvar{s}{STR} as \Vstr{s}.
 \size{\Vstr{s}} is the length of \Vstr{s},
 counted in symbols.
-Let $\var{vocab}^+$ be
+Let $\var{alphabet}^+$ be
 \begin{equation*}
 \left\{ \Vstr{x}
 \; \middle| \;
-\Vstr{x} \in \var{vocab}^\ast
+\Vstr{x} \in \var{alphabet}^\ast
 \; \land \;
 \Vsize{\Vstr{x}} > 0
 \right\}.
@@ -689,8 +687,7 @@ Let $\var{vocab}^+$ be
 Typing is not strict.
 For example,
 we will move freely between strings, and their equivalent sequences of symbols.
-As another example,
-when it is convenient,
+When it is convenient,
 we will treat strings of length 1 as symbols,
 and symbols as strings of length 1.
 
@@ -708,24 +705,21 @@ as well-defined as any concept in mathematics.
 \section{Context-free grammars}
 \label{s-CFGs}
 
-A \dfn{context free grammar} is type \type{CFG}.
-Let
+A \dfn{context free grammar} (CFG) is a 4-tuple,
 \begin{equation}
-\var{g} = [\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}]
-\end{equation}
-be a 4-tuple.
-\var{g} is a CFG, \Vcfg{g},
-if and only if
-\begin{gather*}
-\Vsymset{nt} \cup \Vsymset{term} = \emptyset, \quad \text{and} \\
-\Vsym{accept} \in \Vsymset{nt}, \quad \text{and} \\
+\begin{gathered}
+\text{$[\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}]$ such that} \\
+\Vsymset{nt} \cup \Vsymset{term} = \emptyset, \\
+\text{$\Vsym{accept} \in \Vsymset{nt}$, and} \\
 \text{\Vruleset{rules} is a set of elements of type \type{RULE}.}
-\end{gather*}
+\end{gathered}
+\end{equation}
 We will define type \type{RULE} shortly.
+Context-free grammars have the type CFG.
+
 For convenience,
 for a CFG, \Vcfg{g},
 we write
-\Vcfg{g} (type \type{CFG}) is a 4-tuple
 \begin{equation*}
 \begin{alignedat}{3}
 & \NT{\Vcfg{g}} && \defined && \quad \Vsymset{nt}, \\
@@ -770,19 +764,22 @@ so that
 \begin{equation*}
 \size{\Vrule{r}} = \size{\RHS{\var{r}}}.
 \end{equation*}
-If $\size{Vrule{r}} = j$, then \Vrule{r}
+If $\size{\Vrule{r}} = 0$, then \Vrule{r}
 is an \dfn{empty rule}.
-If $\size{Vrule{r}} = 1$, then \Vrule{r}
+If $\size{\Vrule{r}} = 1$, then \Vrule{r}
 is a \dfn{unit rule}.
 
 Where the choice of \Vcfg{g} is clear in context,
 and unless otherwise specified,
+use of the types \type{SYM}, \type{STR} and \type{RULE} will bind
+their variables.
+Specifically,
 \begin{align*}
 & \text{\Vsym{sym} will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
 & \text{$\var{sym}_\type{SYM}$ will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
 & \text{\Vstr{str} will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$}, \\
 & \text{$\var{str}_\type{STR}$ will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$, and} \\
-& \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}. \\
+& \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}.
 \end{align*}
 
 A grammar describes a rewriting system.
@@ -791,7 +788,7 @@ We consider
 \label{e-rewrite-step}
 \Vstr{prefix}\Vsym{lhs}\Vstr{suffix} \derives \Vstr{prefix}\Vstr{rhs}\Vstr{suffix}
 \end{equation}
-a valid rewrite step of \Vcfg{f} if and only if
+a valid rewrite step of \Vcfg{g} if and only if
 \begin{gather*}
 \Vstr{prefix} \in \Vocab{\Vcfg{g}}, \\
 \Vstr{suffix} \in \Vocab{\Vcfg{g}}, \quad \text{and} \\
@@ -812,9 +809,8 @@ and a rewrite step that is part of a derivation is called
 a \dfn{derivation step}.
 A derivation is a \dfn{right derviation} if and only if
 all of its rewrite steps are right rewrite steps.
-A rewrite step that is part of a right derivation is a
-right rewrite step.
 
+% TODO: Do I need the definition of \dfn{derivation sequence}.
 The sequence of strings in a derivation, its sequence of strings
 is called its \dfn{derivation sequence}.
 The derivation sequence of \Eref{e-derivation} is
@@ -2643,7 +2639,7 @@ as the following right derivation
 & \xderives{R} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vfrontier{suffix} \\
 & \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \cat \boldRangeSizeDecr{w}{current}{w} \\
 \label{e:th-h-ambig-10-1-d}
-& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap1}{w} \\
+& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\spadesuit} \boldRangeSizeDecr{w}{overlap1}{w} \\
 \label{e:th-h-ambig-10-1-e}
 & \xderives{R\ast} \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\
 \label{e:th-h-ambig-10-1-f}
@@ -2651,15 +2647,15 @@ as the following right derivation
 \end{align}
 We have replaced the concatenation operator
 in \Eref{e:th-h-ambig-10-1-d}
-with the $\bigstar$ symbol
+with the $\spadesuit$ symbol
 for convenience in referring to that location.
 
 Since the parse is assumed to be unambiguous, the right derivation must be
 unique.
 The step which derives \Eref{e:th-h-ambig-10-1-d} in unique in its derivation
 as the first to produce a sentential form
-with no non-terminals to the right of $\bigstar$,
-but before the elimination of any non-terminals to the left of $\bigstar$.
+with no non-terminals to the right of $\spadesuit$,
+but before the elimination of any non-terminals to the left of $\spadesuit$.
 Therefore
 \Eref{e:th-h-ambig-10-1-d}
 is a unique step of a unique derivation.
@@ -2695,15 +2691,15 @@ to
 & \qquad \Accept{\var{g}} \\
 & \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vstr{suffix} \\
 \label{e:th-h-ambig-10-2-d}
-& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap2}{w} \\
+& \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \mathop{\spadesuit} \boldRangeSizeDecr{w}{overlap2}{w} \\
 \label{e:th-h-ambig-10-2-f}
 & \xderives{R\ast} \Vterm{w}.
 \end{align}
 The step which derives
 the sentential form of \Eref{e:th-h-ambig-10-2-d}
 also the first to produce a sentential form
-with no non-terminals to the right of $\bigstar$,
-but before the elimination of any non-terminals to the left of $\bigstar$ and,
+with no non-terminals to the right of $\spadesuit$,
+but before the elimination of any non-terminals to the left of $\spadesuit$ and,
 since they result from the same steps of identical derivations,
 the two sentential forms \Eref{e:th-h-ambig-10-1-d}
 and \Eref{e:th-h-ambig-10-2-d}
@@ -2714,8 +2710,8 @@ and therefore
 \begin{equation}
 \label{e:th-h-ambig-50}
 \begin{gathered}
-\Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap1}{w} \\
-\neq \Vstr{prefix} \Vstr{rhs1} \mathop{\bigstar} \boldRangeSizeDecr{w}{overlap2}{w}
+\Vstr{prefix} \Vstr{rhs1} \mathop{\spadesuit} \boldRangeSizeDecr{w}{overlap1}{w} \\
+\neq \Vstr{prefix} \Vstr{rhs1} \mathop{\spadesuit} \boldRangeSizeDecr{w}{overlap2}{w}
 \end{gathered}
 \end{equation}
 From
