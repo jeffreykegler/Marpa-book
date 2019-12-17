@@ -53,6 +53,7 @@
 \newcommand{\subtract}{\,-\,}
 
 \newcommand{\var}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\varprime}[2]{\ensuremath{\texttt{#1}#2}}
 \newcommand{\boldvar}[1]{\ensuremath{\textbf{#1}}}
 
 \newcommand{\cfg}{CFG}
@@ -1442,9 +1443,9 @@ in section \Sref{semantics-safe}.
 Let \Vint{g} be a Marpa internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
 There must be
-a dedicated acceptance rule for \Vint{g},
+a dedicated \dfn{accept rule} for \Vint{g},
 \begin{gather}
-\label{e-acceptance_rule}
+\label{e-accept-rule}
 \Vrule{accept} = [\Vsym{accept} \de \Vsym{top}], \\
 \intertext{such that}
 \Vsym{top} \in \NT{\Vint{g}}, \\
@@ -1454,7 +1455,7 @@ a dedicated acceptance rule for \Vint{g},
 \text{and} \quad \Vsym{accept} \notin \RHS{\Vrule{r}}.
 \end{gather}
 
-The dedicated acceptance rule is also called
+The dedicated accept rule is also called
 the \dfn{augment rule}.
 The semantics for the augment rule are simple ---
 the semantics of \Vsym{top} are passed up to
@@ -1465,8 +1466,8 @@ In the Marpa implementation,
 the general method
 described in section \Sref{semantics-safe}
 for dealing with the semantics of rewritten rules
-is not applied to the augmented rule.
-Instead, the augmented rule is
+is not applied to the accept rule.
+Instead, the accept rule is
 dealt with as a special case.
 
 \subsection{Eliminating proper nullables}
@@ -1493,9 +1494,25 @@ of nulling and non-nullable symbols are accounted for.
 The rewrite in~\cite{AH2002} was similar, but did not do the Chomsky-style
 rewrite before replacing the proper nullables.
 As a result the number of rules in the post-rewrite grammar of \cite{AH2002}
-could be an exponential function of the rule count
-in the pre-rewrite grammar of \cite{AH2002}.
-In our version, the worst case growth in the number of rules is linear.
+could be \order{e^\ell}, where $\ell$ is the maximum length of a rule in the
+the pre-rewrite grammar of \cite{AH2002},
+\[
+\ell = \max\left(\set{ \Vsize{r} : \Vrule{r} \in \Rules{\Vext{pre-rewrite}} }\right).
+\]
+In our version, the worst case growth in the number of rules is \order{\ell}.
+
+In traditional complexity terms,
+because $\ell$ is a constant which
+depends on the grammar, and often a very reasonable one,
+minimizing the rule count in terms of $\ell$ does not
+appear to be a important consideration.
+In practice, however, languages and language statements which have many optional clauses are important.
+The SELECT statement of SQL is one example.
+A straight-forward BNF representation of the syntax of a statement
+with many optional clauses has many proper nullables on the RHS,
+so that, in these cases,
+going exponential on $\ell$ has a cost
+which it is worth some trouble to avoid.
 
 \subsection{Removing nulling symbols}
 \label{s-removing-nulling-symbols}
@@ -1506,26 +1523,27 @@ all the nullable symbols in the grammar are also
 nulling symbols.
 Note that, if \Vext{g} is an external grammar,
 and
-if \var{g'} is \Vext{g}
+if \varprime{g}{'} is \Vext{g}
 revised to eliminate
 all nulling symbols,
 that
-the language of the two grammars is the same: $\myL{\Vext{g}} = \myL{\var{g'}}$.
+the language of the two grammars is the same: $\myL{\Vext{g}} = \myL{\varprime{g}{'}}$.
 Similarly,
 other than
 the presence and absence of the nodes for the nulling symbols themselves,
-the parse trees generated from \Vext{g} are the same as those generated from \var{g'}.
+the parse trees generated from \Vext{g} are the same as those generated from \varprime{g}{'}.
 
 Thus, Marpa may rewrite its grammars to eliminate nulling symbols.
-For the purposes of evaluation and run-time events,
+For the purposes of evaluation and to allow the generation of parse-time events
+based on nulled symbols,
 Marpa records the locations of the eliminated nulling symbols.
 
 A corner case occurs when eliminating nulling symbols from two distinct
 rules makes them identical.
 In this paper,
-we assume that a rewrite that involves creating
+we assume a rewrite that creates
 a new LHS symbol for each rule that must remain distinct;
-and adding new rules to derive the new LHS symbols from the original ones.
+and that adds new rules to derive the new LHS symbols from the original ones.
 Less clean theoretically,
 but easier in practice,
 is to have the implementation treat rules as distinct
@@ -1541,10 +1559,11 @@ handles null parses by treating them
 as a special case.
 
 \dfn{Degenerate grammars} are grammars which do not accept any string.
+A degenerate grammar is treated as a fatal error.
+
 \dfn{Trivial grammars} are grammars which only accept
 zero length inputs.
 No Marpa internal grammar can be a trivial grammar.
-A degenerate grammar is treated as a fatal error.
 Trivial grammars are handled as a special case.
 
 \subsection{Semantics-safe rewriting}
@@ -2096,7 +2115,7 @@ of Earley items in all the Earley sets of
 a \Marpa{} parse.
 
 Recall that
-there was a unique acceptance symbol,
+there was a unique accept symbol,
 \Accept{\Vint{g}}, in \Vint{g}.
 The input \Cw{} is accepted if and only if,
 for some \Vstr{rhs},
@@ -2389,7 +2408,7 @@ is
 \subsection{Initializer operation}
 \label{s-initializer}
 
-Recall from \Eref{e-acceptance_rule} the acceptance rule of \Vint{g},
+Recall from \Eref{e-accept-rule} the accept rule of \Vint{g},
 \Vrule{accept}.
 Then
 \begin{equation*}
