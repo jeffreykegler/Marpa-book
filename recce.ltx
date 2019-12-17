@@ -1287,6 +1287,13 @@ and it can then invoke the custom lexer.
 
 \subsection{Inaccessible symbols}
 
+An \dfn{inaccessible symbol} is one which can never be derived from
+the accept symbol.
+That is, \Vsym{noacc} is inaccessible in \Vext{g} if and only if
+\begin{equation*}
+\neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{\var{g}} \destar \Vstr{pre} \Vsym{noacc} \Vstr{post}.
+\end{equation*}
+
 The current implementation of Marpa supports inaccessible symbols.
 The user can specify \Marpa{}'s treatment
 of inaccessible symbols:
@@ -1299,20 +1306,16 @@ and the default treatment can also be specified.
 The ``factory default'' is
 to report inaccessible symbols as warnings.
 
-An \dfn{inaccessible symbol} is one which can never be derived from
-the accept symbol.
-That is, \Vsym{noacc} is inaccessible in \Vext{g} if and only if
-\begin{equation*}
-\neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{g} \destar \Vstr{pre} \Vsym{noacc} \Vstr{post}.
-\end{equation*}
-
 Inaccessible symbols have been found useful in Marpa applications
 that use higher-level languages ---
 languages which generate other languages.
-Often the generated grammar consists of ``custom''
-rules which vary,
-and ``boilerplate'' rules,
+Often the generated grammar consists of
+\begin{itemize}
+\item ``custom''
+rules which vary, and
+\item ``boilerplate'' rules,
 which are the same in every generated grammar.
+\end{itemize}
 It can be useful to have sections of the ``boilerplate''
 be optional,
 so that some of the ``boilerplate'' rules are only used
@@ -1321,10 +1324,10 @@ If the custom rules do not call for a set of optional rules
 within the boilerplate,
 those boilerplate rules become inaccessible.
 
-Optional boilerplace can be implemented
+Optional boilerplate can be implemented
 by silencing inaccessibility errors for the symbols in the optional boilerplate.
 Usually it is possible to locate a topmost symbol for
-each section of optional boilerplace,
+each section of optional boilerplate,
 in which case the warning need only be silenced for those
 topmost symbols.
 
@@ -1367,9 +1370,9 @@ Grammar rewriting was not the focus
 of \cite{AH2002} ---
 instead that paper centered on revising Earley's algorithm
 to use LR(0) states.
-The first version of Marpa \cite{Kegler2019}
+The first version of Marpa\cite{Kegler2019}
 used the LR(0) states of \cite{AH2002},
-combining them with Joop Leo's improvements \cite{Leo1991}.
+combining them with Joop Leo's improvements\cite{Leo1991}.
 
 Adding the LR(0) states to the first version of Marpa
 made its theory much more complex,
