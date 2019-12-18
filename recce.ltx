@@ -686,6 +686,30 @@ Let $\var{alphabet}^+$ be
 \right\}.
 \end{equation*}
 
+A string can be seen as sequence of symbols,
+and we use sequence index
+to represent individual symbols of a string,
+and subsequence notation
+to represent substrings.
+Thus,
+the \var{i}'th character of the string,
+is \sym{\var{str}[\var{i}]};
+and
+\begin{equation*}
+\str{\var{str}[\var{a} \ldots \var{z}]} \defined
+\str{\lbrace
+    \var{str}[\var{a}], \;\;
+    \var{str}[\var{a}+1], \;\;
+    \ldots \;\;
+    \var{str}[\var{z}]
+\rbrace}.
+\end{equation*}
+We sometimes describe the last character of a
+string as its rightmost:
+\[
+\Rightmost{\str{\var{str}[\var{a} \ldots \var{z}]}} = \var{z}.
+\]
+
 Typing is not strict.
 For example,
 we will move freely between strings, and their equivalent sequences of symbols.
@@ -954,32 +978,13 @@ string, that is, for all \Vstr{y}
 \Vsym{x} is a \dfn{proper nullable} if and only if it is nullable,
 but not nulling.
 
+Locations in the input will be of type \type{LOC}.
 By tradition, the input to the parse is written as \Cw{},
 where $\Cw \in \Term{\var{g}}^\ast$.
 \Vsize{w} will be the length of the input, counted in symbols.
 When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
-
-Locations in the input will be of type \type{LOC}.
-A string can be seen as sequence of symbols,
-and we use sequence index
-to represent individual symbols of a string,
-and subsequence notation
-to represent substrings.
-Thus,
-the \var{i}'th character of the input,
-is \sym{\var{w}[\var{i}]};
-and
-\begin{equation*}
-\str{\var{w}[\var{a} \ldots \var{z}]} \defined
-\str{\lbrace
-    \var{w}[\var{a}], \;\;
-    \var{w}[\var{a}+1], \;\;
-    \ldots \;\;
-    \var{w}[\var{z}]
-\rbrace}.
-\end{equation*}
 
 \section{LR Grammars}
 
@@ -1749,12 +1754,13 @@ The notations for CFG's \Sref{s-CFGs}
 carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
-Noteworthy among these changes:
+Noteworthy among these changes are
+that Marpa internal grammars
 
 \begin{itemize}
-\item Marpa internal grammars do not allow nulling symbols.
-\item The input to a parse must be of length greater than one.
-\item The RHS of a rule can never be empty.
+\item do not allow nulling symbols,
+\item do not allow the input to a parse to be of length zero, and
+\item do not allow the RHS of a rule to be empty.
 \end{itemize}
 
 In the rest of this paper,
@@ -1764,12 +1770,13 @@ we are discussing
 is a Marpa internal grammar.
 The restrictions imposed on INT's allow us
 to state some
-definitions more simply than we could if they had to apply
-to EXT's, or to CFG's.
+definitions, for example \Dfref{df:rr},
+more simply than we could if they had to apply
+to EXT's, or to CFG's,
 
 \begin{definition}
 \label{df:rr}
-Let \Vcfg{g} be an internal grammar.
+Let \Vint{g} be an internal grammar.
 Let \Vstr{sf} be a sentential form of \var{g} non-trivially derived from
 \Vsym{rr}, so that
 \begin{equation}
