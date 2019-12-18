@@ -43,9 +43,9 @@
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
-\newcommand{\Dfref}[1]{(Df\ref{#1}\colonpageref{#1})}
-\newcommand{\Lmref}[1]{(Lm\ref{#1}\colonpageref{#1})}
-\newcommand{\Thref}[1]{(Th\ref{#1}\colonpageref{#1})}
+\newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
+\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
+\newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
 
 % I use hyphens in variable names,
 % so I need to ensure that subtraction is
@@ -157,9 +157,9 @@
 \newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
 \newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{Previous-Link}(#1)}}
 \newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
-\newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
-\newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}(#1)}}
-\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}(#1)}}
+\newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}\left(#1\right)}}
+\newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}\left(#1\right)}}
+\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}\left(#1\right)}}
 \newcommand{\Rtable}[1]{\ensuremath{\mymathop{table}[#1]}}
 \newcommand{\Rtablesize}[1]{\ensuremath{\left| \mymathop{table}[#1] \right|}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
@@ -269,7 +269,7 @@ Reference types are
 ``L'' (a location within a section,
 where {\it n} is the section number),
 ``t'' (table), and
-``Df'' (defintion).
+``Df'' (definition).
 ``Lm'' (lemma).
 ``Th'' (theorem).
 For example
@@ -284,6 +284,12 @@ to page \pageref{loc-brick-depth}
 inside section \ref{loc-brick-depth}.
 Where the page reference would be to the current page,
 it is omitted.
+
+Definitions occur throughout.
+They are
+grouped into numbered definition sections for emphasis,
+or for convenient reference.
+The end of a definitions section is indicated with a black star ($bigstar$).
 
 % TODO Revise once chapters are settled
 \Sref{s-features}
@@ -1002,7 +1008,7 @@ for some $\Vterm{lookahead} \in \Term{\var{g}}^\ast$,
 \end{aligned}
 \\
 \Vrule{r} = \var{lhs} \de \Vstr{rhs}, \;\; \text{and} \\
-\var{i} = \size{\Vstr{stack}\Vstr{rhs}}.
+\var{i} = \size{\Vstr{stack}\Vstr{rhs}}. \quad \bigstar
 \end{gather}
 \end{definition}
 
@@ -1091,7 +1097,7 @@ Every LR($\pi$) grammar is unambiguous.
 If a grammar is unambiguous then it is LR($\pi$)
 for the partition of infinite cardinality,
 \[
-\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}.
+\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}. \quad \bigstar
 \]
 
 \end{definition}
@@ -1682,6 +1688,8 @@ Nulling instances are brick instances.
 In what follows, we will want to match instances from an internal
 parse
 to instances of an external parse of the same input.
+
+\begin{definition}[Semantics-safe]
 An internal symbol instance \textbf{matches}
 an external symbol instance, and vice versa,
 if and only if their 4-tuples match.
@@ -1693,28 +1701,31 @@ be the parse from
 an external grammar,
 \item $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
 be the parse from
-an internal grammar,
+an internal grammar, and
 where \Vint{g} is a rewrite of \Vext{g},
 \item \var{btree} be the brick tree
-produced from \var{itree}, and
-\item
-\var{Instance-matches} be the relation defined by the set of
+produced from \var{itree}.
+\end{itemize}
+Let \var{Instance-matches} be the relation defined by
+the set of duples of identical symbol instances
+in \var{btree} and \var{etree}:
 \begin{equation*}
 \left[
-\begin{gathered}
-[ \Vsym{esym}, \Vloc{estart}, \var{elength}, \var{edepth} ], \\
-\quad [ \Vsym{bsym}, \Vloc{bstart}, \var{blength}, \var{bdepth} ]
-\end{gathered}
+\begin{aligned}
+& \text{$[ \var{enode}, \var{bnode} ]$ such that} \\
+& \qquad
+\begin{aligned}
+& \text{$\var{enode} \in \var{etree} \land \var{bnode} \in \var{btree}$ and} \\
+& \exists \; \Vsym{sym}, \Vloc{start}, \var{length}, \var{depth} : \\
+& \qquad
+\begin{aligned}
+  & \var{enode} = \var{bnode} \\
+  & \qquad = [ \Vsym{sym}, \Vloc{start}, \var{length}, \var{depth} ].
+\end{aligned}
+\end{aligned}
+\end{aligned}
 \right]
 \end{equation*}
-such that
-\begin{equation*}
-\begin{gathered}
-\Vsym{esym} = \Vsym{bsym} \land \Vloc{estart} = \Vloc{bstart} \\
-\land \; \var{elength} = \var{blength} \land \var{edepth} = \var{bdepth}
-\end{gathered}
-\end{equation*}
-\end{itemize}
 
 \begin{sloppypar}
 A rewrite is semantics-safe, if and only if the relation
@@ -1731,8 +1742,9 @@ if \var{Instance-matches}
 matches every instance of \var{btree} with exactly one
 in \var{etree}
 and every instance of \var{etree} with exactly one
-in \var{btree}.
+in \var{btree}. $\bigstar$
 \end{sloppypar}
+\end{definition}
 
 \section{Marpa internal grammars}
 \label{s-INTs}
@@ -1796,7 +1808,7 @@ is \dfn{right-recursive},
 and that the symbol $\Vsym{rr}$
 is \dfn{right-recursive},
 \begin{equation*}
-\RightRecursive{\Vsym{rr}}
+\RightRecursive{\Vsym{rr}}. \quad \bigstar
 \end{equation*}
 \end{definition}
 \Dfref{df:rr} implies that, for any rule \var{r}, $\var{r} \in \Rules{\var{g}}$,
@@ -1808,15 +1820,14 @@ we have
 \end{equation}
 
 \begin{theorem}
-Let \Vcfg{g} be a grammar.
+Let \Vint{g} be a Marpa internal grammar.
 If \Vrule{r} is a rule used in a step of a right recursive derivation,
 then \Vrule{r} is right recursive.
 \end{theorem}
 
 \begin{proof}
-Let \Vcfg{g} be a CFG.
 Note that for the case of a right recursion of length 1,
-the theorem is obviously true.
+the theorem is trivially true.
 We now consider the case of an arbitrarily chosen step
 in a right recursion in \var{g} of
 length 2 or more:
@@ -1833,10 +1844,10 @@ length 2 or more:
 The arbitrarily chosen step is from
 \Eref{rr-proof-10b} to
 \Eref{rr-proof-10c}
-and uses the rule $[ \Vsym{symX} \de \Vstr{rhs} ]$.
+and uses the rule $[ \Vsym{symX} \de \Vstr{rhsX} ]$.
 We may ``pump'' the derivation of
 \Eref{rr-proof-10a}--\Eref{rr-proof-10d}
-produces another right recursion in \var{g}
+to produce another right recursion in \var{g}
 \begin{align}
 \nonumber
 \Vsym{rr1} \derives & \; \Vstr{rhs1} \\
@@ -1864,10 +1875,11 @@ Isolating the derivation from \Eref{rr-proof-20a} to
 \end{equation}
 so that
 \begin{equation}
-\RightRecursive{[ \Vsym{symX} \de \Vstr{rhs} ]} \because \Dfref{df:rr}.
+\RightRecursive{[ \Vsym{symX} \de \Vstr{rhsX} ]} \because \Dfref{df:rr}.
 \end{equation}
 \end{proof}
 
+% TODO Recheck this.  Are these definitions necessary?  Useful?
 In this paper,
 \Earley{} will refer to the Earley's original
 recognizer\cite{Earley1970}.
@@ -2156,7 +2168,7 @@ If, in addition,
 \begin{equation*}
 \Vstr{rhs2}\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
 \end{equation*}
-the EIM is \dfn{useful}.
+the EIM is \dfn{useful}. $bigstar$
 \end{definition}
 
 \section{The Leo algorithm}
@@ -2678,7 +2690,7 @@ $\var{overlap1} = \var{overlap2}$.
 Among other things, this implies that a unit rule
 cannot be the rule of a horizontally ambiguity.
 A grammar is \dfn{horizontally ambiguous} if and only if it has a
-horizontally ambiguous parse.
+horizontally ambiguous parse. $bigstar$
 \end{definition}
 
 \begin{theorem}
@@ -2853,7 +2865,7 @@ of the vertical ambiguity,
 \Vloc{orig} is its \dfn{origin}, and
 \Vloc{dot} is its \dfn{dot position}.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse.
+vertically ambiguous parse. $bigstar$
 \end{definition}
 
 \begin{theorem}
@@ -3032,7 +3044,7 @@ and the EIM is
 \dfn{horizontally ambiguous} if
 \begin{equation}
 \label{e:ambig-EIM-03}
-\Vloc{overlap1} \neq \Vloc{overlap2}.
+\Vloc{overlap1} \neq \Vloc{overlap2}. \quad \bigstar
 \end{equation}
 \end{definition}
 
