@@ -1597,9 +1597,8 @@ of the form
 where
 \begin{itemize}
 \item \Vsym{s} is the node's symbol.
-\item \Vloc{i} is the location
-of the first character in \Cw{} that is derived from \Vsym{s}.
-derived from \Vsym{s}.
+\item \boldRange{w}{\Vloc{start}}{(\Vloc{start}+\var{length}-1)}
+is the terminal string derived from \var{s}.
 \item \var{depth}
 is the ``brick depth''~\Lref{loc-brick-depth}.
 \end{itemize}
@@ -1653,10 +1652,10 @@ The new instances are called \dfn{nulling instances}.
 
 Let \var{marked} be a node in a parse tree.
 Assume that \var{marked} has
-one or more recorded parsing instances.
+one or more recorded nulling instances.
 Recorded with each nulling instance will be whether it occurs
 before or after \var{marked}.
-In the brick tree, each nulling instance takes the form
+In the brick tree, each nulling instance will take the form
 \begin{equation*}
 [ \Vsym{nulling}, \Vloc{bound}, 0, \var{depth} ]
 \end{equation*}
@@ -1681,38 +1680,36 @@ to instances of an external parse of the same input.
 An internal symbol instance \textbf{matches}
 an external symbol instance, and vice versa,
 if and only if their 4-tuples match.
-More formally,
-let
+More formally, let
+\begin{itemize}
+\item
 $\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
 be the parse from
 an external grammar,
-let $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
+\item $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
 be the parse from
 an internal grammar,
 where \Vint{g} is a rewrite of \Vext{g},
-and let \var{btree} be the brick tree
-produced from \var{itree}.
-Let
+\item \var{btree} be the brick tree
+produced from \var{itree}, and
+\item
+\var{Instance-matches} be the relation defined by the set of
 \begin{equation*}
-\var{enode} = [ \Vsym{esym}, \Vloc{estart}, \var{elength}, \var{edepth} ]
+\left[
+\begin{gathered}
+[ \Vsym{esym}, \Vloc{estart}, \var{elength}, \var{edepth} ], \\
+\quad [ \Vsym{bsym}, \Vloc{bstart}, \var{blength}, \var{bdepth} ]
+\end{gathered}
+\right]
 \end{equation*}
-be an instance in \var{etree}, and let
+such that
 \begin{equation*}
-\var{bnode} = [ \Vsym{bsym}, \Vloc{bstart}, \var{blength}, \var{bdepth} ]
+\begin{gathered}
+\Vsym{esym} = \Vsym{bsym} \land \Vloc{estart} = \Vloc{bstart} \\
+\land \; \var{elength} = \var{blength} \land \var{edepth} = \var{bdepth}
+\end{gathered}
 \end{equation*}
-be an instance in \var{btree}.
-Let \var{Instance-matches} be the relation defined by the set
-\begin{equation*}
-\left\lbrace \;
-\begin{aligned}
-& [ \var{enode},\var{bnode} ] \quad \text{such that} \\
-& \qquad \Vsym{esym} = \Vsym{bsym} \\
-& \qquad \text{and} \quad \Vloc{estart} = \Vloc{bstart} \\
-& \qquad \text{and} \quad \var{elength} = \var{blength} \\
-& \qquad \text{and} \quad \var{edepth} = \var{bdepth}
-\end{aligned}
-\; \right\rbrace
-\end{equation*}
+\end{itemize}
 
 \begin{sloppypar}
 A rewrite is semantics-safe, if and only if the relation
@@ -1721,8 +1718,8 @@ defined by
 is a one-to-one correspondence
 (bijection)
 between
-the instances in \var{btree}
-and the instances in \var{etree}.
+the instances in \var{etree}
+and the instances in \var{btree}.
 In other words,
 a rewrite is semantics-safe,
 if \var{Instance-matches}
@@ -1748,7 +1745,7 @@ see \Sref{s-augmentation}.
 \end{itemize}
 
 
-The notations for CFGs \Sref{s-CFGs}
+The notations for CFG's \Sref{s-CFGs}
 carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
