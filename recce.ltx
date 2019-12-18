@@ -139,9 +139,7 @@
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
-\newcommand{\EEtable}[2]{\ensuremath{\mymathop{table}[#1,#2]}}
-\newcommand{\Etable}[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand{\EVtable}[2]{\EEtable{#1}{\var{#2}}}
+\newcommand{\Etable}[1]{\ensuremath{\mymathop{table}\left[#1\right]}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
@@ -152,8 +150,9 @@
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
 \newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
-\newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}(#1)}}
-\newcommand{\Predecessor}[1]{\ensuremath{\mymathop{Predecessor}(#1)}}
+\newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}\left(#1\right)}}
+\newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}\left(#1\right)}}
+\newcommand{\Predecessor}[1]{\ensuremath{\mymathop{Predecessor}\left(#1\right)}}
 \newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
 \newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{Previous-Link}(#1)}}
 \newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
@@ -286,10 +285,17 @@ Where the page reference would be to the current page,
 it is omitted.
 
 Definitions occur throughout.
-They are
-grouped into numbered definition sections for emphasis,
-or for convenient reference.
-The end of a definitions section is indicated with a black star ($bigstar$).
+Verbal defienda are in boldface.
+For emphasis,
+or for convenient reference,
+definitions may be
+in numbered sections.
+The end of a definitions section is indicated with a black star ($\bigstar$).
+Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
+For example, \Dfref{df:parse} states ``full parse'' and ``parse'' mean
+the same thing.
+Shorter synonyms are intended to be used for brevity,
+and only in cases where they are not expected to cause confusion.
 
 % TODO Revise once chapters are settled
 \Sref{s-features}
@@ -955,6 +961,8 @@ $\Vterm{term} \in \Term{\var{g}}^\ast$.
 That the string is composed entirely of terminals must be separately justified by assumption,
 implication or explicit claim.
 
+\begin{definition}[Parse]
+\label{df:parse}
 A \dfn{full parse} is a duple $[\Vcfg{g}, \Vterm{w}]$ such that
 $\Vterm{w} \in \myL{\var{g}}$.
 A \dfn{partial parse} is a duple $[\Vcfg{g}, \Vterm{prefix}]$ such that
@@ -970,8 +978,8 @@ if and only if
 \[
 \exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
 \]
-When no confusion will arise, a full parse will often be called,
-simply, a \dfn{parse}.
+A \dfn{full parse} is often called, simply, a \dfn{parse}. $\bigstar$
+\end{definition}
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -1689,61 +1697,63 @@ In what follows, we will want to match instances from an internal
 parse
 to instances of an external parse of the same input.
 
+\begin{definition}[Equality of symbol instances]
+Symbol instances are \dfn{equal} if their elements
+are equal.  This is, if \var{node1} and \var{node2} are
+instances,
+\begin{equation*}
+\begin{aligned}
+& \var{node1} = \var{node2} \quad \defined \\
+& \quad
+\left(
+\begin{gathered}
+\exists \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} : \\
+\var{node1} = [ \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} ] \\
+\land \;\; \var{node2} = [ \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} ]
+\end{gathered}
+\right) \quad \bigstar
+\end{aligned}
+\end{equation*}
+\end{definition}
+Duplicate symbol instances do not occur within a parse tree,
+so we will usually be speaking of the equality of symbol
+instances in different trees.
+
 \begin{definition}[Semantics-safe]
-An internal symbol instance \textbf{matches}
-an external symbol instance, and vice versa,
-if and only if their 4-tuples match.
-More formally, let
+Let
 \begin{itemize}
 \item
-$\var{etree} = \var{parse}(\Vext{g},\Vstr{w})$
+$\var{Etree} = \var{parse}(\Vext{g},\Vstr{w})$
 be the parse from
 an external grammar,
-\item $\var{itree} = \var{parse}(\Vint{g},\Vstr{w})$
+\item $\var{Itree} = \var{parse}(\Vint{g},\Vstr{w})$
 be the parse from
 an internal grammar, and
 where \Vint{g} is a rewrite of \Vext{g},
-\item \var{btree} be the brick tree
-produced from \var{itree}.
+\item \var{Btree} be the brick tree
+produced from \var{Itree}.
 \end{itemize}
 Let \var{Instance-matches} be the relation defined by
-the set of duples of identical symbol instances
-in \var{btree} and \var{etree}:
+the equality of symbol instances
+in \var{Btree} and \var{Etree}:
 \begin{equation*}
-\left[
+\var{Instance-matches} \; \defined \;
+\left\lbrace
+\begin{gathered}
+[ \var{Enode}, \var{Bnode} ] : \\
 \begin{aligned}
-& \text{$[ \var{enode}, \var{bnode} ]$ such that} \\
-& \qquad
-\begin{aligned}
-& \text{$\var{enode} \in \var{etree} \land \var{bnode} \in \var{btree}$ and} \\
-& \exists \; \Vsym{sym}, \Vloc{start}, \var{length}, \var{depth} : \\
-& \qquad
-\begin{aligned}
-  & \var{enode} = \var{bnode} \\
-  & \qquad = [ \Vsym{sym}, \Vloc{start}, \var{length}, \var{depth} ].
+& \var{Enode} \in \var{Etree} \\
+\land \; & \var{Bnode} \in \var{Btree} \\
+\land \; & \var{Enode} = \var{Bnode}
 \end{aligned}
-\end{aligned}
-\end{aligned}
-\right]
+\end{gathered}
+\right\rbrace
 \end{equation*}
 
-\begin{sloppypar}
-A rewrite is semantics-safe, if and only if the relation
-defined by
+A rewrite is \dfn{semantics-safe}, if and only if
 \var{Instance-matches}
 is a one-to-one correspondence
-(bijection)
-between
-the instances in \var{etree}
-and the instances in \var{btree}.
-In other words,
-a rewrite is semantics-safe,
-if \var{Instance-matches}
-matches every instance of \var{btree} with exactly one
-in \var{etree}
-and every instance of \var{etree} with exactly one
-in \var{btree}. $\bigstar$
-\end{sloppypar}
+(bijection). $\bigstar$
 \end{definition}
 
 \section{Marpa internal grammars}
@@ -1947,15 +1957,23 @@ and unless otherwise specified,
 
 We consider the size of a grammar, \Vsize{\var{g}}, to be the
 number of distinct dotted rules it allows,
-$\size{\Vcfg{g}} = \size{\var{Dottted-Rules}[\var{g}]}$.
+$\size{\Vcfg{g}} = \size{\var{Dotted-Rules}[\var{g}]}$.
 
 If we let \Vdr{x} be a dotted rule, such that
-\begin{gather*}
-\Vdr{x} = \left[ \Vrule{x}, \var{pos} \right], \\
-\intertext{then} \\
-\begin{alignedat}{3}
+\begin{equation}
+\Vdr{x} = \left[ \Vrule{x}, \var{pos} \right],
+\end{equation}
+then
+\begin{align}
 & \LHS{\Vdr{x}} && \defined && \quad
 \LHS{\Vrule{x}} \\
+%
+& \Predot{\Vdr{x}} && \defined && \quad
+\begin{cases}
+\RHS{\Vrule{x}}[\var{pos}\subtract 1], \; \text{if $\var{pos} > 0$} \\
+\Lambda, \; \text{otherwise}
+\end{cases} \\
+%
 & \Postdot{\Vdr{x}} && \defined && \quad
 \begin{cases}
 \RHS{\Vrule{x}}[\var{pos}], \; \text{if $\var{pos} < \size{\Vrule{x}}$} \\
@@ -1974,8 +1992,7 @@ If we let \Vdr{x} be a dotted rule, such that
 \Lambda, \quad \text{otherwise}
 \end{cases}
 %
-\end{alignedat}
-\end{gather*}
+\end{align}
 
 A dotted rule, \Vdr{d},
 is a \dfn{penult} if it is such that $\Penult{\var{d}} \neq \Lambda$.
@@ -1983,28 +2000,32 @@ The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
 \end{equation*}
-A \dfn{predicted dotted rule} is a dotted rule,
+A \dfn{predicted dotted rule},
+or \dfn{prediction} is a dotted rule,
 other than the initial dotted rule,
 with a dot position of zero,
 for example,
 \begin{equation*}
 \Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{rhs} ].
 \end{equation*}
-A \dfn{confirmed dotted rule}
-is the initial dotted rule,
-or a dotted rule
+A \dfn{confirmed dotted rule},
+or \dfn{confirmation},
+is a dotted rule
 with a dot position greater than zero.
-A \dfn{completed dotted rule} is a dotted rule with its dot
+A \dfn{completed dotted rule},
+or \dfn{completion},
+is a dotted rule with its dot
 position after the end of its RHS,
 for example,
 \begin{equation*}
 \Vdr{completed} = [\Vsym{A} \de \Vstr{rhs} \mydot ].
 \end{equation*}
-Predicted, confirmed and completed dotted rules
-are also called, respectively,
-\dfn{predictions}, \dfn{confirmations} and \dfn{completions}.
+
 A dotted rule which is not a completion is called an
-\dfn{incompletion}.
+\dfn{incomplete rule},
+or a \dfn{incompletion}.
+A rule which is both an incompletion and a confirmation
+is called a \dfn{medial rule}, or \dfn{medial}.
 
 A Earley item (type \type{EIM}) is a duple
 \[
@@ -2028,7 +2049,6 @@ When a rule concept is applied to an EIM
 it is the same as applying that concept to the rule
 of the dotted rule of the EIM.
 
-but traditionally
 For example, let
 \begin{equation*}
 \Veim{x} = [\Vdr{x}, \Vorig{x}] =
@@ -2037,10 +2057,10 @@ For example, let
 Then
 \begin{equation*}
 \begin{gathered}
-\Penult{\Veim{x}} = \Penult{\Vdr{x}} \\
-\Postdot{\Veim{x}} = \Postdot{\Vdr{x}} \\
-\LHS{\Veim{x}} = \LHS{\Vdr{x}} = \LHS{\Vrule{x}} \\
-\RHS{\Veim{x}} = \RHS{\Vdr{x}} = \RHS{\Vrule{x}} \\
+\Penult{\Veim{x}} = \Penult{\Vdr{x}}, \\
+\Postdot{\Veim{x}} = \Postdot{\Vdr{x}}, \\
+\LHS{\Veim{x}} = \LHS{\Vdr{x}} = \LHS{\Vrule{x}}, \\
+\RHS{\Veim{x}} = \RHS{\Vdr{x}} = \RHS{\Vrule{x}}, \\
 \end{gathered}
 \end{equation*}
 and so forth.
@@ -2051,20 +2071,36 @@ an EIM is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
 A \dfn{parse item} is either an Earley or a Leo item.
-Leo items will be defined in \Sref{s-leo}.
 Parse items are of type \type{PIM}.
+Leo items (type \type{LIM})
+will be defined in \Sref{s-leo}.
 
 Within Marpa,
 an Earley set is defined as a set of \dfn{parse items}.
 Earley sets are of type \type{ES}.
 As a convenient way to say that a PIM
+is in an Earley set,
 we will put an `$@$' operator between
-the PIM and its Earley set:
+the PIM and its Earley set.
+For example, to say that an EIM,
+$\Veim{x} = [ \Vdr{dotted}, \Vorig{i}]$
+is in Earley set \Ves{j}, we may write any of
 \begin{gather*}
-    \Veim{x} @ \Ves{j} \\
-    \Vlim{x} @ \Ves{j} \\
-    [ \Vdr{dotted}, \Vorig{i}]_\type{EIM} @ \Ves{j} \\
-    [ \Vdr{dotted}, \Vorig{i}] @ \var{j}.
+    \Veim{x} @ \Ves{j}, \qquad \Veim{x} @ \Vloc{j}, \qquad \var{x} @ \var{j}, \\
+    [ \Vdr{dotted}, \Vorig{i}]_\type{EIM} @ \Ves{j}, \\
+    [ \Vdr{dotted}, \Vorig{i}] @ \var{j},
+\end{gather*}
+with the type-less variations used in contexts where type is
+understood.
+Similarly, for the LIM
+$\Vlim{y} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]$
+at \Ves{j},
+or the PIM \Vpim{p} at Ves{j}, we may write any of
+\begin{gather*}
+    \Vlim{y} @ \Ves{j}, \qquad \Vpim{p} @ \Ves{j}, \qquad \var{p} @ \var{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j},
+    \text{etc.}
 \end{gather*}
 
 An Earley parser builds a table of Earley sets,
@@ -2102,33 +2138,9 @@ and Earley set,
 For a discussion of this from the implementation
 point of view, see \Sref{s-es-indexing}.
 }
-
-\EVtable{\alg{Recce}}{i} will be
-the Earley set at \Vloc{i}
-in the table of Earley sets of
-the \alg{Recce} recognizer.
-For example,
-\EVtable{\Marpa}{j} will be Earley set \Vloc{j}
-in \Marpa's table of Earley sets.
-In contexts where it is clear which recognizer is
-intended,
-\Vtable{k}, or \Ves{k}, will symbolize Earley set \Vloc{k}
-in that recognizer's table of Earley sets.
 If \var{working} is an Earley set,
 $\size{\Ves{working}}$ is the number of Earley items
 in \Ves{working}.
-
-\Rtablesize{\alg{Recce}} is the total number
-of Earley items in all Earley sets for \alg{Recce},
-\begin{equation*}
-\Rtablesize{\alg{Recce}} =
-     \sum\limits_{\Vloc{i}=0}^{\size{\Cw}}
-	{\size{\EVtable{\alg{Recce}}{i}}}.
-\end{equation*}
-For example,
-\Rtablesize{\Marpa} is the total number
-of Earley items in all the Earley sets of
-a \Marpa{} parse.
 
 Recall that
 there was a unique accept symbol,
@@ -2144,11 +2156,11 @@ for some \Vstr{rhs},
 \label{df:EIM-valid}
 In the context of a CFG \Vcfg{g} and an input \Vstr{w},
 an EIM
-\begin{equation*}
+\begin{equation}
 \label{e:earley-prop1}
 \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i} \right] @ \Ves{j}
-\end{equation*}
+\end{equation}
 is \dfn{valid}
 if and only if
 there is some \Vstr{before}, \Vstr{after}
@@ -2168,7 +2180,9 @@ If, in addition,
 \begin{equation*}
 \Vstr{rhs2}\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
 \end{equation*}
-the EIM is \dfn{useful}. $bigstar$
+then the EIM
+of \Eref{e:earley-prop1}
+is \dfn{useful}. $\bigstar$
 \end{definition}
 
 \section{The Leo algorithm}
