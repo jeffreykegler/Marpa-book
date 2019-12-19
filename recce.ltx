@@ -2087,7 +2087,7 @@ $\Veim{x} = [ \Vdr{dotted}, \Vorig{i}]$
 is in Earley set \Ves{j}, we may write any of
 \begin{gather*}
     \Veim{x} @ \Ves{j}, \qquad \Veim{x} @ \Vloc{j}, \qquad \var{x} @ \var{j}, \\
-    [ \Vdr{dotted}, \Vorig{i}]_\type{EIM} @ \Ves{j}, \\
+    \text{$[ \Vdr{dotted}, \Vorig{i}]_\type{EIM} @ \Ves{j}$, or} \\
     [ \Vdr{dotted}, \Vorig{i}] @ \var{j},
 \end{gather*}
 with the type-less variations used in contexts where type is
@@ -2194,7 +2194,7 @@ Jay Earley~\cite[p. 60]{Earley1968}
 conjectured that \Earley{} could be
 modified to be \On{} for
 all deterministic context-free grammars (DCFG's).
-(The DCFG's are the union of the
+(Recall that the DCFG's are the union of the
 \var{LR}(\var{k})
 grammars for all \var{k}.)
 He gave no details of the method he had in mind.
@@ -2216,7 +2216,7 @@ while \Earley{} is \On{}
 for left recursion,
 and in fact very efficient,
 it is $\order{\var{n}^2}$ for right recursion.
-This is because all the EIM's necessary for a right
+This is because all EIM's for a right
 recursion are created at every parse location
 where the right recursion might end.
 
@@ -2250,9 +2250,10 @@ needed for a right recursion of length \var{n} is
 Whne the end of the right recursion is found,
 and its actual length is known,
 only the EIM's in the last RR edge will be used.
-Therefore, only \var{n} EIM's are actually used in the parse ---
-the other EIM's are useless.
+That is, only \var{n} EIM's are useful
+\Dfref{df:EIM-valid}.
 
+% TODO: Move or replace with later discussion on Leo memoization?
 Leo's idea was to memoize the right recursions.
 With Leo memoization, each RR edge is represented by
 a pair of EIM's and a memo.
@@ -2268,8 +2269,8 @@ be
 
 If, at evaluation time,
 it is desirable to expand the Leo memoizations,
-only the RR edge actually used in the parse
-needs to be expanded.
+only the useful EIM's
+need to be expanded.
 The number of memoized
 EIM's that need to be expanded
 will be \On{},
@@ -2317,11 +2318,12 @@ In this paper Leo's ``transitive items''
 will be called Leo items.
 Leo items
 will have type \type{LIM}.
-Every parse item (\type{PIM})
+Recall that every parse item (\type{PIM})
 is either
 an Earley item or a Leo item.
 
-In each Earley set, there is at most one Leo item per symbol.
+In each Earley set, there is at most one Leo item
+for each transition symbol.
 A Leo item (LIM) is a triple.
 Let
 \begin{equation*}
