@@ -102,7 +102,8 @@
 \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vbool}[1]{\Tvar{#1}{BOOL}}
 \newcommand{\Vcfg}[1]{\Tvar{#1}{CFG}}
-\newcommand{\Vdr}[1]{\Tvar{#1}{DR}}
+\newcommand{\dr}[1]{\ensuremath{#1_\type{DR}}}
+\newcommand{\Vdr}[1]{\dr{\var{#1}}}
 \newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
 \newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
@@ -2368,7 +2369,7 @@ we have
 \Penult{\Veim{uniq}} = \Postdot{\Veim{x}}
 \implies \Veim{uniq} = \Veim{x}.
 \end{equation*}
-It is important to notice that \Veim{x} ranges over all the
+Note that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{i},
 even those which are not penults.
 
@@ -2383,14 +2384,14 @@ Let \Veim{successor} be such that
 \Veim{successor} = [ \Vdr{successor}, \Vorig{successor} ].
 \end{equation*}
 We say that \Vlim{predecessor}
-is the \dfn{Leo predcessor} of \Veim{successor},
+is the \dfn{Leo predecessor} of \Veim{successor},
 \begin{equation*}
 \Vlim{predecessor} = \LIMPredecessor{\Veim{successor}},
 \end{equation*}
 if and only if, for some \Vdr{top}, \Vorig{top},
 \begin{equation*}
 \begin{gathered}
-\Vlim{predecessor} = [\Vdr{top}, \LHS{\Veim{successor}}, \Vorig{top}] \\
+\Vlim{predecessor} = [\Vdr{top}, \Predot{\Veim{successor}}, \Vorig{top}] \\
 \quad \text{and} \quad \Vlim{predecessor} \in \es{\left( \Vorig{successor} \right)}.
 \end{gathered}
 \end{equation*}
@@ -2399,26 +2400,35 @@ if and only if, for some \Vdr{top}, \Vorig{top},
 \label{s-algorithm}
 
 For the purpose of defining the Marpa algorithm,
-let \Vint{g} be a Marpa internal grammar used in the parse,
-let \Vstr{w} be the input of the parse,
+let $[\Vint{g}, \Vstr{w}]$ be a parse.
 and let \Vesset{esets} be the Earley table.
 
-The top-level view of the Earley algorithm is
-shown in \Aref{a:marpa}.
+We will first introduce the various "operations"
+of the Earley and Marpa algorithms,
+which add PIM's.
+Then we will discuss the top-level.
+
+\TODO{Intro to link pairs goes here.  Cite \cite{AH2002}.}
+
+\subsection{Initializer operation}
+\label{s-initializer}
 
 Let \var{PredictDR1} be the relation defined by the set
 \begin{equation*}
-\left\lbrace \quad
-\begin{gathered}
-\left[ \Vdr{cause}, \left[ \Vrule{predicted}, 0 \right] \right] \quad \text{such that} \\
-\Vdr{cause} \in \DottedRules{\Vint{g}}, \\
-\Vrule{predicted} \in \Rules{\Vint{g}}, \\
-\Postdot{\Vdr{cause}} \neq \Lambda, \; \text{and} \\
-\LHS{\Vrule{predicted}} = \Postdot{\Vdr{cause}}.
-\end{gathered}
+\left\lbrace
+\begin{aligned}
+& \left[ \Vdr{cause}, \dr{\left[ \Vrule{predicted}, 0 \right]} \right] : \\
+& \qquad \quad
+\begin{aligned}
+    & \var{cause} \in \DottedRules{\Vint{g}} \\
+\land \; & \var{predicted} \in \Rules{\Vint{g}} \\
+\land \; & \Postdot{\var{cause}} \neq \Lambda \\
+\land \; & \LHS{\Vrule{predicted}} = \Postdot{\Vdr{cause}}.
+\end{aligned}
+\end{aligned}
 \quad \right\rbrace
 \end{equation*}
-Let \var{PredictDR} be the closure of
+Let \var{PredictDR} be the transitive closure of
 \var{PredictDR1}:
 \begin{equation*}
 \var{PredictDR}(\Vint{g}) \defined \var{PredictDR1}(\Vint{g})^\ast.
@@ -2429,16 +2439,13 @@ the set of predictions caused by \Veim{cause}
 is
 \begin{align*}
 & \var{Predict}(\Veim{cause}, \Vloc{i}) \defined \\
-& \qquad \left\lbrace \quad
-\begin{gathered}
-\left[ \Vdr{predict}, \Vloc{i} \right]_\type{EIM} \quad \text{such that} \\
-[ \Vdr{cause}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
-\end{gathered}
-\quad \right\rbrace
+& \qquad \left\lbrace
+\begin{aligned}
+& \left[ \Vdr{predict}, \Vloc{i} \right]_\type{EIM} : \\
+& \qquad [ \Vdr{cause}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
+\end{aligned}
+\right\rbrace
 \end{align*}
-
-\subsection{Initializer operation}
-\label{s-initializer}
 
 Recall from \Eref{e-accept-rule} the accept rule of \Vint{g},
 \Vrule{accept}.
@@ -2452,6 +2459,18 @@ Then
 \end{equation*}
 where
 $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
+
+\begin{observation}[Link pairs]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
 
 \subsection{Scanner operation}
 \label{d:scanner}
@@ -2481,6 +2500,18 @@ such that
 & \qquad \in \Ves{(\Vloc{i}\subtract 1)}.
 \end{aligned}
 \end{equation*}
+
+\begin{observation}[Link pairs]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
 
 \subsection{Reducer operation}
 \label{d:reducer}
@@ -2544,12 +2575,38 @@ Then
 \var{Leo-reducer}(\Ves{i})
 \end{equation*}
 
+\begin{observation}[Link pairs]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
+
 \subsection{Prediction}
 \label{d:prediction}
 
 \begin{equation*}
-\var{Predicter}(\Ves{i}) \quad \defined \quad \bigcup_{\textstyle \var{eim}\in\Ves{i}} \var{Predict}(\Veim{eim}, \Vloc{i})
+\var{Predicter}(\Ves{i}) \;\; \defined
+\smashoperator[r]{\mathop{\bigcup}_{\textstyle \var{eim}\in\Ves{i}}}
+\;\; \var{Predict}(\Veim{eim}, \Vloc{i})
 \end{equation*}
+
+\begin{observation}[Link pairs]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
 
 \subsection{Memoizer operation}
 \label{d:memoizer}
@@ -2594,6 +2651,24 @@ Let
 \var{Extend-Leo-Chain}(\Ves{i})
 \end{align*}
 
+\begin{observation}[Link pairs]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
+
+\subsection{Top level of the Marpa algorithm}
+
+The top-level view of the Earley algorithm is
+shown in \Aref{a:marpa}.
+
+\subsection{The top level of Marpa}
 \begin{algorithm}[tb]
 \caption{The Marpa Algorithm}
 \label{a:marpa}
@@ -2614,9 +2689,17 @@ Let
 \end{algorithmic}
 \end{algorithm}
 
+\subsection{Top level of the original Earley algorithm}
+\TODO{}
+
+\subsection{Complexity summary}
+\TODO{}
+
 \section{Ambiguity}
 
-We say that a parse of input \Vstr{w1} using grammar \Vcfg{g}
+\TODO{Discuss the sources of this approach.}
+
+We say that a parse $[ \Vcfg{g}, \Vstr{w1} ]$
 is ambiguous, if there is more than one derivation tree for it.
 Most derivation trees allow more than one derivation,
 but for every derivation tree there is exactly one rightmost
@@ -2739,7 +2822,7 @@ as the following right derivation
 \begin{align}
 \label{e:th-h-ambig-10-1-a}
 & \qquad \Accept{\var{g}} \\
-& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vterm{suffix} \\
+& \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vstr{suffix} \\
 & \xderives{R\ast} \Vstr{prefix} \Vsym{lhs} \Vfrontier{suffix} \\
 & \xderives{R} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \Vstr{rhs3} \Vfrontier{suffix} \\
 & \xderives{R\ast} \Vstr{prefix} \Vstr{rhs1} \Vstr{rhs2} \cat \boldRangeSizeDecr{w}{current}{w} \\
@@ -2757,7 +2840,7 @@ for convenience in referring to that location.
 
 Since the parse is assumed to be unambiguous, the right derivation must be
 unique.
-The step which derives \Eref{e:th-h-ambig-10-1-d} in unique in its derivation
+The step which derives \Eref{e:th-h-ambig-10-1-d} in unique within its derivation
 as the first to produce a sentential form
 with no non-terminals to the right of $\spadesuit$,
 but before the elimination of any non-terminals to the left of $\spadesuit$.
@@ -2887,7 +2970,7 @@ vertically ambiguous parse. $bigstar$
 \begin{theorem}
 \label{th:v-ambig_g}
 If a parse has a vertical ambiguity,
-then it is ambiguous.
+then it and its grammar are ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -2936,7 +3019,7 @@ by
 \begin{itemize}
 \item letting the derivation of
 \Eref{e:th-v-ambig-10-2-b} from
-\Eref{e:th-v-ambig-10-2-b}
+\Eref{e:th-v-ambig-10-2-a}
 be identical to the derivation of
 \Eref{e:th-v-ambig-10-1-b} from
 \Eref{e:th-v-ambig-10-1-a};
@@ -2972,9 +3055,9 @@ must be sentential forms in the same position of their
 identical derivations.
 We know this
 because both result from the production of the \Vsym{lhs}
-the first time that \Vsym{lhs} is the rightmost non-terminal and
+when that \Vsym{lhs} is the rightmost non-terminal and
 the underived part of sentential form is $\Vstr{prefix}\Vsym{lhs}$.
-We know that this first time is the only time because otherwise
+We know that this the only time that happens because otherwise
 \[
 \Vstr{prefix}\Vsym{lhs} \deplus \Vstr{prefix}\Vsym{lhs},
 \]
@@ -3003,7 +3086,7 @@ This shows the theorem.
 
 \begin{definition}
 \label{df:ambig-EIM}
-An EIM is \dfn{ambiguous} if it is of the form
+An confirmed EIM is \dfn{ambiguous} if it is of the form
 \begin{equation}
 \label{e:ambig-EIM-05}
 \left[
