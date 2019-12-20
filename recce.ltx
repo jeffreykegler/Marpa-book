@@ -2722,7 +2722,7 @@ for the current choice of \Vcfg{g}.
 We recognize two kinds of ambiguity:
 horizontal and vertical.
 
-\begin{definition}
+\begin{definition}[Horizontal Ambiguity]
 \label{df:h-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
 and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
@@ -2772,7 +2772,6 @@ and also such that
 \var{overlap1} \neq \var{overlap2}.
 \end{gather}
 
-\begin{sloppypar}
 \var{gallia} is called the \dfn{partitioned rule},
 \Vloc{orig} the \dfn{origin}, and
 \Vloc{dot} the \dfn{dot position}
@@ -2780,20 +2779,21 @@ of the horizontal ambiguity.
 The duple $[\var{overlap1}, \var{overlap2}]$ is
 called its \dfn{overlap}.
 The string
-$\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]$
+\[
+\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]
+\]
 is also called its \dfn{overlap}.
-\end{sloppypar}
+A grammar is \dfn{horizontally ambiguous} if and only if it has a
+horizontally ambiguous parse. $\bigstar$
+\end{definition}
 
 Note that if $\Vstr{rhs1} = \epsilon$, that
 $\var{overlap1} = \var{overlap2}$.
 Among other things, this implies that a unit rule
 cannot be the rule of a horizontally ambiguity.
-A grammar is \dfn{horizontally ambiguous} if and only if it has a
-horizontally ambiguous parse. $bigstar$
-\end{definition}
 
 \begin{theorem}
-\label{th:h-ambig_g}
+\label{th:h-ambig-g}
 If a parse has a horizontal ambiguity,
 then it and its grammar are ambiguous.
 \end{theorem}
@@ -2919,7 +2919,7 @@ Since the parse is ambiguous, its grammar is ambiguous.
 This shows the theorem.
 \end{proof}
 
-\begin{definition}
+\begin{definition}[Vertical Ambiguity]
 \label{df:v-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
 A \dfn{vertical ambiguity} is a 4-tuple,
@@ -2964,11 +2964,11 @@ of the vertical ambiguity,
 \Vloc{orig} is its \dfn{origin}, and
 \Vloc{dot} is its \dfn{dot position}.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse. $bigstar$
+vertically ambiguous parse. $\bigstar$
 \end{definition}
 
 \begin{theorem}
-\label{th:v-ambig_g}
+\label{th:v-ambig-g}
 If a parse has a vertical ambiguity,
 then it and its grammar are ambiguous.
 \end{theorem}
@@ -3260,9 +3260,9 @@ Since our assumption of a full parse consistent with
 \Eref{e:th-h-EIM-g-ambig-20b},
 this shows that any full parse consistent with
 \Eref{e:th-h-EIM-g-ambig-15} is horizontally ambiguous.
-And since by \Thref{th:h-ambig_g}, if a parse is horizontally
+And since by \Thref{th:h-ambig-g}, if a parse is horizontally
 ambiguous,
-its grammar is horizontally ambiguous,
+its grammar is ambiguous,
 we see that \Vcfg{g} is horizontally ambiguous.
 \end{proof}
 
@@ -3339,16 +3339,25 @@ from
 \item
 the accessibility and productivity of the variables in
 \Eref{e:def-v-ambig-20a}--\Eref{e:def-v-ambig-20f}
+from the definition of EIM validity for
+\Eref{e:ambig-EIM-10b};
+\item
 the location of \Vloc{dot},
 in \Eref{e:def-v-ambig-20b}
-and the location of \Vloc{origin}
+from the definition of EIM validity for
+\Eref{e:ambig-EIM-10b}
+and \Eref{e:th-v-EIM-g-ambig-25d};
+\item
+the location of \Vloc{origin}
 in \Eref{e:def-v-ambig-20d}
 from the definition of EIM validity for
-\Eref{e:ambig-EIM-10b}; and
+\Eref{e:ambig-EIM-10b}
+and \Eref{e:th-v-EIM-g-ambig-25f}; and
 \item
 \Eref{e:def-v-ambig-15d} follows from
-\Eref{e:ambig-EIM-20b}.
-\TODO{Check}.
+\Eref{e:ambig-EIM-20b},
+\Eref{e:th-v-EIM-g-ambig-25d}, and
+\Eref{e:th-v-EIM-g-ambig-25g}.
 \end{itemize}
 
 It remains to justify
@@ -3361,19 +3370,23 @@ The predecessors of the two links,
 \Eref{e:ambig-EIM-20a}, differ only in their dot locations:
 \Vloc{overlap1} versus \Vloc{overlap2}.
 In
-\Tref{tab:th-v-EIM-g-ambig} we have set
-this both of these
-to \Vloc{origin} in this theorem,
+\Eref{e:th-v-EIM-g-ambig-25f} and
+\Eref{e:th-v-EIM-g-ambig-25g},
+we have set
+both of these
+to \Vloc{origin}
+in \Dfref{df:v-ambig},
 so that
 \begin{equation}
 \label{e:th-v-EIM-g-ambig-40}
 \begin{gathered}
 \text{\Vloc{overlap1} in \Eref{e:ambig-EIM-10a}} \\
 = \text{\Vloc{overlap2} in \Eref{e:ambig-EIM-20a}} \\
-= \text{\Vloc{origin} in this proof.}
+= \text{\Vloc{origin} in \Dfref{df:v-ambig}.}
 \end{gathered}
 \end{equation}
 So, to be distinct, the two link pairs must differ in the causes.
+The two causes,
 \Eref{e:ambig-EIM-10b} and
 \Eref{e:ambig-EIM-20b}
 can differ only in their origins
@@ -3391,19 +3404,18 @@ so that
 \label{e:th-v-EIM-g-ambig-43}
 \begin{gathered}
 \text{\Vstr{children1} in \Eref{e:ambig-EIM-10a}} \\
-\neq \text{\Vstr{children2} in \Eref{e:ambig-EIM-20a}}
+\neq \text{\Vstr{children2} in \Eref{e:ambig-EIM-20a}}.
 \end{gathered}
 \end{equation}
-so that
+From
+\Eref{e:th-v-EIM-g-ambig-43},
+\Eref{e:th-v-EIM-g-ambig-25b}, and
+\Eref{e:th-v-EIM-g-ambig-25c}
+we have
 \begin{equation}
 \label{e:th-v-EIM-g-ambig-46}
-\Vstr{rhs1} \neq \Vstr{rhs2}
+\text{$\Vstr{rhs1} \neq \Vstr{rhs2}$ in \Eref{e:def-v-ambig-15c} of \Dfref{df:v-ambig}.}
 \end{equation}
-in this proof.
-From
-\Eref{e:th-v-EIM-g-ambig-46}
-we have
-\Eref{e:def-v-ambig-15c}.
 \end{proof}
 
 \begin{theorem}
@@ -3423,7 +3435,7 @@ If a grammar is horizontally ambiguous then by
 \Dfref{df:h-ambig}
 it has a horizontally
 ambiguous parse.
-By \Thref{th:h-ambig_g},
+By \Thref{th:h-ambig-g},
 a grammar with a horizontal ambiguity is ambiguous.
 
 If the ambiguous EIM is vertically ambiguous then
@@ -3432,7 +3444,7 @@ If a grammar is horizontally ambiguous then by
 \Dfref{df:v-ambig}
 it has a vertically
 ambiguous parse.
-By \Thref{th:v-ambig_g},
+By \Thref{th:v-ambig-g},
 a grammar with a vertical ambiguity is ambiguous.
 \end{proof}
 
