@@ -3150,18 +3150,51 @@ and the EIM is
 \begin{theorem}
 \label{th:h-EIM-g-ambig}
 If a partial parse has a horizontally ambiguous EIM,
-then its grammar is horizontally ambiguous.
+then any full parse consistent with that partial parse is
+horizontally ambiguous,
+and their grammar is horizontally ambiguous.
 \end{theorem}
 
 \begin{proof}
 Assume that,
 for some \Vstr{w} and \Vloc{dot},
-\[
+\begin{equation}
+\label{e:th-h-EIM-g-ambig-15}
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
-\]
+\end{equation}
 is a partial parse.
 Futher assume that \var{partial}
 has a horizontally ambiguous EIM \Dfref{df:ambig-EIM}.
+
+Without loss of generality,
+let 
+\begin{gather}
+\var{full} = \left[\Vcfg{g}, \Vstr{w} \right], \\
+\label{e:th-h-EIM-g-ambig-20b}
+\text{where $\Vstr{w} = \boldRangeDecr{w}{0}{dot} \cat \Vstr{suffix}$} \\
+\nonumber
+\text{for some \Vstr{suffix}}
+\end{gather}
+be a full parse consistent with \var{partial}.
+
+We proceed by showing that there is a horizontal ambiguity in \var{full}
+according to \Dfref{df:h-ambig}.
+By assumption for the theorem,
+\var{partial} has a horizontally ambiguous EIM according to
+\Dfref{df:ambig-EIM}.
+Let \Vloc{origin},
+\Vloc{overlap1},
+\Vloc{overlap2},
+\Vloc{dot},
+\Vsym{lhs},
+\Vsym{rhs1}, and
+\Vstr{rhs3}
+in \Dfref{df:h-ambig}
+be their eponyms in \Dfref{df:ambig-EIM}.
+And let
+\Vstr{rhs2} in \Dfref{df:h-ambig}
+be the string of length 1 whose only character is
+\Vsym{rhs2} in \Dfref{df:ambig-EIM}.
 
 In the horizontally ambiguous EIM
 let the 3-partitioned rule be
@@ -3199,42 +3232,55 @@ where
 & \destar \Vterm{w}.
 \end{align}
 
-The derivation \Eref{e:def-h-EIM-g-ambig-20a}-\Eref{e:def-h-EIM-g-ambig-20f}
-matches that of
-\Eref{e:def-h-ambig-21a}-\Eref{e:def-h-ambig-21f},
-but we have yet to justify it based on the definition of EIM horizontal ambiguity
-\Dfref{df:ambig-EIM}.
-
-From the definition of validity
+To show that
+writing the derivation \Eref{e:def-h-EIM-g-ambig-20a}-\Eref{e:def-h-EIM-g-ambig-20f}
+in \Dfref{df:h-ambig}
+is justified by the definition 
+\Dfref{df:ambig-EIM}, we note that
+\begin{itemize}
+\item from the definition of validity
 \Dfref{df:EIM-valid}
 for the Earley item
 \Eref{e:ambig-EIM-05},
 we have the accessibility and productivity
 of all the symbols in
-\Eref{e:def-h-EIM-g-ambig-20a}-\Eref{e:def-h-EIM-g-ambig-20f}.
-From the validity of
-the EIM \Eref{e:ambig-EIM-10b}, we also have
+\Eref{e:def-h-EIM-g-ambig-20a}-\Eref{e:def-h-EIM-g-ambig-20f};
+\item from the validity of
+the EIM \Eref{e:ambig-EIM-10b}, we have
 the location of \Vloc{dot}
 in \Eref{e:def-h-EIM-g-ambig-20d}
 and of \Vloc{origin}
-in \Eref{e:def-h-EIM-g-ambig-20f}
-We have the location of \Vloc{overlap1}
-in \Eref{e:def-h-EIM-g-ambig-20e}
+in \Eref{e:def-h-EIM-g-ambig-20f}; and
+\item
 from the definition of EIM validity for
-\Eref{e:ambig-EIM-10b}.
+\Eref{e:ambig-EIM-10b},
+we have the location of \Vloc{overlap1}
+in \Eref{e:def-h-EIM-g-ambig-20e}.
+\end{itemize}
 
-We now show that we have
-the remaining elements of the definition of horizontal ambiguity.
-We have the location of \Vloc{overlap2}
+To show
+the remaining elements of \Dfref{df:h-ambig}
+we note that
+\begin{itemize}
+\item we have the location of \Vloc{overlap2}
 in \Eref{e:def-h-ambig-30a}
 from the definition of EIM validity for
-\Eref{e:ambig-EIM-20a}.
-We have \Eref{e:def-h-ambig-30b}
+\Eref{e:ambig-EIM-20a}; and
+\item
+we have \Eref{e:def-h-ambig-30b}
 from \Eref{e:ambig-EIM-03}.
-This shows all the elements
-in the definition of horizontal ambiguity \Dfref{df:h-ambig},
-and therefore a horizontally
-ambiguous EIM is also a horizontal ambiguity.
+\end{itemize}
+We now have shown all the elements
+in the definition of horizontal ambiguity \Dfref{df:h-ambig}.
+Since our assumption of a full parse consistent with
+\Eref{e:th-h-EIM-g-ambig-15} with without loss of generality
+\Eref{e:th-h-EIM-g-ambig-20b},
+this shows that any full parse consistent with
+\Eref{e:th-h-EIM-g-ambig-15} is horizontally ambiguous.
+And since by \Thref{th:h-ambig_g}, if a parse is horizontally
+ambiguous,
+its grammar is horizontally ambiguous,
+we see that \Vcfg{g} is horizontally ambiguous.
 \end{proof}
 
 \begin{theorem}
