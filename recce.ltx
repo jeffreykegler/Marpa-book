@@ -3269,84 +3269,87 @@ we see that \Vcfg{g} is horizontally ambiguous.
 \begin{theorem}
 \label{th:v-EIM-g-ambig}
 If a partial parse has a vertically ambiguous EIM,
-then its grammar is vertically ambiguous.
+then any full parse consistent with that partial parse is vertically ambiguous,
+and their grammar is vertically ambiguous.
 \end{theorem}
 
 \begin{proof}
 Assume that,
 for some \Vstr{w} and \Vloc{dot},
-\[
+\begin{equation}
+\label{e:th-v-EIM-g-ambig-15}
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
-\]
+\end{equation}
 is a partial parse.
 Futher assume that \var{partial}
 has a vertically ambiguous EIM \Dfref{df:ambig-EIM}.
 
-We set equivalents between the variables of this
-theorem and those
-of \Dfref{df:ambig-EIM} as in Table
-\Thref{tab:th-v-EIM-g-ambig}.
-\begin{table}[tb]
-\centering
-\caption{Equivalent variables for vertical ambiguity proof}
-\begin{tabular}{l l}
-\hline
-\multicolumn{1}{c}{Definition \Dfref{df:ambig-EIM}} &
-  \multicolumn{1}{c}{Proof \Thref{th:v-EIM-g-ambig}} \\
-\hline
-$\Vsym{rhs2}$ & $\Vsym{lhs}$ \\
-$\Vstr{children1}$ & $\Vstr{rhs1}$ \\
-$\Vstr{children2}$ & $\Vstr{rhs2}$ \\
-$\Vloc{dot}$ & $\Vloc{dot}$ \\
-$\Vloc{origin}$ & $\Vloc{origin}$ \\
-$\Vloc{overlap1}$ & $\Vloc{origin}$ \\
-$\Vloc{overlap2}$ & $\Vloc{origin}$ \\
-\hline
-\end{tabular}
-\label{tab:th-v-EIM-g-ambig}
-\end{table}
-
-Let the parse for the vertical ambiguity
-be $\var{p} = [\Vcfg{g}, \Vstr{w}]$,
-where
-\begin{align}
-\label{e:th-v-EIM-g-ambig-20a}
-& \qquad \Accept{\var{g}} \\*
+Without loss of generality,
+let
+\begin{gather}
+\var{full} = \left[\Vcfg{g}, \Vstr{w} \right], \\
 \label{e:th-v-EIM-g-ambig-20b}
-& \destar \Vstr{prefix} \Vsym{lhs} \cat \boldRangeSizeDecr{w}{dot}{w} \\*
-\label{e:th-v-EIM-g-ambig-20c}
-& \derives \Vstr{prefix} \Vstr{rhs1} \cat \boldRangeSizeDecr{w}{dot}{w} \\*
-\label{e:th-v-EIM-g-ambig-20d}
-& \destar \;
-\begin{aligned}
-& \Vstr{prefix} \cat \boldRangeDecr{w}{origin}{dot} \\
-& \qquad \cat \boldRangeSizeDecr{w}{dot}{w}
-\end{aligned}
-\\*
-\label{e:th-v-EIM-g-ambig-20e}
-& = \Vstr{prefix} \cat \boldRangeSizeDecr{w}{origin}{w} \\*
-\label{e:th-v-EIM-g-ambig-20f}
-& \destar \Vterm{w}.
+\text{where $\Vstr{w} = \boldRangeDecr{w}{0}{dot} \cat \Vstr{suffix}$} \\
+\nonumber
+\text{for some \Vstr{suffix}}
+\end{gather}
+be a full parse consistent with \var{partial}.
+
+We proceed by showing that there is a vertical ambiguity in \var{full}
+according to \Dfref{df:v-ambig}.
+By assumption for the theorem,
+\var{partial} has a vertically ambiguous EIM according to
+\Dfref{df:ambig-EIM}.
+
+Let
+\begin{align}
+\label{e:th-v-EIM-g-ambig-25a}
+\text{\Vsym{rhs2} in \Dfref{df:ambig-EIM}} & = \text{\Vsym{lhs} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25b}
+\text{\Vstr{children1} in \Dfref{df:ambig-EIM}} & = \text{\Vstr{rhs1} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25c}
+\text{\Vstr{children2} in \Dfref{df:ambig-EIM}} & = \text{\Vstr{rhs2} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25d}
+\text{\Vloc{dot} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{dot} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25e}
+\text{\Vloc{origin} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25f}
+\text{\Vloc{overlap1} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}} \\
+\label{e:th-v-EIM-g-ambig-25g}
+\text{\Vloc{overlap2} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}}
 \end{align}
 
-The derivation of
-\Eref{e:th-v-EIM-g-ambig-20a}-\Eref{e:th-v-EIM-g-ambig-20f}
-matches that of \Eref{e:def-v-ambig-20a}-\Eref{e:def-v-ambig-20f}.
-We justify writing it for this theorem as follows:
-We have
-\Eref{e:def-v-ambig-15a} and
-\Eref{e:def-v-ambig-15b}
+To justify writing
+\Eref{e:def-v-ambig-20a}--\Eref{e:def-v-ambig-20f}
+after the renamings of
+\Eref{e:th-v-EIM-g-ambig-25a}--\Eref{e:th-v-EIM-g-ambig-25g},
+we note that we have
+\begin{itemize}
+\item
+\Eref{e:def-v-ambig-15a} from
 from
-\Tref{tab:th-v-EIM-g-ambig}.
-The accessibility and productivity of the variables in
-\Eref{e:th-v-EIM-g-ambig-20a}-\Eref{e:th-v-EIM-g-ambig-20f},
+\Eref{e:th-v-EIM-g-ambig-25a},
+\Eref{e:th-v-EIM-g-ambig-25b} and
+\Eref{e:ambig-EIM-10b};
+\item
+\Eref{e:def-v-ambig-15b} from
+\Eref{e:th-v-EIM-g-ambig-25a},
+\Eref{e:th-v-EIM-g-ambig-25c} and
+\Eref{e:ambig-EIM-20b};
+\item
+the accessibility and productivity of the variables in
+\Eref{e:def-v-ambig-20a}--\Eref{e:def-v-ambig-20f}
 the location of \Vloc{dot},
+in \Eref{e:def-v-ambig-20b}
 and the location of \Vloc{origin}
-all follow from the definition of EIM validity for
-\Eref{e:ambig-EIM-10b}.
-\Eref{e:def-v-ambig-15d} follows
-all follow from the definition of EIM validity for
+in \Eref{e:def-v-ambig-20d}
+from the definition of EIM validity for
+\Eref{e:ambig-EIM-10b}; and
+\item
+\Eref{e:def-v-ambig-15d} follows from
 \Eref{e:ambig-EIM-20b}.
+\TODO{Check}.
+\end{itemize}
 
 It remains to justify
 $\var{rhs1} \neq \var{rhs2}$,
