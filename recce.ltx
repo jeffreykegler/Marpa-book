@@ -3460,8 +3460,10 @@ By \Thref{th:v-ambig-g} if \var{full} is vertically ambiguous,
 then \Vcfg{g} is ambiguous.
 \end{proof}
 
-\section{Marpa Changes}
-\label{s-changes}
+\section{Implementation considerations}
+\label{s-implementation}
+
+\subsection{Leo memoization}
 
 \begin{sloppypar}
 Recall that we
@@ -3474,8 +3476,8 @@ For \Marpa{} to consider a dotted rule
 \Vdr{candidate} = [\Vrule{candidate}, \var{i}]
 \end{equation*}
 for Leo memoization,
-\Vdr{candidate} must be a penult and
-\Vrule{candidate} must be right-recursive.
+not only must \Vdr{candidate} be a penult
+but \Vrule{candidate} must be right-recursive.
 \end{sloppypar}
 
 By restricting Leo memoization to right-recursive rules,
@@ -3497,13 +3499,12 @@ Such cases would be unusual, but may occur.
 Omission of a memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
-Later in this paper we will
+% TODO Add ref instead of "Later"
+Later in this paper
+we will
 show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
-
-\section{Implementation}
-\label{s-implementation}
 
 \subsection{Unproductive symbols}
 
