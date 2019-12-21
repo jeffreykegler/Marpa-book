@@ -2724,7 +2724,7 @@ horizontal and vertical.
 
 \begin{definition}[Horizontal Ambiguity]
 \label{df:h-ambig}
-Let $[\Vcfg{g}, \Vstr{w}]$ be a parse,
+Let $\var{p} = [\Vcfg{g}, \Vstr{w}]$ be a parse,
 and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
 where $0 \le \var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
 indicating a rule whose RHS is partitioned
@@ -2783,6 +2783,10 @@ The string
 \var{w}[\var{overlap1}\ldots(\var{overlap2}\subtract 1)]
 \]
 is also called its \dfn{overlap}.
+
+If there is a horizontal ambiguity for a parse \var{p},
+then 
+\var{p} is a horizontally ambiguous parse.
 A grammar is \dfn{horizontally ambiguous} if and only if it has a
 horizontally ambiguous parse. $\bigstar$
 \end{definition}
@@ -2794,8 +2798,8 @@ cannot be the rule of a horizontally ambiguity.
 
 \begin{theorem}
 \label{th:h-ambig-g}
-If a parse has a horizontal ambiguity,
-then it and its grammar are ambiguous.
+If a parse is horizontally ambiguous,
+then its grammar is ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -2965,12 +2969,18 @@ of the vertical ambiguity,
 \Vloc{dot} is its \dfn{dot position}.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
 vertically ambiguous parse. $\bigstar$
+
+If there is a vertical ambiguity for a parse \var{p},
+then 
+\var{p} is a vertically ambiguous parse.
+A grammar is \dfn{vertically ambiguous} if and only if it has a
+vertically ambiguous parse. $\bigstar$
 \end{definition}
 
 \begin{theorem}
 \label{th:v-ambig-g}
-If a parse has a vertical ambiguity,
-then it and its grammar are ambiguous.
+If a parse is vertically ambiguous,
+then its grammar is ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -3152,7 +3162,7 @@ and the EIM is
 If a partial parse has a horizontally ambiguous EIM,
 then any full parse consistent with that partial parse is
 horizontally ambiguous,
-and their grammar is horizontally ambiguous.
+and the grammar shared by the partial and full parse is horizontally ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -3262,7 +3272,7 @@ this shows that any full parse consistent with
 \Eref{e:th-h-EIM-g-ambig-15} is horizontally ambiguous.
 And since by \Thref{th:h-ambig-g}, if a parse is horizontally
 ambiguous,
-its grammar is ambiguous,
+its grammar is horizontally ambiguous,
 we see that \Vcfg{g} is horizontally ambiguous.
 \end{proof}
 
@@ -3270,7 +3280,7 @@ we see that \Vcfg{g} is horizontally ambiguous.
 \label{th:v-EIM-g-ambig}
 If a partial parse has a vertically ambiguous EIM,
 then any full parse consistent with that partial parse is vertically ambiguous,
-and their grammar is vertically ambiguous.
+and the grammar shared by the partial and full parse is vertically ambiguous.
 \end{theorem}
 
 \begin{proof}
@@ -3424,28 +3434,30 @@ then its grammar is ambiguous.
 \end{theorem}
 
 \begin{proof}
+Let $\var{partial} = [ \Vcfg{g}, \Vstr{prefix} ]$ be a partial
+parse with an ambiguous EIM.
+Let $\var{full} = [ \Vcfg{g}, \Vstr{prefix}\Vstr{suffix} ]$ be a full
+parse consistent with \var{partial}.
 From \Dfref{df:ambig-EIM}, we see that an ambiguous EIM
 is either a horizontally ambiguous EIM, or
 a vertically ambiguous EIM.
 We proceed by cases.
 
 If the ambiguous EIM is horizontally ambiguous then
-by \Thref{th:h-EIM-g-ambig}, the grammar is horizontally ambiguous.
-If a grammar is horizontally ambiguous then by
-\Dfref{df:h-ambig}
-it has a horizontally
-ambiguous parse.
-By \Thref{th:h-ambig-g},
-a grammar with a horizontal ambiguity is ambiguous.
+by \Thref{th:h-EIM-g-ambig}
+any full parse consistent with the partial parse
+is horizontally ambiguous,
+and therefore \var{full} is horizontally ambiguous.
+By \Thref{th:h-ambig-g} if \var{full} is horizontally ambiguous,
+then \Vcfg{g} is ambiguous.
 
 If the ambiguous EIM is vertically ambiguous then
-by \Thref{th:v-EIM-g-ambig}, the grammar is vertically ambiguous.
-If a grammar is horizontally ambiguous then by
-\Dfref{df:v-ambig}
-it has a vertically
-ambiguous parse.
-By \Thref{th:v-ambig-g},
-a grammar with a vertical ambiguity is ambiguous.
+by \Thref{th:v-EIM-g-ambig}
+any full parse consistent with the partial parse
+is vertically ambiguous,
+and therefore \var{full} is vertically ambiguous.
+By \Thref{th:v-ambig-g} if \var{full} is vertically ambiguous,
+then \Vcfg{g} is ambiguous.
 \end{proof}
 
 \section{Marpa Changes}
