@@ -45,6 +45,7 @@
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
+\newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
 
 % I use hyphens in variable names,
@@ -268,9 +269,10 @@ Reference types are
 ``s'' (section)
 ``L'' (a location within a section,
 where {\it n} is the section number),
-``t'' (table), and
-``Df'' (definition).
-``Lm'' (lemma).
+``t'' (table),
+``Df'' (definition),
+``Lm'' (lemma),
+``Ob'' (observation), and
 ``Th'' (theorem).
 For example
 \Eref{e-restriction1} refers to equation
@@ -2408,10 +2410,40 @@ of the Earley and Marpa algorithms,
 which add PIM's.
 Then we will discuss the top-level.
 
-\TODO{Intro to link pairs goes here.  Cite \cite{AH2002}.}
+The \Marpa{} implementation tracks the reasons for
+attempts to create a PIM.
+The reasons are tracked in \dfn{link pairs},
+and are essential for efficient evaluation.
+There is one link pair for every attempt to create a PIM,
+with one exception.
 
-\subsection{Initializer operation}
-\label{s-initializer}
+A link pair
+is a duple,
+$[ \var{predecessor}, \var{cause} ]$,
+whose elements are implemented
+as pointers.\footnote{
+The concept of link pairs was present
+in 
+\cite{Earley1968} and
+\cite{Earley1970},
+but \Marpa{} owes much to the
+careful elaboration of the idea in
+\cite{AH2002}.
+}
+The pointers are used as ``links''.
+to other data.
+
+A link pair has type \type{LP}.
+The first element of a link pair is
+called its \dfn{predecessor},
+and the second is called its \dfn{cause}.
+The predecessor element
+may be $\Lambda$.
+$\Lambda$ elements are implemented
+as a null pointer.
+
+\subsection{Common prediction logic}
+\label{s-common-predict}
 
 Let \var{PredictDR1} be the relation defined by the set
 \begin{equation*}
@@ -2433,35 +2465,71 @@ Let \var{PredictDR} be the transitive closure of
 \begin{equation*}
 \var{PredictDR}(\Vint{g}) \defined \var{PredictDR1}(\Vint{g})^\ast.
 \end{equation*}
-If $\Veim{cause} = [ \Vdr{cause}, \Vorig{cause} ]$
-is an EIM in Earley set \Ves{i},
-the set of predictions caused by \Veim{cause}
+The set of predictions
+indirectly caused by \Veim{cause}
 is
-\begin{align*}
-& \var{Predict}(\Veim{cause}, \Vloc{i}) \defined \\
+\begin{equation}
+\begin{aligned}
+& \var{Predict}(\Veim{cause}@\Vloc{j} ) \defined \\
 & \qquad \left\lbrace
 \begin{aligned}
-& \left[ \Vdr{predict}, \Vloc{i} \right]_\type{EIM} : \\
-& \qquad [ \Vdr{cause}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
+& \left[ \Vdr{predict}, \Vloc{j} \right]_\type{EIM} : \\
+& \qquad [ \Vdr{cause}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g})
 \end{aligned}
 \right\rbrace
-\end{align*}
+\\
+& \text{where $\Veim{cause} = [ \Vdr{cause}, \Vorig{cause} ]$.}
+\end{aligned}
+\end{equation}
+
+\begin{observation}[Link pairs]
+\label{ob:common-predict-link-pair},
+Tracking link pairs for a prediction would be cumbersome,
+because, even in an unambiguous grammar,
+each prediction can have many reasons to be in an Earley
+set.
+Moreover,
+the predictions in an Earley set \Ves{j}
+are easily recovered using
+the transition table \Sref{s:transition-tables} for \Ves{j}.
+For these reasons, link pairs are not kept for predictions.
+\end{observation}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm]
+\TODO{}
+\end{observation}
+
+\subsection{Initializer operation}
+\label{s-initializer}
 
 Recall from \Eref{e-accept-rule} the accept rule of \Vint{g},
-\Vrule{accept}.
+\Vrule{accept},
+and from \Sref{s-common-predict}
+the definition of \var{Predict}.
 Then
-\begin{equation*}
+\begin{equation}
+\label{e:def-initializer}
 \var{Initializer}() \defined
 \left\lbrace \;
 \Veim{start}
 \; \right\rbrace \cup
 \var{Predict}(\Veim{start}, (0)_\type{loc}) \\
-\end{equation*}
+\end{equation}
 where
 $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
 
 \begin{observation}[Link pairs]
-\TODO{}
+The initial EIM is present in every parse,
+and always for the same reason,
+so a link pair would serve no purpose.
+And, as noted in \Obref{ob:common-predict-link-pair},
+link pairs are not kept for
+the predictions created by the \var{Predict}
+function in \Eref{e:def-initializer}.
 \end{observation}
 
 \begin{observation}[Complexity]
@@ -2502,7 +2570,24 @@ such that
 \end{equation*}
 
 \begin{observation}[Link pairs]
-\TODO{}
+In an unambiguous parse, a scanned EIM will always have
+exactly one link pair.
+In an ambiguous parse, a scanned EIM will have one or more link pairs.
+The predecessor of a scanned EIM is an incomplete EIM.
+The cause of a scanned EIM is a token,
+which conceptually is
+the duple $[ \Vsym{token}, \var{token-value} ]$,
+where \Vsym{token} is a token symbol,
+and \var{token-value} is the token's value.
+
+The implementation of the token is a pointer to a structure
+containing a pointer to the token symbol,
+and a pointer to the token value,
+which is a value of arbitrary type.\footnote{
+In C language,
+these can be implemented as so-called ``void pointers''.}
+The token value is irrelevant to parsing --- it exists
+in order to be passed on to the semantics.
 \end{observation}
 
 \begin{observation}[Complexity]
@@ -2597,7 +2682,10 @@ Then
 \end{equation*}
 
 \begin{observation}[Link pairs]
-\TODO{}
+And, as noted in \Obref{ob:common-predict-link-pair},
+link pairs are not kept for
+the predictions created by the \var{Predict}
+function.
 \end{observation}
 
 \begin{observation}[Complexity]
@@ -3572,53 +3660,6 @@ and we take this point of view when discussing per-parse resource.
 \subsection{Pointers}
 \label{s-pointers}
 
-The \Marpa{} implementation tracks the reasons for
-attempts to create a PIM.
-The reasons are tracked in \dfn{link pairs},
-and are essential for efficient evaluation.
-There is one link pair for every attempt to create a PIM,
-with one exception.
-
-The one exception just referred to is the initial EIM.
-The initial EIM has no link pairs.
-The reason for its creation is the
-same in every parse.
-
-Conceptually, a link pair is a duple of \dfn{predecessor}
-and \dfn{cause},
-$[ \var{predecessor}, \var{cause} ]$.
-Link pairs are so called because the elements of the pairs
-are implemented as pointers, which are used as ``links``
-to other data.
-One of the pointers may be null,
-The conceptual equivalent of a null pointer element
-is a $\Lambda$ element in the duple.
-
-Predicted EIM's have one or more link pairs.
-Even in an unambiguous parse,
-a predicted EIM may have more than one link pair.
-The predecessor is always an incomplete EIM.
-The cause element is always $\Lambda$.
-
-In an unambiguous parse, a scanned EIM will always have
-exactly one link pair.
-In an ambiguous parse, a scanned EIM will have one or more link pairs.
-The predecessor of a scanned EIM is an incomplete EIM.
-The cause of a scanned EIM is a token,
-which conceptually is
-the duple $[ \Vsym{token}, \var{token-value} ]$,
-where \Vsym{token} is a token symbol,
-and \var{token-value} is the token's value.
-
-The implementation of the token is a pointer to a structure
-containing a pointer to the token symbol,
-and a pointer to the token value,
-which is a value of arbitrary type.\footnote{
-In C language,
-these can be implemented as so-called ``void pointers''.}
-The token value is irrelevant to parsing --- it exists
-in order to be passed on to the semantics.
-
 Reduced EIM's will have a link pair for every attempt to create them.
 In an unambiguous parse, a reduced EIM will always have exactly one link pair.
 In an ambiguous parse, a reduced EIM will have one or more link pairs.
@@ -3650,8 +3691,13 @@ we can define
 and
 \Source{\Vlim{$\ell$}} as the source EIM link of \Vlim{$\ell$}.
 
-\subsection{Restoring memoized items}
-\label{s-restoring}
+\subsection{Transition tables}
+\label{s:transition-tables}
+
+\TODO{}
+
+\section{Reversing Leo memoization}
+\label{s-reverse-leo}
 
 Let \Ves{physical} be an Earley set as produced by \Marpa{},
 and let \Vves{virtual} be \Ves{physical} with its Leo memoized
