@@ -148,6 +148,7 @@
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
+\newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
@@ -2414,8 +2415,7 @@ The \Marpa{} implementation tracks the reasons for
 attempts to create a PIM.
 The reasons are tracked in \dfn{link pairs},
 and are essential for efficient evaluation.
-There is one link pair for every attempt to create a PIM,
-with one exception.
+There is at most one link pair for every attempt to create a PIM.
 
 A link pair
 is a duple,
@@ -2433,7 +2433,6 @@ careful elaboration of the idea in
 The pointers are used as ``links''.
 to other data.
 
-A link pair has type \type{LP}.
 The first element of a link pair is
 called its \dfn{predecessor},
 and the second is called its \dfn{cause}.
@@ -2441,6 +2440,15 @@ The predecessor element
 may be $\Lambda$.
 $\Lambda$ elements are implemented
 as a null pointer.
+
+A link pair has type \type{LP}.
+The set of link pairs of a PIM
+can be written
+\LinkPairs{\Vpim{pim}},
+or as
+\LinkPairs{\Veim{eim}}, or
+\LinkPairs{\Vlim{lim}},
+for the PIM subtypes.
 
 \subsection{Common prediction logic}
 \label{s-common-predict}
@@ -3703,9 +3711,10 @@ Because a LIM has exactly one link pair,
 and expect both \var{PreviousLink} and \var{Source} to be functions.
 Let
 \begin{align}
-\label{e-unhide}
+\label{e-unhide-a}
 & \mymathop{Unhide}(\Lambda, \Veim{base}) \defined \emptyset \\
 \intertext{and, when $\Vlim{link} \neq \Lambda$, let}
+\label{e-unhide-b}
 &
 \begin{aligned}
 & \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
@@ -3719,26 +3728,32 @@ Let
 \;\; \right\rbrace
 \end{aligned}
 \end{align}
-In \Eref{e-unhide},
+In \Eref{e-unhide-b},
 \Veim{new-base} is created with a single link pair,
-the cause is \Veim{base}, and the predecessor
-is \Source{\Vlim{link}}.
+$[ \Source{\Vlim{link}}, \Veim{base} ]$.
 
 Then the set of memoized EIMs in \Ves{i}, $\mymathop{Memoized}(\Ves{i})$ is
 \begin{equation*}
 \left\lbrace
-\begin{gathered}
-\Veim{virtual} \quad \text{such that} \\
-\Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \quad \text{where} \\
-\text{$\left[ (\Vlim{link}, \Veim{base}) \right]$ is a link pair of \Veim{physical}} \\
-\text{and $\Veim{physical} \in \Ves{i}$}
-\end{gathered}
+\begin{aligned}
+& \Veim{virtual} : \\
+& \qquad
+\begin{aligned}
+         & \Veim{physical} \in \Ves{i} \\
+\land \;\; & \left[ (\Vlim{link}, \Veim{base}) \right] \in \LinkPairs{\Veim{physical}} \\
+\land \;\; & \Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}).
+\end{aligned}
+\end{aligned}
 \right\rbrace
 \end{equation*}
 Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
 \begin{equation*}
 \Ves{i} \;\; \cup \;\; \mymathop{Memoized}(\Ves{i}).
 \end{equation*}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
 
 \section{Per-set lists}
 \label{s-per-set-lists}
