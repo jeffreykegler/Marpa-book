@@ -3755,6 +3755,8 @@ Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
 \TODO{}
 \end{observation}
 
+\TODO{Prove Marpa + Reverse Leo = Original Earley}
+
 \section{Per-set lists}
 \label{s-per-set-lists}
 
@@ -3860,31 +3862,24 @@ and \Vbool{z} is \var{true} if \Veim{x}
 is already present in \Ves{j},
 and \var{false} otherwise.
 
-If
-\begin{equation*}
-\PSL{\Ves{i}}{\var{y}} = [\Vloc{j}, \var{true}], \\
-\end{equation*}
-the \Veim{x} already exists.
-The duplicate \Veim{x}
-should not be added to \Ves{j},
-and the psl entry
-$\PSL{\Ves{x}}{\ID{\Vdr{x}}}$
-should be left as is.
+\begin{algorithm}[tb]
+\caption{Add EIM if new}
+\label{a:add-eim-if-new}
+\begin{algorithmic}[1]
+\Procedure{Add-EIM-If-New}{$[\Vdr{x},\Vorig{x}]@\Ves{j}$}
+\If{$\PSL{\Ves{j}}{\ID{\Vdr{x}}} = [\Vloc{j}, \var{true}]$}
+\State return \Comment Do nothing if \Veim{x} exists
+\EndIf
+\State $\Ves{j} \gets \Ves{j} \cup \set{[\Vdr{x]}, \Vorig{x}]}$
+\State $\PSL{\Ves{x}}{\ID{\Vdr{x}}} \gets [\Vloc{j}, \var{true}]$
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
-If
-\begin{equation*}
-\PSL{\Ves{i}}{\var{y}} = \Lambda \;\; \lor \;\;
-\PSL{\Ves{i}}{\var{y}} \neq [\Vloc{j}, \var{true}],
-\end{equation*}
-then  \Veim{x} is new.
-In this case,
-\Veim{x} is added to \Ves{j}, and
-the PSL entry is re-set, as follows:
-\begin{equation*}
-\PSL{\Ves{x}}{\ID{\Vdr{x}}} \gets [\Vloc{j}, \var{true}].
-\end{equation*}
-
-The reader may notice that the above example could be simplified,
+\Aref{a:add-eim-if-new} contains pseudo-code
+showing the use of PSL's.
+The reader may notice that
+\Aref{a:add-eim-if-new} could be simplified,
 because the data to be kept for EIM's is a single boolean.
 Further, this boolean is never set to \var{false}, so that
 if a PSL entry exists, its boolean may be assumed to be \var{true}.
@@ -3923,22 +3918,7 @@ $\Vstr{w} \in \Term{\Vint{g}}^\ast$,
 \end{gathered}
 \end{equation}
 
-\Eref{e-marpa-correct} states the equivalence of two statement in quite distinct
-notation.
-The right hand side of the equivalent states a syntactic derivation.
-The left hand side asserts the existence of a parse item
-in \Marpa{}'s Earley sets.
-The equivalence of the two statements,
-can seem far from obvious.
-The proof in this paper will adopt a intermediate notation that
-highlights the symmetry between the two notations,
-and makes the equivalence
-of \Eref{e-marpa-correct}
-seem more plausible.
-It is hoped in this way to produce a proof whose details
-provide insight into
-why and how \Marpa{} works.
-
+\TODO{Rewrite}
 If
 \begin{equation*}
 \begin{gathered}
@@ -3951,11 +3931,13 @@ then we write
 \Eentail{\Vrule{x}, \var{pos}, \Vloc{orig}, \Ves{i}}.
 \end{equation*}
 
+\TODO{Refer to \cite{Earley1968} and \cite{AU1972}}
 
-\Mentail{1,2,3,4}
-\Lentail{1,2,3,4}
-\Eentail{1,2,3,4}
-\gentail{1,2,3,4}
+% TODO: Will I use these?
+% \Mentail{1,2,3,4}
+% \Lentail{1,2,3,4}
+% \Eentail{1,2,3,4}
+% \gentail{1,2,3,4}
 
 \section{LRR complexity}
 \label{s-lrr-complexity}
