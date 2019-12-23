@@ -4251,32 +4251,33 @@ Assume that
 \Eref{e-left-congruence1},
 \Eref{e-left-congruence2}, and
 \Eref{e-left-congruence3} hold.
-Expand part of \Eref{e-left-congruence1} into
+Expand \Eref{e-left-congruence1} into
 \begin{equation}
 \label{e-left-congruence10a}
 \begin{aligned}
-& \var{sfseqA}[\var{lenA}]\cat\Vterm{suffixA} \\
+& \var{sfseqA}[\var{lenA}]\cat\Vterm{suffixA} = \Vstr{sfA}\cat\Vterm{suffixA}
+\\
 & \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtract 1]\cat\Vterm{suffixA} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqA}[1]\cat\Vterm{suffixA}] = \Vstr{prefix}\Vterm{suffixA} \\
-& \text{where $\Vstr{sfA} = \var{sfseqA}[\var{lenA}]$.}
 \end{aligned}
 \end{equation}
-Expand part of \Eref{e-left-congruence2} into
+and expand \Eref{e-left-congruence2} into
 \begin{equation}
 \label{e-left-congruence10b}
 \begin{aligned}
-& \var{sfseqB}[\var{lenB}]\cat\Vterm{suffixB} \\
+& \var{sfseqB}[\var{lenB}]\cat\Vterm{suffixB} = \Vstr{sfB}\cat\Vterm{suffixB} \\
 & \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtract 1]\cat\Vterm{suffixB} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqB}[1]\cat\Vterm{suffixB} = \Vstr{prefix}\Vterm{suffixB} \\
-& \text{where $\Vstr{sfB} = \var{sfseqB}[\var{lenB}]$.}
 \end{aligned}
 \end{equation}
 
-Let \var{len} be the smaller of \var{lenA} and \var{lenB} in
-\Eref{e-left-congruence10a} and
-\Eref{e-left-congruence10b}.
+Let
+\begin{equation}
+\label{e-left-congruence10-2}
+\var{len} = \min( \var{lenA} ,\var{lenB})
+\end{equation}
 We seek to show
 \begin{equation}
 \label{e-left-congruence11}
@@ -4297,7 +4298,7 @@ so that
 \begin{equation}
 \label{e-left-congruence12b}
 \forall \var{i} \left( \;
-1 \le \var{i} \le \var{j}
+1 \le \var{i} < \var{j}
 \implies
 \var{sfseqA}[\var{i}] = \var{sfseqB}[\var{i}]
 \; \right).
@@ -4308,6 +4309,7 @@ and \Eref{e-left-congruence10b} we know that
 $\var{sfseqA}[1] = \var{sfseqB}[1] = \Vstr{prefix}$,
 so that $\var{j} > 1$.
 With this, we can write
+for some $\Vterm{postA} \in \Term{\var{g}}^\ast$,
 \begin{equation}
 \label{e-left-congruence15a}
 \begin{aligned}
@@ -4322,7 +4324,8 @@ where
 \Vstr{preA}\Vsym{rhsA}\Vterm{postA} =
 \var{sfseqA}[\var{j}\subtract 1]
 \end{equation}
-and
+and similarly, we can write
+for some $\Vterm{postB} \in \Term{\var{g}}^\ast$,
 \begin{equation}
 \label{e-left-congruence15b}
 \begin{aligned}
@@ -4359,7 +4362,7 @@ Then
 Using
 \Eref{e-left-congruence3},
 \Eref{e-left-congruence15a},
-\Eref{e-left-congruence15a},
+\Eref{e-left-congruence15b},
 \Eref{e-left-congruence19}, and
 \Lmref{lm:handle-unique} we
 have
@@ -4407,49 +4410,58 @@ and allows us to conclude that
 \begin{equation}
 \label{e-left-congruence52}
 \begin{gathered}
-\forall \var{j} \mid 1 \le \var{j} < \var{len}
+\forall \var{j} \left (1 \le \var{j} \le \var{len}
 \implies
-\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}].
+\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}] \right).
 \end{gathered}
 \end{equation}
 
-If $\var{lenA} \ge \var{lenB}$,
+Assume, without loss of generality,
+\begin{equation}
+\label{e-left-congruence53}
+\var{lenA} \ge \var{lenB}.
+\end{equation}
+Then
+\begin{equation}
+\label{e-left-congruence53-2}
+\var{lenB} = \var{len} \because
+\Eref{e-left-congruence10-2},
+\Eref{e-left-congruence53},
+\end{equation}
+\begin{equation}
+\label{e-left-congruence54}
+\begin{gathered}
+\forall \var{j} \left (1 \le \var{j} < \var{lenB}
+\implies
+\var{sfseqA}[\var{j}] = \var{sfseqB}[\var{j}] \right) \\
+\because \Eref{e-left-congruence52}, \Eref{e-left-congruence53-2},
+\end{gathered}
+\end{equation}
 \begin{equation}
 \label{e-left-congruence55a}
-\begin{gathered}
 \begin{aligned}
-& \Vstr{sfA}\Vterm{suffixA} = \var{sfseqA}[\var{lenA}]\Vterm{suffixA} \\
-& \qquad \xderives{R\ast} \var{sfseqA}[\var{lenB}]\Vterm{suffixA} \\
-& \qquad = \var{sfseqB}[\var{lenB}]\Vterm{suffixA} \\
+& \Vstr{sfA}\Vterm{suffixA} = \var{sfseqA}[\var{lenA}]\Vterm{suffixA} \because 
+\Eref{e-left-congruence10a} \\
+& \qquad \xderives{R\ast} \var{sfseqA}[\var{lenB}]\Vterm{suffixA}
+\because
+\Eref{e-left-congruence10b},
+\Eref{e-left-congruence52},
+\Eref{e-left-congruence53-2},
+\\
+& \qquad = \var{sfseqB}[\var{lenB}]\Vterm{suffixA}
+\because \Eref{e-left-congruence52}, \Eref{e-left-congruence53-2}
+\\
 & \qquad = \Vstr{sfB}\Vterm{suffixA}
+\because \Eref{e-left-congruence10b},
 \end{aligned}
-\\
-\because \Eref{e-left-congruence10a}, \Eref{e-left-congruence10b}.
-\end{gathered}
 \end{equation}
-Similarly, if $\var{lenB} \ge \var{lenA}$,
-\begin{equation}
-\label{e-left-congruence55b}
-\begin{gathered}
-\begin{aligned}
-& \Vstr{sfB}\Vterm{suffixB} = \var{sfseqB}[\var{lenB}]\Vterm{suffixB} \\
-& \qquad \xderives{R\ast} \var{sfseqB}[\var{lenA}]\Vterm{suffixB} \\
-& \qquad = \var{sfseqA}[\var{lenA}]\Vterm{suffixB} \\
-& \qquad = \Vstr{sfA}\Vterm{suffixB}
-\end{aligned}
-\\
-\because \Eref{e-left-congruence10a}, \Eref{e-left-congruence10b}.
-\end{gathered}
-\end{equation}
-
-Then
 \begin{equation}
 \begin{gathered}
 \label{e-left-congruence60}
 \Vstr{sfA} \xderives{R\ast} \Vstr{sfB}
 \;\; \text{or} \;\;
 \Vstr{sfB} \xderives{R\ast} \Vstr{sfA} \\
-\because \Eref{e-left-congruence55a}, \Eref{e-left-congruence55b}
+\because \Eref{e-left-congruence55a}
 \end{gathered}
 \end{equation}
 and from \Eref{e-left-congruence60}
