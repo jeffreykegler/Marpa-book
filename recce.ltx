@@ -3755,6 +3755,8 @@ Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
 \TODO{}
 \end{observation}
 
+\TODO{Prove useful memoized EIMs = \On{}}
+
 \TODO{Prove Marpa + Reverse Leo = Original Earley}
 
 \section{Per-set lists}
@@ -3945,9 +3947,10 @@ then we write
 The following theorem will prove useful.
 
 \begin{theorem}\label{t:es-size}
-The maximum size of an Earley set at {\upshape $\Vloc{i}$}
+% TODO: Is this theorem used?
+The maximum size of an Earley set at \Vloc{j}
 is
-{\upshape $\order{\var{i}}$}.
+\order{\var{j}}.
 \end{theorem}
 
 \begin{proof}
@@ -3957,17 +3960,17 @@ Recall that
 the number of dotted rules is a \Vsize{g},
 a constant depending on the grammar.
 The possible values of \Vloc{x} range from
-0 to \Vloc{i}.
+0 to \Vloc{j}.
 Therefore the number of possible Earley items
-in \Ves{i} is
-is $\Vloc{i} \times \Oc{}$.
+in \Ves{j} is
+is $\Vloc{j} \times \Oc{}$.
 Recall that the size of an Earley set is the number of EIM's
 that it contains.
 It follows
 that the maximum size of the Earley
-set at \Vloc{i} is
+set at \Vloc{j} is
 \begin{equation*}
-\Vloc{i} \times \Oc{} = \order{\var{i}} \times \Oc{} = \order{\var{i}}.
+\Vloc{j} \times \Oc{} = \order{\var{j}} \times \Oc{} = \order{\var{j}}.
 \end{equation*}
 \end{proof}
 
@@ -3983,18 +3986,22 @@ then \var{g} is ambiguous.
 \end{theorem}
 
 \begin{proof}
-The proof proceeds by eliminating subcases within a reductio.
-For the reductio, we take the following conjunction
+For the theorem, we assume without loss of generality that
 \begin{gather}
 \label{e-ambiguous-links-pair-10a}
 \Veim{added} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
 \label{e-ambiguous-links-pair-10b}
-\text{$\Veim{added} @ \Ves{j}$ is valid,} \\
+\text{$\Veim{added} @ \Ves{j}$ is valid, and} \\
 \label{e-ambiguous-links-pair-10d}
-\text{\Veim{added} has more than one link pair, and} \\
-\label{e-ambiguous-links-pair-10e}
-\text{\var{g} is not ambiguous.}
+\LinkPairs{\Veim{added}} \ge 1.
 \end{gather}
+
+The proof proceeds by eliminating subcases within a reductio.
+We assume for the reductio that
+\begin{equation}
+\label{e-ambiguous-links-pair-12}
+\text{\var{g} is not ambiguous.}
+\end{equation}
 
 Confirmed EIMs are only added by the Scanner and the Completer.
 
