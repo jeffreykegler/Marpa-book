@@ -4027,24 +4027,17 @@ Since \Veim{added} was added by the completer,
 if it has two link pairs
 it takes the form
 
-\TODO{}
+\TODO{Finish proof}
 
 \end{proof}
 
 \subsection{Complexity of each Earley item}
 
-\begin{theorem}\label{t:ambiguous-tries}
-For a context-free grammar,
-the number of attempts to add
-Earley items is $\order{\var{n}^3}$.
-\end{theorem}
-
-\begin{proof}
-Omitted.
-\end{proof}
-
-\begin{theorem}\label{t:leo-right-recursion}
-Either
+% TODO: Is this theorem used?
+\begin{theorem}
+\label{t:leo-right-recursion}
+In a Marpa internal grammar,
+either
 a right derivation has a step
 that uses a right recursive rule,
 or it has length is at most \var{c},
@@ -4053,8 +4046,8 @@ on the grammar.
 \end{theorem}
 
 \begin{proof}
-Let the constant \var{c} be the number
-of symbols.
+Let \Vint{g} be a Marpa internal grammar.
+and let the constant $\var{c} = \NT{\var{g}}$.
 Assume, for a reductio, that a right derivation
 expands to a
 Leo sequence of length
@@ -4063,16 +4056,20 @@ $\var{c}+1$, but that none of its steps uses a right recursive rule.
 Because it is of length $\var{c}+1$,
 the same symbol must appear twice as the rightmost symbol of
 a derivation step.
-(Since for the purposes of these
-complexity results we ignore nulling symbols,
+Since we assumed for the theorem that \var{g}
+is a Marpa internal grammar,
+there will be no nulling symbols,
+and therefore
 the rightmost symbol of a string will also be its rightmost
-non-nulling symbol.)
+non-nulling symbol.
 So part of the rightmost derivation must take the form
-\begin{equation*}
+\begin{equation}
+\label{e:-th-leo-right-recursion-50}
 \Vstr{earlier-prefix} \cat \Vsym{A} \deplus \Vstr{later-prefix} \cat \Vsym{A}.
-\end{equation*}
-But the first step of this derivation sequence must use a rule of the
-form
+\end{equation}
+But the first step of the derivation in
+\Eref{e:-th-leo-right-recursion-50}
+must use a rule of the form
 \begin{equation*}
 \Vsym{A} \de \Vstr{rhs-prefix} \cat \Vsym{rightmost},
 \end{equation*}
