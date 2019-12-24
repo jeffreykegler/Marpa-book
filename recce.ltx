@@ -4475,16 +4475,17 @@ and the theorem.
 \footnote{
 This theorem and its proof are adapted from Lemma 2 of \cite{Leo1991a}.}%
 Let
-\Vcfg{g}
+\Vint{g}
 be an
 unambiguous grammar,
 and let
 \begin{gather*}
 [ \Vsym{lhs} \de \Vstr{rhs1}\Vstr{rhs2} ] \in \Rules{\Vcfg{g}} \\
-\text{where for some $\Vterm{v} \in \Term{\var{g}}^+$} \\
-\Vstr{rhs2} \destar \Vterm{v}.
+\text{where $\Vstr{rhs2} \neq \epsilon$.}
 \end{gather*}
-If
+If, for some $\Vterm{input1}, \Vterm{input2}, \Vterm{input3A}, \Vterm{input3B} \in
+\Term{\var{g}}^\ast$,
+we have
 \begin{align}
 \label{e-equal-prefix1}
 & \begin{aligned}
@@ -4554,12 +4555,13 @@ we assume  that
 \Vstr{beforeB}\Vsym{lhs}.
 \end{equation}
 
-In an unambiguous grammar like \Vcfg{g},
-a right derivation is unique, so that we can combine
+In an unambiguous grammar like \Vint{g},
+a right derivation is unique,
+so that it must be possible to combine
 \Eref{e-equal-prefix1},
 \Eref{e-equal-prefix2}, and
 \Eref{e-equal-prefix8}
-into
+and write
 \begin{align}
 \label{e-equal-prefix10a}
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3A} \\
@@ -4570,45 +4572,82 @@ into
 \label{e-equal-prefix10d}
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
 \label{e-equal-prefix10e}
-                  & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
+                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
 \end{align}
-In \Eref{e-equal-prefix10b}, since $\Vterm{input3A} \in \Term{\Vcfg{g}}^\ast$, we have a right
-derivation
+
+Assume, for an inner reductio,
+that, in the derviation from \Eref{e-equal-prefix10b}
+to \Eref{e-equal-prefix10c},
+\Vstr{rhs2} does not produce the \Vsym{lhs} of
+\Eref{e-equal-prefix10c}.
+Then we must have
+\begin{equation}
+\label{e-equal-prefix11}
+\Vstr{rhs2} \destar \epsilon.
+\end{equation}
+But, since \Vint{g} is a Marpa internal grammar,
+and there are no nullable symbols in a Marpa  grammar,
+we have \Eref{e-equal-prefix11} only if
+\begin{equation}
+\label{e-equal-prefix12}
+\Vstr{rhs2} = \epsilon,
+\end{equation}
+which is contrary to assumption for the theorem.
+This shows the inner reductio,
+and allows us to write
 \begin{equation}
 \label{e-equal-prefix15}
-\Vstr{rhs2} \xderives{R\ast} \Vstr{shim}\Vsym{lhs}.
+\Vstr{rhs2} \destar \Vstr{shim}\Vsym{lhs}.
 \end{equation}
+
 In an unambiguous grammar, a right derivation must be unique,
-so we can combine
-\Eref{e-equal-prefix15} and
-\Eref{e-equal-prefix1} into a single derivation,
+so we can substitute
+\Eref{e-equal-prefix15} into
+\Eref{e-equal-prefix1},
 writing
 \begin{align}
 \label{e-equal-prefix20a}
-& \Accept{\Vcfg{g}}
+& \qquad \Accept{\Vcfg{g}}
 \\
 \label{e-equal-prefix20b}
-& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
-\\
-\label{e-equal-prefix20c}
-& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}\Vsym{lhs}\Vterm{input3A}
-\\
-\label{e-equal-prefix20d}
-& \qquad
+&
 \begin{aligned}
-& \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
-& \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{rhs2}\Vterm{input3A}
+\because \Eref{e-equal-prefix10b}
 \end{aligned}
 \\
-& \qquad
+\label{e-equal-prefix20c}
+&
 \begin{aligned}
-& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} \\
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{shim}\Vsym{lhs}\Vterm{input3A}
+\because \Eref{e-equal-prefix15}
+\end{aligned}
+\\
+\label{e-equal-prefix20d}
+&
+\begin{aligned}
+& \xderives{R} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{shim}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
+\because \Eref{e-equal-prefix10d}
+\end{aligned}
+\\
 \label{e-equal-prefix20e}
-& \qquad \qquad \Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
+&
+\begin{aligned}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{shim}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
+  \because \Eref{e-equal-prefix1}
 \end{aligned}
 \\
 \label{e-equal-prefix20f}
-& \qquad \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}.
+&
+\begin{aligned}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vterm{input2}\Vterm{input3A}
+\because \Eref{e-equal-prefix1}.
+\end{aligned}
 \end{align}
 
 From the derivation from \Eref{e-equal-prefix20e}
@@ -4618,35 +4657,37 @@ we have that
 \label{e-equal-prefix30}
 \Vstr{shim}\Vstr{rhs1} \destar \epsilon.
 \end{equation}
-(Note that
-\Eref{e-equal-prefix30}
-is not necessarily a right-derivation.)
 
-Using \Eref{e-equal-prefix30} with
-the derivation from \Eref{e-equal-prefix20b}
-to \Eref{e-equal-prefix20d},
-we get
+Then
 \begin{align}
 \label{e-equal-prefix35a}
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
 \\
 \label{e-equal-prefix35b}
-\xderives{R\ast} \;\;
-& \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim}
-\\
-\nonumber
-& \qquad \qquad \Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
+& \begin{aligned}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{shim}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
+& \qquad \quad \because \text{derivation \Eref{e-equal-prefix20b}--\Eref{e-equal-prefix20d}},
+\end{aligned}
 \\
 \label{e-equal-prefix35c}
-\derives \;\;
-& \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}.
+& \begin{aligned}
+& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \qquad \Vstr{rhs2}\Vterm{input3A}
+\end{aligned}
+\qquad \because \Eref{e-equal-prefix30}
 \end{align}
-The derivation from \Eref{e-equal-prefix35a}
-to \Eref{e-equal-prefix35c}
+The derivation \Eref{e-equal-prefix35a}--%
+\Eref{e-equal-prefix35c}
 is a cycle, which can only happen if
-\Vcfg{g} is ambiguous.
-This is contrary to assumption,
-which gives us the reductio
+\Vint{g} is ambiguous.
+(Note that
+\Eref{e-equal-prefix35a}--\Eref{e-equal-prefix35c}
+is not and does not need to be a right-derivation.)
+It is contrary to assumption for the theorem
+for \Vint{g} to be ambiguous,
+and this
+gives us the reductio
 and the theorem.
 \end{proof}
 
