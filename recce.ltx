@@ -3546,6 +3546,7 @@ we have
 \end{proof}
 
 \begin{theorem}
+\label{th:ambig-EIM-ambig-g}
 If a partial parse has an ambiguous EIM,
 then its grammar is ambiguous.
 \end{theorem}
@@ -3575,6 +3576,16 @@ is vertically ambiguous,
 and therefore \var{full} is vertically ambiguous.
 By \Thref{th:v-ambig-g} if \var{full} is vertically ambiguous,
 then \Vcfg{g} is ambiguous.
+\end{proof}
+
+\begin{theorem}
+\label{th:unambig-g-unambig-EIM}
+If a grammar is unambiguous, then it does not have
+an ambiguous EIM.
+\end{theorem}
+
+\begin{proof}
+This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}.
 \end{proof}
 
 \section{Implementation considerations}
@@ -4916,7 +4927,8 @@ that
 
 \begin{proof}
 Since \Vcfg{g} is unambiguous, no EIM will have more than one link
-pair, and therefore no EIM will have more than one cause EIM.
+pair \Thref{th:unambig-g-unambig-EIM},
+and therefore no EIM will have more than one cause EIM.
 In this proof,
 let a ``cause chain'' be a sequence \var{chain} such that
 for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtract 1$,
