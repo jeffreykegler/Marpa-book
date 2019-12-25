@@ -4492,7 +4492,7 @@ we have
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3A} \\
                   & \xderives{R} \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
                   & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A} \\
-                  & \destar \Vterm{input1}\Vterm{input2}\Vterm{input3A} \\
+                  & \xderives{R/ast} \Vterm{input1}\Vterm{input2}\Vterm{input3A} \\
 \end{aligned}
 \\
 \intertext{and}
@@ -4501,7 +4501,7 @@ we have
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{beforeB}\Vsym{lhs}\Vterm{input3B} \\
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3B} \\
                   & \xderives{R\ast} \Vstr{beforeB}\Vstr{rhs1}\Vterm{input2}\Vterm{input3B} \\
-                  & \destar \Vterm{input1}\Vterm{input2}\Vterm{input3B} \\
+                  & \xderives{R\ast} \Vterm{input1}\Vterm{input2}\Vterm{input3B} \\
 \end{aligned}
 \end{align}
 and
@@ -4557,11 +4557,12 @@ we assume  that
 
 In an unambiguous grammar like \Vint{g},
 a right derivation is unique,
-so that it must be possible to combine
+so that combining
 \Eref{e-equal-prefix1},
 \Eref{e-equal-prefix2}, and
-\Eref{e-equal-prefix8}
-and write
+\Eref{e-equal-prefix8},
+we see that the right derivation of
+must take  the form
 \begin{align}
 \label{e-equal-prefix10a}
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3A} \\
@@ -4572,7 +4573,9 @@ and write
 \label{e-equal-prefix10d}
                   & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
 \label{e-equal-prefix10e}
-                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
+                  & \xderives{R} \Vstr{beforeB}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A} \\
+\label{e-equal-prefix10f}
+                  & \xderives{R\ast} \Vterm{input1}\Vterm{input2}\Vterm{input3A}
 \end{align}
 
 Assume, for an inner reductio,
@@ -4607,7 +4610,8 @@ so we can substitute
 writing
 \begin{align}
 \label{e-equal-prefix20a}
-& \qquad \Accept{\Vcfg{g}}
+& \Accept{\Vcfg{g}} \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3A}
+\because \Eref{e-equal-prefix10a}
 \\
 \label{e-equal-prefix20b}
 &
@@ -4629,16 +4633,17 @@ writing
 &
 \begin{aligned}
 & \xderives{R} \Vstr{beforeA}\Vstr{rhs1} \\
-& \qquad \Vstr{shim}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
-\because \Eref{e-equal-prefix10d}
+& \qquad \Vstr{shim}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
+& \qquad \qquad \because \Eref{e-equal-prefix10d}
 \end{aligned}
 \\
+\intertext{where \Vstr{beforeA}\Vstr{rhs1}\Vstr{shim} = \Vstr{beforeB}}
 \label{e-equal-prefix20e}
 &
 \begin{aligned}
 & \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
 & \qquad \Vstr{shim}\Vstr{rhs1}\Vterm{input2}\Vterm{input3A}
-  \because \Eref{e-equal-prefix1}
+  \because \Eref{e-equal-prefix10e}
 \end{aligned}
 \\
 \label{e-equal-prefix20f}
@@ -4650,32 +4655,52 @@ writing
 \end{aligned}
 \end{align}
 
-From the derivation from \Eref{e-equal-prefix20e}
+We have the derivation step
+\Eref{e-equal-prefix20e}--\Eref{e-equal-prefix20f}
+because
+\Eref{e-equal-prefix20f}
+occurs in \Eref{e-equal-prefix1}, and
+\Eref{e-equal-prefix20f}
+must occur in the derivation after 
+\Eref{e-equal-prefix20e}
+because, in a right derviation,
+any non-terminals in 
+\Eref{e-equal-prefix20e} must be expanded
+before we reach step
+\Eref{e-equal-prefix20f}.
+
+In fact, comparing \Eref{e-equal-prefix20e}
 to \Eref{e-equal-prefix20f},
-we have that
+we see that
 \begin{equation}
 \label{e-equal-prefix30}
-\Vstr{shim}\Vstr{rhs1} \destar \epsilon.
+\Vstr{shim}\Vstr{rhs1} \destar \epsilon,
+\end{equation}
+which in a Marpa internal grammar means the
+\begin{equation}
+\label{e-equal-prefix31}
+\Vstr{shim}\Vstr{rhs1} = \epsilon.
 \end{equation}
 
-Then
+We now proceed to show that
+\Eref{e-equal-prefix30} implies that \Vint{g}
+has a cycle.
 \begin{align}
 \label{e-equal-prefix35a}
 & \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
 \\
 \label{e-equal-prefix35b}
 & \begin{aligned}
-& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
+& \xderives{\ast} \Vstr{beforeA}\Vstr{rhs1} \\
 & \qquad \Vstr{shim}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A} \\
-& \qquad \quad \because \text{derivation \Eref{e-equal-prefix20b}--\Eref{e-equal-prefix20d}},
+& \qquad \quad \because \text{derivation \Eref{e-equal-prefix20b}--\Eref{e-equal-prefix20d}}
 \end{aligned}
 \\
 \label{e-equal-prefix35c}
 & \begin{aligned}
-& \xderives{R\ast} \Vstr{beforeA}\Vstr{rhs1} \\
-& \qquad \Vstr{rhs2}\Vterm{input3A}
+& = \Vstr{beforeA}\Vstr{rhs1}\Vstr{rhs2}\Vterm{input3A}
+  \because \Eref{e-equal-prefix31}
 \end{aligned}
-\qquad \because \Eref{e-equal-prefix30}
 \end{align}
 The derivation \Eref{e-equal-prefix35a}--%
 \Eref{e-equal-prefix35c}
@@ -4693,10 +4718,12 @@ and the theorem.
 
 \begin{theorem}
 \label{th:incompletion-bound}
+\footnote{
 This theorem and its proof are adapted from
 \cite[``Theorem'']{Leo1991a}
 and
 \cite[Lemma 4.7, p. 173]{Leo1991}.
+}%
 Let
 \Vint{g}
 be an LRR
