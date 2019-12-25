@@ -4919,10 +4919,12 @@ is the constant required by the theorem.
 
 \begin{theorem}
 \label{th:completion-bound}
+\footnote{
 This theorem and its proof are adapted from
 \cite[``Theorem'']{Leo1991a}
 and
 \cite[Lemma 4.7, p. 173]{Leo1991}.
+}%
 Let
 \Vint{g}
 be an unambiguous
@@ -4930,8 +4932,7 @@ grammar.
 Let \var{complete} be the number of complete Earley items
 in an arbitrary Earley set \Ves{j},
 and let \var{medial} be the number of confirmed incomplete Earley items.
-There are constants \var{c1}, \var{c2} such
-that
+Then
 \begin{equation*}
 \var{complete} = \order{\var{medial}}.
 \end{equation*}
@@ -4944,7 +4945,7 @@ and therefore no EIM will have more than one cause EIM.
 In this proof,
 let a ``cause chain'' be a sequence \var{chain} such that
 for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtract 1$,
-$\var{chain}[\var{i}]$ is the cause in one of the link pairs
+$\var{chain}[\var{i}]$ is the cause of the link pair
 of $\var{chain}[\var{i}+1]$.
 
 EIM's may not have more than one cause,
@@ -4960,7 +4961,7 @@ an LHS will occur twice, and therefore the portion of the chain between
 the duplicate occurrences will be Leo-unique and right recursive
 and therefore Leo-eligible.
 Any Leo-eligible stretch of a single-cause chain is memoized and reduced to
-two EIMS -- the bottom and the top.
+two EIM's -- the bottom and the top.
 So
 \begin{equation}
 \label{e:th-completion-bound-20}
@@ -4983,51 +4984,62 @@ These leaves have in common that they cannot be the cause of any other
 EIM.
 The remaining nodes are the completions, other than the accept completion.
 We call these the ``interior'' nodes of the cause tree.
+In this proof,
+we think of a tree as having its ``leaves'' at the top,
+so that the ``interior'' nodes are below the ``leaves''.
 
 For our result, we seek to show the ``worst case''
 and therefore to maximize the number of completions.
 To do this we maximize the number of interior nodes.
 Every leaf will have at most one cause, so we assume every leaf is at the
 end of a single-cause chain.
-We call these single-cause chains the first layer of the tree.
+We call the single-cause chains that end in a ``leaf'',
+the first layer of the tree.
 
 Below the first layer layer, the bottom of every single-cause chain must share
 a cause, because otherwise it would not be the bottom of the single-cause chain.
-To maximize the number of interior nodes, we assume that pairs of first-layer-bottom
-nodes share their causes, and that these are in turn the top of a second layer (layer 1)
+To maximize the number of interior nodes, we assume that pairs of first-layer bottom
+nodes share their causes, and that the causes of the first-layer
+bottom notes are in turn the top of a second layer
 of single-cause chains.
 For the second layer, we again maximize by assuming that pairs of bottom EIM's of the second
 layer share causes.
-Continuing on, this means the number of single-cause chains in the cause tree is less
-than or equal to
-\begin{equation}
+
+Let \var{leaves} be the number of ``leaves'' in the cause tree,
+and letting \var{chains} be the number of single-cause chains in the cause tree,
+we can formalize the above reasoning as
+\begin{gather}
 \label{e:th-completion-bound-22}
-\begin{gathered}
-\var{leaves} + \frac{\var{leaves}}{2} + \frac{\var{leaves}}{4} + \ldots + 1
+\var{chains} \le \var{leaves} + \frac{\var{leaves}}{2} + \frac{\var{leaves}}{4} + \ldots + 1
 \\
-= 2 \times \var{leaves} \subtract 1,
-\end{gathered}
-\end{equation}
-where \var{leaves} is the number of leaf nodes in the cause tree.
+\label{e:th-completion-bound-23}
+\var{chains} = 2 \times \var{leaves} \subtract 1 \because \Eref{e:th-completion-bound-22}.
+\end{gather}
 Letting \var{interior} be the number of interior nodes in the cause tree,
-\begin{equation}
-\label{e:th-completion-bound-25}
-\begin{gathered}
-\var{interior} \le (2 \times \var{leaves} \subtract 1) \times (\size{\NT{\var{g}}}+1)
+\begin{gather}
+\label{e:th-completion-bound-25a}
+\var{interior} \le \var{chains} \times (\size{\NT{\var{g}}}+1)
+\because \Eref{e:th-completion-bound-20}
 \\
-\because \Eref{e:th-completion-bound-20},
-\Eref{e:th-completion-bound-22}.
+\label{e:th-completion-bound-25b}
+\begin{gathered}
+\var{interior} \le (2 \times \var{leaves} \subtract 1) \times (\size{\NT{\var{g}}}+1) \\
+\because \Eref{e:th-completion-bound-23},
+\Eref{e:th-completion-bound-25a}.
 \end{gathered}
-\end{equation}
+\end{gather}
 Noting that
 \size{\NT{\var{g}}} is a constant which depends on \var{g},
-this simplifies to
+\Eref{e:th-completion-bound-25b}
+simplifies to
 \begin{equation}
 \label{e:th-completion-bound-30}
 \var{interior} = \order{\var{leaves}}.
 \end{equation}
-To maximize the number of completions,
-we assume there is an accept completion in \Ves{j},
+
+There may not be an accept completion in \Ves{j},
+but to maximize the number of completions,
+we assume there is one,
 so that
 \begin{gather}
 \label{e:th-completion-bound-32a}
