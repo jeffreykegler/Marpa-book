@@ -14,7 +14,7 @@
 \delimitershortfall=0pt
 \delimiterfactor=1100
 
-\newcommand{\TODO}[1]{\par{\large\bf TODO: #1}\par}
+\newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
 % For a type name, when it occurs in text
@@ -3779,16 +3779,70 @@ or they are disjoint
 \end{proof}
 
 \begin{theorem}
+\label{th:useful-RR-count}
 Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
 be an unambiguous parse,
 where $\var{n} = \size{\Vstr{w}}$.
-The number of useful right recursive EIM's
+The number of useful complete right recursive EIM's
 in \var{p} is less than or equal to $2 \times \var{n} \subtract 1$,
 or \On{}.
 \end{theorem}
 
 \begin{proof}
-\TODO{Finish}
+
+Let UCRR EIM be an abbreviation for useful complete right recursive EIM.
+We first introduce ``staircase patterns'', an abstraction from
+parse trees that allow us to count the UCRR EIM's
+more easily.
+
+Let $\var{p} = [\Vint{g}, \Vstr{w}]$ be a parse, where
+\begin{gather}
+\Vstr{w} = \Vsym{a}\Vsym{a}\Vsym{a}\Vsym{b}, \\
+\Rules{\var{g}} =
+\left\lbrace
+\begin{aligned}
+& [\Vsym{S} \de \Vsym{T}], \\
+& [\Vsym{T} \de \Vsym{L}\Vsym{T}], \\
+& [\Vsym{T} \de \Vsym{b}], \\
+& [\Vsym{L} \de \Vsym{a}],
+\end{aligned}
+\right\rbrace
+\\
+\text{and $\Accept{\var{g}} = \Vsym{S}$.}
+\end{gather}
+As mnemonic,
+\Vsym{T} implies ``trunk'' and \Vsym{L} implies
+``limb''.
+Then
+\begin{align}
+& \qquad \Vsym{S} \\
+\label{th:ucrr-count-020b}
+& \xderives{R} \Vsym{L}\Vsym{T} &&
+  [[\Vsym{T} \de \Vsym{L}\Vsym{T}\mydot], 0]@4 \\
+\label{th:ucrr-count-020c}
+& \xderives{R} \Vsym{L}\Vsym{L}\Vsym{T} &&
+  [[\Vsym{T} \de \Vsym{L}\Vsym{T}\mydot], 1]@4 \\
+\label{th:ucrr-count-020d}
+& \xderives{R} \Vsym{L}\Vsym{L}\Vsym{L}\Vsym{T} &&
+  [[\Vsym{T} \de \Vsym{L}\Vsym{T}\mydot], 2]@4 \\
+& \xderives{R} \Vsym{L}\Vsym{L}\Vsym{L}\Vsym{b} &&
+  [[\Vsym{T} \de \Vsym{b}\mydot], 3]@4 \\
+& \xderives{R\ast} \Vsym{a}\Vsym{a}\Vsym{a}\Vsym{b}
+\end{align}
+is a right derivation.
+
+\TODO{Finish preliminaries}
+
+\begin{equation}
+\label{e:useful-RR-count-13}
+\parbox{.8\textwidth}{
+Two risers of the same width cannot be stacked.
+}
+\end{equation}
+
+\TODO{Show the above}
+
+\TODO{More preliminaries}
 
 \begin{table}[tb]
 \hrule
@@ -3802,6 +3856,66 @@ or \On{}.
 \vspace{1ex}
 \hrule
 \end{table}
+
+\TODO{More preliminaries}
+
+We now seek to show
+\begin{equation}
+\label{e:useful-RR-count-15}
+\parbox{.8\textwidth}{
+  The staircase pattern of length 1 is unique,
+  and it is as shown in \Tref{tab:staircase-1}.
+}
+\end{equation}
+Examination
+shows that the staircase pattern of
+\Tref{tab:staircase-1}
+is clearly of length 1.
+To show that it is unique, we try our strategies for altering it in
+turn.
+Concatening two patterns of length 1 results in a pattern longer
+than 1 finest step,
+If we put another pattern of width 1 below
+\Tref{tab:staircase-1}, it must be
+of width at least 1,
+because we do not allow zero-width patterns.
+It cannot be wider than 1 finest step,
+because cells of staircase patterns fine downwards.
+Therefore any pattern placed below
+\Tref{tab:staircase-1}
+is of width exactly 1,
+and
+violates the stacked riser prohibition
+\Eref{e:useful-RR-count-13}.
+Lastly, we can attempt to replace
+a cell of 
+\Tref{tab:staircase-1} with another staircase pattern.
+But \Tref{tab:staircase-1}
+has only one cell
+and only one potential replacement -- itself.
+So replacement of the one cell of 
+\Tref{tab:staircase-1} with itself results in
+\Tref{tab:staircase-1},
+and
+\Tref{tab:staircase-1} therefore remains
+the unique staircase pattern of length 1.
+This shows
+\Eref{e:useful-RR-count-15}
+
+\TODO{More preliminaries}
+
+We now explicitly set out our induction.
+The induction hypothesis is
+\begin{equation}
+\parbox{.8\textwidth}{The number of risers in a
+staircase pattern is 
+less than or equal to $2 \times \var{n} \subtract 1$.}
+\end{equation}
+As the basis of the induction,
+we take the staircase pattern of length 1
+\Tref{tab:staircase-1},
+which we know to be unique
+\Eref{e:useful-RR-count-15}.
 
 \begin{table}[tb]
 \hrule
@@ -3846,7 +3960,7 @@ Concatenation
 \end{tabular}
 
 \vspace{1ex}
-Single-step
+Landing-only
 \end{minipage}
 %
 \hfill
@@ -3942,7 +4056,7 @@ Length 3 Concatenation Staircases
 \hrule
 \vspace{1ex}
 \begin{center}
-Length 3 Single-step Staircases
+Length 3 Landing-only Staircases
 \end{center}
 \begin{minipage}{0.30\textwidth}
 \centering
@@ -4131,6 +4245,8 @@ Length 3 Landing Extension Staircases
 \vspace{1ex}
 \hrule
 \end{table}
+
+\TODO{Finish induction}
 
 \end{proof}
 
