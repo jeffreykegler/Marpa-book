@@ -2409,28 +2409,69 @@ if and only if, for some \Vdr{top}, \Vorig{top},
 \end{gathered}
 \end{equation*}
 
-\section{The Marpa algorithm}
-\label{s-algorithm}
+\section{Ancestry}
+\label{s-ancestry}
 
-For the purpose of defining the Marpa algorithm,
-let $[\Vint{g}, \Vstr{w}]$ be a parse.
-and let \Vesset{esets} be the Earley table.
+\Marpa{}, like other variants of \Earley{}, performs
+``operations'' on the Earley sets to produce new
+Earley items and, in Marpa's case,
+new Leo items.
+A operation may require that one or two other
+PIM's already exist in the Earley sets before
+it becomes applicable.
+If an operation requires that \Vpim{anc}
+exist in the Earley sets
+before unioning \Vpim{desc} into an Earley set \Ves{j},
+then \Vpim{anc} is said to be the \dfn{direct ancestor}
+of \Vpim{desc},
+and \Vpim{desc} is said to be the \dfn{direct descendant}
+of \Vpim{anc}.
 
-We will first introduce the various "operations"
-of the Earley and Marpa algorithms,
-which add PIM's.
-Then we will discuss the top-level.
+Note that we say, ``unioning into an Earley set''.
+Duplicate PIM's are not added to an Earley set,
+so that \Vpim{desc} will not be added to \Ves{j},
+if \Vpim{desc} is already a member of \Ves{j}.
+\Vpim{anc}
+becomes a direct ancestor of \Vpim{desc},
+and \Vpim{desc} becomes a direct descendant of \Vpim{anc},
+even if \Vpim{desc} already exists in \Ves{j}.
 
-The \Marpa{} implementation tracks the reasons for
-attempts to create a PIM.
+Any PIM is, trivially,
+its own \dfn{trivial ancestor} and its own \dfn{trivial descendant}.
+An ancestor of \Vpim{p} is recursively defined as
+\begin{itemize}
+\item \Vpim{p} itself, trivially;
+\item any direct ancestor of \Vpim{p}; and
+\item any direct ancestor of an ancestor of \Vpim{p}.
+\end{itemize}
+Similarly,
+An \dfn{descendant} of \Vpim{p} is defined to be
+\Vpim{p} itself;
+any direct descendant of \Vpim{p}; and
+any direct descendant of a descendant of \Vpim{p}.
+
+For each operation, there are at most two direct ancestors.
+We follow \cite{AH2002} in calling one the ``predecessor''
+and the other the ``cause''.
+This terminology makes sense in some operations,
+and, for consistency, we stretch it to cover all cases.
+If the predecessor or the cause is not applicable
+to a particular operation, we represent it as a
+$\Lambda$ value.
+
+The \Marpa{} implementation tracks the ancestry of
+PIM's.
 The reasons are tracked in \dfn{link pairs},
 and are essential for efficient evaluation.
-There is at most one link pair for every attempt to create a PIM.
+There is at most one link pair for every attempt to add a
+PIM to an Earley set.
 
 A link pair
-is a duple,
-$[ \var{predecessor}, \var{cause} ]$,
-whose elements are implemented
+is a duple of predecessor and cause:
+\[
+[ \var{predecessor}, \var{cause} ]
+\]
+The elements of a link pair are implemented
 as pointers.\footnote{
 The concept of link pairs was present
 in
@@ -2442,12 +2483,6 @@ careful elaboration of the idea in
 }
 The pointers are used as ``links''.
 to other data.
-
-The first element of a link pair is
-called its \dfn{predecessor},
-and the second is called its \dfn{cause}.
-The predecessor element
-may be $\Lambda$.
 $\Lambda$ elements are implemented
 as a null pointer.
 
@@ -2459,6 +2494,18 @@ or as
 \LinkPairs{\Veim{eim}}, or
 \LinkPairs{\Vlim{lim}},
 for the PIM subtypes.
+
+\section{The Marpa algorithm}
+\label{s-algorithm}
+
+For the purpose of defining the Marpa algorithm,
+let $[\Vint{g}, \Vstr{w}]$ be a parse.
+and let \Vesset{esets} be the Earley table.
+
+We will first introduce the various "operations"
+of the Earley and Marpa algorithms,
+which add PIM's.
+Then we will discuss the top-level.
 
 \subsection{Common prediction logic}
 \label{s-common-predict}
@@ -3640,7 +3687,7 @@ an ambiguous EIM.
 This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}.
 \end{proof}
 
-\section{Implementation considerations}
+\section{Implementation}
 \label{s-implementation}
 
 \subsection{Leo memoization}
