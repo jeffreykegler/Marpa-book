@@ -3890,8 +3890,27 @@ to track is limited to a single boolean.
 It is for this reason that
 the more complicated approach is illustrated above.
 
-\section{Marpa recognizer correctness}
+\section{Marpa is correct}
 \label{s-correctness}
+
+In this paper,
+we call a parsing algorithm \dfn{correct} if and
+only if, for every parse, it is \dfn{consistent} and
+\dfn{complete}.
+We call a parsing algorithm \dfn{consistent} if
+it produces only valid Earley items.
+We call a parsing algorithm \dfn{complete} if
+it all of the valid Earley items.
+
+\begin{theorem}
+\Earley{} is correct.
+\end{theorem}
+
+\begin{proof}
+\Earley{} is proved correct in
+\cite[Theorem 4.9, pp. 323-325]{AU1972} and
+\cite[pp. 18-25]{Earley1968}.
+\end{proof}
 
 Let \Ves{physical} be an Earley set as produced by \Marpa{},
 and let \Vves{virtual} be \Ves{physical} with its Leo memoized
@@ -3909,24 +3928,31 @@ Because a LIM has exactly one link pair,
 \end{gather}
 and expect both \var{PreviousLink} and \var{Source} to be functions.
 Let
-\begin{align}
-\label{e-unhide-a}
-& \mymathop{Unhide}(\Lambda, \Veim{base}) \defined \emptyset \\
-\intertext{and, when $\Vlim{link} \neq \Lambda$, let}
-\label{e-unhide-b}
-&
+\begin{gather}
+\mymathop{Unhide}(\Vlim{pred}, \Veim{base}) \defined
+\begin{cases}
+\text{$\emptyset$, if $\Vlim{pred} = \Lambda$}
+\\
 \begin{aligned}
-& \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
-& \quad \left\lbrace \;\;
+& \mymathop{Unhide1}(\Vlim{pred}, \Veim{base}), \\
+& \quad \text{otherwise}
+\end{aligned}
+\end{cases}
+\\
+\label{e-unhide-b}
+\begin{aligned}
+& \text{where $\mymathop{Unhide1}(\Vlim{pred}, \Veim{base}) \defined$} \\
+& \quad
+\left\lbrace \;\;
 \begin{gathered}
-\mymathop{Unhide}(\PreviousLink{\Vlim{link}}, \Veim{new-base}) \\
-\qquad \cup \quad \set{\Veim{new-base}} \\
-\text{where $\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM}$} \\
-\land \;\; [ \Vdr{link}, \Vsym{link}, \Vorig{link} ] = \Vlim{link}
+\mymathop{Unhide}(\PreviousLink{\Vlim{pred}}, \Veim{new-base}) \\
+\text{$\cup \quad \set{\Veim{new-base}}$ such that} \\
+\Veim{new-base} = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]_\type{EIM} \\
+\land \;\; [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] = \Vlim{pred}
 \end{gathered}
 \;\; \right\rbrace
 \end{aligned}
-\end{align}
+\end{gather}
 In \Eref{e-unhide-b},
 \Veim{new-base} is created with a single link pair,
 $[ \Source{\Vlim{link}}, \Veim{base} ]$.
