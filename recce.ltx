@@ -3702,107 +3702,6 @@ and we take this point of view when discussing per-parse resource.
 
 \TODO{}
 
-\section{Reversing Leo memoization}
-\label{s-reverse-leo}
-
-Let \Ves{physical} be an Earley set as produced by \Marpa{},
-and let \Vves{virtual} be \Ves{physical} with its Leo memoized
-items restored.
-We will call \Ves{physical} a \dfn{physical} Earley set, and
-we will call \Vves{virtual} a \dfn{virtual} Earley set
-(type \type{VES}).
-
-To show how an physical Earley set is restored,
-we will need a few definitions.
-Because a LIM has exactly one link pair,
-\begin{gather}
-\PreviousLink{\Vlim{$\ell$}} \defined \text{the previous link of \Vlim{$\ell$}, and} \\
-\Source{\Vlim{$\ell$}} \defined \text{the source EIM link of \Vlim{$\ell$}}.
-\end{gather}
-and expect both \var{PreviousLink} and \var{Source} to be functions.
-Let
-\begin{align}
-\label{e-unhide-a}
-& \mymathop{Unhide}(\Lambda, \Veim{base}) \defined \emptyset \\
-\intertext{and, when $\Vlim{link} \neq \Lambda$, let}
-\label{e-unhide-b}
-&
-\begin{aligned}
-& \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
-& \quad \left\lbrace \;\;
-\begin{gathered}
-\mymathop{Unhide}(\PreviousLink{\Vlim{link}}, \Veim{new-base}) \\
-\qquad \cup \quad \set{\Veim{new-base}} \\
-\text{where $\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM}$} \\
-\land \;\; [ \Vdr{link}, \Vsym{link}, \Vorig{link} ] = \Vlim{link}
-\end{gathered}
-\;\; \right\rbrace
-\end{aligned}
-\end{align}
-In \Eref{e-unhide-b},
-\Veim{new-base} is created with a single link pair,
-$[ \Source{\Vlim{link}}, \Veim{base} ]$.
-
-Then the set of memoized EIMs in \Ves{i}, $\mymathop{Memoized}(\Ves{i})$ is
-\begin{equation*}
-\left\lbrace
-\begin{aligned}
-& \Veim{virtual} : \\
-& \qquad
-\begin{aligned}
-         & \Veim{physical} \in \Ves{i} \\
-\land \;\; & \left[ (\Vlim{link}, \Veim{base}) \right] \in \LinkPairs{\Veim{physical}} \\
-\land \;\; & \Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}).
-\end{aligned}
-\end{aligned}
-\right\rbrace
-\end{equation*}
-Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
-\begin{equation*}
-\Ves{i} \;\; \cup \;\; \mymathop{Memoized}(\Ves{i}).
-\end{equation*}
-
-\begin{observation}[Complexity]
-\TODO{}
-\end{observation}
-
-\begin{theorem}
-In an unambiguous grammar,
-in every pair of useful complete EIMs,
-one is either contained contained
-in the other,
-or they are disjoint
-\end{theorem}
-
-\begin{proof}
-\TODO{Need this proof?}
-\end{proof}
-
-\begin{theorem}
-\label{th:useful-RR-count}
-Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
-be an unambiguous parse,
-where $\var{n} = \size{\Vstr{w}}$.
-The number of useful complete right recursive EIM's
-in \var{p} is less than or equal to $2 \times \var{n} \subtract 1$,
-or \On{}.
-\end{theorem}
-
-\begin{proof}
-\TODO{Need this proof?}
-\end{proof}
-
-\TODO{Prove Marpa + Reverse Leo = Original Earley}
-
-\begin{theorem}
-The time and space to reverse the Leo memoization
-in an unambiguous parse is \On{}.
-\end{theorem}
-
-\begin{proof}
-\TODO{Prove this}
-\end{proof}
-
 \section{Per-set lists}
 \label{s-per-set-lists}
 
@@ -3942,6 +3841,104 @@ the more complicated approach is illustrated above.
 \section{Marpa recognizer correctness}
 \label{s-correctness}
 
+Let \Ves{physical} be an Earley set as produced by \Marpa{},
+and let \Vves{virtual} be \Ves{physical} with its Leo memoized
+items restored.
+We will call \Ves{physical} a \dfn{physical} Earley set, and
+we will call \Vves{virtual} a \dfn{virtual} Earley set
+(type \type{VES}).
+
+To show how an physical Earley set is restored,
+we will need a few definitions.
+Because a LIM has exactly one link pair,
+\begin{gather}
+\PreviousLink{\Vlim{$\ell$}} \defined \text{the previous link of \Vlim{$\ell$}, and} \\
+\Source{\Vlim{$\ell$}} \defined \text{the source EIM link of \Vlim{$\ell$}}.
+\end{gather}
+and expect both \var{PreviousLink} and \var{Source} to be functions.
+Let
+\begin{align}
+\label{e-unhide-a}
+& \mymathop{Unhide}(\Lambda, \Veim{base}) \defined \emptyset \\
+\intertext{and, when $\Vlim{link} \neq \Lambda$, let}
+\label{e-unhide-b}
+&
+\begin{aligned}
+& \mymathop{Unhide}(\Vlim{link}, \Veim{base}) \defined \\
+& \quad \left\lbrace \;\;
+\begin{gathered}
+\mymathop{Unhide}(\PreviousLink{\Vlim{link}}, \Veim{new-base}) \\
+\qquad \cup \quad \set{\Veim{new-base}} \\
+\text{where $\Veim{new-base} = \left[ \Next{\Vdr{link}}, \Vorig{link} \right]_\type{EIM}$} \\
+\land \;\; [ \Vdr{link}, \Vsym{link}, \Vorig{link} ] = \Vlim{link}
+\end{gathered}
+\;\; \right\rbrace
+\end{aligned}
+\end{align}
+In \Eref{e-unhide-b},
+\Veim{new-base} is created with a single link pair,
+$[ \Source{\Vlim{link}}, \Veim{base} ]$.
+
+Then the set of memoized EIMs in \Ves{i}, $\mymathop{Memoized}(\Ves{i})$ is
+\begin{equation*}
+\left\lbrace
+\begin{aligned}
+& \Veim{virtual} : \\
+& \qquad
+\begin{aligned}
+         & \Veim{physical} \in \Ves{i} \\
+\land \;\; & \left[ (\Vlim{link}, \Veim{base}) \right] \in \LinkPairs{\Veim{physical}} \\
+\land \;\; & \Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}).
+\end{aligned}
+\end{aligned}
+\right\rbrace
+\end{equation*}
+Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
+\begin{equation*}
+\Ves{i} \;\; \cup \;\; \mymathop{Memoized}(\Ves{i}).
+\end{equation*}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
+
+\begin{theorem}
+In an unambiguous grammar,
+in every pair of useful complete EIMs,
+one is either contained contained
+in the other,
+or they are disjoint
+\end{theorem}
+
+\begin{proof}
+\TODO{Need this proof?}
+\end{proof}
+
+\begin{theorem}
+\label{th:useful-RR-count}
+Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
+be an unambiguous parse,
+where $\var{n} = \size{\Vstr{w}}$.
+The number of useful complete right recursive EIM's
+in \var{p} is less than or equal to $2 \times \var{n} \subtract 1$,
+or \On{}.
+\end{theorem}
+
+\begin{proof}
+\TODO{Need this proof?}
+\end{proof}
+
+\TODO{Prove Marpa + Reverse Leo = Original Earley}
+
+\begin{theorem}
+The time and space to reverse the Leo memoization
+in an unambiguous parse is \On{}.
+\end{theorem}
+
+\begin{proof}
+\TODO{Prove this}
+\end{proof}
+
 Following the tradition,
 we seek to convince ourselves that our parser is ``correct'',
 by showing that the strings the parser accepts are all, and only,
@@ -3984,6 +3981,11 @@ then we write
 % \Lentail{1,2,3,4}
 % \Eentail{1,2,3,4}
 % \gentail{1,2,3,4}
+
+\section{Reversing Leo memoization}
+\label{s-reverse-leo}
+
+\TODO{Write this section}
 
 \section{LRR complexity}
 \label{s-lrr-complexity}
