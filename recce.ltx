@@ -179,6 +179,19 @@
 % I want to use 'call' outside of pseudocode
 \newcommand\call[2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
 
+% I use parboxes in equations.  This sets a useful width for them.
+\newlength{\mathparwidth}
+\newlength{\longtagwidth}
+\settowidth{\longtagwidth}{(9999)\quad}
+\setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
+\newcommand{\myparbox}[2][\mathparwidth]{%
+  \parbox[t]{#1}{%
+  \raggedright#2\par
+  \vspace{-\prevdepth} % remove the depth of the last line
+  \vspace{1ex} % add a fixed vertical space
+  }%
+}
+
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
