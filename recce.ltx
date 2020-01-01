@@ -1893,18 +1893,15 @@ so that
 \end{equation}
 \end{proof}
 
-% TODO Recheck this.  Are these definitions necessary?  Useful?
 In this paper,
 \Earley{} will refer to the Earley's original
-recognizer\cite{Earley1970}.
+recognizer\cite{Earley1970}
+with zero characters of lookahead.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
 \Marpa{} will refer to the recognizer described in
 this paper, and implemented in
 Marpa::R2~\cite{Marpa-R2}.
-Where $\alg{Recce}$ is a recognizer,
-$\myL{\alg{Recce},\Cg}$ will be the language accepted by $\alg{Recce}$
-when parsing \Cg{}.
 
 \section{Earley tables}
 \label{s-earley-table}
@@ -2491,7 +2488,7 @@ is
 \end{equation}
 
 \begin{observation}[Link pairs]
-\label{ob:common-predict-link-pair},
+\label{ob:common-predict-link-pair}
 Tracking link pairs for a prediction would be cumbersome,
 because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
@@ -2504,10 +2501,6 @@ For these reasons, link pairs are not kept for predictions.
 \end{observation}
 
 \begin{observation}[Complexity]
-\TODO{}
-\end{observation}
-
-\begin{observation}[Original Earley algorithm]
 \TODO{}
 \end{observation}
 
@@ -2545,7 +2538,8 @@ function in \Eref{e:def-initializer}.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm]
-\TODO{}
+This operation is effectively the same as the construction
+of Earley set 0 by \Earley{}.
 \end{observation}
 
 \subsection{Scanner operation}
@@ -2603,7 +2597,8 @@ in order to be passed on to the semantics.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm]
-\TODO{}
+This operation is effectively the same as the Scanner
+operation of \Earley{}\cite[p. 59]{Earley1970}.
 \end{observation}
 
 \subsection{Reducer operation}
@@ -2627,7 +2622,8 @@ Let
 \Bigr\rbrace
 \end{align*}
 such that
-\begin{equation*}
+\begin{equation}
+\label{e:reducer-op-20}
 \begin{gathered}
 \bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
 \right], \Vloc{predecessor} \bigr]
@@ -2638,7 +2634,7 @@ such that
 \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
 \ni \Ves{predecessor}.
 \end{gathered}
-\end{equation*}
+\end{equation}
 
 Also,
 \begin{equation*}
@@ -2650,7 +2646,8 @@ Also,
 \Bigr\rbrace
 \end{equation*}
 such that
-\begin{equation*}
+\begin{equation}
+\label{e:reducer-op-25}
 \begin{gathered}
 \Bigl(\bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
 \right], \Vloc{predecessor} \bigr]\Bigr)_\var{EIM}
@@ -2658,15 +2655,16 @@ such that
 \land \quad \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
 \in \Ves{predecessor}.
 \end{gathered}
-\end{equation*}
+\end{equation}
 
 Then
-\begin{equation*}
+\begin{equation}
+\label{e:reducer-op-30}
 \var{Reducer}(\Ves{i}) \defined
 \var{Earley-reducer}(\Ves{i})
 \cup
 \var{Leo-reducer}(\Ves{i})
-\end{equation*}
+\end{equation}
 
 \begin{observation}[Link pairs]
 Reduced EIM's will have a link pair for every attempt to create them.
@@ -2688,7 +2686,31 @@ or $\Lambda$.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm]
-\TODO{}
+When there are no LIM's in \Ves{predecessor}
+this operation is effectively the same as the Reducer
+operation of \Earley{}\cite[p. 59]{Earley1970}.
+Put another way, the \var{Reducer} operation of this section
+is the same as the Reducer operation of \Earley{},
+if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
+\[
+\bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
+\in \Ves{predecessor}
+\]
+is false in
+\Eref{e:reducer-op-20}
+and
+\Eref{e:reducer-op-25}.
+In this case,
+we will always have
+\[
+\var{Leo-reducer}(\Ves{i}) = \emptyset
+\]
+so that we may also change
+\Eref{e:reducer-op-20}
+to
+\[
+\var{Reducer}(\Ves{i}) \defined \var{Earley-reducer}(\Ves{i}).
+\]
 \end{observation}
 
 \subsection{Prediction}
