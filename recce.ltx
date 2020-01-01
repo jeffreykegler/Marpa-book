@@ -2550,8 +2550,9 @@ function in \Eref{e:def-initializer}.
 \TODO{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm]
-This operation is effectively the same as the construction
+\begin{observation}[Original Earley algorithm: Earley set 0]
+\label{obs:earley-set-0}
+This operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \end{observation}
 
@@ -2609,9 +2610,10 @@ in order to be passed on to the semantics.
 \TODO{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm]
-This operation is effectively the same as the Scanner
-operation of \Earley{}\cite[p. 59]{Earley1970}.
+\begin{observation}[Original Earley algorithm: Scanner Operation]
+\label{obs:earley-scanner-operation}
+This operation has the same effect as the ``Scanner''
+operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
 \subsection{Reducer operation}
@@ -2698,10 +2700,11 @@ or $\Lambda$.
 \TODO{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm]
+\begin{observation}[Original Earley algorithm: Completer Operation]
+\label{obs:earley-completer-operation}
 When there are no LIM's in \Ves{predecessor}
-this operation is effectively the same as the Reducer
-operation of \Earley{}\cite[p. 59]{Earley1970}.
+this operation has the same effect as the ``Completer''
+operation of \Earley{}\cite{Earley1970}.
 Put another way, the \var{Reducer} operation of this section
 is the same as the Reducer operation of \Earley{},
 if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
@@ -2746,8 +2749,10 @@ function.
 \TODO{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm]
-\TODO{}
+\begin{observation}[Original Earley algorithm: Predictor Operation]
+\label{obs:earley-predictor-operation}
+This operation has the same effect as the ``Predictor''
+operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
 \subsection{Memoizer operation}
@@ -2811,16 +2816,15 @@ another LIM, or $\Lambda$.
 \TODO{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm]
-\TODO{}
+\begin{observation}[Original Earley algorithm: Memorizer Operation]
+\label{obs:earley-memoizer-operation}
+This operation does not exist in \Earley{}\cite{Earley1970}.
 \end{observation}
 
 \subsection{Top level of the Marpa algorithm}
 
 The top-level view of the Earley algorithm is
 shown in \Aref{a:marpa}.
-
-\subsection{The top level of Marpa}
 \begin{algorithm}[tb]
 \caption{The Marpa Algorithm}
 \label{a:marpa}
@@ -2835,14 +2839,25 @@ shown in \Aref{a:marpa}.
 \EndIf
 \State $\Ves{i} \gets \Ves{i} \cup \Call{Reducer}{\Ves{i}}$
 \State $\Ves{i} \gets \Ves{i} \cup \Call{Predicter}{\Ves{i}}$
+\label{a:marpa-line-80}
 \State $\Ves{i} \gets \Ves{i} \cup \Call{Memoizer}{\Ves{i}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
-\subsection{Top level of the original Earley algorithm}
-\TODO{}
+\begin{observation}[Original Earley Algorithm: Top level]
+If line \ref{a:marpa-line-80} is removed,
+\Aref{a:marpa} has the same effect as \Earley{}\cite{Earley1970}.
+This can be seen from
+\Aref{a:marpa},
+\Obref{obs:earley-set-0},
+\Obref{obs:earley-scanner-operation},
+\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-predictor-operation},
+and
+\Obref{obs:earley-memoizer-operation}.
+\end{observation}
 
 \subsection{Complexity summary}
 \TODO{}
