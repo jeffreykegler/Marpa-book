@@ -98,6 +98,7 @@
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
 \newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
 
+\newcommand{\eim}[1]{\ensuremath{#1_\type{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
 \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
@@ -106,7 +107,7 @@
 \newcommand{\dr}[1]{\ensuremath{#1_\type{DR}}}
 \newcommand{\Vdr}[1]{\dr{\var{#1}}}
 \newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
-\newcommand{\Veim}[1]{\Tvar{#1}{EIM}}
+\newcommand{\Veim}[1]{\eim{\var{#1}}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
 \newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
@@ -2547,21 +2548,46 @@ is
 \end{aligned}
 \end{equation}
 
-\begin{observation}[Link pairs]
-\label{ob:common-predict-link-pair}
+\begin{observation}[Ancestry]
+\label{ob:common-predict-ancestry}
+The \Marpa{} convention is that
+predictions have predecessors, but no causes.
+The implementation does not record link pairs for predictions.
+
 Tracking link pairs for a prediction would be cumbersome,
 because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
 set.
-Moreover,
-the predictions in an Earley set \Ves{j}
-are easily recovered using
+For a given prediction,
+The \Marpa{} convention is that
+\[
+\left[ [\Vsym{lhs} \de \mydot \Vstr{rhs}], \Vorig{j}]
+\right]
+\]
+the link pairs could be recovered as
+\begin{equation}
+\label{e:common-predict-ancestry-10}
+\left\lbrace
+\begin{gathered}
+\left[
+  \left[ \Vdr{anc}, \Vorig{anc} \right]@\Vloc{j},
+  \Lambda
+\right]_\type{LP} : \\
+\eim{\left[ \Vdr{anc}, \Vorig{anc} \right]} \in \Ves{j} \\
+\land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
+\end{gathered}
+\right\rbrace
+\end{equation}
+The computation of
+\Eref{e:common-predict-ancestry-10}
+could be sped up using
 the transition table \Sref{s:transition-tables} for \Ves{j}.
-For these reasons, link pairs are not kept for predictions.
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Complexity]
 \TODO{}
+$\bigstar$
 \end{observation}
 
 \subsection{Initializer operation}
@@ -2587,7 +2613,7 @@ $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
 The initial EIM is present in every parse,
 and always for the same reason,
 so a link pair would serve no purpose.
-And, as noted in \Obref{ob:common-predict-link-pair},
+And, as noted in \Obref{ob:common-predict-ancestry},
 link pairs are not kept for
 the predictions created by the \var{Predict}
 function in \Eref{e:def-initializer}.
@@ -2788,7 +2814,7 @@ to
 \end{equation*}
 
 \begin{observation}[Link pairs]
-And, as noted in \Obref{ob:common-predict-link-pair},
+And, as noted in \Obref{ob:common-predict-ancestry},
 link pairs are not kept for
 the predictions created by the \var{Predict}
 function.
