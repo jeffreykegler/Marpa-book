@@ -2350,7 +2350,7 @@ and
 \begin{equation*}
 \Veim{top} = [\Vdr{top}, \Vorig{top}]
 \end{equation*}
-is the Earley item to be added on reductions over
+is the Earley item to be added on completer operations over
 \Vsym{transition}.
 
 Leo items memoize what would otherwise be sequences
@@ -2609,7 +2609,8 @@ Then
 where
 $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
 
-\begin{observation}[Link pairs]
+\begin{observation}[Ancestry]
+\label{ob:initializer-ancestry}
 The \Marpa{} implementation does not keep
 any link pairs for any PIM in Earley set 0.
 \Veim{start} does not have any non-trivial ancestor,
@@ -2662,10 +2663,13 @@ such that
 \end{aligned}
 \end{equation*}
 
-\begin{observation}[Link pairs]
+\begin{observation}[Ancestry]
+\label{ob:scanner-ancestry}
+The \Marpa{} implementation tracks all link paris for scanned EIM's.
 In an unambiguous parse, a scanned EIM will always have
 exactly one link pair.
 In an ambiguous parse, a scanned EIM will have one or more link pairs.
+
 The predecessor of a scanned EIM is an incomplete EIM.
 The cause of a scanned EIM is a token,
 which conceptually is
@@ -2693,12 +2697,12 @@ This operation has the same effect as the ``Scanner''
 operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
-\subsection{Reducer operation}
-\label{d:reducer}
+\subsection{Completer operation}
+\label{d:completer}
 
 Let
 \begin{align*}
-& \var{Earley-reducer}(\Ves{i}) \defined \\
+& \var{Earley-completer}(\Ves{i}) \defined \\
 & \qquad \Bigl\lbrace
 \bigl [
 \left[
@@ -2715,7 +2719,7 @@ Let
 \end{align*}
 such that
 \begin{equation}
-\label{e:reducer-op-20}
+\label{e:completer-op-20}
 \begin{gathered}
 \bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
 \right], \Vloc{predecessor} \bigr]
@@ -2732,7 +2736,7 @@ such that
 
 Also,
 \begin{equation*}
-\var{Leo-reducer}(\Ves{i}) \defined
+\var{Leo-completer}(\Ves{i}) \defined
 \Bigl\lbrace
 \bigl(
 \left[ \Vdr{top}, \Vloc{top} \right]
@@ -2741,7 +2745,7 @@ Also,
 \end{equation*}
 such that
 \begin{equation}
-\label{e:reducer-op-25}
+\label{e:completer-op-25}
 \begin{gathered}
 \Bigl(\bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
 \right], \Vloc{predecessor} \bigr]\Bigr)_\var{EIM}
@@ -2753,26 +2757,31 @@ such that
 
 Then
 \begin{equation}
-\label{e:reducer-op-30}
-\var{Reducer}(\Ves{i}) \defined
-\var{Earley-reducer}(\Ves{i})
+\label{e:completer-op-30}
+\var{Completer}(\Ves{i}) \defined
+\var{Earley-completer}(\Ves{i})
 \cup
-\var{Leo-reducer}(\Ves{i})
+\var{Leo-completer}(\Ves{i})
 \end{equation}
 
-\begin{observation}[Link pairs]
-Reduced EIM's will have a link pair for every attempt to create them.
-In an unambiguous parse, a reduced EIM will always have exactly one link pair.
-In an ambiguous parse, a reduced EIM will have one or more link pairs.
-The cause of a reduced EIM will always be
+\begin{observation}[Ancestry]
+\label{ob:completer-ancestry}
+The \Marpa{} implementation tracks all link pairs for completer-generated
+EIM's.
+Completer-generated EIM's will have a link pair for every attempt to create them.
+In an unambiguous parse, a completer-generated EIM will always have exactly one link pair.
+In an ambiguous parse, a completer-generated EIM will have one or more link pairs.
+The cause of a completer-generated EIM will always be
 a completed EIM.
-The predecessor of a reduced EIM varies depending on whether the attempt
-to create the reduced EIM was a Leo reduction or an Earley reduction.
-For an Earley reduction attempt,
+The predecessor of a completer-generated EIM varies depending on whether the attempt
+to create the completer-generated EIM was a Leo completer operation
+or an Earley completer operation.
+For an Earley completer operation,
 the predecessor will be an incomplete EIM.
-For a Leo reduction attempt,
+For a Leo completer operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Complexity]
@@ -2784,27 +2793,27 @@ or $\Lambda$.
 When there are no LIM's in \Ves{predecessor}
 this operation has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.
-Put another way, the \var{Reducer} operation of this section
-is the same as the Reducer operation of \Earley{},
+Put another way, the \var{Completer} operation of this section
+is the same as the Completer operation of \Earley{},
 if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 \[
 \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
 \in \Ves{predecessor}
 \]
 is false in
-\Eref{e:reducer-op-20}
+\Eref{e:completer-op-20}
 and
-\Eref{e:reducer-op-25}.
+\Eref{e:completer-op-25}.
 In this case,
 we will always have
 \[
-\var{Leo-reducer}(\Ves{i}) = \emptyset
+\var{Leo-completer}(\Ves{i}) = \emptyset
 \]
 so that we may also change
-\Eref{e:reducer-op-20}
+\Eref{e:completer-op-20}
 to
 \[
-\var{Reducer}(\Ves{i}) \defined \var{Earley-reducer}(\Ves{i}).
+\var{Completer}(\Ves{i}) \defined \var{Earley-completer}(\Ves{i}).
 \]
 \end{observation}
 
@@ -2812,26 +2821,30 @@ to
 \label{d:prediction}
 
 \begin{equation*}
-\var{Predicter}(\Ves{i}) \;\; \defined
+\var{Predictor}(\Ves{i}) \;\; \defined
 \smashoperator[r]{\mathop{\bigcup}_{\textstyle \var{eim}\in\Ves{i}}}
 \;\; \var{Predict}(\Veim{eim}, \Vloc{i})
 \end{equation*}
 
-\begin{observation}[Link pairs]
-And, as noted in \Obref{ob:common-predict-ancestry},
+\begin{observation}[Ancestry]
+\label{obs:predictor-ancestry}
+The \Marpa{} implementation does not track
 link pairs are not kept for
-the predictions created by the \var{Predict}
-function.
+the predictions.
+For details, see \Obref{ob:common-predict-ancestry}.
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Complexity]
 \TODO{}
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Predictor Operation]
 \label{obs:earley-predictor-operation}
 This operation has the same effect as the ``Predictor''
 operation of \Earley{}\cite{Earley1970}.
+$\bigstar$
 \end{observation}
 
 \subsection{Memoizer operation}
@@ -2877,10 +2890,14 @@ Let
 \var{Extend-Leo-Chain}(\Ves{i})
 \end{align*}
 
-\begin{observation}[Link pairs]
+\begin{observation}[Ancestry]
+\label{obs:memoizer-ancestry}
+The \Marpa{} implementation tracks the link pairs
+for the LIM's.
 A LIM always has exactly one link pair.
 That is because LIMs memoize Leo chains,
 which are deterministic.
+
 In the link pair for a LIM,
 the ``cause'' is more often called the \dfn{source} of the LIM.
 In the link pair for a LIM,
@@ -2889,15 +2906,18 @@ The source of the link pair of a LIM is the EIM for which it ``stands in''.
 The source EIM will always be a penult in the same Earley set as the LIM.
 The previous link of the link pair of a LIM is either
 another LIM, or $\Lambda$.
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Complexity]
 \TODO{}
+$\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-operation}
 This operation does not exist in \Earley{}\cite{Earley1970}.
+$\bigstar$
 \end{observation}
 
 \subsection{Top level of the Marpa algorithm}
@@ -2916,8 +2936,8 @@ shown in \Aref{a:marpa}.
 \If{$\size{\Ves{i}} = 0$}
 \State return \Comment \Cw{} will be rejected
 \EndIf
-\State $\Ves{i} \gets \Ves{i} \cup \Call{Reducer}{\Ves{i}}$
-\State $\Ves{i} \gets \Ves{i} \cup \Call{Predicter}{\Ves{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Completer}{\Ves{i}}$
+\State $\Ves{i} \gets \Ves{i} \cup \Call{Predictor}{\Ves{i}}$
 \label{a:marpa-line-80}
 \State $\Ves{i} \gets \Ves{i} \cup \Call{Memoizer}{\Ves{i}}$
 \EndFor
