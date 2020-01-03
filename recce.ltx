@@ -292,9 +292,9 @@ where {\it n} is the section number),
 For example
 \Eref{e-restriction1} refers to equation
 \ref{e-restriction1} on page \pageref{e-restriction1};
-\Sref{s-features} refers to
-section \ref{s-features}
-on page \pageref{s-features};
+\Sref{sec:features} refers to
+section \ref{sec:features}
+on page \pageref{sec:features};
 and
 \Lref{loc-brick-depth} refers
 to page \pageref{loc-brick-depth}
@@ -316,33 +316,33 @@ Shorter synonyms are intended to be used for brevity,
 and only in cases where they are not expected to cause confusion.
 
 % TODO Revise once chapters are settled
-\Sref{s-features}
+\Sref{sec:features}
 describes the important features of Marpa
 and
-\Sref{s-using-features}
+\Sref{sec:using-features}
 goes into detail about their application.
-\Sref{s-preliminaries} describes the notation and conventions
+\Sref{sec:preliminaries} describes the notation and conventions
 of this paper.
-\Sref{s-CFGs} defines context-free grammars.
-\Sref{s-EXTs} introduces Marpa's external grammars ---
+\Sref{sec:CFGs} defines context-free grammars.
+\Sref{sec:EXTs} introduces Marpa's external grammars ---
 the grammars which the users see.
-\Sref{s-improper} describes Marpa's
+\Sref{sec:improper} describes Marpa's
 implementation of improper context free grammars.
-\Sref{s-rewrite} explain how Marpa rewrites its external
+\Sref{sec:rewrite} explain how Marpa rewrites its external
 grammars into internal grammars, and
-\Sref{s-INTs} describes Marpa's internal grammars.
-\Sref{s-earley-table} describes the data structures used
+\Sref{sec:INTs} describes Marpa's internal grammars.
+\Sref{sec:earley-table} describes the data structures used
 in parsing Marpa internal grammars.
-\Sref{s-leo} describes Leo's modification
+\Sref{sec:leo} describes Leo's modification
 to Earley's algorithm.
-\Sref{s-algorithm}
+\Sref{sec:algorithm}
 describes the Marpa algorithm.
-\Sref{s-per-set-lists} describes Marpa's
+\Sref{sec:per-set-lists} describes Marpa's
 per-set lists.
-while \Sref{s-complexity} contains
+while \Sref{sec:complexity} contains
 its complexity results.
 Finally,
-section \Sref{s-input}
+section \Sref{sec:input}
 generalizes Marpa's input model.
 
 We assume familiarity with the theory of parsing,
@@ -355,7 +355,7 @@ Readers may find it helpful to read
 before this paper.
 
 \section{Features}
-\label{s-features}
+\label{sec:features}
 
 \subsection{General context-free parsing}
 The Marpa algorithm is capable of parsing all
@@ -369,7 +369,7 @@ but support for them
 was removed because
 practical interest seems to be non-existent.
 For more detail, see section
-\ref{s-improper}.
+\ref{sec:improper}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
@@ -427,7 +427,7 @@ for example, an application could react to the
 rejection of a token by reading two others.
 
 \section{Using the features}
-\label{s-using-features}
+\label{sec:using-features}
 
 \subsection{Error reporting}
 An obvious application of left-eideticism is error
@@ -612,7 +612,7 @@ The user of the yacc equivalent must hope their
 syntax falls within the limits of LALR.
 
 \section{Preliminaries}
-\label{s-preliminaries}
+\label{sec:preliminaries}
 
 This paper will
 use subscripts to indicate commonly occurring types,
@@ -759,7 +759,7 @@ as well-defined as any concept in mathematics.
 }
 
 \section{Context-free grammars}
-\label{s-CFGs}
+\label{sec:CFGs}
 
 A \dfn{context free grammar} (CFG) is a 4-tuple,
 \begin{equation}
@@ -858,7 +858,7 @@ and only if \Vsym{lhs} is the rightmost non-terminal.
 A sequence of iterated rewrite steps of \Vcfg{g}, such that
 \begin{equation}
 \label{e-derivation}
-\Vstr{s1} \derives \Vstr{s2} \derives \Vstr{s3} \ldots \Vstr{s-n}
+\Vstr{s1} \derives \Vstr{s2} \derives \Vstr{s3} \ldots \Vstr{sec:n}
 \end{equation}
 is called a \dfn{derivation} of \Vcfg{g},
 and a rewrite step that is part of a derivation is called
@@ -871,7 +871,7 @@ The sequence of strings in a derivation, its sequence of strings
 is called its \dfn{derivation sequence}.
 The derivation sequence of \Eref{e-derivation} is
 \begin{equation*}
-\Vstr{s1}, \Vstr{s2}, \Vstr{s3} \ldots \Vstr{s-n}.
+\Vstr{s1}, \Vstr{s2}, \Vstr{s3} \ldots \Vstr{sec:n}.
 \end{equation*}
 
 We explicitly indicate that some \Vstr{x} derives \Vstr{y} in \var{k} steps
@@ -1170,7 +1170,7 @@ Directly from \Dfref{df:LR}.
 \end{proof}
 
 \section{External grammars}
-\label{s-EXTs}
+\label{sec:EXTs}
 
 \subsection{Cycles}
 
@@ -1239,7 +1239,7 @@ cycle string, but does not derive the cycle string
 in any of its intermediate steps.
 
 \section{Improper context free grammars}
-\label{s-improper}
+\label{sec:improper}
 
 A \dfn{proper CFG} is a CFG with no
 \begin{itemize}
@@ -1250,7 +1250,7 @@ A \dfn{proper CFG} is a CFG with no
 A \dfn{improper CFG} is a CFG which is
 not proper.
 We discussed Marpa's handling of cycles earlier
-(section \ref{s-EXTs}, p. \pageref{s-EXTs}).
+(section \ref{sec:EXTs}, p. \pageref{sec:EXTs}).
 
 \subsection{Unproductive symbols}
 
@@ -1370,7 +1370,7 @@ in which case the warning need only be silenced for those
 topmost symbols.
 
 \section{Rewriting the grammar}
-\label{s-rewrite}
+\label{sec:rewrite}
 
 \subsection{The Aycock-Horspool parser}
 
@@ -1394,12 +1394,12 @@ is invisible to
 the user.
 
 We defined Marpa's external grammars in
-\Sref{s-EXTs}.
+\Sref{sec:EXTs}.
 Recall that an external grammar may be any cycle-free grammar.
 Marpa internal grammars are described by construction
 in this section.
 They will be defined more carefully
-in \Sref{s-INTs}.
+in \Sref{sec:INTs}.
 This section describes the rewrite
 from an external grammar
 to an internal grammar.
@@ -1463,11 +1463,11 @@ allow the rules and symbols of the external grammar
 to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
 but at run-time as well.
-\Sref{s-augmentation},
-\Sref{s-eliminating-proper_nullables},
-\Sref{s-removing-nulling-symbols},
+\Sref{sec:augmentation},
+\Sref{sec:eliminating-proper_nullables},
+\Sref{sec:removing-nulling-symbols},
 and
-\Sref{s-trivial-grammars}
+\Sref{sec:trivial-grammars}
 describe the rewrites
 applied by Marpa.
 We will state Marpa's definition
@@ -1475,7 +1475,7 @@ of semantics-safe more precisely
 in section \Sref{semantics-safe}.
 
 \subsection{Augmenting the grammar}
-\label{s-augmentation}
+\label{sec:augmentation}
 
 Let \Vint{g} be a Marpa internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
@@ -1508,7 +1508,7 @@ Instead, the accept rule is
 dealt with as a special case.
 
 \subsection{Eliminating proper nullables}
-\label{s-eliminating-proper_nullables}
+\label{sec:eliminating-proper_nullables}
 
 Recall that a proper nullable
 is a nullable symbol which is not nulling.
@@ -1552,10 +1552,10 @@ going exponential on $\ell$ has a cost
 which it is worth some trouble to avoid.
 
 \subsection{Removing nulling symbols}
-\label{s-removing-nulling-symbols}
+\label{sec:removing-nulling-symbols}
 
 After the rewrite of
-\Sref{s-eliminating-proper_nullables},
+\Sref{sec:eliminating-proper_nullables},
 all the nullable symbols in the grammar are also
 nulling symbols.
 Note that, if \Vext{g} is an external grammar,
@@ -1588,7 +1588,7 @@ even if they differ only in their recorded nulling symbols.
 This is what the Marpa implementation does.
 
 \subsection{Trivial grammars and null parses}
-\label{s-trivial-grammars}
+\label{sec:trivial-grammars}
 
 Null parses are parses of zero length inputs.
 The Marpa implementation
@@ -1775,7 +1775,7 @@ is a one-to-one correspondence
 \end{definition}
 
 \section{Marpa internal grammars}
-\label{s-INTs}
+\label{sec:INTs}
 
 The formal definition of
 a Marpa internal grammar is that of
@@ -1785,12 +1785,12 @@ with two additional restrictions.
 \begin{itemize}
 \item Marpa internal grammars are augmented.
 For details of grammar augmentation,
-see \Sref{s-augmentation}.
+see \Sref{sec:augmentation}.
 \item Marpa internal grammars do not allow nullable symbols.
 \end{itemize}
 
 
-The notations for CFG's \Sref{s-CFGs}
+The notations for CFG's \Sref{sec:CFGs}
 carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
@@ -1918,7 +1918,7 @@ this paper, and implemented in
 Marpa::R2~\cite{Marpa-R2}.
 
 \section{Earley tables}
-\label{s-earley-table}
+\label{sec:earley-table}
 
 The definitions of this section
 assume that \Vint{g} is a Marpa internal grammar.
@@ -2088,7 +2088,7 @@ and so on.
 A \dfn{parse item} is either an Earley or a Leo item.
 Parse items are of type \type{PIM}.
 Leo items (type \type{LIM})
-will be defined in \Sref{s-leo}.
+will be defined in \Sref{sec:leo}.
 
 Within Marpa,
 an Earley set is defined as a set of \dfn{parse items}.
@@ -2151,7 +2151,7 @@ to go back and forth between integer location,
 and Earley set,
 \Ves{i}.\footnote{
 For a discussion of this from the implementation
-point of view, see \Sref{s-es-indexing}.
+point of view, see \Sref{sec:es-indexing}.
 }
 If \var{working} is an Earley set,
 $\size{\Ves{working}}$ is the number of Earley items
@@ -2201,7 +2201,7 @@ is \dfn{useful}. $\bigstar$
 \end{definition}
 
 \section{The Leo algorithm}
-\label{s-leo}
+\label{sec:leo}
 
 \subsection{The history of a conjecture}
 
@@ -2319,7 +2319,7 @@ bound in
 his title.
 
 \subsection{Leo items}
-\label{s-LIMs}
+\label{sec:LIMs}
 
 Summarizing Leo's method,
 it consists of spotting potential right recursions
@@ -2364,7 +2364,7 @@ play in the parse is to derive the top EIM.
 We will call these memoized sequences, Leo sequences.
 
 \subsection{Leo uniqueness}
-\label{s-leo-uniqueness}
+\label{sec:leo-uniqueness}
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
@@ -2388,7 +2388,7 @@ EIMs of Earley set \Ves{i},
 even those which are not penults.
 
 \subsection{Leo predecessor}
-\label{s-leo-predecessor}
+\label{sec:leo-predecessor}
 
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
@@ -2411,7 +2411,7 @@ if and only if, for some \Vdr{top}, \Vorig{top},
 \end{equation*}
 
 \section{Ancestry}
-\label{s-ancestry}
+\label{sec:ancestry}
 
 \Marpa{}, like other variants of \Earley{}, performs
 ``operations'' on the Earley sets to produce new
@@ -2497,7 +2497,7 @@ or as
 for the PIM subtypes.
 
 \section{The Marpa algorithm}
-\label{s-algorithm}
+\label{sec:algorithm}
 
 For the purpose of defining the Marpa algorithm,
 let $[\Vint{g}, \Vstr{w}]$ be a parse.
@@ -2509,7 +2509,7 @@ which add PIM's.
 Then we will discuss the top-level.
 
 \subsection{Common prediction logic}
-\label{s-common-predict}
+\label{sec:common-predict}
 
 Let \var{PredictDR1} be the relation defined by the set
 \begin{equation*}
@@ -2581,7 +2581,7 @@ the link pairs could be recovered as
 The computation of
 \Eref{e:common-predict-ancestry-10}
 could be sped up using
-the transition table \Sref{s:transition-tables} for \Ves{j}.
+the transition table \Sref{sec:transition-tables} for \Ves{j}.
 $\bigstar$
 \end{observation}
 
@@ -2591,11 +2591,11 @@ $\bigstar$
 \end{observation}
 
 \subsection{Initializer operation}
-\label{s-initializer}
+\label{sec:initializer}
 
 Recall from \Eref{e-accept-rule} the accept rule of \Vint{g},
 \Vrule{accept},
-and from \Sref{s-common-predict}
+and from \Sref{sec:common-predict}
 the definition of \var{Predict}.
 Then
 \begin{equation}
@@ -2882,13 +2882,17 @@ Let
 \Vlim{pred} = [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] \\
 \end{gathered}
 \;\; \right\rbrace .
-\\
-\displaybreak[3]
-& \text{Then $\var{Memoizer}(\Ves{i}) \defined$} \\
+\end{align*}
+Then
+\begin{equation}
+\label{eq:d-memoizer-40}
+\begin{aligned}
+& \var{Memoizer}(\Ves{i}) \defined \\
 & \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
 \cup
 \var{Extend-Leo-Chain}(\Ves{i})
-\end{align*}
+\end{aligned}
+\end{equation}
 
 \begin{observation}[Ancestry]
 \label{obs:memoizer-ancestry}
@@ -2908,6 +2912,22 @@ The previous link of the link pair of a LIM is either
 another LIM, or $\Lambda$.
 $\bigstar$
 \end{observation}
+
+\begin{definition}[LIM Validity]
+\label{def:lim-validity}
+We say that a LIM is \dfn{valid}
+if and only if
+\begin{itemize}
+\item it is formed according to
+\Eref{eq:d-memoizer-40};
+\item its source is valid; and
+\item its predecessor is valid.
+\end{itemize}
+A predecessor
+whose value is $\Lambda$
+is considered valid.
+$\bigstar$
+\end{definition}
 
 \begin{observation}[Complexity]
 \TODO{}
@@ -3738,7 +3758,7 @@ This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}.
 \end{proof}
 
 \section{Implementation}
-\label{s-implementation}
+\label{sec:implementation}
 
 \subsection{Leo memoization}
 
@@ -3813,7 +3833,7 @@ should consider evaluate their grammar treating
 ``unicorns'' as if they were productive symbols.
 
 \subsection{Earley set indexing}
-\label{s-es-indexing}
+\label{sec:es-indexing}
 
 In our theoretical discussions,
 we assumed that we could efficiently convert between
@@ -3847,12 +3867,12 @@ and we take this point of view when discussing per-parse resource.
 }
 
 \subsection{Transition tables}
-\label{s:transition-tables}
+\label{sec:transition-tables}
 
 \TODO{}
 
 \section{Per-set lists}
-\label{s-per-set-lists}
+\label{sec:per-set-lists}
 
 In the general case,
 where \var{x} is an arbitrary datum,
@@ -3988,7 +4008,7 @@ It is for this reason that
 the more complicated approach is illustrated above.
 
 \section{Marpa is correct}
-\label{s-correctness}
+\label{sec:correctness}
 
 In this paper,
 we call a parsing algorithm \dfn{correct} if and
@@ -4024,6 +4044,9 @@ Let
 \end{gather}
 Because every LIM has exactly one link pair,
 both \var{PreviousLink} and \var{Source} are functions.
+
+We say that a LIM is \dfn{valid} if its source is valid.
+
 Let
 \begin{gather}
 \mymathop{Unhide}(\Vlim{pred}, \Veim{base}) \defined
@@ -4158,12 +4181,12 @@ then we write
 % \gentail{1,2,3,4}
 
 \section{Reversing Leo memoization}
-\label{s-reverse-leo}
+\label{sec:reverse-leo}
 
 \TODO{Write this section}
 
 \section{LRR complexity}
-\label{s-lrr-complexity}
+\label{sec:lrr-complexity}
 
 The following theorem will prove useful.
 
@@ -5265,7 +5288,7 @@ For every LRR grammar,
 \end{proof}
 
 \section{General complexity}
-\label{s-complexity}
+\label{sec:complexity}
 
 \begin{theorem}
 For every unambiguous grammar,
@@ -5317,7 +5340,7 @@ including the space for tracking links.
 \end{proof}
 
 \section{The Marpa Input Model}
-\label{s-input}
+\label{sec:input}
 
 In this paper,
 up to this point,
