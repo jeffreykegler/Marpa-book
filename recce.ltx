@@ -117,6 +117,7 @@
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
+\newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
 \newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
@@ -175,11 +176,12 @@
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
-\newcommand\entail[2]{\ensuremath{{\mathcal{#1}}\models\left(#2\right)}}
-\newcommand\Mentail[1]{\entail{M}{#1}}
-\newcommand\Eentail[1]{\entail{E}{#1}}
-\newcommand\Lentail[1]{\entail{L}{#1}}
-\newcommand\gentail[1]{\ensuremath{\var{g}\vdash\left(#1\right)}}
+% TODO: Delete these?
+% \newcommand\entail[2]{\ensuremath{{\mathcal{#1}}\models\left(#2\right)}}
+% \newcommand\Mentail[1]{\entail{M}{#1}}
+% \newcommand\Eentail[1]{\entail{E}{#1}}
+% \newcommand\Lentail[1]{\entail{L}{#1}}
+% \newcommand\gentail[1]{\ensuremath{\var{g}\vdash\left(#1\right)}}
 
 % I want to use 'call' outside of pseudocode
 \newcommand\call[2]{\textproc{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
@@ -3847,12 +3849,12 @@ Leo\cite{Leo1991} intact.
 % TODO: Reference to Leo chain -- cataphoric?
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
-Omission of a Leo memoization at one end of a Leo
-chain unions at one EIM into the Earley tables,
-and $\es(0)$ memoization would
-would have to be implemented as a special case.
-If the difference could be measured,
-$\es(0)$ memoization would probably be found to
+$\es{(0)}$ memoization
+would have to be implemented as a special case,
+and omission of a Leo memoization at one end of a Leo
+chain unions at one EIM into the Earley tables.
+If the difference is measurable
+$\es{(0)}$ memoization will probably be found to
 be counter-productive.
 
 \subsection{Unproductive symbols}
@@ -4100,7 +4102,7 @@ both \var{PreviousLink} and \var{Source} are functions.
 \begin{definition}[Leo chain]
 \label{d:leo-chain}
 A \dfn{Leo chain} is a sequence of one or more LIM's,
-call it $\var{links}$,
+call it $\Vlimset{links}$,
 where
 \[
 \PreviousLink{\var{links}[\Vsize{n} \subtract 1]} = \Lambda
@@ -4110,34 +4112,56 @@ and, for all $0 \le \var{n} < \Vsize{n} \subtract 1$,
 \PreviousLink{\var{links}[\var{n}]} = \var{links}[\var{n}+1].
 \quad \bigstar
 \]
+We say that \var{links} is the chain of \Vlim{closest} if and
+only if \var{links} is a Leo chain
+such that $\var{links}[0] = \Vlim{closest}$.
 \end{definition}
 
+Let \Veim{base} be an EIM
+and let \Vlim{lim} be a LIM.
+We say \Veim{base} \dfn{matches} \Vlim{lim},
+if and only if
+\begin{itemize}
+\item \Veim{base} is a completion;
+\item the transition symbol of \Vlim{lim} is \LHS{\var{base}}; and
+\item $\Vlim{lim} \in \es{(\Origin{\var{base}})}$.
+\end{itemize}
+We say that \Veim{base} \dfn{matches} a Leo chain,
+call it \Vlimset{chain},
+if and only if \Veim{base} matches $\var{chain}[0]$.
+
 \begin{definition}[Leo edge]
-Let \Vint{g} be a grammar;
-let
-\[
-\Veim{base} = [\Vdr{base}, \Vorig{base}]@\Vloc{current}
-\]
-be a completion
-and let \var{chain} be a Leo chain
+Let \Vint{g} be a grammar,
+let \Vlimset{chain} be a Leo chain,
+and let $\Veim{base} \in \Ves{current}$ be an EIM which
+matches \var{chain}.
+Then the \dfn{Leo edge}, or just \dfn{edge},
+of \var{chain} and \var{base}
+is a sequence of complete EIM's, call it \Veimset{edge},
 such that
-\begin{gather*}
-\var{chain}[0] = [\Vdr{top}, \LHS{\Veim{base}}, \Vorig{top}] \\
-\text{and $\var{chain}[0] \in \Ves{base}$}
-\end{gather*}
-Then \var{edge} is a sequence of complete EIM's such
-that
-\begin{equation}
+\begin{equation*}
 \var{edge}[0] = \Veim{base}
-\end{equation}
+\end{equation*}
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \begin{gather*}
 \var{edge}[\var{n}+1] = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]\mymathop{@}\Vloc{current} \\
 \text{where $\LinkPairs{\var{edge}[\var{n}+1]} = \left[ \Veim{pred}, \var{edge}[\var{n}] \right]_\type{LP}$} \\
 \text{and $\Veim{pred} = \left[ \Vdr{pred}, \Vorig{pred} \right] = \Source{\var{chain}[\var{n}]}$.}
-\quad \bigstar
 \end{gather*}
+We say that an edge is \dfn{valid} if and only if all the elements of the edge
+are valid.
+$\bigstar$
 \end{definition}
+
+\begin{theorem}
+Let 
+\end{theorem}
+
+\begin{proof}
+\TODO{}
+\end{proof}
+
+\TODO{TO HERE}
 
 Let
 \begin{gather}
@@ -4228,49 +4252,6 @@ in an unambiguous parse is \On{}.
 \begin{proof}
 \TODO{Prove this}
 \end{proof}
-
-Following the tradition,
-we seek to convince ourselves that our parser is ``correct'',
-by showing that the strings the parser accepts are all, and only,
-the sentences in the language of its grammar.
-That is, we seek to show that
-for every grammar \Vint{g} and every string \Vstr{w},
-$\Vstr{w} \in \Term{\Vint{g}}^\ast$,
-\begin{equation}
-\label{eq:marpa-correct}
-\begin{gathered}
-\left(
-  \exists \Vstr{x} \;
-\middle| \;
-  \left[ \Accept{\Vint{g}} ::= \Vstr{x} \mydot
-  \right] \in \es{ \left( \Vsize{w} \right) }
-\right)
-\\
-\equiv \;
-\Accept{\Vint{g}} \destar \Vstr{w}.
-\end{gathered}
-\end{equation}
-
-\TODO{Rewrite}
-If
-\begin{equation*}
-\begin{gathered}
-\Veim{x} = [ [ \Vrule{x}, \var{pos} ]_\type{DR}, \Vloc{orig} ] \quad \text{and} \\
-\Veim{x} \in \Ves{i}
-\end{gathered} \\
-\end{equation*}
-then we write
-\begin{equation*}
-\Eentail{\Vrule{x}, \var{pos}, \Vloc{orig}, \Ves{i}}.
-\end{equation*}
-
-\TODO{Refer to \cite{Earley1968} and \cite{AU1972}}
-
-% TODO: Will I use these?
-% \Mentail{1,2,3,4}
-% \Lentail{1,2,3,4}
-% \Eentail{1,2,3,4}
-% \gentail{1,2,3,4}
 
 \section{Reversing Leo memoization}
 \label{sec:reverse-leo}
