@@ -2136,7 +2136,10 @@ or the PIM \Vpim{p} at Ves{j}, we may write any of
 
 When we speak of Earley sets in procedural terms,
 we will say that an Earley item is \dfn{unioned into}
-an Earley set, rather than added to it.
+an Earley set,
+or \dfn{unioned},
+rather than say that the Earley item is ``added'' to an Earley set,
+or ``added''.
 This is because
 Earley sets are sets,
 so that ``adding'' a duplicate EIM to
@@ -2451,15 +2454,10 @@ then \Vpim{anc} is said to be the \dfn{direct ancestor}
 of \Vpim{desc},
 and \Vpim{desc} is said to be the \dfn{direct descendant}
 of \Vpim{anc}.
-
-Note that we say, ``unioning into an Earley set''.
-Duplicate PIM's are not added to an Earley set,
-so that \Vpim{desc} will not be added to \Ves{j},
 if \Vpim{desc} is already a member of \Ves{j}.
 \Vpim{anc}
 becomes a direct ancestor of \Vpim{desc},
-and \Vpim{desc} becomes a direct descendant of \Vpim{anc},
-even if \Vpim{desc} already exists in \Ves{j}.
+and \Vpim{desc} becomes a direct descendant of \Vpim{anc}.
 
 Any PIM is, trivially,
 its own \dfn{trivial ancestor} and its own \dfn{trivial descendant}.
@@ -3850,7 +3848,7 @@ Leo\cite{Leo1991} intact.
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
 Omission of a Leo memoization at one end of a Leo
-chain adds at most one EIM to the Earley tables,
+chain unions at one EIM into the Earley tables,
 and $\es(0)$ memoization would
 would have to be implemented as a special case.
 If the difference could be measured,
@@ -4327,11 +4325,11 @@ then \var{g} is ambiguous.
 For the theorem, we assume without loss of generality that
 \begin{gather}
 \label{eq:ambiguous-links-pair-10a}
-\Veim{added} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
+\Veim{unioned} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
 \label{eq:ambiguous-links-pair-10b}
-\text{$\Veim{added} @ \Ves{j}$ is valid, and} \\
+\text{$\Veim{unioned} @ \Ves{j}$ is valid, and} \\
 \label{eq:ambiguous-links-pair-10d}
-\LinkPairs{\Veim{added}} \ge 1.
+\LinkPairs{\Veim{unioned}} \ge 1.
 \end{gather}
 
 The proof proceeds by eliminating subcases within a reductio.
@@ -4341,10 +4339,10 @@ We assume for the reductio that
 \text{\var{g} is not ambiguous.}
 \end{equation}
 
-Confirmed EIMs are only added by the Scanner and the Completer.
+Confirmed EIMs are only unioned by the Scanner and the Completer.
 
 {\bf Subcase 1: The Scanner.}
-Assume that \Veim{added} was added by the scanner.
+Assume that \Veim{unioned} was unioned by the scanner.
 Then
 \begin{equation}
 \left[ \left[ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} \right], \Vorig{i} \right] @ \es{(\var{j}\subtract 1)}
@@ -4358,10 +4356,10 @@ This link pair must be unique, contrary to assumption
 \Eref{eq:ambiguous-links-pair-10d}.
 This eliminates this subcase, and allows us to assume,
 for the rest of this proof,
-that \Veim{added} was added by the completer.
+that \Veim{unioned} was unioned by the completer.
 
 {\bf The Completer.}
-Since \Veim{added} was added by the completer,
+Since \Veim{unioned} was unioned by the completer,
 if it has two link pairs
 it takes the form
 
@@ -5182,8 +5180,8 @@ From
 \Eref{eq:incompletion-bound-1},
 \Eref{eq:incompletion-bound-2}, and
 \Eref{eq:incompletion-bound-15},
-we see that every derivation which adds an incompletion
-to \Ves{j} for the cell of $\pi$ containing \Vterm{input3} is
+we see that every derivation which unions an incompletion
+into \Ves{j} for the cell of $\pi$ containing \Vterm{input3} is
 of the form
 \begin{align}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3} \\
