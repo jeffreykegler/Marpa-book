@@ -144,6 +144,7 @@
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
+\newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
 \newcommand{\Etable}[1]{\ensuremath{\mymathop{table}\left[#1\right]}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
@@ -155,6 +156,7 @@
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
+\newcommand{\Origin}[1]{\ensuremath{\mymathop{Origin}(#1)}}
 \newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
 \newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}\left(#1\right)}}
 \newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}\left(#1\right)}}
@@ -2045,9 +2047,10 @@ A rule which is both an incompletion and a confirmation
 is called a \dfn{medial rule}, or \dfn{medial}.
 
 A Earley item (type \type{EIM}) is a duple
-\[
+\begin{equation}
+\label{eq:d-eim}
     [\Vdr{dotted}, \Vorig{x}]
-\]
+\end{equation}
 of dotted rule and origin.
 (The origin is the location where recognition of the rule
 started.
@@ -2055,6 +2058,17 @@ It is sometimes called the ``parent''.)
 For convenience, the type \type{ORIG} will be a synonym
 for \type{LOC}, indicating that the variable designates
 the origin element of an Earley item.
+
+For convenience,
+for an EIM such as
+$\Veim{x} = [\Vdr{x}, \Vorig{x}]$,
+we write,
+\begin{equation*}
+\begin{alignedat}{3}
+& \DR{\Veim{x}} && \defined && \quad \Vdr{x}, \quad \text{and} \\
+& \Origin{\Veim{x}} && \defined && \quad \Vorig{x}
+\end{alignedat}
+\end{equation*}
 
 When a dotted rule concept is applied to an EIM,
 it is the same as applying that concept to the EIM's
@@ -2119,6 +2133,14 @@ or the PIM \Vpim{p} at Ves{j}, we may write any of
     [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j},
     \text{etc.}
 \end{gather*}
+
+When we speak of Earley sets in procedural terms,
+we will say that an Earley item is \dfn{unioned into}
+an Earley set, rather than added to it.
+This is because
+Earley sets are sets,
+so that ``adding'' a duplicate EIM to
+an ES leaves the ES unchanged.
 
 An Earley parser builds a table of Earley sets,
 which is called
@@ -2352,7 +2374,7 @@ and
 \begin{equation*}
 \Veim{top} = [\Vdr{top}, \Vorig{top}]
 \end{equation*}
-is the Earley item to be added on completer operations over
+is the Earley item to be unioned on completer operations over
 \Vsym{transition}.
 
 Leo items memoize what would otherwise be sequences
@@ -2466,8 +2488,8 @@ The \Marpa{} implementation tracks the ancestry of
 PIM's.
 The reasons are tracked in \dfn{link pairs},
 and are essential for efficient evaluation.
-There is at most one link pair for every attempt to add a
-PIM to an Earley set.
+There is at most one link pair for every attempt to union a
+PIM into an Earley set.
 
 A link pair
 is a duple of predecessor and cause:
@@ -2506,8 +2528,8 @@ let $[\Vint{g}, \Vstr{w}]$ be a parse.
 and let \Vesset{esets} be the Earley table.
 
 We will first introduce the various "operations"
-of the Earley and Marpa algorithms,
-which add PIM's.
+of the Earley and Marpa algorithms.
+These operations union PIM's in Earley sets.
 Then we will discuss the top-level.
 
 \subsection{Common prediction logic}
@@ -2760,10 +2782,10 @@ such that
 Then
 \begin{equation}
 \label{eq:completer-op-30}
-\var{Completer}(\Ves{i}) \defined
-\var{Earley-completer}(\Ves{i})
-\cup
-\var{Leo-completer}(\Ves{i})
+\begin{aligned}
+& \var{Completer}(\Ves{i}) \defined \\
+& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
+\end{aligned}
 \end{equation}
 
 \begin{observation}[Ancestry]
@@ -2816,6 +2838,24 @@ so that we may also change
 to
 \[
 \var{Completer}(\Ves{i}) \defined \var{Earley-completer}(\Ves{i}).
+\]
+
+In what follows,
+we will find the following summary of the original, \Earley{} completer
+operation useful.
+If
+\begin{itemize}
+\item we have a completion, $\Veim{cause} \in \Ves{current}$;
+\item we have an incompletion, $\var{pred} \in \es{(\Origin{\var{cause}})}$; and
+\item $\Postdot{\var{pred}} = \LHS{\var{cause}}$;
+\end{itemize}
+then we union
+\[
+[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} ]
+\]
+into \Ves{current} with the link pair
+\[
+[ \var{pred}, \var{cause} ]. \quad \bigstar
 \]
 \end{observation}
 
@@ -3466,13 +3506,14 @@ has a horizontally ambiguous EIM \Dfref{df:ambig-EIM}.
 
 Without loss of generality,
 let
-\begin{gather}
+\begin{equation}
+\label{eq:th-h-EIM-g-ambig-20}
+\begin{gathered}
 \var{full} = \left[\Vcfg{g}, \Vstr{w} \right], \\
-\label{eq:th-h-EIM-g-ambig-20b}
 \text{where $\Vstr{w} = \boldRangeDecr{w}{0}{dot} \cat \Vterm{suffix}$} \\
-\nonumber
 \text{for some \Vterm{suffix}}
-\end{gather}
+\end{gathered}
+\end{equation}
 be a full parse consistent with \var{partial}.
 
 We proceed by showing that there is a horizontal ambiguity in \var{full}
@@ -3554,8 +3595,8 @@ from \Eref{eq:ambig-EIM-03}.
 We now have shown all the elements
 in the definition of horizontal ambiguity \Dfref{df:h-ambig}.
 Since our assumption of a full parse consistent with
-\Eref{eq:th-h-EIM-g-ambig-15} with without loss of generality
-\Eref{eq:th-h-EIM-g-ambig-20b},
+\Eref{eq:th-h-EIM-g-ambig-15} is without loss of generality
+\Eref{eq:th-h-EIM-g-ambig-20},
 this shows that any full parse consistent with
 \Eref{eq:th-h-EIM-g-ambig-15} is horizontally ambiguous.
 And since by \Thref{th:h-ambig-g}, if a parse is horizontally
@@ -3805,6 +3846,17 @@ show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
 
+% TODO: Reference to Leo chain -- cataphoric?
+The \Marpa{} implementation does not implement
+Leo memoization in Earley set 0.
+Omission of a Leo memoization at one end of a Leo
+chain adds at most one EIM to the Earley tables,
+and $\es(0)$ memoization would
+would have to be implemented as a special case.
+If the difference could be measured,
+$\es(0)$ memoization would probably be found to
+be counter-productive.
+
 \subsection{Unproductive symbols}
 
 Users using ``unicorns'' symbols
@@ -3915,7 +3967,7 @@ a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-While \Marpa{} is adding EIM's to \Ves{j},
+While \Marpa{} is unioning EIM's into \Ves{j},
 the PSL for \Ves{i}
 keeps track of the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
@@ -3954,7 +4006,7 @@ and wants to check whether Earley item,
 \Veim{x} = [ \Vdr{x}, \Vorig{x} ],
 \end{equation*}
 is new,
-or if \Veim{x} needs to be added to the Earley sets.
+or if \Veim{x} needs to be unioned into the Earley sets.
 
 Let
 \begin{equation*}
@@ -3979,8 +4031,8 @@ is already present in \Ves{j},
 and \var{false} otherwise.
 
 \begin{algorithm}[tb]
-\caption{Add EIM if new}
-\label{alg:add-eim-if-new}
+\caption{Union EIM}
+\label{alg:union-eim}
 \begin{algorithmic}[1]
 \Procedure{Add-EIM-If-New}{$[\Vdr{x},\Vorig{x}]@\Ves{j}$}
 \If{$\PSL{\Ves{j}}{\ID{\Vdr{x}}} = [\Vloc{j}, \var{true}]$}
@@ -3992,10 +4044,10 @@ and \var{false} otherwise.
 \end{algorithmic}
 \end{algorithm}
 
-\Aref{alg:add-eim-if-new} contains pseudo-code
+\Aref{alg:union-eim} contains pseudo-code
 showing the use of PSL's.
 The reader may notice that
-\Aref{alg:add-eim-if-new} could be simplified,
+\Aref{alg:union-eim} could be simplified,
 because the data to be kept for EIM's is a single boolean.
 Further, this boolean is never set to \var{false}, so that
 if a PSL entry exists, its boolean may be assumed to be \var{true}.
