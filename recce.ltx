@@ -4052,13 +4052,14 @@ both \var{PreviousLink} and \var{Source} are functions.
 A \dfn{Leo chain} is a sequence of one or more LIM's,
 call it $\var{links}$,
 where
-\begin{gather*}
-\PreviousLink{\var{links}[\var{n}]} = \var{links}[\var{n}+1] \\
-\text{for all $0 \le \var{n} < \Vsize{n} \subtract 1$}
-\\
-\text{and $\PreviousLink{\var{links}[\Vsize{n} \subtract 1]} = \Lambda$.}
+\[
+\PreviousLink{\var{links}[\Vsize{n} \subtract 1]} = \Lambda
+\]
+and, for all $0 \le \var{n} < \Vsize{n} \subtract 1$,
+\[
+\PreviousLink{\var{links}[\var{n}]} = \var{links}[\var{n}+1].
 \quad \bigstar
-\end{gather*}
+\]
 \end{definition}
 
 \begin{definition}[Leo edge]
@@ -4076,10 +4077,16 @@ such that
 \end{gather*}
 Then \var{edge} is a sequence of complete EIM's such
 that
-\begin{itemize}
-\item \var{edge}[0] = \Veim{base}
-\end{itemize}
-$\bigstar$
+\begin{equation}
+\var{edge}[0] = \Veim{base}
+\end{equation}
+and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
+\begin{gather*}
+\var{edge}[\var{n}+1] = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]\mymathop{@}\Vloc{current} \\
+\text{where $\LinkPairs{\var{edge}[\var{n}+1]} = \left[ \Veim{pred}, \var{edge}[\var{n}] \right]_\type{LP}$} \\
+\text{and $\Veim{pred} = \left[ \Vdr{pred}, \Vorig{pred} \right] = \Source{\var{chain}[\var{n}]}$.}
+\quad \bigstar
+\end{gather*}
 \end{definition}
 
 Let
