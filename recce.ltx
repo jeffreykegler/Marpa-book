@@ -2847,18 +2847,18 @@ to
 In what follows,
 we will find the following summary of the original, \Earley{} completer
 operation useful.
-If
+If, for some \Vloc{current},
 \begin{align}
 \label{eq:original-completer-summary-1}
-& \myparbox{$\Veim{cause} \in \Ves{current}$ is a completion,} \\
+& \myparbox{$\Veim{cause}@\Vloc{current}$ is a completion,} \\
 \label{eq:original-completer-summary-2}
 & \myparbox{$\var{pred} \in \es{(\Origin{\var{cause}})}$ is an incompletion, and} \\
 \label{eq:original-completer-summary-3}
 & \Postdot{\var{pred}} = \LHS{\var{cause}}
 \intertext{then we union}
 \label{eq:original-completer-summary-4}
-& \qquad \left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right] \\
-\intertext{into \Ves{current} with the link pair}
+& \qquad \left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current} \\
+\intertext{into the Earley table with the link pair}
 \label{eq:original-completer-summary-5}
 & \qquad [ \var{pred}, \var{cause} ]. \quad \bigstar
 \end{align}
@@ -4132,6 +4132,8 @@ only if \var{links} is a Leo chain
 such that $\var{links}[0] = \Vlim{closest}$.
 \end{definition}
 
+\begin{definition}[Leo chain--base match]
+\label{d:leo-chain-base-match}
 Let \Veim{base} be an EIM
 and let \Vlim{lim} be a LIM.
 We say \Veim{base} \dfn{matches} \Vlim{lim},
@@ -4144,6 +4146,8 @@ if and only if
 We say that \Veim{base} \dfn{matches} a Leo chain,
 call it \Vlimset{chain},
 if and only if \Veim{base} matches $\var{chain}[0]$.
+$\bigstar$
+\end{definition}
 
 \begin{definition}[Leo edge]
 Let \Vint{g} be a grammar,
@@ -4154,9 +4158,10 @@ Then the \dfn{Leo edge}, or just \dfn{edge},
 of \var{chain} and \var{base}
 is a sequence of complete EIM's, call it \Veimset{edge},
 such that
-\begin{equation*}
+\begin{equation}
+\label{eq:d-leo-edge-10}
 \var{edge}[0] = \Veim{base}
-\end{equation*}
+\end{equation}
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \begin{gather}
 \label{d:leo-edge-30}
@@ -4171,7 +4176,8 @@ are valid.
 $\bigstar$
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[Leo chain source properties]
+\label{th:leo-chain-source-properties}
 In a Marpa internal grammar,
 the source of a Leo chain element is a penult in the same
 Earley set as the element.
@@ -4182,41 +4188,122 @@ Let \Vint{g} be a Marpa internal grammar,
 and let \Veim{source} be the source
 of a Leo chain element in \Ves{element}.
 \begin{align}
-\label{th:source-is-penult-10}
+\label{eq:th-leo-chain-source-properties-10}
 &
 \begin{gathered}
 \Veim{source} \in \LeoEligible{\Ves{element}} \\
-\qquad \because \Eref{th:source-is-penult-10}, \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}
+\qquad \because \Eref{eq:th-leo-chain-source-properties-10}, \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}
 \end{gathered}
 \\
-\label{th:source-is-penult-12}
+\label{eq:th-leo-chain-source-properties-12}
 &
 \begin{gathered}
 \Veim{source} \in \LeoUnique{\Veim{pred}, \Ves{element}} \\
 \because
-\Eref{th:source-is-penult-10}, \Eref{eq:memoizer-operation-10}
+\Eref{eq:th-leo-chain-source-properties-10}, \Eref{eq:memoizer-operation-10}
 \end{gathered}
 \\
-\label{th:source-is-penult-14}
+\label{eq:th-leo-chain-source-properties-14}
 & \myparbox{\Veim{pred} is a penult
-  $\because \Eref{th:source-is-penult-12}, \Dfref{d:leo-unique}$}
+  $\because \Eref{eq:th-leo-chain-source-properties-12}, \Dfref{d:leo-unique}$}
 \\
-\label{th:source-is-penult-16}
+\label{eq:th-leo-chain-source-properties-16}
 & \Veim{pred} \in \Ves{element}
-  \because \Eref{th:source-is-penult-12}, \Dfref{d:leo-unique}
+  \because \Eref{eq:th-leo-chain-source-properties-12}, \Dfref{d:leo-unique}
 \end{align}
 The theorem follows directly from 
-\Eref{th:source-is-penult-14} and
-\Eref{th:source-is-penult-16}.
+\Eref{eq:th-leo-chain-source-properties-14} and
+\Eref{eq:th-leo-chain-source-properties-16}.
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Edge properties]
+\label{th:edge-elements-are-complete}
+In a Marpa internal grammar,
+every element of the edge of a Leo chain and a matching EIM,
+call it \Veim{base},
+is a completion in the same Earley set as \Veim{base}.
+\end{theorem}
+
+\begin{proof}
+Let \Vint{g} be a Marpa internal grammar,
+let \Vlimset{chain} be a Leo chain
+and let \Veim{base} be an EIM which matches \var{chain}
+of a Leo chain element in \Ves{element}.
+Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
+We proceed by induction on the elements of the edge,
+with the induction hypothesis
+
+\begin{equation}
+\myparbox{
+$\var{edge}[\var{n}]$ a completion in the same Earley set as \Veim{base}.
+}
+\end{equation}
+
+We take as the basis $\var{n} = 0$.
+\begin{align}
+\label{th:edge-elements-are-complete-10}
+& \var{edge}[0] = \Veim{base} \because \Eref{eq:d-leo-edge-10}
+\\
+\label{th:edge-elements-are-complete-12}
+& \text{\Veim{base} is a completion $\because \Eref{d:leo-chain-base-match}$}
+\\
+\label{th:edge-elements-are-complete-14}
+& \myparbox{\Veim{base} is in the same Earley set as \Veim{base} $\because$ trivial}
+\end{align}
+We have the basis from
+\Eref{th:edge-elements-are-complete-12} and
+\Eref{th:edge-elements-are-complete-14}.
+
+For the step of the induction, we assume that
+\begin{equation}
+\myparbox{
+$\var{edge}[\var{n}]$ is a completion in the same Earley set as \Veim{base}.
+}
+\end{equation}
+to show
+\begin{equation}
+\myparbox{
+$\var{edge}[\var{n}+1]$  isa completion in the same Earley set as \Veim{base}.
+}
+\end{equation}
+\begin{align}
+\label{th:edge-elements-are-complete-30}
+& \DR{\var{edge}[\var{n}+1]} = \Next{\Vdr{pred}}
+\because \Eref{d:leo-edge-30}
+\\
+\label{th:edge-elements-are-complete-32}
+& \text{ \Veim{pred} is the source of a Leo item}
+\because \Eref{d:leo-edge-32}
+\\
+\label{th:edge-elements-are-complete-34}
+& \text{ \Veim{pred} is a penult}
+\because 
+\Eref{th:edge-elements-are-complete-32},
+\Thref{th:leo-chain-source-properties}
+\\
+\label{th:edge-elements-are-complete-36}
+& \text{$\var{edge}[\var{n}+1]$ is a completion}
+\because 
+\Eref{th:edge-elements-are-complete-30},
+\Eref{th:edge-elements-are-complete-34}
+\\
+\label{th:edge-elements-are-complete-38}
+& \myparbox{$\var{edge}[\var{n}+1]$ is in the same Earley set as \Veim{base}
+$\because \Eref{d:leo-edge-30}$
+}
+\end{align}
+The step, the induction and therefore the theorem follow
+from
+\Eref{th:edge-elements-are-complete-36} and
+\Eref{th:edge-elements-are-complete-38}.
+\end{proof}
+
+\begin{theorem}[Edge validity]
 If a Leo chain and an EIM that matches the Leo chain are valid,
 then their edge is valid.
 \end{theorem}
 
 \begin{proof}
-\TODO{Revise this}
 
 Let \Vlimset{chain} be a Leo chain,
 \Veim{base} a matching EIM,
@@ -4243,7 +4330,23 @@ We now try to show that
 $\var{edge}[\var{n}+1]$ is the cause,
 and
 \Source{\var{chain}[\var{n}]} the predecessor
-of a original Earley{} completer operation.
+of an original Earley{} completer operation.
+satisfying,
+\Eref{eq:original-completer-summary-1}--
+\Eref{eq:original-completer-summary-3}.
+
+\TODO{Revise this}
+To show this,
+\begin{align}
+& \myparbox{
+$\var{edge}[\var{n}+1]$ is a completion
+$\because \Thref{th:edge-elements-are-complete}$
+}
+\\
+& \Eref{eq:original-completer-summary-2}
+\because \Thref{th:leo-chain-source-properties}
+\end{align}
+
 From \Eref{d:leo-edge-30}--\Eref{d:leo-edge-32}
 we have that
 the dotted rule of
