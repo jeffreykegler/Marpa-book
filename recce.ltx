@@ -4172,11 +4172,52 @@ $\bigstar$
 \end{definition}
 
 \begin{theorem}
+In a Marpa internal grammar,
+the source of a Leo chain element is a penult in the same
+Earley set as the element.
+\end{theorem}
+
+\begin{proof}
+Let \Vint{g} be a Marpa internal grammar,
+and let \Veim{source} be the source
+of a Leo chain element in \Ves{element}.
+\begin{align}
+\label{th:source-is-penult-10}
+&
+\begin{gathered}
+\Veim{source} \in \LeoEligible{\Ves{element}} \\
+\qquad \because \Eref{th:source-is-penult-10}, \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}
+\end{gathered}
+\\
+\label{th:source-is-penult-12}
+&
+\begin{gathered}
+\Veim{source} \in \LeoUnique{\Veim{pred}, \Ves{element}} \\
+\because
+\Eref{th:source-is-penult-10}, \Eref{eq:memoizer-operation-10}
+\end{gathered}
+\\
+\label{th:source-is-penult-14}
+& \myparbox{\Veim{pred} is a penult
+  $\because \Eref{th:source-is-penult-12}, \Dfref{d:leo-unique}$}
+\\
+\label{th:source-is-penult-16}
+& \Veim{pred} \in \Ves{element}
+  \because \Eref{th:source-is-penult-12}, \Dfref{d:leo-unique}
+\end{align}
+The theorem follows directly from 
+\Eref{th:source-is-penult-14} and
+\Eref{th:source-is-penult-16}.
+\end{proof}
+
+\begin{theorem}
 If a Leo chain and an EIM that matches the Leo chain are valid,
 then their edge is valid.
 \end{theorem}
 
 \begin{proof}
+\TODO{Revise this}
+
 Let \Vlimset{chain} be a Leo chain,
 \Veim{base} a matching EIM,
 and \Veimset{edge} be their edge.
