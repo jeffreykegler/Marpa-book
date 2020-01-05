@@ -2397,6 +2397,8 @@ We will call these memoized sequences, Leo sequences.
 
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
+\begin{definition}[Leo unique]
+\label{d:leo-unique}
 An EIM \Veim{uniq} such that
 \begin{equation*}
 \Veim{uniq} \in \Ves{i}
@@ -2415,6 +2417,8 @@ we have
 Note that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{i},
 even those which are not penults.
+$\bigstar$
+\end{definition}
 
 \subsection{Leo predecessor}
 \label{sec:leo-predecessor}
@@ -2844,22 +2848,23 @@ In what follows,
 we will find the following summary of the original, \Earley{} completer
 operation useful.
 If
-\begin{itemize}
-\item we have a completion, $\Veim{cause} \in \Ves{current}$;
-\item we have an incompletion, $\var{pred} \in \es{(\Origin{\var{cause}})}$; and
-\item $\Postdot{\var{pred}} = \LHS{\var{cause}}$;
-\end{itemize}
-then we union
-\[
-[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} ]
-\]
-into \Ves{current} with the link pair
-\[
-[ \var{pred}, \var{cause} ]. \quad \bigstar
-\]
+\begin{align}
+\label{eq:original-completer-summary-1}
+& \myparbox{$\Veim{cause} \in \Ves{current}$ is a completion,} \\
+\label{eq:original-completer-summary-2}
+& \myparbox{$\var{pred} \in \es{(\Origin{\var{cause}})}$ is an incompletion, and} \\
+\label{eq:original-completer-summary-3}
+& \Postdot{\var{pred}} = \LHS{\var{cause}}
+\intertext{then we union}
+\label{eq:original-completer-summary-4}
+& \qquad \left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right] \\
+\intertext{into \Ves{current} with the link pair}
+\label{eq:original-completer-summary-5}
+& \qquad [ \var{pred}, \var{cause} ]. \quad \bigstar
+\end{align}
 \end{observation}
 
-\subsection{Prediction}
+\subsection{Predictor operation}
 \label{d:prediction}
 
 \begin{equation*}
@@ -2893,19 +2898,23 @@ $\bigstar$
 \label{d:memoizer}
 
 Let
-\begin{align*}
+\begin{gather}
+\label{eq:memoizer-operation-10}
+\begin{aligned}
 & \LeoEligible{\Ves{i}} \defined \\
-& \qquad \qquad \left\lbrace \;\;
+& \qquad \left\lbrace \;\;
 \begin{gathered}
 \Veim{eligible} \;\; \text{such that} \\
 \Veim{eligible} \in \LeoUnique{\Ves{i}} \;\; \text{and} \\
 \RightRecursive{\Veim{eligible}}
 \end{gathered}
 \;\; \right\rbrace,
+\end{aligned}
 \\
-\displaybreak[3]
+\label{eq:memoizer-operation-20}
+\begin{aligned}
 & \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
-& \qquad \qquad \left\lbrace \;\;
+& \qquad \left\lbrace \;\;
 \begin{gathered}
 \left[ \Vdr{base}, \LHS{\Veim{base}}, \Vorig{base} \right]_\type{LIM} \quad \text{such that} \\
 \Veim{base} \in \LeoEligible{\Ves{i}}, \\
@@ -2913,10 +2922,14 @@ Let
 \LIMPredecessor{\Veim{base}} = \Lambda \\
 \end{gathered}
 \;\; \right\rbrace,
-\\
-\displaybreak[3]
-& \text{and $\mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined$} \\
-& \qquad \qquad \left\lbrace \;\;
+\end{aligned}
+\end{gather}
+and
+\begin{gather}
+\label{eq:memoizer-operation-30}
+\begin{aligned}
+& \mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined \\
+& \qquad \left\lbrace \;\;
 \begin{gathered}
 \left[ \Vdr{pred}, \LHS{\Veim{base}}, \Vorig{pred} \right]_\type{LIM} \quad \text{such that} \\
 \Veim{base} \in \LeoEligible{\Ves{i}}, \\
@@ -2924,10 +2937,11 @@ Let
 \Vlim{pred} = [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] \\
 \end{gathered}
 \;\; \right\rbrace .
-\end{align*}
+\end{aligned}
+\end{gather}
 Then
 \begin{equation}
-\label{eq:d-memoizer-40}
+\label{eq:memoizer-operation-40}
 \begin{aligned}
 & \var{Memoizer}(\Ves{i}) \defined \\
 & \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
@@ -2961,7 +2975,8 @@ We say that a LIM is \dfn{valid}
 if and only if
 \begin{itemize}
 \item it is formed according to
-\Eref{eq:d-memoizer-40};
+\Eref{eq:memoizer-operation-10}--%
+\Eref{eq:memoizer-operation-40};
 \item its source is valid; and
 \item its predecessor is valid.
 \end{itemize}
@@ -4143,23 +4158,76 @@ such that
 \var{edge}[0] = \Veim{base}
 \end{equation*}
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
-\begin{gather*}
+\begin{gather}
+\label{d:leo-edge-30}
 \var{edge}[\var{n}+1] = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]\mymathop{@}\Vloc{current} \\
+\label{d:leo-edge-31}
 \text{where $\LinkPairs{\var{edge}[\var{n}+1]} = \left[ \Veim{pred}, \var{edge}[\var{n}] \right]_\type{LP}$} \\
+\label{d:leo-edge-32}
 \text{and $\Veim{pred} = \left[ \Vdr{pred}, \Vorig{pred} \right] = \Source{\var{chain}[\var{n}]}$.}
-\end{gather*}
+\end{gather}
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
 are valid.
 $\bigstar$
 \end{definition}
 
 \begin{theorem}
-If a Leo chain and a matching EIM are valid,
+If a Leo chain and an EIM that matches the Leo chain are valid,
 then their edge is valid.
 \end{theorem}
 
 \begin{proof}
-\TODO{}
+Let \Vlimset{chain} be a Leo chain,
+\Veim{base} a matching EIM,
+and \Veimset{edge} be their edge.
+We proceed by induction on the elements of the edge.
+Our induction hypothesis is
+\begin{equation}
+\myparbox{$\var{edge}[\var{n}]$ is valid.}
+\end{equation}
+As the basis of the induction we note that \
+$\var{edge}[0] = \Veim{base}$ is valid by
+assumption for the theorem.
+
+For the step, we assume
+\begin{equation}
+\myparbox{\var{edge}[\var{n}] is valid}
+\end{equation}
+to show that
+\begin{equation}
+\myparbox{\var{edge}[\var{n}+1] is valid.}
+\end{equation}
+
+We now try to show that 
+$\var{edge}[\var{n}+1]$ is the cause,
+and
+\Source{\var{chain}[\var{n}]} the predecessor
+of a original Earley{} completer operation.
+From \Eref{d:leo-edge-30}--\Eref{d:leo-edge-32}
+we have that
+the dotted rule of
+$\var{edge}[\var{n}+1]$ is \Next{\Vdr{pred}},
+where
+\begin{equation}
+\Veim{pred} = [ \Vdr{pred}, \Vorig{pred} ] = \Source{\var{chain}[\var{n}]}.
+\end{equation}
+\Veim{pred} is the source of a LIM so that
+\begin{gather}
+\LeoEligible{\Veim{pred}}
+\because
+\Eref{eq:memoizer-operation-20},
+\Eref{eq:memoizer-operation-30}
+\\
+\LeoUnique{\Veim{pred}}
+\because
+\Eref{eq:memoizer-operation-10},
+\\
+\text{\Veim{pred} is a penult $\because \Dfref{d:leo-unique}$}
+\end{gather}
+
+% \Eref{eq:original-completer-summary-1}
+
+\TODO{finish}
 \end{proof}
 
 \TODO{TO HERE}
