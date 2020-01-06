@@ -2656,7 +2656,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Earley set 0]
-\label{obs:earley-set-0}
+\label{ob:earley-set-0}
 This operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 $\bigstar$
@@ -2720,7 +2720,7 @@ in order to be passed on to the semantics.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
-\label{obs:earley-scanner-operation}
+\label{ob:earley-scanner-operation}
 This operation has the same effect as the ``Scanner''
 operation of \Earley{}\cite{Earley1970}.
 \end{observation}
@@ -2817,7 +2817,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
-\label{obs:earley-completer-operation}
+\label{ob:earley-completer-operation}
 When there are no LIM's in \Ves{predecessor}
 this operation has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.
@@ -2874,7 +2874,7 @@ If, for some \Vloc{current},
 \end{equation*}
 
 \begin{observation}[Ancestry]
-\label{obs:predictor-ancestry}
+\label{ob:predictor-ancestry}
 The \Marpa{} implementation does not track
 link pairs are not kept for
 the predictions.
@@ -2888,7 +2888,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Predictor Operation]
-\label{obs:earley-predictor-operation}
+\label{ob:earley-predictor-operation}
 This operation has the same effect as the ``Predictor''
 operation of \Earley{}\cite{Earley1970}.
 $\bigstar$
@@ -2951,7 +2951,7 @@ Then
 \end{equation}
 
 \begin{observation}[Ancestry]
-\label{obs:memoizer-ancestry}
+\label{ob:memoizer-ancestry}
 The \Marpa{} implementation tracks the link pairs
 for the LIM's.
 A LIM always has exactly one link pair.
@@ -2992,7 +2992,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
-\label{obs:earley-memoizer-operation}
+\label{ob:earley-memoizer-operation}
 This operation does not exist in \Earley{}\cite{Earley1970}.
 $\bigstar$
 \end{observation}
@@ -3027,12 +3027,12 @@ If line \ref{alg:marpa-line-80} is removed,
 \Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
 This can be seen from
 \Aref{alg:marpa},
-\Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-operation},
-\Obref{obs:earley-completer-operation},
-\Obref{obs:earley-predictor-operation},
+\Obref{ob:earley-set-0},
+\Obref{ob:earley-scanner-operation},
+\Obref{ob:earley-completer-operation},
+\Obref{ob:earley-predictor-operation},
 and
-\Obref{obs:earley-memoizer-operation}.
+\Obref{ob:earley-memoizer-operation}.
 \end{observation}
 
 \subsection{Complexity summary}
@@ -4163,14 +4163,11 @@ such that
 \var{edge}[0] = \Veim{base}
 \end{equation}
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
-\begin{gather}
+\begin{equation}
 \label{d:leo-edge-30}
-\var{edge}[\var{n}+1] = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]\mymathop{@}\Vloc{current} \\
-\label{d:leo-edge-31}
-\text{where $\LinkPairs{\var{edge}[\var{n}+1]} = \left[ \Veim{pred}, \var{edge}[\var{n}] \right]_\type{LP}$} \\
-\label{d:leo-edge-32}
-\text{and $\Veim{pred} = \left[ \Vdr{pred}, \Vorig{pred} \right] = \Source{\var{chain}[\var{n}]}$.}
-\end{gather}
+\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
+  \in \LinkPairs{\var{edge}[\var{n}+1]} 
+\end{equation}
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
 are valid.
 $\bigstar$
@@ -4245,7 +4242,7 @@ We take as the basis $\var{n} = 0$.
 & \var{edge}[0] = \Veim{base} \because \Eref{eq:d-leo-edge-10}
 \\
 \label{th:edge-elements-are-complete-12}
-& \text{\Veim{base} is a completion $\because \Eref{d:leo-chain-base-match}$}
+& \text{\Veim{base} is a completion $\because \Dfref{d:leo-chain-base-match}$}
 \\
 \label{th:edge-elements-are-complete-14}
 & \myparbox{\Veim{base} is in the same Earley set as \Veim{base} $\because$ trivial}
@@ -4263,39 +4260,72 @@ $\var{edge}[\var{n}]$ is a completion in the same Earley set as \Veim{base}.
 to show
 \begin{equation}
 \myparbox{
-$\var{edge}[\var{n}+1]$  isa completion in the same Earley set as \Veim{base}.
+$\var{edge}[\var{n}+1]$  is a completion in the same Earley set as \Veim{base}.
 }
 \end{equation}
+
+Proceeding to show the step,
 \begin{align}
 \label{th:edge-elements-are-complete-30}
-& \DR{\var{edge}[\var{n}+1]} = \Next{\Vdr{pred}}
+& \begin{gathered}
+\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
+  \in \LinkPairs{\var{edge}[\var{n}+1]} \\
 \because \Eref{d:leo-edge-30}
+\end{gathered}
 \\
 \label{th:edge-elements-are-complete-32}
-& \text{ \Veim{pred} is the source of a Leo item}
-\because \Eref{d:leo-edge-32}
+& \myparbox{$\var{edge}[\var{n}]$ is a completion
+$\because \Thref{th:edge-elements-are-complete-14}$.}
 \\
 \label{th:edge-elements-are-complete-34}
-& \text{ \Veim{pred} is a penult}
-\because 
-\Eref{th:edge-elements-are-complete-32},
-\Thref{th:leo-chain-source-properties}
+& \myparbox{
+$\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}$
+can only be the link pair for a completer operation because
+\Eref{th:edge-elements-are-complete-32}, and because
+\Obref{ob:earley-set-0},
+\Obref{ob:earley-scanner-operation},
+\Obref{ob:earley-completer-operation},
+\Obref{ob:earley-predictor-operation},
+and
+\Obref{ob:earley-memoizer-operation} show that only
+a completer operation has a complete EIM as its cause
+}
 \\
 \label{th:edge-elements-are-complete-36}
-& \text{$\var{edge}[\var{n}+1]$ is a completion}
+& \text{
+\Source{\var{chain}[\var{n}]} is a penult}
 \because 
-\Eref{th:edge-elements-are-complete-30},
-\Eref{th:edge-elements-are-complete-34}
+\Thref{th:leo-chain-source-properties}
 \\
 \label{th:edge-elements-are-complete-38}
+& \myparbox{$\var{edge}[\var{n}+1]$ is the result of a completer operation
+$\because
+\Eref{th:edge-elements-are-complete-30},
+\Eref{th:edge-elements-are-complete-34}$
+}
+\\
+\label{th:edge-elements-are-complete-40}
+& \DR{\var{edge}[\var{n}+1]} = \Next{\Source{\var{chain}[\var{n}]}}
+\because
+\Eref{eq:original-completer-summary-4},
+\Eref{th:edge-elements-are-complete-38}
+\\
+\label{th:edge-elements-are-complete-42}
+& \text{$\var{edge}[\var{n}+1]$ is a completion}
+\because 
+\Eref{th:edge-elements-are-complete-36},
+\Eref{th:edge-elements-are-complete-40}
+\\
+\label{th:edge-elements-are-complete-44}
 & \myparbox{$\var{edge}[\var{n}+1]$ is in the same Earley set as \Veim{base}
-$\because \Eref{d:leo-edge-30}$
+\Eref{eq:original-completer-summary-4},
+\Eref{th:edge-elements-are-complete-38}.
 }
 \end{align}
 The step, the induction and therefore the theorem follow
 from
-\Eref{th:edge-elements-are-complete-36} and
-\Eref{th:edge-elements-are-complete-38}.
+\Eref{th:edge-elements-are-complete-42} and
+\Eref{th:edge-elements-are-complete-44}.
 \end{proof}
 
 \begin{theorem}[Edge validity]
@@ -4343,34 +4373,33 @@ $\because \Thref{th:edge-elements-are-complete}$
 }
 \\
 & \myparbox{
-$\Source{\var{chain}[\var{n}]}$ in an incompletion
+$\Source{\var{chain}[\var{n}]}$ is an incompletion
 $\because \Thref{th:leo-chain-source-properties}$
 }
+\\
 \end{align}
 
-\TODO{Revise this}
-
-From \Eref{d:leo-edge-30}--\Eref{d:leo-edge-32}
-we have that
-the dotted rule of
-$\var{edge}[\var{n}+1]$ is \Next{\Vdr{pred}},
-where
-\begin{equation}
-\Veim{pred} = [ \Vdr{pred}, \Vorig{pred} ] = \Source{\var{chain}[\var{n}]}.
-\end{equation}
-\Veim{pred} is the source of a LIM so that
-\begin{gather}
-\LeoEligible{\Veim{pred}}
-\because
-\Eref{eq:memoizer-operation-20},
-\Eref{eq:memoizer-operation-30}
-\\
-\LeoUnique{\Veim{pred}}
-\because
-\Eref{eq:memoizer-operation-10},
-\\
-\text{\Veim{pred} is a penult $\because \Dfref{d:leo-unique}$}
-\end{gather}
+% From \Eref{d:leo-edge-30}--\Eref{d:leo-edge-32}
+% we have that
+% the dotted rule of
+% $\var{edge}[\var{n}+1]$ is \Next{\Vdr{pred}},
+% where
+% \begin{equation}
+% \Veim{pred} = [ \Vdr{pred}, \Vorig{pred} ] = \Source{\var{chain}[\var{n}]}.
+% \end{equation}
+% \Veim{pred} is the source of a LIM so that
+% \begin{gather}
+% \LeoEligible{\Veim{pred}}
+% \because
+% \Eref{eq:memoizer-operation-20},
+% \Eref{eq:memoizer-operation-30}
+% \\
+% \LeoUnique{\Veim{pred}}
+% \because
+% \Eref{eq:memoizer-operation-10},
+% \\
+% \text{\Veim{pred} is a penult $\because \Dfref{d:leo-unique}$}
+% \end{gather}
 
 % \Eref{eq:original-completer-summary-1}
 
