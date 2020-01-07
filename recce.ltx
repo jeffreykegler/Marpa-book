@@ -2199,36 +2199,36 @@ for some \Vstr{rhs},
 \TODO{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}
 \label{df:EIM-valid}
-In the context of a CFG \Vcfg{g} and an input \Vstr{w},
-an EIM
+Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
+Let, without loss of generality,
 \begin{equation}
-\label{eq:earley-prop1}
-\left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+\label{eq:EIM-valid-10}
+\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i} \right] @ \Ves{j}
 \end{equation}
-is \dfn{valid}
+be an EIM,
+where $\var{i} \le \var{j} < \Vsize{prefix}$.
+\Veim{x} is \dfn{valid}
 if and only if
-there is some \Vstr{before}, \Vstr{after}
-such
-that
 \begin{gather}
-\label{eq:EIM-valid-20a}
+\label{eq:EIM-valid-22a}
+\left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}}
+\\
+\label{eq:EIM-valid-22b}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
-\label{eq:EIM-valid-20b}
-\Vstr{before} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
-\label{eq:EIM-valid-20c}
-\Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
+\label{eq:EIM-valid-22c}
+\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \\
+\label{eq:EIM-valid-22d}
+\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)].
 \end{gather}
-A valid EIM is
+\Veim{x}
 is \dfn{useful}
 if and only if
 \begin{equation*}
-\label{eq:EIM-valid-20d}
-\Vstr{rhs2}\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
+\label{eq:EIM-valid-30}
+\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  (\Vsize{w}\subtract 1)].
+\quad \bigstar
 \end{equation*}
-then the EIM
-of \Eref{eq:earley-prop1}
-$\bigstar$
 \end{definition}
 
 \section{The Leo algorithm}
@@ -3885,7 +3885,7 @@ this restriction in the theory is made
 without loss of its relevance to practice.
 
 For example, in cases where
-\Eref{eq:EIM-valid-20d}
+\Eref{eq:EIM-valid-30}
 in the definition of EIM validity
 is violated,
 the result would be that EIM's that were ``invalid''
@@ -4091,6 +4091,7 @@ We call a parsing algorithm \dfn{complete} if
 it all of the valid Earley items.
 
 \begin{theorem}
+\label{th:earley-is-correct}
 \Earley{} is correct.
 \end{theorem}
 
@@ -4098,6 +4099,41 @@ it all of the valid Earley items.
 \Earley{} is proved correct in
 \cite[Theorem 4.9, pp. 323-325]{AU1972} and
 \cite[pp. 18-25]{Earley1968}.
+\end{proof}
+
+The following is proved as part of
+\Thref{th:earley-is-correct},
+but we make special use of it in this paper.
+
+\begin{theorem}
+The \Earley{} completer operation preserves validity.
+That is, if the ancestry (predecessor and cause)
+of an Earley{} completer operation is valid,
+the result of the Earley{} completer operation is valid.
+\end{theorem}
+
+\begin{proof}
+\begin{align}
+\label{th:earley-completer-is-consistent-20},
+\myparbox{\Veim{predecessor} is valid
+by assumption for theorem}
+\\
+\label{th:earley-completer-is-consistent-22},
+\myparbox{\Veim{cause} is valid
+by assumption for theorem}
+\\
+\label{th:earley-completer-is-consistent-24},
+\\
+\label{th:earley-completer-is-consistent-26},
+\Accept{\var{g}} \destar \Vstr{beforeP} \Vsym{lhsP} \Vstr{afterP}, \\
+\\
+\label{th:earley-completer-is-consistent-28},
+\Vstr{beforeP} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
+\\
+\label{th:earley-completer-is-consistent-30},
+\Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
+\end{align}
+TODO{prove}
 \end{proof}
 
 \TODO{Move this?}
