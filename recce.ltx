@@ -2196,6 +2196,7 @@ for some \Vstr{rhs},
 \left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
 \end{gather*}
 
+\TODO{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}
 \label{df:EIM-valid}
 In the context of a CFG \Vcfg{g} and an input \Vstr{w},
@@ -2217,16 +2218,17 @@ that
 \Vstr{before} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
 \label{eq:EIM-valid-20c}
 \Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
-\label{eq:EIM-valid-20d}
-\text{and \Vstr{rhs2}\Vstr{after} is productive.}
 \end{gather}
-If, in addition,
+A valid EIM is
+is \dfn{useful}
+if and only if
 \begin{equation*}
+\label{eq:EIM-valid-20d}
 \Vstr{rhs2}\Vstr{after} \destar \var{w}[\var{j}  \ldots  (\Vsize{w}\subtract 1)]
 \end{equation*}
 then the EIM
 of \Eref{eq:earley-prop1}
-is \dfn{useful}. $\bigstar$
+$\bigstar$
 \end{definition}
 
 \section{The Leo algorithm}
@@ -4166,7 +4168,7 @@ and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \begin{equation}
 \label{d:leo-edge-30}
 \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
-  \in \LinkPairs{\var{edge}[\var{n}+1]} 
+  \in \LinkPairs{\var{edge}[\var{n}+1]}
 \end{equation}
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
 are valid.
@@ -4208,7 +4210,7 @@ of a Leo chain element in \Ves{element}.
 & \Veim{pred} \in \Ves{element}
   \because \Eref{eq:th-leo-chain-source-properties-12}, \Dfref{d:leo-unique}
 \end{align}
-The theorem follows directly from 
+The theorem follows directly from
 \Eref{eq:th-leo-chain-source-properties-14} and
 \Eref{eq:th-leo-chain-source-properties-16}.
 \end{proof}
@@ -4277,7 +4279,7 @@ Proceeding to show the step,
 \\
 \label{eq:edge-elements-are-complete-32}
 & \myparbox{
-the only \Earley{} operation 
+the only \Earley{} operation
 that has an EIM completion as its cause
 is the \Earley{} completer operation
 $\because
@@ -4313,7 +4315,7 @@ $\because
 \label{eq:edge-elements-are-complete-38}
 & \text{
 \Source{\var{chain}[\var{n}]} is a penult}
-\because 
+\because
 \Thref{th:leo-chain-source-properties}
 \\
 \label{eq:edge-elements-are-complete-40}
@@ -4324,7 +4326,7 @@ $\because
 \\
 \label{eq:edge-elements-are-complete-42}
 & \text{$\var{edge}[\var{n}+1]$ is a completion}
-\because 
+\because
 \Eref{eq:edge-elements-are-complete-38},
 \Eref{eq:edge-elements-are-complete-40}
 \\
@@ -4368,7 +4370,7 @@ to show that
 \myparbox{\var{edge}[\var{n}+1] is valid.}
 \end{equation}
 
-We now try to show that 
+We now try to show that
 $\var{edge}[\var{n}+1]$ is the cause,
 and
 \Source{\var{chain}[\var{n}]} the predecessor
