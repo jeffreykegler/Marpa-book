@@ -4115,41 +4115,48 @@ the result of the Earley{} completer operation is valid.
 \begin{proof}
 Call the ancestry of an Earley{} completer operation
 \[
-[ \Veim{predecessor}, \Veim{cause} ]_\type{LP}
+[ \Veim{pred}, \Veim{cuz} ]_\type{LP}
 \]
-and call its result, \Veim{result}.
+and call its result, \Veim{rez}.
 Then
 \begin{align}
 \label{th:earley-completer-is-consistent-20}
-& \begin{aligned}
-  & \Vdr{predecessor} = \\
-  & \quad \left[ \Vsym{lhsP} \de \Vstr{predotP} \mydot \Vsym{completed} \Vstr{postdotP}
+& \begin{multlined}
+  \Vdr{pred} = \\
+  \left[ \Vsym{lhsP} \de \Vstr{rhs1P} \mydot \Vsym{postdot} \Vstr{rhs3P}
   \right] \\
-  & \qquad \because \Eref{eq:original-completer-summary-2}
-  \end{aligned}
+  \because \Eref{eq:original-completer-summary-2}
+  \end{multlined}
 \\
 \label{th:earley-completer-is-consistent-22}
-& \begin{aligned}
-  & \Veim{predecessor} = \\
-  & \qquad \left[ \Vdr{predecessor}, \Vloc{orig} \right] @ \Vloc{meet} \\
-  & \qquad \because \Eref{th:earley-completer-is-consistent-20},
+& \begin{multlined}
+  \Veim{pred} = \\
+  \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
+  \because \Eref{th:earley-completer-is-consistent-20},
     \Eref{eq:original-completer-summary-2}
-  \end{aligned}
+  \end{multlined}
 \\
 \label{th:earley-completer-is-consistent-24}
-& \LHS{\Vdr{cause}} = \Vsym{completed}
+& \LHS{\Vdr{cuz}} = \Vsym{postdot}
 \because \Eref{eq:original-completer-summary-3}
 \\
 \label{th:earley-completer-is-consistent-26}
-& \begin{aligned}
-  & \Veim{cause} = \\
-  & \qquad \left[ \Vdr{cause}, \Vloc{meet} \right]
-  @ \Vloc{current}
-  \\
-  & \qquad \because \Eref{th:earley-completer-is-consistent-22},
+& \begin{multlined}
+  \Veim{cuz} = \\
+  \left[ \Vdr{cuz}, \Vloc{meet} \right]
+  @ \Vloc{current} \\
+  \because \Eref{th:earley-completer-is-consistent-22},
   \Eref{eq:original-completer-summary-1},
   \Eref{eq:original-completer-summary-2}
-  \end{aligned}
+  \end{multlined}
+\\
+\label{th:earley-completer-is-consistent-28}
+& \begin{multlined}
+  \Veim{rez} = \\
+  \left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current} \\
+  \because
+  \Eref{eq:original-completer-summary-4}
+  \end{multlined}
 \end{align}
 % \\
 % \label{th:earley-completer-is-consistent-30}
