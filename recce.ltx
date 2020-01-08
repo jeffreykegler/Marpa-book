@@ -144,6 +144,8 @@
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
+\newcommand{\Current}[1]{\ensuremath{\mymathop{Current}\left(#1\right)}}
+\newcommand{\DotPos}[1]{\ensuremath{\mymathop{DotPos}(#1)}}
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
 \newcommand{\Etable}[1]{\ensuremath{\mymathop{table}\left[#1\right]}}
@@ -170,6 +172,7 @@
 \newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}\left(#1\right)}}
 \newcommand{\Rtable}[1]{\ensuremath{\mymathop{table}[#1]}}
 \newcommand{\Rtablesize}[1]{\ensuremath{\left| \mymathop{table}[#1] \right|}}
+\newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
@@ -1975,6 +1978,17 @@ in \Vcfg{g}, that is,
 Where the choice of \Vcfg{g} is clear in context,
 and unless otherwise specified,
 \Vdr{dr} will imply that $\var{dr} \in \DottedRules{\var{g}}$.
+For convenience, where
+\[
+\Vdr{x} = [\Vrule{r}, \var{pos}]
+\]
+is a dotted rule,
+\begin{equation*}
+\begin{gathered}
+\text{$\Rule{\Vdr{x}} \defined \Vrule{r}$ and} \\
+\DotPos{\Vdr{x}} \defined \var{pos}.
+\end{gathered}
+\end{equation*}
 
 We consider the size of a grammar, \Vsize{\var{g}}, to be the
 number of distinct dotted rules it allows,
@@ -2134,6 +2148,12 @@ or the PIM \Vpim{p} at Ves{j}, we may write any of
     [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
     [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j},
     \text{etc.}
+\end{gather*}
+For convenience,
+\begin{gather*}
+\Current{[\Veim{x}@\Vloc{eLoc}]} \defined \Vloc{eLoc}, \\
+\text{$\Current{[\Vlim{x}@\Vloc{lLoc}]} \defined \Vloc{lLoc}$, and} \\
+\Current{[\Vpim{x}@\Vloc{pLoc}]} \defined \Vloc{pLoc}.
 \end{gather*}
 
 When we speak of Earley sets in procedural terms,
@@ -4157,6 +4177,30 @@ Then
   \because
   \Eref{eq:original-completer-summary-4}
   \end{multlined}
+\\
+\label{th:earley-completer-is-consistent-30}
+& \myparbox{\Veim{pred} is valid
+by assumption for theorem}
+\\
+\label{th:earley-completer-is-consistent-32}
+& \myparbox{\Veim{cause} is valid
+by assumption for theorem}
+\\
+\label{th:earley-completer-is-consistent-34}
+\Rule{\Veim{pred}} \in \Rules{\var{g}}
+\because \Eref{eq:EIM-valid-22a}
+\\
+\label{th:earley-completer-is-consistent-36}
+\Accept{\var{g}} \destar \Vstr{before} \cat \LHS{\Veim{pred}} \cat \Vstr{after}
+\because \Eref{eq:EIM-valid-22b}
+\\
+\label{th:earley-completer-is-consistent-38}
+\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)]
+\because \Eref{eq:EIM-valid-22c}
+\\
+\label{th:earley-completer-is-consistent-40}
+\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
+\because \Eref{eq:EIM-valid-22d}
 \end{align}
 % \\
 % \label{th:earley-completer-is-consistent-30}
@@ -4166,14 +4210,6 @@ Then
 % \Eref{eq:EIM-valid-22a}
 % \end{gathered}
 % \\
-% \\
-% \label{th:earley-completer-is-consistent-42a}
-% & \myparbox{\Veim{predecessor} is valid
-% by assumption for theorem}
-% \\
-% \label{th:earley-completer-is-consistent-42b}
-% & \myparbox{\Veim{cause} is valid
-% by assumption for theorem}
 % \\
 % \label{th:earley-completer-is-consistent-28}
 % &
