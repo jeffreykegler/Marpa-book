@@ -4108,31 +4108,105 @@ but we make special use of it in this paper.
 \begin{theorem}
 The \Earley{} completer operation preserves validity.
 That is, if the ancestry (predecessor and cause)
-of an Earley{} completer operation is valid,
+an Earley{} completer operation is valid,
 the result of the Earley{} completer operation is valid.
 \end{theorem}
 
 \begin{proof}
+Call the ancestry of an Earley{} completer operation
+\[
+[ \Veim{predecessor}, \Veim{cause} ]_\type{LP}
+\]
+and call its result, \Veim{result}.
+Then
 \begin{align}
-\label{th:earley-completer-is-consistent-20},
-\myparbox{\Veim{predecessor} is valid
-by assumption for theorem}
+\label{th:earley-completer-is-consistent-20}
+& \begin{aligned}
+  & \Vdr{predecessor} = \\
+  & \quad \left[ \Vsym{lhsP} \de \Vstr{predotP} \mydot \Vsym{completed} \Vstr{postdotP}
+  \right] \\
+  & \qquad \because \Eref{eq:original-completer-summary-2}
+  \end{aligned}
 \\
-\label{th:earley-completer-is-consistent-22},
-\myparbox{\Veim{cause} is valid
-by assumption for theorem}
+\label{th:earley-completer-is-consistent-22}
+& \begin{aligned}
+  & \Veim{predecessor} = \\
+  & \qquad \left[ \Vdr{predecessor}, \Vloc{orig} \right] @ \Vloc{meet} \\
+  & \qquad \because \Eref{th:earley-completer-is-consistent-20},
+    \Eref{eq:original-completer-summary-2}
+  \end{aligned}
 \\
-\label{th:earley-completer-is-consistent-24},
+\label{th:earley-completer-is-consistent-24}
+& \LHS{\Vdr{cause}} = \Vsym{completed}
+\because \Eref{eq:original-completer-summary-3}
 \\
-\label{th:earley-completer-is-consistent-26},
-\Accept{\var{g}} \destar \Vstr{beforeP} \Vsym{lhsP} \Vstr{afterP}, \\
-\\
-\label{th:earley-completer-is-consistent-28},
-\Vstr{beforeP} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)], \\
-\\
-\label{th:earley-completer-is-consistent-30},
-\Vstr{rhs1} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)], \\
+\label{th:earley-completer-is-consistent-26}
+& \begin{aligned}
+  & \Veim{cause} = \\
+  & \qquad \left[ \Vdr{cause}, \Vloc{meet} \right]
+  @ \Vloc{current}
+  \\
+  & \qquad \because \Eref{th:earley-completer-is-consistent-22},
+  \Eref{eq:original-completer-summary-1},
+  \Eref{eq:original-completer-summary-2}
+  \end{aligned}
 \end{align}
+% \\
+% \label{th:earley-completer-is-consistent-30}
+% & \begin{gathered}
+% \left[ \Vsym{lhsP} \de \Vstr{predotP} \Vstr{postdotP} \right] \in \Rules{\var{g}} \\
+% \because \Eref{th:earley-completer-is-consistent-20},
+% \Eref{eq:EIM-valid-22a}
+% \end{gathered}
+% \\
+% \\
+% \label{th:earley-completer-is-consistent-42a}
+% & \myparbox{\Veim{predecessor} is valid
+% by assumption for theorem}
+% \\
+% \label{th:earley-completer-is-consistent-42b}
+% & \myparbox{\Veim{cause} is valid
+% by assumption for theorem}
+% \\
+% \label{th:earley-completer-is-consistent-28}
+% &
+% \begin{aligned}
+  % & \Veim{cause} = \\
+  % & \qquad \left[ \left[ \Vsym{completed} \de \Vstr{rhsC} \mydot \right],
+  % \Vloc{meet} \right]
+  % \\
+  % & \qquad \qquad @ \Vloc{current}
+  % \\
+  % & \qquad \because \Eref{th:earley-completer-is-consistent-11a},
+  % \Eref{eq:original-completer-summary-1},
+  % \Eref{eq:original-completer-summary-2},
+  % \Eref{eq:original-completer-summary-3}
+% \end{aligned}
+% \\
+% \label{th:earley-completer-is-consistent-30}
+% & \begin{gathered}
+% \left[ \Vsym{lhsP} \de \Vstr{predotP} \Vstr{postdotP} \right] \in \Rules{\var{g}} \\
+% \because \Eref{th:earley-completer-is-consistent-20},
+% \Eref{eq:EIM-valid-22a}
+% \end{gathered}
+% \\
+% \label{th:earley-completer-is-consistent-32}
+% & \begin{gathered}
+% \Accept{\var{g}} \destar \Vstr{beforeP} \Vsym{lhsP} \Vstr{afterP} \\
+% \because \Eref{th:earley-completer-is-consistent-20},
+% \Eref{eq:EIM-valid-22b}
+% \end{gathered}
+% \\
+% \label{th:earley-completer-is-consistent-34}
+% & \Vstr{beforeP} \destar \var{w}[0  \ldots  (\var{i}\subtract 1)]
+% \because \Eref{th:earley-completer-is-consistent-20},
+% \Eref{eq:EIM-valid-22c}
+% \\
+% \label{th:earley-completer-is-consistent-36}
+% & \Vstr{predotP} \destar \var{w}[\var{i}  \ldots  (\var{j}\subtract 1)]
+% \because \Eref{th:earley-completer-is-consistent-20},
+% \Eref{eq:EIM-valid-22d}
+% \end{align}
 TODO{prove}
 \end{proof}
 
