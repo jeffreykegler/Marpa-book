@@ -4125,7 +4125,8 @@ The following is proved as part of
 \Thref{th:earley-is-correct},
 but we make special use of it in this paper.
 
-\begin{theorem}
+\begin{theorem}[Earley completer consistency]
+\label{th:earley-completer-is-consistent}
 The \Earley{} completer operation preserves validity.
 That is, if the ancestry (predecessor and cause)
 an Earley{} completer operation is valid,
@@ -4307,6 +4308,8 @@ and, for all $0 \le \var{n} < \Vsize{n} \subtract 1$,
 We say that \var{links} is the chain of \Vlim{closest} if and
 only if \var{links} is a Leo chain
 such that $\var{links}[0] = \Vlim{closest}$.
+We say that a chain is \dfn{valid}
+if and only if all of its links are valid.
 \end{definition}
 
 \begin{definition}[Leo chain--base match]
@@ -4401,8 +4404,6 @@ is a valid completion in the same Earley set as \Veim{base}.
 
 \begin{proof}
 
-\TODO{Add validity proof}
-
 Let \Vint{g} be a Marpa internal grammar,
 let \Vlimset{chain} be a Leo chain
 and let \Veim{base} be an EIM which matches \var{chain}
@@ -4465,7 +4466,7 @@ Proceeding to show the step,
 \begin{align}
 \label{eq:edge-elements-are-complete-30}
 & \begin{gathered}
-\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP} 
+\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
     \in \LinkPairs{\var{edge}[\var{n}+1]} \\
   \because \Eref{d:leo-edge-30}
   \end{gathered}
@@ -4500,10 +4501,43 @@ $\because \Eref{eq:edge-elements-are-complete-32}$
 \label{eq:edge-elements-are-complete-36}
 & \myparbox{$\var{edge}[\var{n}+1]$
 is the result of an \Earley{} completer operation
+whose ancestry is
+$\left[ \Source{\var{chain}[\var{n}]},
+  \var{edge}[\var{n}] \right]_\type{LP}$
 $\because
 \Eref{eq:edge-elements-are-complete-30},
 \Eref{eq:edge-elements-are-complete-34}$
 }
+\\
+\label{eq:edge-elements-are-complete-37-10}
+& \myparbox{
+  \Vlimset{chain} is valid by assumption
+  for the theorem.
+  }
+\\
+\label{eq:edge-elements-are-complete-37-15}
+& \myparbox{
+  \Source{\var{chain}[\var{n}]} is valid
+  \Dfref{def:lim-validity},
+  \Dfref{d:leo-chain},
+  \Eref{eq:edge-elements-are-complete-37-10}
+  }
+\\
+\label{eq:edge-elements-are-complete-37-20}
+& \myparbox{
+  $\var{edge}[\var{n}]$ is valid
+  $\because \Eref{eq:edge-elements-are-complete-20}$
+  }
+\\
+\label{eq:edge-elements-are-complete-37-25}
+& \myparbox{
+  $\var{edge}[\var{n}+1]$ is valid
+  $\because
+  \Thref{th:earley-completer-is-consistent},
+  \Eref{eq:edge-elements-are-complete-36},
+  \Eref{eq:edge-elements-are-complete-37-15},
+  \Eref{eq:edge-elements-are-complete-37-20}
+  $}
 \\
 \label{eq:edge-elements-are-complete-38}
 & \text{
@@ -4531,7 +4565,8 @@ $\because \Eref{eq:original-completer-summary-4},
 \end{align}
 The step, the induction and therefore the theorem follow
 from
-\Eref{eq:edge-elements-are-complete-42} and
+\Eref{eq:edge-elements-are-complete-37-25},
+\Eref{eq:edge-elements-are-complete-42}, and
 \Eref{eq:edge-elements-are-complete-44}.
 \end{proof}
 
