@@ -33,6 +33,8 @@
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\Oc}{\order{1}}
 \newcommand{\On}{\order{\var{n}}}
+\newcommand{\lastix}[1]{\ensuremath{\##1}}
+\newcommand{\Vlastix}[1]{\lastix{\var{#1}}}
 
 \newcommand{\colonpageref}[1]{%
 \vrefpagenum{\temprefpage}{#1}%
@@ -99,9 +101,13 @@
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
 \newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
+\newcommand{\element}[2]{\ensuremath{#1\left[#2\right]}}
+\newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
+\newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
 
 \newcommand{\eim}[1]{\ensuremath{#1_\type{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
+\newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
 \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vbool}[1]{\Tvar{#1}{BOOL}}
@@ -116,7 +122,7 @@
 \newcommand{\Vesset}[1]{\Tvarset{#1}{ES}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
-\newcommand{\Vlim}[1]{\Tvar{#1}{LIM}}
+\newcommand{\Vlim}[1]{\mylim{\var{#1}}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
@@ -684,8 +690,13 @@ Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
 Where \var{set} is a set,
 \Vsize{set} is the size of the set.
 Where \var{seq} is a sequence (ordered set),
-$\var{seq}[\var{i}]$ is its \var{i}'th element,
-$0 \le \var{i} \le \Vsize{seq}$.
+the first element of \var{seq} is \Velement{seq}{0},
+the last element is \Velement{seq}{\Vlastix{seq}},
+and the \var{i}'th element of \var{seq}
+is \VVelement{seq}{i},
+for $0 \le \var{i} \le \Vlastix{seq}$.
+Note that these definitions imply that $\Vlastix{seq} = \Vsize{seq}\subtract 1$.
+
 We will write
 $\var{s}[\var{a} \ldots \var{z}]$
 for the subsequence
@@ -2997,32 +3008,26 @@ That is because LIMs memoize Leo chains,
 which are deterministic.
 
 In the link pair for a LIM,
-the ``cause'' is more often called the \dfn{source} of the LIM.
+the ``cause'' is more often called the \dfn{source} of the LIM,
+and
+\[
+\text{\Source{\Vlim{$\ell$}} $\defined$ the source EIM link of \Vlim{$\ell$}.}
+\]
 In the link pair for a LIM,
-the ``predecessor'' is more often called the \dfn{previous link} of the LIM.
-The source of the link pair of a LIM is the EIM for which it ``stands in''.
+the ``predecessor'' is more often called the \dfn{previous link} of the LIM,
+and
+\[
+\text{\PreviousLink{\Vlim{$\ell$}} $\defined$ the previous link of \Vlim{$\ell$}.}
+\]
+Because every LIM has exactly one link pair,
+both \var{PreviousLink} and \var{Source} are functions.
+
+The source of the link pair of a LIM is the EIM for which it,
+in a intuitive sense, ``replaces''.
 The source EIM will always be a penult in the same Earley set as the LIM.
 The previous link of the link pair of a LIM is either
-another LIM, or $\Lambda$.
 $\bigstar$
 \end{observation}
-
-\begin{definition}[LIM Validity]
-\label{def:lim-validity}
-We say that a LIM is \dfn{valid}
-if and only if
-\begin{itemize}
-\item it is formed according to
-\Eref{eq:memoizer-operation-10}--%
-\Eref{eq:memoizer-operation-40};
-\item its source is valid; and
-\item its predecessor is valid.
-\end{itemize}
-A predecessor
-whose value is $\Lambda$
-is considered valid.
-$\bigstar$
-\end{definition}
 
 \begin{observation}[Complexity]
 \TODO{}
@@ -4283,11 +4288,11 @@ by assumption for theorem}
 \\
 \label{eq:earley-completer-is-consistent-58}
 & \myparbox{\Veim{rez} is valid
-  $\because \Dfref{df:EIM-valid},
+  $\because$ \Dfref{df:EIM-valid},
   \Eref{eq:earley-completer-is-consistent-38},
   \Eref{eq:earley-completer-is-consistent-44},
   \Eref{eq:earley-completer-is-consistent-48},
-  \Eref{eq:earley-completer-is-consistent-56}$
+  \Eref{eq:earley-completer-is-consistent-56}
 }
 \end{align}
 \end{proof}
@@ -4299,14 +4304,6 @@ items restored.
 We will call \Ves{physical} a \dfn{physical} Earley set, and
 we will call \Vves{virtual} a \dfn{virtual} Earley set
 (type \type{VES}).
-
-Let
-\begin{gather}
-\PreviousLink{\Vlim{$\ell$}} \defined \text{the previous link of \Vlim{$\ell$}, and} \\
-\Source{\Vlim{$\ell$}} \defined \text{the source EIM link of \Vlim{$\ell$}}.
-\end{gather}
-Because every LIM has exactly one link pair,
-both \var{PreviousLink} and \var{Source} are functions.
 
 \begin{definition}[Leo chain]
 \label{d:leo-chain}
@@ -4321,13 +4318,29 @@ where
 and, for all $0 \le \var{n} < \Vsize{n} \subtract 1$,
 \[
 \PreviousLink{\var{links}[\var{n}]} = \var{links}[\var{n}+1].
-\quad \bigstar
 \]
 We say that \var{links} is the chain of \Vlim{closest} if and
 only if \var{links} is a Leo chain
 such that $\var{links}[0] = \Vlim{closest}$.
-We say that a chain is \dfn{valid}
-if and only if all of its links are valid.
+$\bigstar$
+\end{definition}
+
+\begin{definition}[LIM Validity]
+\label{def:lim-validity}
+Let an arbitrary LIM
+We say that a LIM,
+call it \mylim{\ell},
+is \dfn{valid}
+if and only if,
+where \var{chain} is the LIM chain of $\ell$,
+\begin{gather}
+\DR{\Source{\Velement{chain}{\Vlastix{chain}}}} = \DR{\ell}, \\
+\Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} = \Origin{\ell}, \\
+\Postdot{\Source{\ell}} = \Transition{\ell}, \\
+\text{\Source{\ell} is valid, and} \\
+\text{\PreviousLink{\ell} is $\Lambda$ or a valid LIM.}
+  \quad \bigstar
+\end{gather}
 \end{definition}
 
 \begin{definition}[Leo chain--base match]
