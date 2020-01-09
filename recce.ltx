@@ -4393,12 +4393,16 @@ The theorem follows directly from
 \begin{theorem}[Edge properties]
 \label{th:edge-elements-are-complete}
 In a Marpa internal grammar,
-every element of the edge of a Leo chain and a matching EIM,
+every element of the edge of
+a valid Leo chain and a valid matching EIM,
 call it \Veim{base},
-is a completion in the same Earley set as \Veim{base}.
+is a valid completion in the same Earley set as \Veim{base}.
 \end{theorem}
 
 \begin{proof}
+
+\TODO{Add validity proof}
+
 Let \Vint{g} be a Marpa internal grammar,
 let \Vlimset{chain} be a Leo chain
 and let \Veim{base} be an EIM which matches \var{chain}
@@ -4516,139 +4520,6 @@ from
 \Eref{eq:edge-elements-are-complete-42} and
 \Eref{eq:edge-elements-are-complete-44}.
 \end{proof}
-
-\begin{theorem}[Edge validity]
-If a Leo chain and an EIM that matches the Leo chain are valid,
-then their edge is valid.
-\end{theorem}
-
-\begin{proof}
-
-Let \Vlimset{chain} be a Leo chain,
-\Veim{base} a matching EIM,
-and \Veimset{edge} be their edge.
-We proceed by induction on the elements of the edge.
-Our induction hypothesis is
-\begin{equation}
-\myparbox{$\var{edge}[\var{n}]$ is valid.}
-\end{equation}
-As the basis of the induction we note that \
-$\var{edge}[0] = \Veim{base}$ is valid by
-assumption for the theorem.
-
-For the step, we assume
-\begin{equation}
-\myparbox{\var{edge}[\var{n}] is valid}
-\end{equation}
-to show that
-\begin{equation}
-\myparbox{\var{edge}[\var{n}+1] is valid.}
-\end{equation}
-
-We now try to show that
-$\var{edge}[\var{n}+1]$ is the cause,
-and
-\Source{\var{chain}[\var{n}]} the predecessor
-of an original Earley{} completer operation.
-satisfying,
-\Eref{eq:original-completer-summary-1}--
-\Eref{eq:original-completer-summary-3}.
-
-To show this,
-\begin{align}
-& \myparbox{
-$\var{edge}[\var{n}+1]$ is a completion
-$\because \Thref{th:edge-elements-are-complete}$
-}
-\\
-& \myparbox{
-$\Source{\var{chain}[\var{n}]}$ is an incompletion
-$\because \Thref{th:leo-chain-source-properties}$
-}
-\\
-\end{align}
-
-% From \Eref{d:leo-edge-30}--\Eref{d:leo-edge-32}
-% we have that
-% the dotted rule of
-% $\var{edge}[\var{n}+1]$ is \Next{\Vdr{pred}},
-% where
-% \begin{equation}
-% \Veim{pred} = [ \Vdr{pred}, \Vorig{pred} ] = \Source{\var{chain}[\var{n}]}.
-% \end{equation}
-% \Veim{pred} is the source of a LIM so that
-% \begin{gather}
-% \LeoEligible{\Veim{pred}}
-% \because
-% \Eref{eq:memoizer-operation-20},
-% \Eref{eq:memoizer-operation-30}
-% \\
-% \LeoUnique{\Veim{pred}}
-% \because
-% \Eref{eq:memoizer-operation-10},
-% \\
-% \text{\Veim{pred} is a penult $\because \Dfref{d:leo-unique}$}
-% \end{gather}
-
-% \Eref{eq:original-completer-summary-1}
-
-\TODO{finish}
-\end{proof}
-
-\TODO{TO HERE}
-
-Let
-\begin{gather}
-\mymathop{Unhide}(\Vlim{pred}, \Veim{base}) \defined
-\begin{cases}
-\text{$\emptyset$, if $\Vlim{pred} = \Lambda$}
-\\
-\begin{aligned}
-& \mymathop{Unhide1}(\Vlim{pred}, \Veim{base}), \\
-& \quad \text{otherwise}
-\end{aligned}
-\end{cases}
-\\
-\label{eq:unhide-b}
-\begin{aligned}
-& \text{where $\mymathop{Unhide1}(\Vlim{pred}, \Veim{base}) \defined$} \\
-& \quad
-\left\lbrace \;\;
-\begin{gathered}
-\mymathop{Unhide}(\PreviousLink{\Vlim{pred}}, \Veim{new-base}) \\
-\text{$\cup \quad \set{\Veim{new-base}}$ such that} \\
-\Veim{new-base} = \left[ \Next{\Vdr{pred}}, \Vorig{pred} \right]_\type{EIM} \\
-\land \;\; [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] = \Vlim{pred}
-\end{gathered}
-\;\; \right\rbrace
-\end{aligned}
-\end{gather}
-In \Eref{eq:unhide-b},
-\Veim{new-base} is created with a single link pair,
-$[ \Source{\Vlim{link}}, \Veim{base} ]$.
-
-Then the set of memoized EIMs in \Ves{i}, $\mymathop{Memoized}(\Ves{i})$ is
-\begin{equation*}
-\left\lbrace
-\begin{aligned}
-& \Veim{virtual} : \\
-& \qquad
-\begin{aligned}
-         & \Veim{physical} \in \Ves{i} \\
-\land \;\; & \left[ (\Vlim{link}, \Veim{base}) \right] \in \LinkPairs{\Veim{physical}} \\
-\land \;\; & \Veim{virtual} \in \mymathop{Unhide}(\Vlim{link}, \Veim{base}).
-\end{aligned}
-\end{aligned}
-\right\rbrace
-\end{equation*}
-Then, \Vves{i}, the virtual Earley set corresponding to \Ves{i}, is
-\begin{equation*}
-\Ves{i} \;\; \cup \;\; \mymathop{Memoized}(\Ves{i}).
-\end{equation*}
-
-\begin{observation}[Complexity]
-\TODO{}
-\end{observation}
 
 \begin{theorem}
 In an unambiguous grammar,
