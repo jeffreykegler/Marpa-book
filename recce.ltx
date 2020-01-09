@@ -176,6 +176,7 @@
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
+\newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}\left(#1\right)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
@@ -2129,31 +2130,28 @@ As a convenient way to say that a PIM
 is in an Earley set,
 we will put an `$@$' operator between
 the PIM and its Earley set.
-For example, to say that an EIM,
+For example, to say that an arbitrary EIM,
 $\Veim{x} = [ \Vdr{dotted}, \Vorig{i}]$
 is in Earley set \Ves{j}, we may write any of
 \begin{gather*}
     \Veim{x} @ \Ves{j}, \qquad \Veim{x} @ \Vloc{j}, \qquad \var{x} @ \var{j}, \\
     \text{$[ \Vdr{dotted}, \Vorig{i}]_\type{EIM} @ \Ves{j}$, or} \\
-    [ \Vdr{dotted}, \Vorig{i}] @ \var{j},
+    \text{$[ \Vdr{dotted}, \Vorig{i}] @ \var{j}$, etc.}
 \end{gather*}
 with the type-less variations used in contexts where type is
 understood.
-Similarly, for the LIM
-$\Vlim{y} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]$
-at \Ves{j},
-or the PIM \Vpim{p} at Ves{j}, we may write any of
+Similarly, for the
+PIM \Vpim{p} at \Ves{j}, we may write
+\[
+    \text{$\Vpim{p} @ \Ves{j}$, $\var{p} @ \var{j}$, etc.}
+\]
+Also,
+for aribtary
+$\Veim{x}@\Vloc{eLoc}$ and
+$\Vpim{x}@\Vloc{pLoc}$,
 \begin{gather*}
-    \Vlim{y} @ \Ves{j}, \qquad \Vpim{p} @ \Ves{j}, \qquad \var{p} @ \var{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j},
-    \text{etc.}
-\end{gather*}
-For convenience,
-\begin{gather*}
-\Current{[\Veim{x}@\Vloc{eLoc}]} \defined \Vloc{eLoc}, \\
-\text{$\Current{[\Vlim{x}@\Vloc{lLoc}]} \defined \Vloc{lLoc}$, and} \\
-\Current{[\Vpim{x}@\Vloc{pLoc}]} \defined \Vloc{pLoc}.
+\text{$\Current{\Veim{x}@\Vloc{eLoc}} \defined \Vloc{eLoc}$, and}\\
+\Current{\Vpim{x}@\Vloc{pLoc}} \defined \Vloc{pLoc}.
 \end{gather*}
 
 When we speak of Earley sets in procedural terms,
@@ -2395,7 +2393,7 @@ Let
 \begin{equation*}
 \Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
 \end{equation*}
-be a Leo item.
+be an arbitrary Leo item.
 \Vsym{transition} is the transition symbol of \Vlim{x},
 and
 \begin{equation*}
@@ -2403,6 +2401,24 @@ and
 \end{equation*}
 is the Earley item to be unioned on completer operations over
 \Vsym{transition}.
+To say that \Vlim{x}
+is at \Ves{j}, we may write
+\begin{gather*}
+    \Vlim{x} @ \Ves{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
+    \text{$[ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j}$, etc.}
+\end{gather*}
+Also,
+\begin{align}
+\DR{\Vlim{x}} & \defined \Vdr{top}, \\
+\Transition{\Vlim{x}} & \defined \Vsym{transition},
+\;\; \text{and} \\
+\Origin{\Vlim{x}} & \defined \Vorig{top},
+\end{align}
+and, for arbitrary $\Vlim{x}@\Vloc{j}$,
+\[
+\Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
+\]
 
 Leo items memoize what would otherwise be sequences
 of Earley items.
@@ -4108,7 +4124,7 @@ only if, for every parse, it is \dfn{consistent} and
 We call a parsing algorithm \dfn{consistent} if
 it produces only valid Earley items.
 We call a parsing algorithm \dfn{complete} if
-it all of the valid Earley items.
+it produces all of the valid Earley items.
 
 \begin{theorem}
 \label{th:earley-is-correct}
@@ -4123,13 +4139,14 @@ it all of the valid Earley items.
 
 The following is proved as part of
 \Thref{th:earley-is-correct},
-but we make special use of it in this paper.
+but we state and prove it specifically
+because we make special use of it in this paper.
 
 \begin{theorem}[Earley completer consistency]
 \label{th:earley-completer-is-consistent}
 The \Earley{} completer operation preserves validity.
-That is, if the ancestry (predecessor and cause)
-an Earley{} completer operation is valid,
+That is, if the predecessor and cause
+of an Earley{} completer operation are valid,
 the result of the Earley{} completer operation is valid.
 \end{theorem}
 
@@ -4142,20 +4159,20 @@ and call its result, \Veim{rez}.
 Then
 \begin{align}
 \label{eq:earley-completer-is-consistent-20}
-& \begin{multlined}
-  \Vdr{pred} = \\
-  \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
+& \begin{aligned}
+  & \Vdr{pred} = \\
+  & \qquad \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
   \right] \\
-  \because \Eref{eq:original-completer-summary-2}
-  \end{multlined}
+  & \qquad\qquad  \because \Eref{eq:original-completer-summary-2}
+  \end{aligned}
 \\
 \label{eq:earley-completer-is-consistent-22}
-& \begin{multlined}
-  \Veim{pred} = \\
-  \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
-  \because \Eref{eq:earley-completer-is-consistent-20},
+& \begin{aligned}
+  & \Veim{pred} = \\
+  & \qquad \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
+  & \qquad\qquad  \because \Eref{eq:earley-completer-is-consistent-20},
     \Eref{eq:original-completer-summary-2}
-  \end{multlined}
+  \end{aligned}
 \\
 \label{eq:earley-completer-is-consistent-24}
 & \LHS{\Vdr{cuz}} = \Vsym{postdot}
@@ -4273,7 +4290,6 @@ by assumption for theorem}
   \Eref{eq:earley-completer-is-consistent-56}$
 }
 \end{align}
-TODO{finish}
 \end{proof}
 
 \TODO{Move this?}
@@ -4294,7 +4310,9 @@ both \var{PreviousLink} and \var{Source} are functions.
 
 \begin{definition}[Leo chain]
 \label{d:leo-chain}
-A \dfn{Leo chain} is a sequence of one or more LIM's,
+A \dfn{Leo chain},
+or simply \dfn{chain} when the meaning is clear in context,
+is a sequence of one or more LIM's,
 call it $\Vlimset{links}$,
 where
 \[
@@ -4320,7 +4338,7 @@ We say \Veim{base} \dfn{matches} \Vlim{lim},
 if and only if
 \begin{itemize}
 \item \Veim{base} is a completion;
-\item the transition symbol of \Vlim{lim} is \LHS{\var{base}}; and
+\item %\Transition{\Vlim{lim}} = \LHS{\var{base}}$; and
 \item $\Vlim{lim} \in \es{(\Origin{\var{base}})}$.
 \end{itemize}
 We say that \Veim{base} \dfn{matches} a Leo chain,
