@@ -4144,8 +4144,8 @@ it produces all of the valid Earley items.
 
 The following is proved as part of
 \Thref{th:earley-is-correct},
-but we state and prove it specifically
-because we make special use of it in this paper.
+but we state and prove it separately
+we make special use of it.
 
 \begin{theorem}[Earley completer consistency]
 \label{th:earley-completer-is-consistent}
@@ -4162,112 +4162,133 @@ Call the ancestry of an Earley{} completer operation
 \]
 and call its result, \Veim{rez}.
 Then
-\begin{align}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-20}
-& \begin{aligned}
-  & \Vdr{pred} = \\
-  & \qquad \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
+  \begin{gathered}
+  \Vdr{pred} =
+  \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
   \right] \\
-  & \qquad\qquad  \because \Eref{eq:original-completer-summary-2}
-  \end{aligned}
-\\
+  \because \Eref{eq:original-completer-summary-2}
+  \end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-22}
-& \begin{aligned}
-  & \Veim{pred} = \\
-  & \qquad \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
-  & \qquad\qquad  \because \Eref{eq:earley-completer-is-consistent-20},
+  \begin{gathered}
+  \Veim{pred} = 
+  \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
+  \because \Eref{eq:earley-completer-is-consistent-20},
     \Eref{eq:original-completer-summary-2}
-  \end{aligned}
-\\
+  \end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-24}
-& \LHS{\Vdr{cuz}} = \Vsym{postdot}
+\LHS{\Vdr{cuz}} = \Vsym{postdot}
 \because \Eref{eq:original-completer-summary-3}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-26}
-& \begin{multlined}
-  \Veim{cuz} = \\
-  \left[ \Vdr{cuz}, \Vloc{meet} \right]
-  @ \Vloc{current} \\
+  \begin{gathered}
+  \Veim{cuz} = \left[ \Vdr{cuz}, \Vloc{meet} \right]
+    @ \Vloc{current} \\
   \because \Eref{eq:earley-completer-is-consistent-22},
   \Eref{eq:original-completer-summary-1},
   \Eref{eq:original-completer-summary-2}
-  \end{multlined}
-\\
+  \end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-28}
-& \begin{multlined}
-  \Veim{rez} = \\
-  \left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current} \\
+  \begin{gathered}
+  \Veim{rez} =
+  \left[
+    \begin{gathered}
+      \Next{\DR{\var{pred}}}, \\
+      \Origin{\var{pred}}
+    \end{gathered}
+  \right]@\Vloc{current} \\
   \because
   \Eref{eq:original-completer-summary-4}
-  \end{multlined}
-\\
+  \end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-30}
-& \myparbox{\Veim{pred} is valid
+\myparbox{\Veim{pred} is valid
 by assumption for theorem}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-32}
-& \myparbox{\Veim{cuz} is valid
+\myparbox{\Veim{cuz} is valid
 by assumption for theorem}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-34}
-& \Rule{\Veim{pred}} \in \Rules{\var{g}}
+\Rule{\Veim{pred}} \in \Rules{\var{g}}
 \because \Eref{eq:EIM-valid-22a},
   \Eref{eq:earley-completer-is-consistent-30}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-36}
-& \begin{multlined}
+\begin{multlined}
   \Accept{\var{g}} \destar \Vstr{before} \cat \LHS{\Veim{pred}} \cat \Vstr{after} \\
   \because \Eref{eq:EIM-valid-22b},
     \Eref{eq:earley-completer-is-consistent-30}
   \end{multlined}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-38}
-& \begin{multlined}
+\begin{multlined}
   \Vstr{before} \destar \var{prefix}[0  \ldots  (\var{orig}\subtract 1)] \\
   \because \Eref{eq:EIM-valid-22c},
     \Eref{eq:earley-completer-is-consistent-30}
   \end{multlined}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-40}
-& \begin{multlined}
+\begin{multlined}
   \Vstr{rhs1} \destar \var{prefix}[\var{orig}  \ldots  (\var{meet}\subtract 1)] \\
   \because \Eref{eq:EIM-valid-22d}, \Eref{eq:earley-completer-is-consistent-30}
   \end{multlined}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-42}
-& \Rule{\Veim{pred}} = \Rule{\Veim{rez}}
-\because \Eref{eq:earley-completer-is-consistent-28}
-\\
+\Rule{\Veim{pred}} = \Rule{\Veim{rez}}
+\because \Eref{eq:earley-completer-is-consistent-38}
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-44}
-& \Rule{\Veim{rez}} \in \Rules{\var{g}}
+\Rule{\Veim{rez}} \in \Rules{\var{g}}
 \because \Eref{eq:earley-completer-is-consistent-34},
 \Eref{eq:earley-completer-is-consistent-42}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-46}
-& \LHS{\Veim{pred}} = \LHS{\Veim{rez}}
+\LHS{\Veim{pred}} = \LHS{\Veim{rez}}
 \because \Eref{eq:earley-completer-is-consistent-34}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-48}
-& \begin{multlined}
+\begin{multlined}
   \Accept{\var{g}} \destar \Vstr{before} \cat \LHS{\Veim{rez}} \cat \Vstr{after} \\
   \because \Eref{eq:earley-completer-is-consistent-36},
   \Eref{eq:earley-completer-is-consistent-46}
   \end{multlined}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-50}
-& \begin{aligned}
+\begin{aligned}
   & \Vdr{rez} = \\
   & \qquad \left[ \Vsym{lhsP} \de \Vstr{rhs1} \Vsym{postdot} \mydot \Vstr{rhs3}
   \right] \\
   & \qquad \quad \because \Eref{eq:earley-completer-is-consistent-20}, \Eref{eq:earley-completer-is-consistent-28}
   \end{aligned}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-52}
-& \myparbox{\Veim{cuz} is a completion
+\myparbox{\Veim{cuz} is a completion
   $\because \Eref{eq:original-completer-summary-1}$}
-\\[1ex]
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-54}
-& \begin{aligned}
+\begin{aligned}
   & \Vstr{postdot} \\
   & \qquad \destar
   \var{prefix}[\var{meet}  \ldots  (\var{current}\subtract 1)] \\
@@ -4277,24 +4298,26 @@ by assumption for theorem}
   & \qquad \qquad \quad \Eref{eq:earley-completer-is-consistent-32},
   \Eref{eq:earley-completer-is-consistent-52}
   \end{aligned}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-56}
-& \begin{aligned}
+\begin{aligned}
   & \Vstr{rhs1} \Vstr{postdot} \\
   & \qquad \destar \var{prefix}[\var{orig}  \ldots  (\var{current}\subtract 1)] \\
   & \qquad \qquad \because \Eref{eq:earley-completer-is-consistent-40},
     \Eref{eq:earley-completer-is-consistent-54}
   \end{aligned}
-\\
+\end{equation}
+\begin{equation}
 \label{eq:earley-completer-is-consistent-58}
-& \myparbox{\Veim{rez} is valid
+\myparbox{\Veim{rez} is valid
   $\because$ \Dfref{df:EIM-valid},
   \Eref{eq:earley-completer-is-consistent-38},
   \Eref{eq:earley-completer-is-consistent-44},
   \Eref{eq:earley-completer-is-consistent-48},
   \Eref{eq:earley-completer-is-consistent-56}
 }
-\end{align}
+\end{equation}
 \end{proof}
 
 \TODO{Move this?}
