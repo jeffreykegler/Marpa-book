@@ -16,6 +16,15 @@
 \delimitershortfall=0pt
 \delimiterfactor=1100
 
+% Shorten the distane between equations.  This is not
+% to save space for its own sake, but because
+% we often equations into series, and these
+% do not look good with too much space.
+\setlength{\abovedisplayskip}{3pt}
+\setlength{\belowdisplayskip}{3pt}
+\setlength\abovedisplayshortskip{3pt}
+\setlength\belowdisplayshortskip{3pt}
+
 \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
@@ -203,7 +212,8 @@
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
-  \raggedright#2\par
+  %\raggedright#2\par
+  \centering#2\par
   \vspace{-\prevdepth} % remove the depth of the last line
   \vspace{1ex} % add a fixed vertical space
   }%
@@ -4481,59 +4491,59 @@ and let \Veim{base} be an EIM which matches \var{chain}
 of a Leo chain element in \Ves{element}.
 Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
 We proceed by induction on the elements of the edge,
-with the induction hypothesis
-
+where the induction hypothesis is
 \begin{equation}
+\label{eq:edge-elements-are-complete-05}
 \myparbox{
-$\var{edge}[\var{n}]$ a valid completion in the same Earley set as \Veim{base}.
+$\var{edge}[\var{ix}]$ a valid completion in the same Earley set as \Veim{base}.
 }
 \end{equation}
 
-We take as the basis $\var{n} = 0$.
-\begin{align}
+We use $\var{ix} = 0$ as the basis of the induction:
+\begin{equation}
 \label{eq:edge-elements-are-complete-10}
-& \var{edge}[0] = \Veim{base} \because \Eref{eq:d-leo-edge-10}
-\\
+\var{edge}[0] = \Veim{base} \because \Eref{eq:d-leo-edge-10}.
+\end{equation}
+\begin{equation}
 \label{eq:edge-elements-are-complete-12}
-& \text{\Veim{base} is a completion $\because \Dfref{d:leo-chain-base-match}$}
-\\
+\text{\Veim{base} is a completion $\because \Dfref{d:leo-chain-base-match}$.}
+\end{equation}
+\begin{equation}
 \label{eq:edge-elements-are-complete-14}
-& \myparbox{\Veim{base} is in the same Earley set as \Veim{base} $\because$ trivial}
-\\
+\text{\Veim{base} is in the same Earley set as \Veim{base} $\because$ trivial.}
+\end{equation}
+\begin{equation}
 \label{eq:edge-elements-are-complete-16}
-& \myparbox{\Veim{base} is valid by
-  assumption for the theorem
-  }
-\\
+\text{\Veim{base} is valid by
+  assumption for the theorem.}
+\end{equation}
+\begin{gather}
 \label{eq:edge-elements-are-complete-18}
-& \myparbox{\var{edge}[0] is a valid completion
+\myparbox{\var{edge}[0] is a valid completion
   in the same Earley set as \Veim{base}
-  $\because
+  $\because$
   \Eref{eq:edge-elements-are-complete-10},
   \Eref{eq:edge-elements-are-complete-12},
   \Eref{eq:edge-elements-are-complete-14},
-  \Eref{eq:edge-elements-are-complete-16}
-  $}
-\end{align}
-\Eref{eq:edge-elements-are-complete-18}
-is the basis of the induction.
+  \Eref{eq:edge-elements-are-complete-16}.}
+\end{gather}
 
-For the step of the induction, we assume that
+With
+\Eref{eq:edge-elements-are-complete-18}
+we have the basis of the induction.
+For the step of the induction, we assume
+the induction hypothesis \Eref{eq:edge-elements-are-complete-05}
+for $\var{ix}=\var{n}$
+to show
+the induction hypothesis
+for $\var{ix}=\var{n}+1$.
 \begin{equation}
 \label{eq:edge-elements-are-complete-20}
 \myparbox{
-$\var{edge}[\var{n}]$ is a valid completion in the same Earley set as \Veim{base}.
+$\var{edge}[\var{n}]$ is a valid completion in the same Earley set as \Veim{base}
+$\because$ assumption for step of the induction.
 }
 \end{equation}
-to show
-\begin{equation}
-\label{eq:edge-elements-are-complete-22}
-\myparbox{
-$\var{edge}[\var{n}+1]$  is a valid completion in the same Earley set as \Veim{base}.
-}
-\end{equation}
-
-Proceeding to show the step,
 \begin{align}
 \label{eq:edge-elements-are-complete-30}
 & \begin{gathered}
@@ -4641,9 +4651,9 @@ from
 \Eref{eq:edge-elements-are-complete-44}, so that
 \begin{equation}
 \label{eq:edge-elements-are-complete-50}
-\myparbox{
+\myparbox{%
 for all \var{n} such $0 \le \var{n} \le \Vlastix{edge}$,
-\VVelement{edge}{n} is a valid completion in the same Earley set as \Velement{edge}{0}.
+\VVelement{edge}{n} is a valid completion in the same Earley set as \Velement{edge}{0}.%
 }
 \end{equation}
 \begin{equation}
