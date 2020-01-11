@@ -4174,7 +4174,7 @@ Then
 \begin{equation}
 \label{eq:earley-completer-is-consistent-22}
   \begin{gathered}
-  \Veim{pred} = 
+  \Veim{pred} =
   \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
   \because \Eref{eq:earley-completer-is-consistent-20},
     \Eref{eq:original-completer-summary-2}
@@ -4411,8 +4411,15 @@ and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
   \in \LinkPairs{\var{edge}[\var{n}+1]}
 \end{equation}
+
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
 are valid.
+The \dfn{top} of the edge is \Velement{edge}{\Vlastix{edge}}.
+The \dfn{bottom} of the edge is \Velement{edge}{0}.
+The \dfn{inside} of the edge is the sequence
+\Velement{edge}{1 \ldots (\Vlastix{edge}\subtract 1)}.
+An \dfn{inside element} of an edge is a element of the
+inside of the edge.
 $\bigstar$
 \end{definition}
 
@@ -4432,7 +4439,7 @@ of a Leo chain element in \Ves{element}.
 &
 \begin{gathered}
 \Veim{source} \in \LeoEligible{\Ves{element}} \\
-\qquad \because \Eref{eq:th-leo-chain-source-properties-10}, \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}
+\qquad \because \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}
 \end{gathered}
 \\
 \label{eq:th-leo-chain-source-properties-12}
@@ -4459,10 +4466,11 @@ The theorem follows directly from
 \begin{theorem}[Edge properties]
 \label{th:edge-elements-are-complete}
 In a Marpa internal grammar,
-every element of the edge of
-a valid Leo chain and a valid matching EIM,
-call it \Veim{base},
-is a valid completion in the same Earley set as \Veim{base}.
+let \Vlimset{chain} be a valid Leo chain,
+and \Veim{base} a valid EIM matching \var{chain}.
+Every element of the edge of \var{chain} and \var{base}
+is a valid completion in the same Earley set as \Veim{base},
+and the edge is valid.
 \end{theorem}
 
 \begin{proof}
@@ -4626,11 +4634,26 @@ $\because \Eref{eq:original-completer-summary-4},
 \Eref{eq:edge-elements-are-complete-36}$.
 }
 \end{align}
-The step, the induction and therefore the theorem follow
+The step and the induction follow
 from
 \Eref{eq:edge-elements-are-complete-37-25},
 \Eref{eq:edge-elements-are-complete-42}, and
-\Eref{eq:edge-elements-are-complete-44}.
+\Eref{eq:edge-elements-are-complete-44}, so that
+\begin{equation}
+\label{eq:edge-elements-are-complete-50}
+\myparbox{
+for all \var{n} such $0 \le \var{n} \le \Vlastix{edge}$,
+\VVelement{edge}{n} is a valid completion in the same Earley set as \Velement{edge}{0}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:edge-elements-are-complete-52}
+\myparbox{\Veimset{edge} is valid $\because$
+\Eref{eq:edge-elements-are-complete-50}.}
+\end{equation}
+We have the theorem directly from
+\Eref{eq:edge-elements-are-complete-50} and
+\Eref{eq:edge-elements-are-complete-52}.
 \end{proof}
 
 \begin{theorem}
