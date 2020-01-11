@@ -4684,6 +4684,7 @@ Recall that \var{Leo-completer}
 is defined at
 \Eref{eq:completer-op-23}.
 \begin{theorem}
+\label{th:leo-completer-is-consistent}
 The \var{Leo-completer} sub-operation
 of the \Marpa{} Completer operation
 preserves validity.
@@ -4710,7 +4711,73 @@ that PIM's are only created by operations.
 We now proceed by elimination of subcases,
 where our subcases are the operations
 of the \Marpa{} algorithm.
-\TODO{finish}
+We first note that an operation creates
+the first invalid PIM only if it does not preserve
+validity.
+
+The \Marpa{} initializer operation creates the
+same PIM's as the \Earley{} initializer operation
+\Obref{ob:earley-set-0}.
+The \Earley{} initializer operation preserves
+validity because the \Earley{} algorithm is
+correct
+\Thref{th:earley-is-correct}.
+Note in the case of the Initalizer operation,
+validity is preserved vacuously ---
+no PIM is in the ancestry of the Initializer
+operation.
+
+The \Marpa{} scanner operation
+creates the same PIM's as the \Earley{}
+scanner operations
+\Obref{ob:earley-scanner-operation}.
+The \Marpa{} predictor operation
+creates the same PIM's as the \Earley{}
+predictor operations
+\Obref{ob:earley-predictor-operation}.
+These two operations preserve
+validity because the \Earley{} algorithm is
+correct
+\Thref{th:earley-is-correct}.
+
+We have shown that the memoizer operation is
+correct \Eref{th:memoizer-consistency}.
+The remaining subcase is the \Marpa completer operation.
+
+The \Marpa completer operation consists of two
+sub-operations:
+\var{Earley-completer} and
+\var{Leo-completer}.
+We have shown that the
+\var{Leo-completer} preserves complexity
+\Thref{th:leo-completer-is-consistent}.
+
+From
+\Obref{ob:earley-completer-operation}
+and the description of the 
+\var{Earley-completer},
+the \var{Earley-completer} creates the EIM that
+the \Earley{} completer operation would have
+created, unless there is a LIM that ``blocks''
+\Marpa{}'s \var{Earley-completer}.
+Therefore the PIM's created by
+the \Marpa{} \var{Earley-completer} sub-operation
+are a subset of those created by the \Earley{}
+completer operation.
+We know the \Earley{} completer operation preserves
+validity
+\Thref{th:earley-completer-is-consistent},
+and therefore any operation which creates some subset of the
+EIM's that 
+the \Earley{} completer operation creates also
+preserves validity.
+
+With this we have shown the last subcase,
+and may conclude that no \Marpa{} operation creates the
+first invalid PIM,
+and therefore no \Marpa{} operation creates
+an invalid PIM.
+Therefore, \Marpa{} is consistent.
 \end{proof}
 
 \begin{theorem}
