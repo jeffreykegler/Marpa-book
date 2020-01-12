@@ -2485,22 +2485,24 @@ $\bigstar$
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
 for LIMs.
-Let \Veim{successor} be such that
-\begin{equation*}
-\Veim{successor} = [ \Vdr{successor}, \Vorig{successor} ].
-\end{equation*}
 We say that \Vlim{predecessor}
-is the \dfn{Leo predecessor} of \Veim{successor},
+is the \dfn{LIM predecessor} of \Veim{successor},
 \begin{equation*}
 \Vlim{predecessor} = \LIMPredecessor{\Veim{successor}},
 \end{equation*}
-if and only if, for some \Vdr{top}, \Vorig{top},
+if and only if
 \begin{equation*}
 \begin{gathered}
-\Vlim{predecessor} = [\Vdr{top}, \Predot{\Veim{successor}}, \Vorig{top}] \\
-\quad \text{and} \quad \Vlim{predecessor} \in \es{\left( \Vorig{successor} \right)}.
+\Transition{\Vlim{predecessor}} = \Predot{\Veim{successor}} \\
+\land \; \Current{\Vlim{predecessor}} = \Origin{\Veim{successor}}.
 \end{gathered}
 \end{equation*}
+If there is no
+\Predot{\Veim{successor}},
+that is, if
+$\Predot{\Veim{successor}} = \Lambda$,
+then there is no LIM predecessor
+$\LIMPredecessor{\Veim{successor}} = \Lambda$.
 
 \section{Ancestry}
 \label{sec:ancestry}
@@ -2976,10 +2978,10 @@ Let
 & \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
 & \qquad \left\lbrace \;\;
 \begin{gathered}
-\left[ \Vdr{base}, \LHS{\Veim{base}}, \Vorig{base} \right]_\type{LIM} \quad \text{such that} \\
-\Veim{base} \in \LeoEligible{\Ves{i}}, \\
-\Veim{base} = [ \Vdr{base}, \Vorig{base} ], \;\; \text{and} \\
-\LIMPredecessor{\Veim{base}} = \Lambda \\
+\left[ \Vdr{source}, \LHS{\Veim{source}}, \Vorig{source} \right]_\type{LIM} \quad \text{such that} \\
+\Veim{source} \in \LeoEligible{\Ves{i}}, \\
+\Veim{source} = [ \Vdr{source}, \Vorig{source} ], \;\; \text{and} \\
+\LIMPredecessor{\Veim{source}} = \Lambda \\
 \end{gathered}
 \;\; \right\rbrace,
 \end{aligned}
@@ -2991,9 +2993,9 @@ and
 & \mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined \\
 & \qquad \left\lbrace \;\;
 \begin{gathered}
-\left[ \Vdr{pred}, \LHS{\Veim{base}}, \Vorig{pred} \right]_\type{LIM} \quad \text{such that} \\
-\Veim{base} \in \LeoEligible{\Ves{i}}, \\
-\Vlim{pred} = \LIMPredecessor{\Veim{base}}, \quad \text{and} \\
+\left[ \Vdr{pred}, \LHS{\Veim{source}}, \Vorig{pred} \right]_\type{LIM} \quad \text{such that} \\
+\Veim{source} \in \LeoEligible{\Ves{i}}, \\
+\Vlim{pred} = \LIMPredecessor{\Veim{source}}, \quad \text{and} \\
 \Vlim{pred} = [ \Vdr{pred}, \Vsym{pred}, \Vorig{pred} ] \\
 \end{gathered}
 \;\; \right\rbrace .
@@ -4383,7 +4385,20 @@ The \Marpa{} memoizer operation preserves validity.
 \end{theorem}
 
 \begin{proof}
-\TODO{prove this}
+Call the LIM added by an arbitrary Marpa memoizer
+operation \mylim{\ell},
+and its ancestry $[\Vlim{previous}, \Veim{source}]$.
+\begin{equation}
+\label{eq:th-memoizer-consistency-10}
+\myparbox{\Vlim{previous} is $\Lambda$ or a valid LIM, by
+assumption for the theorem.}
+\end{equation}
+\begin{equation}
+\label{eq:th-memoizer-consistency-12}
+\myparbox{\Veim{source} is valid, by
+assumption for the theorem.}
+\end{equation}
+\TODO{finish}
 \end{proof}
 
 \begin{definition}[Leo chain--base match]
@@ -4750,7 +4765,7 @@ sub-operations:
 \var{Earley-completer} and
 \var{Leo-completer}.
 We have shown that the
-\var{Leo-completer} preserves complexity
+\var{Leo-completer} preserves validity
 \Thref{th:leo-completer-is-consistent}.
 
 From
