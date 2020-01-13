@@ -4822,7 +4822,7 @@ All other PIM's are \dfn{visible}.
 \end{definition}
 
 \begin{theorem}
-\Marpa is complete, except for the hidden
+\Marpa{} is complete, except for the hidden
 PIM's.
 \end{theorem}
 
@@ -4831,9 +4831,10 @@ PIM's.
 \end{proof}
 
 \begin{lemma}
-Let \Ves{j} be an Earley set in a \Marpa parse,
+\label{lem:marpa-completer-completeness}
+Let \Ves{j} be an Earley set in a \Marpa{} parse,
 $\var{j} > 0$.
-If the Earley sets Ves{i}, for $0 \le \var{i} < var{j}$
+If the Earley sets \Ves{i}, for $0 \le \var{i} < \var{j}$
 are complete with respect to the visible PIM's,
 and the PIM's added to \Ves{J} by the
 \Marpa{} scanner are complete, then
@@ -4843,7 +4844,8 @@ with respect to the visible PIM's
 
 \begin{proof}
 This proof will be by induction on
-the depth counted in terms of EIM causes,
+the depth counted in terms of
+visible confirmed EIM causes,
 which we will refer to as ``visible depth''.
 We will write \var{Depth}(\Veim{x}) for the visible depth
 of \Veim{x}.
@@ -4854,19 +4856,70 @@ is the ``deepest''.
 
 The visible depth is
 defined only for visible confirmed EIM's.
-Visible depth of \Veim{x},
-$\var{Depth}(\var{x})$, is
-\begin{itemize}
-\item 1, if \var{x} is a result of \Marpa{}'s scanner operation;
-\item $\var{Depth}(\Veim{bottom})+1$,
+We write the visible depth of \Veim{x} as
+$\var{Depth}(\var{x})$.
+
+\begin{equation}
+\label{lem:marpa-completer-completeness-20}
+\myparbox{$\var{Depth}(\Veim{x}) = 1$
+if \var{x} is a result of \Marpa{}'s scanner operation.}
+\end{equation}
+\begin{equation}
+\label{lem:marpa-completer-completeness-22}
+\myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{bottom})+1$,
 if \var{x} is the top of a Leo edge,
 where
-\Veim{bottom} is the bottom of the edge; and
-\item $\var{Depth}(\Veim{cuz})+1$,
-if \var{x} is any other visible confirmed EIM,
-where
-\Veim{cuz} is the ``deepest'' cause of \Veim{x}.
-\end{itemize}
+\Veim{bottom} is the bottom of the Leo edge.}
+\end{equation}
+\begin{equation}
+\label{lem:marpa-completer-completeness-24}
+\myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{cuz})+1$,
+where \Veim{cuz} is the ``deepest'' cause of \Veim{x},
+if \var{x} is a visible confirmed EIM whose depth is not defined
+in \Eref{lem:marpa-completer-completeness-20} and
+\Eref{lem:marpa-completer-completeness-22}.
+}
+\end{equation}
+\begin{equation}
+\label{lem:marpa-completer-completeness-26}
+\myparbox{
+  \Eref{lem:marpa-completer-completeness-20}--%
+  \Eref{lem:marpa-completer-completeness-24}
+  define \var{Depth} for all confirmed visible EIM's.}
+\end{equation}
+
+We take for the induction hypothesis
+\begin{equation}
+\label{lem:marpa-completer-completeness-28}
+\myparbox{After a \Marpa{} completer operation at \Ves{j},
+\Ves{j} is complete
+with respect to the
+the EIM's of visible depth \var{ix}.}
+\end{equation}
+
+\begin{equation}
+\label{lem:marpa-completer-completeness-30}
+\myparbox{The \Marpa{} scanner operation creates
+all the valid PIM's of visible depth 1
+$\because$ \Eref{lem:marpa-completer-completeness-20}
+and by assumption for the lemma.
+This is the basis for the induction on the hypothesis
+\Eref{lem:marpa-completer-completeness-28}.
+}
+\end{equation}
+
+\begin{equation}
+\label{lem:marpa-completer-completeness-32}
+\myparbox{After a \Marpa{} completer operation at \Ves{j},
+\Ves{j} is complete
+with respect to the
+the EIM's of visible depth \var{n},
+by assumption for the step of the induction
+on the hypothesis
+\Eref{lem:marpa-completer-completeness-28}.
+}
+\end{equation}
+
 \TODO{finish this proof}
 \end{proof}
 
