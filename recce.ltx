@@ -2805,13 +2805,14 @@ operation of \Earley{}\cite{Earley1970}.
 \label{d:completer}
 
 \begin{align}
-\label{eq:completer-op-30}
+\label{eq:completer-op-10}
 & \var{Completer}(\Ves{i}) \defined \\
 \nonumber
 & \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
 \end{align}
 where
 \begin{multline}
+\label{eq:completer-op-20}
 \var{Earley-completer}(\Ves{i}) \defined \\
 \left\lbrace
 \begin{gathered}
@@ -2873,6 +2874,7 @@ EIM's.
 Completer-generated EIM's will have a link pair for every attempt to create them.
 In an unambiguous parse, a completer-generated EIM will always have exactly one link pair.
 In an ambiguous parse, a completer-generated EIM will have one or more link pairs.
+
 The cause of a completer-generated EIM will always be
 a completed EIM.
 The predecessor of a completer-generated EIM varies depending on whether the attempt
@@ -2905,14 +2907,14 @@ if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 is false in
 \Eref{eq:completer-op-20}
 and
-\Eref{eq:completer-op-25}.
+\Eref{eq:completer-op-23}.
 In this case,
 we will always have
 \[
 \var{Leo-completer}(\Ves{i}) = \emptyset
 \]
 so that we may also change
-\Eref{eq:completer-op-20}
+\Eref{eq:completer-op-10}
 to
 \[
 \var{Completer}(\Ves{i}) \defined \var{Earley-completer}(\Ves{i}).
@@ -4181,7 +4183,7 @@ it produces all of the valid Earley items.
 The following is proved as part of
 \Thref{th:earley-is-correct},
 but we state and prove it separately
-we make special use of it.
+because we make special use of it.
 
 \begin{theorem}[Earley completer consistency]
 \label{th:earley-completer-is-consistent}
@@ -4192,7 +4194,7 @@ the result of the Earley{} completer operation is valid.
 \end{theorem}
 
 \begin{proof}
-Call the ancestry of an Earley{} completer operation
+Call an arbitrary ancestry of an Earley{} completer operation
 \[
 [ \Veim{pred}, \Veim{cuz} ]_\type{LP}
 \]
@@ -4219,7 +4221,8 @@ Then
 \begin{equation}
 \label{eq:earley-completer-is-consistent-24}
 \LHS{\Vdr{cuz}} = \Vsym{postdot}
-\because \Eref{eq:original-completer-summary-3}
+\because \Eref{eq:original-completer-summary-3},
+  \Eref{eq:earley-completer-is-consistent-20}
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-26}
@@ -4242,7 +4245,8 @@ Then
     \end{gathered}
   \right]@\Vloc{current} \\
   \because
-  \Eref{eq:original-completer-summary-4}
+  \Eref{eq:original-completer-summary-4},
+  \Eref{eq:earley-completer-is-consistent-22}
   \end{gathered}
 \end{equation}
 \begin{equation}
