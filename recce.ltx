@@ -118,6 +118,7 @@
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
+\newcommand{\term}[1]{\ensuremath{\lfloor{#1}\rfloor}}
 \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vbool}[1]{\Tvar{#1}{BOOL}}
 \newcommand{\Vcfg}[1]{\Tvar{#1}{CFG}}
@@ -141,7 +142,7 @@
 \newcommand{\Vruleset}[1]{\Tvarset{#1}{RULE}}
 \newcommand{\Vstr}[1]{\str{\var{#1}}}
 \newcommand{\Vstrset}[1]{\Tvarset{#1}{STR}}
-\newcommand{\Vterm}[1]{\str{\boldvar{#1}}}
+\newcommand{\Vterm}[1]{\term{\boldvar{#1}}}
 \newcommand{\Vtermset}[1]{\Tvarset{\boldvar{#1}}{TERM}}
 \newcommand{\Vsym}[1]{\sym{\var{#1}}}
 \newcommand{\Vsymset}[1]{\Tvarset{#1}{SYM}}
@@ -866,6 +867,7 @@ Specifically,
 & \text{$\var{sym}_\type{SYM}$ will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
 & \text{\Vstr{str} will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$}, \\
 & \text{$\var{str}_\type{STR}$ will imply that $\Vstr{str} \in \Vocab{\var{g}}^\ast$, and} \\
+& \text{\Vterm{str} will imply that $\Vterm{str} \in \Term{\var{g}}^\ast$}, \\
 & \text{\Vrule{r} will imply that $\Vrule{r} \in \Rules{\var{g}}$}.
 \end{align*}
 
@@ -1029,6 +1031,20 @@ if and only if
 \]
 A \dfn{full parse} is often called, simply, a \dfn{parse}. $\bigstar$
 \end{definition}
+
+Note that, by the above definition,
+a full parse is a special case of a partial parse.
+Where the choice of partial parse,
+$\left[\Vcfg{g}, \Vterm{input}\right]$
+is clear in context,
+and unless otherwise specified,
+use of the types \type{ES} and \type{LOC} will bind
+their variables.
+Specifically,
+\begin{align*}
+& \text{\Vloc{j} will imply that $0 \le \var{j} \le \size{\Vterm{input}}$} \\
+& \text{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$}
+\end{align*}
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
@@ -2782,18 +2798,25 @@ in order to be passed on to the semantics.
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
 \label{ob:earley-scanner-operation}
-This operation has the same effect as the ``Scanner''
+\Marpa{}'s scanner operation has the same effect as the ``Scanner''
 operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
 \subsection{Completer operation}
 \label{d:completer}
 
-Let
-\begin{align*}
-& \var{Earley-completer}(\Ves{i}) \defined \\
-& \qquad \Bigl\lbrace
-\bigl [
+\begin{align}
+\label{eq:completer-op-30}
+& \var{Completer}(\Ves{i}) \defined \\
+\nonumber
+& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
+\end{align}
+where
+\begin{multline}
+\var{Earley-completer}(\Ves{i}) \defined \\
+\left\lbrace
+\begin{gathered}
+\left [
 \left[
 \Vsym{lhs}
 \de
@@ -2803,56 +2826,46 @@ Let
 \Vstr{suffix}
 \right],
 \Vloc{origin}
-\bigr]
-\Bigr\rbrace
-\end{align*}
-such that
-\begin{equation}
-\label{eq:completer-op-20}
+\right]
+: \\
 \begin{gathered}
-\bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
-\right], \Vloc{predecessor} \bigr]
-\in \Ves{i} \quad \text{and} \\
- \bigl[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{completed} \Vstr{suffix}
-\right], \Vloc{origin} \bigr] \\
-\in \Ves{predecessor} \quad \text{and} \\
-\neg \left(
+\left[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
+\right], \Vloc{predecessor} \right]
+\in \Ves{i} \\
+\land \;
+ \left[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{completed} \Vstr{suffix}
+\right], \Vloc{origin} \right] \\
+\in \Ves{predecessor} \\
+\land \; \neg \left(
 \left([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\right)_\var{LIM}
 \in \Ves{predecessor}
-\right).
+\right),
 \end{gathered}
-\end{equation}
-
-Also,
-\begin{equation}
+\end{gathered}
+\right\rbrace
+\end{multline}
+and
+\begin{multline}
 \label{eq:completer-op-23}
 \var{Leo-completer}(\Ves{i}) \defined
-\Bigl\lbrace
-\bigl(
-\left[ \Vdr{top}, \Vloc{top} \right]
-\bigr)_\var{EIM}
-\Bigr\rbrace
-\end{equation}
-such that
-\begin{equation}
-\label{eq:completer-op-25}
+\\
+\left\lbrace
 \begin{gathered}
-\Bigl(\bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
-\right], \Vloc{predecessor} \bigr]\Bigr)_\var{EIM}
+\left(
+  \left[ \Vdr{top}, \Vloc{top} \right]
+\right)_\var{EIM}
+: \\
+\Bigl(
+  \bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
+\right], \Vloc{predecessor}
+  \bigr]
+\Bigr)_\var{EIM}
 \in \Ves{i} \\
 \land \quad \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
 \in \Ves{predecessor}.
 \end{gathered}
-\end{equation}
-
-Then
-\begin{equation}
-\label{eq:completer-op-30}
-\begin{aligned}
-& \var{Completer}(\Ves{i}) \defined \\
-& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
-\end{aligned}
-\end{equation}
+\right\rbrace
+\end{multline}
 
 \begin{observation}[Ancestry]
 \label{ob:completer-ancestry}
