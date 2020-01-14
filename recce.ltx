@@ -2733,7 +2733,7 @@ $\bigstar$
 
 \begin{observation}[Original Earley algorithm: Earley set 0]
 \label{ob:earley-set-0}
-This operation has the same effect as the construction
+\Marpa{}'s \var{Initialization} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 $\bigstar$
 \end{observation}
@@ -2984,22 +2984,23 @@ $\bigstar$
 \label{d:memoizer}
 
 Let
-\begin{gather}
+\begin{align}
 \label{eq:memoizer-operation-10}
-\begin{aligned}
 & \LeoEligible{\Ves{i}} \defined \\
+\nonumber
 & \qquad \left\lbrace \;\;
 \begin{gathered}
-\Veim{eligible} \;\; \text{such that} \\
-\Veim{eligible} \in \LeoUnique{\Ves{i}} \;\; \text{and} \\
-\RightRecursive{\Veim{eligible}}
+\Veim{eligible} : \\
+\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
+\land \; \RightRecursive{\Veim{eligible}}
 \end{gathered}
 \;\; \right\rbrace,
-\end{aligned}
-\\
+\end{align}
+%
+\begin{align}
 \label{eq:memoizer-operation-20}
-\begin{aligned}
 & \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
+\nonumber
 & \qquad \left\lbrace \;\;
 \begin{gathered}
 \left[
@@ -3008,19 +3009,18 @@ Let
   \Postdot{\Veim{source}}, \\
   \Origin{\var{source}}
   \end{gathered}
-\right]_\type{LIM} \\
-\text{such that} \\
+\right]_\type{LIM} @ \Ves{i}
+: \\
 \Veim{source} \in \LeoEligible{\Ves{i}} \\
 \land \; \LIMPredecessor{\Veim{source}} = \Lambda
 \end{gathered}
 \;\; \right\rbrace,
-\end{aligned}
-\end{gather}
+\end{align}
 and
-\begin{gather}
+\begin{align}
 \label{eq:memoizer-operation-30}
-\begin{aligned}
 & \mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined \\
+\nonumber
 & \qquad \left\lbrace \;\;
 \begin{gathered}
 \left[
@@ -3028,24 +3028,22 @@ and
   \DR{\var{pred}}, \Postdot{\Veim{source}}, \\
   \Origin{\var{pred}}
   \end{gathered}
-\right]_\type{LIM} \\
-\text{such that} \\
+\right]_\type{LIM} @ \Ves{i}
+: \\
 \Veim{source} \in \LeoEligible{\Ves{i}} \\
 \land \; \Vlim{pred} = \LIMPredecessor{\Veim{source}}
 \end{gathered}
 \;\; \right\rbrace .
-\end{aligned}
-\end{gather}
+\end{align}
 Then
-\begin{equation}
+\begin{align}
 \label{eq:memoizer-operation-40}
-\begin{aligned}
 & \var{Memoizer}(\Ves{i}) \defined \\
+\nonumber
 & \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
 \cup
 \var{Extend-Leo-Chain}(\Ves{i})
-\end{aligned}
-\end{equation}
+\end{align}
 
 \begin{observation}[Ancestry]
 \label{ob:memoizer-ancestry}
@@ -3070,10 +3068,11 @@ and
 Because every LIM has exactly one link pair,
 both \var{PreviousLink} and \var{Source} are functions.
 
-The source of the link pair of a LIM is the EIM for which it,
+The source of the link pair of a LIM is the EIM which that LIM,
 in a intuitive sense, ``replaces''.
 The source EIM will always be a penult in the same Earley set as the LIM.
 The previous link of the link pair of a LIM is either
+$\Lambda$ or another LIM.
 $\bigstar$
 \end{observation}
 
@@ -3084,7 +3083,7 @@ $\bigstar$
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{ob:earley-memoizer-operation}
-Marpa{}'s memoizer operation does not exist in \Earley{}\cite{Earley1970}.
+Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
 $\bigstar$
 \end{observation}
 
