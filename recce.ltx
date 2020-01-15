@@ -805,15 +805,20 @@ Local definitions are given in double quotes,
 and in numbered equations.
 
 Equations are sometimes stated verbally,
-at least in part,
-and in any case are often followed by a justification.
+at least in part.
+They are often followed by a justification,
+especially inside proofs.
 For clarity, the justification may be separated
 from the body of the equation by a ``because'' symbol ($\because$).
+
 Where an equation is a definition,
 its justification will state that is a
 ``definition for the purpose of
 presentation'',
 which may be abbreviated ``DFPP''.
+``WLOG'' abbreviates ``assumed without loss of generality''.
+``AF'' abbreviates ``assumed for''.
+For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 
 \section{Context-free grammars}
 \label{sec:CFGs}
@@ -4941,13 +4946,13 @@ numerically lowest depth value
 is the ``deepest''.
 
 \begin{equation}
-\label{lem:marpa-completer-completeness-20}
+\label{eq:def-complete-as-far-as-20}
 \myparbox{$\var{Depth}(\Veim{x}) = 1$
 if $\Predot{\Veim{x}} \in \Term{\var{g}}$
 $\because$ DFPP.}
 \end{equation}
 \begin{equation}
-\label{lem:marpa-completer-completeness-22}
+\label{eq:def-complete-as-far-as-22}
 \myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{bottom})+1$,
 if \var{x} is the top of a Leo edge,
 where
@@ -4956,7 +4961,7 @@ $\because$ DFPP.}
 \end{equation}
 
 \begin{equation}
-\label{lem:marpa-completer-completeness-24}
+\label{eq:def-complete-as-far-as-24}
 \myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{cuz})+1$,
 where \Veim{cuz} is the ``deepest'' cause of \Veim{x},
 if \var{x} is a visible confirmed EIM where
@@ -4965,7 +4970,7 @@ $\Predot{\var{x}} \in \NT{\var{g}}$
 $\because$ DFPP.}
 \end{equation}
 \begin{equation}
-\label{lem:marpa-completer-completeness-26}
+\label{eq:def-complete-as-far-as-26}
 \myparbox{$\var{Depth}(\Vpim{pim}) = \Lambda$
 if \Vpim{pim} is a LIM,
 a hidden EIM,
@@ -4978,6 +4983,20 @@ $\because$ DFPP.
 \end{equation}
 
 \begin{equation}
+\label{eq:def-complete-as-far-as-25}
+\begin{gathered}
+\forall \; \Veim{x} \; ( \var{Depth}(\var{x}) \ge 1 \lor 
+ \var{Depth}(\var{x}) = \Lambda) \\
+\because
+\Eref{eq:def-complete-as-far-as-20},
+\Eref{eq:def-complete-as-far-as-22},
+\Eref{eq:def-complete-as-far-as-24},
+\Eref{eq:def-complete-as-far-as-26}.
+\end{gathered}
+\end{equation}
+
+\begin{equation}
+\label{eq:def-complete-as-far-as-28}
 \myparbox{The Earley tables are ``complete as far as''
 visible depth \var{n} in Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
@@ -5012,29 +5031,6 @@ with respect to the
 the EIM's of visible depth \var{ix}.}
 \end{equation}
 
-\begin{equation}
-\label{lem:marpa-completer-completeness-30}
-\myparbox{The \Marpa{} scanner operation creates
-all the valid PIM's of visible depth 1
-$\because$ \Eref{lem:marpa-completer-completeness-20}
-and by assumption for the lemma.
-This is the basis for the induction on the hypothesis
-\Eref{lem:marpa-completer-completeness-28}.
-}
-\end{equation}
-
-\begin{equation}
-\label{lem:marpa-completer-completeness-32}
-\myparbox{After a \Marpa{} completer operation at \Ves{j},
-\Ves{j} is complete
-with respect to the
-the EIM's of visible depth \var{n},
-by assumption for the step of the induction
-on the hypothesis
-\Eref{lem:marpa-completer-completeness-28}.
-}
-\end{equation}
-
 \TODO{finish this proof}
 \end{proof}
 
@@ -5042,16 +5038,51 @@ on the hypothesis
 \label{lem:marpa-visible-depth-completeness}
 Let \Ves{j} be an Earley set in a \Marpa{} parse,
 $\var{j} > 0$.
-If the parse is complete as far as the
+If the parse is complete as far as
 visible depth \var{n}
 in Earley set \Ves{j},
 then the parse is complete as far as
-visible depth \var{n+1}
+visible depth $\var{n}+1$
 in
 Earley set \Ves{j}.
 \end{lemma}
 \begin{proof}
-\TODO{prove this}
+The proof is by a reductio.
+\begin{equation}
+\label{eq:lem-marpa-visible-depth-completeness-08}
+\myparbox{Let $\Vpim{rez}@\Ves{j}$ be a valid PIM where
+$\var{Depth}(\var{rez}) = \var{n}+1$
+which \Marpa{} does not create.
+$\because$ AF reductio.}
+\end{equation}
+\begin{equation}
+\label{eq:lem-marpa-visible-depth-completeness-10}
+\myparbox{$\Vpim{rez} = \Veim{rez} \because$ only EIM's have
+a visible depth
+\Eref{eq:def-complete-as-far-as-26}.}
+\end{equation}
+\begin{equation}
+\label{eq:lem-marpa-visible-depth-completeness-12}
+\myparbox{\Veim{rez} is confirmed
+$\because$ only confirmed EIM's have a visible depth
+\Eref{eq:def-complete-as-far-as-26}.}
+\end{equation}
+\begin{equation}
+\label{eq:lem-marpa-visible-depth-completeness-14}
+\begin{gathered}
+\var{Depth}(\Veim{rez}) > 1 \because
+\Eref{eq:def-complete-as-far-as-25},
+\Eref{eq:lem-marpa-visible-depth-completeness-08}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-marpa-visible-depth-completeness-16}
+\Predot{\Veim{rez}} \in \NT{\var{g}} \because
+\Eref{eq:def-complete-as-far-as-20},
+\Eref{eq:lem-marpa-visible-depth-completeness-12},
+\Eref{eq:lem-marpa-visible-depth-completeness-14}.
+\end{equation}
+\TODO{finish proof}
 \end{proof}
 
 \TODO{Prove Marpa + Reverse Leo = Original Earley}
