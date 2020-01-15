@@ -790,6 +790,31 @@ Haskell's ``undefined'' is, for example,
 as well-defined as any concept in mathematics.
 }
 
+Explicit ``Definition'' sections and boldface are reserved
+for definitions that are of significance throughout
+this paper.
+In some contexts,
+as for example in stating and proving some lemmas,
+or in proving some theorems,
+it is convenient to have definitions
+which are ``local'' ---
+useful only within
+a particular presentation.
+Local definitions are given in double quotes,
+(``definition''),
+and in numbered equations.
+
+Equations are sometimes stated verbally,
+at least in part,
+and in any case are often followed by a justification.
+For clarity, the justification may be separated
+from the body of the equation by a ``because'' symbol ($\because$).
+Where an equation is a definition,
+its justification will state that is a
+``definition for the purpose of
+presentation'',
+which may be abbreviated ``DFPP''.
+
 \section{Context-free grammars}
 \label{sec:CFGs}
 
@@ -4868,23 +4893,46 @@ PIM's.
 \TODO{prove this}
 \end{proof}
 
-\begin{lemma}
-\label{lem:marpa-completer-completeness}
-Let \Ves{j} be an Earley set in a \Marpa{} parse,
-$\var{j} > 0$.
-If the Earley sets \Ves{i}, for $0 \le \var{i} < \var{j}$
-are complete with respect to the visible PIM's,
-and the PIM's added to \Ves{J} by the
-\Marpa{} scanner are complete, then
-the \Marpa{} completer operation is complete
-with respect to the visible PIM's.
-\end{lemma}
+For convenience in the next few lemma's,
+we will state some definitions for the purpose of presentation
+(DFPP's).
+Intuitively 
+the Earley tables are ``complete as far as X'',
+where X is some point in running of the \Marpa{} algorithm,
+if they contain all the visible valid PIM's
+for X and every prior to it in 
+in the \Marpa{} algorithm.
+\begin{equation}
+\myparbox{The Earley tables of a \Marpa{} parse
+are ``complete as far as''
+Earley set \var{j},
+if every Earley set, \Ves{i}, $0 \le \var{i} \le \var{j}$,
+contains all the valid visible PIM's
+$\because$ DFPP.
+}
+\end{equation}
+\begin{equation}
+\myparbox{The Earley tables of a \Marpa{} parse
+are ``complete as far as''
+the \Marpa{} \var{Scanner} operation of Earley set \var{j},
+if they are complete as far as Earley set $\var{j}\subtract 1$,
+and if they contain all the visible valid EIM's with a predot terminal
+$\because$ DFPP.
+}
+\end{equation}
+\begin{equation}
+\myparbox{The Earley tables of a \Marpa{} parse
+are ``complete as far as''
+the \Marpa{} \var{Completer} operation of Earley set \var{j},
+if they are complete as far as Earley set $\var{j}\subtract 1$,
+and if they contain all the visible valid confirmed EIM's
+$\because$ DFPP.
+}
+\end{equation}
 
-\begin{proof}
-This proof will be by induction on
-the depth counted in terms of
-visible confirmed EIM causes,
-which we will refer to as ``visible depth''.
+Intuitively, ``visible depth''
+is depth counted in terms of
+visible confirmed EIM causes.
 We will write \var{Depth}(\Veim{x}) for the visible depth
 of \Veim{x}.
 When speaking of several EIM's,
@@ -4892,39 +4940,68 @@ we will say that the one with the
 numerically lowest depth value
 is the ``deepest''.
 
-The visible depth is
-defined only for visible confirmed EIM's.
-We write the visible depth of \Veim{x} as
-$\var{Depth}(\var{x})$.
-
 \begin{equation}
 \label{lem:marpa-completer-completeness-20}
 \myparbox{$\var{Depth}(\Veim{x}) = 1$
-if \var{x} is a result of \Marpa{}'s scanner operation.}
+if $\Predot{\Veim{x}} \in \Term{\var{g}}$
+$\because$ DFPP.}
 \end{equation}
 \begin{equation}
 \label{lem:marpa-completer-completeness-22}
 \myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{bottom})+1$,
 if \var{x} is the top of a Leo edge,
 where
-\Veim{bottom} is the bottom of the Leo edge.}
+\Veim{bottom} is the bottom of the Leo edge
+$\because$ DFPP.}
 \end{equation}
+
 \begin{equation}
 \label{lem:marpa-completer-completeness-24}
 \myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{cuz})+1$,
 where \Veim{cuz} is the ``deepest'' cause of \Veim{x},
-if \var{x} is a visible confirmed EIM whose depth is not defined
-in \Eref{lem:marpa-completer-completeness-20} and
-\Eref{lem:marpa-completer-completeness-22}.
-}
+if \var{x} is a visible confirmed EIM where
+\var{x} is not the top of a Leo edge and
+$\Predot{\var{x}} \in \NT{\var{g}}$
+$\because$ DFPP.}
 \end{equation}
 \begin{equation}
 \label{lem:marpa-completer-completeness-26}
-\myparbox{
-  \Eref{lem:marpa-completer-completeness-20}--%
-  \Eref{lem:marpa-completer-completeness-24}
-  define \var{Depth} for all confirmed visible EIM's.}
+\myparbox{$\var{Depth}(\Vpim{pim}) = \Lambda$
+if \Vpim{pim} is a LIM,
+a hidden EIM,
+or a prediction.
+In other words,
+visible depth is
+defined only for visible confirmed EIM's
+$\because$ DFPP.
+}
 \end{equation}
+
+\begin{equation}
+\myparbox{The Earley tables are ``complete as far as''
+visible depth \var{n} in Earley set \var{j},
+if they are complete as far as Earley set $\var{j}\subtract 1$,
+and if they contain all the visible valid EIM's of visible depth
+\var{n} or less
+$\because$ DFPP.
+}
+\end{equation}
+
+\begin{lemma}
+\label{lem:marpa-completer-completeness}
+Let \Ves{j} be an Earley set in a \Marpa{} parse,
+$\var{j} > 0$.
+If the parse is complete as far as the
+\Marpa{} \var{Scanner} operation of
+Earley set \Ves{j},
+then the parse is complete as far as the
+\Marpa{} \var{Completer} operation of
+Earley set \Ves{j}.
+\end{lemma}
+
+\begin{proof}
+This proof will be by induction on
+visible depth.
 
 We take for the induction hypothesis
 \begin{equation}
@@ -4959,6 +5036,22 @@ on the hypothesis
 \end{equation}
 
 \TODO{finish this proof}
+\end{proof}
+
+\begin{lemma}
+\label{lem:marpa-visible-depth-completeness}
+Let \Ves{j} be an Earley set in a \Marpa{} parse,
+$\var{j} > 0$.
+If the parse is complete as far as the
+visible depth \var{n}
+in Earley set \Ves{j},
+then the parse is complete as far as
+visible depth \var{n+1}
+in
+Earley set \Ves{j}.
+\end{lemma}
+\begin{proof}
+\TODO{prove this}
 \end{proof}
 
 \TODO{Prove Marpa + Reverse Leo = Original Earley}
