@@ -2734,14 +2734,16 @@ the definition of \var{Predict}.
 Then
 \begin{equation}
 \label{eq:def-initializer}
+\begin{gathered}
 \var{Initializer}() \defined
 \left\lbrace \;
 \Veim{start}
 \; \right\rbrace \cup
-\var{Predict}(\Veim{start}, (0)_\type{loc}) \\
+\var{Predict}(\Veim{start}, (0)_\type{loc})
+\\
+\text{where $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.}
+\end{gathered}
 \end{equation}
-where
-$\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$.
 
 \begin{observation}[Ancestry]
 \label{ob:initializer-ancestry}
@@ -2771,31 +2773,24 @@ $\bigstar$
 \subsection{Scanner operation}
 \label{d:scanner}
 
-\begin{align*}
-& \var{Scanner}(\Ves{i}) \defined \\
-& \qquad \Bigl\lbrace
-\left [
+\begin{align}
+\label{eq:def-scanner}
+& \var{Scanner}(\Ves{i}) \defined
+\\
+\nonumber
+& \qquad \left\lbrace
+\begin{gathered}
 \left[
-\Vsym{lhs}
-\de
-\Vstr{prefix}
-\Vsym{token}
-\mydot
-\Vstr{suffix}
-\right],
-\Vloc{origin}
-\right]
-\Bigr\rbrace
-\end{align*}
-such that
-\begin{equation*}
-\begin{aligned}
-& \Vsym{token} = \Vstr{w}[\Vloc{i} \subtract 1] \\
-\land \quad & \left[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{token} \Vstr{suffix}
-\right], \Vloc{origin} \right]\\
-& \qquad \in \Ves{(\Vloc{i}\subtract 1)}.
-\end{aligned}
-\end{equation*}
+  \Next{\Vdr{cuz}},
+  \Vloc{origin}
+\right] :
+\\
+\Predot{\Vdr{cuz}} = \Vstr{w}[\Vloc{i} \subtract 1] \\
+\land \left[ \Vdr{cuz}, \Vloc{origin} \right]
+\in \Ves{(\Vloc{i}\subtract 1)}.
+\end{gathered}
+\right\rbrace
+\end{align}
 
 \begin{observation}[Ancestry]
 \label{ob:scanner-ancestry}
@@ -2835,14 +2830,14 @@ operation of \Earley{}\cite{Earley1970}.
 \label{d:completer}
 
 \begin{align}
-\label{eq:completer-op-10}
+\label{eq:def-completer-10}
 & \var{Completer}(\Ves{i}) \defined \\
 \nonumber
 & \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
 \end{align}
 where
 \begin{multline}
-\label{eq:completer-op-20}
+\label{eq:def-completer-20}
 \var{Earley-completer}(\Ves{i}) \defined \\
 \left\lbrace
 \begin{gathered}
@@ -2876,7 +2871,7 @@ where
 \end{multline}
 and
 \begin{multline}
-\label{eq:completer-op-23}
+\label{eq:def-completer-23}
 \var{Leo-completer}(\Ves{i}) \defined
 \\
 \left\lbrace
@@ -2935,16 +2930,16 @@ if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 \in \Ves{predecessor}
 \]
 is false in
-\Eref{eq:completer-op-20}
+\Eref{eq:def-completer-20}
 and
-\Eref{eq:completer-op-23}.
+\Eref{eq:def-completer-23}.
 In this case,
 we will always have
 \[
 \var{Leo-completer}(\Ves{i}) = \emptyset
 \]
 so that we may also change
-\Eref{eq:completer-op-10}
+\Eref{eq:def-completer-10}
 to
 \[
 \var{Completer}(\Ves{i}) \defined \var{Earley-completer}(\Ves{i}).
@@ -2983,11 +2978,12 @@ into the Earley table with the link pair
 \subsection{Predictor operation}
 \label{d:prediction}
 
-\begin{equation*}
+\begin{equation}
+\label{eq:def-predictor}
 \var{Predictor}(\Ves{i}) \;\; \defined \;\;
 \smashoperator[r]{\mathop{\bigcup}_{\textstyle \var{eim}\in\Ves{i}}}
 \;\; \var{Predict}(\Veim{eim}, \Vloc{i})
-\end{equation*}
+\end{equation}
 
 \begin{observation}[Ancestry]
 \label{ob:predictor-ancestry}
@@ -3155,7 +3151,57 @@ and
 \Obref{ob:earley-memoizer-operation}.
 \end{observation}
 
-\subsection{Complexity summary}
+\subsection{Summary}
+
+\begin{observation}[\Marpa{} operation by type of result]
+\label{obs:marpa-operation-by-result}
+Let \Vpim{rez} be the result of a \Marpa{} operation.
+Every PIM is the result of exactly \Marpa{} operation,
+as follows:
+\begin{itemize}
+\item $\Current{\Vpim{rez}} = 0$
+if and only if \Vpim{rez} is the result of the
+\Marpa{} \var{Initializer} operation.
+\item \Vpim{rez} is an EIM,
+$\Predot{\Veim{rez}} = \Lambda$, and
+$\Current{\var{rez}} > 0$,
+if and only if
+\var{rez} is the result of a
+\Marpa{} \var{Predictor} operation.
+\item \Vpim{rez} is an EIM,
+$\Predot{\Veim{rez}} \in \Term{\var{g}}$, and
+$\Current{\var{rez}} > 0$,
+if and only if
+\var{rez} is the result of a
+\Marpa{} \var{Scanner} operation.
+\item \Vpim{rez} is an EIM,
+$\Predot{\Veim{rez}} \in \NT{\var{g}}$, and
+$\Current{\var{rez}} > 0$
+if and only if \var{rez} is the result of a
+\Marpa{} \var{Completer} operation.
+\item \Vpim{rez} is a LIM
+if and only if
+\var{rez} is the result of a
+\Marpa{} \var{Memoizer} operation.
+\end{itemize}
+This observation follows from
+\Eref{eq:def-initializer},
+\Eref{eq:def-scanner},
+\Eref{eq:def-completer-10}--\Eref{eq:def-completer-23},
+\Eref{eq:def-predictor}, and
+\Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\end{observation}
+
+\begin{observation}[\Earley{} operation by type of result]
+\label{obs:earley-operation-by-result}
+The operation of the original \Earley{} algorithm can be determined
+from the result as described in
+\Obref{obs:marpa-operation-by-result},
+except that in \Earley{}
+there is no \var{Memoizer} operation,
+and there are no LIM's.
+\end{observation}
+
 \TODO{}
 
 \section{Ambiguity}
@@ -4784,7 +4830,7 @@ We have the theorem directly from
 
 Recall that \var{Leo-completer}
 is defined at
-\Eref{eq:completer-op-23}.
+\Eref{eq:def-completer-23}.
 \begin{theorem}
 \label{th:leo-completer-is-consistent}
 The \var{Leo-completer} sub-operation
