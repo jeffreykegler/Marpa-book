@@ -171,7 +171,7 @@
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
-\newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
+\newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}\left(#1\right)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
@@ -2660,24 +2660,20 @@ Let \var{PredictDR} be the transitive closure of
 The set of predictions
 indirectly caused by \Veim{cause}
 is
-\begin{equation}
-\begin{aligned}
+\begin{align}
 & \var{Predict}(\Veim{cause}@\Vloc{j} ) \defined \\
-& \qquad \left\lbrace
-\begin{aligned}
-& \left[ \Vdr{predict}, \Vloc{j} \right]_\type{EIM} : \\
-& \qquad [ \Vdr{cause}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g})
-\end{aligned}
+\nonumber
+& \quad \left\lbrace
+\begin{gathered}
+\left[ \Vdr{predict}, \Vloc{j} \right]_\type{EIM} : \\
+[ \DR{\var{cause}}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
+\end{gathered}
 \right\rbrace
-\\
-& \text{where $\Veim{cause} = [ \Vdr{cause}, \Vorig{cause} ]$.}
-\end{aligned}
-\end{equation}
+\end{align}
 
 \begin{observation}[Ancestry]
 \label{ob:common-predict-ancestry}
-The \Marpa{} convention is that
-predictions have predecessors, but no causes.
+Predictions have predecessors, but no causes.
 The implementation does not record link pairs for predictions.
 
 Tracking link pairs for a prediction would be cumbersome,
@@ -2685,25 +2681,26 @@ because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
 set.
 For a given prediction,
-The \Marpa{} convention is that
-\[
-\left[ [\Vsym{lhs} \de \mydot \Vstr{rhs}], \Vorig{j}]
-\right]
-\]
-the link pairs could be recovered as
-\begin{equation}
+\begin{align}
 \label{eq:common-predict-ancestry-10}
-\left\lbrace
-\begin{gathered}
+& \LinkPairs{
 \left[
-  \left[ \Vdr{anc}, \Vorig{anc} \right]@\Vloc{j},
-  \Lambda
-\right]_\type{LP} : \\
-\eim{\left[ \Vdr{anc}, \Vorig{anc} \right]} \in \Ves{j} \\
-\land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
-\end{gathered}
+  \left[\Vsym{lhs} \de \mydot \Vstr{rhs}\right],
+  \Vorig{j}
+\right]} =
+\\ \nonumber
+& \qquad
+\left\lbrace
+  \begin{gathered}
+  \left[
+    \left[ \Vdr{anc}, \Vorig{anc} \right]@\Vloc{j},
+    \Lambda
+  \right]_\type{LP} : \\
+  \eim{\left[ \Vdr{anc}, \Vorig{anc} \right]} \in \Ves{j} \\
+  \land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
+  \end{gathered}
 \right\rbrace
-\end{equation}
+\end{align}
 The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
