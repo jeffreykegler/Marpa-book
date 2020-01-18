@@ -4352,6 +4352,7 @@ by assumption for theorem.}
 \begin{gathered}
   \Vstr{before} \destar \var{prefix}[0  \ldots  (\var{orig}\subtract 1)] \\
   \because \Eref{eq:EIM-valid-22c},
+    \Eref{eq:earley-completer-is-consistent-22},
     \Eref{eq:earley-completer-is-consistent-30}.
   \end{gathered}
 \end{equation}
@@ -4359,13 +4360,16 @@ by assumption for theorem.}
 \label{eq:earley-completer-is-consistent-40}
 \begin{gathered}
   \Vstr{rhs1} \destar \var{prefix}[\var{orig}  \ldots  (\var{meet}\subtract 1)] \\
-  \because \Eref{eq:EIM-valid-22d}, \Eref{eq:earley-completer-is-consistent-30}.
+  \because \Eref{eq:EIM-valid-22d},
+  \Eref{eq:earley-completer-is-consistent-20},
+  \Eref{eq:earley-completer-is-consistent-22},
+  \Eref{eq:earley-completer-is-consistent-30}.
   \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-42}
 \Rule{\Veim{pred}} = \Rule{\Veim{rez}}
-\because \Eref{eq:earley-completer-is-consistent-38}.
+\because \Eref{eq:earley-completer-is-consistent-28}.
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-44}
@@ -4376,7 +4380,7 @@ by assumption for theorem.}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-46}
 \LHS{\Veim{pred}} = \LHS{\Veim{rez}}
-\because \Eref{eq:earley-completer-is-consistent-34}.
+\because \Eref{eq:earley-completer-is-consistent-42}.
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-48}
@@ -4557,8 +4561,6 @@ and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
   \in \LinkPairs{\var{edge}[\var{n}+1]}
 \end{equation}
 
-\TODO{Above: assume EIM's are complete, or prove it?}
-
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
 are valid.
 The \dfn{top} of the edge is \Velement{edge}{\Vlastix{edge}}.
@@ -4625,8 +4627,7 @@ and the edge is valid.
 
 Let \Vint{g} be a \Marpa{} internal grammar,
 let \Vlimset{chain} be a Leo chain
-and let \Veim{base} be an EIM which matches \var{chain}
-of a Leo chain element in \Ves{element}.
+and let \Veim{base} be an EIM which matches \var{chain}.
 Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
 We proceed by induction on the elements of the edge,
 where the induction hypothesis is
@@ -4692,37 +4693,6 @@ $\because$ assumption for step of the induction.
       \text{\Eref{d:leo-edge-30} of the definition of ``Leo edge''
       \Dfref{def:leo-edge}}
     \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:edge-elements-are-complete-32}
-\myparbox{
-the only \Earley{} operation
-that has an EIM completion as its cause
-is the \Earley{} completer operation
-$\because
-\Obref{ob:common-predict-ancestry},
-\Obref{ob:earley-set-0},
-\Obref{ob:initializer-ancestry},
-\Obref{ob:scanner-ancestry},
-\Obref{ob:earley-scanner-operation},
-\Obref{ob:completer-ancestry},
-\Obref{ob:earley-completer-operation},
-\Obref{ob:predictor-ancestry},
-\Obref{ob:earley-predictor-operation},
-\Obref{ob:memoizer-ancestry},
-\Obref{ob:earley-memoizer-operation}
-$
-}
-\end{equation}
-\begin{equation}
-\label{eq:edge-elements-are-complete-34}
-\myparbox{
-$\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}$
-can only be the link pair for an \Earley{} completer operation
-$\because$
-\Eref{eq:edge-elements-are-complete-20},
-\Eref{eq:edge-elements-are-complete-32}
-}
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-36}
