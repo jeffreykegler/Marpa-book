@@ -9,7 +9,7 @@
 \usepackage{url}
 \usepackage{varioref}
 \usepackage{hyperref}
-\allowdisplaybreaks[4]
+\allowdisplaybreaks[3]
 
 % Reference meta tags follow standard from fancyref, etc.
 
@@ -2823,66 +2823,59 @@ operation of \Earley{}\cite{Earley1970}.
 
 \begin{align}
 \label{eq:def-completer-10}
-& \var{Completer}(\Ves{i}) \defined \\
-\nonumber
-& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i}).
+& \var{Completer}(\Ves{i}) \defined
+\\ \nonumber \displaybreak[0]
+& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i})
 \end{align}
 where
-\begin{multline}
+\begin{align}
 \label{eq:def-completer-20}
-\var{Earley-completer}(\Ves{i}) \defined \\
+& \var{Earley-completer}(\Ves{i}) \defined
+\\ \nonumber \displaybreak[0]
+& \qquad
 \left\lbrace
 \begin{gathered}
-\left [
-\left[
-\Vsym{lhs}
-\de
-\Vstr{prefix}
-\Vsym{completed}
-\mydot
-\Vstr{suffix}
-\right],
-\Vloc{origin}
-\right]
-: \\
-\begin{gathered}
-\left[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
-\right], \Vloc{predecessor} \right]
-\in \Ves{i} \\
-\land \;
- \left[ \left[ \Vsym{lhs} \de \Vstr{prefix} \mydot \Vsym{completed} \Vstr{suffix}
-\right], \Vloc{origin} \right] \\
-\in \Ves{predecessor} \\
-\land \; \neg \left(
-\left([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\right)_\var{LIM}
-\in \Ves{predecessor}
-\right),
+  \left [ \Next{\Veim{pred}}, \Origin{\var{pred}} \right] @ \Ves{i} :
+  \\
+  \begin{gathered}
+    \Veim{cuz} \in \Ves{i} \\
+    \land \; \Veim{pred} \in \Origin{\var{cuz}} \\
+    \land \; \Postdot{\var{pred}} = \LHS{\var{cuz}} \\
+    \land \; \neg \; \var{Blocker}(\var{cuz})
+  \end{gathered}
 \end{gathered}
-\end{gathered}
-\right\rbrace
-\end{multline}
-and
-\begin{multline}
+\right\rbrace,
+\end{align}
+%
+\begin{align}
 \label{eq:def-completer-23}
-\var{Leo-completer}(\Ves{i}) \defined
-\\
+& \var{Leo-completer}(\Ves{i}) \defined
+\\ \nonumber \displaybreak[0]
+& \qquad
 \left\lbrace
 \begin{gathered}
-\left(
-  \left[ \Vdr{top}, \Vloc{top} \right]
-\right)_\var{EIM}
-: \\
-\Bigl(
-  \bigl[ \left[ \Vsym{completed} \de \Vstr{rhs} \mydot
-\right], \Vloc{predecessor}
-  \bigr]
-\Bigr)_\var{EIM}
-\in \Ves{i} \\
-\land \quad \bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
-\in \Ves{predecessor}.
+  \left[
+    \DR{\var{blocker}}, \Origin{\var{blocker}}
+  \right]_\var{EIM}
+  :
+\\
+    \Veim{cuz} \in \Ves{i}
+\\
+    \land \; \var{Blocker}(\var{cuz})
 \end{gathered}
-\right\rbrace
-\end{multline}
+\right\rbrace,
+\end{align}
+and
+\begin{align}
+\label{eq:def-completer-24}
+& \var{Blocker}(\Veim{cuz}) \defined
+\\ \nonumber \displaybreak[0]
+& \qquad \qquad
+   \begin{gathered}
+    \exists \; \Vlim{blocker} \in \Origin{\var{cuz}} : \\
+    \Transition{\var{blocker}} = \LHS{\var{cuz}}
+   \end{gathered}
+\end{align}
 
 \begin{observation}[Ancestry]
 \label{ob:completer-ancestry}
@@ -4232,14 +4225,9 @@ because the data to be kept for EIM's is a single boolean.
 Further, this boolean is never set to \var{false}, so that
 if a PSL entry exists, its boolean may be assumed to be \var{true}.
 This means that an explicit boolean is not actually needed.
-A simpler approach, which omits the boolean,
+The simpler approach, which omits the boolean,
 is the one that
-the \Marpa{} implementation uses.
-
-It will not always be the case that the data that the PSL's need
-to track is limited to a single boolean.
-It is for this reason that
-the more complicated approach is illustrated above.
+the \Marpa{} implementation sometimes uses.
 
 \section{\Marpa{} is correct}
 \label{sec:correctness}
@@ -4278,11 +4266,13 @@ the result of the Earley{} completer operation is valid.
 \end{theorem}
 
 \begin{proof}
-Call an arbitrary ancestry of an Earley{} completer operation
+Let $[\Vint{g}, \Vstr{prefix}]$ be a partial parse,
+let
 \[
 [ \Veim{pred}, \Veim{cuz} ]_\type{LP}
 \]
-and call its result, \Veim{rez}.
+be an arbitrary ancestry of an Earley{} completer operation,
+and let the result of the operation be \Veim{rez}.
 Then
 \begin{equation}
 \label{eq:earley-completer-is-consistent-20}
@@ -4298,8 +4288,8 @@ Then
   \begin{gathered}
   \Veim{pred} =
   \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
-  \because \Eref{eq:earley-completer-is-consistent-20},
-    \Eref{eq:original-completer-summary-2}.
+  \because \Eref{eq:original-completer-summary-2},
+    \Eref{eq:earley-completer-is-consistent-20}.
   \end{gathered}
 \end{equation}
 \begin{equation}
