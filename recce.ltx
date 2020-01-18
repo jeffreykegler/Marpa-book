@@ -2933,7 +2933,7 @@ to
 In what follows,
 we will find the following summary of the original, \Earley{} completer
 operation useful.
-If, for some \Vloc{current},
+If
 \begin{equation}
 \label{eq:original-completer-summary-1}
 \myparbox{$\Veim{cause}@\Vloc{current}$ is a completion,} \\
@@ -4761,25 +4761,35 @@ $\because$
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-44}
+\myparbox{\Velement{edge}{\var{n}+1} is in the same Earley set as \VVelement{edge}{n}
+  $\because$
+\Eref{eq:original-completer-summary-1}
+  \Eref{eq:original-completer-summary-4},
+  \Eref{eq:edge-elements-are-complete-36}. }
+\end{equation}
+\begin{equation}
+\label{eq:edge-elements-are-complete-46}
 \myparbox{$\var{edge}[\var{n}+1]$ is in the same Earley set as \Veim{base}
-  $\because \Eref{eq:original-completer-summary-4},
-  \Eref{eq:edge-elements-are-complete-36}$. }
+  $\because$
+  \Eref{eq:edge-elements-are-complete-20},
+  \Eref{eq:edge-elements-are-complete-44}.  }
 \end{equation}
 The step and the induction follow
 from
 \Eref{eq:edge-elements-are-complete-37-25},
 \Eref{eq:edge-elements-are-complete-42}, and
-\Eref{eq:edge-elements-are-complete-44}, so that
+\Eref{eq:edge-elements-are-complete-46}, so that
 \begin{equation}
 \label{eq:edge-elements-are-complete-50}
 \myparbox{%
 for all \var{n} such $0 \le \var{n} \le \Vlastix{edge}$,
-\VVelement{edge}{n} is a valid completion in the same Earley set as \Velement{edge}{0}.%
+\VVelement{edge}{n} is a valid completion in the same Earley set as \Veim{base}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-52}
 \myparbox{\Veimset{edge} is valid $\because$
+\Dfref{def:leo-edge},
 \Eref{eq:edge-elements-are-complete-50}.}
 \end{equation}
 We have the theorem directly from
@@ -4848,7 +4858,7 @@ correct
 \Thref{th:earley-is-correct}.
 
 We have shown that the memoizer operation
-preserves validity.
+preserves validity
 \Eref{th:memoizer-consistency}.
 The remaining subcase is the \Marpa{} completer operation.
 
@@ -5053,11 +5063,12 @@ Earley set \Ves{j}.
 \end{lemma}
 \begin{proof}
 The proof is by a reductio.
+\TODO{presence in physical Earley set (PES?) vs theoretical {ES?}.}
 \begin{equation}
 \label{eq:lem-marpa-visible-depth-completeness-08}
 \myparbox{Let $\Vpim{rez}@\Ves{j}$ be a valid PIM where
-$\var{Depth}(\var{rez}) = \var{n}+1$
-which \Marpa{} does not create.
+$\var{Depth}(\var{rez}) = \var{n}+1 \land
+  \neg \var{rez} \in \Ves{j}$
 $\because$ AF reductio.}
 \end{equation}
 \begin{equation}
