@@ -2503,23 +2503,34 @@ To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
 \begin{definition}[Leo unique]
 \label{d:leo-unique}
-An EIM \Veim{uniq} such that
-\begin{equation*}
-\Veim{uniq} \in \Ves{i}
-\quad \text{and} \quad \Penult{\Veim{uniq}} \neq \Lambda,
-\end{equation*}
-is \dfn{Leo unique} in \Ves{i},
-\LeoUnique{\Veim{uniq}, \Ves{i}},
-if and only if,
-for all
-$\Veim{x} \in \Ves{i}$
-we have
-\begin{equation*}
-\Penult{\Veim{uniq}} = \Postdot{\Veim{x}}
-\implies \Veim{uniq} = \Veim{x}.
-\end{equation*}
+An EIM \Veim{uniq}
+is \dfn{Leo unique} in \Ves{j}
+if and only if
+\[
+\Veim{uniq} \in \LeoUnique{\Ves{j}},
+\]
+where
+\begin{align}
+  & \LeoUnique{\Ves{j}} \defined
+  \\ \nonumber \displaybreak[0]
+  & \quad
+  \left\lbrace
+  \begin{gathered}
+    \Veim{uniq} : \forall \; \Veim{x} \\
+      \begin{gathered}
+	\left(
+	\begin{gathered}
+	  \Current{\var{uniq}} = \Current{\var{x}} \\
+	  \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
+	\end{gathered}
+	\right) % \\
+	\implies \var{uniq} = \var{x}.
+      \end{gathered}
+    \end{gathered}
+  \right\rbrace
+\end{align}
 Note that \Veim{x} ranges over all the
-EIMs of Earley set \Ves{i},
+EIMs of Earley set \Ves{j},
 even those which are not penults.
 $\bigstar$
 \end{definition}
@@ -4569,6 +4580,8 @@ The \dfn{inside} of the edge is the sequence
 \Velement{edge}{1 \ldots (\Vlastix{edge}\subtract 1)}.
 An \dfn{inside element} of an edge is a element of the
 inside of the edge.
+An \dfn{upper element} of an edge is a top or an inside element.
+An \dfn{lower element} of an edge is a bottom or an inside element.
 $\bigstar$
 \end{definition}
 
@@ -4593,7 +4606,7 @@ of a Leo chain element in \Ves{element}.
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-12}
 \begin{gathered}
-\Veim{source} \in \LeoUnique{\Veim{pred}, \Ves{element}} \\
+\Veim{source} \in \LeoUnique{\Ves{element}} \\
 \because
 \Eref{eq:th-leo-chain-source-properties-10}, \Eref{eq:memoizer-operation-10}.
 \end{gathered}
@@ -4624,7 +4637,6 @@ and the edge is valid.
 \end{theorem}
 
 \begin{proof}
-
 Let \Vint{g} be a \Marpa{} internal grammar,
 let \Vlimset{chain} be a Leo chain
 and let \Veim{base} be an EIM which matches \var{chain}.
@@ -4795,6 +4807,75 @@ for all \var{n} such $0 \le \var{n} \le \Vlastix{edge}$,
 We have the theorem directly from
 \Eref{eq:edge-elements-are-complete-50} and
 \Eref{eq:edge-elements-are-complete-52}.
+\end{proof}
+
+\begin{theorem}[Lower Edge Direct Descendants]
+\label{th:lower-edge-ancestor}
+In an \Earley{} parse,
+let \Veim{anc} be a lower element of an edge
+that is a direct
+ancestor of an EIM, \Veim{rez}.
+Then \Veim{rez} is an upper element of an edge.
+\end{theorem}
+
+\begin{proof}
+Let \Veim{lo} be a lower element of an edge,
+and let \Veim{desc} be its direct descendant.
+If \Veim{desc} does not exist, then the theorem is
+vacuously true.
+For the non-vacuous case, we proceed by reductio.
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-10}
+\myparbox{\Veim{lo} is a valid lower element of an edge
+$\because$ AF theorem.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-12}
+\myparbox{\Veim{desc} is a valid direct descendant of \Veim{lo}
+$\because$ AF theorem.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-14}
+\myparbox{
+\Veim{desc} is not an upper edge element
+$\because$ AF reductio.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-16}
+\begin{gathered}
+\exists \; \Vlimset{chain}, \var{n} : \\
+\left[ \var{source}, \Veim{lo} \right]_\type{LP}
+  \in \LinkPairs{\Veim{next}} \\
+  \land \; \Vlim{match} = \var{chain}[\var{n}] \\
+  \land \; \Veim{source} = \Source{\Vlim{match}} \\
+  \because \Dfref{def:leo-edge}, \Eref{eg:th-lower-edge-ancestor-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-18}
+\begin{gathered}
+\Veim{source} \in \LeoEligible{\Current{\Vlim{match}}} \\
+\because \Eref{eg:th-lower-edge-ancestor-16},
+  \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-20}
+\begin{gathered}
+\Veim{source} \in \LeoUnique{\Current{\Vlim{match}}} \\
+\because
+\Eref{eg:th-lower-edge-ancestor-18}, \Eref{eq:memoizer-operation-10}.
+\end{gathered}
+\end{equation}
+
+\begin{equation}
+\myparbox{\Veim{lo} is complete
+$\because$
+\Thref{th:edge-elements-are-complete},
+\Eref{eg:th-lower-edge-ancestor-10}.}
+\end{equation}
+
+\TODO{finish proof}
 \end{proof}
 
 Recall that \var{Leo-completer}
