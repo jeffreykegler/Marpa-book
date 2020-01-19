@@ -2465,7 +2465,7 @@ and
 \begin{equation*}
 \Veim{top} = [\Vdr{top}, \Vorig{top}]
 \end{equation*}
-is the Earley item to be unioned on completer operations over
+is the Earley item to be unioned on Marpa{} \var{Reducer} operations over
 \Vsym{transition}.
 To say that \Vlim{x}
 is at \Ves{j}, we may write
@@ -2829,19 +2829,19 @@ in order to be passed on to the semantics.
 operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
-\subsection{Completer operation}
-\label{d:completer}
+\subsection{Reducer operation}
+\label{d:reducer}
 
 \begin{align}
-\label{eq:def-completer-10}
+\label{eq:def-reducer-10}
 & \var{Completer}(\Ves{i}) \defined
 \\ \nonumber \displaybreak[0]
-& \qquad \var{Earley-completer}(\Ves{i}) \cup \var{Leo-completer}(\Ves{i})
+& \qquad \var{Earley-reducer}(\Ves{i}) \cup \var{Leo-reducer}(\Ves{i})
 \end{align}
 where
 \begin{align}
-\label{eq:def-completer-20}
-& \var{Earley-completer}(\Ves{i}) \defined
+\label{eq:def-reducer-20}
+& \var{Earley-reducer}(\Ves{i}) \defined
 \\ \nonumber \displaybreak[0]
 & \qquad
 \left\lbrace
@@ -2859,8 +2859,8 @@ where
 \end{align}
 %
 \begin{align}
-\label{eq:def-completer-23}
-& \var{Leo-completer}(\Ves{i}) \defined
+\label{eq:def-reducer-23}
+& \var{Leo-reducer}(\Ves{i}) \defined
 \\ \nonumber \displaybreak[0]
 & \qquad
 \left\lbrace
@@ -2878,7 +2878,7 @@ where
 \end{align}
 and
 \begin{align}
-\label{eq:def-completer-24}
+\label{eq:def-reducer-24}
 & \var{Blocker}(\Veim{cuz}) \defined
 \\ \nonumber \displaybreak[0]
 & \qquad \qquad
@@ -2889,21 +2889,21 @@ and
 \end{align}
 
 \begin{observation}[Ancestry]
-\label{ob:completer-ancestry}
-The \Marpa{} implementation tracks all link pairs for completer-generated
+\label{ob:reducer-ancestry}
+The \Marpa{} implementation tracks all link pairs for reducer-generated
 EIM's.
 Completer-generated EIM's will have a link pair for every attempt to create them.
-In an unambiguous parse, a completer-generated EIM will always have exactly one link pair.
-In an ambiguous parse, a completer-generated EIM will have one or more link pairs.
+In an unambiguous parse, a reducer-generated EIM will always have exactly one link pair.
+In an ambiguous parse, a reducer-generated EIM will have one or more link pairs.
 
-The cause of a completer-generated EIM will always be
+The cause of a reducer-generated EIM will always be
 a completed EIM.
-The predecessor of a completer-generated EIM varies depending on whether the attempt
-to create the completer-generated EIM was a Leo completer operation
-or an Earley completer operation.
-For an Earley completer operation,
+The predecessor of a reducer-generated EIM varies depending on whether the attempt
+to create the reducer-generated EIM was a \var{Leo-reducer} operation
+or an \var{Earley-reducer} operation.
+For an \var{Earley-reducer} operation,
 the predecessor will be an incomplete EIM.
-For a Leo completer operation,
+For a \var{leo-reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
 $\bigstar$
@@ -2926,19 +2926,19 @@ if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 \in \Ves{predecessor}
 \]
 is false in
-\Eref{eq:def-completer-20}
+\Eref{eq:def-reducer-20}
 and
-\Eref{eq:def-completer-23}.
+\Eref{eq:def-reducer-23}.
 In this case,
 we will always have
 \[
-\var{Leo-completer}(\Ves{i}) = \emptyset
+\var{Leo-reducer}(\Ves{i}) = \emptyset
 \]
 so that we may also change
-\Eref{eq:def-completer-10}
+\Eref{eq:def-reducer-10}
 to
 \[
-\var{Completer}(\Ves{i}) \defined \var{Earley-completer}(\Ves{i}).
+\var{Reducer}(\Ves{i}) \defined \var{Earley-reducer}(\Ves{i}).
 \]
 
 In what follows,
@@ -3183,7 +3183,7 @@ if and only if
 This observation follows from
 \Eref{eq:def-initializer},
 \Eref{eq:def-scanner},
-\Eref{eq:def-completer-10}--\Eref{eq:def-completer-23},
+\Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
 \Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
 \end{observation}
@@ -4878,13 +4878,13 @@ $\because$
 \TODO{finish proof}
 \end{proof}
 
-Recall that \var{Leo-completer}
+Recall that \var{Leo-reducer}
 is defined at
-\Eref{eq:def-completer-23}.
+\Eref{eq:def-reducer-23}.
 \begin{theorem}
-\label{th:leo-completer-is-consistent}
-The \var{Leo-completer} sub-operation
-of the \Marpa{} Completer operation
+\label{th:leo-reducer-is-consistent}
+The \var{Leo-reducer} sub-operation
+of the \Marpa{} \var{Reducer} operation
 preserves validity.
 \end{theorem}
 \begin{proof}
@@ -4941,26 +4941,26 @@ correct
 We have shown that the memoizer operation
 preserves validity
 \Eref{th:memoizer-consistency}.
-The remaining subcase is the \Marpa{} completer operation.
+The remaining subcase is the \Marpa{} \var{Reducer} operation.
 
-The \Marpa{} completer operation consists of two
+The \Marpa{} \var{Reducer} operation consists of two
 sub-operations:
-\var{Earley-completer} and
-\var{Leo-completer}.
+\var{Earley-reducer} and
+\var{Leo-reducer}.
 We have shown that the
-\var{Leo-completer} preserves validity
-\Thref{th:leo-completer-is-consistent}.
+\var{Leo-reducer} preserves validity
+\Thref{th:leo-reducer-is-consistent}.
 
 From
 \Obref{ob:earley-completer-operation}
 and the description of the
-\var{Earley-completer},
-the \var{Earley-completer} creates the EIM that
+\var{Earley-reducer},
+the \var{Earley-reducer} creates the EIM that
 the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
-\Marpa{}'s \var{Earley-completer}.
+\Marpa{}'s \var{Earley-reducer}.
 Therefore the PIM's created by
-the \Marpa{} \var{Earley-completer} sub-operation
+the \Marpa{} \var{Earley-reducer} sub-operation
 are a subset of those created by the \Earley{}
 completer operation.
 We know the \Earley{} completer operation preserves
@@ -5103,7 +5103,7 @@ $\because$ DFPP.
 \end{equation}
 
 \begin{lemma}
-\label{lem:marpa-completer-completeness}
+\label{lem:marpa-reducer-completeness}
 Let \Ves{j} be an Earley set in a \Marpa{} parse,
 $\var{j} > 0$.
 If the parse is complete as far as the
@@ -5120,8 +5120,8 @@ visible depth.
 
 We take for the induction hypothesis
 \begin{equation}
-\label{lem:marpa-completer-completeness-28}
-\myparbox{After a \Marpa{} completer operation at \Ves{j},
+\label{lem:marpa-reducer-completeness-28}
+\myparbox{After a \Marpa{} \var{Reducer} operation at \Ves{j},
 \Ves{j} is complete
 with respect to the
 the EIM's of visible depth \var{ix}.}
@@ -5286,28 +5286,6 @@ We assume for the reductio that
 \end{equation}
 
 Confirmed EIMs are only unioned by the Scanner and the Completer.
-
-{\bf Subcase 1: The Scanner.}
-Assume that \Veim{unioned} was unioned by the scanner.
-Then
-\begin{equation}
-\left[ \left[ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} \right], \Vorig{i} \right] @ \es{(\var{j}\subtract 1)}
-\end{equation}
-must be the predecessor of
-the link pair,
-and $\Vsym{rhs2} = \var{w}[\var{j}\subtract 1]$
-must be the terminal symbol which is the cause
-of the link pair.
-This link pair must be unique, contrary to assumption
-\Eref{eq:ambiguous-links-pair-10d}.
-This eliminates this subcase, and allows us to assume,
-for the rest of this proof,
-that \Veim{unioned} was unioned by the completer.
-
-{\bf The Completer.}
-Since \Veim{unioned} was unioned by the completer,
-if it has two link pairs
-it takes the form
 
 \TODO{Finish proof}
 
