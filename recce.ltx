@@ -2075,19 +2075,19 @@ then
 \RHS{\Vrule{x}}[\var{pos}\subtract 1], \; \text{if $\var{pos} > 0$} \\
 \Lambda, \; \text{otherwise}
 \end{cases} \\
-%
+\label{eq:def-postdot}
 & \Postdot{\Vdr{x}} && \defined && \quad
 \begin{cases}
 \RHS{\Vrule{x}}[\var{pos}], \; \text{if $\var{pos} < \size{\Vrule{x}}$} \\
 \Lambda, \; \text{otherwise}
 \end{cases} \\
-%
+\label{eq:def-next}
 & \Next{\Vdr{x}} && \defined && \quad
 \begin{cases}
 [\Vrule{x}, \var{pos}+1], \; \text{if $\var{pos} < \size{\Vrule{x}}$} \\
 \Lambda, \; \text{otherwise}
 \end{cases} \\
-%
+\label{eq:def-penult}
 & \Penult{\Vdr{x}} && \defined && \quad
 \begin{cases}
 \Postdot{\Vdr{x}}, \; \text{if $\var{pos} = \size{\Vrule{x}}\subtract 1$} \\
@@ -2147,6 +2147,7 @@ for an EIM such as
 $\Veim{x} = [\Vdr{x}, \Vorig{x}]$,
 we write,
 \begin{equation*}
+\label{eq:def-dr}
 \begin{alignedat}{3}
 & \DR{\Veim{x}} && \defined && \quad \Vdr{x}, \quad \text{and} \\
 & \Origin{\Veim{x}} && \defined && \quad \Vorig{x}
@@ -2465,8 +2466,8 @@ and
 \begin{equation*}
 \Veim{top} = [\Vdr{top}, \Vorig{top}]
 \end{equation*}
-is the Earley item to be unioned on Marpa{} \var{Reducer} operations over
-\Vsym{transition}.
+is the Earley item to be unioned as a result of a operation
+using the LIM.
 To say that \Vlim{x}
 is at \Ves{j}, we may write
 \begin{gather*}
@@ -2510,25 +2511,24 @@ if and only if
 \Veim{uniq} \in \LeoUnique{\Ves{j}},
 \]
 where
-\begin{align}
-  & \LeoUnique{\Ves{j}} \defined
-  \\ \nonumber \displaybreak[0]
-  & \quad
-  \left\lbrace
+\LeoUnique{\Vloc{j}} is defined as the set of \Veim{uniq}
+such that
+\begin{itemize}
+\item $\Penult{\var{uniq}} \neq \Lambda$,
+\item $\Current{\var{uniq}} = \Vloc{j}$, and
+\item
+for all \Veim{x},
+\begin{gather*}
+\left(
   \begin{gathered}
-    \Veim{uniq} : \forall \; \Veim{x} \\
-      \begin{gathered}
-	\left(
-	\begin{gathered}
-	  \Current{\var{uniq}} = \Current{\var{x}} \\
-	  \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
-	\end{gathered}
-	\right) % \\
-	\implies \var{uniq} = \var{x}.
-      \end{gathered}
-    \end{gathered}
-  \right\rbrace
-\end{align}
+  \Current{\var{uniq}} = \Current{\var{x}} \\
+  \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
+  \end{gathered}
+\right)
+\\
+\implies \var{uniq} = \var{x}.
+\end{gather*}
+\end{itemize}
 Note that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{j},
 even those which are not penults.
@@ -2834,7 +2834,7 @@ operation of \Earley{}\cite{Earley1970}.
 
 \begin{align}
 \label{eq:def-reducer-10}
-& \var{Completer}(\Ves{i}) \defined
+& \var{Reducer}(\Ves{i}) \defined
 \\ \nonumber \displaybreak[0]
 & \qquad \var{Earley-reducer}(\Ves{i}) \cup \var{Leo-reducer}(\Ves{i})
 \end{align}
@@ -2916,9 +2916,21 @@ $\bigstar$
 \begin{observation}[Original Earley algorithm: Completer Operation]
 \label{ob:earley-completer-operation}
 When there are no LIM's in \Ves{predecessor}
-\Marpa{}'s \var{Completer} operation has the same effect as the ``Completer''
-operation of \Earley{}\cite{Earley1970}.
-Put another way, \Marpa{}'s \var{Completer} operation
+\Marpa{}'s \var{Reducer} operation has the same effect as the ``Completer''
+operation of \Earley{}\cite{Earley1970}.\footnote{
+For all other \Marpa{} operations we have used the name of its
+equivalent in \Earley{}.
+It is convenient to use a different name
+for \Marpa{}'s \var{Reducer} operation,
+however,
+because it differs in effect from the \Earley{}
+``Completer'' operation,
+and because the cognates of ``complete'' are
+overloaded in confusing ways.
+For example, the result of an \Earley{} ``Completer'' operation
+is not necessarily an EIM completion.
+}
+Put another way, \Marpa{}'s \var{Reducer} operation
 is the same as the Completer operation of \Earley{},
 if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 \[
@@ -2934,12 +2946,8 @@ we will always have
 \[
 \var{Leo-reducer}(\Ves{i}) = \emptyset
 \]
-so that we may also change
-\Eref{eq:def-reducer-10}
-to
-\[
-\var{Reducer}(\Ves{i}) \defined \var{Earley-reducer}(\Ves{i}).
-\]
+so that we may also the \Earley{} completer is equivalent
+in effect to $\var{Earley-reducer}(\Ves{i})$.
 
 In what follows,
 we will find the following summary of the original, \Earley{} completer
@@ -3078,15 +3086,17 @@ which are deterministic.
 In the link pair for a LIM,
 the ``cause'' is more often called the \dfn{source} of the LIM,
 and
-\[
+\begin{equation}
+\label{eq:def-source}
 \text{\Source{\Vlim{$\ell$}} $\defined$ the source EIM link of \Vlim{$\ell$}.}
-\]
+\end{equation}
 In the link pair for a LIM,
 the ``predecessor'' is more often called the \dfn{previous link} of the LIM,
 and
-\[
+\begin{equation}
+\label{eq:def-previous-link}
 \text{\PreviousLink{\Vlim{$\ell$}} $\defined$ the previous link of \Vlim{$\ell$}.}
-\]
+\end{equation}
 Because every LIM has exactly one link pair,
 both \var{PreviousLink} and \var{Source} are functions.
 
@@ -3174,7 +3184,7 @@ if and only if
 $\Predot{\Veim{rez}} \in \NT{\var{g}}$, and
 $\Current{\var{rez}} > 0$
 if and only if \var{rez} is the result of a
-\Marpa{} \var{Completer} operation.
+\Marpa{} \var{Reducer} operation.
 \item \Vpim{rez} is a LIM
 if and only if
 \var{rez} is the result of a
@@ -3193,8 +3203,8 @@ This observation follows from
 The operation of the original \Earley{} algorithm can be determined
 from the result as described in
 \Obref{ob:marpa-operation-by-result},
-except that in \Earley{}
-there is no \var{Memoizer} operation,
+except
+in \Earley{} there is no \var{Memoizer} operation,
 and there are no LIM's.
 This follows from
 \Obref{ob:earley-set-0},
@@ -3203,6 +3213,34 @@ This follows from
 \Obref{ob:earley-predictor-operation},
 \Obref{ob:earley-memoizer-operation}, and
 \Obref{ob:marpa-operation-by-result}.
+\end{observation}
+
+\begin{observation}[\Marpa{} operation by direct ancestor]
+\label{ob:marpa-operation-by-direct-ancestor}
+If a completion is a direct ancestor of a \Marpa{}
+operation, that operation is the \var{Reducer} operation.
+If a token is a direct ancestor of a \Marpa{}
+operation, that operation is the \var{Scanner} operation.
+This observation follows from
+\Eref{eq:def-initializer},
+\Eref{eq:def-scanner},
+\Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
+\Eref{eq:def-predictor}, and
+\Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\end{observation}
+
+\begin{observation}[\Earley{} operation by direct ancestor]
+\label{ob:earley-operation-by-direct-ancestor}
+If a completion is a direct ancestor of an \Earley{}
+operation, that operation is the Completer operation.
+If a token is a direct ancestor of a \Marpa{}
+operation, that operation is the Scanner operation.
+This observation follows from
+\Obref{ob:earley-set-0},
+\Obref{ob:earley-scanner-operation},
+\Obref{ob:earley-completer-operation},
+\Obref{ob:earley-predictor-operation} and
+\Obref{ob:earley-memoizer-operation}.
 \end{observation}
 
 \TODO{complexity observations}
@@ -4291,7 +4329,7 @@ Then
   \Vdr{pred} =
   \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
   \right] \\
-  \because \Eref{eq:original-completer-summary-2}.
+  \because \Eref{eq:original-completer-summary-2}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4300,7 +4338,7 @@ Then
   \Veim{pred} =
   \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
   \because \Eref{eq:original-completer-summary-2},
-    \Eref{eq:earley-completer-is-consistent-20}.
+    \Eref{eq:earley-completer-is-consistent-20}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4316,7 +4354,7 @@ Then
     @ \Vloc{current} \\
   \because \Eref{eq:earley-completer-is-consistent-22},
   \Eref{eq:original-completer-summary-1},
-  \Eref{eq:original-completer-summary-2}.
+  \Eref{eq:original-completer-summary-2}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4331,7 +4369,8 @@ Then
   \right]@\Vloc{current} \\
   \because
   \Eref{eq:original-completer-summary-4},
-  \Eref{eq:earley-completer-is-consistent-22}.
+  \Eref{eq:earley-completer-is-consistent-22},
+  \Eref{eq:earley-completer-is-consistent-26}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4355,7 +4394,7 @@ by assumption for theorem.}
 \begin{gathered}
   \Accept{\var{g}} \destar \Vstr{before} \cat \LHS{\Veim{pred}} \cat \Vstr{after} \\
   \because \Eref{eq:EIM-valid-22b},
-    \Eref{eq:earley-completer-is-consistent-30}.
+    \Eref{eq:earley-completer-is-consistent-30}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4390,8 +4429,11 @@ by assumption for theorem.}
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-46}
-\LHS{\Veim{pred}} = \LHS{\Veim{rez}}
-\because \Eref{eq:earley-completer-is-consistent-42}.
+\myparbox{$\LHS{\Veim{pred}} = \LHS{\Veim{rez}}$
+$\because$ definition of \var{Next} \Eref{eq:def-next},
+  definition of \var{DR} \Eref{eq:def-dr},
+  \Eref{eq:earley-completer-is-consistent-42}.
+}
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-48}
@@ -4593,37 +4635,52 @@ Earley set as the element.
 \end{theorem}
 
 \begin{proof}
-Let \Vint{g} be a \Marpa{} internal grammar,
-and let \Veim{source} be the source
-of a Leo chain element in \Ves{element}.
+Let \Vint{g} be a \Marpa{} internal grammar.
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-10}
-\begin{gathered}
-\Veim{source} \in \LeoEligible{\Ves{element}} \\
-\qquad \because \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}.
-\end{gathered}
+\myparbox{$\mylim{\ell}@\Vloc{j}$ is a Leo chain element
+$\because$ AF theorem, WLOG.
+}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-12}
-\begin{gathered}
-\Veim{source} \in \LeoUnique{\Ves{element}} \\
+\Veim{source} = \Source{\ell}
 \because
-\Eref{eq:th-leo-chain-source-properties-10}, \Eref{eq:memoizer-operation-10}.
+\Eref{eq:th-leo-chain-source-properties-10},
+\text{WLOG}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-chain-source-properties-20}
+\begin{gathered}
+\Veim{source} \in \LeoEligible{\Vloc{j}} \\
+\qquad \because
+\Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30},
+\text{definition of ``source'' \Eref{eq:def-source}}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-chain-source-properties-14}
-\myparbox{\Veim{pred} is a penult
-  $\because \Eref{eq:th-leo-chain-source-properties-12}, \Dfref{d:leo-unique}$.}
+\label{eq:th-leo-chain-source-properties-22}
+\begin{gathered}
+\Veim{source} \in \LeoUnique{\Vloc{j}} \\
+\because
+\Eref{eq:th-leo-chain-source-properties-20}, \Eref{eq:memoizer-operation-10}.
+\end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-chain-source-properties-16}
-\Veim{pred} \in \Ves{element}
-  \because \Eref{eq:th-leo-chain-source-properties-12}, \Dfref{d:leo-unique}.
+\label{eq:th-leo-chain-source-properties-24}
+\myparbox{\Veim{source} is a penult
+  $\because$ \Eref{eq:th-leo-chain-source-properties-22},
+  definition of Leo unique \Dfref{d:leo-unique}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-chain-source-properties-26}
+\Current{\Veim{source}} = \Vloc{j}
+  \because \Eref{eq:th-leo-chain-source-properties-22},
+  \Dfref{d:leo-unique}.
 \end{equation}
 The theorem follows directly from
-\Eref{eq:th-leo-chain-source-properties-14} and
-\Eref{eq:th-leo-chain-source-properties-16}.
+\Eref{eq:th-leo-chain-source-properties-24} and
+\Eref{eq:th-leo-chain-source-properties-26}.
 \end{proof}
 
 \begin{theorem}[Edge properties]
@@ -4867,12 +4924,59 @@ $\because$ AF reductio.}
 \Eref{eg:th-lower-edge-ancestor-18}, \Eref{eq:memoizer-operation-10}.
 \end{gathered}
 \end{equation}
-
 \begin{equation}
+\label{eg:th-lower-edge-ancestor-22}
 \myparbox{\Veim{lo} is complete
 $\because$
 \Thref{th:edge-elements-are-complete},
 \Eref{eg:th-lower-edge-ancestor-10}.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-24}
+\myparbox{\Veim{next} is the result of an \Earley{} completer
+operation with link pair
+$\left[ \var{source}, \var{lo} \right]_\type{LP}$
+$\because$
+\Obref{ob:earley-operation-by-direct-ancestor},
+\Eref{eg:th-lower-edge-ancestor-16},
+\Eref{eg:th-lower-edge-ancestor-22}.
+}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-26}
+\myparbox{$\Current{\var{source}} = \Origin{\var{lo}}$
+  $\because$
+  \Eref{eq:original-completer-summary-1}
+  and \Eref{eq:original-completer-summary-2}
+  in \Obref{ob:earley-completer-operation};
+  \Eref{eg:th-lower-edge-ancestor-24}.
+}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-28}
+\myparbox{\Veim{desc} is the result of an \Earley{} completer
+  operation with link pair
+  $\left[ \Veim{pred}, \var{lo} \right]_\type{LP}$
+  $\because$
+  \Obref{ob:earley-operation-by-direct-ancestor},
+  \Eref{eg:th-lower-edge-ancestor-12},
+  \Eref{eg:th-lower-edge-ancestor-22}.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-30}
+\myparbox{$\Current{\Veim{pred}} = \Origin{\var{lo}}$
+  $\because$
+  \Eref{eq:original-completer-summary-1}
+  and \Eref{eq:original-completer-summary-2}
+  in \Obref{ob:earley-completer-operation};
+  \Eref{eg:th-lower-edge-ancestor-28}.}
+\end{equation}
+\begin{equation}
+\label{eg:th-lower-edge-ancestor-32}
+\myparbox{$\Current{\Veim{pred}} = \Current{\Veim{source}}$
+  $\because$
+  \Eref{eg:th-lower-edge-ancestor-26},
+  \Eref{eg:th-lower-edge-ancestor-30}.}
 \end{equation}
 
 \TODO{finish proof}
@@ -4997,11 +5101,11 @@ PIM's.
 For convenience in the next few lemma's,
 we will state some definitions for the purpose of presentation
 (DFPP's).
-Intuitively 
+Intuitively
 the Earley tables are ``complete as far as X'',
 where X is some point in running of the \Marpa{} algorithm,
 if they contain all the visible valid PIM's
-for X and every prior to it in 
+for X and every prior to it in
 in the \Marpa{} algorithm.
 \begin{equation}
 \myparbox{The Earley tables of a \Marpa{} parse
@@ -5024,7 +5128,7 @@ $\because$ DFPP.
 \begin{equation}
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
-the \Marpa{} \var{Completer} operation of Earley set \var{j},
+the \Marpa{} \var{Reducer} operation of Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
 and if they contain all the visible valid confirmed EIM's
 $\because$ DFPP.
@@ -5081,7 +5185,7 @@ $\because$ DFPP.
 \begin{equation}
 \label{eq:def-complete-as-far-as-25}
 \begin{gathered}
-\forall \; \Veim{x} \; ( \var{Depth}(\var{x}) \ge 1 \lor 
+\forall \; \Veim{x} \; ( \var{Depth}(\var{x}) \ge 1 \lor
  \var{Depth}(\var{x}) = \Lambda) \\
 \because
 \Eref{eq:def-complete-as-far-as-20},
@@ -5110,7 +5214,7 @@ If the parse is complete as far as the
 \Marpa{} \var{Scanner} operation of
 Earley set \Ves{j},
 then the parse is complete as far as the
-\Marpa{} \var{Completer} operation of
+\Marpa{} \var{Reducer} operation of
 Earley set \Ves{j}.
 \end{lemma}
 
