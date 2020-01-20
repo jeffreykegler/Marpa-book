@@ -817,6 +817,7 @@ its justification will state that is a
 presentation'',
 which may be abbreviated ``DFPP''.
 ``WLOG'' abbreviates ``assumed without loss of generality''.
+``Def'' abbreviates ``definition''.
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 
@@ -2948,7 +2949,10 @@ we will always have
 \]
 so that we may also the \Earley{} completer is equivalent
 in effect to $\var{Earley-reducer}(\Ves{i})$.
+\end{observation}
 
+\begin{observation}[Summary of \Earley{} Completer Operation]
+\label{ob:earley-completer-summary}
 In what follows,
 we will find the following summary of the original, \Earley{} completer
 operation useful.
@@ -4430,8 +4434,7 @@ by assumption for theorem.}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-46}
 \myparbox{$\LHS{\Veim{pred}} = \LHS{\Veim{rez}}$
-$\because$ definition of \var{Next} \Eref{eq:def-next},
-  definition of \var{DR} \Eref{eq:def-dr},
+$\because$ Def \var{Next} \Eref{eq:def-next},
   \Eref{eq:earley-completer-is-consistent-42}.
 }
 \end{equation}
@@ -4543,6 +4546,8 @@ where \var{chain} is the LIM chain of $\ell$,
 \text{\PreviousLink{\ell} is $\Lambda$ or a valid LIM.}
   \quad \bigstar
 \end{gather}
+We say that a Leo chain is \dfn{valid} if and only if
+all the links of the chain are valid.
 \end{definition}
 
 \begin{theorem}[Memoizer consistency]
@@ -4655,7 +4660,7 @@ $\because$ AF theorem, WLOG.
 \Veim{source} \in \LeoEligible{\Vloc{j}} \\
 \qquad \because
 \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30},
-\text{definition of ``source'' \Eref{eq:def-source}}.
+\text{Def ``source'' \Eref{eq:def-source}}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4670,7 +4675,7 @@ $\because$ AF theorem, WLOG.
 \label{eq:th-leo-chain-source-properties-24}
 \myparbox{\Veim{source} is a penult
   $\because$ \Eref{eq:th-leo-chain-source-properties-22},
-  definition of Leo unique \Dfref{d:leo-unique}.}
+  Def ``Leo unique'' \Dfref{d:leo-unique}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-26}
@@ -4695,8 +4700,8 @@ and the edge is valid.
 
 \begin{proof}
 Let \Vint{g} be a \Marpa{} internal grammar,
-let \Vlimset{chain} be a Leo chain
-and let \Veim{base} be an EIM which matches \var{chain}.
+let \Vlimset{chain} be a valid Leo chain
+and let \Veim{base} be a valid EIM which matches \var{chain}.
 Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
 We proceed by induction on the elements of the edge,
 where the induction hypothesis is
@@ -4759,7 +4764,7 @@ $\because$ assumption for step of the induction.
     \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
       \in \LinkPairs{\var{edge}[\var{n}+1]} \\
     \because
-      \text{\Eref{d:leo-edge-30} of the definition of ``Leo edge''
+      \text{\Eref{d:leo-edge-30} of Def ``Leo edge''
       \Dfref{def:leo-edge}}.
     \end{gathered}
 \end{equation}
@@ -4771,6 +4776,7 @@ whose ancestry includes
 $\left[ \Source{\var{chain}[\var{n}]},
   \var{edge}[\var{n}] \right]_\type{LP}$
 $\because$
+\Obref{ob:earley-operation-by-direct-ancestor},
 \Eref{eq:edge-elements-are-complete-20},
 \Eref{eq:edge-elements-are-complete-30}.
 }
@@ -4778,16 +4784,15 @@ $\because$
 \begin{equation}
 \label{eq:edge-elements-are-complete-37-10}
 \myparbox{
-  \Vlimset{chain} is valid by assumption
-  for the theorem.
-  }
+  \Vlimset{chain} is valid
+  $\because$ AF theorem.}
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-37-15}
 \myparbox{
   \Source{\var{chain}[\var{n}]} is valid
-  \Dfref{def:lim-validity},
-  \Dfref{d:leo-chain},
+  $\because$
+  Def ``LIM valdity'' \Dfref{def:lim-validity},
   \Eref{eq:edge-elements-are-complete-37-10}.
   }
 \end{equation}
@@ -4948,7 +4953,7 @@ $\because$
   $\because$
   \Eref{eq:original-completer-summary-1}
   and \Eref{eq:original-completer-summary-2}
-  in \Obref{ob:earley-completer-operation};
+  in \Obref{ob:earley-completer-summary};
   \Eref{eg:th-lower-edge-ancestor-24}.
 }
 \end{equation}
@@ -4968,7 +4973,7 @@ $\because$
   $\because$
   \Eref{eq:original-completer-summary-1}
   and \Eref{eq:original-completer-summary-2}
-  in \Obref{ob:earley-completer-operation};
+  in \Obref{ob:earley-completer-summary};
   \Eref{eg:th-lower-edge-ancestor-28}.}
 \end{equation}
 \begin{equation}
@@ -5058,7 +5063,8 @@ We have shown that the
 From
 \Obref{ob:earley-completer-operation}
 and the description of the
-\var{Earley-reducer},
+\var{Earley-reducer}
+\Eref{eq:def-reducer-10},
 the \var{Earley-reducer} creates the EIM that
 the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
