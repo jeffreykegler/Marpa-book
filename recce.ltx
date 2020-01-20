@@ -2958,27 +2958,27 @@ we will find the following summary of the original, \Earley{} completer
 operation useful.
 If
 \begin{equation}
-\label{eq:original-completer-summary-1}
+\label{eq:earley-completer-summary-1}
 \myparbox{$\Veim{cause}@\Vloc{current}$ is a completion,} \\
 \end{equation}
 \begin{equation}
-\label{eq:original-completer-summary-2}
+\label{eq:earley-completer-summary-2}
 \myparbox{$\var{pred} @ (\Origin{\var{cause}})$ is an incompletion, and} \\
 \end{equation}
 \begin{equation}
-\label{eq:original-completer-summary-3}
+\label{eq:earley-completer-summary-3}
 \myparbox{$\Postdot{\var{pred}} = \LHS{\var{cause}}$,}
 \end{equation}
 then we union
 \begin{equation}
-\label{eq:original-completer-summary-4}
+\label{eq:earley-completer-summary-4}
 \myparbox{%
 $\left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current}$
 }
 \end{equation}
 into the Earley table with the link pair
 \begin{equation}
-\label{eq:original-completer-summary-5}
+\label{eq:earley-completer-summary-5}
 [ \var{pred}, \var{cause} ]. \quad \bigstar
 \end{equation}
 \end{observation}
@@ -4333,7 +4333,7 @@ Then
   \Vdr{pred} =
   \left[ \Vsym{lhsP} \de \Vstr{rhs1} \mydot \Vsym{postdot} \Vstr{rhs3}
   \right] \\
-  \because \Eref{eq:original-completer-summary-2}, \text{WLOG}.
+  \because \Eref{eq:earley-completer-summary-2}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4341,14 +4341,14 @@ Then
   \begin{gathered}
   \Veim{pred} =
   \left[ \Vdr{pred}, \Vloc{orig} \right] @ \Vloc{meet} \\
-  \because \Eref{eq:original-completer-summary-2},
+  \because \Eref{eq:earley-completer-summary-2},
     \Eref{eq:earley-completer-is-consistent-20}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-24}
 \LHS{\Vdr{cuz}} = \Vsym{postdot}
-\because \Eref{eq:original-completer-summary-3},
+\because \Eref{eq:earley-completer-summary-3},
   \Eref{eq:earley-completer-is-consistent-20}.
 \end{equation}
 \begin{equation}
@@ -4357,8 +4357,8 @@ Then
   \Veim{cuz} = \left[ \Vdr{cuz}, \Vloc{meet} \right]
     @ \Vloc{current} \\
   \because \Eref{eq:earley-completer-is-consistent-22},
-  \Eref{eq:original-completer-summary-1},
-  \Eref{eq:original-completer-summary-2}, \text{WLOG}.
+  \Eref{eq:earley-completer-summary-1},
+  \Eref{eq:earley-completer-summary-2}, \text{WLOG}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4372,7 +4372,7 @@ Then
     \end{gathered}
   \right]@\Vloc{current} \\
   \because
-  \Eref{eq:original-completer-summary-4},
+  \Eref{eq:earley-completer-summary-4},
   \Eref{eq:earley-completer-is-consistent-22},
   \Eref{eq:earley-completer-is-consistent-26}.
   \end{gathered}
@@ -4457,7 +4457,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \begin{equation}
 \label{eq:earley-completer-is-consistent-52}
 \myparbox{\Veim{cuz} is a completion
-  $\because \Eref{eq:original-completer-summary-1}$.}
+  $\because \Eref{eq:earley-completer-summary-1}$.}
 \end{equation}
 %
 \begin{equation}
@@ -4823,13 +4823,15 @@ $\because$
 \label{eq:edge-elements-are-complete-40}
 \begin{gathered}
   \DR{\var{edge}[\var{n}+1]} = \Next{\Source{\var{chain}[\var{n}]}} \\
-  \because \Eref{eq:original-completer-summary-4}, \Eref{eq:edge-elements-are-complete-30}.
+  \because
+  \Eref{ob:earley-completer-summary}, \Eref{eq:edge-elements-are-complete-36}.
   \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-42}
 \myparbox{$\var{edge}[\var{n}+1]$ is a completion
   $\because$
+  Def \var{Next} \Eref{eq:def-next},
   \Eref{eq:edge-elements-are-complete-38},
   \Eref{eq:edge-elements-are-complete-40}.}
 \end{equation}
@@ -4837,8 +4839,8 @@ $\because$
 \label{eq:edge-elements-are-complete-44}
 \myparbox{\Velement{edge}{\var{n}+1} is in the same Earley set as \VVelement{edge}{n}
   $\because$
-\Eref{eq:original-completer-summary-1}
-  \Eref{eq:original-completer-summary-4},
+\Eref{eq:earley-completer-summary-1}
+  \Eref{eq:earley-completer-summary-4},
   \Eref{eq:edge-elements-are-complete-36}. }
 \end{equation}
 \begin{equation}
@@ -4856,7 +4858,8 @@ from
 \begin{equation}
 \label{eq:edge-elements-are-complete-50}
 \myparbox{%
-for all \var{n} such $0 \le \var{n} \le \Vlastix{edge}$,
+for all \var{n} such that
+$0 \le \var{n} \le \Vlastix{edge}$,
 \VVelement{edge}{n} is a valid completion in the same Earley set as \Veim{base}.%
 }
 \end{equation}
@@ -4951,8 +4954,8 @@ $\because$
 \label{eg:th-lower-edge-ancestor-26}
 \myparbox{$\Current{\var{source}} = \Origin{\var{lo}}$
   $\because$
-  \Eref{eq:original-completer-summary-1}
-  and \Eref{eq:original-completer-summary-2}
+  \Eref{eq:earley-completer-summary-1}
+  and \Eref{eq:earley-completer-summary-2}
   in \Obref{ob:earley-completer-summary};
   \Eref{eg:th-lower-edge-ancestor-24}.
 }
@@ -4971,8 +4974,8 @@ $\because$
 \label{eg:th-lower-edge-ancestor-30}
 \myparbox{$\Current{\Veim{pred}} = \Origin{\var{lo}}$
   $\because$
-  \Eref{eq:original-completer-summary-1}
-  and \Eref{eq:original-completer-summary-2}
+  \Eref{eq:earley-completer-summary-1}
+  and \Eref{eq:earley-completer-summary-2}
   in \Obref{ob:earley-completer-summary};
   \Eref{eg:th-lower-edge-ancestor-28}.}
 \end{equation}
