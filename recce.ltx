@@ -4874,117 +4874,194 @@ We have the theorem directly from
 \Eref{eq:edge-elements-are-complete-52}.
 \end{proof}
 
-\begin{theorem}[Lower Edge Direct Descendants]
-\label{th:lower-edge-ancestor}
+\begin{theorem}[Edge Descendant Uniqueness]
+\label{th:edge-descendant-uniqueness}
 In an \Earley{} parse,
-let \Veim{anc} be a lower element of an edge
-that is a direct
-ancestor of an EIM, \Veim{rez}.
-Then \Veim{rez} is an upper element of an edge.
+the descendant of a lower element of an edge
+is unique.
 \end{theorem}
 
 \begin{proof}
-Let \Veim{lo} be a lower element of an edge,
-and let \Veim{desc} be its direct descendant.
-If \Veim{desc} does not exist, then the theorem is
-vacuously true.
-For the non-vacuous case, we proceed by reductio.
+We proceed by
+assuming that an arbitrary lower element has
+two distinct descendants,
+for a reductio.
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-10}
-\myparbox{\Veim{lo} is a valid lower element of an edge
-$\because$ AF theorem.}
+\label{th:edge-descendant-uniqueness-08}
+\myparbox{Let \Veimset{edge} be an edge WLOG.}
 \end{equation}
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-12}
-\myparbox{\Veim{desc} is a valid direct descendant of \Veim{lo}
-$\because$ AF theorem.}
+\label{th:edge-descendant-uniqueness-10}
+\myparbox{$\Veim{lo}=\VVelement{edge}{n}$ is a valid lower element of an edge
+  $\because$ AF theorem, WLOG.}
 \end{equation}
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-14}
-\myparbox{
-\Veim{desc} is not an upper edge element
+\label{th:edge-descendant-uniqueness-12}
+\myparbox{$\Veim{desc} = \Velement{edge}{\var{n}+1}$
+  is a valid direct descendant of \Veim{lo}
+  $\because$ AF theorem.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-14}
+\myparbox{\Veim{desc2} is a valid direct descendant of \Veim{lo}
+$\because$ WLOG.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-16}
+\myparbox{$\var{desc} \neq \Veim{desc2}$
 $\because$ AF reductio.}
 \end{equation}
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-16}
-\begin{gathered}
-\exists \; \Vlimset{chain}, \var{n} : \\
-\left[ \var{source}, \Veim{lo} \right]_\type{LP}
-  \in \LinkPairs{\Veim{next}} \\
-  \land \;\; \Vlim{match} = \var{chain}[\var{n}] \\
-  \land \;\; \Veim{source} = \Source{\Vlim{match}} \\
-  \because \Dfref{def:leo-edge}, \Eref{eg:th-lower-edge-ancestor-10}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eg:th-lower-edge-ancestor-18}
-\begin{gathered}
-\Veim{source} \in \LeoEligible{\Current{\Vlim{match}}} \\
-\because \Eref{eg:th-lower-edge-ancestor-16},
-  \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eg:th-lower-edge-ancestor-20}
-\begin{gathered}
-\Veim{source} \in \LeoUnique{\Current{\Vlim{match}}} \\
-\because
-\Eref{eg:th-lower-edge-ancestor-18}, \Eref{eq:memoizer-operation-10}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eg:th-lower-edge-ancestor-22}
+\label{th:edge-descendant-uniqueness-18}
 \myparbox{\Veim{lo} is complete
 $\because$
 \Thref{th:edge-elements-are-complete},
-\Eref{eg:th-lower-edge-ancestor-10}.}
+\Eref{th:edge-descendant-uniqueness-10}.}
 \end{equation}
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-24}
-\myparbox{\Veim{next} is the result of an \Earley{} completer
+\label{th:edge-descendant-uniqueness-20}
+\myparbox{\Veim{desc} is the result of an \Earley{} completer
 operation with link pair
-$\left[ \var{source}, \var{lo} \right]_\type{LP}$
+$\left[ \var{pred}, \var{lo} \right]_\type{LP}$
 $\because$
 \Obref{ob:earley-operation-by-direct-ancestor},
-\Eref{eg:th-lower-edge-ancestor-16},
-\Eref{eg:th-lower-edge-ancestor-22}.
+\Eref{th:edge-descendant-uniqueness-12},
+\Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
 \end{equation}
+%
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-26}
-\myparbox{$\Current{\var{source}} = \Origin{\var{lo}}$
-  $\because$
-  \Eref{eq:earley-completer-summary-1}
-  and \Eref{eq:earley-completer-summary-2}
-  in \Obref{ob:earley-completer-summary};
-  \Eref{eg:th-lower-edge-ancestor-24}.
+\label{th:edge-descendant-uniqueness-21}
+\begin{gathered}
+\left[ \Veim{pred2}, \var{lo} \right]_\type{LP}
+  \in \LinkPairs{\Veim{desc2}} \\
+  \land \;\; \Vlim{match} = \var{chain}[\var{n}] \\
+  \land \;\; \Veim{pred2} = \Source{\Vlim{match}} \\
+  \because \text{Def of ``Leo edge''} \Dfref{def:leo-edge},
+    \Eref{th:edge-descendant-uniqueness-12}
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{th:edge-descendant-uniqueness-22}
+\myparbox{\Veim{desc2} is the result of an \Earley{} completer
+operation with link pair
+$\left[ \var{pred2}, \var{lo} \right]_\type{LP}$
+$\because$
+\Obref{ob:earley-operation-by-direct-ancestor},
+\Eref{th:edge-descendant-uniqueness-14},
+\Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
 \end{equation}
+%
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-28}
-\myparbox{\Veim{desc} is the result of an \Earley{} completer
-  operation with link pair
-  $\left[ \Veim{pred}, \var{lo} \right]_\type{LP}$
-  $\because$
-  \Obref{ob:earley-operation-by-direct-ancestor},
-  \Eref{eg:th-lower-edge-ancestor-12},
-  \Eref{eg:th-lower-edge-ancestor-22}.}
-\end{equation}
-\begin{equation}
-\label{eg:th-lower-edge-ancestor-30}
+\label{th:edge-descendant-uniqueness-24}
 \myparbox{$\Current{\Veim{pred}} = \Origin{\var{lo}}$
   $\because$
   \Eref{eq:earley-completer-summary-1}
   and \Eref{eq:earley-completer-summary-2}
   in \Obref{ob:earley-completer-summary};
-  \Eref{eg:th-lower-edge-ancestor-28}.}
+  \Eref{th:edge-descendant-uniqueness-20}.
+}
 \end{equation}
 \begin{equation}
-\label{eg:th-lower-edge-ancestor-32}
-\myparbox{$\Current{\Veim{pred}} = \Current{\Veim{source}}$
+\label{th:edge-descendant-uniqueness-26}
+\myparbox{$\Current{\Veim{pred2}} = \Origin{\var{lo}}$
   $\because$
-  \Eref{eg:th-lower-edge-ancestor-26},
-  \Eref{eg:th-lower-edge-ancestor-30}.}
+  \Eref{eq:earley-completer-summary-1}
+  and \Eref{eq:earley-completer-summary-2}
+  in \Obref{ob:earley-completer-summary};
+  \Eref{th:edge-descendant-uniqueness-22}.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-28}
+\myparbox{$\Current{\Veim{pred}} = \Current{\Veim{pred2}}$
+  $\because$
+  \Eref{th:edge-descendant-uniqueness-24},
+  \Eref{th:edge-descendant-uniqueness-26}.}
+\end{equation}
+%
+\begin{equation}
+\label{th:edge-descendant-uniqueness-30}
+\myparbox{$\Postdot{\var{pred}} = \LHS{\var{lo}}$
+  $\because$
+  \Eref{eq:earley-completer-summary-3}
+  in \Obref{ob:earley-completer-summary};
+  \Eref{th:edge-descendant-uniqueness-20}.
+}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-32}
+\myparbox{$\Postdot{\Veim{pred2}} = \LHS{\var{lo}}$
+  $\because$
+  \Eref{eq:earley-completer-summary-3}
+  in \Obref{ob:earley-completer-summary};
+  \Eref{th:edge-descendant-uniqueness-22}.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-34}
+\myparbox{$\Postdot{\Veim{pred}} = \Postdot{\Veim{pred2}}$
+  $\because$
+  \Eref{th:edge-descendant-uniqueness-30},
+  \Eref{th:edge-descendant-uniqueness-32}.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-36}
+\myparbox{\var{pred2} is the source of \Vlim{match}
+  $\because$
+  \Eref{th:edge-descendant-uniqueness-21}.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-38}
+\myparbox{\var{pred2} is a penult
+  $\because$
+  \Eref{th:edge-descendant-uniqueness-36},
+  \Thref{th:leo-chain-source-properties}.}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-40}
+\myparbox{$\Penult{\Veim{pred2}} = \Postdot{\Veim{pred2}}$
+  $\because$
+  \Eref{eq:def-penult},
+  \Eref{th:edge-descendant-uniqueness-38}.}
+\end{equation}
+%
+\begin{equation}
+\label{th:edge-descendant-uniqueness-42}
+\begin{gathered}
+\Veim{pred2} \in \LeoEligible{\Current{\Vlim{match}}} \\
+\because \Eref{th:edge-descendant-uniqueness-36},
+\Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-44}
+  \begin{gathered}
+    \Veim{pred2} \in \LeoUnique{\Current{\Vlim{match}}} \\
+    \because
+    \Eref{th:edge-descendant-uniqueness-42}, \Eref{eq:memoizer-operation-10}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:edge-descendant-uniqueness-46}
+\begin{gathered}
+\forall \; \Veim{x}
+\left(
+\begin{gathered}
+\left(
+  \begin{gathered}
+  \Current{\var{pred2}} = \Current{\var{x}} \\
+  \land \; \Penult{\var{pred2}} = \Postdot{\var{x}}
+  \end{gathered}
+\right)
+\\
+\implies \var{pred2} = \var{x}.
+\end{gathered}
+\right)
+\\
+\because \text{Def of \var{Leo-Unique} \Dfref{d:leo-unique}},
+  \Eref{th:edge-descendant-uniqueness-44}.
+\end{gathered}
 \end{equation}
 
 \TODO{finish proof}
