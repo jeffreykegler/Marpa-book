@@ -11,7 +11,20 @@
 \usepackage{hyperref}
 \allowdisplaybreaks[3]
 
-% Reference meta tags follow standard from fancyref, etc.
+% Reference meta tags ("classifying prefixes") from fancyref:
+% Note: I follow fancyref
+% Chapter chap:
+% Section sec:
+% Equation eq:
+% Figure fig:
+% Table tab:
+% Enumeration enum:
+% Footnote fn:
+% My classifying prefixes
+% Definition def:
+% Theorem th:
+% Lemma lem:
+% Observation obs:
 
 \delimitershortfall=0pt
 \delimiterfactor=1100
@@ -337,7 +350,7 @@ definitions may be
 in numbered sections.
 The end of a definitions section is indicated with a black star ($\bigstar$).
 Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
-For example, \Dfref{df:parse} states ``full parse'' and ``parse'' mean
+For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
 the same thing.
 Shorter synonyms are intended to be used for brevity,
 and only in cases where they are not expected to cause confusion.
@@ -1044,7 +1057,7 @@ That the string is composed entirely of terminals must be separately justified b
 implication or explicit claim.
 
 \begin{definition}[Parse]
-\label{df:parse}
+\label{def:parse}
 A \dfn{full parse} is a duple $[\Vcfg{g}, \Vterm{w}]$ such that
 $\Vterm{w} \in \myL{\var{g}}$.
 A \dfn{partial parse} is a duple $[\Vcfg{g}, \Vterm{prefix}]$ such that
@@ -1149,7 +1162,7 @@ if those lookaheads are in the same cell of $\pi$.
 More formally,
 
 \begin{definition}
-\label{df:LR}
+\label{def:LR}
 \begin{align}
 \begin{aligned}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
@@ -1206,7 +1219,7 @@ for the partition of infinite cardinality,
 \end{definition}
 
 \Thref{th:LR}
-presents \Dfref{df:LR}
+presents \Dfref{def:LR}
 in a way that is easier to apply.
 \begin{theorem}
 \label{th:LR}
@@ -1243,7 +1256,7 @@ we have
 \end{theorem}
 
 \begin{proof}
-Directly from \Dfref{df:LR}.
+Directly from \Dfref{def:LR}.
 \end{proof}
 
 \section{External grammars}
@@ -1887,12 +1900,12 @@ we are discussing
 is a \Marpa{} internal grammar.
 The restrictions imposed on INT's allow us
 to state some
-definitions, for example \Dfref{df:rr},
+definitions, for example \Dfref{def:rr},
 more simply than we could if they had to apply
 to EXT's, or to CFG's,
 
 \begin{definition}
-\label{df:rr}
+\label{def:rr}
 Let \Vint{g} be an internal grammar.
 Let \Vstr{sf} be a sentential form of \var{g} non-trivially derived from
 \Vsym{rr}, so that
@@ -1916,7 +1929,7 @@ is \dfn{right-recursive},
 \RightRecursive{\Vsym{rr}}. \quad \bigstar
 \end{equation*}
 \end{definition}
-\Dfref{df:rr} implies that, for any rule \var{r}, $\var{r} \in \Rules{\var{g}}$,
+\Dfref{def:rr} implies that, for any rule \var{r}, $\var{r} \in \Rules{\var{g}}$,
 we have
 \begin{equation}
 \begin{gathered}
@@ -1980,7 +1993,7 @@ Isolating the derivation from \Eref{rr-proof-20a} to
 \end{equation}
 so that
 \begin{equation}
-\RightRecursive{[ \Vsym{symX} \de \Vstr{rhsX} ]} \because \Dfref{df:rr}.
+\RightRecursive{[ \Vsym{symX} \de \Vstr{rhsX} ]} \because \Dfref{def:rr}.
 \end{equation}
 \end{proof}
 
@@ -2284,7 +2297,7 @@ for some \Vstr{rhs},
 
 \TODO{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}
-\label{df:EIM-valid}
+\label{def:EIM-valid}
 Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
 Let, without loss of generality,
 \begin{equation}
@@ -2383,7 +2396,7 @@ Whne the end of the right recursion is found,
 and its actual length is known,
 only the EIM's in the last RR edge will be used.
 That is, only \var{n} EIM's are useful
-\Dfref{df:EIM-valid}.
+\Dfref{def:EIM-valid}.
 
 % TODO: Move or replace with later discussion on Leo memoization?
 Leo's idea was to memoize the right recursions.
@@ -2504,7 +2517,7 @@ We will call these memoized sequences, Leo sequences.
 To quarantee that a Leo sequence is deterministic,
 \Leo{} enforced \dfn{Leo uniqueness}.
 \begin{definition}[Leo unique]
-\label{d:leo-unique}
+\label{def:leo-unique}
 An EIM \Veim{uniq}
 is \dfn{Leo unique} in \Ves{j}
 if and only if
@@ -2684,7 +2697,7 @@ is
 \end{align}
 
 \begin{observation}[Ancestry]
-\label{ob:common-predict-ancestry}
+\label{obs:common-predict-ancestry}
 Predictions have predecessors, but no causes.
 The implementation does not record link pairs for predictions.
 
@@ -2747,7 +2760,7 @@ Then
 \end{equation}
 
 \begin{observation}[Ancestry]
-\label{ob:initializer-ancestry}
+\label{obs:initializer-ancestry}
 The \Marpa{} implementation does not keep
 any link pairs for any PIM in Earley set 0.
 \Veim{start} does not have any non-trivial ancestor,
@@ -2755,7 +2768,7 @@ so that a link pair does not exist for it,
 even conceptually.
 Link pairs
 for the predictions in Earley set 0
-are as described in \Obref{ob:common-predict-ancestry}.
+are as described in \Obref{obs:common-predict-ancestry}.
 $\bigstar$
 \end{observation}
 
@@ -2765,14 +2778,14 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[\Earley{}'s Earley set 0]
-\label{ob:earley-set-0}
+\label{obs:earley-set-0}
 \Marpa{}'s \var{Initialization} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 $\bigstar$
 \end{observation}
 
 \subsection{Scanner operation}
-\label{d:scanner}
+\label{def:scanner}
 
 \begin{align}
 \label{eq:def-scanner}
@@ -2794,7 +2807,7 @@ $\bigstar$
 \end{align}
 
 \begin{observation}[Ancestry]
-\label{ob:scanner-ancestry}
+\label{obs:scanner-ancestry}
 The \Marpa{} implementation tracks all link pairs for scanned EIM's.
 In an unambiguous parse, a scanned EIM will always have
 exactly one link pair.
@@ -2825,13 +2838,13 @@ in order to be passed on to the semantics.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
-\label{ob:earley-scanner-operation}
+\label{obs:earley-scanner-operation}
 \Marpa{}'s scanner operation has the same effect as the ``Scanner''
 operation of \Earley{}\cite{Earley1970}.
 \end{observation}
 
 \subsection{Reducer operation}
-\label{d:reducer}
+\label{def:reducer}
 
 \begin{align}
 \label{eq:def-reducer-10}
@@ -2890,7 +2903,7 @@ and
 \end{align}
 
 \begin{observation}[Ancestry]
-\label{ob:reducer-ancestry}
+\label{obs:reducer-ancestry}
 The \Marpa{} implementation tracks all link pairs for reducer-generated
 EIM's.
 Completer-generated EIM's will have a link pair for every attempt to create them.
@@ -2915,7 +2928,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
-\label{ob:earley-completer-operation}
+\label{obs:earley-completer-operation}
 When there are no LIM's in \Ves{predecessor}
 \Marpa{}'s \var{Reducer} operation has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.\footnote{
@@ -2952,7 +2965,7 @@ in effect to $\var{Earley-reducer}(\Ves{i})$.
 \end{observation}
 
 \begin{observation}[Summary of \Earley{} Completer Operation]
-\label{ob:earley-completer-summary}
+\label{obs:earley-completer-summary}
 In what follows,
 we will find the following summary of the original, \Earley{} completer
 operation useful.
@@ -2984,7 +2997,7 @@ into the Earley table with the link pair
 \end{observation}
 
 \subsection{Predictor operation}
-\label{d:prediction}
+\label{def:prediction}
 
 \begin{equation}
 \label{eq:def-predictor}
@@ -2994,11 +3007,11 @@ into the Earley table with the link pair
 \end{equation}
 
 \begin{observation}[Ancestry]
-\label{ob:predictor-ancestry}
+\label{obs:predictor-ancestry}
 The \Marpa{} implementation does not track
 link pairs
 for predictions.
-For details, see \Obref{ob:common-predict-ancestry}.
+For details, see \Obref{obs:common-predict-ancestry}.
 $\bigstar$
 \end{observation}
 
@@ -3008,14 +3021,14 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Predictor Operation]
-\label{ob:earley-predictor-operation}
+\label{obs:earley-predictor-operation}
 \Marpa{}'s predictor operation has the same effect as the ``Predictor''
 operation of \Earley{}\cite{Earley1970}.
 $\bigstar$
 \end{observation}
 
 \subsection{Memoizer operation}
-\label{d:memoizer}
+\label{def:memoizer}
 
 Let
 \begin{align}
@@ -3080,29 +3093,34 @@ Then
 \end{align}
 
 \begin{observation}[Ancestry]
-\label{ob:memoizer-ancestry}
+\label{obs:memoizer-ancestry}
 The \Marpa{} implementation tracks the link pairs
 for the LIM's.
-A LIM always has exactly one link pair.
-That is because LIMs memoize Leo chains,
-which are deterministic.
+LIMs memoize Leo chains,
+which are deterministic, so that
+a LIM always has exactly one link pair:
+\[
+\left[ \LIMPredecessor{\Veim{source}}, \Veim{source} \right],
+\]
+where \var{source} is as in
+\Eref{eq:memoizer-operation-20} and
+\Eref{eq:memoizer-operation-30}.
 
-In the link pair for a LIM,
-the ``cause'' is more often called the \dfn{source} of the LIM,
-and
+In the link pair for a LIM, call it \Vlim{$\ell$},
+the ``cause''
+is more often called the \dfn{source} of the LIM,
 \begin{equation}
 \label{eq:def-source}
-\text{\Source{\Vlim{$\ell$}} $\defined$ the source EIM link of \Vlim{$\ell$}.}
+\Source{\Vlim{$\ell$}} \defined \Veim{source},
 \end{equation}
-In the link pair for a LIM,
 the ``predecessor'' is more often called the \dfn{previous link} of the LIM,
 and
 \begin{equation}
 \label{eq:def-previous-link}
-\text{\PreviousLink{\Vlim{$\ell$}} $\defined$ the previous link of \Vlim{$\ell$}.}
+\PreviousLink{\Vlim{$\ell$}} \defined \LIMPredecessor{\Veim{source}}.
 \end{equation}
 Because every LIM has exactly one link pair,
-both \var{PreviousLink} and \var{Source} are functions.
+\var{PreviousLink} and \var{Source} are functions.
 
 The source of the link pair of a LIM is the EIM which that LIM,
 in a intuitive sense, ``replaces''.
@@ -3118,7 +3136,7 @@ $\bigstar$
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
-\label{ob:earley-memoizer-operation}
+\label{obs:earley-memoizer-operation}
 \Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
 $\bigstar$
 \end{observation}
@@ -3153,18 +3171,18 @@ If line \ref{alg:marpa-line-80} is removed,
 \Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
 This can be seen from
 \Aref{alg:marpa},
-\Obref{ob:earley-set-0},
-\Obref{ob:earley-scanner-operation},
-\Obref{ob:earley-completer-operation},
-\Obref{ob:earley-predictor-operation},
+\Obref{obs:earley-set-0},
+\Obref{obs:earley-scanner-operation},
+\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-predictor-operation},
 and
-\Obref{ob:earley-memoizer-operation}.
+\Obref{obs:earley-memoizer-operation}.
 \end{observation}
 
 \subsection{Summary}
 
 \begin{observation}[\Marpa{} operation by type of result]
-\label{ob:marpa-operation-by-result}
+\label{obs:marpa-operation-by-result}
 Let \Vpim{rez} be the result of a \Marpa{} operation.
 Every PIM is the result of exactly \Marpa{} operation,
 as follows:
@@ -3203,24 +3221,24 @@ This observation follows from
 \end{observation}
 
 \begin{observation}[\Earley{} operation by type of result]
-\label{ob:earley-operation-by-result}
+\label{obs:earley-operation-by-result}
 The operation of the original \Earley{} algorithm can be determined
 from the result as described in
-\Obref{ob:marpa-operation-by-result},
+\Obref{obs:marpa-operation-by-result},
 except
 in \Earley{} there is no \var{Memoizer} operation,
 and there are no LIM's.
 This follows from
-\Obref{ob:earley-set-0},
-\Obref{ob:earley-scanner-operation},
-\Obref{ob:earley-completer-operation},
-\Obref{ob:earley-predictor-operation},
-\Obref{ob:earley-memoizer-operation}, and
-\Obref{ob:marpa-operation-by-result}.
+\Obref{obs:earley-set-0},
+\Obref{obs:earley-scanner-operation},
+\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-predictor-operation},
+\Obref{obs:earley-memoizer-operation}, and
+\Obref{obs:marpa-operation-by-result}.
 \end{observation}
 
 \begin{observation}[\Marpa{} operation by direct ancestor]
-\label{ob:marpa-operation-by-direct-ancestor}
+\label{obs:marpa-operation-by-direct-ancestor}
 If a completion is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Reducer} operation.
 If a token is a direct ancestor of a \Marpa{}
@@ -3234,17 +3252,17 @@ This observation follows from
 \end{observation}
 
 \begin{observation}[\Earley{} operation by direct ancestor]
-\label{ob:earley-operation-by-direct-ancestor}
+\label{obs:earley-operation-by-direct-ancestor}
 If a completion is a direct ancestor of an \Earley{}
 operation, that operation is the Completer operation.
 If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the Scanner operation.
 This observation follows from
-\Obref{ob:earley-set-0},
-\Obref{ob:earley-scanner-operation},
-\Obref{ob:earley-completer-operation},
-\Obref{ob:earley-predictor-operation} and
-\Obref{ob:earley-memoizer-operation}.
+\Obref{obs:earley-set-0},
+\Obref{obs:earley-scanner-operation},
+\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-predictor-operation} and
+\Obref{obs:earley-memoizer-operation}.
 \end{observation}
 
 \TODO{complexity observations}
@@ -3277,7 +3295,7 @@ We recognize two kinds of ambiguity:
 horizontal and vertical.
 
 \begin{definition}[Horizontal Ambiguity]
-\label{df:h-ambig}
+\label{def:h-ambig}
 Let $\var{p} = [\Vcfg{g}, \Vstr{w}]$ be a parse,
 and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
 where $0 \le \var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
@@ -3367,7 +3385,7 @@ Therefore, for the rest of this proof, we assume that
 
 We assume for a reductio that
 \var{p} is unambiguous,
-but contains a horizontal ambiguity as defined in \Dfref{df:h-ambig}.
+but contains a horizontal ambiguity as defined in \Dfref{def:h-ambig}.
 Since the parse is unambiguous, we can write
 \[
 \Vstr{suffix} \destar \Vfrontier{suffix},
@@ -3426,7 +3444,7 @@ so that our claim that
 of any non-terminals in \Vstr{rhs1} is vacuously true.
 
 We go back
-to \Dfref{df:h-ambig}, and write a second right derivation for the parse.
+to \Dfref{def:h-ambig}, and write a second right derivation for the parse.
 Because our parse is unambiguous, this derivation should be equivalent to the
 derivation from
 \Eref{eq:th-h-ambig-10-1-a}
@@ -3478,7 +3496,7 @@ This shows the theorem.
 \end{proof}
 
 \begin{definition}[Vertical Ambiguity]
-\label{df:v-ambig}
+\label{def:v-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
 A \dfn{vertical ambiguity} is a 4-tuple,
 \begin{equation}
@@ -3548,11 +3566,11 @@ Therefore, for the rest of this proof, we assume that
 
 We assume for a reductio that
 \var{p} is unambiguous,
-but has a vertical ambiguity as defined in \Dfref{df:v-ambig}.
+but has a vertical ambiguity as defined in \Dfref{def:v-ambig}.
 Noting that
 \Eref{eq:def-v-ambig-20a} through
 \Eref{eq:def-v-ambig-20f}
-in \Dfref{df:v-ambig} is a right derivation,
+in \Dfref{def:v-ambig} is a right derivation,
 we can write
 \begin{align}
 \label{eq:th-v-ambig-10-1-a}
@@ -3649,7 +3667,7 @@ This shows the theorem.
 \end{proof}
 
 \begin{definition}
-\label{df:ambig-EIM}
+\label{def:ambig-EIM}
 An confirmed EIM is \dfn{ambiguous} if it is of the form
 \begin{equation}
 \label{eq:ambig-EIM-05}
@@ -3728,7 +3746,7 @@ for some \Vstr{w} and \Vloc{dot},
 \end{equation}
 is a partial parse.
 Futher assume that \var{partial}
-has a horizontally ambiguous EIM \Dfref{df:ambig-EIM}.
+has a horizontally ambiguous EIM \Dfref{def:ambig-EIM}.
 
 Without loss of generality,
 let
@@ -3743,10 +3761,10 @@ let
 be a full parse consistent with \var{partial}.
 
 We proceed by showing that there is a horizontal ambiguity in \var{full}
-according to \Dfref{df:h-ambig}.
+according to \Dfref{def:h-ambig}.
 By assumption for the theorem,
 \var{partial} has a horizontally ambiguous EIM according to
-\Dfref{df:ambig-EIM}.
+\Dfref{def:ambig-EIM}.
 Let \Vloc{origin},
 \Vloc{overlap1},
 \Vloc{overlap2},
@@ -3754,39 +3772,39 @@ Let \Vloc{origin},
 \Vsym{lhs},
 \Vsym{rhs1}, and
 \Vstr{rhs3}
-in \Dfref{df:h-ambig}
-be their eponyms in \Dfref{df:ambig-EIM}.
+in \Dfref{def:h-ambig}
+be their eponyms in \Dfref{def:ambig-EIM}.
 And let
-\Vstr{rhs2} in \Dfref{df:h-ambig}
+\Vstr{rhs2} in \Dfref{def:h-ambig}
 be the string of length 1 whose only character is
-\Vsym{rhs2} in \Dfref{df:ambig-EIM}.
+\Vsym{rhs2} in \Dfref{def:ambig-EIM}.
 
 In the horizontally ambiguous EIM
 let the 3-partitioned rule be
 \[
 [ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \Vstr{rhs3} ].
 \]
-from \Dfref{df:ambig-EIM}.
+from \Dfref{def:ambig-EIM}.
 and let \Vloc{origin}, \Vloc{overlap1}, \Vloc{overlap2},
 \Vloc{dot},
 \Vsym{lhs}, \Vstr{rhs1}, and \Vstr{rhs3}
 in
-\Dfref{df:h-ambig} be their eponyms in
-\Dfref{df:ambig-EIM}.
+\Dfref{def:h-ambig} be their eponyms in
+\Dfref{def:ambig-EIM}.
 Let \Vstr{rhs2}
-in \Dfref{df:h-ambig} be
+in \Dfref{def:h-ambig} be
 the string of length 1 consisting of \Vsym{rhs2}
-in \Dfref{df:ambig-EIM}.
+in \Dfref{def:ambig-EIM}.
 
 To show that
 writing the derivation
 \Eref{eq:def-h-ambig-21a}--\Eref{eq:def-h-ambig-21f}
-in \Dfref{df:h-ambig}
+in \Dfref{def:h-ambig}
 is justified by the definition
-\Dfref{df:ambig-EIM}, we note that
+\Dfref{def:ambig-EIM}, we note that
 \begin{itemize}
 \item from the definition of validity
-\Dfref{df:EIM-valid}
+\Dfref{def:EIM-valid}
 for the Earley item
 \Eref{eq:ambig-EIM-05},
 we have the accessibility and productivity
@@ -3806,7 +3824,7 @@ in \Eref{eq:def-h-ambig-21e}.
 \end{itemize}
 
 To show
-the remaining elements of \Dfref{df:h-ambig}
+the remaining elements of \Dfref{def:h-ambig}
 we note that
 \begin{itemize}
 \item we have the location of \Vloc{overlap2}
@@ -3819,7 +3837,7 @@ from \Eref{eq:ambig-EIM-03}.
 \end{itemize}
 
 We now have shown all the elements
-in the definition of horizontal ambiguity \Dfref{df:h-ambig}.
+in the definition of horizontal ambiguity \Dfref{def:h-ambig}.
 Since our assumption of a full parse consistent with
 \Eref{eq:th-h-EIM-g-ambig-15} is without loss of generality
 \Eref{eq:th-h-EIM-g-ambig-20},
@@ -3847,7 +3865,7 @@ for some \Vstr{w} and \Vloc{dot},
 \end{equation}
 is a partial parse.
 Futher assume that \var{partial}
-has a vertically ambiguous EIM \Dfref{df:ambig-EIM}.
+has a vertically ambiguous EIM \Dfref{def:ambig-EIM}.
 
 Without loss of generality,
 let
@@ -3861,27 +3879,27 @@ let
 be a full parse consistent with \var{partial}.
 
 We proceed by showing that there is a vertical ambiguity in \var{full}
-according to \Dfref{df:v-ambig}.
+according to \Dfref{def:v-ambig}.
 By assumption for the theorem,
 \var{partial} has a vertically ambiguous EIM according to
-\Dfref{df:ambig-EIM}.
+\Dfref{def:ambig-EIM}.
 
 Let
 \begin{align}
 \label{eq:th-v-EIM-g-ambig-25a}
-\text{\Vsym{rhs2} in \Dfref{df:ambig-EIM}} & = \text{\Vsym{lhs} in \Dfref{df:v-ambig}} \\
+\text{\Vsym{rhs2} in \Dfref{def:ambig-EIM}} & = \text{\Vsym{lhs} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25b}
-\text{\Vstr{children1} in \Dfref{df:ambig-EIM}} & = \text{\Vstr{rhs1} in \Dfref{df:v-ambig}} \\
+\text{\Vstr{children1} in \Dfref{def:ambig-EIM}} & = \text{\Vstr{rhs1} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25c}
-\text{\Vstr{children2} in \Dfref{df:ambig-EIM}} & = \text{\Vstr{rhs2} in \Dfref{df:v-ambig}} \\
+\text{\Vstr{children2} in \Dfref{def:ambig-EIM}} & = \text{\Vstr{rhs2} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25d}
-\text{\Vloc{dot} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{dot} in \Dfref{df:v-ambig}} \\
+\text{\Vloc{dot} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{dot} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25e}
-\text{\Vloc{origin} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}} \\
+\text{\Vloc{origin} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25f}
-\text{\Vloc{overlap1} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}} \\
+\text{\Vloc{overlap1} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
 \label{eq:th-v-EIM-g-ambig-25g}
-\text{\Vloc{overlap2} in \Dfref{df:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{df:v-ambig}}
+\text{\Vloc{overlap2} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}}
 \end{align}
 
 To justify writing
@@ -3928,7 +3946,7 @@ and \Eref{eq:th-v-EIM-g-ambig-25f}; and
 It remains to justify
 $\var{rhs1} \neq \var{rhs2}$,
 \Eref{eq:def-v-ambig-15c}.
-In \Dfref{df:ambig-EIM}
+In \Dfref{def:ambig-EIM}
 the two link pairs are required to be distinct.
 The predecessors of the two links,
 \Eref{eq:ambig-EIM-10a} and
@@ -3940,14 +3958,14 @@ In
 we have set
 both of these
 to \Vloc{origin}
-in \Dfref{df:v-ambig},
+in \Dfref{def:v-ambig},
 so that
 \begin{equation}
 \label{eq:th-v-EIM-g-ambig-40}
 \begin{gathered}
 \text{\Vloc{overlap1} in \Eref{eq:ambig-EIM-10a}} \\
 = \text{\Vloc{overlap2} in \Eref{eq:ambig-EIM-20a}} \\
-= \text{\Vloc{origin} in \Dfref{df:v-ambig}.}
+= \text{\Vloc{origin} in \Dfref{def:v-ambig}.}
 \end{gathered}
 \end{equation}
 So, to be distinct, the two link pairs must differ in the causes.
@@ -3979,7 +3997,7 @@ From
 we have
 \begin{equation}
 \label{eq:th-v-EIM-g-ambig-46}
-\text{$\Vstr{rhs1} \neq \Vstr{rhs2}$ in \Eref{eq:def-v-ambig-15c} of \Dfref{df:v-ambig}.}
+\text{$\Vstr{rhs1} \neq \Vstr{rhs2}$ in \Eref{eq:def-v-ambig-15c} of \Dfref{def:v-ambig}.}
 \end{equation}
 \end{proof}
 
@@ -3994,7 +4012,7 @@ Let $\var{partial} = [ \Vcfg{g}, \Vstr{prefix} ]$ be a partial
 parse with an ambiguous EIM.
 Let $\var{full} = [ \Vcfg{g}, \Vstr{prefix}\Vterm{suffix} ]$ be a full
 parse consistent with \var{partial}.
-From \Dfref{df:ambig-EIM}, we see that an ambiguous EIM
+From \Dfref{def:ambig-EIM}, we see that an ambiguous EIM
 is either a horizontally ambiguous EIM, or
 a vertically ambiguous EIM.
 We proceed by cases.
@@ -4494,7 +4512,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \begin{equation}
 \label{eq:earley-completer-is-consistent-58}
 \myparbox{\Veim{rez} is valid
-  $\because$ \Dfref{df:EIM-valid},
+  $\because$ \Dfref{def:EIM-valid},
   \Eref{eq:earley-completer-is-consistent-38},
   \Eref{eq:earley-completer-is-consistent-44},
   \Eref{eq:earley-completer-is-consistent-48},
@@ -4512,7 +4530,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 % (type \type{VES}).
 
 \begin{definition}[Leo chain]
-\label{d:leo-chain}
+\label{def:leo-chain}
 A \dfn{Leo chain},
 or simply \dfn{chain} when the meaning is clear in context,
 is a sequence of one or more LIM's,
@@ -4582,7 +4600,7 @@ assumption for the theorem.}
 \end{proof}
 
 \begin{definition}[Leo chain--base match]
-\label{d:leo-chain-base-match}
+\label{def:leo-chain-base-match}
 Let \Veim{base} be an EIM
 and let \Vlim{lim} be a LIM.
 We say \Veim{base} \dfn{matches} \Vlim{lim},
@@ -4614,7 +4632,7 @@ such that
 \end{equation}
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \begin{equation}
-\label{d:leo-edge-30}
+\label{def:leo-edge-30}
 \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
   \in \LinkPairs{\var{edge}[\var{n}+1]}
 \end{equation}
@@ -4649,7 +4667,7 @@ Then
 \begin{equation}
 \label{eq:th-leo-edge-length-10}
 \Vsize{chain} > 0 \because
-\text{Def of ``Leo chain'' \Dfref{d:leo-chain}.}
+\text{Def of ``Leo chain'' \Dfref{def:leo-chain}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-edge-length-14}
@@ -4657,7 +4675,7 @@ Then
 \left[ \Source{\Velement{chain}{\Vlastix{chain}}}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
   \in \LinkPairs{\Velement{edge}{\Vlastix{chain}+1}} \\
   \because
-  \text{\Eref{d:leo-edge-30} in \Dfref{d:leo-chain}},
+  \text{\Eref{def:leo-edge-30} in \Dfref{def:leo-chain}},
   \Eref{eq:th-leo-edge-length-10}.
 \end{gathered}
 \end{equation}
@@ -4665,7 +4683,7 @@ Then
 \label{eq:th-leo-edge-length-16}
 \myparbox{edge index is monotonically increasing
 as a function of chain index $\because$
-\Eref{d:leo-edge-30} in \Dfref{d:leo-chain}.}
+\Eref{def:leo-edge-30} in \Dfref{def:leo-chain}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-edge-length-18}
@@ -4719,13 +4737,13 @@ $\because$ AF theorem, WLOG.
 \label{eq:th-leo-chain-source-properties-24}
 \myparbox{\Veim{source} is a penult
   $\because$ \Eref{eq:th-leo-chain-source-properties-22},
-  Def ``Leo unique'' \Dfref{d:leo-unique}.}
+  Def ``Leo unique'' \Dfref{def:leo-unique}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-26}
 \Current{\Veim{source}} = \Vloc{j}
   \because \Eref{eq:th-leo-chain-source-properties-22},
-  \Dfref{d:leo-unique}.
+  \Dfref{def:leo-unique}.
 \end{equation}
 The theorem follows directly from
 \Eref{eq:th-leo-chain-source-properties-24} and
@@ -4763,7 +4781,7 @@ We use $\var{ix} = 0$ as the basis of the induction:
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-12}
-\text{\Veim{base} is a completion $\because \Dfref{d:leo-chain-base-match}$.}
+\text{\Veim{base} is a completion $\because \Dfref{def:leo-chain-base-match}$.}
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-14}
@@ -4808,7 +4826,7 @@ $\because$ assumption for step of the induction.
     \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
       \in \LinkPairs{\var{edge}[\var{n}+1]} \\
     \because
-      \text{\Eref{d:leo-edge-30} of Def ``Leo edge''
+      \text{\Eref{def:leo-edge-30} of Def ``Leo edge''
       \Dfref{def:leo-edge}}.
     \end{gathered}
 \end{equation}
@@ -4820,7 +4838,7 @@ whose ancestry includes
 $\left[ \Source{\var{chain}[\var{n}]},
   \var{edge}[\var{n}] \right]_\type{LP}$
 $\because$
-\Obref{ob:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-operation-by-direct-ancestor},
 \Eref{eq:edge-elements-are-complete-20},
 \Eref{eq:edge-elements-are-complete-30}.
 }
@@ -4868,7 +4886,7 @@ $\because$
 \begin{gathered}
   \DR{\var{edge}[\var{n}+1]} = \Next{\Source{\var{chain}[\var{n}]}} \\
   \because
-  \Eref{ob:earley-completer-summary}, \Eref{eq:edge-elements-are-complete-36}.
+  \Eref{obs:earley-completer-summary}, \Eref{eq:edge-elements-are-complete-36}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4968,7 +4986,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred}, \var{lo} \right]_\type{LP}$
 $\because$
-\Obref{ob:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-operation-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-12},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -4992,7 +5010,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred2}, \var{lo} \right]_\type{LP}$
 $\because$
-\Obref{ob:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-operation-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-14},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -5004,7 +5022,7 @@ $\because$
   $\because$
   \Eref{eq:earley-completer-summary-1}
   and \Eref{eq:earley-completer-summary-2}
-  in \Obref{ob:earley-completer-summary};
+  in \Obref{obs:earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-20}.
 }
 \end{equation}
@@ -5014,7 +5032,7 @@ $\because$
   $\because$
   \Eref{eq:earley-completer-summary-1}
   and \Eref{eq:earley-completer-summary-2}
-  in \Obref{ob:earley-completer-summary};
+  in \Obref{obs:earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-22}.}
 \end{equation}
 \begin{equation}
@@ -5030,7 +5048,7 @@ $\because$
 \myparbox{$\Postdot{\var{pred}} = \LHS{\var{lo}}$
   $\because$
   \Eref{eq:earley-completer-summary-3}
-  in \Obref{ob:earley-completer-summary};
+  in \Obref{obs:earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-20}.
 }
 \end{equation}
@@ -5039,7 +5057,7 @@ $\because$
 \myparbox{$\Postdot{\Veim{pred2}} = \LHS{\var{lo}}$
   $\because$
   \Eref{eq:earley-completer-summary-3}
-  in \Obref{ob:earley-completer-summary};
+  in \Obref{obs:earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-22}.}
 \end{equation}
 \begin{equation}
@@ -5110,7 +5128,7 @@ $\because$
 \end{gathered}
 \right)
 \\
-\because \text{Def of \var{Leo-Unique} \Dfref{d:leo-unique}},
+\because \text{Def of \var{Leo-Unique} \Dfref{def:leo-unique}},
   \Eref{th:edge-descendant-uniqueness-44}.
 \end{gathered}
 \end{equation}
@@ -5131,7 +5149,7 @@ $\because$
 \myparbox{If two \Earley{} completer operations share
 a link pair, they produce the same result
 $\because$
-\Obref{ob:earley-completer-summary}.}
+\Obref{obs:earley-completer-summary}.}
 \end{equation}
 \begin{equation}
 \label{th:edge-descendant-uniqueness-54}
@@ -5299,7 +5317,7 @@ $\because$ Def of ``Leo edge'' \Dfref{def:leo-edge}.}
 \begin{gathered}
 \left[ \Source{\Velement{chain}{\Vlastix{edge}\subtract 1}}, \Velement{edge}{\Vlastix{edge}\subtract 1} \right]_\type{LP} \\
   \in \LinkPairs{\Velement{edge}{\Vlastix{edge}}} \\
-\because \text{\Eref{d:leo-edge-30} in \Dfref{def:leo-edge}}.
+\because \text{\Eref{def:leo-edge-30} in \Dfref{def:leo-edge}}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5339,7 +5357,7 @@ result of an \Earley{} completer
 operation with link pair
 $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 } \\
-\because \Obref{ob:earley-operation-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
+\because \Obref{obs:earley-operation-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
   \Eref{eq:th-leo-edge-top-14}.
 \end{gathered}
 \end{equation}
@@ -5349,7 +5367,7 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 \Velement{edge}{\Vlastix{edge}} = \\
 \left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Velement{edge}{\Vlastix{chain}}} \\
 \because
-\Obref{ob:earley-completer-summary},
+\Obref{obs:earley-completer-summary},
 \Eref{eq:th-leo-edge-top-18}.
 \end{gathered}
 \end{equation}
@@ -5375,7 +5393,7 @@ In a \Marpa{} parse,
 let \Vlimset{chain} be a valid LIM chain.
 For every element \mylim{\ell} of \var{chain},
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-5}
+\label{eq-th-LIM-chain-dr+origin-05}
 \begin{gathered}
 \text{$\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}}$ and} \\
 \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}}
@@ -5384,7 +5402,28 @@ For every element \mylim{\ell} of \var{chain},
 \end{theorem}
 
 \begin{proof}
-\TODO{prove this}
+The proof is by a reductio.
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-10}
+\begin{gathered}
+\exists \mylim{\ell} : \mylim{\ell} \in \var{chain} \\
+\lor \; \DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
+\lor \; \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}}. \\
+\because \text{AF reduction.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-12}
+\myparbox{LIM's are only added by the
+\Marpa{} \var{Memoizer} operation.
+$\because$ \Obref{obs:marpa-operation-by-result}%
+}
+\end{equation}
+\begin{equation}
+\myparbox{For the first LIM added to \var{chain}, 
+$\LIMPredecessor{\Veim{source}} = \Lambda$}
+\end{equation}
+\TODO{finish proof}
 \end{proof}
 
 \begin{theorem}
@@ -5424,7 +5463,7 @@ validity.
 
 The \Marpa{} initializer operation creates the
 same PIM's as the \Earley{} initializer operation
-\Obref{ob:earley-set-0}.
+\Obref{obs:earley-set-0}.
 The \Earley{} initializer operation preserves
 validity because the \Earley{} algorithm is
 correct
@@ -5437,11 +5476,11 @@ operation.
 The \Marpa{} scanner operation
 creates the same PIM's as the \Earley{}
 scanner operations
-\Obref{ob:earley-scanner-operation}.
+\Obref{obs:earley-scanner-operation}.
 The \Marpa{} predictor operation
 creates the same PIM's as the \Earley{}
 predictor operations
-\Obref{ob:earley-predictor-operation}.
+\Obref{obs:earley-predictor-operation}.
 These two operations preserve
 validity because the \Earley{} algorithm is
 correct
@@ -5461,7 +5500,7 @@ We have shown that the
 \Thref{th:leo-reducer-is-consistent}.
 
 From
-\Obref{ob:earley-completer-operation}
+\Obref{obs:earley-completer-operation}
 and the description of the
 \var{Earley-reducer}
 \Eref{eq:def-reducer-10},
@@ -5854,7 +5893,7 @@ unless at least one step of that derivation uses a right recursive rule.
 \subsection{The complexity results}
 
 \begin{lemma}
-\label{lm:handle-unique}
+\label{lem:handle-unique}
 Let \Vint{g} be a LR($\pi$) grammar where $\pi$ is
 a left congruence.
 Let
@@ -5924,7 +5963,7 @@ we have
 \label{eq:handle-unique-23}
 \Vterm{postA}\Vterm{suffixA} \equiv \Vterm{postA}\Vterm{suffixB} (\text{mod $\pi$}).
 \end{equation}
-\Vint{g} is LR and from \Thref{df:LR},
+\Vint{g} is LR and from \Thref{def:LR},
 \Eref{eq:handle-unique-10a},
 \Eref{eq:handle-unique-20}, and
 \Eref{eq:handle-unique-23}
@@ -5972,7 +6011,7 @@ and
 \end{proof}
 
 \begin{lemma}
-\label{lm:addendum-lemma1}
+\label{lem:addendum-lemma1}
 This theorem and its proof are adapted from Lemma 1 of \cite{Leo1991a}.
 Let
 \Vint{g}
@@ -6134,7 +6173,7 @@ Using
 \Eref{eq:left-congruence15a},
 \Eref{eq:left-congruence15b},
 \Eref{eq:left-congruence19}, and
-\Lmref{lm:handle-unique} we
+\Lmref{lem:handle-unique} we
 have
 \begin{gather}
 \label{eq:left-congruence25a}
@@ -6241,7 +6280,7 @@ and the theorem.
 \end{proof}
 
 \begin{lemma}
-\label{lm:addendum-lemma2}
+\label{lem:addendum-lemma2}
 \footnote{
 This theorem and its proof are adapted from Lemma 2 of \cite{Leo1991a}.}%
 Let
@@ -6557,39 +6596,39 @@ Since an LRR grammar is
 an LR($\pi$) grammar where
 $\pi$ is a left congruence of $\Term{\Vint{g}}^\ast$,
 we can use
-\Thref{lm:addendum-lemma1}.
+\Thref{lem:addendum-lemma1}.
 We set equivalents between the variables of this
 theorem and
-\Thref{lm:addendum-lemma1} as follows:
+\Thref{lem:addendum-lemma1} as follows:
 
 \begin{align}
 & \begin{aligned}
-& \text{\Vstr{sfA} in \Thref{lm:addendum-lemma1}} \\
+& \text{\Vstr{sfA} in \Thref{lem:addendum-lemma1}} \\
 & \qquad \qquad = \text{\Vstr{beforeA}\Vsym{lhs} in this proof}
 \end{aligned}
 \\
 & \begin{aligned}
-& \text{\Vterm{suffixA} in \Thref{lm:addendum-lemma1}} \\
+& \text{\Vterm{suffixA} in \Thref{lem:addendum-lemma1}} \\
 & \qquad \qquad = \text{\Vterm{input3A} in this proof}
 \end{aligned}
 \\
 & \begin{aligned}
-& \text{\Vstr{sfB} in \Thref{lm:addendum-lemma1}} \\
+& \text{\Vstr{sfB} in \Thref{lem:addendum-lemma1}} \\
 & \qquad \qquad = \text{\Vstr{beforeB}\Vsym{lhs} in this proof}
 \end{aligned}
 \\
 & \begin{aligned}
-& \text{\Vterm{suffixB} in \Thref{lm:addendum-lemma1}} \\
+& \text{\Vterm{suffixB} in \Thref{lem:addendum-lemma1}} \\
 & \qquad \qquad = \text{\Vterm{input3B} in this proof}
 \end{aligned}
 \\
 & \begin{aligned}
-& \text{\Vterm{prefix} in \Thref{lm:addendum-lemma1}} \\
+& \text{\Vterm{prefix} in \Thref{lem:addendum-lemma1}} \\
 & \qquad \qquad = \text{\Vterm{input1}\Vterm{input2} in this proof}
 \end{aligned}
 \end{align}
 
-\Thref{lm:addendum-lemma1} tells us that
+\Thref{lem:addendum-lemma1} tells us that
 \begin{equation}
 \label{eq:incompletion-bound-10}
 \begin{gathered}
@@ -6604,7 +6643,7 @@ From
 \Eref{eq:incompletion-bound-1},
 \Eref{eq:incompletion-bound-2},
 \Eref{eq:incompletion-bound-10}, and
-\Thref{lm:addendum-lemma2},
+\Thref{lem:addendum-lemma2},
 we have
 \begin{equation}
 \label{eq:incompletion-bound-15}
@@ -6996,7 +7035,7 @@ And with them,
 the complexity results for \Marpa{} stand.
 
 \section{Acknowledgments}
-\label{p:Acknowledgments}
+\label{sec:Acknowledgments}
 
 Ruslan Shvedov
 and
