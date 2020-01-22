@@ -664,7 +664,7 @@ as shown in
 \begin{tabular}{ll}
 \hline
 $\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
-$\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
+$\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate of \type{T}'' \\
 \type{SYM} & The type for a symbol \\
 \type{STR} & The type for a string \\
 \type{EIM} & The type for an Earley item \\
@@ -675,14 +675,27 @@ $\var{set-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \typ
 \Vstr{a} & A variable \var{a} of type \type{STR}, angle bracket form \\
 \Veim{a} & A variable \var{a} of type \type{EIM} \\
 \Vrule{a} & A variable \var{a} of type \type{RULE} \\
-\Vsymset{set-two} & The variable \var{set-two}, a set of strings \\
-\Vstrset{strings} & The variable \var{strings}, a set of strings \\
-\Veimset{set-three} & The variable \var{set-three}, a set of Earley items \\
-\Vruleset{set-four} & The variable \var{set-four}, a set of grammar rules \\
+\Vsymset{agg-two} & The variable \var{agg-two}, an aggreggate  of strings \\
+\Vstrset{strings} & The variable \var{strings}, an aggreggate of strings \\
+\Veimset{agg-three} & The variable \var{agg-three}, an aggregate of Earley items \\
+\Vruleset{agg-four} & The variable \var{agg-four}, an aggregate of grammar rules \\
 \hline
 \end{tabular}
 \label{tab:type-notation}
 \end{table}
+
+The type system of this paper is opportunistic,
+and intended to aid the reader.
+It is emphatically not intended as a contribution to
+the theory of types.
+
+An ``aggregate'' may be a set, a multiset, an indexable sequence, etc.
+Its precise semantics will be specified
+when it is defined.
+For all aggregates,
+the notation $\var{element} \in \var{aggregate}$
+means "\var{element} is contained in \var{aggregate}".
+
 Subscripts may be omitted when the type
 is obvious from the context.
 Symbols and strings
@@ -691,6 +704,8 @@ which uses angle brackets.
 Type names are often used in the text
 as a convenient way to refer to
 their type.
+
+Aggregates
 
 Multi-character variable names will be common.
 When the angle bracket notation is used,
@@ -4546,6 +4561,12 @@ and, for all $0 \le \var{n} < \Vlastix{links}$,
 We say that \var{links} is the chain of \Vlim{first} if and
 only if \var{links} is a Leo chain
 such that $\var{links}[0] = \Vlim{first}$.
+
+A chain is \dfn{maximal} if and only if it is not properly
+contained in another chain.
+A chain is \dfn{partial} if it is contained in another chain.
+Note that a maximal chain is a special case of a partial chain.
+Chains are maximal unless stated otherwise.
 $\bigstar$
 \end{definition}
 
@@ -4647,13 +4668,17 @@ An \dfn{inside element} of an edge is a element of the
 inside of the edge.
 An \dfn{upper element} of an edge is a top or an inside element.
 An \dfn{lower element} of an edge is a bottom or an inside element.
+
+An edge is \dfn{maximal} if its Leo chain is maximal.
+An edge is \dfn{partial} if its Leo chain is partial.
+An edge is maximal, unless stated otherwise.
 $\bigstar$
 \end{definition}
 
 \begin{theorem}[Leo edge length]
 \label{th:leo-edge-length}
 Let \Vint{g} be a grammar;
-let \Vlimset{chain} be a valid Leo chain;
+let \Vlimset{chain} be a valid partial Leo chain;
 let $\Veim{base} \in \Ves{current}$ be a valid EIM which
 matches \var{chain};
 and let \Veimset{edge} be their edge.
@@ -5390,7 +5415,7 @@ $\because$ \Eref{eq:th-leo-edge-top-10}, \Eref{eq:th-leo-edge-top-22}.}
 \begin{theorem}[LIM chain dotted rule and origin]
 \label{th:LIM-chain-dr+origin}
 In a \Marpa{} parse,
-let \Vlimset{chain} be a valid LIM chain.
+let \Vlimset{chain} be a valid partial LIM chain.
 For every element \mylim{\ell} of \var{chain},
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-05}
@@ -5409,7 +5434,7 @@ The proof is by a reductio.
 \exists \mylim{\ell}, \mylim{\ell} \in \var{chain} : \\
 \DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
 \lor \; \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
-\because \text{AF reduction.}
+\because \text{AF reductio.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5417,6 +5442,25 @@ The proof is by a reductio.
 \myparbox{LIM's are only added by the
 \Marpa{} \var{Memoizer} operation
 $\because$ \Obref{obs:marpa-operation-by-result}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-14}
+\myparbox{LIM's are added by either the
+\var{Start-Leo-Chain} or
+\var{Extend-Leo-Chain} sub-operation
+$\because$
+\Eref{eq-th-LIM-chain-dr+origin-12},
+\Eref{eq:memoizer-operation-20},
+\Eref{eq:memoizer-operation-30}.%
+}
+\end{equation}
+We now proceed by subcase, starting with
+\var{Start-Leo-Chain}.
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-16}
+\myparbox{\mylim{\ell} was added by a
+\var{Start-Leo-Chain} sub-operation.%
 }
 \end{equation}
 \TODO{finish proof}
