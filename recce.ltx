@@ -4646,7 +4646,34 @@ Then
 \end{theorem}
 
 \begin{proof}
-\TODO{prove this}
+\begin{equation}
+\label{eq:th-leo-edge-length-10}
+\Vsize{chain} > 0 \because
+\text{Def of ``Leo chain'' \Dfref{d:leo-chain}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-length-14}
+\begin{gathered}
+\left[ \Source{\Velement{chain}{\Vlastix{chain}}}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
+  \in \LinkPairs{\Velement{edge}{\Vlastix{chain}+1}} \\
+  \because
+  \text{\Eref{d:leo-edge-30} in \Dfref{d:leo-chain}},
+  \Eref{eq:th-leo-edge-length-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-length-16}
+\myparbox{edge index is monotonically increasing
+as a function of chain index $\because$
+\Eref{d:leo-edge-30} in \Dfref{d:leo-chain}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-length-18}
+\Vlastix{edge} = \Vlastix{chain} + 1
+\because
+\Eref{eq:th-leo-edge-length-14},
+\Eref{eq:th-leo-edge-length-16}. \quad \qedhere
+\end{equation}
 \end{proof}
 
 \begin{theorem}[Leo chain source properties]
@@ -5261,7 +5288,85 @@ Then the top of their edge is
 \end{theorem}
 
 \begin{proof}
-\TODO{prove this}
+\begin{equation}
+\label{eq:th-leo-edge-top-10}
+\myparbox{\Velement{edge}{\Vlastix{edge}} is the top of the edge
+$\because$ Def of ``Leo edge'' \Dfref{def:leo-edge}.}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-edge-top-12}
+\begin{gathered}
+\left[ \Source{\Velement{chain}{\Vlastix{edge}\subtract 1}}, \Velement{edge}{\Vlastix{edge}\subtract 1} \right]_\type{LP} \\
+  \in \LinkPairs{\Velement{edge}{\Vlastix{edge}}} \\
+\because \text{\Eref{d:leo-edge-30} in \Dfref{def:leo-edge}}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-13-1}
+\begin{gathered}
+\left[ \Source{\Velement{chain}{\Vlastix{chain}}}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
+  \in \LinkPairs{\Velement{edge}{\Vlastix{edge}}} \\
+\because \Thref{th:leo-edge-length}, \Eref{eq:th-leo-edge-top-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-13-2}
+\begin{gathered}
+\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
+  \in \LinkPairs{\Velement{edge}{\Vlastix{edge}}} \\
+\because \Eref{eq:th-leo-edge-top-05}, \Eref{eq:th-leo-edge-top-13-1}.
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-edge-top-14}
+\myparbox{\Velement{edge}{\Vlastix{chain}} is a completion
+$\because$ \Thref{th:edge-elements-are-complete}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-16}
+\begin{gathered}
+\Current{\Velement{edge}{\Vlastix{chain}}} = \Current{\var{base}} \\
+\because \Thref{th:edge-elements-are-complete}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-18}
+\begin{gathered}
+\myparbox{\Velement{edge}{\Vlastix{edge}} is the
+result of an \Earley{} completer
+operation with link pair
+$\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
+} \\
+\because \Obref{ob:earley-operation-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
+  \Eref{eq:th-leo-edge-top-14}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-20}
+\begin{gathered}
+\Velement{edge}{\Vlastix{edge}} = \\
+\left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Velement{edge}{\Vlastix{chain}}} \\
+\because
+\Obref{ob:earley-completer-summary},
+\Eref{eq:th-leo-edge-top-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-22}
+\begin{gathered}
+\Velement{edge}{\Vlastix{edge}} = \\
+\left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Veim{base}} \\
+\because \Eref{eq:th-leo-edge-top-16}, \Eref{eq:th-leo-edge-top-20}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-edge-top-24}
+\myparbox{The top of \Veimset{edge} is
+$\left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Veim{base}}$ \\
+$\because$ \Eref{eq:th-leo-edge-top-10}, \Eref{eq:th-leo-edge-top-22}.}
+\end{equation}
 \end{proof}
 
 \begin{theorem}[LIM chain dotted rule and origin]
