@@ -70,6 +70,7 @@
 \newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
+\newcommand{\longDfref}[2]{Def of ``#1'' \Dfref{#2}}
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
@@ -728,13 +729,19 @@ Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
 
 Where \var{set} is a set,
 \Vsize{set} is the size of the set.
-Where \var{seq} is a sequence (ordered set),
+Where \var{seq} is a sequence,
 the first element of \var{seq} is \Velement{seq}{0},
-the last element is \Velement{seq}{\Vlastix{seq}},
-and the \var{i}'th element of \var{seq}
-is \VVelement{seq}{i},
-for $0 \le \var{i} \le \Vlastix{seq}$.
-Note that these definitions imply that $\Vlastix{seq} = \Vsize{seq}\subtract 1$.
+and the last element is \Velement{seq}{\Vlastix{seq}}.
+Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtract 1$.
+\begin{equation*}
+\VVelement{seq}{i} =
+\begin{cases}
+\text{the \var{i}'th element of \var{seq},
+if $0 \le \var{i} \le \Vlastix{seq}$,} \\
+\text{$\Lambda$, if $\var{i} < 0$,} \\
+\text{$\Lambda$, if $\var{i} > \Vlastix{seq}$.}
+\end{cases}
+\end{equation*}
 
 We will write
 $\var{s}[\var{a} \ldots \var{z}]$
@@ -745,12 +752,16 @@ for the subsequence
     \ldots \;\;
     \var{s}[\var{z}].
 \]
-As a special case, if
-$\var{j} < \var{i}$ then
+We require that $0 \le \var{a} \le \var{z} \le \Vlastix{seq}$,
+except in one special case.
+If
+$\var{z} < \var{a}$ then
+the values of \var{i} and \var{j} may be negative,
+and $\var{s}[\var{a} \ldots \var{z}]$
+is the empty sequence, which we may write as $\epsilon$:
 \[
-\var{s}[\var{i} \ldots \var{j}] = \epsilon
+\var{z} < \var{a} \implies \var{s}[\var{a} \ldots \var{z}] = \epsilon.
 \]
-In this case, the values of \var{i} and \var{j} may be negative.
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -807,16 +818,10 @@ When it is convenient,
 we will treat strings of length 1 as symbols,
 and symbols as strings of length 1.
 
-$\Lambda$, when used as a value,
-compares unequal to any integer or tuple.
-$\Lambda$ is often used as a special, reserved, value,
-to indicate ``non-standard''.\footnote{
-Often similar values are called ``undefined'' values,
-but the author considers this confusing in the extreme.
-This is taken to an extreme in programming languages.
-Haskell's ``undefined'' is, for example,
-as well-defined as any concept in mathematics.
-}
+$\Lambda$ is often used as a special ``null'' value.
+When used in a comparison,
+$\Lambda$ compares equal to itself
+and unequal to any integer or tuple.
 
 Explicit ``Definition'' sections and boldface are reserved
 for definitions that are of significance throughout
@@ -4587,7 +4592,102 @@ where \var{chain} is the LIM chain of $\ell$,
 \end{gather}
 We say that a Leo chain is \dfn{valid} if and only if
 all the links of the chain are valid.
+$\bigstar$
 \end{definition}
+
+\begin{theorem}[LEO Chain containment]
+\label{th:chain-containment}
+Let
+\begin{gather}
+\label{eq:th-chain-containment-01}
+\myparbox{\Vlimset{longer} be a valid Leo chain,} \\
+\label{eq:th-chain-containment-02}
+\myparbox{$\mylim{\ell} \in \var{longer}$ be a LIM,} \\
+\label{eq:th-chain-containment-03}
+\myparbox{\var{shorter} be the valid Leo chain of \mylim{\ell}.}
+\end{gather}
+Then
+\begin{gather}
+\label{eq:th-chain-containment-07}
+\text{$\forall \; \mylim{\ell{}2} \in \var{shorter} : \ell{}2 \in \var{longer}$ and} \\
+\label{eq:th-chain-containment-08}
+\Velement{shorter}{\Vlastix{shorter}} = \Velement{longer}{\Vlastix{longer}}
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+Let \Vlimset{longer}, \mylim{\ell},
+and \var{shorter} be as stated for the theorem.
+We show \Eref{eq:th-chain-containment-07} by induction on element index
+of \var{shorter}.
+\begin{equation}
+\label{eq:th-chain-containment-10}
+\myparbox{$\VVelement{shorter}{ix} \in \var{longer}$
+  $\because$ hypothesis for induction.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-12}
+\myparbox{$\Velement{shorter}{0} \in \var{longer}$
+  $\because$
+  \Dfref{def:leo-chain}, \Eref{eq:th-chain-containment-03}.
+  This is the basis of an induction on
+  hypothesis \Eref{eq:th-chain-containment-10}, with $\var{ix} = 0$.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-14}
+\myparbox{$\VVelement{shorter}{n} \in \var{longer}$
+  $\because$ AF step of induction on
+  \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}$.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-16}
+\myparbox{$\exists \; \var{m} : \VVelement{shorter}{n} = \VVelement{longer}{m}$
+  $\because$ \Eref{eq:th-chain-containment-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-18}
+\myparbox{$\PreviousLink{\VVelement{shorter}{n}} = \Velement{shorter}{\var{n}+1}$
+  $\because$ \longDfref{Leo chain}{def:leo-chain}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-20}
+\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{shorter}{\var{n}+1}$
+  $\because$
+  \Eref{eq:th-chain-containment-16},
+  \Eref{eq:th-chain-containment-18}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-22}
+\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{longer}{\var{m}+1}$
+  $\because$ \longDfref{Leo chain}{def:leo-chain}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-24}
+\myparbox{$\PreviousLink{\VVelement{shorter}{\var{n}+1}} = \Velement{longer}{\var{m}+1}$
+  $\because$
+  \Eref{eq:th-chain-containment-20},
+  \Eref{eq:th-chain-containment-22}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-26}
+\myparbox{$\PreviousLink{\VVelement{shorter}{\var{n}+1}} \in \var{longer}$
+  $\because$
+  \Eref{eq:th-chain-containment-24}.
+  This is \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}+1$
+  and shows the step starting at \Eref{eq:th-chain-containment-14}.
+}
+\end{equation}
+
+\TODO{prove this}
+\end{proof}
 
 \begin{theorem}[Memoizer consistency]
 \label{th:memoizer-consistency}
@@ -5455,11 +5555,36 @@ $\because$
 \Eref{eq:memoizer-operation-30}.%
 }
 \end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-15-20}
+\myparbox{Of the LIM's added which
+satisfy
+\Eref{eq-th-LIM-chain-dr+origin-10}
+one, call it \Vlim{first} is added first
+$\because$
+\Eref{eq-th-LIM-chain-dr+origin-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-15-25}
+\myparbox{\Vlim{first} = \Velement{partial}{0},
+where \Vlimset{partial} is the partial Leo chain
+of \Vlim{first}
+$\because$
+\Dfref{def:leo-chain},
+\Eref{eq:memoizer-operation-20},
+\Eref{eq:memoizer-operation-30}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-15-30}
+\Velement{partial}{0} = \Vlim{first}
+\end{equation}
 We now proceed by subcase, starting with
 \var{Start-Leo-Chain}.
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-16}
-\myparbox{\mylim{\ell} was added by a
+\myparbox{\Vlim{first} was added by a
 \var{Start-Leo-Chain} sub-operation
 $\because$ AF subcase.%
 }
@@ -5473,7 +5598,7 @@ $\because$ AF subcase.%
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-20}
-\PreviousLink{\mylim{\ell}} = \Lambda
+\PreviousLink{\Vlim{first}} = \Lambda
 \because
 \Eref{eq:memoizer-operation-20},
 \Obref{obs:memoizer-ancestry},
@@ -5481,10 +5606,23 @@ $\because$ AF subcase.%
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-22}
-\Velement{chain}{\Vlastix{chain}} = \mylim{\ell}
+\Vsize{partial} = 1
 \because
 \text{Def of ``Leo chain'' \Dfref{def:leo-chain}},
 \Eref{eq-th-LIM-chain-dr+origin-20}.
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-24}
+\Vlastix{partial} = 0 \because
+\Eref{eq-th-LIM-chain-dr+origin-22}.
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-26}
+  \begin{gathered}
+    \DR{\Vlim{first}} = \DR{\Source{\Velement{partial}{0}}} \\
+    \land \; \Origin{\Vlim{first}} = \Origin{\Source{\Velement{partial}{0}}} \\
+    \because \Eref{eq:memoizer-operation-20}.
+  \end{gathered}
 \end{equation}
 \TODO{finish proof}
 \end{proof}
