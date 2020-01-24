@@ -4610,55 +4610,87 @@ Let
 Then
 \begin{gather}
 \label{eq:th-chain-containment-07}
-\text{$\forall \; \mylim{\ell{}2} \in \var{shorter} : \ell{}2 \in \var{longer}$ and} \\
-\label{eq:th-chain-containment-08}
-\Velement{shorter}{\Vlastix{shorter}} = \Velement{longer}{\Vlastix{longer}}
+\forall \; \mylim{\ell{}2} \in \var{shorter} : \ell{}2 \in \var{longer}
 \end{gather}
 \end{theorem}
 
 \begin{proof}
 Let \Vlimset{longer}, \mylim{\ell},
-and \var{shorter} be as stated for the theorem.
+and \Vlimset{shorter} be as stated for the theorem.
+
 We show \Eref{eq:th-chain-containment-07} by induction on element index
 of \var{shorter}.
 \begin{equation}
 \label{eq:th-chain-containment-10}
-\myparbox{$\VVelement{shorter}{ix} \in \var{longer}$
-  $\because$ hypothesis for induction.%
-}
+\begin{gathered}
+0 \le \var{ix} \le \Vlastix{shorter} \implies \VVelement{shorter}{ix} \in \var{longer} \\
+\text{$\because$ hypothesis for induction.}
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-12}
 \myparbox{$\Velement{shorter}{0} \in \var{longer}$
   $\because$
-  \Dfref{def:leo-chain}, \Eref{eq:th-chain-containment-03}.
-  This is the basis of an induction on
-  hypothesis \Eref{eq:th-chain-containment-10}, with $\var{ix} = 0$.%
+  \Dfref{def:leo-chain}, \Eref{eq:th-chain-containment-03}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-chain-containment-14}
-\myparbox{$\VVelement{shorter}{n} \in \var{longer}$
-  $\because$ AF step of induction on
-  \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}$.%
+\label{eq:th-chain-containment-13}
+\begin{gathered}
+0 \le 0 \le \Vlastix{shorter} \implies \Velement{shorter}{0} \in \var{longer} \\
+\myparbox{$\because$ \Eref{eq:th-chain-containment-12}.
+  This is the basis of an induction on
+  hypothesis \Eref{eq:th-chain-containment-10}, with $\var{ix} = 0$.%
 }
+\end{gathered}
+\end{equation}
+For the step of the induction
+we assume
+\begin{equation}
+\label{eq:th-chain-containment-14}
+\begin{gathered}
+0 \le \var{n} \le \Vlastix{shorter} \implies \VVelement{shorter}{n} \in \var{longer} \\
+\myparbox{$\because$ \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}$.%
+}
+\end{gathered}
+\end{equation}
+to show
+\begin{equation}
+\label{eq:th-chain-containment-14-10}
+\begin{gathered}
+0 \le \var{n}+1 \le \Vlastix{shorter} \implies \Velement{shorter}{\var{n}+1} \in \var{longer} \\
+\myparbox{$\because$ \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}+1$.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-chain-containment-15}
+\begin{gathered}
+0 \le \var{n} < \Vlastix{shorter} \\
+\myparbox{$\because$ AF subcase.
+Otherwise, we have \Eref{eq:th-chain-containment-14-10} vacuously.}
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-16}
 \myparbox{$\exists \; \var{m} : \VVelement{shorter}{n} = \VVelement{longer}{m}$
-  $\because$ \Eref{eq:th-chain-containment-14}.%
+  $\because$
+  \Eref{eq:th-chain-containment-14},
+  \Eref{eq:th-chain-containment-15}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-18}
 \myparbox{$\PreviousLink{\VVelement{shorter}{n}} = \Velement{shorter}{\var{n}+1}$
-  $\because$ \longDfref{Leo chain}{def:leo-chain}.%
+  $\because$ \longDfref{Leo chain}{def:leo-chain},
+  \Eref{eq:th-chain-containment-15}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-20}
 \myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{shorter}{\var{n}+1}$
   $\because$
+  \Eref{eq:th-chain-containment-15},
   \Eref{eq:th-chain-containment-16},
   \Eref{eq:th-chain-containment-18}.%
 }
@@ -4666,12 +4698,13 @@ of \var{shorter}.
 \begin{equation}
 \label{eq:th-chain-containment-22}
 \myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{longer}{\var{m}+1}$
-  $\because$ \longDfref{Leo chain}{def:leo-chain}.%
+  $\because$ \longDfref{Leo chain}{def:leo-chain},
+  \Eref{eq:th-chain-containment-15}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-24}
-\myparbox{$\PreviousLink{\VVelement{shorter}{\var{n}+1}} = \Velement{longer}{\var{m}+1}$
+\myparbox{$\VVelement{shorter}{\var{n}+1} = \Velement{longer}{\var{m}+1}$
   $\because$
   \Eref{eq:th-chain-containment-20},
   \Eref{eq:th-chain-containment-22}.
@@ -4679,16 +4712,38 @@ of \var{shorter}.
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-26}
-\myparbox{$\PreviousLink{\VVelement{shorter}{\var{n}+1}} \in \var{longer}$
-  $\because$
-  \Eref{eq:th-chain-containment-24}.
+\begin{gathered}
+0 \le \var{n}+1 \le \Vlastix{shorter} \implies \Velement{shorter}{\var{n}+1} \in \var{longer} \\
+\myparbox{$\because$ \Eref{eq:th-chain-containment-24}.
   This is \Eref{eq:th-chain-containment-10} with $\var{ix} = \var{n}+1$
   and shows the step starting at \Eref{eq:th-chain-containment-14}.
 }
+\end{gathered}
 \end{equation}
-
-\TODO{prove this}
+\begin{equation}
+\label{eq:th-chain-containment-28}
+\begin{gathered}
+\forall \; \mylim{\ell{}2} \in \var{shorter} : \ell{}2 \in \var{longer} \\
+\text{$\because$ induction \Eref{eq:th-chain-containment-10}--\Eref{eq:th-chain-containment-26}.}
+\end{gathered}
+\end{equation}
 \end{proof}
+
+\begin{theorem}[LEO Chain termination]
+\label{th:chain-termination}
+Let
+\begin{gather}
+\label{eq:th-chain-termination-01}
+\myparbox{\Vlimset{longer} be a valid Leo chain,} \\
+\label{eq:th-chain-termination-03}
+\myparbox{\var{shorter} be the valid Leo chain contained in \var{longer}.}
+\end{gather}
+Then
+\begin{gather}
+\label{eq:th-chain-termination-08}
+\Velement{shorter}{\Vlastix{shorter}} = \Velement{longer}{\Vlastix{longer}}
+\end{gather}
+\end{theorem}
 
 \begin{theorem}[Memoizer consistency]
 \label{th:memoizer-consistency}
