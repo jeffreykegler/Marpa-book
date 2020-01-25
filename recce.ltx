@@ -2386,13 +2386,9 @@ if and only if
 \end{equation*}
 \end{definition}
 
-The following definitions will be useful in dealing with Earley items:
+The following definition will be useful for dealing with ``matching'' EIM's.
 \begin{equation*}
-\Symbol{\Veim{eim}} \defined
-  \begin{cases}
-  \text{\LHS{\var{eim}} if \var{eim} is a completion,} \\
-  \text{$\Lambda$, otherwise.}
-  \end{cases}
+\Symbol{\Veim{eim}} \defined \LHS{\var{eim}}
 \end{equation*}
 
 \begin{definition}[Matching]
@@ -2471,9 +2467,17 @@ This is because all EIM's for a right
 recursion are created at every parse location
 where the right recursion might end.
 
+Summarizing Leo's method,
+it consists of
+memoizing penults.
+Leo restricts the memoization to situations where
+the penult is unambiguous.
+Every right recursion involves a penult,
+so that Leo's method memoizes right recursions.
+
 % TODO: Define LR(k) here?
 % TODO: Move this to earlier definitions?
-In \cite{Leo1991}, Joop Leo
+In \cite{Leo1991}, Leo
 showed that,
 with his modification, \Earley{}
 is \On{} for all LR-regular grammars.
@@ -2490,27 +2494,18 @@ the weaker
 bound in
 his title.
 
-\subsection{Leo items}
-\label{sec:LIMs}
+\begin{definition}[Leo items]
+\label{def:LIMs}
 
-Summarizing Leo's method,
-it consists of spotting potential right recursions
-and memoizing them.
-Leo restricts the memoization to situations where
-the right recursion is unambiguous.
-Potential right recursions are memoized by
-Earley set, using what Leo called
-``transitive items''.
+In \cite{Leo1991}, penults were memoized
+using what Leo called ``transitive items''.
 In this paper Leo's ``transitive items''
-will be called Leo items.
-Leo items
-will have type \type{LIM}.
+will be called \dfn{Leo items}.
+Leo items will have type \type{LIM}.
 Recall that every parse item (\type{PIM})
 is either
 an Earley item or a Leo item.
 
-In each Earley set, there is at most one Leo item
-for each transition symbol.
 A Leo item (LIM) is a triple.
 Let
 \begin{equation*}
@@ -2524,6 +2519,9 @@ and
 \end{equation*}
 is the Earley item to be unioned as a result of a operation
 using the LIM.
+$\bigstar$
+\end{definition}
+
 To say that \Vlim{x}
 is at \Ves{j}, we may write
 \begin{gather*}
@@ -2543,23 +2541,35 @@ and, for arbitrary $\Vlim{x}@\Vloc{j}$,
 \Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
 \]
 
-Leo items memoize what would otherwise be sequences
-of Earley items.
-Leo items only memoize unambiguous (or
-deterministic) sequences,
-so that the top of the sequence can represent
-the entire sequence --
-the only role the other EIM's in the sequence
-play in the parse is to derive the top EIM.
-We will call these memoized sequences, Leo sequences.
+\begin{definition}[Leo item source]
+\label{def:leo-item-source}
+Leo items ``stand in'' for an EIM source.
+Let \mylim{\ell} be a Leo item.
+The \dfn{source} of \mylim{\ell},
+is
+\begin{equation}
+\begin{aligned}
+& \Source{\mylim{\ell}} \defined \\
+& \qquad \qquad \left\lbrace
+   \begin{gathered}
+   \Veim{source}: \\
+   \Transition{\ell} = \Postdot{\var{source}} \\
+   \land \; \Current{\ell} = \Current{\var{source}}.
+   \end{gathered}
+  \right\rbrace \quad \bigstar
+\end{aligned}
+\end{equation}
+\end{definition}
 
-\subsection{Leo uniqueness}
-\label{sec:leo-uniqueness}
+The source of a LIM is unique,
+and in each Earley set, there is at most one Leo item
+for each transition symbol.
+To guarantee this,
+\cite{Leo1991} and \Marpa{} enforce ``Leo uniqueness''.
 
-To quarantee that a Leo sequence is deterministic,
-\Leo{} enforced \dfn{Leo uniqueness}.
 \begin{definition}[Leo unique]
 \label{def:leo-unique}
+
 An EIM \Veim{uniq}
 is \dfn{Leo unique} in \Ves{j}
 if and only if
@@ -2567,54 +2577,50 @@ if and only if
 \Veim{uniq} \in \LeoUnique{\Ves{j}},
 \]
 where
-\LeoUnique{\Vloc{j}} is defined as the set of \Veim{uniq}
-such that
-\begin{itemize}
-\item $\Penult{\var{uniq}} \neq \Lambda$,
-\item $\Current{\var{uniq}} = \Vloc{j}$, and
-\item
-for all \Veim{x},
-\begin{gather*}
-\left(
-  \begin{gathered}
-  \Current{\var{uniq}} = \Current{\var{x}} \\
-  \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
-  \end{gathered}
-\right)
-\\
-\implies \var{uniq} = \var{x}.
-\end{gather*}
-\end{itemize}
+\begin{align*}
+& \LeoUnique{\Vloc{j}} \defined \\
+& \qquad \qquad
+  \left\lbrace
+    \begin{gathered}
+      \Penult{\var{uniq}} \neq \Lambda \; \land \; \Current{\var{uniq}} = \Vloc{j} \\
+	\land \; \forall \Veim{x} \;
+	\left(
+	  \begin{gathered}
+	  \left(
+	    \begin{gathered}
+	    \Current{\var{uniq}} = \Current{\var{x}} \\
+	    \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
+	    \end{gathered}
+	  \right) \\
+	  \implies \var{uniq} = \var{x}.
+	  \end{gathered}
+	\right)
+    \end{gathered}
+  \right\rbrace
+\end{align*}
 Note that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{j},
 even those which are not penults.
 $\bigstar$
 \end{definition}
 
-\subsection{LIM predecessor}
-\label{sec:lim-predecessor}
-
+\begin{definition}[LIM predecessor]
+\label{def:lim-predecessor}
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
 for LIMs.
-We say that \Vlim{predecessor}
-is the \dfn{LIM predecessor} of \Veim{successor},
-\begin{equation*}
-\Vlim{predecessor} = \LIMPredecessor{\Veim{successor}},
-\end{equation*}
+We say that \Vlim{pred}
+is the \dfn{LIM predecessor} of \Veim{succ}
 if and only if
-\begin{equation*}
-\begin{gathered}
-\Transition{\Vlim{predecessor}} = \Predot{\Veim{successor}} \\
-\land \; \Current{\Vlim{predecessor}} = \Origin{\Veim{successor}}.
-\end{gathered}
-\end{equation*}
-If there is no
-\Predot{\Veim{successor}},
-that is, if
-$\Predot{\Veim{successor}} = \Lambda$,
-then there is no LIM predecessor,
-$\LIMPredecessor{\Veim{successor}} = \Lambda$.
+\[
+\Vlim{pred} = \LIMPredecessor{\var{succ}}
+\]
+where
+\[
+\Matches{\Source{\LIMPredecessor{\var{succ}}}, \var{succ}}.
+\quad \bigstar
+\]
+\end{definition}
 
 \section{Ancestry}
 \label{sec:ancestry}
