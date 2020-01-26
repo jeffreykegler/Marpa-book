@@ -2585,7 +2585,6 @@ even those which are not penults.
 $\bigstar$
 \end{definition}
 
-\TODO{Do I need to prove that \var{LIM-Predecessor} is a function?}
 \begin{definition}[LIM predecessor]
 \label{def:lim-predecessor}
 Tracking the Leo chains requires that there
@@ -2598,14 +2597,15 @@ $\Vlim{pred} = \LIMPredecessor{\var{succ}}$ where
 \begin{equation*}
 \begin{aligned}
 & \LIMPredecessor{\var{succ}} \defined \\
-& \qquad \begin{cases}
-  \Vlim{x}, \text{ if } \Matches{\Source{\var{x}}, \var{succ}}, \\[1ex]
-  \Lambda, \text{ if } \neg \exists \Vlim{x} :
-    \Matches{\Source{\var{x}}, \var{succ}}.
-\end{cases}
+& \qquad \left\lbrace
+  \Vlim{x} : \Matches{\Source{\var{x}}, \var{succ}}.
+  \right\rbrace
     \quad \bigstar
 \end{aligned}
 \end{equation*}
+In \Marpa{},
+the \var{LIM-Processor} set is a singleton,
+but we have yet to prove this.
 \end{definition}
 
 \begin{definition}[LIM matching]
@@ -3106,7 +3106,7 @@ Let
 \right]_\type{LIM} @ \Ves{i}
 : \\
 \Veim{source} \in \LeoEligible{\Ves{i}} \\
-\land \; \LIMPredecessor{\Veim{source}} = \Lambda
+\land \; \LIMPredecessor{\Veim{source}} = \emptyset
 \end{gathered}
 \;\; \right\rbrace,
 \end{align}
@@ -3125,7 +3125,7 @@ and
 \right]_\type{LIM} @ \Ves{i}
 : \\
 \Veim{source} \in \LeoEligible{\Ves{i}} \\
-\land \; \Vlim{pred} = \LIMPredecessor{\Veim{source}}
+\land \; \Vlim{pred} \in \LIMPredecessor{\Veim{source}}
 \end{gathered}
 \;\; \right\rbrace .
 \end{align}
@@ -3161,8 +3161,9 @@ We may write the previous link of \mylim{\ell} as
 \[
 \PreviousLink{\Vlim{$\ell$}} \defined \LIMPredecessor{\Source{\mylim{\ell}}}
 \]
-Because every LIM has exactly one link pair,
-\var{PreviousLink} and \var{Source} are functions.
+In \Marpa{},
+\var{PreviousLink} and \var{Source} are both singleton sets,
+but we have yet to prove this.
 
 The source of the link pair of a LIM is the EIM which that LIM,
 in a intuitive sense, ``replaces''.
@@ -5673,7 +5674,7 @@ $\because$ AF subcase.%
 \TODO{rework proof from here.  Look at use of \var{LIMPredecessor}}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-18}
-\LIMPredecessor{\Veim{source}} = \Lambda
+\LIMPredecessor{\Veim{source}} = \emptyset
 \because
 \Eref{eq:memoizer-operation-20},
 \Eref{eq-th-LIM-chain-dr+origin-16}.
