@@ -2595,17 +2595,19 @@ is the \dfn{LIM predecessor} of \Veim{succ}
 if and only if
 $\Vlim{pred} = \LIMPredecessor{\var{succ}}$ where
 \begin{equation*}
-\begin{aligned}
-& \LIMPredecessor{\var{succ}} \defined \\
-& \qquad \left\lbrace
-  \Vlim{x} : \Matches{\Source{\var{x}}, \var{succ}}.
-  \right\rbrace
-    \quad \bigstar
-\end{aligned}
+  \begin{aligned}
+  & \LIMPredecessor{\var{succ}} \defined \\
+  & \qquad \qquad \left\lbrace
+      \begin{gathered}
+      \Vlim{x} : \Matches{ \var{source},\var{succ}} \\
+      \land \; \Source{\var{x}} = \set{\Veim{source}}
+      \end{gathered}
+    \right\rbrace{}.
+  \end{aligned}
 \end{equation*}
 In \Marpa{},
 the \var{LIM-Processor} set is a singleton,
-but we have yet to prove this.
+but we have yet to prove this. $\bigstar$
 \end{definition}
 
 \begin{definition}[LIM matching]
@@ -3143,14 +3145,18 @@ Then
 \label{obs:memoizer-ancestry}
 The \Marpa{} implementation tracks the link pairs
 for the LIM's.
-LIMs memoize Leo chains,
-which are deterministic, so that
-a LIM, call it \mylim{\ell},
-always has exactly one link pair:
-\begin{equation}
+\begin{align}
 \label{eq:memoizer-link-pair}
-\left[ \LIMPredecessor{\Source{\mylim{\ell}}}, \Source{\mylim{\ell}} \right].
-\end{equation}
+& \LinkPairs{\mylim{\ell}} =
+\\ \nonumber
+& \qquad \left\lbrace
+  \begin{gathered}
+\left[ \var{pred}, \Veim{source} \right] : \\
+\Veim{source} \in \Source{\mylim{\ell}} \\
+\land \; \var{pred} \in \LIMPredecessor{\Veim{source}}
+  \end{gathered}
+\right\rbrace
+\end{align}
 
 In the link pair for a LIM, call it \Vlim{$\ell$},
 the ``cause''
@@ -3159,19 +3165,30 @@ and the ``predecessor'' is
 and is more often called the \dfn{previous link} of the LIM.
 We may write the previous link of \mylim{\ell} as
 \[
-\PreviousLink{\Vlim{$\ell$}} \defined \LIMPredecessor{\Source{\mylim{\ell}}}
+  \begin{aligned}
+  & \PreviousLink{\Vlim{$\ell$}} \defined
+  \\ \nonumber
+  & \qquad
+    \left\lbrace
+      \LIMPredecessor{\var{source}} :
+      \Veim{source} \in \Source{\mylim{\ell}}
+    \right\rbrace \quad \bigstar
+  \end{aligned}
 \]
-In \Marpa{},
-\var{PreviousLink} and \var{Source} are both singleton sets,
-but we have yet to prove this.
-
-The source of the link pair of a LIM is the EIM which that LIM,
-in a intuitive sense, ``replaces''.
-The source EIM will always be a penult in the same Earley set as the LIM.
-The previous link of the link pair of a LIM is either
-$\Lambda$ or another LIM.
-$\bigstar$
 \end{observation}
+
+In \Marpa{},
+for every valid LIM, call it \Vlim{lim},
+\begin{itemize}
+\item \Source{\var{lim}} is always a singleton set containing a penult
+in the same Earley set as \var{lim}.
+\item \var{PreviousLink} is a set of cardinality at most one,
+and if its element exists, it is a valid LIM,
+\item $\size{\LinkPairs{\var{lim}}} = 1$,
+\end{itemize}
+but we have yet to prove these things.
+
+\TODO{Prove the above later.}
 
 \begin{observation}[Complexity]
 \TODO{}
@@ -4580,11 +4597,11 @@ is a sequence of one or more LIM's,
 call it $\Vlimset{links}$,
 where
 \[
-\PreviousLink{\var{links}[\Vlastix{links}]} = \Lambda
+\PreviousLink{\var{links}[\Vlastix{links}]} = \emptyset
 \]
 and, for all $0 \le \var{n} < \Vlastix{links}$,
 \[
-\PreviousLink{\var{links}[\var{n}]} = \var{links}[\var{n}+1].
+\PreviousLink{\var{links}[\var{n}]} = \set{\var{links}[\var{n}+1]}.
 \]
 We say that \var{links} is the chain of \Vlim{first} if and
 only if \var{links} is a Leo chain
@@ -4609,9 +4626,10 @@ where \var{chain} is the LIM chain of $\ell$,
 \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} = \DR{\ell}, \\
 \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} = \Origin{\ell}, \\
 \Postdot{\Source{\ell}} = \Transition{\ell}, \\
-\text{\Source{\ell} is valid, and} \\
-\text{\PreviousLink{\ell} is $\Lambda$ or a valid LIM.}
-  \quad \bigstar
+\Source{\ell} \text{ is valid} \\
+0 \le \size{\PreviousLink{\ell}} \le 1 \\
+\forall \; \mylim{\ell{}2} \in \PreviousLink{\ell} :
+   \mylim{\ell{}2} \text{ is valid}.
 \end{gather}
 We say that a Leo chain is \dfn{valid} if and only if
 all the links of the chain are valid.
@@ -4703,14 +4721,14 @@ Otherwise, we have \Eref{eq:th-chain-containment-14-10} vacuously.}
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-18}
-\myparbox{$\PreviousLink{\VVelement{shorter}{n}} = \Velement{shorter}{\var{n}+1}$
+\myparbox{$\PreviousLink{\VVelement{shorter}{n}} = \set{\Velement{shorter}{\var{n}+1}}$
   $\because$ \longDfref{Leo chain}{def:leo-chain},
   \Eref{eq:th-chain-containment-15}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-20}
-\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{shorter}{\var{n}+1}$
+\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \set{\Velement{shorter}{\var{n}+1}}$
   $\because$
   \Eref{eq:th-chain-containment-15},
   \Eref{eq:th-chain-containment-16},
@@ -4719,7 +4737,7 @@ Otherwise, we have \Eref{eq:th-chain-containment-14-10} vacuously.}
 \end{equation}
 \begin{equation}
 \label{eq:th-chain-containment-22}
-\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \Velement{longer}{\var{m}+1}$
+\myparbox{$\PreviousLink{\VVelement{longer}{m}} = \set{\Velement{longer}{\var{m}+1}}$
   $\because$ \longDfref{Leo chain}{def:leo-chain},
   \Eref{eq:th-chain-containment-15}.%
 }
@@ -5674,14 +5692,14 @@ $\because$ AF subcase.%
 \TODO{rework proof from here.  Look at use of \var{LIMPredecessor}}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-18}
-\LIMPredecessor{\Veim{source}} = \emptyset
+\LIMPredecessor{\Veim{source}} = \Lambda
 \because
 \Eref{eq:memoizer-operation-20},
 \Eref{eq-th-LIM-chain-dr+origin-16}.
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-20}
-\PreviousLink{\Vlim{first}} = \Lambda
+\PreviousLink{\Vlim{first}} = \emptyset
 \because
 \Eref{eq:memoizer-operation-20},
 \Obref{obs:memoizer-ancestry},
