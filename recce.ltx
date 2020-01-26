@@ -2435,7 +2435,7 @@ The match of an EIM with a location:
 \section{The Leo algorithm}
 \label{sec:leo}
 
-Jay Earley conjectured~cite[p. 60]{Earley1968}
+Jay Earley conjectured~\cite[p. 60]{Earley1968}
 that \Earley{} could be
 modified to be \On{} for
 all deterministic context-free grammars (DCFG's).
@@ -2593,14 +2593,33 @@ for LIMs.
 We say that \Vlim{pred}
 is the \dfn{LIM predecessor} of \Veim{succ}
 if and only if
-\[
-\Vlim{pred} = \LIMPredecessor{\var{succ}}
-\]
-where
-\[
-\Matches{\Source{\LIMPredecessor{\var{succ}}}, \var{succ}}.
-\quad \bigstar
-\]
+$\Vlim{pred} = \LIMPredecessor{\var{succ}}$ where
+\begin{equation*}
+\begin{aligned}
+& \LIMPredecessor{\var{succ}} \defined \\
+& \qquad \begin{cases}
+  \Vlim{x}, \text{ if } \Matches{\Source{\var{x}}, \var{succ}}, \\[1ex]
+  \Lambda, \text{ if } \neg \exists \Vlim{x} :
+    \Matches{\Source{\var{x}}, \var{succ}}.
+\end{cases}
+    \quad \bigstar
+\end{aligned}
+\end{equation*}
+\end{definition}
+
+\begin{definition}[LIM matching]
+We overload \var{Matches} to deal with LIM's as follows.
+\begin{equation*}
+\begin{aligned}
+& \Matches{\mylim{\ell},\Veim{cuz}} \defined \\
+& \qquad \qquad \begin{aligned}
+	 & \Postdot{\var{cuz}} = \Lambda \\
+\land \; & \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
+\land \; & \Current{\mylim{\ell}} = \Origin{\var{cuz}}
+  \quad \bigstar
+\end{aligned}
+\end{aligned}
+\end{equation*}
 \end{definition}
 
 \section{Ancestry}
@@ -3125,27 +3144,22 @@ The \Marpa{} implementation tracks the link pairs
 for the LIM's.
 LIMs memoize Leo chains,
 which are deterministic, so that
-a LIM always has exactly one link pair:
-\[
-\left[ \LIMPredecessor{\Veim{source}}, \Veim{source} \right],
-\]
-where \var{source} is as in
-\Eref{eq:memoizer-operation-20} and
-\Eref{eq:memoizer-operation-30}.
+a LIM, call it \mylim{\ell},
+always has exactly one link pair:
+\begin{equation}
+\label{eq:memoizer-link-pair}
+\left[ \LIMPredecessor{\Source{\mylim{\ell}}}, \Source{\mylim{\ell}} \right].
+\end{equation}
 
 In the link pair for a LIM, call it \Vlim{$\ell$},
 the ``cause''
-is more often called the \dfn{source} of the LIM,
-\begin{equation}
-\label{eq:def-source}
-\Source{\Vlim{$\ell$}} \defined \Veim{source},
-\end{equation}
-the ``predecessor'' is more often called the \dfn{previous link} of the LIM,
-and
-\begin{equation}
-\label{eq:def-previous-link}
-\PreviousLink{\Vlim{$\ell$}} \defined \LIMPredecessor{\Veim{source}}.
-\end{equation}
+is more often called the \dfn{source} of the LIM;
+and the ``predecessor'' is
+and is more often called the \dfn{previous link} of the LIM.
+We may write the previous link of \mylim{\ell} as
+\[
+\PreviousLink{\Vlim{$\ell$}} \defined \LIMPredecessor{\Source{\mylim{\ell}}}
+\]
 Because every LIM has exactly one link pair,
 \var{PreviousLink} and \var{Source} are functions.
 
@@ -4912,8 +4926,8 @@ $\because$ AF theorem, WLOG.
 \begin{gathered}
 \Veim{source} \in \LeoEligible{\Vloc{j}} \\
 \qquad \because
+\Eref{eq:memoizer-link-pair},
 \Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30},
-\text{Def ``source'' \Eref{eq:def-source}}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5655,6 +5669,7 @@ We now proceed by subcase, starting with
 $\because$ AF subcase.%
 }
 \end{equation}
+\TODO{rework proof from here.  Look at use of \var{LIMPredecessor}}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-18}
 \LIMPredecessor{\Veim{source}} = \Lambda
@@ -5690,7 +5705,6 @@ $\because$ AF subcase.%
     \because \Eref{eq:memoizer-operation-20}.
   \end{gathered}
 \end{equation}
-\TODO{finish proof}
 \end{proof}
 
 \begin{theorem}
