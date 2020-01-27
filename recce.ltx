@@ -4820,7 +4820,85 @@ assumption for the theorem.}
   \Eref{eq:memoizer-operation-30}.
   \end{gathered}
 \end{equation}
-\TODO{finish}
+
+\TODO{second proof merged in what follows}
+
+% \begin{theorem}[LIM chain dotted rule and origin]
+% \label{th:LIM-chain-dr+origin}
+% In a \Marpa{} parse,
+% let \Vlimset{chain} be a valid partial LIM chain.
+% For every element \mylim{\ell} of \var{chain},
+% \begin{equation}
+% \label{eq-th-LIM-chain-dr+origin-05}
+% \begin{gathered}
+% \text{$\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}}$ and} \\
+% \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}}
+% \end{gathered}
+% \end{equation}
+% \end{theorem}
+
+% \begin{proof}
+
+The proof is by a reductio.
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-10}
+\begin{gathered}
+\exists \mylim{\ell}, \mylim{\ell} \in \var{chain} : \\
+\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
+\lor \; \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
+\because \text{AF reductio.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-12}
+\myparbox{LIM's are only added by the
+\Marpa{} \var{Memoizer} operation
+$\because$ \Obref{obs:marpa-operation-by-result}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-14}
+\myparbox{LIM's are added by either the
+\var{Start-Leo-Chain} or
+\var{Extend-Leo-Chain} sub-operation
+$\because$
+\Eref{eq-th-LIM-chain-dr+origin-12},
+\Eref{eq:memoizer-operation-20},
+\Eref{eq:memoizer-operation-30}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-15-20}
+\myparbox{Of the LIM's added which
+satisfy
+\Eref{eq-th-LIM-chain-dr+origin-10}
+one, call it \Vlim{first} is added first
+$\because$
+\Eref{eq-th-LIM-chain-dr+origin-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-15-25}
+\myparbox{\Vlim{first} = \Velement{partial}{0},
+where \Vlimset{partial} is the partial Leo chain
+of \Vlim{first}
+$\because$
+\Dfref{def:leo-chain},
+\Eref{eq:memoizer-operation-20},
+\Eref{eq:memoizer-operation-30}.%
+}
+\end{equation}
+
+We now proceed by subcase, starting with
+\var{Start-Leo-Chain}.
+\begin{equation}
+\label{eq-th-LIM-chain-dr+origin-16}
+\myparbox{\Vlim{first} was added by a
+\var{Start-Leo-Chain} sub-operation
+$\because$ AF subcase.%
+}
+\end{equation}
+\TODO{Finish proof from here.  Look at use of \var{LIMPredecessor}}
 \end{proof}
 
 \begin{definition}[Leo chain--base match]
@@ -5621,85 +5699,6 @@ $\because$ \Eref{eq:th-leo-edge-top-10}, \Eref{eq:th-leo-edge-top-22}.}
 \end{equation}
 \end{proof}
 
-\begin{theorem}[LIM chain dotted rule and origin]
-\label{th:LIM-chain-dr+origin}
-In a \Marpa{} parse,
-let \Vlimset{chain} be a valid partial LIM chain.
-For every element \mylim{\ell} of \var{chain},
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-05}
-\begin{gathered}
-\text{$\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}}$ and} \\
-\Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}}
-\end{gathered}
-\end{equation}
-\end{theorem}
-
-\begin{proof}
-The proof is by a reductio.
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-10}
-\begin{gathered}
-\exists \mylim{\ell}, \mylim{\ell} \in \var{chain} : \\
-\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
-\lor \; \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
-\because \text{AF reductio.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-12}
-\myparbox{LIM's are only added by the
-\Marpa{} \var{Memoizer} operation
-$\because$ \Obref{obs:marpa-operation-by-result}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-14}
-\myparbox{LIM's are added by either the
-\var{Start-Leo-Chain} or
-\var{Extend-Leo-Chain} sub-operation
-$\because$
-\Eref{eq-th-LIM-chain-dr+origin-12},
-\Eref{eq:memoizer-operation-20},
-\Eref{eq:memoizer-operation-30}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-15-20}
-\myparbox{Of the LIM's added which
-satisfy
-\Eref{eq-th-LIM-chain-dr+origin-10}
-one, call it \Vlim{first} is added first
-$\because$
-\Eref{eq-th-LIM-chain-dr+origin-14}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-15-25}
-\myparbox{\Vlim{first} = \Velement{partial}{0},
-where \Vlimset{partial} is the partial Leo chain
-of \Vlim{first}
-$\because$
-\Dfref{def:leo-chain},
-\Eref{eq:memoizer-operation-20},
-\Eref{eq:memoizer-operation-30}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-15-30}
-\Velement{partial}{0} = \Vlim{first}
-\end{equation}
-We now proceed by subcase, starting with
-\var{Start-Leo-Chain}.
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-16}
-\myparbox{\Vlim{first} was added by a
-\var{Start-Leo-Chain} sub-operation
-$\because$ AF subcase.%
-}
-\end{equation}
-\TODO{Finish proof from here.  Look at use of \var{LIMPredecessor}}
-\end{proof}
 
 \begin{theorem}
 \label{th:leo-reducer-is-consistent}
