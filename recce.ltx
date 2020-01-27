@@ -2708,12 +2708,10 @@ for the PIM subtypes.
 \label{sec:algorithm}
 
 For the purpose of defining the \Marpa{} algorithm,
-let $[\Vint{g}, \Vstr{w}]$ be a parse.
-and let \Vesset{esets} be the Earley table.
-
+let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 We will first introduce the various ``operations''
 of the \Earley{} and \Marpa{} algorithms.
-These operations union PIM's in Earley sets.
+These operations union PIM's into Earley sets.
 
 \subsection{Common prediction logic}
 \label{sec:common-predict}
@@ -2741,7 +2739,7 @@ is
 \nonumber
 & \quad \left\lbrace
 \begin{gathered}
-\left[ \Vdr{predict}, \Vloc{j} \right]_\type{EIM} : \\
+\eim{(\left[ \Vdr{predict}, \Vloc{j} \right]@\Vloc{j})} : \\
 [ \DR{\var{cause}}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
 \end{gathered}
 \right\rbrace
@@ -2750,22 +2748,23 @@ is
 \begin{observation}[Ancestry]
 \label{obs:common-predict-ancestry}
 Predictions have predecessors, but no causes.
-The implementation does not record link pairs for predictions.
+The \Marpa{} implementation
+does not record link pairs for predictions.
 
 Tracking link pairs for a prediction would be cumbersome,
 because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
 set.
-For a given prediction,
-\begin{align}
+\begin{equation}
+\begin{gathered}
 \label{eq:common-predict-ancestry-10}
-& \LinkPairs{
-\left[
+\myparbox{For an arbitrary prediction,
+$\left[
   \left[\Vsym{lhs} \de \mydot \Vstr{rhs}\right],
   \Vorig{j}
-\right]} =
-\\ \nonumber
-& \qquad
+\right]$, the direct ancestry is%
+}
+\\
 \left\lbrace
   \begin{gathered}
   \left[
@@ -2776,7 +2775,8 @@ For a given prediction,
   \land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
   \end{gathered}
 \right\rbrace
-\end{align}
+\end{gathered}
+\end{equation}
 The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
