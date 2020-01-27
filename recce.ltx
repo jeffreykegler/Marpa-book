@@ -4621,18 +4621,21 @@ We say that a LIM,
 call it \mylim{\ell},
 is \dfn{valid}
 if and only if,
-where \var{chain} is the LIM chain of $\ell$,
+where \var{chain} is the partial LIM chain of $\ell$,
 \begin{gather}
-\DR{\Source{\Velement{chain}{\Vlastix{chain}}}} = \DR{\ell}, \\
-\Origin{\Source{\Velement{chain}{\Vlastix{chain}}}} = \Origin{\ell}, \\
-\Postdot{\Source{\ell}} = \Transition{\ell}, \\
-\Source{\ell} \text{ is valid} \\
+\Source{\Velement{chain}{\Vlastix{chain}}} = \set{\Veim{top-src}}, \\
+\Source{\ell} = \set{\Veim{src}}, \\
+\var{top-src} \text{ is valid,} \\
+\var{src} \text{ is valid,} \\
+\DR{\var{top-src}} = \DR{\ell}, \\
+\Origin{\var{top-src}} = \Origin{\ell}, \\
+\Postdot{\var{src}} = \Transition{\ell}, \\
 0 \le \size{\PreviousLink{\ell}} \le 1 \\
 \forall \; \mylim{\ell{}2} \in \PreviousLink{\ell} :
    \mylim{\ell{}2} \text{ is valid}.
 \end{gather}
-We say that a Leo chain is \dfn{valid} if and only if
-all the links of the chain are valid.
+We say that a partial Leo chain is \dfn{valid} if and only if
+all the links of the partial chain are valid.
 $\bigstar$
 \end{definition}
 
@@ -4791,13 +4794,13 @@ Then
 
 \begin{theorem}[Memoizer consistency]
 \label{th:memoizer-consistency}
-The \Marpa{} memoizer operation preserves validity.
+The \Marpa{} \var{Memoizer} operation preserves validity.
 \end{theorem}
 
 \begin{proof}
-Call the LIM added by an arbitrary \Marpa{} memoizer
+Call the LIM added by an arbitrary \Marpa{} \var{Memoizer}
 operation \mylim{\ell},
-and its ancestry $[\Vlim{previous}, \Veim{source}]$.
+and call its valid ancestry $[\Vlim{previous}, \Veim{source}]$.
 \begin{equation}
 \label{eq:th-memoizer-consistency-10}
 \myparbox{\Vlim{previous} is $\Lambda$ or a valid LIM, by
@@ -4854,8 +4857,11 @@ such that
 and, for all \var{n} such that $0 \le \var{n} < \Vsize{chain}$,
 \begin{equation}
 \label{def:leo-edge-30}
-\left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
+\begin{gathered}
+\Veim{source} \in \Source{\var{chain}[\var{n}]} \\
+\land \; \left[ \var{source}, \var{edge}[\var{n}] \right]_\type{LP}
   \in \LinkPairs{\var{edge}[\var{n}+1]}
+\end{gathered}
 \end{equation}
 
 We say that an edge is \dfn{valid} if and only if all the elements of the edge
@@ -4896,14 +4902,15 @@ Then
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-edge-length-14}
-\begin{gathered}
-\left[ \Source{\Velement{chain}{\Vlastix{chain}}}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
-  \in \LinkPairs{\Velement{edge}{\Vlastix{chain}+1}} \\
-  \because
-  \text{\Eref{def:leo-edge-30} in \Dfref{def:leo-chain}},
-  \Eref{eq:th-leo-edge-length-10}.
-\end{gathered}
+  \begin{aligned}
+    & \Veim{source} \in \Source{\Velement{chain}{\Vlastix{chain}}} \\
+    & \land \; \left[ \var{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP} \\
+    & \qquad \qquad \in \LinkPairs{\Velement{edge}{\Vlastix{chain}+1}} \\
+    & \because \text{\Eref{def:leo-edge-30} in \Dfref{def:leo-chain}},
+	\Eref{eq:th-leo-edge-length-10}.
+  \end{aligned}
 \end{equation}
+\TODO{\var{Source} changed.  Revise from here.}
 \begin{equation}
 \label{eq:th-leo-edge-length-16}
 \myparbox{edge index is monotonically increasing
@@ -4936,7 +4943,7 @@ $\because$ AF theorem, WLOG.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-12}
-\Veim{source} = \Source{\ell}
+\Veim{source} \in \Source{\ell}
 \because
 \Eref{eq:th-leo-chain-source-properties-10},
 \text{WLOG}.
@@ -5048,19 +5055,21 @@ $\because$ assumption for step of the induction.
 \begin{equation}
 \label{eq:edge-elements-are-complete-30}
   \begin{gathered}
-    \left[ \Source{\var{chain}[\var{n}]}, \var{edge}[\var{n}] \right]_\type{LP}
+    \Veim{source} \in \Source{\var{chain}[\var{n}]} \\
+    \land \; \left[ \var{source}, \var{edge}[\var{n}] \right]_\type{LP}
       \in \LinkPairs{\var{edge}[\var{n}+1]} \\
     \because
       \text{\Eref{def:leo-edge-30} of Def ``Leo edge''
       \Dfref{def:leo-edge}}.
     \end{gathered}
 \end{equation}
+\TODO{\var{Source} changed.  Recheck from here.}
 \begin{equation}
 \label{eq:edge-elements-are-complete-36}
 \myparbox{$\var{edge}[\var{n}+1]$
 is the result of an \Earley{} completer operation
 whose ancestry includes
-$\left[ \Source{\var{chain}[\var{n}]},
+$\left[ \Veim{source},
   \var{edge}[\var{n}] \right]_\type{LP}$
 $\because$
 \Obref{obs:earley-operation-by-direct-ancestor},
@@ -5077,7 +5086,7 @@ $\because$
 \begin{equation}
 \label{eq:edge-elements-are-complete-37-15}
 \myparbox{
-  \Source{\var{chain}[\var{n}]} is valid
+  \Veim{source} is valid
   $\because$
   Def ``LIM valdity'' \Dfref{def:lim-validity},
   \Eref{eq:edge-elements-are-complete-37-10}.
@@ -5103,13 +5112,13 @@ $\because$
 \begin{equation}
 \label{eq:edge-elements-are-complete-38}
 \myparbox{
-  \Source{\var{chain}[\var{n}]} is a penult
+  \Veim{source} is a penult
   $\because$ \Thref{th:leo-chain-source-properties}.}
 \end{equation}
 \begin{equation}
 \label{eq:edge-elements-are-complete-40}
 \begin{gathered}
-  \DR{\var{edge}[\var{n}+1]} = \Next{\Source{\var{chain}[\var{n}]}} \\
+  \DR{\var{edge}[\var{n}+1]} = \Next{\Veim{source}} \\
   \because
   \Eref{obs:earley-completer-summary}, \Eref{eq:edge-elements-are-complete-36}.
   \end{gathered}
@@ -5223,7 +5232,7 @@ $\because$
 \left[ \Veim{pred2}, \var{lo} \right]_\type{LP}
   \in \LinkPairs{\Veim{desc2}} \\
   \land \;\; \Vlim{match} = \var{chain}[\var{n}] \\
-  \land \;\; \Veim{pred2} = \Source{\Vlim{match}} \\
+  \land \;\; \Veim{pred2} \in \Source{\Vlim{match}} \\
   \because \text{Def of ``Leo edge''} \Dfref{def:leo-edge},
     \Eref{th:edge-descendant-uniqueness-12}
 \end{gathered}
@@ -5525,7 +5534,7 @@ Then the top of their edge is
 \begin{gathered}
 \left[ \DR{\Veim{source}}, \Origin{\var{source}}
 \right]@\Current{\var{base}}, \\
-\text{where $\Veim{source} = \Source{\Velement{chain}{\Vlastix{chain}}}$.}
+\text{where $\Veim{source} \in \Source{\Velement{chain}{\Vlastix{chain}}}$.}
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -5689,42 +5698,7 @@ We now proceed by subcase, starting with
 $\because$ AF subcase.%
 }
 \end{equation}
-\TODO{rework proof from here.  Look at use of \var{LIMPredecessor}}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-18}
-\LIMPredecessor{\Veim{source}} = \Lambda
-\because
-\Eref{eq:memoizer-operation-20},
-\Eref{eq-th-LIM-chain-dr+origin-16}.
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-20}
-\PreviousLink{\Vlim{first}} = \emptyset
-\because
-\Eref{eq:memoizer-operation-20},
-\Obref{obs:memoizer-ancestry},
-\Eref{eq-th-LIM-chain-dr+origin-18}.
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-22}
-\Vsize{partial} = 1
-\because
-\text{Def of ``Leo chain'' \Dfref{def:leo-chain}},
-\Eref{eq-th-LIM-chain-dr+origin-20}.
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-24}
-\Vlastix{partial} = 0 \because
-\Eref{eq-th-LIM-chain-dr+origin-22}.
-\end{equation}
-\begin{equation}
-\label{eq-th-LIM-chain-dr+origin-26}
-  \begin{gathered}
-    \DR{\Vlim{first}} = \DR{\Source{\Velement{partial}{0}}} \\
-    \land \; \Origin{\Vlim{first}} = \Origin{\Source{\Velement{partial}{0}}} \\
-    \because \Eref{eq:memoizer-operation-20}.
-  \end{gathered}
-\end{equation}
+\TODO{Finish proof from here.  Look at use of \var{LIMPredecessor}}
 \end{proof}
 
 \begin{theorem}
