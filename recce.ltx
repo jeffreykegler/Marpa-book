@@ -49,7 +49,7 @@
 \newcommand{\sep}{\,\mid\,}
 \newcommand{\mydot}{\raisebox{.05em}{$\,\bullet\,$}}
 \newcommand{\cat}{\,.\,}
-\newcommand{\size}[1]{\ensuremath{\left | {#1} \right |}}
+\newcommand{\size}[1]{\ensuremath{\left| {#1} \right|}}
 \newcommand{\bigsize}[1]{\ensuremath{\bigl| {#1} \bigr|}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
@@ -109,6 +109,7 @@
         {\mapsto\!}\:$}}}
 
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
+\newcommand{\tuple}[1]{{\left[ #1 \right]} }
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldRange}[3]{\textbf{#1[#2 \ldots #3]}}
@@ -147,6 +148,7 @@
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\mylim{\var{#1}}}
+\newcommand{\Vlp}[1]{\Tvar{#1}{LP}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
@@ -2716,55 +2718,98 @@ These operations union PIM's into Earley sets.
 \subsection{Common prediction logic}
 \label{sec:common-predict}
 
-Let \var{PredictDR1} be the relation defined by the set
-\begin{equation*}
-\left\lbrace
-\begin{gathered}
-\left[ \Vdr{cause}, \dr{\left[ \Vrule{predicted}, 0 \right]} \right] : \\
-  \Postdot{\var{cause}} \neq \Lambda \\
-\land \; \LHS{\var{predicted}} = \Postdot{\var{cause}}.
-\end{gathered}
-\quad \right\rbrace
-\end{equation*}
-Let \var{PredictDR} be the transitive closure of
-\var{PredictDR1}:
-\begin{equation*}
-\var{PredictDR}(\Vint{g}) \defined \var{PredictDR1}(\Vint{g})^\ast.
-\end{equation*}
-The set of predictions
-indirectly caused by \Veim{cause}
-is
-\begin{align}
-& \var{Predict}(\Veim{cause}@\Vloc{j} ) \defined \\
-\nonumber
-& \quad \left\lbrace
-\begin{gathered}
-\eim{(\left[ \Vdr{predict}, \Vloc{j} \right]@\Vloc{j})} : \\
-[ \DR{\var{cause}}, \Vdr{predict} ] \in \var{PredictDR}(\Vint{g}).
-\end{gathered}
-\right\rbrace
-\end{align}
+\begin{algorithm}[tb]
+\caption{\var{Predict}}
+\label{alg:marpa-predict}
+\begin{algorithmic}[1]
+\Procedure{Predict}{\Veim{x}@\Ves{j}}
+\label{line:marpa-predict-10}
+\State $\Veim{rez} \gets [ \dr{[\Rule{\var{x}}, 0]}, \Vloc{j} ] @ \var{j}$
+% \State $\Vlp{lp} \gets [\var{x}, \Lambda]$
+\If{$\var{rez} \in \Ves{j}$}
+  \Comment Is \var{rez} is already in \Ves{j}?
+% \State $\LinkPairs{\var{rez}} = \LinkPairs{\var{rez}} \cup \var{lp}$
+\State return
+\EndIf
+% \State $\LinkPairs{\var{rez}} = \set{\var{lp}}$
+\State $\Ves{j} \gets \Ves{j} \cup \var{rez}$
+  \Comment If here, then \var{rez} is new
+\label{line:marpa-predict-60}
+\State \Call{Predict}{$\Veim{rez}@\Ves{j}$}
+\label{line:marpa-predict-70}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+Algorithm
+\Aref{alg:marpa-predict} shows a ``just in time'' method
+of computing the prediction derived from an EIM.
+It is also possible to eliminate the recursion
+of \Aref{alg:marpa-predict}
+by precompute the dotted rules predicted
+for each dotted rule in the grammar.
+
+\begin{observation}[Complexity]
+\var{Predict} in
+\Aref{alg:marpa-predict} runs in \Oc{} time.
+To show this, note that every prediction in \Ves{j} takes the
+form
+\[
+\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}},
+\]
+so that
+at most \size{\Rules{\var{g}}}
+predictions
+are possible in \Ves{j}.
+\var{Predict} in
+\ref{line:marpa-predict-70}
+of \Aref{alg:marpa-predict} is called only when a new
+prediction is added to \Ves{j}.
+This means that no call of \var{Predict} will recurse more
+than
+\size{\Rules{\var{g}}} times.
+\size{\Rules{\var{g}}} is a constant which depends on the
+grammar, and therefore
+every call of \var{Predict} runs in \Oc{} time.
+$\bigstar$
+\end{observation}
+
+If precomputation is used
+it can be sped up using Warshall's algorithm.
+A version of \var{Predict} using precomputation
+will clearly run no worse than
+\Aref{alg:marpa-predict}, and therefore its
+time complexity will be \Oc{}.
 
 \begin{observation}[Ancestry]
 \label{obs:common-predict-ancestry}
-Predictions have predecessors, but no causes.
 The \Marpa{} implementation
 does not record link pairs for predictions.
-
 Tracking link pairs for a prediction would be cumbersome,
 because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
 set.
+
+Conceptually,
+predictions have predecessors, but no causes,
+and the link pair generated for
+\Veim{rez} in
+line \ref{line:marpa-predict-10} in
+\Aref{alg:marpa-predict}
+would be
+$[\Veim{x}, \Lambda]$.
+
+If link pairs were generated,
+for the arbitrary prediction
 \begin{equation}
-\begin{gathered}
-\label{eq:common-predict-ancestry-10}
-\myparbox{For an arbitrary prediction,
-$\left[
+\left[
   \left[\Vsym{lhs} \de \mydot \Vstr{rhs}\right],
   \Vorig{j}
-\right]$, the direct ancestry is%
-}
-\\
+\right]
+\end{equation}
+they would be
+\begin{equation}
+\label{eq:common-predict-ancestry-10}
 \left\lbrace
   \begin{gathered}
   \left[
@@ -2775,17 +2820,11 @@ $\left[
   \land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
   \end{gathered}
 \right\rbrace
-\end{gathered}
 \end{equation}
 The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition table \Sref{sec:transition-tables} for \Ves{j}.
-$\bigstar$
-\end{observation}
-
-\begin{observation}[Complexity]
-\TODO{}
 $\bigstar$
 \end{observation}
 
