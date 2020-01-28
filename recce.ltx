@@ -2813,37 +2813,48 @@ for each dotted rule in the grammar.
 \begin{observation}[Complexity]
 \var{Predict} in
 \Aref{alg:marpa-predict} runs in \Oc{} time and space.
-
 To show this observation for time,
-we note that the times for
-lines
-\ref{line:marpa-predict-00}--\ref{line:marpa-predict-60}
-and the exclusive time for line \ref{line:marpa-predict-99}
-is clearly \Oc{}.
-To show the inclusive time for the recursive call of \var{Predict}
-in line
-\ref{line:marpa-predict-99},
-we first note that every prediction in \Ves{j} takes the
-form
-\[
-\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}},
-\]
-so that
-at most \size{\Rules{\var{g}}}
-predictions
-are possible in \Ves{j}.
-\var{Predict} in
-\ref{line:marpa-predict-99}
-of \Aref{alg:marpa-predict} is called only when a new
-prediction is added to \Ves{j}.
-This means that no call of \var{Predict} will recurse more
-than
-\size{\Rules{\var{g}}} times.
-Therefore, the time used in
-line \ref{line:marpa-predict-99} is
 \begin{equation}
 \label{eq:obs-predict-complexity-10}
-\myparbox{$\size{\Rules{\var{g}}} \times \Oc{}$
+\myparbox{$\Time{\text{\ref{line:marpa-predict-00}--\ref{line:marpa-predict-60}}} = \Oc$
+  $\because$ direct from \Aref{alg:marpa-predict}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-12}
+\myparbox{$\ExTime{\ref{line:marpa-predict-99}} = \Oc$
+  $\because$
+  direct from \Aref{alg:marpa-predict}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-14}
+\myparbox{Every prediction in \Ves{j} takes the
+  form $\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}}$.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-16}
+\myparbox{At most \size{\Rules{\var{g}}}
+  predictions are possible in \Ves{j}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-18}
+\myparbox{\var{Predict} in \ref{line:marpa-predict-99}
+  of \Aref{alg:marpa-predict} is called only when a new
+  prediction is added to \Ves{j}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-20}
+\myparbox{No call of \var{Predict} will recurse more
+  than \size{\Rules{\var{g}}} times.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-30}
+\myparbox{$\Time{\ref{line:marpa-predict-99}} = \size{\Rules{\var{g}}} \times \Oc{}$
   $\because$
   the maximum number of
   recursive calls of \var{Predict},
@@ -2851,17 +2862,17 @@ line \ref{line:marpa-predict-99} is
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-20}
-\myparbox{$\Oc{} \times \Oc{}$
+\label{eq:obs-predict-complexity-32}
+\myparbox{$\Time{\ref{line:marpa-predict-99}} = \Oc{} \times \Oc{}$
   $\because$
   \size{\Rules{\var{g}}}
   is a constant depending on \Vint{g}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-30}
+\label{eq:obs-predict-complexity-34}
 \begin{gathered}
-\Oc{} \because \Eref{eq:obs-predict-complexity-20}
+\Time{\ref{line:marpa-predict-99}} = \Oc{} \because \Eref{eq:obs-predict-complexity-32}
 \end{gathered}
 \end{equation}
 This shows this observation for time.
