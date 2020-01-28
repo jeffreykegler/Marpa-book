@@ -183,6 +183,8 @@
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}\left(#1\right)}}
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}\left(#1\right)}}
 \newcommand{\Etable}[1]{\ensuremath{\mymathop{table}\left[#1\right)]}}
+\newcommand{\ExSpace}[1]{\ensuremath{\mymathop{Ex-Space}\left(#1\right)}}
+\newcommand{\ExTime}[1]{\ensuremath{\mymathop{Ex-Time}\left(#1\right)}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}\left(#1\right)}}
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}\left(#1\right)}}
@@ -210,6 +212,8 @@
 \newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}\left(#1\right)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}\left(#1\right)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}\left(#1\right)}}
+\newcommand{\Space}[1]{\ensuremath{\mymathop{Space}\left(#1\right)}}
+\newcommand{\Time}[1]{\ensuremath{\mymathop{Time}\left(#1\right)}}
 \newcommand{\Symbol}[1]{\ensuremath{\mymathop{Symbol}\left(#1\right)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}\left(#1\right)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}\left(#1\right)}}
@@ -2720,6 +2724,59 @@ We will first introduce the various ``operations''
 of the \Earley{} and \Marpa{} algorithms.
 These operations union PIM's into Earley sets.
 
+\subsection{Complexity remarks}
+\label{sec:complexity-remarks}
+This section contains the pseudocode,
+and it is convenient to make make our code-level complexity
+investigation alongside the pseudocode.
+Our approach to proving our complexity claims is based
+on the traditional one for \Earley{} variants.
+We ``charge'' all time and space to adds,
+and attempts to add, PIM's.
+These ``charges'' will be found to be \Oc{}.
+In later sections, we will count
+PIM's and PIM attempts for various grammar classes.
+Our results will follow from
+multiplying the charge per PIM by the appropriate count.
+
+In the pseudocode itself, the line location of an
+PIM addition will be shown with the tag $\var{add}\plusplus$
+in a comment.
+The tag $\var{attempt}\plusplus$ will show the location of
+an attempt to add a PIM.
+
+As stated, charges of time and space will be made to PIM's.
+At certain points, it will not be convenient to indicate a specific
+PIM, as we will state that the resource is ``charged to the parse'',
+or ``charged to the Earley set''.
+
+A resource ``charged to the parse'' is re-charged to the first PIM
+of Earley set 0, which exists in every parse.
+A resource charged to an Earley set is re-charged to the first PIM added
+to the Earley set.
+In a successful parse, every Earley set has at least one PIM.
+A failed parse will terminate with the first empty Earley set,
+so that there is only one Earley set's resource to re-charge,
+and this may be charged to the parse.
+
+In analyzing the pseudocode we will speak of the ``exclusive''
+resource used, and ``inclusive'' resource used.
+``Exclusive'' will mean excluding the resource used by other
+pseudocode algorithms called in the pseudocode.
+``Inclusive'' mean including all resource used,
+whether directly or indirectly.
+
+We will write \ExTime{\var{x}} to indicate the exclusive time
+taken by \var{x};
+\ExSpace{\var{x}} to indicate the exclusive space
+taken by \var{x};
+\Time{\var{x}} to indicate the inclusive time
+taken by \var{x}; and
+\Space{\var{x}} to indicate the inclusive space
+taken by \var{x}.
+Here \var{x} may be a code snippet, a line, a line range
+or an algorithm.
+
 \subsection{Common prediction logic}
 \label{sec:common-predict}
 
@@ -2728,7 +2785,7 @@ These operations union PIM's into Earley sets.
 \label{alg:marpa-predict}
 \begin{algorithmic}[1]
 \Procedure{Predict}{\Veim{x}@\Ves{j}}
-\label{line:marpa-predict-10}
+\label{line:marpa-predict-00}
 \State $\Veim{rez} \gets [ \dr{[\Rule{\var{x}}, 0]}, \Vloc{j} ] @ \var{j}$
   \Comment $\var{attempted}\plusplus$
 \If{$\var{rez} \in \Ves{j}$}
@@ -2740,7 +2797,7 @@ These operations union PIM's into Earley sets.
   \Comment $\var{added}\plusplus$
 \label{line:marpa-predict-60}
 \State \Call{Predict}{$\Veim{rez}@\Ves{j}$}
-\label{line:marpa-predict-70}
+\label{line:marpa-predict-99}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -2755,8 +2812,18 @@ for each dotted rule in the grammar.
 
 \begin{observation}[Complexity]
 \var{Predict} in
-\Aref{alg:marpa-predict} runs in \Oc{} time.
-To show this, note that every prediction in \Ves{j} takes the
+\Aref{alg:marpa-predict} runs in \Oc{} time and space.
+
+To show this observation for time,
+we note that the times for
+lines
+\ref{line:marpa-predict-00}--\ref{line:marpa-predict-60}
+and the exclusive time for line \ref{line:marpa-predict-99}
+is clearly \Oc{}.
+To show the inclusive time for the recursive call of \var{Predict}
+in line
+\ref{line:marpa-predict-99},
+we first note that every prediction in \Ves{j} takes the
 form
 \[
 \tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}},
@@ -2766,15 +2833,40 @@ at most \size{\Rules{\var{g}}}
 predictions
 are possible in \Ves{j}.
 \var{Predict} in
-\ref{line:marpa-predict-70}
+\ref{line:marpa-predict-99}
 of \Aref{alg:marpa-predict} is called only when a new
 prediction is added to \Ves{j}.
 This means that no call of \var{Predict} will recurse more
 than
 \size{\Rules{\var{g}}} times.
-\size{\Rules{\var{g}}} is a constant which depends on the
-grammar, and therefore
-every call of \var{Predict} runs in \Oc{} time.
+Therefore, the time used in
+line \ref{line:marpa-predict-99} is
+\begin{equation}
+\label{eq:obs-predict-complexity-10}
+\myparbox{$\size{\Rules{\var{g}}} \times \Oc{}$
+  $\because$
+  the maximum number of
+  recursive calls of \var{Predict},
+  times the exclusive time used by \var{Predict}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-20}
+\myparbox{$\Oc{} \times \Oc{}$
+  $\because$
+  \size{\Rules{\var{g}}}
+  is a constant depending on \Vint{g}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-30}
+\begin{gathered}
+\Oc{} \because \Eref{eq:obs-predict-complexity-20}
+\end{gathered}
+\end{equation}
+This shows this observation for time.
+
+For space, we note that the only inclusive use of space
 $\dispend$
 \end{observation}
 
@@ -2798,10 +2890,10 @@ Conceptually,
 predictions have predecessors, but no causes,
 and the link pair generated for
 \Veim{rez} in
-line \ref{line:marpa-predict-10} in
+line \ref{line:marpa-predict-00} in
 \Aref{alg:marpa-predict}
 would be
-$[\Veim{x}, \Lambda]$.
+$\tuple{\Veim{x}, \Lambda}$.
 
 If link pairs were generated,
 for the arbitrary prediction
