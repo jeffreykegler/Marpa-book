@@ -1630,16 +1630,19 @@ Let \Vint{g} be a \Marpa{} internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
 There must be
 a dedicated \dfn{accept rule} for \Vint{g},
-\begin{gather}
-\label{eq:accept-rule}
-\Vrule{accept} = [\Vsym{accept} \de \Vsym{top}], \\
-\intertext{such that}
-\Vsym{top} \in \NT{\Vint{g}}, \\
-\Vrule{accept} \in \Rules{\Vint{g}}, \\
-\intertext{and for all \Vrule{r}, $\var{r} \in \Rules{\Vint{g}}$,}
-\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept} \\
-\text{and} \quad \Vsym{accept} \notin \RHS{\Vrule{r}}.
-\end{gather}
+\begin{equation}
+\label{eq:def-accept-rule}
+\begin{gathered}
+  \Vrule{accept} = \tuple{\Vsym{accept} \de \Vsym{top}} \text{ such that} \\
+  \Vsym{top} \in \NT{\Vint{g}} \\
+  \land \; \forall \; \Vrule{r} \left(\Vsym{accept} \notin \RHS{\Vrule{r}} \right)
+  \\
+  \land \; \forall \; \Vrule{r}
+      \left(
+	\LHS{\Vrule{r}} = \Vsym{accept} \implies \Vrule{r} = \Vrule{accept}
+      \right)
+\end{gathered}
+\end{equation}
 
 The dedicated accept rule is also called
 the \dfn{augment rule}.
@@ -2838,8 +2841,10 @@ $\bigstar$
 \Procedure{Initializer}{}
 \label{line:marpa-initializer-10}
 \State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
+\Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
 \State $\LinkPairs{\Veim{start}} = \set{}$
 \State Add \Veim{start} to \es{(0)}
+  \Comment $\var{attempted}\plusplus, \var{added}\plusplus$
 \label{line:marpa-initializer-60}
 \State \Call{Predict}{$\Veim{start}@\Ves{(0)}$}
 \label{line:marpa-initializer-70}
@@ -2847,7 +2852,7 @@ $\bigstar$
 \end{algorithmic}
 \end{algorithm}
 
-Recall from \Eref{eq:accept-rule} the accept rule of \Vint{g},
+Recall from \Eref{eq:def-accept-rule} the accept rule of \Vint{g},
 \Vrule{accept},
 and from \Sref{sec:common-predict}
 the definition of \var{Predict}.
