@@ -53,6 +53,7 @@
 \newcommand{\bigsize}[1]{\ensuremath{\bigl| {#1} \bigr|}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
+\newcommand{\plusplus}{\mathord{++}}
 \newcommand{\Oc}{\order{1}}
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\lastix}[1]{\ensuremath{\##1}}
@@ -2725,15 +2726,14 @@ These operations union PIM's into Earley sets.
 \Procedure{Predict}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-10}
 \State $\Veim{rez} \gets [ \dr{[\Rule{\var{x}}, 0]}, \Vloc{j} ] @ \var{j}$
-% \State $\Vlp{lp} \gets [\var{x}, \Lambda]$
+  \Comment $\var{attempted}\plusplus$
 \If{$\var{rez} \in \Ves{j}$}
   \Comment Is \var{rez} is already in \Ves{j}?
-% \State $\LinkPairs{\var{rez}} = \LinkPairs{\var{rez}} \cup \var{lp}$
 \State return
 \EndIf
-% \State $\LinkPairs{\var{rez}} = \set{\var{lp}}$
-\State $\Ves{j} \gets \Ves{j} \cup \var{rez}$
-  \Comment If here, then \var{rez} is new
+\State $\LinkPairs{\var{rez}} = \set{}$
+\State Add \var{rez} to \Ves{j}
+  \Comment $\var{added}\plusplus$
 \label{line:marpa-predict-60}
 \State \Call{Predict}{$\Veim{rez}@\Ves{j}$}
 \label{line:marpa-predict-70}
@@ -2830,6 +2830,22 @@ $\bigstar$
 
 \subsection{Initializer operation}
 \label{sec:initializer}
+
+\begin{algorithm}[tb]
+\caption{\var{Initializer}}
+\label{alg:marpa-initializer}
+\begin{algorithmic}[1]
+\Procedure{Initializer}{}
+\label{line:marpa-initializer-10}
+\State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
+\State $\LinkPairs{\Veim{start}} = \set{}$
+\State Add \Veim{start} to \es{(0)}
+\label{line:marpa-initializer-60}
+\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$}
+\label{line:marpa-initializer-70}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
 Recall from \Eref{eq:accept-rule} the accept rule of \Vint{g},
 \Vrule{accept},
