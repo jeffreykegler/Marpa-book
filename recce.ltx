@@ -236,6 +236,10 @@
   \vspace{1ex} % add a fixed vertical space
   }%
 }
+\newcommand{\parcomment}[2][\mathparwidth]{%
+  \myparbox[#1]{$\triangleright$ #2}%
+} 
+\newcommand{\lcomment}[1]{\hspace\algorithmicindent$\triangleright$ #1}
 
 \theoremstyle{definition}
 \newtheorem{theorem}{Theorem}
@@ -867,6 +871,8 @@ For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 \section{Context-free grammars}
 \label{sec:CFGs}
 
+\begin{definition}[Context-free grammar]
+\label{def:context-free-grammar}
 A \dfn{context free grammar} (CFG) is a 4-tuple,
 \begin{equation}
 \begin{gathered}
@@ -919,6 +925,8 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
+$\dispend$
+\end{definition}
 
 The size of \var{r}, $\size{\Vrule{r}}$,
 is the number of symbols on its RHS,
@@ -2177,12 +2185,18 @@ then
 %
 \end{align}
 
+\begin{definition}[Penult]
+\label{def:penult}
 A dotted rule, \Vdr{d},
 is a \dfn{penult} if it is such that $\Penult{\var{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
 \begin{equation*}
-\Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
+\Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ]. 
+\quad \dispend
 \end{equation*}
+\end{definition}
+\begin{definition}[Prediction]
+\label{def:prediction}
 A \dfn{predicted dotted rule},
 or \dfn{prediction} is a dotted rule,
 other than the initial dotted rule,
@@ -2190,7 +2204,11 @@ with a dot position of zero,
 for example,
 \begin{equation*}
 \Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{rhs} ].
+\quad \dispend
 \end{equation*}
+\end{definition}
+\begin{definition}[Confirmation]
+\label{def:confirmation}
 A \dfn{confirmed dotted rule},
 or \dfn{confirmation},
 is a dotted rule
@@ -2203,6 +2221,10 @@ for example,
 \begin{equation*}
 \Vdr{completed} = [\Vsym{A} \de \Vstr{rhs} \mydot ].
 \end{equation*}
+A dotted rule is \dfn{unconfirmed} if and only if
+it is not confirmed.
+$\dispend$
+\end{definition}
 
 A dotted rule which is not a completion is called an
 \dfn{incomplete rule},
@@ -2731,7 +2753,10 @@ and it is convenient to make make our code-level complexity
 investigation alongside the pseudocode.
 Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
-We ``charge'' all time and space to adds,
+
+In the complexity context,
+``resource'' means time or space.
+We ``charge'' all resource to adds,
 and attempts to add, PIM's.
 These ``charges'' will be found to be \Oc{}.
 In later sections, we will count
@@ -2745,7 +2770,7 @@ in a comment.
 The tag $\var{attempt}\plusplus$ will show the location of
 an attempt to add a PIM.
 
-As stated, charges of time and space will be made to PIM's.
+As stated, charges of resource will be made to PIM's.
 At certain points, it will not be convenient to indicate a specific
 PIM, as we will state that the resource is ``charged to the parse'',
 or ``charged to the Earley set''.
@@ -2765,6 +2790,7 @@ resource used, and ``inclusive'' resource used.
 pseudocode algorithms called in the pseudocode.
 ``Inclusive'' mean including all resource used,
 whether directly or indirectly.
+Resource is inclusvie unless otherwise stated.
 
 We will write \ExTime{\var{x}} to indicate the exclusive time
 taken by \var{x};
@@ -2781,22 +2807,43 @@ or an algorithm.
 \label{sec:common-predict}
 
 \begin{algorithm}[tb]
-\caption{\var{Predict}}
+\caption{\var{Predict-ES}}
 \label{alg:marpa-predict}
 \begin{algorithmic}[1]
-\Procedure{Predict}{\Veim{x}@\Ves{j}}
+\Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-00}
-\State $\Veim{rez} \gets [ \dr{[\Rule{\var{x}}, 0]}, \Vloc{j} ] @ \var{j}$
-  \Comment $\var{attempted}\plusplus$
-\If{$\var{rez} \in \Ves{j}$}
-  \Comment Is \var{rez} is already in \Ves{j}?
-\State return
+\Statex \hspace\algorithmicindent
+\parcomment{\ID{\Vrule{x}} is a unique identifier
+of \Vrule{x}; and
+\var{dotZeroUsed} is a bitmap tracking
+whether an unconfirmed EIM is already in \Ves{j}.%
+}
+\State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
+\Statex \hspace\algorithmicindent
+    \parcomment{Loop over every \Veim{x} in \Ves{j},
+    including those that \var{Predict1} adds while the loop
+    is running.
+    }
+\For{$\Veim{x} \in \Ves{j}$}
+  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
+    \State $\Veim{pred} \gets [ \dr{\tuple{\Vrule{r}, 0}}, \Vloc{j} ] @ \var{j}$
+       \Comment $\var{attempt}\plusplus$
+    \State \Call{Predict1}{\var{pred}}
+    \label{line:marpa-predict-49}
+  \EndFor
+\EndFor
+\EndProcedure
+\Procedure{Predict1}{\Veim{x}@\Ves{j}}
+\label{line:marpa-predict-60}
+\If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{x}}}} = \var{true}$}
+  \State return
+    \Comment Return if \var{rez} is already in \Ves{j}
 \EndIf
 \State $\LinkPairs{\var{rez}} = \set{}$
 \State Add \var{rez} to \Ves{j}
-  \Comment $\var{added}\plusplus$
-\label{line:marpa-predict-60}
-\State \Call{Predict}{$\Veim{rez}@\Ves{j}$}
+  \Comment $\var{add}\plusplus$
+\State $\VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
+   \Comment Set bit
 \label{line:marpa-predict-99}
 \EndProcedure
 \end{algorithmic}
@@ -2810,50 +2857,79 @@ of \Aref{alg:marpa-predict}
 by precompute the dotted rules predicted
 for each dotted rule in the grammar.
 
-\begin{observation}[Complexity]
+\begin{theorem}[Predict() Complexity]
 \var{Predict} in
-\Aref{alg:marpa-predict} runs in \Oc{} time and space.
+\Aref{alg:marpa-predict} runs in \Oc{} time and space,
+with \Oc{} space charged to the parse.
+\end{theorem}
+
+\begin{proof}
 To show this observation for time,
 \begin{equation}
 \label{eq:obs-predict-complexity-10}
+\myparbox{Every prediction in \Ves{j} takes the
+  form $\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}}$
+  $\because$
+  \longDfref{prediction}{def:prediction},
+  \longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-12}
+\myparbox{At most \size{\Rules{\var{g}}}
+  predictions are possible in \Ves{j}
+  $\because$
+  \Eref{eq:obs-predict-complexity-10}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-14}
+\myparbox{\size{\Rules{\var{g}}}
+  is a constant which depends on the grammar
+  $\because$
+  \longDfref{CFG}{def:context-free-grammar}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-15}
+\myparbox{
+  $\var{rez} \in \Ves{j}$ can be computed using a bitmap of constant size,
+  whose space is charged to the Earley set.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-16}
+\myparbox{\Oc{} predictions are possible in \Ves{j}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:obs-predict-complexity-18}
 \myparbox{$\Time{\text{\ref{line:marpa-predict-00}--\ref{line:marpa-predict-60}}} = \Oc$
   $\because$ direct from \Aref{alg:marpa-predict}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-12}
+\label{eq:obs-predict-complexity-20}
 \myparbox{$\ExTime{\ref{line:marpa-predict-99}} = \Oc$
   $\because$
   direct from \Aref{alg:marpa-predict}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-14}
-\myparbox{Every prediction in \Ves{j} takes the
-  form $\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}}$.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-16}
-\myparbox{At most \size{\Rules{\var{g}}}
-  predictions are possible in \Ves{j}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-18}
+\label{eq:obs-predict-complexity-22}
 \myparbox{\var{Predict} in \ref{line:marpa-predict-99}
   of \Aref{alg:marpa-predict} is called only when a new
   prediction is added to \Ves{j}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-20}
+\label{eq:obs-predict-complexity-24}
 \myparbox{No call of \var{Predict} will recurse more
   than \size{\Rules{\var{g}}} times.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-30}
+\label{eq:obs-predict-complexity-26}
 \myparbox{$\Time{\ref{line:marpa-predict-99}} = \size{\Rules{\var{g}}} \times \Oc{}$
   $\because$
   the maximum number of
@@ -2862,7 +2938,7 @@ To show this observation for time,
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-32}
+\label{eq:obs-predict-complexity-28}
 \myparbox{$\Time{\ref{line:marpa-predict-99}} = \Oc{} \times \Oc{}$
   $\because$
   \size{\Rules{\var{g}}}
@@ -2870,16 +2946,15 @@ To show this observation for time,
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-34}
+\label{eq:obs-predict-complexity-30}
 \begin{gathered}
-\Time{\ref{line:marpa-predict-99}} = \Oc{} \because \Eref{eq:obs-predict-complexity-32}
+\Time{\ref{line:marpa-predict-99}} = \Oc{} \because \Eref{eq:obs-predict-complexity-28}
 \end{gathered}
 \end{equation}
 This shows this observation for time.
 
 For space, we note that the only inclusive use of space
-$\dispend$
-\end{observation}
+\end{proof}
 
 If precomputation is used
 it can be sped up using Warshall's algorithm.
@@ -2949,6 +3024,7 @@ $\dispend$
 \State $\LinkPairs{\Veim{start}} = \set{}$
 \State Add \Veim{start} to \es{(0)}
   \Comment $\var{attempted}\plusplus, \var{added}\plusplus$
+\State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:marpa-initializer-60}
 \State \Call{Predict}{$\Veim{start}@\Ves{(0)}$}
 \label{line:marpa-initializer-70}
@@ -3216,7 +3292,7 @@ into the Earley table with the link pair
 \end{observation}
 
 \subsection{Predictor operation}
-\label{def:prediction}
+\label{sec:prediction}
 
 \begin{equation}
 \label{eq:def-predictor}
