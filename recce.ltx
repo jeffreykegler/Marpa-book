@@ -72,7 +72,13 @@
 \newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
-\newcommand{\longDfref}[2]{Def of ``#1'' \Dfref{#2}}
+\newcommand{\longDfref}[2]{
+  \ifmmode
+    \text{``#1''\Dfref{#2}}
+  \else
+    ``#1''\Dfref{#2}
+  \fi
+}
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
@@ -238,7 +244,7 @@
 }
 \newcommand{\parcomment}[2][\mathparwidth]{%
   \myparbox[#1]{$\triangleright$ #2}%
-} 
+}
 \newcommand{\lcomment}[1]{\hspace\algorithmicindent$\triangleright$ #1}
 
 \theoremstyle{definition}
@@ -732,6 +738,7 @@ Otherwise, operations are never implicit
 \begin{tabular}{ll}
 \hline
 Multiplication &  $\var{a} \times \var{b}$ \\
+Cartesian product &  $\var{set1} \times \var{set2}$ \\
 Concatenation & $\var{a} \cat \var{b}$ \\
 Concatenation & $\Vstr{a} \Vsym{b}$ \\
 Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
@@ -2146,9 +2153,15 @@ is a dotted rule,
 \end{gathered}
 \end{equation*}
 
-We consider the size of a grammar, \Vsize{\var{g}}, to be the
-number of distinct dotted rules it allows,
-$\size{\Vcfg{g}} = \size{\var{Dotted-Rules}[\var{g}]}$.
+\begin{definition}[Size of grammar]
+\label{def:grammar-size}
+The size of a grammar, \Vsize{\var{g}} is
+the number of distinct dotted rules it allows.
+That is,
+\[
+\size{\Vcfg{g}} = \size{\var{Dotted-Rules}[\var{g}]}.
+\]
+\end{definition}
 
 If we let \Vdr{x} be a dotted rule, such that
 \begin{equation}
@@ -2191,7 +2204,7 @@ A dotted rule, \Vdr{d},
 is a \dfn{penult} if it is such that $\Penult{\var{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
 \begin{equation*}
-\Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ]. 
+\Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
 \quad \dispend
 \end{equation*}
 \end{definition}
@@ -2207,12 +2220,8 @@ for example,
 \quad \dispend
 \end{equation*}
 \end{definition}
-\begin{definition}[Confirmation]
-\label{def:confirmation}
-A \dfn{confirmed dotted rule},
-or \dfn{confirmation},
-is a dotted rule
-with a dot position greater than zero.
+\begin{definition}[Completion]
+\label{def:completion}
 A \dfn{completed dotted rule},
 or \dfn{completion},
 is a dotted rule with its dot
@@ -2221,34 +2230,49 @@ for example,
 \begin{equation*}
 \Vdr{completed} = [\Vsym{A} \de \Vstr{rhs} \mydot ].
 \end{equation*}
+A dotted rule which is not a completion is called an
+\dfn{incomplete rule},
+or an \dfn{incompletion}.
+$\dispend$
+\end{definition}
+\begin{definition}[Confirmation]
+\label{def:confirmation}
+A \dfn{confirmed dotted rule},
+or \dfn{confirmation},
+is a dotted rule
+with a dot position greater than zero.
 A dotted rule is \dfn{unconfirmed} if and only if
 it is not confirmed.
 $\dispend$
 \end{definition}
-
-A dotted rule which is not a completion is called an
-\dfn{incomplete rule},
-or a \dfn{incompletion}.
+\begin{definition}[Medial]
+\label{def:medial}
 A rule which is both an incompletion and a confirmation
 is called a \dfn{medial rule}, or \dfn{medial}.
+\end{definition}
 
+\begin{definition}[EIM]
+\label{def:eim}
 A Earley item (type \type{EIM}) is a duple
 \begin{equation}
 \label{eq:d-eim}
     [\Vdr{dotted}, \Vorig{x}]
 \end{equation}
 of dotted rule and origin.
-(The origin is the location where recognition of the rule
+\end{definition}
+
+The origin is the location where recognition of the rule
 started.
-It is sometimes called the ``parent''.)
+In the Earley parsing literature,
+the origin is often called the ``parent''.
 For convenience, the type \type{ORIG} will be a synonym
 for \type{LOC}, indicating that the variable designates
-the origin element of an Earley item.
-
-For convenience,
-for an EIM such as
-$\Veim{x} = [\Vdr{x}, \Vorig{x}]$,
-we write,
+the origin element of an Earley item; and
+where
+\[
+\Veim{x} = [\Vdr{x}, \Vorig{x}]
+\]
+is an arbitrary EIM, we write
 \begin{equation*}
 \label{eq:def-dr}
 \begin{alignedat}{3}
@@ -2385,8 +2409,8 @@ for some \Vstr{rhs},
 \end{gather*}
 
 \TODO{Revisit productivity, accessiblity.  Require in INT?}
-\begin{definition}
-\label{def:EIM-valid}
+\begin{definition}[EIM validity]
+\label{def:eim-validity}
 Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
 Let, without loss of generality,
 \begin{equation}
@@ -2460,10 +2484,155 @@ The match of an EIM with a location:
 & \qquad \qquad \begin{aligned}
 	 & \Postdot{\var{pred}} = \Symbol{\Vloc{j}} \\
 \land \; & \Current{\var{pred}} = \Origin{\Vloc{j}}
+\quad \dispend
 \end{aligned}
 \end{aligned}
 \end{equation*}
 \end{definition}
+
+\begin{theorem}
+\label{th:es-prediction-count}
+The count of valid predictions in an Earley set is \Oc{}.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-es-prediction-count-08}
+\myparbox{\Veim{pred} is a valid prediction $\because$ \text{AF theorem}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-10}
+\begin{gathered}
+\Veim{pred} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+   \right], \Vorig{i} \right] @ \Ves{j} \\
+   \because \Eref{eq:th-es-prediction-count-08},
+   \text{WLOG},
+   \longDfref{EIM validity}{def:eim-validity}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-12}
+\Vstr{rhs1} = \epsilon \because
+\longDfref{prediction}{def:prediction}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-14}
+\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
+\because
+\Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:prediction}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-16}
+\var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
+\because
+\Eref{eq:th-es-prediction-count-12},
+\Eref{eq:th-es-prediction-count-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-17}
+\var{j} \le \var{i}
+\because \Eref{eq:th-es-prediction-count-16}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-18}
+\var{i} \le \var{j} \because \longDfref{EIM validity}{def:eim-validity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-20}
+\var{i} = \var{j} \because
+  \Eref{eq:th-es-prediction-count-17},
+  \Eref{eq:th-es-prediction-count-18}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-22}
+\Origin{\Veim{pred}} = \Current{\Veim{pred}}
+  \because \Eref{eq:th-es-prediction-count-10},
+  \Eref{eq:th-es-prediction-count-20}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-24}
+  \begin{gathered}
+    \DotPos{\Veim{pred}} = 0 \\
+    \because \Eref{eq:th-es-prediction-count-08},
+      \longDfref{prediction}{def:prediction}.
+  \end{gathered}
+\end{equation}
+Let \var{count} be the maximum number of predictions possible in \Ves{j}.
+\begin{equation}
+\label{eq:th-es-prediction-count-26}
+\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
+  rules, the number of possible dot positions,
+  and the number of possible origins.
+  $\because$
+  \longDfref{EIM}{def:eim}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-28}
+\var{count} = \size{\Rules{\var{g}} \times \set{0} \times \set{\var{j}}}
+\because \Eref{eq:th-es-prediction-count-22},
+  \Eref{eq:th-es-prediction-count-24},
+  \Eref{eq:th-es-prediction-count-26}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-30}
+\var{count} = \size{\Rules{\var{g}}}
+\because \Eref{eq:th-es-prediction-count-28}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-32}
+\myparbox{\size{\Rules{\var{g}}} is a constant which depends on \Vcfg{g}.
+  $\because$
+  \longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-34}
+\var{count} = \Oc{}
+\because \Eref{eq:th-es-prediction-count-30},
+\Eref{eq:th-es-prediction-count-32}.
+\end{equation}
+\end{proof}
+
+\begin{theorem}
+\label{th:es-eim-count}
+The count of valid EIMS in the Earley set at \Vloc{j} is \order{\var{j}}.
+\end{theorem}
+
+\begin{proof}
+Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
+\begin{equation}
+\label{eq:th-es-eim-count-10}
+\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
+  dotted rules and the number of possible origins.
+  $\because$
+  \longDfref{EIM}{def:eim}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-12}
+\var{count} = \size{\DottedRules{\Vcfg{g}} \times \set{\var{i} : 0 \le \var{i} \le \var{j}}}
+\because \Eref{eq:th-es-eim-count-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-14}
+\myparbox{\size{\DottedRules{\var{g}}} is a constant which depends on \Vcfg{g}.
+  $\because$
+  \longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-16}
+\var{count} = \Oc{} \times \order{\var{j}}
+\because \Eref{eq:th-es-eim-count-12}, \Eref{eq:th-es-eim-count-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-18}
+\var{count} = \order{\var{j}}
+\because \Eref{eq:th-es-eim-count-16}.
+\end{equation}
+\end{proof}
 
 \section{The Leo algorithm}
 \label{sec:leo}
@@ -4110,7 +4279,7 @@ is justified by the definition
 \Dfref{def:ambig-EIM}, we note that
 \begin{itemize}
 \item from the definition of validity
-\Dfref{def:EIM-valid}
+\Dfref{def:eim-validity}
 for the Earley item
 \Eref{eq:ambig-EIM-05},
 we have the accessibility and productivity
@@ -4818,7 +4987,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \begin{equation}
 \label{eq:earley-completer-is-consistent-58}
 \myparbox{\Veim{rez} is valid
-  $\because$ \Dfref{def:EIM-valid},
+  $\because$ \Dfref{def:eim-validity},
   \Eref{eq:earley-completer-is-consistent-38},
   \Eref{eq:earley-completer-is-consistent-44},
   \Eref{eq:earley-completer-is-consistent-48},
