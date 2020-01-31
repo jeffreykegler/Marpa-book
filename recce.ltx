@@ -3046,7 +3046,7 @@ of computing the predictions for an Earley set.
 Creation of \var{dotZeroUsed} uses \Oc{} time and \Oc{}
 space, which is charged to the parse.
 The resources are \Oc{}
-because \var{dotZeroUsed} is a bitmap with 
+because \var{dotZeroUsed} is a bitmap with
 one bit per rule, and \Rules{\var{g}} is a constant
 that depends on the grammar.
 \dispEnd{}
@@ -3121,13 +3121,12 @@ The theorem is
 and \Eref{th:predict1-complexity-22}.
 \end{proof}
 
-\begin{theorem}[\var{Predict-ES} Complexity]
+\begin{theorem}[\var{Predict-ES} Time Complexity]
 \label{th:predict-es-complexity}
 \[
 \Time{\var{Predict-ES} \text{ of } \Aref{alg:predict-es}}(\Ves{j})
-  = \var{j}
+  = \var{j}.
 \]
-and \Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added.
 \end{theorem}
 
 \begin{proof}
@@ -3258,12 +3257,20 @@ we have
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
 \label{th:predict-es-space}
+\Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added,
+and
 \[
 \Space{\var{Predict-ES}(\Ves{j}} = \Oc{}.
 \]
 \end{theorem}
 
 \begin{proof}
+\begin{equation}
+\myparbox{%
+  Space is used in \var{Predict-ES} of \Aref{alg:predict-es} only at
+  line \ref{line:marpa-predict-60}.
+}
+\end{equation}
 \TODO{Prove this}
 \end{proof}
 
@@ -3306,7 +3313,7 @@ they would be
 \left\lbrace
   \begin{gathered}
   \tuple{\Veim{pred}, \Lambda}_\type{LP} : \\
-  \Current{\var{pred}} = \Vloc{j} 
+  \Current{\var{pred}} = \Vloc{j}
   \; \land \; \Postdot{\var{pred}} = \Vsym{lhs}.
   \end{gathered}
 \right\rbrace
