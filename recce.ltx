@@ -58,7 +58,16 @@
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\lastix}[1]{\ensuremath{\##1}}
 \newcommand{\Vlastix}[1]{\lastix{\var{#1}}}
-\newcommand{\dispend}{\bigcirc}
+\newcommand{\dispEnd}{
+  \ifmmode\bigcirc
+  \else$\bigcirc$
+  \fi%
+}
+\newcommand{\cuz}{
+  \ifmmode\because
+  \else$\because$
+  \fi%
+}
 
 \newcommand{\colonpageref}[1]{%
 \vrefpagenum{\temprefpage}{#1}%
@@ -73,11 +82,9 @@
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
 \newcommand{\longDfref}[2]{
-  \ifmmode
-    \text{``#1''\Dfref{#2}}
-  \else
-    ``#1''\Dfref{#2}
-  \fi
+  \ifmmode \text{``#1''\Dfref{#2}}%
+  \else``#1''\Dfref{#2}%
+  \fi%
 }
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
@@ -362,7 +369,7 @@ For emphasis,
 or for convenient reference,
 definitions may be
 in numbered sections.
-The end of a definitions section is indicated with a circle ($\dispend$).
+The end of a definitions section is indicated with a circle (\dispEnd).
 Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
 For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
 the same thing.
@@ -932,7 +939,7 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
-$\dispend$
+\dispEnd
 \end{definition}
 
 The size of \var{r}, $\size{\Vrule{r}}$,
@@ -1118,7 +1125,7 @@ if and only if
 \[
 \exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
 \]
-A \dfn{full parse} is often called, simply, a \dfn{parse}. $\dispend$
+A \dfn{full parse} is often called, simply, a \dfn{parse}. \dispEnd{}
 Note that, by the this definition,
 a full parse is a special case of a partial parse.
 \end{definition}
@@ -1203,7 +1210,7 @@ for some $\Vterm{lookahead} \in \Term{\var{g}}^\ast$,
 \end{aligned}
 \\
 \Vrule{r} = \var{lhs} \de \Vstr{rhs}, \;\; \text{and} \\
-\var{i} = \size{\Vstr{stack}\Vstr{rhs}}. \quad \dispend
+\var{i} = \size{\Vstr{stack}\Vstr{rhs}}. \quad \dispEnd
 \end{gather}
 \end{definition}
 
@@ -1292,7 +1299,7 @@ Every LR($\pi$) grammar is unambiguous.
 If a grammar is unambiguous then it is LR($\pi$)
 for the partition of infinite cardinality,
 \[
-\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}. \quad \dispend
+\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}. \quad \dispEnd
 \]
 
 \end{definition}
@@ -1901,7 +1908,7 @@ instances,
 \var{node1} = [ \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} ] \\
 \land \;\; \var{node2} = [ \Vsym{s}, \Vloc{start}, \var{length}, \var{depth} ]
 \end{gathered}
-\right) \quad \dispend
+\right) \quad \dispEnd
 \end{aligned}
 \end{equation*}
 \end{definition}
@@ -1943,7 +1950,7 @@ in \var{Btree} and \var{Etree}:
 A rewrite is \dfn{semantics-safe}, if and only if
 \var{Instance-matches}
 is a one-to-one correspondence
-(bijection). $\dispend$
+(bijection). \dispEnd{}
 \end{definition}
 
 \section{\Marpa{} internal grammars}
@@ -2008,7 +2015,7 @@ is \dfn{right-recursive},
 and that the symbol $\Vsym{rr}$
 is \dfn{right-recursive},
 \begin{equation*}
-\RightRecursive{\Vsym{rr}}. \quad \dispend
+\RightRecursive{\Vsym{rr}}. \quad \dispEnd
 \end{equation*}
 \end{definition}
 \Dfref{def:rr} implies that, for any rule \var{r}, $\var{r} \in \Rules{\var{g}}$,
@@ -2205,7 +2212,7 @@ is a \dfn{penult} if it is such that $\Penult{\var{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
-\quad \dispend
+\quad \dispEnd
 \end{equation*}
 \end{definition}
 \begin{definition}[Prediction]
@@ -2217,7 +2224,7 @@ with a dot position of zero,
 for example,
 \begin{equation*}
 \Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{rhs} ].
-\quad \dispend
+\quad \dispEnd
 \end{equation*}
 \end{definition}
 \begin{definition}[Completion]
@@ -2233,7 +2240,7 @@ for example,
 A dotted rule which is not a completion is called an
 \dfn{incomplete rule},
 or an \dfn{incompletion}.
-$\dispend$
+\dispEnd{}
 \end{definition}
 \begin{definition}[Confirmation]
 \label{def:confirmation}
@@ -2243,7 +2250,7 @@ is a dotted rule
 with a dot position greater than zero.
 A dotted rule is \dfn{unconfirmed} if and only if
 it is not confirmed.
-$\dispend$
+\dispEnd{}
 \end{definition}
 \begin{definition}[Medial]
 \label{def:medial}
@@ -2439,7 +2446,7 @@ if and only if
 \begin{equation*}
 \label{eq:EIM-valid-30}
 \Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  (\Vsize{w}\subtract 1)].
-\quad \dispend
+\quad \dispEnd
 \end{equation*}
 \end{definition}
 
@@ -2484,7 +2491,7 @@ The match of an EIM with a location:
 & \qquad \qquad \begin{aligned}
 	 & \Postdot{\var{pred}} = \Symbol{\Vloc{j}} \\
 \land \; & \Current{\var{pred}} = \Origin{\Vloc{j}}
-\quad \dispend
+\quad \dispEnd
 \end{aligned}
 \end{aligned}
 \end{equation*}
@@ -2597,7 +2604,7 @@ Let \var{count} be the maximum number of predictions possible in \Ves{j}.
 
 \begin{theorem}
 \label{th:es-eim-count}
-The count of valid EIMS in the Earley set at \Vloc{j} is \order{\var{j}}.
+The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
 \end{theorem}
 
 \begin{proof}
@@ -2702,7 +2709,7 @@ and
 \end{equation*}
 is the Earley item to be unioned as a result of a operation
 using the LIM.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 To say that \Vlim{x}
@@ -2739,7 +2746,7 @@ is
    \Transition{\ell} = \Postdot{\var{source}} \\
    \land \; \Current{\ell} = \Current{\var{source}}.
    \end{gathered}
-  \right\rbrace \quad \dispend
+  \right\rbrace \quad \dispEnd
 \end{aligned}
 \end{equation}
 \end{definition}
@@ -2784,7 +2791,7 @@ where
 Note that \Veim{x} ranges over all the
 EIMs of Earley set \Ves{j},
 even those which are not penults.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 \begin{definition}[LIM predecessor]
@@ -2809,7 +2816,7 @@ $\Vlim{pred} = \LIMPredecessor{\var{succ}}$ where
 \end{equation*}
 In \Marpa{},
 the \var{LIM-Processor} set is a singleton,
-but we have yet to prove this. $\dispend$
+but we have yet to prove this. \dispEnd{}
 \end{definition}
 
 \begin{definition}[LIM matching]
@@ -2821,7 +2828,7 @@ We overload \var{Matches} to deal with LIM's as follows.
 	 & \Postdot{\var{cuz}} = \Lambda \\
 \land \; & \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
 \land \; & \Current{\mylim{\ell}} = \Origin{\var{cuz}}
-  \quad \dispend
+  \quad \dispEnd
 \end{aligned}
 \end{aligned}
 \end{equation*}
@@ -2977,7 +2984,7 @@ or an algorithm.
 
 \begin{algorithm}[tb]
 \caption{\var{Predict-ES}}
-\label{alg:marpa-predict}
+\label{alg:predict-es}
 \begin{algorithmic}[1]
 \Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-00}
@@ -2985,151 +2992,286 @@ or an algorithm.
 \parcomment{\ID{\Vrule{x}} is a unique identifier
 of \Vrule{x}; and
 \var{dotZeroUsed} is a bitmap tracking
-whether an unconfirmed EIM is already in \Ves{j}.%
+whether an unconfirmed EIM is
+already~in~\Ves{j}.% avoid widow words in graf
 }
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
+\label{line:marpa-predict-10}
 \Statex \hspace\algorithmicindent
     \parcomment{Loop over every \Veim{x} in \Ves{j},
     including those that \var{Predict1} adds while the loop
     is running.
     }
 \For{$\Veim{x} \in \Ves{j}$}
+\label{line:marpa-predict-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
+  \label{line:marpa-predict-14}
     \State $\Veim{pred} \gets [ \dr{\tuple{\Vrule{r}, 0}}, \Vloc{j} ] @ \var{j}$
        \Comment $\var{attempt}\plusplus$
+      \label{line:marpa-predict-16}
     \State \Call{Predict1}{\var{pred}}
-    \label{line:marpa-predict-49}
+    \label{line:marpa-predict-18}
   \EndFor
+  \label{line:marpa-predict-20}
 \EndFor
+\label{line:marpa-predict-22}
 \EndProcedure
 \Procedure{Predict1}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-60}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{x}}}} = \var{true}$}
+\label{line:marpa-predict-65}
   \State return
     \Comment Return if \var{rez} is already in \Ves{j}
+\label{line:marpa-predict-70}
 \EndIf
+\label{line:marpa-predict-75}
 \State $\LinkPairs{\var{rez}} = \set{}$
+\label{line:marpa-predict-80}
 \State Add \var{rez} to \Ves{j}
   \Comment $\var{add}\plusplus$
+\label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
    \Comment Set bit
-\label{line:marpa-predict-99}
+\label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 Algorithm
-\Aref{alg:marpa-predict} shows a ``just in time'' method
-of computing the prediction derived from an EIM.
-It is also possible to eliminate the recursion
-of \Aref{alg:marpa-predict}
-by precompute the dotted rules predicted
-for each dotted rule in the grammar.
+\Aref{alg:predict-es} shows a ``just in time'' method
+of computing the predictions for an Earley set.
 
-\begin{theorem}[Predict() Complexity]
-\var{Predict} in
-\Aref{alg:marpa-predict} runs in \Oc{} time and space,
-with \Oc{} space charged to the parse.
+\begin{observation}[\var{dotZeroUsed} resource]
+\label{obs:dotzeroused}
+Creation of \var{dotZeroUsed} uses \Oc{} time and \Oc{}
+space, which is charged to the parse.
+The resources are \Oc{}
+because \var{dotZeroUsed} is a bitmap with 
+one bit per rule, and \Rules{\var{g}} is a constant
+that depends on the grammar.
+\dispEnd{}
+\end{observation}
+
+\begin{theorem}[\var{Predict1} Complexity]
+\label{th:predict1-complexity}
+Time for \var{Predict1} is \Oc{} per invocation,
+and space is \Oc{} for each added EIM.
+\dispEnd{}
 \end{theorem}
 
 \begin{proof}
-To show this observation for time,
 \begin{equation}
-\label{eq:obs-predict-complexity-10}
-\myparbox{Every prediction in \Ves{j} takes the
-  form $\tuple{\dr{\tuple{\Vrule{r},0}}, \Vloc{j}}$
-  $\because$
-  \longDfref{prediction}{def:prediction},
-  \longDfref{CFG}{def:context-free-grammar}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-12}
-\myparbox{At most \size{\Rules{\var{g}}}
-  predictions are possible in \Ves{j}
-  $\because$
-  \Eref{eq:obs-predict-complexity-10}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-14}
-\myparbox{\size{\Rules{\var{g}}}
-  is a constant which depends on the grammar
-  $\because$
-  \longDfref{CFG}{def:context-free-grammar}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-15}
+\label{th:predict1-complexity-08}
 \myparbox{
-  $\var{rez} \in \Ves{j}$ can be computed using a bitmap of constant size,
-  whose space is charged to the Earley set.%
+  \Time{\ref{line:marpa-predict-65},\ref{line:marpa-predict-90}} = \Oc{}
+  $\because$ \Obref{obs:dotzeroused}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-16}
-\myparbox{\Oc{} predictions are possible in \Ves{j}.
-}
+  \label{th:predict1-complexity-10}
+  \Time{\ref{line:marpa-predict-60},
+    \text{\ref{line:marpa-predict-70}--\ref{line:marpa-predict-90}}}
+      = \Oc{}
+  \because \Aref{alg:predict-es}.
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-18}
-\myparbox{$\Time{\text{\ref{line:marpa-predict-00}--\ref{line:marpa-predict-60}}} = \Oc$
-  $\because$ direct from \Aref{alg:marpa-predict}.%
-}
+\label{th:predict1-complexity-12}
+\Time{\var{Predict1}} = \Oc{}
+\because \Eref{th:predict1-complexity-08}, \Eref{th:predict1-complexity-10}.
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-20}
-\myparbox{$\ExTime{\ref{line:marpa-predict-99}} = \Oc$
+\label{th:predict1-complexity-14}
+\Space{\ref{line:marpa-predict-85}} = \Oc{}
+\because \Aref{alg:predict-es}.
+\end{equation}
+%
+\begin{equation}
+\label{th:predict1-complexity-16}
+\Space{\text{\ref{line:marpa-predict-60}--\ref{line:marpa-predict-80}},
+  \ref{line:marpa-predict-90}} = 0.
+\end{equation}
+%
+\begin{equation}
+\label{th:predict1-complexity-18}
+\myparbox{Line \ref{line:marpa-predict-85} is only invoked if \var{Predict1}
+  is called with a new prediction.
   $\because$
-  direct from \Aref{alg:marpa-predict}.
+  Lines \ref{line:marpa-predict-65}
+  \ref{line:marpa-predict-70} in \Aref{alg:predict-es}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-22}
-\myparbox{\var{Predict} in \ref{line:marpa-predict-99}
-  of \Aref{alg:marpa-predict} is called only when a new
-  prediction is added to \Ves{j}.%
-}
+\label{th:predict1-complexity-20}
+\myparbox{
+Time for \var{Predict1} is \Oc{} per invocation
+$\because$ \Eref{th:predict1-complexity-12}.}
 \end{equation}
 \begin{equation}
-\label{eq:obs-predict-complexity-24}
-\myparbox{No call of \var{Predict} will recurse more
-  than \size{\Rules{\var{g}}} times.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-26}
-\myparbox{$\Time{\ref{line:marpa-predict-99}} = \size{\Rules{\var{g}}} \times \Oc{}$
+\label{th:predict1-complexity-22}
+\myparbox{%
+  Space is \Oc{} for each add EIM
   $\because$
-  the maximum number of
-  recursive calls of \var{Predict},
-  times the exclusive time used by \var{Predict}.%
+  \Eref{th:predict1-complexity-14},
+  \Eref{th:predict1-complexity-16},
+  \Eref{th:predict1-complexity-18}.%
 }
 \end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-28}
-\myparbox{$\Time{\ref{line:marpa-predict-99}} = \Oc{} \times \Oc{}$
-  $\because$
-  \size{\Rules{\var{g}}}
-  is a constant depending on \Vint{g}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:obs-predict-complexity-30}
-\begin{gathered}
-\Time{\ref{line:marpa-predict-99}} = \Oc{} \because \Eref{eq:obs-predict-complexity-28}
-\end{gathered}
-\end{equation}
-This shows this observation for time.
+The theorem is
+\Eref{th:predict1-complexity-20},
+and \Eref{th:predict1-complexity-22}.
+\end{proof}
 
-For space, we note that the only inclusive use of space
+\begin{theorem}[\var{Predict-ES} Complexity]
+\label{th:predict-es-complexity}
+\[
+\Time{\var{Predict-ES} \text{ of } \Aref{alg:predict-es}}(\Ves{j})
+  = \var{j}
+\]
+and \Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-predict-es-complexity-10}
+\myparbox{%
+  \Rules{\Vcfg{g}} is a constant depending on \var{g}
+  \cuz{}~\longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-12}
+\myparbox{%
+  Line \ref{line:marpa-predict-10} is invoked once
+  \cuz{} \Aref{alg:predict-es}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-13}
+\myparbox{%
+  Loop \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
+  is invoked once
+  \cuz \Aref{alg:predict-es}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-14}
+\myparbox{%
+  Loop \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
+  has \order{\var{j}} passes
+  \cuz{} \Thref{th:es-eim-count},
+  line \ref{line:marpa-predict-12}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-15}
+\myparbox{%
+  Lines \ref{line:marpa-predict-12} and \ref{line:marpa-predict-22}
+  are invoked \order{\var{j}} times.
+  \cuz{} line \ref{line:marpa-predict-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-16}
+\myparbox{%
+  Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
+  is invoked \order{\var{j}} times
+  \cuz{}
+  \Eref{eq:th-predict-es-complexity-14},
+  line \ref{line:marpa-predict-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-18}
+\myparbox{%
+  Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
+  has \Oc{} passes
+  \cuz{}
+  \Eref{eq:th-predict-es-complexity-10},
+  line \ref{line:marpa-predict-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-20}
+\myparbox{%
+  Lines \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
+  are invoked $\order{\var{j}} \times \Oc{} = \order{\var{j}}$ times
+  \cuz{}
+  \Eref{eq:th-predict-es-complexity-16},
+  \Eref{eq:th-predict-es-complexity-18}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-32}
+\Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
+\cuz \Obref{obs:dotzeroused}, \Eref{eq:th-predict-es-complexity-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-34}
+\Time{\ref{line:marpa-predict-10}} = \Oc{}
+\cuz \Eref{eq:th-predict-es-complexity-32}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-36}
+\Time{\ref{line:marpa-predict-14}} = \Oc{}
+\cuz \Eref{eq:th-predict-es-complexity-10}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-38}
+\Time{\ref{line:marpa-predict-18}} = \Oc{}
+\cuz \Thref{th:predict1-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-40}
+\Time{
+  \ref{line:marpa-predict-12},
+  \ref{line:marpa-predict-16},
+  \text{\ref{line:marpa-predict-20}--\ref{line:marpa-predict-22}}
+} = \Oc{}
+\cuz \Thref{th:predict1-complexity}.
+\end{equation}
+Multiplying
+the invocation count of each line by
+the time resource used,
+then summing,
+we have
+\begin{equation}
+\begin{gathered}
+\Time{\var{Predict-ES}} = \\
+  \smashoperator[r]{\sum_{\var{line}
+      \in
+      \set{\ref{line:marpa-predict-10},
+	\ref{line:marpa-predict-12},
+	\ref{line:marpa-predict-22}}
+    }}
+    \;\; \Oc{} \times \Oc{}
+  \\
+  + \smashoperator[r]{\sum_{\var{line}
+    \in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
+    }}
+    \;\; \order{\var{j}} \times \Oc{}
+  \\
+  = \order{\var{j}}
+  \end{gathered}
+\end{equation}
+\TODO{Finish proof}
+\end{proof}
+
+\begin{theorem}[\var{Predict-ES} Space Complexity]
+\label{th:predict-es-space}
+\[
+\Space{\var{Predict-ES}(\Ves{j}} = \Oc{}.
+\]
+\end{theorem}
+
+\begin{proof}
+\TODO{Prove this}
 \end{proof}
 
 If precomputation is used
-it can be sped up using Warshall's algorithm.
+\Aref{alg:predict-es} can be sped up using Warshall's algorithm.
 A version of \var{Predict} using precomputation
 will clearly run no worse than
-\Aref{alg:marpa-predict}, and therefore its
+\Aref{alg:predict-es}, and therefore its
 time complexity will be \Oc{}.
 
 \begin{observation}[Ancestry]
@@ -3146,7 +3288,7 @@ predictions have predecessors, but no causes,
 and the link pair generated for
 \Veim{rez} in
 line \ref{line:marpa-predict-00} in
-\Aref{alg:marpa-predict}
+\Aref{alg:predict-es}
 would be
 $\tuple{\Veim{x}, \Lambda}$.
 
@@ -3163,12 +3305,9 @@ they would be
 \label{eq:common-predict-ancestry-10}
 \left\lbrace
   \begin{gathered}
-  \left[
-    \left[ \Vdr{anc}, \Vorig{anc} \right]@\Vloc{j},
-    \Lambda
-  \right]_\type{LP} : \\
-  \eim{\left[ \Vdr{anc}, \Vorig{anc} \right]} \in \Ves{j} \\
-  \land \;\; \Postdot{\Vdr{anc}} = \Vsym{lhs}.
+  \tuple{\Veim{pred}, \Lambda}_\type{LP} : \\
+  \Current{\var{pred}} = \Vloc{j} 
+  \; \land \; \Postdot{\var{pred}} = \Vsym{lhs}.
   \end{gathered}
 \right\rbrace
 \end{equation}
@@ -3176,7 +3315,7 @@ The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition table \Sref{sec:transition-tables} for \Ves{j}.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \subsection{Initializer operation}
@@ -3235,19 +3374,19 @@ so that a link pair does not exist for it,
 even conceptually.
 And \Marpa{} does not track link pairs for
 predictions.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[Complexity]
 \TODO{}
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
 \Marpa{}'s \var{Initialization} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \subsection{Scanner operation}
@@ -3384,7 +3523,7 @@ the predecessor will be an incomplete EIM.
 For a \var{leo-reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[Complexity]
@@ -3456,7 +3595,7 @@ $\left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current}$
 into the Earley table with the link pair
 \begin{equation}
 \label{eq:earley-completer-summary-5}
-[ \var{pred}, \var{cause} ]. \quad \dispend
+[ \var{pred}, \var{cause} ]. \quad \dispEnd
 \end{equation}
 \end{observation}
 
@@ -3476,19 +3615,19 @@ The \Marpa{} implementation does not track
 link pairs
 for predictions.
 For details, see \Obref{obs:common-predict-ancestry}.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[Complexity]
 \TODO{}
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Predictor Operation]
 \label{obs:earley-predictor-operation}
 \Marpa{}'s predictor operation has the same effect as the ``Predictor''
 operation of \Earley{}\cite{Earley1970}.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \subsection{Memoizer operation}
@@ -3587,7 +3726,7 @@ We may write the previous link of \mylim{\ell} as
     \left\lbrace
       \LIMPredecessor{\var{source}} :
       \Veim{source} \in \Source{\mylim{\ell}}
-    \right\rbrace \quad \dispend
+    \right\rbrace \quad \dispEnd
   \end{aligned}
 \]
 \end{observation}
@@ -3607,13 +3746,13 @@ but we have yet to prove these things.
 
 \begin{observation}[Complexity]
 \TODO{}
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-operation}
 \Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
-$\dispend$
+\dispEnd{}
 \end{observation}
 
 \subsection{Top level of \Marpa{}}
@@ -3835,7 +3974,7 @@ If there is a horizontal ambiguity for a parse \var{p},
 then
 \var{p} is a horizontally ambiguous parse.
 A grammar is \dfn{horizontally ambiguous} if and only if it has a
-horizontally ambiguous parse. $\dispend$
+horizontally ambiguous parse. \dispEnd{}
 \end{definition}
 
 Note that if $\Vstr{rhs1} = \epsilon$, that
@@ -4015,13 +4154,13 @@ of the vertical ambiguity,
 \Vloc{orig} is its \dfn{origin}, and
 \Vloc{dot} is its \dfn{dot position}.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse. $\dispend$
+vertically ambiguous parse. \dispEnd{}
 
 If there is a vertical ambiguity for a parse \var{p},
 then
 \var{p} is a vertically ambiguous parse.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse. $\dispend$
+vertically ambiguous parse. \dispEnd{}
 \end{definition}
 
 \begin{theorem}
@@ -4200,7 +4339,7 @@ and the EIM is
 \dfn{horizontally ambiguous} if
 \begin{equation}
 \label{eq:ambig-EIM-03}
-\Vloc{overlap1} \neq \Vloc{overlap2}. \quad \dispend
+\Vloc{overlap1} \neq \Vloc{overlap2}. \quad \dispEnd
 \end{equation}
 \end{definition}
 
@@ -5027,7 +5166,7 @@ contained in another chain.
 A chain is \dfn{partial} if it is contained in another chain.
 Note that a maximal chain is a special case of a partial chain.
 Chains are maximal unless stated otherwise.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 \begin{definition}[LIM Validity]
@@ -5051,7 +5190,7 @@ where \var{chain} is the partial LIM chain of $\ell$,
 \end{gather}
 We say that a partial Leo chain is \dfn{valid} if and only if
 all the links of the partial chain are valid.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 \begin{theorem}[LEO Chain containment]
@@ -5330,7 +5469,7 @@ if and only if
 We say that \Veim{base} \dfn{matches} a Leo chain,
 call it \Vlimset{chain},
 if and only if \Veim{base} matches $\var{chain}[0]$.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 \begin{definition}[Leo edge]
@@ -5371,7 +5510,7 @@ An \dfn{lower element} of an edge is a bottom or an inside element.
 An edge is \dfn{maximal} if its Leo chain is maximal.
 An edge is \dfn{partial} if its Leo chain is partial.
 An edge is maximal, unless stated otherwise.
-$\dispend$
+\dispEnd{}
 \end{definition}
 
 \begin{theorem}[Leo edge length]
