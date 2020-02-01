@@ -2949,7 +2949,7 @@ an attempt to add a PIM.
 As stated, charges of resource will be made to PIM's.
 At certain points, it will not be convenient to indicate a specific
 PIM, as we will state that the resource is ``charged to the parse'',
-or ``charged to the Earley set''.
+``charged to the Earley set'', or ``charged to the caller''.
 
 A resource ``charged to the parse'' is re-charged to the first PIM
 of Earley set 0, which exists in every parse.
@@ -2959,6 +2959,9 @@ In a successful parse, every Earley set has at least one PIM.
 A failed parse will terminate with the first empty Earley set,
 so that there is only one Earley set's resource to re-charge,
 and this may be charged to the parse.
+If a resource is ``charged to the caller'' the decision of how
+to charge the resource is made by
+the calling routine.
 
 In analyzing the pseudocode we will speak of the ``exclusive''
 resource used, and ``inclusive'' resource used.
@@ -3021,13 +3024,13 @@ already~in~\Ves{j}.% avoid widow words in graf
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{x}}}} = \var{true}$}
 \label{line:marpa-predict-65}
   \State return
-    \Comment Return if \var{rez} is already in \Ves{j}
+    \Comment Return if \var{x} is already in \Ves{j}
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{rez}} = \set{}$
+\State $\LinkPairs{\var{x}} = \set{}$
 \label{line:marpa-predict-80}
-\State Add \var{rez} to \Ves{j}
+\State Add \var{x} to \Ves{j}
   \Comment $\var{add}\plusplus$
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
@@ -3054,8 +3057,10 @@ that depends on the grammar.
 
 \begin{theorem}[\var{Predict1} Complexity]
 \label{th:predict1-complexity}
-Time for \var{Predict1} is \Oc{} per invocation,
-and space is \Oc{} for each added EIM.
+Time for \var{Predict1} can be accounted for by
+charging \Oc{} to the caller.
+Space for \var{Predict1} can be account
+for by charging \Oc{} to each added EIM.
 \dispEnd{}
 \end{theorem}
 
@@ -3109,24 +3114,27 @@ $\because$ \Eref{th:predict1-complexity-12}.}
 \begin{equation}
 \label{th:predict1-complexity-22}
 \myparbox{%
-  Space is \Oc{} for each add EIM
+  Space is \Oc{} for each added EIM
   $\because$
   \Eref{th:predict1-complexity-14},
   \Eref{th:predict1-complexity-16},
   \Eref{th:predict1-complexity-18}.%
 }
 \end{equation}
-The theorem is
-\Eref{th:predict1-complexity-20},
-and \Eref{th:predict1-complexity-22}.
+To show the theorem we charge the \Oc{} time
+shown in \Eref{th:predict1-complexity-20} to the caller;
+and we charge the \Oc{} space shown in
+\Eref{th:predict1-complexity-22} to
+\Veim{x} of line \ref{line:marpa-predict-85}.
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Time Complexity]
 \label{th:predict-es-complexity}
-\[
-\Time{\var{Predict-ES} \text{ of } \Aref{alg:predict-es}}(\Ves{j})
-  = \var{j}.
-\]
+The time of $\var{Predict-ES}(\Ves{j})$
+\Aref{alg:predict-es}
+may be charged as
+\Oc{} to each EIM of \Ves{j},
+and \Oc{} to \Ves{j} itself.
 \end{theorem}
 
 \begin{proof}
@@ -3138,11 +3146,21 @@ and \Eref{th:predict1-complexity-22}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-complexity-12}
+\label{eq:th-predict-es-complexity-12-1}
 \myparbox{%
   Line \ref{line:marpa-predict-10} is invoked once
   \cuz{} \Aref{alg:predict-es}.%
 }
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-12-2}
+  \Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
+  \cuz \Obref{obs:dotzeroused}, \Eref{eq:th-predict-es-complexity-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-complexity-12-3}
+  \Time{\ref{line:marpa-predict-10}} = \Oc{}
+  \cuz \Eref{eq:th-predict-es-complexity-12-2}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-13}
@@ -3200,24 +3218,14 @@ and \Eref{th:predict1-complexity-22}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-complexity-32}
-\Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
-\cuz \Obref{obs:dotzeroused}, \Eref{eq:th-predict-es-complexity-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-34}
-\Time{\ref{line:marpa-predict-10}} = \Oc{}
-\cuz \Eref{eq:th-predict-es-complexity-32}.
-\end{equation}
-\begin{equation}
 \label{eq:th-predict-es-complexity-36}
-\Time{\ref{line:marpa-predict-14}} = \Oc{}
-\cuz \Eref{eq:th-predict-es-complexity-10}
+  \Time{\ref{line:marpa-predict-14}} = \Oc{}
+  \cuz \Eref{eq:th-predict-es-complexity-10}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-38}
-\Time{\ref{line:marpa-predict-18}} = \Oc{}
-\cuz \Thref{th:predict1-complexity}.
+  \Time{\ref{line:marpa-predict-18}} = \Oc{}
+  \cuz \Thref{th:predict1-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-40}
@@ -3226,7 +3234,7 @@ and \Eref{th:predict1-complexity-22}.
   \ref{line:marpa-predict-16},
   \text{\ref{line:marpa-predict-20}--\ref{line:marpa-predict-22}}
 } = \Oc{}
-\cuz \Thref{th:predict1-complexity}.
+  \cuz \Aref{alg:predict-es}.
 \end{equation}
 Multiplying
 the invocation count of each line by
@@ -3234,12 +3242,15 @@ the time resource used,
 then summing,
 we have
 \begin{equation}
-\begin{gathered}
-\Time{\var{Predict-ES}} = \\
-  \smashoperator[r]{\sum_{\var{line}
+\label{eq:th-predict-es-complexity-42}
+  \begin{aligned}
+  \Time{\text{\ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}}}
+  & =
+  \left(
+    \begin{gathered}
+    \smashoperator[r]{\sum_{\var{line}
       \in
-      \set{\ref{line:marpa-predict-10},
-	\ref{line:marpa-predict-12},
+      \set{\ref{line:marpa-predict-12},
 	\ref{line:marpa-predict-22}}
     }}
     \;\; \Oc{} \times \Oc{}
@@ -3248,11 +3259,16 @@ we have
     \in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
     }}
     \;\; \order{\var{j}} \times \Oc{}
-  \\
-  = \order{\var{j}}
-  \end{gathered}
+    \end{gathered}
+  \right)
+  & = \order{\var{j}}
+  \end{aligned}
 \end{equation}
-\TODO{Finish proof}
+\Eref{eq:th-predict-es-complexity-12-3} accounts for the time
+for line \ref{line:marpa-predict-10},
+which is \Oc() and may be charged to the Earley set.
+\Eref{eq:th-predict-es-complexity-42} accounts for all the other lines
+of \var{Predict-ES}
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
