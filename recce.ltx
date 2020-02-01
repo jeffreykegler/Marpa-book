@@ -3174,16 +3174,15 @@ and \Oc{} to \Ves{j} itself.
 \label{eq:th-predict-es-complexity-14}
 \myparbox{%
   Loop \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
-  has \order{\var{j}} passes
-  \cuz{} \Thref{th:es-eim-count},
-  line \ref{line:marpa-predict-12}.%
+  has one pass per $\Veim{x} \in \Ves{j}$
+  \cuz{} line \ref{line:marpa-predict-12}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-15}
 \myparbox{%
   Lines \ref{line:marpa-predict-12} and \ref{line:marpa-predict-22}
-  are invoked \order{\var{j}} times.
+  are invoked once per $\Veim{x} \in \Ves{j}$
   \cuz{} line \ref{line:marpa-predict-14}.%
 }
 \end{equation}
@@ -3191,7 +3190,7 @@ and \Oc{} to \Ves{j} itself.
 \label{eq:th-predict-es-complexity-16}
 \myparbox{%
   Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  is invoked \order{\var{j}} times
+  is invoked once per $\Veim{x} \in \Ves{j}$
   \cuz{}
   \Eref{eq:th-predict-es-complexity-14},
   line \ref{line:marpa-predict-14}.%
@@ -3201,7 +3200,7 @@ and \Oc{} to \Ves{j} itself.
 \label{eq:th-predict-es-complexity-18}
 \myparbox{%
   Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  has \Oc{} passes
+  has \Oc{} passes per $\Veim{x} \in \Ves{j}$
   \cuz{}
   \Eref{eq:th-predict-es-complexity-10},
   line \ref{line:marpa-predict-14}.%
@@ -3211,7 +3210,7 @@ and \Oc{} to \Ves{j} itself.
 \label{eq:th-predict-es-complexity-20}
 \myparbox{%
   Lines \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  are invoked $\order{\var{j}} \times \Oc{} = \order{\var{j}}$ times
+  are invoked \Oc{} times per $\Veim{x} \in \Ves{j}$
   \cuz{}
   \Eref{eq:th-predict-es-complexity-16},
   \Eref{eq:th-predict-es-complexity-18}.%
@@ -3243,9 +3242,9 @@ then summing,
 we have
 \begin{equation}
 \label{eq:th-predict-es-complexity-42}
-  \begin{aligned}
-  \Time{\text{\ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}}}
-  & =
+  \begin{gathered}
+  \myparbox{Time used by lines \text{\ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}} per~$\Veim{x} \in \Ves{j}$~is}
+  \\
   \left(
     \begin{gathered}
     \smashoperator[r]{\sum_{\var{line}
@@ -3253,22 +3252,30 @@ we have
       \set{\ref{line:marpa-predict-12},
 	\ref{line:marpa-predict-22}}
     }}
-    \;\; \Oc{} \times \Oc{}
+    \;\; 1 \times \Oc{}
   \\
   + \smashoperator[r]{\sum_{\var{line}
     \in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
     }}
-    \;\; \order{\var{j}} \times \Oc{}
+    \;\; \Oc{} \times \Oc{}
     \end{gathered}
   \right)
-  & = \order{\var{j}}
-  \end{aligned}
+  = \Oc{}
+  \end{gathered}
 \end{equation}
-\Eref{eq:th-predict-es-complexity-12-3} accounts for the time
+
+To show the theorem, we note that
+\begin{itemize}
+\item \Eref{eq:th-predict-es-complexity-12-3} accounts for the \Oc{} time
 for line \ref{line:marpa-predict-10},
-which is \Oc() and may be charged to the Earley set.
-\Eref{eq:th-predict-es-complexity-42} accounts for all the other lines
-of \var{Predict-ES}
+which is \Oc{} and may be charged to the Earley set.
+\item
+\Eref{eq:th-predict-es-complexity-42} accounts for
+all the other lines of \var{Predict-ES}
+as \Oc{} time
+for each $\Veim{x} \in \Ves{j}$, which may be charged
+to \Veim{x}.
+\end{itemize}
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
