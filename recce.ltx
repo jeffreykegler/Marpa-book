@@ -2995,21 +2995,39 @@ so at this point we will ``pre-declare'' them.
 
 \begin{observation}[\var{dotZeroUsed} bitmap]
 \label{obs:dotzeroused-bitmap}
+For each Earley set,
 \var{dotZeroUsed} is a bitmap with
 one bit for every rule in the grammar.
 This means that its size is \size{\Rules{\var{g}}}.
 Since \Rules{\var{g}} is a constant
 that depends on the grammar \Dfref{def:context-free-grammar},
-its creation consumes \Oc{} space.
+its creation consumes \Oc{} space,
+which will be charged to the Earley set.
 \dispEnd{}
 \end{observation}
 
-\begin{observation}[\var{used} PSL]
-\label{obs:used-psl}
-\TODO{TODO}
+\begin{observation}[\var{seen} PSL]
+\label{obs:seen-psl}
+For each Earley set,
+\var{used} is a PSL with
+one entry for every dotted rule in the grammar.
+Earley sets never have duplicated EIM's and
+\var{seen} is used to efficiently enforce this.
+PSL's are described in detail in section
+\Sref{sec:per-set-lists}.
+
+Since there 
+is one fixed-size entry for every dotted rule in the grammar,
+The size of \var{seen} is \order{\size{\DottedRules{\var{g}}}},
+which is a constant which depends on \Vcfg{g},
+and therefore the creation of \var{seen} will consume
+\Oc{} space,
+\dispEnd{}
+which will be charged to the Earley set.
+\dispEnd{}
 \end{observation}
 
-\begin{observation}[\var{transition} PSL]
+\begin{observation}[\var{transition} array]
 \label{obs:transition-array}
 \TODO{TODO}
 \end{observation}
@@ -3091,7 +3109,7 @@ added at \ref{line:marpa-predict-85}.
 \label{th:predict1-complexity-08}
 \myparbox{
   \Time{\ref{line:marpa-predict-65},\ref{line:marpa-predict-90}} = \Oc{}
-  $\because$ \Obref{obs:dotzeroused}.
+  $\because$ \Obref{obs:dotzeroused-bitmap}.
 }
 \end{equation}
 \begin{equation}
@@ -3177,7 +3195,7 @@ and \Oc{} to \Ves{j} itself.
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-2}
   \Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
-  \cuz \Obref{obs:dotzeroused}, \Eref{eq:th-predict-es-complexity-10}.
+  \cuz \Obref{obs:dotzeroused-bitmap}, \Eref{eq:th-predict-es-complexity-10}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-3}
@@ -3407,9 +3425,7 @@ the transition table \Sref{sec:transition-tables} for \Ves{j}.
 
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
-As stated in
-\Eref{eq:def-initializer-lp},
-the \Marpa{} implementation does not keep
+The \Marpa{} implementation does not keep
 any link pairs for any PIM in Earley set 0.
 \Veim{start} does not have any non-trivial ancestor,
 so that a link pair does not exist for it,
@@ -3864,7 +3880,7 @@ if and only if
 \Marpa{} \var{Memoizer} operation.
 \end{itemize}
 This observation follows from
-\Eref{eq:def-initializer},
+\Aref{alg:marpa-initializer},
 \Eref{eq:def-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
@@ -3895,7 +3911,7 @@ operation, that operation is the \var{Reducer} operation.
 If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
-\Eref{eq:def-initializer},
+\Aref{alg:marpa-initializer},
 \Eref{eq:def-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
