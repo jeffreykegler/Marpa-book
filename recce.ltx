@@ -3019,18 +3019,18 @@ already~in~\Ves{j}.% avoid widow words in graf
 \EndFor
 \label{line:marpa-predict-22}
 \EndProcedure
-\Procedure{Predict1}{\Veim{x}@\Ves{j}}
+\Procedure{Predict1}{\Veim{prediction}@\Ves{j}}
 \label{line:marpa-predict-60}
-\If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{x}}}} = \var{true}$}
+\If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
 \label{line:marpa-predict-65}
   \State return
-    \Comment Return if \var{x} is already in \Ves{j}
+    \Comment Return if \var{prediction} is already in \Ves{j}
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{x}} = \set{}$
+\State $\LinkPairs{\var{prediction}} = \set{}$
 \label{line:marpa-predict-80}
-\State Add \var{x} to \Ves{j}
+\State Add \var{prediction} to \Ves{j}
   \Comment $\var{add}\plusplus$
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
@@ -3060,7 +3060,8 @@ that depends on the grammar.
 Time for \var{Predict1} can be accounted for by
 charging \Oc{} to the caller.
 Space for \var{Predict1} can be account
-for by charging \Oc{} to each added EIM.
+for by charging \Oc{} to each \Veim{prediction}
+added at \ref{line:marpa-predict-85}.
 \dispEnd{}
 \end{theorem}
 
@@ -3280,21 +3281,29 @@ to \Veim{x}.
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
 \label{th:predict-es-space}
-\Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added,
-and
-\[
-\Space{\var{Predict-ES}(\Ves{j}} = \Oc{}.
-\]
+\Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added.
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
+\label{eq:th-predict-es-space-10}
 \myparbox{%
-  Space is used in \var{Predict-ES} of \Aref{alg:predict-es} only at
-  line \ref{line:marpa-predict-60}.
+  Space is consumed in \var{Predict-ES} of \Aref{alg:predict-es} only at
+  line \ref{line:marpa-predict-60}.%
 }
 \end{equation}
-\TODO{Prove this}
+\begin{equation}
+\label{eq:th-predict-es-space-20}
+\myparbox{%
+  The space is consumed at line \ref{line:marpa-predict-60}.
+  of \var{Predict-ES} is \Oc{} and is charged to \Veim{pred},
+  the prediction added
+  \cuz{} \Thref{th:predict1-complexity}.%
+}
+\end{equation}
+The theorem follows from
+\Eref{eq:th-predict-es-space-10} and
+\Eref{eq:th-predict-es-space-20}.
 \end{proof}
 
 If precomputation is used
@@ -3370,28 +3379,10 @@ the transition table \Sref{sec:transition-tables} for \Ves{j}.
 \end{algorithmic}
 \end{algorithm}
 
-Recall from \Eref{eq:def-accept-rule} the accept rule of \Vint{g},
-\Vrule{accept},
-and from \Sref{sec:common-predict}
-the definition of \var{Predict}.
-Then
-\begin{equation}
-\label{eq:def-initializer}
-\begin{gathered}
-\var{Initializer}() \defined
-\left\lbrace \;
-\Veim{start}
-\; \right\rbrace \cup
-\var{Predict}(\Veim{start}, (0)_\type{loc})
-\\
-\text{where $\Veim{start} = \left[ [ \Vrule{accept}, 0 ], 0 \right]$}
-\end{gathered}
-\end{equation}
-and
-\begin{equation}
-\label{eq:def-initializer-lp}
-\forall \; \Vpim{pim} \in \es{(0)}: \LinkPairs{\var{pim}} = \emptyset.
-\end{equation}
+\begin{observation}[Complexity]
+\TODO{}
+\dispEnd{}
+\end{observation}
 
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
@@ -3404,11 +3395,6 @@ so that a link pair does not exist for it,
 even conceptually.
 And \Marpa{} does not track link pairs for
 predictions.
-\dispEnd{}
-\end{observation}
-
-\begin{observation}[Complexity]
-\TODO{}
 \dispEnd{}
 \end{observation}
 
