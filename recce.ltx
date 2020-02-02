@@ -2964,12 +2964,12 @@ to charge the resource is made by
 the calling routine.
 
 In analyzing the pseudocode we will speak of the ``exclusive''
-resource used, and ``inclusive'' resource used.
-``Exclusive'' will mean excluding the resource used by other
+resource consumed, and ``inclusive'' resource consumed.
+``Exclusive'' will mean excluding the resource consumed by other
 pseudocode algorithms called in the pseudocode.
-``Inclusive'' mean including all resource used,
+``Inclusive'' mean including all resource consumed,
 whether directly or indirectly.
-Resource is inclusvie unless otherwise stated.
+Resource is inclusive unless otherwise stated.
 
 We will write \ExTime{\var{x}} to indicate the exclusive time
 taken by \var{x};
@@ -2981,6 +2981,38 @@ taken by \var{x}; and
 taken by \var{x}.
 Here \var{x} may be a code snippet, a line, a line range
 or an algorithm.
+
+Space is consumed only when new space is allocated.
+Reads and writes do not consume space.
+
+\subsection{Space charged to Earley sets}
+\label{sec:earley-set-space}
+
+We will use several data structures which are charged
+to the Earley set before it is convenient to
+account for their creation,
+so at this point we will ``pre-declare'' them.
+
+\begin{observation}[\var{dotZeroUsed} bitmap]
+\label{obs:dotzeroused-bitmap}
+\var{dotZeroUsed} is a bitmap with
+one bit for every rule in the grammar.
+This means that its size is \size{\Rules{\var{g}}}.
+Since \Rules{\var{g}} is a constant
+that depends on the grammar \Dfref{def:context-free-grammar},
+its creation consumes \Oc{} space.
+\dispEnd{}
+\end{observation}
+
+\begin{observation}[\var{used} PSL]
+\label{obs:used-psl}
+\TODO{TODO}
+\end{observation}
+
+\begin{observation}[\var{transition} PSL]
+\label{obs:transition-array}
+\TODO{TODO}
+\end{observation}
 
 \subsection{Common prediction logic}
 \label{sec:common-predict}
@@ -3043,17 +3075,6 @@ already~in~\Ves{j}.% avoid widow words in graf
 Algorithm
 \Aref{alg:predict-es} shows a ``just in time'' method
 of computing the predictions for an Earley set.
-
-\begin{observation}[\var{dotZeroUsed} resource]
-\label{obs:dotzeroused}
-Creation of \var{dotZeroUsed} uses \Oc{} time and \Oc{}
-space, which is charged to the parse.
-The resources are \Oc{}
-because \var{dotZeroUsed} is a bitmap with
-one bit per rule, and \Rules{\var{g}} is a constant
-that depends on the grammar.
-\dispEnd{}
-\end{observation}
 
 \begin{theorem}[\var{Predict1} Complexity]
 \label{th:predict1-complexity}
