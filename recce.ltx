@@ -2731,6 +2731,24 @@ and, for arbitrary $\Vlim{x}@\Vloc{j}$,
 \Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
 \]
 
+\begin{definition}[Transition of a PIM]
+\label{def:transition}
+Let \Vpim{pim} be an arbitrary PIM.
+The \dfn{transition symbol},
+or \dfn{transition},
+of \var{pim} is
+\begin{equation*}
+\begin{cases}
+\Transition{\Vlim{pim}} \text{ if \var{pim} is a LIM, and} \\
+\Postdot{\Veim{pim}} \text{ if \var{pim} is an EIM.}
+\end{cases}
+\end{equation*}
+In either case, the transition symbol
+of \var{pim}
+may be written
+\Transition{\var{pim}}. \dispEnd
+\end{definition}
+
 \begin{definition}[Leo item source]
 \label{def:leo-item-source}
 Leo items ``stand in'' for an EIM source.
@@ -3022,14 +3040,37 @@ The size of \var{seen} is \order{\size{\DottedRules{\var{g}}}},
 which is a constant which depends on \Vcfg{g},
 and therefore the creation of \var{seen} will consume
 \Oc{} space,
-\dispEnd{}
 which will be charged to the Earley set.
 \dispEnd{}
 \end{observation}
 
 \begin{observation}[\var{transition} array]
 \label{obs:transition-array}
-\TODO{TODO}
+For each Earley set,
+\var{transition} is a sparse array
+of linked lists.
+The array entries are indexed by symbol,
+and the linked lists are of PIM's.
+The \var{transition} array is for efficient lookup
+of EIM and LIM matches.
+
+In charging the space used by \var{transition},
+we deal separately with the space consumed by the linked lists,
+and the space consumed by the \var{transition} itself,
+excluding the links lists.
+The space for the linked lists will be charged to the
+PIM's as shown later.
+
+Since there is at most one entry for every symbol
+in the grammar,
+the number of array entries in \var{transition} is,
+\order{\size{\Vocab{\var{g}}}}.
+\Vocab{\var{g}} is a constant which depends on \Vcfg{g},
+and the \var{transition} array itself,
+excluding the linked lists,
+consumes \Oc{} space,
+which may be charged to the Earley set.
+\dispEnd{}
 \end{observation}
 
 \subsection{Common prediction logic}
