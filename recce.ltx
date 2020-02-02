@@ -30,7 +30,11 @@
 % replacement of \qedhere often fails as well.  I go with
 % a 100 fail-safe manual placement
 \renewcommand{\qedsymbol}{}
-\newcommand{\myqed}{\square}
+\newcommand{\myqed}{%
+  \ifmmode\square
+  \else$\square$
+  \fi%
+}
 
 \delimitershortfall=0pt
 \delimiterfactor=1100
@@ -1348,7 +1352,7 @@ we have
 \end{theorem}
 
 \begin{proof}
-Directly from \Dfref{def:LR}.
+Directly from \Dfref{def:LR}. \myqed
 \end{proof}
 
 \section{External grammars}
@@ -2088,7 +2092,7 @@ Isolating the derivation from \Eref{rr-proof-20a} to
 \end{equation}
 so that
 \begin{equation}
-\RightRecursive{[ \Vsym{symX} \de \Vstr{rhsX} ]} \because \Dfref{def:rr}.
+\RightRecursive{[ \Vsym{symX} \de \Vstr{rhsX} ]} \because \Dfref{def:rr}. \quad \myqed
 \end{equation}
 \end{proof}
 
@@ -2643,7 +2647,7 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 \begin{equation}
 \label{eq:th-es-eim-count-18}
 \var{count} = \order{\var{j}}
-\because \Eref{eq:th-es-eim-count-16}.
+\because \Eref{eq:th-es-eim-count-16}. \quad \myqed
 \end{equation}
 \end{proof}
 
@@ -3211,7 +3215,7 @@ To show the theorem we charge the \Oc{} time
 shown in \Eref{th:predict1-complexity-20} to the caller;
 and we charge the \Oc{} space shown in
 \Eref{th:predict1-complexity-22} to
-\Veim{x} of line \ref{line:marpa-predict-85}.
+\Veim{x} of line \ref{line:marpa-predict-85}. \myqed
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Time Complexity]
@@ -3360,7 +3364,7 @@ which is \Oc{} and may be charged to the Earley set.
 all the other lines of \var{Predict-ES}
 as \Oc{} time
 for each $\Veim{x} \in \Ves{j}$, which may be charged
-to \Veim{x}.
+to \Veim{x}. \myqed
 \end{itemize}
 \end{proof}
 
@@ -3388,7 +3392,7 @@ to \Veim{x}.
 \end{equation}
 The theorem follows from
 \Eref{eq:th-predict-es-space-10} and
-\Eref{eq:th-predict-es-space-20}.
+\Eref{eq:th-predict-es-space-20}. \myqed
 \end{proof}
 
 If precomputation is used
@@ -4205,7 +4209,7 @@ Since these are both right derviations,
 the parse must be ambiguous, which shows
 the reductio.
 Since the parse is ambiguous, its grammar is ambiguous.
-This shows the theorem.
+This shows the theorem. \myqed
 \end{proof}
 
 \begin{definition}[Vertical Ambiguity]
@@ -4376,7 +4380,7 @@ and \var{p} is ambiguous,
 which shows the reductio.
 Since \var{p} is ambiguous, its grammar, \Vcfg{g} must
 also be ambiguous.
-This shows the theorem.
+This shows the theorem. \myqed
 \end{proof}
 
 \begin{definition}
@@ -4559,7 +4563,7 @@ this shows that any full parse consistent with
 And since by \Thref{th:h-ambig-g}, if a parse is horizontally
 ambiguous,
 its grammar is horizontally ambiguous,
-we see that \Vcfg{g} is horizontally ambiguous.
+we see that \Vcfg{g} is horizontally ambiguous. \myqed
 \end{proof}
 
 \begin{theorem}
@@ -4710,7 +4714,9 @@ From
 we have
 \begin{equation}
 \label{eq:th-v-EIM-g-ambig-46}
-\text{$\Vstr{rhs1} \neq \Vstr{rhs2}$ in \Eref{eq:def-v-ambig-15c} of \Dfref{def:v-ambig}.}
+\Vstr{rhs1} \neq \Vstr{rhs2}
+  \text{ in \Eref{eq:def-v-ambig-15c}
+    of \Dfref{def:v-ambig}. \myqed}
 \end{equation}
 \end{proof}
 
@@ -4744,7 +4750,7 @@ any full parse consistent with the partial parse
 is vertically ambiguous,
 and therefore \var{full} is vertically ambiguous.
 By \Thref{th:v-ambig-g} if \var{full} is vertically ambiguous,
-then \Vcfg{g} is ambiguous.
+then \Vcfg{g} is ambiguous. \myqed
 \end{proof}
 
 \begin{theorem}
@@ -4754,7 +4760,7 @@ an ambiguous EIM.
 \end{theorem}
 
 \begin{proof}
-This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}.
+This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}. \myqed
 \end{proof}
 
 \section{Implementation}
@@ -5033,7 +5039,7 @@ it produces all of the valid Earley items.
 \begin{proof}
 \Earley{} is proved correct in
 \cite[Theorem 4.9, pp. 323-325]{AU1972} and
-\cite[pp. 18-25]{Earley1968}.
+\cite[pp. 18-25]{Earley1968}. \myqed
 \end{proof}
 
 The following is proved as part of
@@ -5229,7 +5235,8 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
   \Eref{eq:earley-completer-is-consistent-38},
   \Eref{eq:earley-completer-is-consistent-44},
   \Eref{eq:earley-completer-is-consistent-48},
-  \Eref{eq:earley-completer-is-consistent-56}
+  \Eref{eq:earley-completer-is-consistent-56}.
+  \myqed
 }
 \end{equation}
 \end{proof}
@@ -5420,7 +5427,8 @@ Otherwise, we have \Eref{eq:th-chain-containment-14-10} vacuously.}
 \label{eq:th-chain-containment-28}
 \begin{gathered}
 \forall \; \mylim{\ell{}2} \in \var{shorter} : \ell{}2 \in \var{longer} \\
-\text{$\because$ induction \Eref{eq:th-chain-containment-10}--\Eref{eq:th-chain-containment-26}.}
+\because \text{ induction \Eref{eq:th-chain-containment-10}--\Eref{eq:th-chain-containment-26}.}
+   \quad \myqed
 \end{gathered}
 \end{equation}
 \end{proof}
@@ -5443,6 +5451,7 @@ Then
 
 \begin{proof}
 \TODO{Prove this}
+\myqed
 \end{proof}
 
 \begin{theorem}[Memoizer consistency]
@@ -5552,6 +5561,7 @@ $\because$ AF subcase.%
 }
 \end{equation}
 \TODO{Finish proof from here.  Look at use of \var{LIMPredecessor}}
+\myqed
 \end{proof}
 
 \begin{definition}[Leo chain--base match]
@@ -5653,7 +5663,7 @@ as a function of chain index $\because$
 \Vlastix{edge} = \Vlastix{chain} + 1
 \because
 \Eref{eq:th-leo-edge-length-14},
-\Eref{eq:th-leo-edge-length-16}. \quad \qedhere
+\Eref{eq:th-leo-edge-length-16}. \quad \myqed
 \end{equation}
 \end{proof}
 
@@ -5710,7 +5720,7 @@ $\because$ AF theorem, WLOG.
 \end{equation}
 The theorem follows directly from
 \Eref{eq:th-leo-chain-source-properties-24} and
-\Eref{eq:th-leo-chain-source-properties-26}.
+\Eref{eq:th-leo-chain-source-properties-26}. \myqed
 \end{proof}
 
 \begin{theorem}[Edge properties]
@@ -5898,7 +5908,7 @@ $0 \le \var{n} \le \Vlastix{edge}$,
 \end{equation}
 We have the theorem directly from
 \Eref{eq:edge-elements-are-complete-50} and
-\Eref{eq:edge-elements-are-complete-52}.
+\Eref{eq:edge-elements-are-complete-52}. \myqed
 \end{proof}
 
 \begin{theorem}[Edge Descendant Uniqueness]
@@ -6128,7 +6138,7 @@ With
 \Eref{th:edge-descendant-uniqueness-52} we
 have the reductio of
 \Eref{th:edge-descendant-uniqueness-16}
-and the theorem.
+and the theorem. \myqed
 \end{proof}
 
 \begin{theorem}[Edge Top is Border]
@@ -6251,7 +6261,7 @@ $\because$ \Eref{th:edge-top-is-border-40}
 \end{equation}
 Since the choice of \Veim{no} was without loss of generality,
 with \Eref{th:edge-top-is-border-44} we have the
-theorem.
+theorem. \myqed
 \end{proof}
 
 \begin{theorem}[Leo edge top]
@@ -6347,8 +6357,10 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 \begin{equation}
 \label{eq:th-leo-edge-top-24}
 \myparbox{The top of \Veimset{edge} is
-$\left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Veim{base}}$ \\
-$\because$ \Eref{eq:th-leo-edge-top-10}, \Eref{eq:th-leo-edge-top-22}.}
+  $\left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Veim{base}}$ \\
+  $\because$ \Eref{eq:th-leo-edge-top-10}, \Eref{eq:th-leo-edge-top-22}.
+  \myqed
+}
 \end{equation}
 \end{proof}
 
@@ -6364,6 +6376,7 @@ Recall that \var{Leo-reducer}
 is defined at
 \Eref{eq:def-reducer-23}.
 \TODO{prove this}
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -6453,6 +6466,7 @@ first invalid PIM,
 and therefore no \Marpa{} operation creates
 an invalid PIM.
 Therefore, \Marpa{} is consistent.
+\myqed
 \end{proof}
 
 \begin{definition}[Hidden and Visible PIM's]
@@ -6468,6 +6482,7 @@ PIM's.
 
 \begin{proof}
 \TODO{prove this}
+\myqed
 \end{proof}
 
 For convenience in the next few lemma's,
@@ -6604,6 +6619,7 @@ the EIM's of visible depth \var{ix}.}
 \end{equation}
 
 \TODO{finish this proof}
+\myqed
 \end{proof}
 
 \begin{lemma}
@@ -6656,6 +6672,7 @@ $\because$ only confirmed EIM's have a visible depth
 \Eref{eq:lem-marpa-visible-depth-completeness-14}.
 \end{equation}
 \TODO{finish proof}
+\myqed
 \end{proof}
 
 \TODO{Prove Marpa + Reverse Leo = Original Earley}
@@ -6669,6 +6686,7 @@ or they are disjoint
 \end{theorem}
 \begin{proof}
 \TODO{Need this proof?}
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -6683,6 +6701,7 @@ or \On{}.
 
 \begin{proof}
 \TODO{Need this proof?}
+\myqed
 \end{proof}
 
 \section{Reversing Leo memoization}
@@ -6704,6 +6723,7 @@ where $\var{n} = \Vsize{partial}$.
 
 \begin{proof}
 \TODO{Prove this}
+\myqed
 \end{proof}
 
 As a result,
@@ -6722,6 +6742,7 @@ in an unambiguous parse is \On{}.
 
 \begin{proof}
 \TODO{Prove this}
+\myqed
 \end{proof}
 
 \section{LRR complexity}
@@ -6754,6 +6775,7 @@ that the maximum size of the Earley
 set at \Vloc{j} is
 \begin{equation*}
 \Vloc{j} \times \Oc{} = \order{\var{j}} \times \Oc{} = \order{\var{j}}.
+  \quad \myqed
 \end{equation*}
 \end{proof}
 
@@ -6789,6 +6811,7 @@ We assume for the reductio that
 Confirmed EIMs are only unioned by the Scanner and the Completer.
 
 \TODO{Finish proof}
+\myqed
 
 \end{proof}
 
@@ -6840,6 +6863,7 @@ This is contrary to the assumption for the reductio.
 We therefore conclude that the length of a right derivation
 must be less than or equal to \var{c},
 unless at least one step of that derivation uses a right recursive rule.
+\myqed
 \end{proof}
 
 \subsection{The complexity results}
@@ -6960,6 +6984,7 @@ We have
 \Eref{eq:handle-unique-15c} from \Eref{eq:handle-unique-33};
 and
 \Eref{eq:handle-unique-15d} from \Eref{eq:handle-unique-30}.
+\myqed
 \end{proof}
 
 \begin{lemma}
@@ -7228,7 +7253,7 @@ Then
 and from \Eref{eq:left-congruence60}
 we have \Eref{eq:left-congruence4}
 and the theorem.
-
+\myqed
 \end{proof}
 
 \begin{lemma}
@@ -7475,6 +7500,7 @@ for \Vint{g} to be ambiguous,
 and this
 gives us the reductio
 and the theorem.
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -7653,6 +7679,7 @@ $\size{\pi}$ is a constant.
 Therefore \var{c} in
 \Eref{eq:incompletion-bound-80}
 is the constant required by the theorem.
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -7793,6 +7820,7 @@ Then
 \Eref{eq:th-completion-bound-32b}.
 \end{equation}
 and we have the theorem.
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -7802,6 +7830,7 @@ For every LRR grammar,
 
 \begin{proof}
 \TODO{Add proof}
+\myqed
 \end{proof}
 
 \section{General complexity}
@@ -7814,6 +7843,7 @@ For every unambiguous grammar,
 
 \begin{proof}
 \TODO{Add proof}
+\myqed
 \end{proof}
 
 \begin{theorem}
@@ -7823,6 +7853,7 @@ For every context-free grammar,
 
 \begin{proof}
 \TODO{Add proof}
+\myqed
 \end{proof}
 
 \begin{theorem}\label{th:cfg-space}
@@ -7833,6 +7864,7 @@ if it does not track links.
 
 \begin{proof}
 \TODO{Add proof}
+\myqed
 \end{proof}
 
 Traditionally only the space result stated for a parsing algorithm
@@ -7854,6 +7886,7 @@ including the space for tracking links.
 
 \begin{proof}
 \TODO{Add proof}
+\myqed
 \end{proof}
 
 \section{The \Marpa{} Input Model}
