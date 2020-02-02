@@ -15,6 +15,9 @@
 
 all: ah2002_notes.pdf recce.pdf finite.pdf
 
+clean:
+	rm recce.out recce.aux recce.toc
+
 recce.pdf: recce.ltx
 	pdflatex $?
 
