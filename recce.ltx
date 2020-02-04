@@ -76,8 +76,10 @@
   \fi%
 }
 \newcommand{\cuz}{
-  \ifmmode\because
-  \else$\because$
+  \ifmmode
+    \because
+  \else
+    $\because$
   \fi%
 }
 
@@ -3168,7 +3170,7 @@ which may be charged to the Earley set.
 \State Add \var{prediction} to \Ves{j}
   \Comment $\var{add}\plusplus$
 \label{line:marpa-predict-85}
-\State $\VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
+\State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
    \Comment Set bit
 \label{line:marpa-predict-90}
 \EndProcedure
@@ -3225,8 +3227,8 @@ added at line \ref{line:marpa-predict-85}.
 \myparbox{Line \ref{line:marpa-predict-85} is only invoked if \var{Predict1}
   is called with a new prediction.
   $\because$
-  Lines \ref{line:marpa-predict-65}
-  \ref{line:marpa-predict-70} in \Aref{alg:predict-es}.%
+  Lines \ref{line:marpa-predict-65}, \ref{line:marpa-predict-70}
+    in \Aref{alg:predict-es}.%
 }
 \end{equation}
 \begin{equation}
@@ -3275,12 +3277,12 @@ and \Oc{} to \Ves{j} itself.
   \ref{line:marpa-predict-05},
   \ref{line:marpa-predict-10}} :
   \Invocs{\var{line}} = 1
-  \cuz{} \Aref{alg:predict-es}.
+  \cuz \Aref{alg:predict-es}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-2}
   \Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
-  \cuz \Obref{obs:dotzeroused-bitmap}, \Eref{eq:th-predict-es-complexity-10}.
+  \cuz \Obref{obs:dotzeroused-bitmap}, \Aref{alg:predict-es}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-3}
@@ -3368,31 +3370,41 @@ we have
 \begin{equation}
 \label{eq:th-predict-es-complexity-42}
   \begin{gathered}
-  \myparbox{Time used by lines \text{\ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}} per~$\Veim{x} \in \Ves{j}$~is}
+    \myparbox{Time used by lines
+      \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
+      per~$\Veim{x} \in \Ves{j}$~is}
   \\
-  \left(
-    \begin{gathered}
-    \smashoperator[r]{\sum_{\var{line}
-      \in
-      \set{\ref{line:marpa-predict-12},
-	\ref{line:marpa-predict-22}}
-    }}
-    \;\; 1 \times \Oc{}
+    \left(
+      \begin{gathered}
+	\smashoperator[r]{\sum_{\var{line}
+	  \in
+	  \set{\ref{line:marpa-predict-12},
+	    \ref{line:marpa-predict-22}}
+	}}
+	\;\; 1 \times \Oc{}
+      \\
+      + \smashoperator[r]{\sum_{\var{line}
+	\in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
+	}}
+	\;\; \Oc{} \times \Oc{}
+      \end{gathered}
+    \right)
+    = \Oc{}
   \\
-  + \smashoperator[r]{\sum_{\var{line}
-    \in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
-    }}
-    \;\; \Oc{} \times \Oc{}
-    \end{gathered}
-  \right)
-  = \Oc{}
+    \because
+    \Eref{eq:th-predict-es-complexity-15},
+    \Eref{eq:th-predict-es-complexity-20},
+    \Eref{eq:th-predict-es-complexity-36},
+    \Eref{eq:th-predict-es-complexity-38},
+    \Eref{eq:th-predict-es-complexity-40}.
   \end{gathered}
 \end{equation}
 
 To show the theorem, we note that
 \begin{itemize}
-\item \Eref{eq:th-predict-es-complexity-12-3} accounts for the \Oc{} time
-for line \ref{line:marpa-predict-10},
+\item \Eref{eq:th-predict-es-complexity-12-3} and \Eref{eq:th-predict-es-complexity-12-3}
+account for the \Oc{} time
+for lines \ref{line:marpa-predict-05} and \ref{line:marpa-predict-10},
 which is \Oc{} and may be charged to the Earley set.
 \item
 \Eref{eq:th-predict-es-complexity-42} accounts for
@@ -3413,14 +3425,15 @@ to \Veim{x}. \myqed
 \label{eq:th-predict-es-space-10}
 \myparbox{%
   Space is consumed in \var{Predict-ES} of \Aref{alg:predict-es} only at
-  line \ref{line:marpa-predict-60}.%
+  line \ref{line:marpa-predict-18}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-20}
 \myparbox{%
-  The space is consumed at line \ref{line:marpa-predict-60}.
-  of \var{Predict-ES} is \Oc{} and is charged to \Veim{pred},
+  The space is consumed at line \ref{line:marpa-predict-18}
+  of \var{Predict-ES} is \Oc{}
+  and may be charged to \Veim{pred},
   the prediction added
   \cuz{} \Thref{th:predict1-complexity}.%
 }
@@ -3454,7 +3467,6 @@ line \ref{line:marpa-predict-00} in
 \Aref{alg:predict-es}
 would be
 $\tuple{\Veim{x}, \Lambda}$.
-
 If link pairs were generated,
 for the arbitrary prediction
 \begin{equation}
@@ -3477,7 +3489,8 @@ they would be
 The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
-the transition table \Sref{sec:transition-tables} for \Ves{j}.
+the transition array
+\Obref{obs:transition-array} for \Ves{j}.
 \dispEnd{}
 \end{observation}
 
