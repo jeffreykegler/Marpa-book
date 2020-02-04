@@ -11,8 +11,8 @@
 \usepackage{hyperref}
 \allowdisplaybreaks[3]
 
-% Reference meta tags ("classifying prefixes") from fancyref:
-% Note: I follow fancyref
+% * Reference meta tags ("classifying prefixes") use in this document:
+% * From fancyref:
 % Chapter chap:
 % Section sec:
 % Equation eq:
@@ -20,15 +20,17 @@
 % Table tab:
 % Enumeration enum:
 % Footnote fn:
-% My classifying prefixes
+%
+% * Not in fancyref
 % Definition def:
 % Theorem th:
 % Lemma lem:
 % Observation obs:
 
-% The auto-placement of qed's fails a lot and the manual
-% replacement of \qedhere often fails as well.  I go with
-% a 100 fail-safe manual placement
+% The auto-placement of qed's fails a lot and manual
+% replacement with \qedhere often fails as well.  I go with
+% 100% manual placement, which is no more trouble,
+% and 100% fail-safe.
 \renewcommand{\qedsymbol}{}
 \newcommand{\myqed}{%
   \ifmmode\square
@@ -258,6 +260,9 @@
   \vspace{-\prevdepth} % remove the depth of the last line
   \vspace{1ex} % add a fixed vertical space
   }%
+}
+\newcommand{\rawparcomment}[2][\mathparwidth]{%
+  \myparbox[#1]{#2}%
 }
 \newcommand{\parcomment}[2][\mathparwidth]{%
   \myparbox[#1]{$\triangleright$ #2}%
@@ -2952,8 +2957,8 @@ These operations union PIM's into Earley sets.
 
 \subsection{Complexity remarks}
 \label{sec:complexity-remarks}
-This section contains the pseudocode,
-and it is convenient to make make our code-level complexity
+This section contains pseudocode,
+and it will be convenient to make our code-level complexity
 investigation alongside the pseudocode.
 Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
@@ -2964,32 +2969,41 @@ We ``charge'' all resource to adds,
 and attempts to add, PIM's.
 These ``charges'' will be found to be \Oc{}.
 In later sections, we will count
-PIM's and PIM attempts for various grammar classes.
+PIM attempts and PIM adds for various grammar classes.
 Our results will follow from
 multiplying the charge per PIM by the appropriate count.
 
-In the pseudocode itself, the line location of an
-PIM addition will be shown with the tag $\var{add}\plusplus$
-in a comment.
-The tag $\var{attempt}\plusplus$ will show the location of
-an attempt to add a PIM.
+PIM adds and attempts will require multiple pseudocode
+lines,
+but it will be convenient
+to identify each add and attempt with a specific line.
+We will mark these lines with tags in comments on the
+pseudocode.
+The adds with the
+tag $\var{add}\plusplus$,
+and the attempts with the tag
+$\var{attempt}\plusplus$.
 
 As stated, charges of resource will be made to PIM's.
 At certain points, it will not be convenient to indicate a specific
-PIM, as we will state that the resource is ``charged to the parse'',
-``charged to the Earley set'', or ``charged to the caller''.
+PIM, as we will state that the resource is
+``charged to the caller''.
+``charged to the parse'',
+or ``charged to the Earley set''.
 
+If a resource is ``charged to the caller'' the decision of how
+to charge the resource is made by
+the routine that called the current one.
 A resource ``charged to the parse'' is re-charged to the first PIM
 of Earley set 0, which exists in every parse.
-A resource charged to an Earley set is re-charged to the first PIM added
+
+In a successful parse,
+a resource charged to an Earley set is re-charged to the first PIM added
 to the Earley set.
 In a successful parse, every Earley set has at least one PIM.
 A failed parse will terminate with the first empty Earley set,
-so that there is only one Earley set's resource to re-charge,
-and this may be charged to the parse.
-If a resource is ``charged to the caller'' the decision of how
-to charge the resource is made by
-the calling routine.
+and that
+Earley set's resource may be charged to the parse.
 
 In analyzing the pseudocode we will speak of the ``exclusive''
 resource consumed, and ``inclusive'' resource consumed.
@@ -3092,17 +3106,13 @@ which may be charged to the Earley set.
 \begin{algorithmic}[1]
 \Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-00}
-\Statex \hspace\algorithmicindent
-\parcomment{\ID{\Vrule{x}} is a unique identifier
-of \Vrule{x}; and
-\var{dotZeroUsed} is a bitmap tracking
-whether an unconfirmed EIM is
-already~in~\Ves{j}.% avoid widow words in graf
-}
+\State Allocate \var{zeroDotUsed}
+\Statex \lcomment{\ID{\Vrule{x}} is a unique identifier
+    of \Vrule{x}}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
 \label{line:marpa-predict-10}
 \Statex \hspace\algorithmicindent
-    \parcomment{Loop over every \Veim{x} in \Ves{j},
+    $\triangleright$ \rawparcomment{Loop over every \Veim{x} in \Ves{j},
     including those that \var{Predict1} adds while the loop
     is running.
     }
