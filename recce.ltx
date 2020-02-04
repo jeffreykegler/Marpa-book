@@ -247,10 +247,7 @@
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Space}[1]{\ensuremath{\mymathop{Space}(#1)}}
 \newcommand{\SpacePer}[2]{\ensuremath{\mymathop{SpacePer}(#1,#2)}}
-\newcommand{\Time}[1]{% \ensuremath{ % \mymathop{Time}
-% (#1)
-% }
-}
+\newcommand{\Time}[1]{\ensuremath{\mymathop{Time}(#1)}}
 \newcommand{\TimePer}[2]{\ensuremath{\mymathop{TimePer}(#1,#2)}}
 \newcommand{\Symbol}[1]{\ensuremath{\mymathop{Symbol}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
@@ -3133,6 +3130,7 @@ which may be charged to the Earley set.
 \Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-00}
 \State Allocate \var{zeroDotUsed}
+\label{line:marpa-predict-05}
 \Statex \lcomment{\ID{\Vrule{x}} is a unique identifier
     of \Vrule{x}}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
@@ -3273,10 +3271,11 @@ and \Oc{} to \Ves{j} itself.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-1}
-\myparbox{%
-  Line \ref{line:marpa-predict-10} is invoked once
-  \cuz{} \Aref{alg:predict-es}.%
-}
+\forall \; \var{line} \in \set{
+  \ref{line:marpa-predict-05},
+  \ref{line:marpa-predict-10}} :
+  \Invocs{\var{line}} = 1
+  \cuz{} \Aref{alg:predict-es}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-complexity-12-2}
