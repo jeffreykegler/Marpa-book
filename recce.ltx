@@ -38,6 +38,9 @@
   \fi%
 }
 
+% Hack the algorithmicx package
+\algdef{S}[FOR]{ForNoDo}[1]{\algorithmicfor\ #1}%
+
 \delimitershortfall=0pt
 \delimiterfactor=1100
 
@@ -227,6 +230,7 @@
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
 \newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
+\newcommand{\LookupEIM}[1]{\ensuremath{\mymathop{Lookup-EIM}(#1)}}
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
@@ -1184,16 +1188,19 @@ their variables, so that
 & \text{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$.}
 \end{align*}
 
-When our discussion is closer to the implementation,
+\begin{definition}[Token]
+\label{def:token}
+In discussion that are closer to the implementation,
 the contents of the location \Vloc{j}
 in an input \Vstr{w}
-will also be treated as a \dfn{token}.
+will be treated as a \dfn{token}.
 A token is a duple
 \[
   \left[ \Vsym{token}, \var{token-value} \right],
 \]
 where \Vsym{token} = \Velement{w}{j} is the \dfn{token symbol},
 and \var{token-value} is the \dfn{token value}.
+
 The token value is irrelevant to parsing --- it exists
 in order to be passed on to the semantics.
 In \Marpa{},
@@ -1203,6 +1210,7 @@ and a pointer to the token value,
 which is a value of arbitrary type.\footnote{
 In C language,
 these can be implemented as so-called ``void pointers''.}
+\end{definition}
 
 Where an input location, \Vloc{j},
 is the token, $\var{token} = [\Vsym{sym}, \var{value}]$,
@@ -3543,22 +3551,37 @@ of Earley set 0 by \Earley{}.
 \subsection{Scanner operation}
 \label{def:scanner}
 
-\begin{align}
-\label{eq:def-scanner}
-& \var{Scanner}(\Ves{i}) \defined
-\\
-\nonumber
-& \qquad \left\lbrace
-\begin{gathered}
-\left[
-  \Next{\Vdr{pred}},
-  \Vloc{origin}
-\right] :
-\\
-\Matches{\Veim{pred}, \Vloc{(i\subtract 1)}}
-\end{gathered}
-\right\rbrace
-\end{align}
+\begin{algorithm}[tb]
+\caption{\var{Scanner}}
+\label{alg:marpa-scanner}
+\begin{algorithmic}[1]
+\Procedure{Scanner}{\Ves{j}}
+\Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{prefix}{\var{j}\subtract 1}, \var{val}}$.
+  See \Dfref{def:token}.
+}
+\label{line:marpa-scanner-10}
+\ForNoDo{every $\var{lp} = \tuple{\var{pred}, \var{token}}$ such that}
+\Statex \hskip\algorithmicindent \hskip\algorithmicindent \hskip\algorithmicindent
+    $\var{lp} \in \Matches{\Veim{pred}, \var{token}}$ \algorithmicdo
+\State $\Veim{rez} = \tuple{\Next{\var{pred}},\Origin{\var{pred}}}@\Vloc{j}$
+   \Comment $\var{attempt}\plusplus$
+\State $\Veim{old} \gets \LookupEIM{\var{rez}}$
+  \If{$\var{old} \neq \Lambda$}
+    \State Add \var{lp} to \LinkPairs{\var{old}}
+  \Else
+    \State $\LinkPairs{\var{old}} = \set{\var{lp}}$
+    \State Add \var{rez} to \Ves{j}
+      \Comment $\var{add}\plusplus$
+  \EndIf
+\EndFor
+\label{line:marpa-scanner-70}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{observation}[Complexity]
+\TODO{}
+\end{observation}
 
 \begin{observation}[Ancestry]
 \label{obs:scanner-ancestry}
@@ -3566,29 +3589,6 @@ The \Marpa{} implementation tracks all link pairs for scanned EIM's.
 In an unambiguous parse, a scanned EIM will always have
 exactly one link pair.
 In an ambiguous parse, a scanned EIM will have one or more link pairs.
-
-The predecessor of a scanned EIM is an incomplete EIM.
-The cause of a scanned EIM is a token.
-which conceptually is
-the duple
-\[
-  \left[ \Vsym{token}, \var{token-value} \right],
-\]
-where \Vsym{token} is a token symbol,
-and \var{token-value} is the token's value.
-
-The implementation of the token is a pointer to a structure
-containing a pointer to the token symbol,
-and a pointer to the token value,
-which is a value of arbitrary type.\footnote{
-In C language,
-these can be implemented as so-called ``void pointers''.}
-The token value is irrelevant to parsing --- it exists
-in order to be passed on to the semantics.
-\end{observation}
-
-\begin{observation}[Complexity]
-\TODO{}
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
