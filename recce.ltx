@@ -198,10 +198,10 @@
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 
-\newcommand{\alg}[1]{\ensuremath{\mathtt{#1}}}
-\newcommand{\Earley}{\alg{Earley}}
-\newcommand{\Leo}{\alg{Leo}}
-\newcommand{\Marpa}{\alg{Marpa}}
+\newcommand{\proc}[1]{\ensuremath{\mathbb{\uppercase{#1}}}}
+\newcommand{\Earley}{\proc{Earley}}
+\newcommand{\Leo}{\proc{Leo}}
+\newcommand{\Marpa}{\proc{Marpa}}
 
 % I want to use 'call' outside of pseudocode
 \newcommand\mycallname[1]{\textproc{#1}}
@@ -3130,6 +3130,52 @@ we let
 Here \var{unit} may be \var{invoc}, meaning ``per invocation'', or a PIM.
 % TODO: Need other units?
 
+\subsection{Earley set indexing}
+\label{sec:es-indexing}
+
+\TODO{Rewrite this section.}
+
+For our theoretical discussions,
+we assume that we can efficiently convert between
+an Earley set location as an integer
+(\Vloc{i} or \Ves{i}),
+and an Earley set as data structure including its PIM's.
+In algorithmic discussions, we need to be more specific.
+We claim that
+\begin{gather}
+\TimePer{\Loc{\Vpim{pim}}}{\var{invoc}} = \Oc{}, \\
+\TimePer{\Loc{\Ves{es}}}{\var{invoc}} = \Oc{}, \\
+\TimePer{\ES{\Vpim{p}}}{\var{invoc}} = \Oc{}, \text{ but} \\
+\TimePer{\ES{\Vloc{j}}}{\var{invoc}} = \order{\log \var{j}}.
+\end{gather}
+
+Marpa::R2\cite{Marpa-R2}
+builds Earley sets as a linked list of structures,
+and stores the \Vloc{i} in an integer field.
+An array for indexing is created on an ``as needed''
+basis.
+
+Earley sets are stored internally as pointers.
+These pointers are sufficient even for the run-time
+event mechanism.
+In practice,
+indexing by \Vloc{i} only becomes necessary
+during run-time for run-time tracing and debugging.
+In normal usage, the creation of the array of
+Earley sets on an ``as needed'' basis means that it
+is created once,
+after the parse is complete.
+The Earley sets will never be changed after this point
+and therefore the array of Earley sets will never need to be resized.\footnote{
+In this discussion a parse is said to be ``complete'' when it is ready to be evaluated.
+This becomes relevant when an application takes advantage of
+Marpa::R2's ability to resume an already evaluated
+parse, reading more input.
+Each of these is, in fact, a separate parse,
+and we take this point of view when discussing per-parse resource.
+}
+
+
 \subsection{Space charged to Earley sets}
 \label{sec:earley-set-space}
 
@@ -3614,7 +3660,8 @@ predictions.
 
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
-\Marpa{}'s \var{Initialization} operation has the same effect as the construction
+\Marpa{}'s \linebreak
+\var{Initialization} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
@@ -4967,40 +5014,6 @@ who are concerned about the theoretical results,
 and who wish to be conservative,
 should consider evaluate their grammar treating
 ``unicorns'' as if they were productive symbols.
-
-\subsection{Earley set indexing}
-\label{sec:es-indexing}
-
-In our theoretical discussions,
-we assumed that we could efficiently convert between
-an Earley set location as an integer
-(\Vloc{i} or \Ves{i}),
-and an Earley set as data structure including the PIM's.
-Marpa::R2\cite{Marpa-R2}
-builds Earley sets as a linked list of structures,
-and stores the \Vloc{i} in an integer field.
-An array for indexing is created on an ``as needed''
-basis.
-
-Earley sets are stored internally as pointers.
-These pointers are sufficient even for the run-time
-event mechanism.
-In practice,
-indexing by \Vloc{i} only becomes necessary
-during run-time for run-time tracing and debugging.
-In normal usage, the creation of the array of
-Earley sets on an ``as needed'' basis means that it
-is created once,
-after the parse is complete.
-The Earley sets will never be changed after this point
-and therefore the array of Earley sets will never need to be resized.\footnote{
-In this discussion a parse is said to be ``complete'' when it is ready to be evaluated.
-This becomes relevant when an application takes advantage of
-Marpa::R2's ability to resume an already evaluated
-parse, reading more input.
-Each of these is, in fact, a separate parse,
-and we take this point of view when discussing per-parse resource.
-}
 
 \subsection{Transition tables}
 \label{sec:transition-tables}
