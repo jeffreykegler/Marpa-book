@@ -912,23 +912,37 @@ For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 
 \TODO{TODO: ``operation'' is overloaded.  Another term?}
 \TODO{Rewrite}
-In this paper,
-\dfn{function} and \dfn{relation} will be as defined in an informal set theory.
-\dfn{algorithm},
-\dfn{procedure},
-and \dfn{operation} as sequences of the primitive operations
+In this paper, we will deal both with theoretical notions
+and algorithmic notions,
+which are intended to be closer to the implementation.
+The theoretical notions are based on informal set theory.
+Our algorithms are, in theory,
+ultimately reducible to sequences of the primitive operations
 of a random access machine like the one described by Earley.\footnote{Jay Earley
   describes his random access machine model in
   \cite[p. 61]{Earley1970}.
-  In this paper, we only go into enough detail to make it
-  intuitively clear that the reduction into primitive operations
-  can be performed.
-  However, for most of the algorithms of this paper,
-  and all of those required for a practical implementation,
-  every step of the algorithm is reduced to C language in
-  the implementation
+}
+In this paper,
+we never break any algorithm down into primitive operations,
+instead stopping once it is clear that such a break-down
+can be performed.\footnote{%
+  Those who want more implementation details will find
+  those procedures required for a practical implementation,
+  (which is most of the algorithms in this paper)
+  broken further down in our C language
+  implementation
   \cite{Marpa-R2}.
 }
+
+In this paper,
+the terms \dfn{function} and \dfn{relation} are as
+traditionally defined in set theory.
+Algorithms are also referred to as \dfn{procedures}.
+Following \cite{Earley1970}, procedures
+which are major building blocks
+of Earley variants are called \dfn{operations}.
+In \Marpa{} will also refer to certain components of these,
+as \dfn{sub-operations}.
 
 \section{Context-free grammars}
 \label{sec:CFGs}
@@ -3110,7 +3124,7 @@ Earley sets never have duplicated EIM's and
 PSL's are described in detail in section
 \Sref{sec:per-set-lists}.
 
-Since there 
+Since there
 is one fixed-size entry for every dotted rule in the grammar,
 the size of \var{seen} is \order{\size{\DottedRules{\var{g}}}}.
 \DottedRules{\var{g}}
@@ -3999,7 +4013,7 @@ if and only if
 \end{itemize}
 This observation follows from
 \Aref{alg:marpa-initializer},
-\Eref{eq:def-scanner},
+\Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
 \Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
@@ -4030,7 +4044,7 @@ If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
 \Aref{alg:marpa-initializer},
-\Eref{eq:def-scanner},
+\Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
 \Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
