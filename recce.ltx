@@ -3116,8 +3116,9 @@ or an algorithm:
 \Invocs{\var{x}} & \defined \text{ the number of invocations of \var{x}.}
 \end{align*}
 
-The resource functions above return the grand total of that resource.
-For finer analysis, there are ``resource-per'' variants of the resource
+The resource functions above return resource per invocation.
+For total resource consumed by multiple invocations,
+there are ``resource-per'' variants of the resource
 functions.
 we let
 \begin{align*}
@@ -3127,7 +3128,8 @@ we let
 \SpacePer{\var{x}}{\var{unit}} & \defined \text{ the inclusive space consumed per \var{unit} by \var{x}} \\
 \InvocsPer{\var{x}}{\var{unit}} & \defined \text{ the number of invocations per \var{unit} of \var{x}}.
 \end{align*}
-Here \var{unit} may be \var{invoc}, meaning ``per invocation'', or a PIM.
+Here \var{unit} may be a PIM, indicating total resource consumed for that PIM,
+a procedure name, indicating total resource consumed by all invocations in that procedure.
 % TODO: Need other units?
 
 \subsection{Earley set indexing}
@@ -3143,10 +3145,10 @@ and an Earley set as data structure including its PIM's.
 In algorithmic discussions, we need to be more specific.
 We claim that
 \begin{gather}
-\TimePer{\Loc{\Vpim{pim}}}{\var{invoc}} = \Oc{}, \\
-\TimePer{\Loc{\Ves{es}}}{\var{invoc}} = \Oc{}, \\
-\TimePer{\ES{\Vpim{p}}}{\var{invoc}} = \Oc{}, \text{ but} \\
-\TimePer{\ES{\Vloc{j}}}{\var{invoc}} = \order{\log \var{j}}.
+\Time{\Loc{\Vpim{pim}}} = \Oc{}, \\
+\Time{\Loc{\Ves{es}}} = \Oc{}, \\
+\Time{\ES{\Vpim{p}}} = \Oc{}, \text{ but} \\
+\Time{\ES{\Vloc{j}}} = \order{\log \var{j}}.
 \end{gather}
 
 Marpa::R2\cite{Marpa-R2}
@@ -3660,7 +3662,7 @@ predictions.
 
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
-\Marpa{}'s \linebreak
+\Marpa{}'s % \linebreak
 \var{Initialization} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \dispEnd{}
