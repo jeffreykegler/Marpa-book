@@ -202,6 +202,7 @@
 \newcommand{\Earley}{\proc{Earley}}
 \newcommand{\Leo}{\proc{Leo}}
 \newcommand{\Marpa}{\proc{Marpa}}
+\newcommand{\Rtwo}{\texttt{Marpa::R2}}
 
 % I want to use 'call' outside of pseudocode
 \newcommand\mycallname[1]{\textproc{#1}}
@@ -3142,41 +3143,67 @@ we assume that we can efficiently convert between
 an Earley set location as an integer
 (\Vloc{i} or \Ves{i}),
 and an Earley set as data structure including its PIM's.
-In algorithmic discussions, we need to be more specific.
-We claim that
+For our complexity discussions, we need to be more specific.
+
 \begin{gather}
-\Time{\Loc{\Vpim{pim}}} = \Oc{}, \\
-\Time{\Loc{\Ves{es}}} = \Oc{}, \\
-\Time{\ES{\Vpim{p}}} = \Oc{}, \text{ but} \\
-\Time{\ES{\Vloc{j}}} = \order{\log \var{j}}.
+\label{eq:def-loc-of_pim}
+\myparbox{%
+  $\Time{\Loc{\Vpim{pim}}} = \Oc{} \because$
+  Marpa::R2\cite{Marpa-R2} stores the integer location
+  of each PIM in its data structure.%
+}  \\
+\label{eq:def-loc-of_es}
+\myparbox{%
+  $\Time{\Loc{\Ves{es}}} = \Oc{}, \because$
+  Marpa::R2 stores the integer location
+  of each Earley set in its data structure.%
+}  \\
+\label{eq:def-es-of-pim}
+\myparbox{%
+ $\Time{\ES{\Vpim{p}}} = \Oc{}, \because$
+  Marpa::R2 stores a pointer to its Earley set
+  in each PIM, but%
+} \\
+\label{eq:def-es-of-loc}
+\myparbox{%
+  $\Time{\ES{\Vloc{j}} = \Oc{}} \because$
+  Marpa::R2 uses a dynamic array.
+}
 \end{gather}
 
+While $\Time{\ES{\Vloc{j}} = \Oc{}}$,
+the \Marpa{} implemenation is more careful about indexing
+Earley sets during parsing, because there is a higher
+constant overhead in the case of
+\Eref{eq:def-es-of-loc},
+than for \Eref{eq:def-loc-of_pim},
+\Eref{eq:def-loc-of_es} and \Eref{eq:def-es-of-pim}.
+During parsing
 Marpa::R2\cite{Marpa-R2}
 builds Earley sets as a linked list of structures,
-and stores the \Vloc{i} in an integer field.
-An array for indexing is created on an ``as needed''
-basis.
+and a dynamic array indexing them is only created
+when needed.
 
-Earley sets are stored internally as pointers.
-These pointers are sufficient even for the run-time
-event mechanism.
-In practice,
-indexing by \Vloc{i} only becomes necessary
-during run-time for run-time tracing and debugging.
-In normal usage, the creation of the array of
-Earley sets on an ``as needed'' basis means that it
-is created once,
-after the parse is complete.
-The Earley sets will never be changed after this point
-and therefore the array of Earley sets will never need to be resized.\footnote{
-In this discussion a parse is said to be ``complete'' when it is ready to be evaluated.
-This becomes relevant when an application takes advantage of
-Marpa::R2's ability to resume an already evaluated
-parse, reading more input.
-Each of these is, in fact, a separate parse,
-and we take this point of view when discussing per-parse resource.
-}
+The dynamic array is not needed when
+running the recognizer in normal production,
+because links to Earley sets are kept in the PIMs,
+a link to the current Earley set is kept,
+and the event mechanism works using links.
+But for tracing and debugging in \Rtwo{},
+Earley sets must be indexed
+by location.
+The major reason for this is that the trace and
+debug facilities must allow the developer to
+specify arbitrary Earley sets,
+and the developer will usually know these by
+their location.
 
+An array is needed for evaluation,
+but at this point the array indexing Earley set
+by location is usually dynamic in theory only.
+For most applications, evaluation only
+occurs after the parse is complete,
+and the array will not change once evaluation begins.
 
 \subsection{Space charged to Earley sets}
 \label{sec:earley-set-space}
@@ -3253,6 +3280,30 @@ which may be charged to the Earley set.
 \label{sec:common-predict}
 
 \begin{algorithm}[tb]
+\caption{\var{Predict1}}
+\begin{algorithmic}[1]
+\Procedure{Predict1}{\Veim{prediction}@\Ves{j}}
+\label{line:marpa-predict-60}
+\If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
+\label{line:marpa-predict-65}
+  \State return
+    \Comment Return if \var{prediction} is already in \Ves{j}
+\label{line:marpa-predict-70}
+\EndIf
+\label{line:marpa-predict-75}
+\State $\LinkPairs{\var{prediction}} = \set{}$
+\label{line:marpa-predict-80}
+\State Add \var{prediction} to \Ves{j}
+  \Comment $\var{add}\plusplus$
+\label{line:marpa-predict-85}
+\State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
+   \Comment Set bit
+\label{line:marpa-predict-90}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+%
+\begin{algorithm}[tb]
 \caption{\var{Predict-ES}}
 \label{alg:predict-es}
 \begin{algorithmic}[1]
@@ -3282,24 +3333,6 @@ which may be charged to the Earley set.
   \label{line:marpa-predict-20}
 \EndFor
 \label{line:marpa-predict-22}
-\EndProcedure
-\Procedure{Predict1}{\Veim{prediction}@\Ves{j}}
-\label{line:marpa-predict-60}
-\If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
-\label{line:marpa-predict-65}
-  \State return
-    \Comment Return if \var{prediction} is already in \Ves{j}
-\label{line:marpa-predict-70}
-\EndIf
-\label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$
-\label{line:marpa-predict-80}
-\State Add \var{prediction} to \Ves{j}
-  \Comment $\var{add}\plusplus$
-\label{line:marpa-predict-85}
-\State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment Set bit
-\label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
