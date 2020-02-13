@@ -65,6 +65,8 @@
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
+\newcommand{\op}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\proc}[1]{\ensuremath{\texttt{#1}}}
 \newcommand{\sep}{\,\mid\,}
 \newcommand{\mydot}{\raisebox{.05em}{$\,\bullet\,$}}
 \newcommand{\cat}{\,.\,}
@@ -203,10 +205,10 @@
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 
-\newcommand{\proc}[1]{\ensuremath{\mathbb{\uppercase{#1}}}}
-\newcommand{\Earley}{\proc{Earley}}
-\newcommand{\Leo}{\proc{Leo}}
-\newcommand{\Marpa}{\proc{Marpa}}
+\newcommand{\algo}[1]{\ensuremath{\mathbb{\uppercase{#1}}}}
+\newcommand{\Earley}{\algo{Earley}}
+\newcommand{\Leo}{\algo{Leo}}
+\newcommand{\Marpa}{\algo{Marpa}}
 \newcommand{\Rtwo}{\texttt{Marpa::R2}}
 
 % I want to use 'call' outside of pseudocode
@@ -3099,29 +3101,37 @@ A failed parse will terminate with the first empty Earley set,
 and that
 Earley set's resource may be charged to the parse.
 
-From the point of view of a current pseudocode procedure,
-all resource is
-consumed either ``directly'' or ``indirectly'',
-but not both.
-The resource consumed by the commands explicitly in
-the display of the current pseudocode procedure is ``directly'' consumed,
-and the resource consumed by commands explicitly in the
-pseudocode display of a procedure called by the current procedure
-is ``indirectly'' consumed.
-The \Oc{} time taken by a procedure call itself is
-``directly'' consumed by the current procedure,
-since the call itself is explicitly in the procedure.
-But the resources consumed by the commands of the called procedure are
-``indirectly'' consumed.
+For the purposes of complexity analysis,
+we find it helpful to divide the resource consumption
+of a called pseudocode procedure into ``housekeeping''
+and ``body execution''.
+The ``housekeeping'' is assume to consumer \Oc{} time and zero space.
+In a common implementation, the housekeeping will be execution of
+one or more prologues, which set up registers and stack for
+the procedure,
+and the execution of one more more epilogues,
+which restore the registers and stack.
 
-``Included'' resource means resource consumed indirectly.
+Resource not consumed by housekeeping
+is considered to be consumed by ``Body execution''.
+Body execution may consume arbitrary resource.
+
+From the point of view of a current pseudocode procedure,
+\begin{itemize}
+\item the resource consumed by the body execution of the pseudocode procedures
+called by current pseudocode procedure is consumed ``indirectly''; and
+\item all other resource is consumed ``directly''.
+\end{itemize}
+
 ``Exclusive'' resource means resource consumed directly.
+``Included'' resource means resource consumed indirectly.
 ``Inclusive'' resource means resource consumed both
 directly and indirectly.
-Resource is exclusive unless otherwise stated.
+Resource consumed is exclusive unless otherwise stated.
 
 Space is consumed only when new space is allocated.
 Reads and writes do not consume space.
+\TODO{Talk about local or stack space}
 
 For use in the complexity analysis,
 we define the following ``resource functions'',
@@ -3236,6 +3246,18 @@ The grammar is a constant, so the space consumed by
 the various data structures to hold its rules, etc.,
 is \Oc{} and is charged to the parse.
 
+\begin{observation}[Earley set complexity]
+\label{obs:es-complexity}
+Adding an EIM to an Earley set consumes \Oc{} time
+and \Oc{} space.
+When \Marpa{} reaches a new current location,
+it creates an empty Earley set, in time and
+space which may be charged to the Earley set.
+Each PIM is added at the end of a linked list,
+so that each add of a PIM takes \Oc{} time.
+Each PIM data structure requires \Oc{} space.
+\end{observation}
+
 \begin{observation}[Rule ID's]
 \label{obs:rule-ID}
 The functions \ID{\Vrule{r}} maps each rule to an
@@ -3278,11 +3300,13 @@ given its ID.
 For each Earley set,
 \var{dotZeroUsed} is a bitmap with
 one bit for every rule in the grammar.
-This means that its size is \size{\Rules{\var{g}}}.
-Since \Rules{\var{g}} is a constant
-that depends on the grammar \Dfref{def:context-free-grammar},
-its creation consumes \Oc{} space,
-which will be charged to the Earley set.
+Accesses and writes take \Oc{} time and zero space.
+Creation takes \Oc{} time and \Oc{} space.
+
+{\bf Justification}:
+The size of the bitmap is \size{\Rules{\var{g}}}.
+\Rules{\var{g}} is a constant
+that depends on the grammar \Dfref{def:context-free-grammar}.
 \dispEnd{}
 \end{observation}
 
@@ -3364,33 +3388,149 @@ which may be charged to the Earley set.
 \end{algorithmic}
 \end{algorithm}
 
+The \op{Initializer} op adds the start EIM and its predictons.
+We first look at
+Algorithms \Aref{alg:predict1} and \Aref{alg:predict-es},
+which contain the pseudocode for adding predictions.
+
 \begin{theorem}[\var{Predict1} Invocations]
-For every line of \var{Predict1}
+\label{th:predict1-invocs}
 \Aref{alg:predict1},
-The number of invocations per call is \Oc{}.
+\begin{gather}
+\label{eq:th-predict1-invocs-04}
+\myparbox{
+Lines \enRange{\ref{line:marpa-predict-60}}{\ref{line:marpa-predict-65}}
+of \var{Predict1}
+are invoked once.}
+\\
+\label{eq:th-predict1-invocs-05}
+\myparbox{Lines
+\enRange{\ref{line:marpa-predict-70}}{\ref{line:marpa-predict-90}}
+of \var{Predict1}
+are invoked once per add, and at most once.}
+\\
+\label{eq:th-predict1-invocs-06}
+\myparbox{
+For every line of \var{Predict1},
+the number of invocations per call is \Oc{}.}
+\end{gather}
 \end{theorem}
 
 \begin{proof}
-From \Aref{alg:predict1} we see that
-Lines \ref{line:marpa-predict-60}
-and \ref{line:marpa-predict-65}
-are invoked once;
-and 
-Lines
-\enRange{\ref{line:marpa-predict-70}}{\ref{line:marpa-predict-90}}
-are invoked at most once.
-In either case, the number of invocations is \Oc{}.
+We have
+\Eref{eq:th-predict1-invocs-04}
+and
+\Eref{eq:th-predict1-invocs-05}
+directly from \Aref{alg:predict1}.
+\Eref{eq:th-predict1-invocs-06}
+follows from
+\Eref{eq:th-predict1-invocs-04}
+and
+\Eref{eq:th-predict1-invocs-05}.
 \myqed
 \end{proof}
 
-\begin{theorem}[\var{Predict1} Time]
-The time of \var{Predict1} is
-\Aref{alg:predict1}
-and is \Oc{}, charged to the caller.
+\begin{equation}
+\label{eq:def-predict1-time-charge}
+\myparbox{%
+  Time in \proc{Predict1} is charged to the
+  caller
+  \cuz{} Def for this section.}
+\end{equation}
+
+\begin{theorem}[\proc{Predict1} Time]
+\label{th:predict1-time}
+The time of \var{Predict1}
+is \Oc{}, charged to the caller.
 \end{theorem}
 
 \begin{proof}
+All lines of \proc{Predict1} take \Oc{} time.
+For the justification in the case of lines
+\ref{line:marpa-predict-65} and
+\ref{line:marpa-predict-90},
+see
+\Obref{obs:rule-ID} and
+\Obref{obs:dotzeroused-bitmap}.
+For the justification of line
+\ref{line:marpa-predict-85},
+see \Obref{obs:es-complexity}.
+For other lines, the time complexity follows
+directly from \Aref{alg:predict1}.
+
+Total time complexity is the sum over all lines of \proc{Predict1} of
+time complexity times the number of invocations, or
+\begin{equation}
+\label{eq:th-predict1-time}
+\sum_{\var{line}=\ref{line:marpa-predict-65}}
+^{\ref{line:marpa-predict-90}} \Oc{} \times \Oc{}
+= \Oc{}.
+\end{equation}
+Per \Eref{eq:def-predict1-time-charge},
+the \Oc{} time of \Eref{eq:th-predict1-time}
+is charged
+to the caller.
 \myqed
+\end{proof}
+
+\begin{equation}
+\label{eq:def-predict1-space-charge}
+\myparbox{%
+  Space in \var{Predict1} is charged to the
+  prediction it adds
+  \cuz{} Def for this section.}
+\end{equation}
+
+\begin{theorem}[\var{Predict1} Space]
+\label{th:predict1-complexity}
+Space for \var{Predict1} is
+\Oc{} charged to the prediction it adds.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-predict1-complexity-10}
+\myparbox{%
+  All lines of \proc{Predict1},
+  other than
+  \ref{line:marpa-predict-85}
+  consume zero space
+  \cuz{}
+  \Obref{obs:rule-ID},
+  \Obref{obs:dotzeroused-bitmap},
+  \Aref{alg:predict1}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict1-complexity-15}
+\myparbox{%
+  Line \ref{line:marpa-predict-85}
+  consumes \Oc{} space
+  \cuz{} \Obref{obs:es-complexity}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict1-complexity-20}
+\myparbox{%
+  Line \ref{line:marpa-predict-85}
+  is invoked only when a prediction is added \cuz{}
+  \Eref{eq:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict1-complexity-25}
+\myparbox{%
+  \proc{Predict1} consumes \Oc{} space for each prediction added
+  \cuz{}
+  \Eref{eq:th-predict1-complexity-10},
+  \Eref{eq:th-predict1-complexity-15},
+  \Eref{eq:th-predict1-complexity-20}.}
+\end{equation}
+\begin{equation}
+\myparbox{%
+  Space for \proc{Predict1} is \Oc{} space,
+  charged to the prediction that it adds
+  \cuz{} \Eref{eq:def-predict1-space-charge},
+    \Eref{eq:th-predict1-complexity-25}.
+  \quad \myqed}
+\end{equation}
 \end{proof}
 
 \begin{algorithm}[tb]
@@ -3402,8 +3542,6 @@ and is \Oc{}, charged to the caller.
 \State Allocate \var{zeroDotUsed}
    \Comment $\var{s}=\Oc$
 \label{line:marpa-predict-05}
-\Statex \lcomment{\ID{\Vrule{x}} is a unique identifier
-    of \Vrule{x}}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
 \label{line:marpa-predict-10}
 \Statex \hspace\algorithmicindent
@@ -3411,15 +3549,15 @@ and is \Oc{}, charged to the caller.
     including those that \var{Predict1} adds while the loop
     is running.
     }
-\For{$\Veim{x} \in \Ves{j}$} \Comment $\times@\var{j}$
+\For{$\Veim{x} \in \Ves{j}$} \Comment $\times\order{\var{j}}$
 \label{line:marpa-predict-12}
-  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$} \Comment $\times@\var{j}$
+  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$} \Comment $\times\order{\var{j}}$
   \label{line:marpa-predict-14}
     \State $\Veim{pred} \gets [ \dr{\tuple{\Vrule{r}, 0}}, \Vloc{j} ] @ \var{j}$
-       \Comment $\times@\var{j}$
+       \Comment $\times\order{\var{j}}$
       \label{line:marpa-predict-16}
     \State \Call{Predict1}{\var{pred}}
-       \Comment $\text{Inc};\times@\var{j}$
+       \Comment $\text{Ind};\times\order{\var{j}}$
     \label{line:marpa-predict-18}
   \EndFor
   \label{line:marpa-predict-20}
@@ -3428,83 +3566,6 @@ and is \Oc{}, charged to the caller.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
-Algorithm
-\Aref{alg:predict-es} shows a ``just in time'' method
-of computing the predictions for an Earley set.
-
-\begin{theorem}[\var{Predict1} Complexity]
-\label{th:predict1-complexity}
-Time for \var{Predict1} can be accounted for by
-charging \Oc{} to the caller.
-Space for \var{Predict1} can be account
-for by charging \Oc{} to each \Veim{prediction}
-added at line \ref{line:marpa-predict-85}.
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{th:predict1-complexity-08}
-\myparbox{
-  \Time{\ref{line:marpa-predict-65},\ref{line:marpa-predict-90}} = \Oc{}
-  $\because$ \Obref{obs:dotzeroused-bitmap}.
-}
-\end{equation}
-\begin{equation}
-  \label{th:predict1-complexity-10}
-  \Time{\ref{line:marpa-predict-60},
-    \text{\ref{line:marpa-predict-70}--\ref{line:marpa-predict-90}}}
-      = \Oc{}
-  \because \Aref{alg:predict-es}.
-\end{equation}
-\begin{equation}
-\label{th:predict1-complexity-12}
-\Time{\var{Predict1}} = \Oc{}
-\because \Eref{th:predict1-complexity-08}, \Eref{th:predict1-complexity-10}.
-\end{equation}
-\begin{equation}
-\label{th:predict1-complexity-14}
-\Space{\ref{line:marpa-predict-85}} = \Oc{}
-\because \Aref{alg:predict-es}.
-\end{equation}
-%
-\begin{equation}
-\label{th:predict1-complexity-16}
-\Space{\text{\ref{line:marpa-predict-60}--\ref{line:marpa-predict-80}},
-  \ref{line:marpa-predict-90}} = 0.
-\end{equation}
-%
-\begin{equation}
-\label{th:predict1-complexity-18}
-\myparbox{Line \ref{line:marpa-predict-85} is only invoked if \var{Predict1}
-  is called with a new prediction.
-  $\because$
-  Lines \ref{line:marpa-predict-65}, \ref{line:marpa-predict-70}
-    in \Aref{alg:predict-es}.%
-}
-\end{equation}
-\begin{equation}
-\label{th:predict1-complexity-20}
-\myparbox{
-Time for \var{Predict1} is \Oc{} per invocation
-$\because$ \Eref{th:predict1-complexity-12}.}
-\end{equation}
-\begin{equation}
-\label{th:predict1-complexity-22}
-\myparbox{%
-  Space is \Oc{} for each added EIM
-  $\because$
-  \Eref{th:predict1-complexity-14},
-  \Eref{th:predict1-complexity-16},
-  \Eref{th:predict1-complexity-18}.%
-}
-\end{equation}
-To show the theorem we charge the \Oc{} time
-shown in \Eref{th:predict1-complexity-20} to the caller;
-and we charge the \Oc{} space shown in
-\Eref{th:predict1-complexity-22} to
-\Veim{x} of line \ref{line:marpa-predict-85}. \myqed
-\end{proof}
 
 \begin{theorem}[\var{Predict-ES} Time Complexity]
 \label{th:predict-es-complexity}
@@ -3759,7 +3820,7 @@ the transition array
   \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:marpa-initializer-60}
-\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$} \Comment Incl
+\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$} \Comment Ind
 \label{line:marpa-initializer-70}
 \EndProcedure
 \end{algorithmic}
