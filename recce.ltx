@@ -42,6 +42,7 @@
 \algdef{S}[FOR]{ForNoDo}[1]{\algorithmicfor\ #1}%
 \algtext*{EndIf}
 \algtext*{EndFor}
+\algtext*{EndProcedure}
 \algtext*{EndWhile}
 
 \delimitershortfall=0pt
@@ -69,6 +70,7 @@
 \newcommand{\cat}{\,.\,}
 \newcommand{\size}[1]{\ensuremath{|{#1}|}}
 \newcommand{\bigsize}[1]{\ensuremath{\left| {#1} \right|}}
+\newcommand{\enRange}[2]{\ensuremath{#1\text{--}#2}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\plusplus}{\mathord{++}}
@@ -3221,13 +3223,55 @@ For most applications, evaluation only
 occurs after the parse is complete,
 and the array will not change once evaluation begins.
 
-\subsection{Global Space}
+\subsection{Global space}
 \label{sec:global-space}
 
 We will use several data structures which are global.
 In some cases these will need to grow.
 \TODO{Talk about charging?}
-\TODO{Account for \var{g}, Earley sets}
+\TODO{Account for Earley sets}
+
+Our context grammar is \Vint{g}.
+The grammar is a constant, so the space consumed by
+the various data structures to hold its rules, etc.,
+is \Oc{} and is charged to the parse.
+
+\begin{observation}[Rule ID's]
+\label{obs:rule-ID}
+The functions \ID{\Vrule{r}} maps each rule to an
+unique integer ID.
+For convenience of implementation,
+these are consecutive integers starting at 0.
+starting at 0 and without gaps.
+The data structure for \Vrule{r}
+contains its ID, so that the time to 
+find \ID{\var{r}} is \Oc{}.
+Also, the data structure for \Vint{g}
+contains an array for looking up a rule in \Oc{} time,
+given its ID.
+\dispEnd
+\end{observation}
+
+\begin{observation}[Dotted rule ID's]
+\label{obs:dotted-rule-ID}
+The function \ID{\Vdr{x}} maps each dotted rule to
+an ID.
+Again,
+these are consecutive integers starting at 0.
+One way to assign the 
+dotted rule ID's is to interate through the array
+of rule by rule ID,
+and within each rule iterate through its possible dot
+positions.
+The data structure for \Vrule{r},
+allows, given a dot position \var{pos},
+the ID of $\tuple{\var{r}, \var{pos}}$ to be found in \Oc{}
+time.
+Also, the data structure for \Vint{g}
+contains an array for looking up a dotted rule in \Oc{} time,
+given its ID.
+\dispEnd
+\end{observation}
 
 \begin{observation}[\var{dotZeroUsed} bitmap]
 \label{obs:dotzeroused-bitmap}
@@ -3297,6 +3341,7 @@ which may be charged to the Earley set.
 
 \begin{algorithm}[tb]
 \caption{\var{Predict1}}
+\label{alg:predict1}
 \begin{algorithmic}[1]
 \Procedure{Predict1}{\Veim{prediction}}
 \label{line:marpa-predict-60}
@@ -3318,7 +3363,36 @@ which may be charged to the Earley set.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-%
+
+\begin{theorem}[\var{Predict1} Invocations]
+For every line of \var{Predict1}
+\Aref{alg:predict1},
+The number of invocations per call is \Oc{}.
+\end{theorem}
+
+\begin{proof}
+From \Aref{alg:predict1} we see that
+Lines \ref{line:marpa-predict-60}
+and \ref{line:marpa-predict-65}
+are invoked once;
+and 
+Lines
+\enRange{\ref{line:marpa-predict-70}}{\ref{line:marpa-predict-90}}
+are invoked at most once.
+In either case, the number of invocations is \Oc{}.
+\myqed
+\end{proof}
+
+\begin{theorem}[\var{Predict1} Time]
+The time of \var{Predict1} is
+\Aref{alg:predict1}
+and is \Oc{}, charged to the caller.
+\end{theorem}
+
+\begin{proof}
+\myqed
+\end{proof}
+
 \begin{algorithm}[tb]
 \caption{\var{Predict-ES}}
 \label{alg:predict-es}
@@ -5133,13 +5207,6 @@ This overhead is avoided by ``time-stamping'' each PSL
 entry with the Earley set
 that was current when that PSL
 entry was last updated.
-
-Let $\ID{\Vdr{x}}$ be the unique integer ID of a dotted rule.
-One way to create a unique integer value
-for every dotted rule is create an arbitrary but fixed order
-for the rules;
-sort the dotted rules into a sequence by dot position with rule;
-and then number the elements of the sorted sequence consecutively.
 
 Intuitively, the idea is avoid most re-computation
 of the PSL's by keeping timestamps with the PSL data.
