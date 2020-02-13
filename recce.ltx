@@ -40,6 +40,9 @@
 
 % Hack the algorithmicx package
 \algdef{S}[FOR]{ForNoDo}[1]{\algorithmicfor\ #1}%
+\algtext*{EndIf}
+\algtext*{EndFor}
+\algtext*{EndWhile}
 
 \delimitershortfall=0pt
 \delimiterfactor=1100
@@ -3094,13 +3097,26 @@ A failed parse will terminate with the first empty Earley set,
 and that
 Earley set's resource may be charged to the parse.
 
-In analyzing the pseudocode we will speak of the ``exclusive''
-resource consumed, and ``inclusive'' resource consumed.
-``Exclusive'' will mean excluding the resource consumed by other
-pseudocode algorithms called in the pseudocode.
-``Inclusive'' mean including all resource consumed,
-whether directly or indirectly.
-Resource is inclusive unless otherwise stated.
+From the point of view of a current pseudocode procedure,
+all resource is
+consumed either ``directly'' or ``indirectly'',
+but not both.
+The resource consumed by the commands explicitly in
+the display of the current pseudocode procedure is ``directly'' consumed,
+and the resource consumed by commands explicitly in the
+pseudocode display of a procedure called by the current procedure
+is ``indirectly'' consumed.
+The \Oc{} time taken by a procedure call itself is
+``directly'' consumed by the current procedure,
+since the call itself is explicitly in the procedure.
+But the resources consumed by the commands of the called procedure are
+``indirectly'' consumed.
+
+``Included'' resource means resource consumed indirectly.
+``Exclusive'' resource means resource consumed directly.
+``Inclusive'' resource means resource consumed both
+directly and indirectly.
+Resource is exclusive unless otherwise stated.
 
 Space is consumed only when new space is allocated.
 Reads and writes do not consume space.
@@ -3205,13 +3221,13 @@ For most applications, evaluation only
 occurs after the parse is complete,
 and the array will not change once evaluation begins.
 
-\subsection{Space charged to Earley sets}
-\label{sec:earley-set-space}
+\subsection{Global Space}
+\label{sec:global-space}
 
-We will use several data structures which are charged
-to the Earley set before it is convenient to
-account for their creation,
-so at this point we will ``pre-declare'' them.
+We will use several data structures which are global.
+In some cases these will need to grow.
+\TODO{Talk about charging?}
+\TODO{Account for \var{g}, Earley sets}
 
 \begin{observation}[\var{dotZeroUsed} bitmap]
 \label{obs:dotzeroused-bitmap}
@@ -3276,13 +3292,13 @@ which may be charged to the Earley set.
 \dispEnd{}
 \end{observation}
 
-\subsection{Common prediction logic}
-\label{sec:common-predict}
+\subsection{Initializer operation}
+\label{sec:initializer}
 
 \begin{algorithm}[tb]
 \caption{\var{Predict1}}
 \begin{algorithmic}[1]
-\Procedure{Predict1}{\Veim{prediction}@\Ves{j}}
+\Procedure{Predict1}{\Veim{prediction}}
 \label{line:marpa-predict-60}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
 \label{line:marpa-predict-65}
@@ -3291,13 +3307,13 @@ which may be charged to the Earley set.
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$
+\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times@\var{add}$
 \label{line:marpa-predict-80}
-\State Add \var{prediction} to \Ves{j}
-  \Comment $\var{add}\plusplus$
+\State Add \var{prediction} to \ES{\Current{\var{prediction}}}
+\Statex  \Comment $\var{s}=\Oc;\times@\var{add}$
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment Set bit
+   \Comment $\times@\var{add}$
 \label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
@@ -3310,6 +3326,7 @@ which may be charged to the Earley set.
 \Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
 \label{line:marpa-predict-00}
 \State Allocate \var{zeroDotUsed}
+   \Comment $\var{s}=\Oc$
 \label{line:marpa-predict-05}
 \Statex \lcomment{\ID{\Vrule{x}} is a unique identifier
     of \Vrule{x}}
@@ -3320,14 +3337,15 @@ which may be charged to the Earley set.
     including those that \var{Predict1} adds while the loop
     is running.
     }
-\For{$\Veim{x} \in \Ves{j}$}
+\For{$\Veim{x} \in \Ves{j}$} \Comment $\times@\var{j}$
 \label{line:marpa-predict-12}
-  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
+  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$} \Comment $\times@\var{j}$
   \label{line:marpa-predict-14}
     \State $\Veim{pred} \gets [ \dr{\tuple{\Vrule{r}, 0}}, \Vloc{j} ] @ \var{j}$
-       \Comment $\var{attempt}\plusplus$
+       \Comment $\times@\var{j}$
       \label{line:marpa-predict-16}
     \State \Call{Predict1}{\var{pred}}
+       \Comment $\text{Inc};\times@\var{j}$
     \label{line:marpa-predict-18}
   \EndFor
   \label{line:marpa-predict-20}
@@ -3654,9 +3672,6 @@ the transition array
 \dispEnd{}
 \end{observation}
 
-\subsection{Initializer operation}
-\label{sec:initializer}
-
 \begin{algorithm}[tb]
 \caption{\var{Initializer}}
 \label{alg:marpa-initializer}
@@ -3667,10 +3682,10 @@ the transition array
 \Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
 \State $\LinkPairs{\Veim{start}} = \set{}$
 \State Add \Veim{start} to \es{(0)}
-  \Comment $\var{attempted}\plusplus, \var{added}\plusplus$
+  \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:marpa-initializer-60}
-\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$}
+\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$} \Comment Incl
 \label{line:marpa-initializer-70}
 \EndProcedure
 \end{algorithmic}
