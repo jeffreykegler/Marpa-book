@@ -73,6 +73,7 @@
 \newcommand{\size}[1]{\ensuremath{|{#1}|}}
 \newcommand{\bigsize}[1]{\ensuremath{\left| {#1} \right|}}
 \newcommand{\enRange}[2]{\ensuremath{#1\text{--}#2}}
+\newcommand{\enRefs}[2]{\enRange{\ref{#1}}{\ref{#2}}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\plusplus}{\mathord{++}}
@@ -3360,7 +3361,89 @@ which may be charged to the Earley set.
 \dispEnd{}
 \end{observation}
 
-\subsection{Initializer operation}
+\subsection{Counting invocations}
+
+We first define out conventions for counting line
+invocations,
+and will then follow with a toy example.
+The number of \dfn{invocations} of a line is the number of execution of
+that line's logic.
+The number of \dfn{invocations} of a loop is the number of times
+the loop is initialized.
+Every line in a loop is either its \dfn{first line},
+or an \dfn{interior} line.
+The interior lines of loop are invoked once
+for every \dfn{pass} of the loop.
+The first line of a loop is invoked once for every pass
+of the loop, plus once for the final test.
+
+Note that these definitions imply that the number of
+invocations of the first line of a loop
+is not necessarily the same as the number of invocations
+of the loop.
+The two will only be identical if the loop has zero passes ---
+in other words, if the loop test fails the first time.
+
+In the comments in the following fragment
+``inv'' abbreviates invocation(s) and
+``init'' abbreviates loop initializations.
+
+\begin{algorithmic}[1]
+\State do something
+  \Comment inv=1
+\label{line:toy-10}
+\For{$\var{j} \in \set{1,2,3}$}
+  \Comment init=1; inv=4; passes=3
+\label{line:toy-20}
+\State do an outer loop thing
+  \Comment inv=3
+\label{line:toy-30}
+\For{$\var{i} \in \set{1,2}$}
+  \Comment init=3; inv=9; passes=6
+\label{line:toy-40}
+\State do an inner loop thing
+  \Comment inv=6
+\label{line:toy-50}
+\EndFor
+\EndFor
+\end{algorithmic}
+
+\begin{itemize}
+\item Line \ref{line:toy-10} is invoked once.
+\item The outer loop, loop \enRefs{line:toy-20}{line:toy-50},
+is invoked once and therefore initialized once.
+It has 3 passes.
+\item The first line of the outer loop,
+line \ref{line:toy-20}, is invoked 4 times,
+once for each pass of the outer loop,
+and once to execute the test which terminates the outer loop.
+\item Line \ref{line:toy-30} is top-level interior line
+of the outer loop.
+It is invoked once for every pass of the outer loop,
+or 3 times.
+\item
+The inner loop, loop \enRefs{line:toy-40}{line:toy-50},
+is initialized 3 times, once for every pass of the outer loop.
+Loop \enRefs{line:toy-40}{line:toy-50},
+is therefore said to have been
+invoked 3 times.
+The inner loop has 2 passes per intialization,
+for a total of 6 passes.
+\item
+The first line of the inner loop,
+line \ref{line:toy-40}
+is invoked 3 times per initialization of the inner loop,
+for a total of 9 times.
+\item
+The interior line of the inner loop,
+line \ref{line:toy-50}
+is a 2nd level line of the outer loop,
+and a top level line of inner loop.
+Line \ref{line:toy-50}
+is invoked once per pass of the inner loop, or 6 times.
+\end{itemize}
+
+\subsection{Initializer op}
 \label{sec:initializer}
 
 \begin{algorithm}[tb]
@@ -3537,7 +3620,7 @@ Space for \var{Predict1} is
 \caption{\var{Predict-ES}}
 \label{alg:predict-es}
 \begin{algorithmic}[1]
-\Procedure{Predict-ES}{\Veim{x}@\Ves{j}}
+\Procedure{Predict-ES}{\Ves{es}}
 \label{line:marpa-predict-00}
 \State Allocate \var{zeroDotUsed}
    \Comment $\var{s}=\Oc$
@@ -3545,27 +3628,55 @@ Space for \var{Predict1} is
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
 \label{line:marpa-predict-10}
 \Statex \hspace\algorithmicindent
-    $\triangleright$ \rawparcomment{Loop over every \Veim{x} in \Ves{j},
+    $\triangleright$ \rawparcomment{Loop over every \Veim{x} in \Ves{es},
     including those that \var{Predict1} adds while the loop
     is running.
     }
-\For{$\Veim{x} \in \Ves{j}$} \Comment $\times\order{\var{j}}$
+\For{$\Veim{x} \in \Ves{es}$}
+       \Comment $\times\order{\Loc{\var{es}}}$
 \label{line:marpa-predict-12}
-  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$} \Comment $\times\order{\var{j}}$
+  \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
   \label{line:marpa-predict-14}
-    \State $\Veim{pred} \gets [ \dr{\tuple{\Vrule{r}, 0}}, \Vloc{j} ] @ \var{j}$
-       \Comment $\times\order{\var{j}}$
+  \Statex \Comment $\times\order{\Loc{\var{es}}}$
+    \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Loc{\var{es}} } @ \Loc{\var{es}}$
       \label{line:marpa-predict-16}
+       \Statex \Comment $\times\order{\Loc{\var{es}}}$
     \State \Call{Predict1}{\var{pred}}
-       \Comment $\text{Ind};\times\order{\var{j}}$
+       \Comment $\text{Ind};\times\order{\Loc{\var{es}}}$
     \label{line:marpa-predict-18}
   \EndFor
-  \label{line:marpa-predict-20}
 \EndFor
-\label{line:marpa-predict-22}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\begin{theorem}[\proc{Predict-ES} Invocations]
+\label{th:predict-es-invocations}
+In \proc{Predict-ES}(\Ves{es}) the numbers of invocations is
+\begin{itemize}
+\item \Oc{} for lines \ref{line:marpa-predict-05} and
+  \ref{line:marpa-predict-10}; and
+\item \order{\Vloc{j}} for lines
+    \enRange{\ref{line:marpa-predict-12}}{\ref{line:marpa-predict-18}},
+    where \var{j} = \Loc{\Ves{es}}.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Let \Invocs{\var{ln}} be the number of invocations of line \var{ln}
+in \proc{Predict-ES}.
+\begin{equation}
+\label{eq:th-predict-es-invocations-10}
+\Invocs{\ref{line:marpa-predict-05}} = \Oc{} \because
+   \text{ evident directly from \Aref{alg:predict-es}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-12}
+\Invocs{\ref{line:marpa-predict-10}} = \Oc{} \because
+   \text{ evident directly from \Aref{alg:predict-es}.}
+\end{equation}
+\myqed
+\end{proof}
 
 \begin{theorem}[\var{Predict-ES} Time Complexity]
 \label{th:predict-es-complexity}
@@ -3584,148 +3695,6 @@ and \Oc{} to \Ves{j} itself.
   \cuz{}~\longDfref{CFG}{def:context-free-grammar}.%
 }
 \end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-12-1}
-\forall \; \var{line} \in \set{
-  \ref{line:marpa-predict-05},
-  \ref{line:marpa-predict-10}} :
-  \Invocs{\var{line}} = 1
-  \cuz \Aref{alg:predict-es}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-12-2}
-  \Time{\ref{line:marpa-predict-10}} = \Oc{} \times \Oc{}
-  \cuz \Obref{obs:dotzeroused-bitmap}, \Aref{alg:predict-es}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-12-3}
-  \Time{\ref{line:marpa-predict-10}} = \Oc{}
-  \cuz \Eref{eq:th-predict-es-complexity-12-2}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-13}
-\myparbox{%
-  Loop \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
-  is invoked once
-  \cuz \Aref{alg:predict-es}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-14}
-\myparbox{%
-  Loop \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
-  has one pass per $\Veim{x} \in \Ves{j}$
-  \cuz{} line \ref{line:marpa-predict-12}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-15}
-\myparbox{%
-  Lines \ref{line:marpa-predict-12} and \ref{line:marpa-predict-22}
-  are invoked once per $\Veim{x} \in \Ves{j}$
-  \cuz{} line \ref{line:marpa-predict-14}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-16}
-\myparbox{%
-  Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  is invoked once per $\Veim{x} \in \Ves{j}$
-  \cuz{}
-  \Eref{eq:th-predict-es-complexity-14},
-  line \ref{line:marpa-predict-14}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-18}
-\myparbox{%
-  Loop \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  has \Oc{} passes per $\Veim{x} \in \Ves{j}$
-  \cuz{}
-  \Eref{eq:th-predict-es-complexity-10},
-  line \ref{line:marpa-predict-14}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-20}
-\myparbox{%
-  Lines \ref{line:marpa-predict-14}--\ref{line:marpa-predict-20}
-  are invoked \Oc{} times per $\Veim{x} \in \Ves{j}$
-  \cuz{}
-  \Eref{eq:th-predict-es-complexity-16},
-  \Eref{eq:th-predict-es-complexity-18}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-36}
-  \Time{\ref{line:marpa-predict-14}} = \Oc{}
-  \cuz \Eref{eq:th-predict-es-complexity-10}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-38}
-  \Time{\ref{line:marpa-predict-18}} = \Oc{}
-  \cuz \Thref{th:predict1-complexity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-complexity-40}
-\Time{
-  \ref{line:marpa-predict-12},
-  \ref{line:marpa-predict-16},
-  \text{\ref{line:marpa-predict-20}--\ref{line:marpa-predict-22}}
-} = \Oc{}
-  \cuz \Aref{alg:predict-es}.
-\end{equation}
-Multiplying
-the invocation count of each line by
-the time resource used,
-then summing,
-we have
-\begin{equation}
-\label{eq:th-predict-es-complexity-42}
-  \begin{gathered}
-    \myparbox{Time used by lines
-      \ref{line:marpa-predict-12}--\ref{line:marpa-predict-22}
-      per~$\Veim{x} \in \Ves{j}$~is}
-  \\
-    \left(
-      \begin{gathered}
-	\smashoperator[r]{\sum_{\var{line}
-	  \in
-	  \set{\ref{line:marpa-predict-12},
-	    \ref{line:marpa-predict-22}}
-	}}
-	\;\; 1 \times \Oc{}
-      \\
-      + \smashoperator[r]{\sum_{\var{line}
-	\in \set{\ref{line:marpa-predict-14} \; \ldots \; \ref{line:marpa-predict-20}}
-	}}
-	\;\; \Oc{} \times \Oc{}
-      \end{gathered}
-    \right)
-    = \Oc{}
-  \\
-    \because
-    \Eref{eq:th-predict-es-complexity-15},
-    \Eref{eq:th-predict-es-complexity-20},
-    \Eref{eq:th-predict-es-complexity-36},
-    \Eref{eq:th-predict-es-complexity-38},
-    \Eref{eq:th-predict-es-complexity-40}.
-  \end{gathered}
-\end{equation}
-
-To show the theorem, we note that
-\begin{itemize}
-\item \Eref{eq:th-predict-es-complexity-12-3} and \Eref{eq:th-predict-es-complexity-12-3}
-account for the \Oc{} time
-for lines \ref{line:marpa-predict-05} and \ref{line:marpa-predict-10},
-which is \Oc{} and may be charged to the Earley set.
-\item
-\Eref{eq:th-predict-es-complexity-42} accounts for
-all the other lines of \var{Predict-ES}
-as \Oc{} time
-for each $\Veim{x} \in \Ves{j}$, which may be charged
-to \Veim{x}. \myqed
-\end{itemize}
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
@@ -3820,7 +3789,7 @@ the transition array
   \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:marpa-initializer-60}
-\State \Call{Predict}{$\Veim{start}@\Ves{(0)}$} \Comment Ind
+\State \Call{Predict-ES}{\Ves{(0)}} \Comment Ind
 \label{line:marpa-initializer-70}
 \EndProcedure
 \end{algorithmic}
