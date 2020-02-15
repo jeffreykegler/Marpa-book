@@ -3287,6 +3287,10 @@ is \Oc{} and is charged to the parse.
 \label{obs:es-complexity}
 Adding an EIM to an Earley set consumes \Oc{} time
 and \Oc{} space.
+Traversal of an Earley set requires \Oc{} time per PIM.
+
+{\bf Justification}:
+An Earley set is kept as a linked list.
 When \Marpa{} reaches a new current location,
 it creates an empty Earley set, in time and
 space which may be charged to the Earley set.
@@ -3298,16 +3302,21 @@ Each PIM data structure requires \Oc{} space.
 \begin{observation}[Rule ID's]
 \label{obs:rule-ID}
 The functions \ID{\Vrule{r}} maps each rule to an
-unique integer ID.
 For convenience of implementation,
-these are consecutive integers starting at 0.
+ID's are consecutive integers starting at 0.
 starting at 0 and without gaps.
+unique integer ID in \Oc{} time.
+Also, the entire list of rules may be travesed in \Oc{}
+time.
+
+{\bf: Justification}:
 The data structure for \Vrule{r}
 contains its ID, so that the time to
 find \ID{\var{r}} is \Oc{}.
 Also, the data structure for \Vint{g}
-contains an array for looking up a rule in \Oc{} time,
-given its ID.
+contains an array for looking up rules.
+Since \Rules{var{g}} is a constant depending on \var{g},
+traversal of the rule list is \Oc{}.
 \dispEnd
 \end{observation}
 
@@ -3663,12 +3672,12 @@ Space for \var{Predict1} is
 \label{alg:predict-es}
 \begin{algorithmic}[1]
 \Procedure{Predict-ES}{\Ves{es}}
-\label{line:marpa-predict-00}
-\State Allocate \var{zeroDotUsed}
+\label{line:marpa-predict-es-00}
+\State Allocate \var{dotZeroUsed}
    \Comment $\var{s}=\Oc$
-\label{line:marpa-predict-05}
+\label{line:marpa-predict-es-05}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
-\label{line:marpa-predict-10}
+\label{line:marpa-predict-es-10}
 \Statex \hspace\algorithmicindent
     $\triangleright$ \rawparcomment{Loop over every \Veim{x} in \Ves{es},
     including those that \var{Predict1} adds while the loop
@@ -3676,16 +3685,16 @@ Space for \var{Predict1} is
     }
 \For{$\Veim{x} \in \Ves{es}$}
        \Comment $\times\order{\Loc{\var{es}}}$
-\label{line:marpa-predict-12}
+\label{line:marpa-predict-es-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
-  \label{line:marpa-predict-14}
+  \label{line:marpa-predict-es-14}
   \Statex \Comment $\times\order{\Loc{\var{es}}}$
     \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Loc{\var{es}} } @ \Loc{\var{es}}$
-      \label{line:marpa-predict-16}
+      \label{line:marpa-predict-es-16}
        \Statex \Comment $\times\order{\Loc{\var{es}}}$
     \State \Call{Predict1}{\var{pred}}
        \Comment $\text{Ind};\times\order{\Loc{\var{es}}}$
-    \label{line:marpa-predict-18}
+    \label{line:marpa-predict-es-18}
   \EndFor
 \EndFor
 \EndProcedure
@@ -3696,10 +3705,10 @@ Space for \var{Predict1} is
 \label{th:predict-es-invocations}
 In \proc{Predict-ES}(\Ves{es}) the numbers of invocations is
 \begin{itemize}
-\item \Oc{} for lines \ref{line:marpa-predict-05} and
-  \ref{line:marpa-predict-10}; and
+\item \Oc{} for lines \ref{line:marpa-predict-es-05} and
+  \ref{line:marpa-predict-es-10}; and
 \item \order{\Vloc{j}} for lines
-    \enRange{\ref{line:marpa-predict-12}}{\ref{line:marpa-predict-18}},
+    \enRange{\ref{line:marpa-predict-es-12}}{\ref{line:marpa-predict-es-18}},
     where \var{j} = \Loc{\Ves{es}}.
 \end{itemize}
 \end{theorem}
@@ -3709,34 +3718,34 @@ Let \Invocs{\var{ln}} be the number of invocations of line \var{ln}
 in the procedure call \proc{Predict-ES}(\Ves{es}).
 \begin{equation}
 \label{eq:th-predict-es-invocations-10}
-\Invocs{\ref{line:marpa-predict-05}} = \Oc{} \because
+\Invocs{\ref{line:marpa-predict-es-05}} = \Oc{} \because
    \Aref{alg:predict-es}, \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-12}
-\Invocs{\ref{line:marpa-predict-10}} = \Oc{} \because
+\Invocs{\ref{line:marpa-predict-es-10}} = \Oc{} \because
     \Eref{eq:th-predict-es-invocations-10},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-16}
-  \Invocs{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}} = \Oc{}
+  \Invocs{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \Oc{}
     \because
     \Eref{eq:th-predict-es-invocations-12},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-18}
-  \Passes{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}} = \order{\Loc{\var{es}}}
+  \Passes{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
     \because \Thref{th:es-eim-count}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-20}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-12}} =
-    \Invocs{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}}
+    \Invocs{\ref{line:marpa-predict-es-12}} =
+    \Invocs{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}
     \times
-    (\Passes{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}}+1)
+    (\Passes{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}+1)
     \\
     \because
     \Obref{obs:invocation-counting}.
@@ -3745,7 +3754,7 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \begin{equation}
 \label{eq:th-predict-es-invocations-22}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-12}} = \Oc{} \times (\order{\Loc{\var{es}}}+1) = \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-12}} = \Oc{} \times (\order{\Loc{\var{es}}}+1) = \order{\Loc{\var{es}}}
     \\
     \because
     \Eref{eq:th-predict-es-invocations-16},
@@ -3755,7 +3764,7 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-24}
-  \Invocs{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}
+  \Invocs{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
     = \order{\Loc{\var{es}}}
     \because
     \Eref{eq:th-predict-es-invocations-22},
@@ -3771,17 +3780,17 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-28}
-  \Passes{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}} = \Oc{}
+  \Passes{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} = \Oc{}
     \because
     \Eref{eq:th-predict-es-invocations-26}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-30}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-14}} =
-    \Invocs{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}
+    \Invocs{\ref{line:marpa-predict-es-14}} =
+    \Invocs{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
     \times
-    (\Passes{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}+1)
+    (\Passes{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}+1)
     \\
     \because
     \Obref{obs:invocation-counting}.
@@ -3790,7 +3799,7 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \begin{equation}
 \label{eq:th-predict-es-invocations-32}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-14}} =
+    \Invocs{\ref{line:marpa-predict-es-14}} =
       \order{\Loc{\var{es}}} \times (\Oc+1) =
       \order{\Loc{\var{es}}}
     \\
@@ -3802,13 +3811,13 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-34}
-    \Invocs{\ref{line:marpa-predict-16}} = \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-16}} = \order{\Loc{\var{es}}}
     \because \Eref{eq:th-predict-es-invocations-28},
     \text{ sequential execution.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-36}
-    \Invocs{\ref{line:marpa-predict-18}} = \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
     \because \Eref{eq:th-predict-es-invocations-34},
     \text{ sequential execution.}
 \end{equation}
@@ -3834,21 +3843,65 @@ The theorem follows from
 \end{equation}
 
 \begin{theorem}[\var{Predict-ES} Time Complexity]
-\label{th:predict-es-complexity}
-The time of $\var{Predict-ES}(\Ves{j})$
+\label{th:predict-es-time}
+The inclusive time of $\var{Predict-ES}(\Ves{j})$
 \Aref{alg:predict-es}
-may be charged as
-\Oc{} to each EIM of \Ves{j},
-and \Oc{} to \Ves{j} itself.
+is
+\Oc{} charged to each EIM of \Ves{j},
+and \Oc{} charged to \Ves{j} itself.
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-predict-es-complexity-10}
+\label{eq:th-predict-es-time-10}
 \myparbox{%
   \Rules{\Vcfg{g}} is a constant depending on \var{g}
   \cuz{}~\longDfref{CFG}{def:context-free-grammar}.%
 }
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-12}
+\myparbox{%
+  The loop variable for
+  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} is in scope
+  for all invocations of lines
+  loop \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
+  for all but the final test invocation of
+  line \ref{line:marpa-predict-es-12};
+  and only for those invocations.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-14}
+\Time{\ref{line:marpa-predict-es-05}} = \Oc{}
+  \because \Obref{obs:dotzeroused-bitmap}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-16}
+\Time{\ref{line:marpa-predict-es-10}} = \Oc{}
+  \because
+  \Obref{obs:rule-ID},
+  \Obref{obs:dotzeroused-bitmap},
+  \Eref{eq:th-predict-es-time-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-18}
+\Time{\ref{line:marpa-predict-es-12}} = \Oc{}
+   \because \Obref{obs:es-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-20}
+\Time{\ref{line:marpa-predict-es-14}} = \Oc{}
+  \because \Obref{obs:rule-ID}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-22}
+\Time{\ref{line:marpa-predict-es-16}} = \Oc{}
+  \because \text{ direct from line \ref{line:marpa-predict-es-16}}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-24}
+\Time{\ref{line:marpa-predict-es-18}} = \Oc{}
+  \because \Thref{th:predict1-time}.
 \end{equation}
 \end{proof}
 
@@ -3858,26 +3911,7 @@ and \Oc{} to \Ves{j} itself.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-predict-es-space-10}
-\myparbox{%
-  Space is consumed in \var{Predict-ES} of \Aref{alg:predict-es} only at
-  line \ref{line:marpa-predict-18}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-space-20}
-\myparbox{%
-  The space is consumed at line \ref{line:marpa-predict-18}
-  of \var{Predict-ES} is \Oc{}
-  and may be charged to \Veim{pred},
-  the prediction added
-  \cuz{} \Thref{th:predict1-complexity}.%
-}
-\end{equation}
-The theorem follows from
-\Eref{eq:th-predict-es-space-10} and
-\Eref{eq:th-predict-es-space-20}. \myqed
+\myqed
 \end{proof}
 
 If precomputation is used
@@ -3899,9 +3933,8 @@ set.
 Conceptually,
 predictions have predecessors, but no causes,
 and the link pair generated for
-\Veim{rez} in
-line \ref{line:marpa-predict-00} in
-\Aref{alg:predict-es}
+\Veim{pred} in line
+\ref{line:marpa-predict-es-16} of \Aref{alg:predict-es}
 would be
 $\tuple{\Veim{x}, \Lambda}$.
 If link pairs were generated,
