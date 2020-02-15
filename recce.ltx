@@ -3143,6 +3143,22 @@ called by current pseudocode procedure is consumed ``indirectly''; and
 \item all other resource is consumed ``directly''.
 \end{itemize}
 
+Resource ``charged to the caller'' is considered direct or indirect, based
+on where it is ultimately charged.
+That is, let \proc{Top}, \proc{Middle} and \proc{Bottom} be pseudocode procedures.
+Suppose \proc{Bottom} charges resource ``to the caller'',
+in this case,
+\proc{Middle}.
+Suppose that \proc{Middle} does not pass the resource on to \proc{Top},
+but instead charges it to, say, the Earley set.
+Then the resource is considered to have been consumed ``directly''
+by \proc{Middle}.
+
+Suppose that, instead, \proc{Middle} charges the resource ``to the caller'',
+in this case \proc{Top}, and that \proc{Top} does not pass the resource
+up the call chain, perhaps charging it to an EIM.
+Then the resource is considered to have been consumed ``directly'' by \proc{Top}.
+
 ``Exclusive'' resource means resource consumed directly.
 ``Included'' resource means resource consumed indirectly.
 ``Inclusive'' resource means resource consumed both
