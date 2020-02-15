@@ -229,11 +229,13 @@
 \newcommand{\Etable}[1]{\ensuremath{\mymathop{table}[#1)]}}
 \newcommand{\ExSpace}[1]{\ensuremath{\mymathop{ExSpace}(#1)}}
 \newcommand{\ExTime}[1]{\ensuremath{\mymathop{ExTime}(#1)}}
+% TODO: Delete next 2?
 \newcommand{\ExSpacePer}[2]{\ensuremath{\mymathop{ExSpacePer}(#1,#2)}}
 \newcommand{\ExTimePer}[2]{\ensuremath{\mymathop{ExTimePer}(#1,#2)}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\Invocs}[1]{\ensuremath{\mymathop{Invocs}(#1)}}
+% TODO: Delete next?
 \newcommand{\InvocsPer}[2]{\ensuremath{\mymathop{InvocsPer}(#1,#2)}}
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
@@ -247,6 +249,7 @@
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
 \newcommand{\Origin}[1]{\ensuremath{\mymathop{Origin}(#1)}}
+\newcommand{\Passes}[1]{\ensuremath{\mymathop{Passes}(#1)}}
 \newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
 \newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}(#1)}}
 \newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}(#1)}}
@@ -711,6 +714,62 @@ syntax falls within the limits of LALR.
 \section{Preliminaries}
 \label{sec:preliminaries}
 
+The basis of the mathematical presentation to follow is
+a naive set theory,
+consistent with that of
+Halmos 1960~\cite{Halmos1960}.
+Alongside the set theoretical notions,
+and in concept based on them,
+are algorithmic notions.
+The algorithmic notions are better for describing implementation
+on modern computer architectures,
+and will be essential for our complexity analysis.
+
+The algorithmic notions are, in concept,
+ultimately reducible to sequences of the primitive operations
+of a random access machine (RAM) like the one described by Earley.\footnote{Jay Earley
+  describes his random access machine model in
+  \cite[p. 61]{Earley1970}.
+}
+In this paper,
+we never break any algorithm down even close
+to the primitive operation level.
+Once a piece is small enough that we can conveniently
+characterize its complexity by other means,
+we will break it down no further.\footnote{%
+  Those who want more implementation details will find
+  most of the procedures in this paper,
+  including all of
+  the procedures required for a practical implementation,
+  broken further down in our C language
+  implementation
+  \cite{Marpa-R2}.%
+}
+
+In this paper,
+a \dfn{function} is never an algorithm ---
+it always refers to the set theoretic notion.
+Algorithms are also referred to as \dfn{procedures}.
+
+\Earley{} will refer to the Earley's original
+recognizer\cite{Earley1970}
+with zero characters of lookahead.
+\Leo{} will refer to Leo's revision of \Earley{}
+as described in~\cite{Leo1991}.
+\Marpa{} will refer to the recognizer described in
+this paper, and implemented in
+Marpa::R2~\cite{Marpa-R2}.
+
+The procedures which are major building blocks
+of \Marpa{} will be called \dfn{ops}.
+A second level of \Marpa{} building blocks will
+be called \dfn{sub-ops}.
+The building blocks of \Earley{} will be
+called \dfn{operations}.
+This overloads a term with a mathematical meaning
+but we feel that following Jay Earley's terminology in \cite{Earley1970}
+justifies any risk of confusion.
+
 \begin{table}[tb]
 \centering
 \caption{Type notations}
@@ -780,11 +839,14 @@ Otherwise, operations are never implicit
 \caption{Selected operator notations}
 \begin{tabular}{ll}
 \hline
+\rule{0pt}{3ex}%
 Multiplication &  $\var{a} \times \var{b}$ \\
 Cartesian product &  $\var{set1} \times \var{set2}$ \\
 Concatenation & $\var{a} \cat \var{b}$ \\
 Concatenation & $\Vstr{a} \Vsym{b}$ \\
 Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
+Floor & $\var{floor}(\var{a})$ \\
+Terminal symbol \Dfref{def:terminal-string} & \Vterm{terminal} \\[.8ex]
 \hline
 \end{tabular}
 \label{tab:op-notation}.
@@ -918,40 +980,6 @@ which may be abbreviated ``DFPP''.
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 
-In this paper, we will deal both with theoretical notions
-and algorithmic notions,
-The theoretical notions are based on informal set theory.
-
-Algorithmic notions are intended to be closer to the implementation.
-They are, in concept,
-ultimately reducible to sequences of the primitive operations
-of a random access machine like the one described by Earley.\footnote{Jay Earley
-  describes his random access machine model in
-  \cite[p. 61]{Earley1970}.
-}
-In this paper,
-we never break any algorithm down into primitive operations,
-instead stopping once it is clear that such a break-down
-can be performed.\footnote{%
-  Those who want more implementation details will find
-  most of the procedures in this paper,
-  including all of
-  the procedures required for a practical implementation,
-  broken further down in our C language
-  implementation
-  \cite{Marpa-R2}.%
-}
-
-In this paper,
-the terms \dfn{function} and \dfn{relation} are as
-traditionally defined in set theory.
-Algorithms are also referred to as \dfn{procedures}.
-Following \cite{Earley1970}, procedures
-which are major building blocks
-of Earley variants are called \dfn{operations}.
-In \Marpa{} will also refer to certain components of these
-as \dfn{sub-operations}.
-
 \section{Context-free grammars}
 \label{sec:CFGs}
 
@@ -1023,9 +1051,21 @@ is an \dfn{empty rule}.
 If $\size{\Vrule{r}} = 1$, then \Vrule{r}
 is a \dfn{unit rule}.
 
+\begin{definition}[Terminal string convention]
+\label{def:terminal-string}
+When a string
+is a string of terminal symbols,
+we will write it in boldface and enclose it
+between a pair of the brackets traditionally used
+for the ``floor'' operation: for example,
+\Vterm{terminal}.
+\end{definition}
+
 Where the choice of \Vcfg{g} is clear in context,
 and unless otherwise specified,
-use of the types \type{SYM}, \type{STR} and \type{RULE} will bind
+use of the types \type{SYM}, \type{STR} and \type{RULE},
+and of bracketing in angle brackets or ``floor'' brackets,
+will bind
 their variables.
 Specifically,
 \begin{align*}
@@ -1166,17 +1206,6 @@ of sentential forms:
 \[
 \myL{\var{g}} \defined \myL{\var{g}, \Accept{\var{g}}}.
 \]
-
-When a string in double-angle-bracket form
-is a string of terminals,
-we will write it in boldface.
-Use of boldface for a terminal \Vterm{term} is intended as a reading aid ---
-it implies
-$\Vterm{term} \in \Vocab{\var{g}}^\ast$,
-but not that
-$\Vterm{term} \in \Term{\var{g}}^\ast$.
-That the string is composed entirely of terminals must be separately justified by assumption,
-implication or explicit claim.
 
 \begin{definition}[Parse]
 \label{def:parse}
@@ -2154,16 +2183,6 @@ so that
 \end{equation}
 \end{proof}
 
-In this paper,
-\Earley{} will refer to the Earley's original
-recognizer\cite{Earley1970}
-with zero characters of lookahead.
-\Leo{} will refer to Leo's revision of \Earley{}
-as described in~\cite{Leo1991}.
-\Marpa{} will refer to the recognizer described in
-this paper, and implemented in
-Marpa::R2~\cite{Marpa-R2}.
-
 \section{Earley tables}
 \label{sec:earley-table}
 
@@ -3134,6 +3153,7 @@ Space is consumed only when new space is allocated.
 Reads and writes do not consume space.
 \TODO{Talk about local or stack space}
 
+\TODO{Redo these functions}
 For use in the complexity analysis,
 we define the following ``resource functions'',
 where \var{x} may be a code snippet, a line,
@@ -3366,6 +3386,9 @@ which may be charged to the Earley set.
 We first define out conventions for counting line
 invocations,
 and will then follow with a toy example.
+
+\begin{observation}
+\label{obs:invocation-counting}
 The number of \dfn{invocations} of a line is the number of execution of
 that line's logic.
 The number of \dfn{invocations} of a loop is the number of times
@@ -3376,6 +3399,7 @@ The interior lines of loop are invoked once
 for every \dfn{pass} of the loop.
 The first line of a loop is invoked once for every pass
 of the loop, plus once for the final test.
+\end{observation}
 
 Note that these definitions imply that the number of
 invocations of the first line of a loop
@@ -3408,6 +3432,8 @@ In the comments in the following fragment
 \EndFor
 \end{algorithmic}
 
+\TODO{Define Invocs, Invocs(x@y), Passes}
+According to our conventions, the following are true:
 \begin{itemize}
 \item Line \ref{line:toy-10} is invoked once.
 \item The outer loop, loop \enRefs{line:toy-20}{line:toy-50},
@@ -3664,16 +3690,99 @@ In \proc{Predict-ES}(\Ves{es}) the numbers of invocations is
 
 \begin{proof}
 Let \Invocs{\var{ln}} be the number of invocations of line \var{ln}
-in \proc{Predict-ES}.
+in the procedure call \proc{Predict-ES}(\Ves{es}).
 \begin{equation}
 \label{eq:th-predict-es-invocations-10}
 \Invocs{\ref{line:marpa-predict-05}} = \Oc{} \because
-   \text{ evident directly from \Aref{alg:predict-es}.}
+   \Aref{alg:predict-es}, \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-12}
 \Invocs{\ref{line:marpa-predict-10}} = \Oc{} \because
-   \text{ evident directly from \Aref{alg:predict-es}.}
+    \Eref{eq:th-predict-es-invocations-10},
+    \text{sequential execution}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-16}
+  \Invocs{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}} = \Oc{}
+    \because
+    \Eref{eq:th-predict-es-invocations-12},
+    \text{sequential execution}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-18}
+  \Passes{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}} = \order{\Loc{\var{es}}}
+    \because \Thref{th:es-eim-count}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-20}
+  \begin{gathered}
+    \Invocs{\ref{line:marpa-predict-12}} =
+    \Invocs{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}}
+    \times
+    (\Passes{\text{loop} \enRefs{line:marpa-predict-12}{line:marpa-predict-18}}+1)
+    \\
+    \because
+    \Obref{obs:invocation-counting}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-22}
+  \begin{gathered}
+    \Invocs{\ref{line:marpa-predict-12}} = \Oc{} \times (\order{\Loc{\var{es}}}+1) = \order{\Loc{\var{es}}}
+    \\
+    \because
+    \Eref{eq:th-predict-es-invocations-16},
+    \Eref{eq:th-predict-es-invocations-18},
+    \Eref{eq:th-predict-es-invocations-20}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-24}
+  \Invocs{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}
+    = \order{\Loc{\var{es}}}
+    \because
+    \Eref{eq:th-predict-es-invocations-22},
+    \text{sequential execution}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-26}
+\begin{gathered}
+  \bigsize{\set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}} = \Oc
+  \\
+  \because \text{ \Rules{\var{g}} is a constant depending on \Vint{g}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-28}
+  \Passes{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}} = \Oc{}
+    \because
+    \Eref{eq:th-predict-es-invocations-26}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-30}
+  \begin{gathered}
+    \Invocs{\ref{line:marpa-predict-14}} =
+    \Invocs{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}
+    \times
+    (\Passes{\text{loop} \enRefs{line:marpa-predict-14}{line:marpa-predict-18}}+1)
+    \\
+    \because
+    \Obref{obs:invocation-counting}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-32}
+  \begin{gathered}
+    \Invocs{\ref{line:marpa-predict-14}} =
+      \order{\Loc{\var{es}}} \times (\Oc+1) =
+      \order{\Loc{\var{es}}}
+    \\
+    \because
+    \Eref{eq:th-predict-es-invocations-24},
+    \Eref{eq:th-predict-es-invocations-28},
+    \Eref{eq:th-predict-es-invocations-30}.
+  \end{gathered}
 \end{equation}
 \myqed
 \end{proof}
@@ -8359,6 +8468,11 @@ J.~Earley.
 Dirk~Grune and Ceriel~J.H Jacobs.
 \newblock {\em Parsing Techniques: A Practical Guide}.
 \newblock Springer, Amsterdam, 2008.
+
+\bibitem{Halmos1960}
+Paul~R.~Halmos
+\newblock {\em Naive Set Theory}
+\newblock van Nostrand Reinhold, 1960.
 
 \bibitem{Harrison1978}
 Michael~A.~Harrison.
