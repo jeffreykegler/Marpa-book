@@ -66,7 +66,7 @@
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
 \newcommand{\op}[1]{\ensuremath{\texttt{#1}}}
-\newcommand{\proc}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\proc}[2][]{\ensuremath{\texttt{#2}(#1)}}
 \newcommand{\sep}{\,\mid\,}
 \newcommand{\mydot}{\raisebox{.05em}{$\,\bullet\,$}}
 \newcommand{\cat}{\,.\,}
@@ -3522,7 +3522,7 @@ is invoked once per pass of the inner loop, or 6 times.
 \end{algorithmic}
 \end{algorithm}
 
-The \op{Initializer} op adds the start EIM and its predictons.
+The \op{Initializer} op adds the start EIM and its predictions.
 We first look at
 Algorithms \Aref{alg:predict1} and \Aref{alg:predict-es},
 which contain the pseudocode for adding predictions.
@@ -3703,19 +3703,24 @@ Space for \var{Predict1} is
 
 \begin{theorem}[\proc{Predict-ES} Invocations]
 \label{th:predict-es-invocations}
-In \proc{Predict-ES}(\Ves{es}) the numbers of invocations is
+Consider \proc{Predict-ES}[\Ves{es}].
+There are \Oc{} invocations per Earley set
 \begin{itemize}
-\item \Oc{} for lines \ref{line:marpa-predict-es-05} and
-  \ref{line:marpa-predict-es-10}; and
-\item \order{\Vloc{j}} for lines
-    \enRange{\ref{line:marpa-predict-es-12}}{\ref{line:marpa-predict-es-18}},
-    where \var{j} = \Loc{\Ves{es}}.
+\item for each of lines
+  \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}; and
+\item for the final, test-failure, invocation of
+  line \ref{line:marpa-predict-es-12}.
+\end{itemize}
+There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
+\begin{itemize}
+\item for the non-final, successful, invocations of
+line \ref{line:marpa-predict-es-12}; and
+\item for each of lines
+\enRange{\ref{line:marpa-predict-es-14}}{\ref{line:marpa-predict-es-18}}.
 \end{itemize}
 \end{theorem}
 
 \begin{proof}
-Let \Invocs{\var{ln}} be the number of invocations of line \var{ln}
-in the procedure call \proc{Predict-ES}(\Ves{es}).
 \begin{equation}
 \label{eq:th-predict-es-invocations-10}
 \Invocs{\ref{line:marpa-predict-es-05}} = \Oc{} \because
@@ -3729,23 +3734,49 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-16}
-  \Invocs{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \Oc{}
+  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \Oc{}
     \because
     \Eref{eq:th-predict-es-invocations-12},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
+\label{eq:th-predict-es-invocations-16-10}
+\myparbox{%
+   There is exactly one final, test-failure invocation of
+    line \ref{line:marpa-predict-es-12} \cuz{}
+  \Eref{eq:th-predict-es-invocations-16},
+    \text{sequential execution},
+    and by the definition of a \algorithmicfor{} loop.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-16-20}
+\myparbox{%
+   There is exactly one successful invocation of
+    line \ref{line:marpa-predict-es-12} for each
+    $\Veim{x} \in \Ves{es}$
+    \cuz{} directly from line
+    \Eref{eq:th-predict-es-invocations-12}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-16-30}
+\myparbox{%
+   There is exactly one pass of
+  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}
+     for each $\Veim{x} \in \Ves{es}$
+    \cuz{} \Eref{eq:th-predict-es-invocations-16-20}.}
+\end{equation}
+\begin{equation}
 \label{eq:th-predict-es-invocations-18}
-  \Passes{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
     \because \Thref{th:es-eim-count}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-20}
   \begin{gathered}
     \Invocs{\ref{line:marpa-predict-es-12}} =
-    \Invocs{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}
+    \Invocs{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}
     \times
-    (\Passes{\text{loop} \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}+1)
+    (\Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}+1)
     \\
     \because
     \Obref{obs:invocation-counting}.
@@ -3764,7 +3795,7 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-24}
-  \Invocs{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
     = \order{\Loc{\var{es}}}
     \because
     \Eref{eq:th-predict-es-invocations-22},
@@ -3780,7 +3811,7 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-28}
-  \Passes{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} = \Oc{}
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} = \Oc{}
     \because
     \Eref{eq:th-predict-es-invocations-26}.
 \end{equation}
@@ -3788,9 +3819,9 @@ in the procedure call \proc{Predict-ES}(\Ves{es}).
 \label{eq:th-predict-es-invocations-30}
   \begin{gathered}
     \Invocs{\ref{line:marpa-predict-es-14}} =
-    \Invocs{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+    \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
     \times
-    (\Passes{\text{loop} \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}+1)
+    (\Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}+1)
     \\
     \because
     \Obref{obs:invocation-counting}.
@@ -3903,6 +3934,54 @@ and \Oc{} charged to \Ves{j} itself.
 \Time{\ref{line:marpa-predict-es-18}} = \Oc{}
   \because \Thref{th:predict1-time}.
 \end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-26}
+\myparbox{%
+   Total exclusive time for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   is the number of invocations of each multiplied by the time for each invocation.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-time-28}
+\begin{gathered}
+   \myparbox{%
+     Total exclusive time for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   is}
+   \\
+     \smashoperator[r]{\sum_{\textstyle{
+       \var{line}\in\set{\enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}}
+     }}}
+     \quad \Oc{} \times \Oc{} = \Oc{}
+   \\
+     \because
+     \Thref{th:predict-es-invocations},
+     \Eref{eq:th-predict-es-time-14},
+     \Eref{eq:th-predict-es-time-16},
+     \Eref{eq:th-predict-es-time-26}.
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-predict-es-time-30}
+\myparbox{%
+   Total exclusive time for the final invocation of
+   line \ref{line:marpa-predict-es-12} is \Oc{}
+   \cuz{} \Eref{eq:th-predict-es-time-18}.
+}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-predict-es-time-32}
+\myparbox{%
+   Total exclusive time charged to the Earley set is
+   $\Oc{} + \Oc{} = \Oc{}$
+   \cuz{}
+  \Eref{eq:def-predict-es-time-charge},
+  \Eref{eq:th-predict-es-time-12},
+  \Eref{eq:th-predict-es-time-28},
+  \Eref{eq:th-predict-es-time-30}.}
+\end{equation}
+\TODO{Finish}
+\myqed
 \end{proof}
 
 \begin{theorem}[\var{Predict-ES} Space Complexity]
