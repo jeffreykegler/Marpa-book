@@ -3416,14 +3416,27 @@ and will then follow with a toy example.
 \label{obs:invocation-counting}
 The number of \dfn{invocations} of a line is the number of execution of
 that line's logic.
+\end{observation}
+
+\begin{observation}
+\label{obs:loop-invocation-counting}
 The number of \dfn{invocations} of a loop is the number of times
 the loop is initialized.
 Every line in a loop is either its \dfn{first line},
 or an \dfn{interior} line.
-The interior lines of loop are invoked once
-for every \dfn{pass} of the loop.
-The first line of a loop is invoked once for every pass
-of the loop, plus once for the final test.
+The interior lines of loop are invoked zero or more times,
+once for every \dfn{pass} of the loop.
+
+The first line of a loop is invoked
+\begin{itemize}
+\item once for every successful test of the test condition of the loop; and
+\item exactly once for an unsucessful, and therefore final, test
+of the test condition of the loop.
+\end{itemize}
+The need for a final test implies
+that the first line of the loop is invoked at last once.
+There is one successful test of the loop condition for every
+pass of the loop.
 \end{observation}
 
 Note that these definitions imply that the number of
@@ -3703,21 +3716,27 @@ Space for \var{Predict1} is
 
 \begin{theorem}[\proc{Predict-ES} Invocations]
 \label{th:predict-es-invocations}
-Consider \proc{Predict-ES}[\Ves{es}].
-There are \Oc{} invocations per Earley set
-\begin{itemize}
-\item for each of lines
-  \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}; and
-\item for the final, test-failure, invocation of
-  line \ref{line:marpa-predict-es-12}.
-\end{itemize}
-There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
-\begin{itemize}
-\item for the non-final, successful, invocations of
-line \ref{line:marpa-predict-es-12}; and
-\item for each of lines
-\enRange{\ref{line:marpa-predict-es-14}}{\ref{line:marpa-predict-es-18}}.
-\end{itemize}
+Consider \proc[\Ves{es}]{Predict-ES}.
+\begin{enumerate}
+\item
+  \label{enum:th-predict-es-invocations-10}
+  There are \Oc{} invocations per Earley set
+  \begin{itemize}
+    \item for each of lines
+      \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}; and
+    \item for the final, test-failure, invocation of
+      line \ref{line:marpa-predict-es-12}.
+  \end{itemize}
+\item
+  \label{enum:th-predict-es-invocations-20}
+  There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
+  \begin{itemize}
+    \item for the non-final, successful, invocations of
+      line \ref{line:marpa-predict-es-12}; and
+    \item for each of lines
+      \enRange{\ref{line:marpa-predict-es-14}}{\ref{line:marpa-predict-es-18}}.
+  \end{itemize}
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
@@ -3744,9 +3763,9 @@ line \ref{line:marpa-predict-es-12}; and
 \myparbox{%
    There is exactly one final, test-failure invocation of
     line \ref{line:marpa-predict-es-12} \cuz{}
-  \Eref{eq:th-predict-es-invocations-16},
-    \text{sequential execution},
-    and by the definition of a \algorithmicfor{} loop.}
+    \Obref{obs:loop-invocation-counting}.
+    \Eref{eq:th-predict-es-invocations-16},
+    \text{sequential execution}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-16-20}
@@ -3754,51 +3773,24 @@ line \ref{line:marpa-predict-es-12}; and
    There is exactly one successful invocation of
     line \ref{line:marpa-predict-es-12} for each
     $\Veim{x} \in \Ves{es}$
-    \cuz{} directly from line
-    \Eref{eq:th-predict-es-invocations-12}.}
+    \cuz{} \Obref{obs:loop-invocation-counting}.}
 \end{equation}
-\begin{equation}
-\label{eq:th-predict-es-invocations-16-30}
-\myparbox{%
-   There is exactly one pass of
-  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}
-     for each $\Veim{x} \in \Ves{es}$
-    \cuz{} \Eref{eq:th-predict-es-invocations-16-20}.}
-\end{equation}
+In the rest of this proof,
+we will write $\Passes{\var{lp}@\Veim{x}}$
+to say ``passes of loop \var{lp} per \Veim{x}'';
+and $\Invocs{\var{ln}@\Veim{x}}$
+to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-18}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
-    \because \Thref{th:es-eim-count}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-invocations-20}
-  \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-12}} =
-    \Invocs{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}
-    \times
-    (\Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}}+1)
-    \\
-    \because
-    \Obref{obs:invocation-counting}.
-  \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict-es-invocations-22}
-  \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-12}} = \Oc{} \times (\order{\Loc{\var{es}}}+1) = \order{\Loc{\var{es}}}
-    \\
-    \because
-    \Eref{eq:th-predict-es-invocations-16},
-    \Eref{eq:th-predict-es-invocations-18},
-    \Eref{eq:th-predict-es-invocations-20}.
-  \end{gathered}
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} @ \var{x}} = \Oc
+    \because \Eref{eq:th-predict-es-invocations-16-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-24}
-  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
-    = \order{\Loc{\var{es}}}
+  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} @ \var{x}}
+    = \Oc
     \because
-    \Eref{eq:th-predict-es-invocations-22},
+    \Eref{eq:th-predict-es-invocations-18},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
@@ -3811,54 +3803,72 @@ line \ref{line:marpa-predict-es-12}; and
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-28}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} = \Oc{}
+  \begin{gathered}
+      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
+	  @ \var{x}}
+    \\
+      = \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
+	  @ \var{x}}
+      \times
+      \bigsize{\set{\Vrule{r} : \Postdot{\var{x}}}}
+    \\
+      \because \Obref{obs:loop-invocation-counting}
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-invocations-29}
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} @ \var{x}}
+      = \Oc{} \times \Oc
     \because
-    \Eref{eq:th-predict-es-invocations-26}.
+    \Eref{eq:th-predict-es-invocations-24},
+    \Eref{eq:th-predict-es-invocations-26},
+    \Eref{eq:th-predict-es-invocations-28}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-30}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}} =
-    \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
-    \times
-    (\Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}+1)
+    \Invocs{\ref{line:marpa-predict-es-14}@\var{x}} =
+      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}@\var{x}}
+      +1
     \\
     \because
-    \Obref{obs:invocation-counting}.
+    \Obref{obs:loop-invocation-counting}.
   \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-32}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}} =
-      \order{\Loc{\var{es}}} \times (\Oc+1) =
-      \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-14}@\var{x}} =
+      \Oc+1 = \Oc{}
     \\
     \because
-    \Eref{eq:th-predict-es-invocations-24},
-    \Eref{eq:th-predict-es-invocations-28},
+    \Eref{eq:th-predict-es-invocations-29},
     \Eref{eq:th-predict-es-invocations-30}.
   \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-34}
-    \Invocs{\ref{line:marpa-predict-es-16}} = \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-16}@\var{x}} = \Oc{}
     \because \Eref{eq:th-predict-es-invocations-28},
     \text{ sequential execution.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-36}
-    \Invocs{\ref{line:marpa-predict-es-18}} = \order{\Loc{\var{es}}}
+    \Invocs{\ref{line:marpa-predict-es-18}@\var{x}} = \Oc{}
     \because \Eref{eq:th-predict-es-invocations-34},
     \text{ sequential execution.}
 \end{equation}
-The theorem follows from
-\Eref{eq:th-predict-es-invocations-10},
-\Eref{eq:th-predict-es-invocations-12},
-\Eref{eq:th-predict-es-invocations-22},
-\Eref{eq:th-predict-es-invocations-32},
-\Eref{eq:th-predict-es-invocations-34}, and
-\Eref{eq:th-predict-es-invocations-36}.
+We have \ref{enum:th-predict-es-invocations-10}
+of \Thref{th:predict-es-invocations}
+from \Eref{eq:th-predict-es-invocations-10},
+  \Eref{eq:th-predict-es-invocations-12},
+  \Eref{eq:th-predict-es-invocations-16-10}.
+We have \ref{enum:th-predict-es-invocations-20}
+of \Thref{th:predict-es-invocations}
+from \Eref{eq:th-predict-es-invocations-16-20},
+  \Eref{eq:th-predict-es-invocations-32},
+  \Eref{eq:th-predict-es-invocations-34},
+  \Eref{eq:th-predict-es-invocations-36}.
 \myqed
 \end{proof}
 
