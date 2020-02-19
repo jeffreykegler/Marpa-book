@@ -3279,6 +3279,7 @@ space which may be charged to the Earley set.
 Each PIM is added at the end of a linked list,
 so that each add of a PIM takes \Oc{} time.
 Each PIM data structure requires \Oc{} space.
+\dispEnd
 \end{observation}
 
 \begin{observation}[Rule ID's]
@@ -3398,6 +3399,7 @@ and will then follow with a toy example.
 \label{obs:invocation-counting}
 The number of \dfn{invocations} of a line is the number of execution of
 that line's logic.
+\dispEnd
 \end{observation}
 
 \begin{observation}
@@ -3419,6 +3421,7 @@ The need for a final test implies
 that the first line of the loop is invoked at last once.
 There is one successful test of the loop condition for every
 pass of the loop.
+\dispEnd
 \end{observation}
 
 Note that these definitions imply that the number of
@@ -3452,7 +3455,6 @@ In the comments in the following fragment
 \EndFor
 \end{algorithmic}
 
-\TODO{Define Invocs, Invocs(x@y), Passes}
 According to our conventions, the following are true:
 \begin{itemize}
 \item Line \ref{line:toy-10} is invoked once.
@@ -3505,13 +3507,13 @@ is invoked once per pass of the inner loop, or 6 times.
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times@\var{add}$
+\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times/\var{add}$
 \label{line:marpa-predict-80}
 \State Add \var{prediction} to \ES{\Current{\var{prediction}}}
-\Statex  \Comment $\var{s}=\Oc;\times@\var{add}$
+\Statex  \Comment $\var{s}=\Oc;\times/\var{add}$
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment $\times@\var{add}$
+   \Comment $\times/\var{add}$
 \label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
@@ -3758,18 +3760,18 @@ Consider \proc[\Ves{es}]{Predict-ES}.
     \cuz{} \Obref{obs:loop-invocation-counting}.}
 \end{equation}
 In the rest of this proof,
-we will write $\Passes{\var{lp}@\Veim{x}}$
+we will write $\Passes{\var{lp}}/\Veim{x}$
 to say ``passes of loop \var{lp} per \Veim{x}'';
-and $\Invocs{\var{ln}@\Veim{x}}$
+and $\Invocs{\var{ln}}/\Veim{x}$
 to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-18}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} @ \var{x}} = \Oc
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} / \Veim{x} = \Oc
     \because \Eref{eq:th-predict-es-invocations-16-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-24}
-  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} @ \var{x}}
+  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} / \Veim{x}
     = \Oc
     \because
     \Eref{eq:th-predict-es-invocations-18},
@@ -3786,11 +3788,11 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-28}
   \begin{gathered}
-      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
-	  @ \var{x}}
+      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+	  / \Veim{x}
     \\
-      = \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
-	  @ \var{x}}
+      = \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+	  / \Veim{x}
       \times
       \bigsize{\set{\Vrule{r} : \Postdot{\var{x}}}}
     \\
@@ -3799,7 +3801,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-29}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} @ \var{x}}
+  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} / \Veim{x}
       = \Oc{} \times \Oc
     \because
     \Eref{eq:th-predict-es-invocations-24},
@@ -3809,8 +3811,8 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-30}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}@\var{x}} =
-      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}@\var{x}}
+    \Invocs{\ref{line:marpa-predict-es-14}}/\Veim{x} =
+      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}/\Veim{x}
       +1
     \\
     \because
@@ -3820,7 +3822,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-32}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}@\var{x}} =
+    \Invocs{\ref{line:marpa-predict-es-14}}/\Veim{x} =
       \Oc+1 = \Oc{}
     \\
     \because
@@ -3830,13 +3832,13 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-34}
-    \Invocs{\ref{line:marpa-predict-es-16}@\var{x}} = \Oc{}
+    \Invocs{\ref{line:marpa-predict-es-16}}/\Veim{x} = \Oc{}
     \because \Eref{eq:th-predict-es-invocations-28},
     \text{ sequential execution.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-invocations-36}
-    \Invocs{\ref{line:marpa-predict-es-18}@\var{x}} = \Oc{}
+    \Invocs{\ref{line:marpa-predict-es-18}}/\Veim{x} = \Oc{}
     \because \Eref{eq:th-predict-es-invocations-34},
     \text{ sequential execution.}
 \end{equation}
@@ -4112,6 +4114,7 @@ of Earley set 0 by \Earley{}.
 
 \begin{observation}[Complexity]
 \TODO{}
+\dispEnd
 \end{observation}
 
 \begin{observation}[Ancestry]
@@ -4120,12 +4123,14 @@ The \Marpa{} implementation tracks all link pairs for scanned EIM's.
 In an unambiguous parse, a scanned EIM will always have
 exactly one link pair.
 In an ambiguous parse, a scanned EIM will have one or more link pairs.
+\dispEnd
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
 \label{obs:earley-scanner-operation}
 \Marpa{}'s scanner operation has the same effect as the ``Scanner''
 operation of \Earley{}\cite{Earley1970}.
+\dispEnd
 \end{observation}
 
 \subsection{Reducer operation}
@@ -4210,6 +4215,7 @@ or $\Lambda$.
 
 \begin{observation}[Complexity]
 \TODO{}
+\dispEnd
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
@@ -4247,6 +4253,7 @@ we will always have
 \]
 so that we may also the \Earley{} completer is equivalent
 in effect to $\var{Earley-reducer}(\Ves{i})$.
+\dispEnd
 \end{observation}
 
 \begin{observation}[Summary of \Earley{} Completer Operation]
@@ -4473,6 +4480,7 @@ This can be seen from
 \Obref{obs:earley-predictor-operation},
 and
 \Obref{obs:earley-memoizer-operation}.
+\dispEnd
 \end{observation}
 
 \subsection{Summary}
@@ -4514,6 +4522,7 @@ This observation follows from
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
 \Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\dispEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by type of result]
@@ -4531,6 +4540,7 @@ This follows from
 \Obref{obs:earley-predictor-operation},
 \Obref{obs:earley-memoizer-operation}, and
 \Obref{obs:marpa-operation-by-result}.
+\dispEnd
 \end{observation}
 
 \begin{observation}[\Marpa{} operation by direct ancestor]
@@ -4545,6 +4555,7 @@ This observation follows from
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
 \Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\dispEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by direct ancestor]
@@ -4559,6 +4570,7 @@ This observation follows from
 \Obref{obs:earley-completer-operation},
 \Obref{obs:earley-predictor-operation} and
 \Obref{obs:earley-memoizer-operation}.
+\dispEnd
 \end{observation}
 
 \TODO{complexity observations}
