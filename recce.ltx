@@ -227,16 +227,9 @@
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
 \newcommand{\ES}[1]{\ensuremath{\mymathop{ES}(#1)}}
 \newcommand{\Etable}[1]{\ensuremath{\mymathop{table}[#1)]}}
-\newcommand{\ExSpace}[1]{\ensuremath{\mymathop{ExSpace}(#1)}}
-\newcommand{\ExTime}[1]{\ensuremath{\mymathop{ExTime}(#1)}}
-% TODO: Delete next 2?
-\newcommand{\ExSpacePer}[2]{\ensuremath{\mymathop{ExSpacePer}(#1,#2)}}
-\newcommand{\ExTimePer}[2]{\ensuremath{\mymathop{ExTimePer}(#1,#2)}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\Invocs}[1]{\ensuremath{\mymathop{Invocs}(#1)}}
-% TODO: Delete next?
-\newcommand{\InvocsPer}[2]{\ensuremath{\mymathop{InvocsPer}(#1,#2)}}
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
@@ -266,9 +259,7 @@
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Space}[1]{\ensuremath{\mymathop{Space}(#1)}}
-\newcommand{\SpacePer}[2]{\ensuremath{\mymathop{SpacePer}(#1,#2)}}
 \newcommand{\Time}[1]{\ensuremath{\mymathop{Time}(#1)}}
-\newcommand{\TimePer}[2]{\ensuremath{\mymathop{TimePer}(#1,#2)}}
 \newcommand{\Symbol}[1]{\ensuremath{\mymathop{Symbol}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}(#1)}}
@@ -3083,43 +3074,43 @@ In the complexity context,
 ``resource'' means time or space.
 We ``charge'' all resource to adds,
 and attempts to add, PIM's.
-These ``charges'' will be found to be \Oc{}.
-In later sections, we will count
-PIM attempts and PIM adds for various grammar classes.
-Our results will follow from
-multiplying the charge per PIM by the appropriate count.
+We have yet to show this,
+but we will find these ``charges'' to be \Oc{}.
 
-PIM adds and attempts will require multiple pseudocode
-lines,
-but it will be convenient
-to identify each add and attempt with a specific line.
-We will mark these lines with tags in comments on the
-pseudocode.
-The adds with the
-tag $\var{add}\plusplus$,
-and the attempts with the tag
-$\var{attempt}\plusplus$.
+In a pseudocode procedure,
+charges are made either to a ``destination'',
+or if the pseudocode procedure is called by another pseudocode
+procedure, the charge can be made ``to the caller''.
+A ``destination'' is either an ``ultimate destination''
+or an ``intermediate desination''.
 
-As stated, charges of resource will be made to PIM's.
-At certain points, it will not be convenient to indicate a specific
-PIM, as we will state that the resource is
-``charged to the caller''.
-``charged to the parse'',
-or ``charged to the Earley set''.
+The ``ultimate destination'' of a charge is always a PIM.
+An ``intermediate destination'' can be either an Earley set,
+or the parse itself.
+All charges not made to an ultimate destination are
+re-charged at some point,
+and eventually every charge is re-charged to an
+ultimate destination.
+
+A resource ``charged to the parse'' is re-charged to the first PIM
+of Earley set 0.
+There is always a start EIM in Earley set 0,
+so that the first PIM of Earley set 0
+exists in every parse.
+
+A resource ``charged to an Earley set'' is re-charged to the first PIM
+of that Earley set.
+In a successful parse, every Earley set will have at least one PIM,
+so that the first PIM of an Earley set will always exist.
+An Earley set without a PIM causes a parse failure,
+so that in a failed parse, every Earley set except the last will have at least one PIM,
+and resource charged to those Earley sets can be charge to their first PIM.
+In the last Earley set of a failed parse,
+resource charged to the Earley set is charged to the parse.
 
 If a resource is ``charged to the caller'' the decision of how
-to charge the resource is made by
-the routine that called the current one.
-A resource ``charged to the parse'' is re-charged to the first PIM
-of Earley set 0, which exists in every parse.
-
-In a successful parse,
-a resource charged to an Earley set is re-charged to the first PIM added
-to the Earley set.
-In a successful parse, every Earley set has at least one PIM.
-A failed parse will terminate with the first empty Earley set,
-and that
-Earley set's resource may be charged to the parse.
+to re-charge the resource is made by
+the pseudocode procedure that called the current pseudocode procedure.
 
 For the purposes of complexity analysis,
 we find it helpful to divide the resource consumption
@@ -3169,34 +3160,25 @@ Space is consumed only when new space is allocated.
 Reads and writes do not consume space.
 \TODO{Talk about local or stack space}
 
-\TODO{Redo these functions}
 For use in the complexity analysis,
 we define the following ``resource functions'',
 where \var{x} may be a code snippet, a line,
 or an algorithm:
 \begin{align*}
-\ExTime{\var{x}} & \defined \text{ the exclusive time consumed by \var{x}} \\
-\ExSpace{\var{x}} & \defined \text{ the exclusive space consumed by \var{x}} \\
 \Time{\var{x}} & \defined \text{ the inclusive time consumed by \var{x}} \\
 \Space{\var{x}} & \defined \text{ the inclusive space consumed by \var{x}} \\
 \Invocs{\var{x}} & \defined \text{ the number of invocations of \var{x}.}
 \end{align*}
 
-The resource functions above return resource per invocation.
-For total resource consumed by multiple invocations,
-there are ``resource-per'' variants of the resource
-functions.
-we let
-\begin{align*}
-\ExTimePer{\var{x}}{\var{unit}} & \defined \text{ the exclusive time consumed per \var{unit} by \var{x}} \\
-\ExSpacePer{\var{x}}{\var{unit}} & \defined \text{ the exclusive space consumed per \var{unit} by \var{x}} \\
-\TimePer{\var{x}}{\var{unit}} & \defined \text{ the inclusive time consumed per \var{unit} by \var{x}} \\
-\SpacePer{\var{x}}{\var{unit}} & \defined \text{ the inclusive space consumed per \var{unit} by \var{x}} \\
-\InvocsPer{\var{x}}{\var{unit}} & \defined \text{ the number of invocations per \var{unit} of \var{x}}.
-\end{align*}
-Here \var{unit} may be a PIM, indicating total resource consumed for that PIM,
-a procedure name, indicating total resource consumed by all invocations in that procedure.
-% TODO: Need other units?
+PIM adds and attempts will usually require multiple pseudocode
+lines,
+but it will be convenient
+to mark the line where each add or attempt begins.
+pseudocode:
+the adds with the
+tag $\var{add}\plusplus$,
+and the attempts with the tag
+$\var{try}\plusplus$.
 
 \subsection{Earley set indexing}
 \label{sec:es-indexing}
@@ -4113,7 +4095,7 @@ of Earley set 0 by \Earley{}.
 \Statex \hskip\algorithmicindent \hskip\algorithmicindent \hskip\algorithmicindent
     $\var{lp} \in \Matches{\Veim{pred}, \var{token}}$ \algorithmicdo
 \State $\Veim{rez} = \tuple{\Next{\var{pred}},\Origin{\var{pred}}}@\Vloc{j}$
-   \Comment $\var{attempt}\plusplus$
+   \Comment $\var{try}\plusplus$
 \State $\Veim{old} \gets \LookupEIM{\var{rez}}$
   \If{$\var{old} \neq \Lambda$}
     \State Add \var{lp} to \LinkPairs{\var{old}}
