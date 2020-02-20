@@ -3331,21 +3331,28 @@ that depends on the grammar \Dfref{def:context-free-grammar}.
 \begin{observation}[\var{seen} PSL]
 \label{obs:seen-psl}
 For each Earley set,
-\var{used} is a PSL with
+\var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
 Earley sets never have duplicated EIM's and
 \var{seen} is used to efficiently enforce this.
 PSL's are described in detail in section
 \Sref{sec:per-set-lists}.
 
+In each Earley set, \var{seen} will consume \Oc{} space.
+Accesses and writes of \var{seen} consume \Oc{}.
+
+{\bf Justification}:
 Since there
 is one fixed-size entry for every dotted rule in the grammar,
 the size of \var{seen} is \order{\size{\DottedRules{\var{g}}}}.
 \DottedRules{\var{g}}
 is a constant which depends on \Vcfg{g},
-and therefore the creation of \var{seen} will consume
-\Oc{} space,
-which will be charged to the Earley set.
+and therefore the space consumed by \var{seen} will be
+\Oc{}.
+It can be seen that creation, each access and each write
+of \var{seen} consumes \Oc{} time from
+section \Sref{sec:per-set-lists},
+where PSL's are described in detail.
 \dispEnd{}
 \end{observation}
 
@@ -3359,13 +3366,15 @@ and the linked lists are of PIM's.
 The \var{transition} array is for efficient lookup
 of EIM and LIM matches.
 
-In charging the space used by \var{transition},
-we deal separately with the space consumed by the linked lists,
-and the space consumed by the \var{transition} itself,
-excluding the linked lists.
-The space for the linked lists will be charged to the
-PIM's as shown later.
+Creation of \var{transition} consumes \Oc{} time
+and \Oc{} space for per-Earley-set overhead,
+and \Oc{} space and \Oc{} time for every PIM in
+the Earley set.
+Writes after creation do not occur.
+Accesses by symbol
+to the head of each linked list consume \Oc{} time.
 
+{\bf Justification}:
 Since there is at most one entry for every symbol
 in the grammar,
 the number of array entries in \var{transition} is,
@@ -3373,20 +3382,30 @@ the number of array entries in \var{transition} is,
 \Vocab{\var{g}} is a constant which depends on \Vcfg{g},
 and the \var{transition} array itself,
 excluding the linked lists,
-consumes \Oc{} space,
-which may be charged to the Earley set.
+is of size \Oc{}.
+Per-Earley-set creation of \var{transition}
+therefore consumes \Oc{} time and \Oc{} space.
+
+Since the array is of fixed-size,
+access to the head of the linked lists
+that it stores is \Oc{}.
+There is a fixed-size link in one of the linked lists of
+\var{transition} for every PIM in the Earley sets,
+and therefore creation time for the links is \Oc{}
+per PIM.
 \dispEnd{}
 \end{observation}
 
 \subsection{Counting invocations}
 
-We first define out conventions for counting line
+We first define our conventions for counting line
 invocations,
 and will then follow with a toy example.
 
 \begin{observation}
 \label{obs:invocation-counting}
-The number of \dfn{invocations} of a line is the number of execution of
+The number of \dfn{invocations} of a line
+is the number of executions of
 that line's logic.
 \dispEnd
 \end{observation}
@@ -3417,7 +3436,7 @@ Note that these definitions imply that the number of
 invocations of the first line of a loop
 is not necessarily the same as the number of invocations
 of the loop.
-The two will only be identical if the loop has zero passes ---
+The two counts will only be identical if the loop has zero passes ---
 in other words, if the loop test fails the first time.
 
 In the comments in the following fragment
