@@ -3162,11 +3162,16 @@ For use in the complexity analysis,
 we define the following ``resource functions'',
 where \var{x} may be a code snippet, a line,
 or an algorithm:
-\begin{align*}
-\Time{\var{x}} & \defined \text{ the exclusive time consumed by \var{x}} \\
-\Space{\var{x}} & \defined \text{ the exclusive space consumed by \var{x}} \\
-\Invocs{\var{x}} & \defined \text{ the number of invocations of \var{x}.}
-\end{align*}
+\begin{itemize}
+\item \Time{\var{x}} $\defined$ the exclusive time consumed by one invocation of \var{x}.
+\item \Space{\var{x}} $\defined$ the exclusive space consumed by one invocation of \var{x}.
+\item \Invocs{\var{x}} $\defined$ the number of invocations during one call of the current pseudocode procedure of \var{x}.
+\item \Passes{\ell} $\defined$ the number of passes during one call of the current pseudocode procedure of the loop $\ell$.
+\item \Invocs{\var{x}}/\var{unit} $\defined$ the number of invocations modulo one \var{unit} of \var{x}.
+\item \Passes{\ell/\var{unit}} $\defined$ the number of passes module one \var{unit} of the loop $\ell$.
+\end{itemize}
+The calls ``module a unit'' are for counting invocations and passes at a level finer than the total count for the pseudocode procedure.
+Their precise meaning will defined in the context in which they are used.
 
 PIM adds and tries will usually require multiple pseudocode
 lines,
@@ -3207,19 +3212,14 @@ $\var{try}\plusplus$.
   Marpa::R2 uses a dynamic array.}
 \end{gather}
 
-While $\Time{\ES{\Vloc{j}} = \Oc{}}$,
-the \Marpa{} implemenation is more careful about indexing
-Earley sets during parsing, because there is a higher
-constant overhead in the case of
-\Eref{eq:def-es-of-loc},
-than for \Eref{eq:def-loc-of_pim},
-\Eref{eq:def-loc-of_es} and \Eref{eq:def-es-of-pim}.
+\ES{\Vloc{j}} is not actually used
+by the \Marpa{} implementation during parsing,
+to avoid the constant overhead of dynamic arrays.
 During parsing
 Marpa::R2\cite{Marpa-R2}
 builds Earley sets as a linked list of structures,
 and a dynamic array indexing them is only created
 when needed.
-
 The dynamic array is not needed when
 running the recognizer in normal production,
 because links to Earley sets are kept in the PIMs,
@@ -4200,9 +4200,10 @@ a completed EIM.
 The predecessor of a reducer-generated EIM varies depending on whether the attempt
 to create the reducer-generated EIM was a \var{Leo-reducer} operation
 or an \var{Earley-reducer} operation.
-For an \var{Earley-reducer} operation,
+For an
+\var{Earley-reducer} operation,
 the predecessor will be an incomplete EIM.
-For a \var{leo-reducer} operation,
+For a \var{Leo-reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
 \dispEnd{}
