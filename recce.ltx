@@ -3225,21 +3225,23 @@ running the recognizer in normal production,
 because links to Earley sets are kept in the PIMs,
 a link to the current Earley set is kept,
 and the event mechanism works using links.
+
 But for tracing and debugging in \Rtwo{},
-Earley sets must be indexed
-by location.
+\ES{\Vloc{j}} is used.
 The major reason for this is that the trace and
 debug facilities must allow the developer to
 specify arbitrary Earley sets,
-and the developer will usually know these by
-their location.
+and the developer will want to identify a location by
+its numerical ID.
 
-An array is needed for evaluation,
-but at this point the array indexing Earley set
-by location is usually dynamic in theory only.
+An array is also needed for evaluation,
+but at evaluation time the dynamic array implementing
+\ES{\Vloc{j}} is usually dynamic in theory only.
 For most applications, evaluation only
 occurs after the parse is complete,
-and the array will not change once evaluation begins.
+the array of Earley sets will be static,
+and the overhead of using a dynamic array will be
+minimal.
 
 \subsection{Global space}
 \label{sec:global-space}
@@ -3259,6 +3261,7 @@ is \Oc{} and is charged to the parse.
 Adding an EIM to an Earley set consumes \Oc{} time
 and \Oc{} space.
 Traversal of an Earley set requires \Oc{} time per PIM.
+Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
 
 {\bf Justification}:
 An Earley set is kept as a linked list.
@@ -3273,21 +3276,18 @@ Each PIM data structure requires \Oc{} space.
 
 \begin{observation}[Rule ID's]
 \label{obs:rule-ID}
-The functions \ID{\Vrule{r}} maps each rule to an
-For convenience of implementation,
-ID's are consecutive integers starting at 0.
-starting at 0 and without gaps.
+The function \ID{\Vrule{r}} maps each rule to an
 unique integer ID in \Oc{} time.
-Also, the entire list of rules may be travesed in \Oc{}
+Also, the entire list of rules may be traversed in \Oc{}
 time.
 
-{\bf: Justification}:
+{\bf Justification}:
 The data structure for \Vrule{r}
 contains its ID, so that the time to
 find \ID{\var{r}} is \Oc{}.
 Also, the data structure for \Vint{g}
 contains an array for looking up rules.
-Since \Rules{var{g}} is a constant depending on \var{g},
+Since \Rules{\var{g}} is a constant depending on \var{g},
 traversal of the rule list is \Oc{}.
 \dispEnd
 \end{observation}
@@ -3295,9 +3295,9 @@ traversal of the rule list is \Oc{}.
 \begin{observation}[Dotted rule ID's]
 \label{obs:dotted-rule-ID}
 The function \ID{\Vdr{x}} maps each dotted rule to
-an ID.
-Again,
-these are consecutive integers starting at 0.
+an ID in \Oc{} time.
+
+{\bf Justification}:
 One way to assign the
 dotted rule ID's is to interate through the array
 of rule by rule ID,
