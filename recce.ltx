@@ -3513,7 +3513,6 @@ let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 \label{alg:predict1}
 \begin{algorithmic}[1]
 \Procedure{Predict1}{\Veim{prediction}}
-\label{line:marpa-predict-60}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
 \label{line:marpa-predict-65}
   \State return
@@ -3521,13 +3520,13 @@ let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times/\var{add}$
+\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times 1/\var{add}$
 \label{line:marpa-predict-80}
 \State Add \var{prediction} to \ES{\Current{\var{prediction}}}
-\Statex  \Comment $\var{s}=\Oc;\times/\var{add}$
+\Statex  \Comment $\var{s}=\Oc;\times 1/\var{add}$
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment $\times/\var{add}$
+   \Comment $\times 1/\var{add}$
 \label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
@@ -3541,37 +3540,36 @@ which contain the pseudocode for adding predictions.
 \begin{theorem}[\var{Predict1} Invocations]
 \label{th:predict1-invocs}
 \Aref{alg:predict1},
-\begin{gather}
-\label{eq:th-predict1-invocs-04}
-\myparbox{
-Lines \enRange{\ref{line:marpa-predict-60}}{\ref{line:marpa-predict-65}}
+\begin{enumerate}
+\item \label{enum:th-predict1-invocs-04}
+Lines \enRange{\ref{line:marpa-predict-65}}{\ref{line:marpa-predict-70}}
 of \var{Predict1}
-are invoked once.}
-\\
-\label{eq:th-predict1-invocs-05}
-\myparbox{Lines
-\enRange{\ref{line:marpa-predict-70}}{\ref{line:marpa-predict-90}}
+are invoked once.
+\item \label{enum:th-predict1-invocs-05}
+Lines
+\enRange{\ref{line:marpa-predict-75}}{\ref{line:marpa-predict-90}}
 of \var{Predict1}
-are invoked once per add, and at most once.}
-\\
-\label{eq:th-predict1-invocs-06}
-\myparbox{
+are invoked once per add, and at most once.
+\item \label{enum:th-predict1-invocs-06}
 For every line of \var{Predict1},
-the number of invocations per call is \Oc{}.}
-\end{gather}
+the number of invocations per call is \Oc{}.
+\end{enumerate}
 \end{theorem}
 
 \begin{proof}
 We have
-\Eref{eq:th-predict1-invocs-04}
+\ref{enum:th-predict1-invocs-04}
 and
-\Eref{eq:th-predict1-invocs-05}
+\ref{enum:th-predict1-invocs-05}
+of \Thref{th:predict1-invocs}
 directly from \Aref{alg:predict1}.
-\Eref{eq:th-predict1-invocs-06}
+\ref{enum:th-predict1-invocs-06}
+of \Thref{th:predict1-invocs}
 follows from
-\Eref{eq:th-predict1-invocs-04}
+\ref{enum:th-predict1-invocs-04}
 and
-\Eref{eq:th-predict1-invocs-05}.
+\ref{enum:th-predict1-invocs-05}
+of \Thref{th:predict1-invocs}.
 \myqed
 \end{proof}
 
@@ -3580,7 +3578,7 @@ and
 \myparbox{%
   Time in \proc{Predict1} is charged to the
   caller
-  \cuz{} Def for this section.}
+  \cuz{} AF complexity analysis.}
 \end{equation}
 
 \begin{theorem}[\proc{Predict1} Time]
@@ -3623,7 +3621,7 @@ to the caller.
 \myparbox{%
   Space in \var{Predict1} is charged to the
   prediction it adds
-  \cuz{} Def for this section.}
+  \cuz{} AF complexity analysis.}
 \end{equation}
 
 \begin{theorem}[\var{Predict1} Space]
@@ -3657,7 +3655,7 @@ Space for \var{Predict1} is
 \myparbox{%
   Line \ref{line:marpa-predict-85}
   is invoked only when a prediction is added \cuz{}
-  \Eref{eq:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
+  \Eref{enum:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict1-complexity-25}
