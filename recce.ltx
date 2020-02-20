@@ -427,7 +427,7 @@ grammars into internal grammars, and
 in parsing \Marpa{} internal grammars.
 \Sref{sec:leo} describes Leo's modification
 to Earley's algorithm.
-\Sref{sec:algorithm}
+\Sref{sec:marpa}
 describes the \Marpa{} algorithm.
 \Sref{sec:per-set-lists} describes \Marpa{}'s
 per-set lists.
@@ -3053,34 +3053,32 @@ or as
 \LinkPairs{\Vlim{lim}},
 for the PIM subtypes.
 
-\section{The \Marpa{} algorithm}
-\label{sec:algorithm}
+\section{Complexity preliminaries}
+\label{sec:complexity-preliminaries}
 
-For the purpose of defining the \Marpa{} algorithm,
-let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
-We will first introduce the various ``operations''
-of the \Earley{} and \Marpa{} algorithms.
-These operations union PIM's into Earley sets.
-
-\subsection{Complexity remarks}
-\label{sec:complexity-remarks}
-This section contains pseudocode,
-and it will be convenient to do our code-level complexity
-analysis alongside the pseudocode.
 Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
-
 In the complexity context,
 ``resource'' means time or space.
-We ``charge'' all resource to adds,
-and attempts to add, PIM's.
+
+We ``charge'' all resource to adds and tries.
+Recall that when an attempt is made to add a duplicate PIM to an Earley set,
+that it does not change the Earley set.
+An attempt to add a duplicate PIM is a ``try''.
+If the PIM is not a duplicate,
+and therefore new to the Earley set,
+the attempt to add it is an ``add''.
+Every ``add'' is also a ``try'',
+but not every ``try'' is an ``add''.
 We have yet to show this,
-but we will find these ``charges'' to be \Oc{}.
+but we will find the time charged to every ``add'' is \Oc{};
+the time charged to every ``try'' is \Oc{};
+the space charged to every ``add'' is \Oc{}; and
+the space charged to every ``try'' is zero.
 
 In a pseudocode procedure,
 charges are made either to a ``destination'',
-or if the pseudocode procedure is called by another pseudocode
-procedure, the charge can be made ``to the caller''.
+or ``to the caller''.
 A ``destination'' is either an ``ultimate destination''
 or an ``intermediate desination''.
 
@@ -3104,19 +3102,30 @@ In a successful parse, every Earley set will have at least one PIM,
 so that the first PIM of an Earley set will always exist.
 An Earley set without a PIM causes a parse failure,
 so that in a failed parse, every Earley set except the last will have at least one PIM,
-and resource charged to those Earley sets can be charge to their first PIM.
+and resource charged to those Earley sets can be charged to their first PIM.
 In the last Earley set of a failed parse,
 resource charged to the Earley set is charged to the parse.
 
-If a resource is ``charged to the caller'' the decision of how
+If a resource is ``charged to the caller'',
+the decision of how
 to re-charge the resource is made by
 the pseudocode procedure that called the current pseudocode procedure.
+
+Reads and writes do not consume space -- only allocations of space
+consume space.
+We will not examine allocations of non-global space in detail.
+Instead, we assume
+that space local to the pseudocode procedures
+resides in a data structure
+(in common implementations, a stack)
+whose maximum space consumed to \Oc{}.
 
 For the purposes of complexity analysis,
 we find it helpful to divide the resource consumption
 of a called pseudocode procedure into ``housekeeping''
 and ``body execution''.
-The ``housekeeping'' is assume to consumer \Oc{} time and zero space.
+As a matter of definition
+``housekeeping'' is limited to \Oc{} time and zero space.
 In a common implementation, the housekeeping will be execution of
 one or more prologues, which set up registers and stack for
 the procedure,
@@ -3124,31 +3133,24 @@ and the execution of one more more epilogues,
 which restore the registers and stack.
 
 Resource not consumed by housekeeping
-is considered to be consumed by ``Body execution''.
+is considered to be consumed by ``body execution''.
 Body execution may consume arbitrary resource.
 
 From the point of view of a current pseudocode procedure,
 \begin{itemize}
-\item the resource consumed by the body execution of the pseudocode procedures
-called by current pseudocode procedure is consumed ``indirectly''; and
-\item all other resource is consumed ``directly''.
+\item the resource consumed by the execution of logic in the pseudocode
+which is not a call of another pseudocode procedure,
+is consumed ``directly''; and
+\item the housekeeping resource consumed by the execution of 
+calls of another pseudocode procedure,
+is consumed ``directly''; and
+\item resource charged by other pseudocode procedures
+``to the caller'', which is passed up to the current pseudocode
+procedure, and which the current pseudocode procedure charges to
+a destination,
+is consumed ``directly''; and
+\item all other resource is consumed ``indirectly''.
 \end{itemize}
-
-Resource ``charged to the caller'' is considered direct or indirect, based
-on where it is ultimately charged.
-That is, let \proc{Top}, \proc{Middle} and \proc{Bottom} be pseudocode procedures.
-Suppose \proc{Bottom} charges resource ``to the caller'',
-in this case,
-\proc{Middle}.
-Suppose that \proc{Middle} does not pass the resource on to \proc{Top},
-but instead charges it to, say, the Earley set.
-Then the resource is considered to have been consumed ``directly''
-by \proc{Middle}.
-
-Suppose that, instead, \proc{Middle} charges the resource ``to the caller'',
-in this case \proc{Top}, and that \proc{Top} does not pass the resource
-up the call chain, perhaps charging it to an EIM.
-Then the resource is considered to have been consumed ``directly'' by \proc{Top}.
 
 ``Exclusive'' resource means resource consumed directly.
 ``Included'' resource means resource consumed indirectly.
@@ -3156,28 +3158,23 @@ Then the resource is considered to have been consumed ``directly'' by \proc{Top}
 directly and indirectly.
 Resource consumed is exclusive unless otherwise stated.
 
-Space is consumed only when new space is allocated.
-Reads and writes do not consume space.
-\TODO{Talk about local or stack space}
-
 For use in the complexity analysis,
 we define the following ``resource functions'',
 where \var{x} may be a code snippet, a line,
 or an algorithm:
 \begin{align*}
-\Time{\var{x}} & \defined \text{ the inclusive time consumed by \var{x}} \\
-\Space{\var{x}} & \defined \text{ the inclusive space consumed by \var{x}} \\
+\Time{\var{x}} & \defined \text{ the exclusive time consumed by \var{x}} \\
+\Space{\var{x}} & \defined \text{ the exclusive space consumed by \var{x}} \\
 \Invocs{\var{x}} & \defined \text{ the number of invocations of \var{x}.}
 \end{align*}
 
-PIM adds and attempts will usually require multiple pseudocode
+PIM adds and tries will usually require multiple pseudocode
 lines,
 but it will be convenient
-to mark the line where each add or attempt begins.
-pseudocode:
-the adds with the
+to indicate the line where each add or attempt begins.
+The adds will be marked with the
 tag $\var{add}\plusplus$,
-and the attempts with the tag
+and the tries with the tag
 $\var{try}\plusplus$.
 
 \subsection{Earley set indexing}
@@ -3185,37 +3182,29 @@ $\var{try}\plusplus$.
 
 \TODO{Rewrite this section.}
 
-For our theoretical discussions,
-we assume that we can efficiently convert between
-an Earley set location as an integer
-(\Vloc{i} or \Ves{i}),
-and an Earley set as data structure including its PIM's.
-For our complexity discussions, we need to be more specific.
-
 \begin{gather}
 \label{eq:def-loc-of_pim}
 \myparbox{%
   $\Time{\Loc{\Vpim{pim}}} = \Oc{} \because$
   Marpa::R2\cite{Marpa-R2} stores the integer location
   of each PIM in its data structure.%
-}  \\
+} \\
 \label{eq:def-loc-of_es}
 \myparbox{%
   $\Time{\Loc{\Ves{es}}} = \Oc{}, \because$
   Marpa::R2 stores the integer location
   of each Earley set in its data structure.%
-}  \\
+} \\
 \label{eq:def-es-of-pim}
 \myparbox{%
  $\Time{\ES{\Vpim{p}}} = \Oc{}, \because$
   Marpa::R2 stores a pointer to its Earley set
-  in each PIM, but%
+  in each PIM.%
 } \\
 \label{eq:def-es-of-loc}
 \myparbox{%
   $\Time{\ES{\Vloc{j}} = \Oc{}} \because$
-  Marpa::R2 uses a dynamic array.
-}
+  Marpa::R2 uses a dynamic array.}
 \end{gather}
 
 While $\Time{\ES{\Vloc{j}} = \Oc{}}$,
@@ -3490,6 +3479,12 @@ and a top level line of inner loop.
 Line \ref{line:toy-50}
 is invoked once per pass of the inner loop, or 6 times.
 \end{itemize}
+
+\section{The \Marpa{} algorithm}
+\label{sec:marpa}
+
+For the purpose of defining the \Marpa{} algorithm,
+let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 
 \subsection{Initializer op}
 \label{sec:initializer}
@@ -4081,7 +4076,7 @@ of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
 
-\subsection{Scanner operation}
+\subsection{Scanner op}
 \label{def:scanner}
 
 \begin{algorithm}[tb]
@@ -4133,7 +4128,7 @@ operation of \Earley{}\cite{Earley1970}.
 \dispEnd
 \end{observation}
 
-\subsection{Reducer operation}
+\subsection{Reducer op}
 \label{def:reducer}
 
 \begin{align}
@@ -4288,7 +4283,7 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
-\subsection{Predictor operation}
+\subsection{Predictor op}
 \label{sec:prediction}
 
 \begin{equation}
@@ -4319,7 +4314,7 @@ operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
 
-\subsection{Memoizer operation}
+\subsection{Memoizer op}
 \label{def:memoizer}
 
 Let
@@ -6941,7 +6936,7 @@ that there is \Marpa{} parse that creates an invalid PIM.
 This means that there is a first invalid PIM created
 by that \Marpa{} parse.
 Inspection of the \Marpa{} algorithm
-\Sref{sec:algorithm} shows
+\Sref{sec:marpa} shows
 that PIM's are only created by operations.
 
 We now proceed by elimination of subcases,
