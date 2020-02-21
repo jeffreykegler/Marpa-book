@@ -9,6 +9,7 @@
 \usepackage{url}
 \usepackage{varioref}
 \usepackage{hyperref}
+\usepackage{ragged2e}
 \allowdisplaybreaks[3]
 
 % * Reference meta tags ("classifying prefixes") use in this document:
@@ -29,8 +30,9 @@
 
 % The auto-placement of qed's fails a lot and manual
 % replacement with \qedhere often fails as well.  I go with
-% 100% manual placement, which is no more trouble,
-% and 100% fail-safe.
+% 100% manual placement, which turns out to be no more trouble,
+% and which allows me to quarantee the QED's wind up where I
+% want them.
 \renewcommand{\qedsymbol}{}
 \newcommand{\myqed}{%
   \ifmmode\square
@@ -718,12 +720,23 @@ and will be essential for our complexity analysis.
 
 The algorithmic notions are, in concept,
 ultimately reducible to sequences of the primitive operations
-of a random access machine (RAM) like the one described by Earley.\footnote{Jay Earley
+of a random access machine (RAM), like the one described by Earley
+but with primitive operations typical of a modern computer
+and with it explicitly noted that
+the word size of our machine must be less than $\var{c}\times\var{n}$,
+where \var{c} is a constant and \var{n} is the size of the problem under
+discussion.\footnote{%
+  Jay Earley
   describes his random access machine model in
   \cite[p. 61]{Earley1970}.
+  Jay Earley's primitive operations only included addition --
+  his algorithm and his data structure (linked lists) did not need multiplication.
+  Our changes bring us in line with the more modern
+  approach of Cormen et al. 2009~\cite[p. 23--24]{Cormen2009}.
+  In their RAM, multiplication and bit shifts are primitive operations,
+  but their RAM does not have an exponentiation instruction.%
 }
-In this paper,
-we never break any algorithm down even close
+In fact, we never break any algorithm down even close
 to the primitive operation level.
 Once a piece is small enough that we can conveniently
 characterize its complexity by other means,
@@ -3136,6 +3149,8 @@ Resource not consumed by housekeeping
 is considered to be consumed by ``body execution''.
 Body execution may consume arbitrary resource.
 
+\begin{observation}
+\label{obs:direct-vs-indirect}
 From the point of view of a current pseudocode procedure,
 \begin{itemize}
 \item the resource consumed by the execution of logic in the pseudocode
@@ -3151,6 +3166,7 @@ a destination,
 is consumed ``directly''; and
 \item all other resource is consumed ``indirectly''.
 \end{itemize}
+\end{observation}
 
 ``Exclusive'' resource means resource consumed directly.
 ``Included'' resource means resource consumed indirectly.
@@ -3808,7 +3824,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
       \times
       \bigsize{\set{\Vrule{r} : \Postdot{\var{x}}}}
     \\
-      \because \Obref{obs:loop-invocation-counting}
+      \because \Obref{obs:loop-invocation-counting}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3903,8 +3919,8 @@ and \Oc{} charged to \Ves{j} itself.
 \myparbox{%
   The loop variable for
   loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} is in scope
-  for all invocations of lines
-  loop \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
+  for all invocations of
+  lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
   for all but the final test invocation of
   line \ref{line:marpa-predict-es-12};
   and only for those invocations.}
@@ -3961,7 +3977,7 @@ and \Oc{} charged to \Ves{j} itself.
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
      \because
-     \Thref{th:predict-es-invocations},
+     \ref{enum:th-predict-es-invocations-10}\text{ of }\Thref{th:predict-es-invocations},
      \Eref{eq:th-predict-es-time-14},
      \Eref{eq:th-predict-es-time-16},
      \Eref{eq:th-predict-es-time-26}.
@@ -4013,7 +4029,7 @@ and \Oc{} charged to \Ves{j} itself.
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
      \because
-     \Thref{th:predict-es-invocations},
+     \ref{enum:th-predict-es-invocations-20}\text{ of }\Thref{th:predict-es-invocations},
      \Eref{eq:th-predict-es-time-20},
      \Eref{eq:th-predict-es-time-22},
      \Eref{eq:th-predict-es-time-24},
@@ -4028,7 +4044,7 @@ and \Oc{} charged to \Ves{j} itself.
    line \ref{line:marpa-predict-es-12}
    for each \Veim{x}
    is \Oc{}
-   \cuz{} \ref{enum:th-predict-es-invocations-20} of \Thref{th:predict-es-invocations},
+   \cuz{} \ref{enum:th-predict-es-invocations-20}~of~\Thref{th:predict-es-invocations},
      \Eref{eq:th-predict-es-time-18}.
 }
 \end{equation}
@@ -4048,22 +4064,25 @@ and \Oc{} charged to \Ves{j} itself.
 \label{eq:th-predict-es-time-42}
 \myparbox{%
   The only indirect time is \Oc{} at
-       line ref{line:marpa-predict-es-18}
-      \cuz{} \Aref{alg:predict-es}, \Thref{th:predict1-time}.}
+       line \ref{line:marpa-predict-es-18}
+      \cuz{}
+      \Obref{obs:direct-vs-indirect},
+      \Aref{alg:predict-es}, \Thref{th:predict1-time}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-44}
 \myparbox{%
-  The indirect time of \proc{Predict-ES} is \Oc{},
-       which is re-charged directly to \Veim{x}
+  The indirect time of \proc{Predict-ES} is \Oc{} per \Veim{x},
+       which is re-charged directly to each \Veim{x}
        \cuz \Eref{eq:def-predict-es-time-charge}, \Eref{eq:th-predict-es-time-42}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-48}
 \myparbox{%
   The time charged by \proc{Predict-ES} to each \Veim{x} is
-  $\Oc + \Oc = \Oc$.
+  $\Oc + \Oc = \Oc$
   \cuz
+  \Eref{eq:th-predict-es-time-12},
   \Eref{eq:th-predict-es-time-40},
   \Eref{eq:th-predict-es-time-44}.
 }
@@ -4071,7 +4090,6 @@ and \Oc{} charged to \Ves{j} itself.
 The theorem follows directly from
 \Eref{eq:th-predict-es-time-32}
 and \Eref{eq:th-predict-es-time-48}.
-\TODO{Finish}
 \myqed
 \end{proof}
 
@@ -8537,7 +8555,7 @@ including the space for tracking links.
 \myqed
 \end{proof}
 
-\section{The \Marpa{} Input Model}
+\section{The \texorpdfstring{\Marpa{}}{Marpa} Input Model}
 \label{sec:input}
 
 In this paper,
@@ -8685,6 +8703,8 @@ his support.
 
 \bibliographystyle{plain}
 
+{\RaggedRight
+
 \begin{thebibliography}{10}
 
 \bibitem{AU1972}
@@ -8705,6 +8725,12 @@ Claus~Brabrand, Robert~Giegerich and Anders~M{\"o}ller.
 on Implementation and Application of Automata}.
 \newblock CIAA ’07, Prague, Czech Republic, July 2007.
 \newblock \url{http://www.brics.dk/~amoeller/papers/ambiguity/journal.pdf}
+
+\bibitem{Cormen2009}
+Thomas~H.~Cormen, Charles~E.~Leiserson, Ronald~L.~Rivest, and
+    \hbox{Clifford~Stein.}
+\newblock {\em Introduction to Algorithms.}
+\newblock Third Edition (3rd. ed.), The MIT Press, 2009.
 
 \bibitem{Culik1973}
 Karel~{\v{C}}ulik, and Rina~Cohen.
@@ -8731,7 +8757,7 @@ Dirk~Grune and Ceriel~J.H Jacobs.
 
 \bibitem{Halmos1960}
 Paul~R.~Halmos
-\newblock {\em Naive Set Theory}
+\newblock {\em Naive Set Theory}.
 \newblock van Nostrand Reinhold, 1960.
 
 \bibitem{Harrison1978}
@@ -8753,7 +8779,8 @@ Stephen~C. Johnson.
 \bibitem{Kegler2019}
 Jeffrey~Kegler.
 \newblock Marpa, A practical general parser: the recognizer.
-\newblock arXiv:1910.08129v1
+\\ % fix underfull HBOX
+\newblock arXiv:1910.08129v1.
 \newblock \url{https://arxiv.org/abs/1910.08129v1}
 
 \bibitem{Marpa-HTML}
@@ -8772,6 +8799,7 @@ Jeffrey~Kegler, 2011: Marpa-XS-1.002000.
 Jeffrey~Kegler.
 \newblock Parsing:~a~timeline.
 \newblock Version 3.1, 2019.
+\\ % fix underfull HBOX
 \newblock \url{https://jeffreykegler.github.io/personal/timeline_v3}.
 
 \bibitem{Leo1991}
@@ -8786,6 +8814,8 @@ J.~M. I.~M. Leo.
 \newblock An undated 2-page addendum to \cite{Leo1991}.
 
 \end{thebibliography}
+
+} % RaggedRight
 
 \clearpage
 \tableofcontents
