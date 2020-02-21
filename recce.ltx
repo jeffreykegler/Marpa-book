@@ -3641,14 +3641,14 @@ to the caller.
 \end{equation}
 
 \begin{theorem}[\var{Predict1} Space]
-\label{th:predict1-complexity}
+\label{th:predict1-space}
 Space for \var{Predict1} is
 \Oc{} charged to the prediction it adds.
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-predict1-complexity-10}
+\label{eq:th-predict1-space-10}
 \myparbox{%
   All lines of \proc{Predict1},
   other than
@@ -3660,34 +3660,34 @@ Space for \var{Predict1} is
   \Aref{alg:predict1}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict1-complexity-15}
+\label{eq:th-predict1-space-15}
 \myparbox{%
   Line \ref{line:marpa-predict-85}
   consumes \Oc{} space
   \cuz{} \Obref{obs:es-complexity}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict1-complexity-20}
+\label{eq:th-predict1-space-20}
 \myparbox{%
   Line \ref{line:marpa-predict-85}
   is invoked only when a prediction is added \cuz{}
   \Eref{enum:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict1-complexity-25}
+\label{eq:th-predict1-space-25}
 \myparbox{%
   \proc{Predict1} consumes \Oc{} space for each prediction added
   \cuz{}
-  \Eref{eq:th-predict1-complexity-10},
-  \Eref{eq:th-predict1-complexity-15},
-  \Eref{eq:th-predict1-complexity-20}.}
+  \Eref{eq:th-predict1-space-10},
+  \Eref{eq:th-predict1-space-15},
+  \Eref{eq:th-predict1-space-20}.}
 \end{equation}
 \begin{equation}
 \myparbox{%
   Space for \proc{Predict1} is \Oc{} space,
   charged to the prediction that it adds
   \cuz{} \Eref{eq:def-predict1-space-charge},
-    \Eref{eq:th-predict1-complexity-25}.
+    \Eref{eq:th-predict1-space-25}.
   \quad \myqed}
 \end{equation}
 \end{proof}
@@ -4093,12 +4093,200 @@ and \Eref{eq:th-predict-es-time-48}.
 \myqed
 \end{proof}
 
+\begin{equation}
+\label{eq:def-predict-es-space-charge}
+\myparbox{%
+  Direct space in \var{Predict-ES} is charged to the
+  Earley item which is the loop variable of
+  the outer loop, when it is in scope,
+  and to the
+  Earley set, otherwise
+  \cuz{} AF complexity analysis.}
+\end{equation}
+
 \begin{theorem}[\var{Predict-ES} Space Complexity]
 \label{th:predict-es-space}
-\Space{\var{Predict-ES}(\Ves{j}} is \Oc{} per EIM added.
+The space consumed by
+\proc[\Ves{j}]{Predict-ES}
+is \Oc{} charged to \Ves{j}
+and \Oc{} charged to each prediction added.
 \end{theorem}
 
 \begin{proof}
+\begin{equation}
+\label{eq:th-predict-es-space-12}
+\myparbox{%
+  The loop variable for
+  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} is in scope
+  for all invocations of
+  lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
+  for all but the final test invocation of
+  line \ref{line:marpa-predict-es-12};
+  and only for those invocations.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-14}
+\Space{\ref{line:marpa-predict-es-05}} = \Oc
+  \because \Obref{obs:dotzeroused-bitmap}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-16}
+\Space{\ref{line:marpa-predict-es-10}} = 0
+  \because
+  \Obref{obs:rule-ID}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-18}
+\Space{\ref{line:marpa-predict-es-12}} = 0
+   \because \Obref{obs:es-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-20}
+\Space{\ref{line:marpa-predict-es-14}} = 0
+  \because \Obref{obs:rule-ID}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-22}
+\Space{\ref{line:marpa-predict-es-16}} = 0
+  \because \text{ direct from line \ref{line:marpa-predict-es-16}}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-24}
+\Space{\ref{line:marpa-predict-es-18}} = 0
+  \because \Thref{th:predict1-space}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-26}
+\myparbox{%
+   Total exclusive space for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   is the number of invocations of each multiplied by the space for each invocation.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-28}
+\begin{gathered}
+   \myparbox{%
+     Total exclusive space for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   is}
+   \\
+     \smashoperator[r]{\sum_{\textstyle{
+       \var{line}\in\set{\enRefs{line:marpa-predict-es-10}{line:marpa-predict-es-18}}
+     }}}
+     \quad 0 \times \Oc{}
+   \\
+     \because
+     \ref{enum:th-predict-es-invocations-10}\text{ of }\Thref{th:predict-es-invocations},
+     \Eref{eq:th-predict-es-space-14},
+     \Eref{eq:th-predict-es-space-16},
+     \Eref{eq:th-predict-es-space-26}.
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-predict-es-space-30}
+\myparbox{%
+   Total exclusive space for the final invocation of
+   line \ref{line:marpa-predict-es-12} is \Oc{}
+   \cuz{} \Eref{eq:th-predict-es-space-18}.
+}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-predict-es-space-32}
+\myparbox{%
+   Total exclusive space for \proc{Predict-ES}
+   charged to the Earley set is
+   $\Oc{} + \Oc{} = \Oc{}$
+   \cuz{}
+  \Eref{eq:def-predict-es-space-charge},
+  \Eref{eq:th-predict-es-space-12},
+  \Eref{eq:th-predict-es-space-28},
+  \Eref{eq:th-predict-es-space-30}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-34}
+\myparbox{%
+   Total exclusive space
+   per \Veim{x}
+   for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
+   is the number of invocations
+   multiplied by the space for each invocation.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-36}
+\begin{gathered}
+   \myparbox{%
+     Total exclusive space
+     per \Veim{x}
+     for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} is
+     }
+   \\
+     \smashoperator[r]{\sum_{\textstyle{
+       \var{line}\in\set{\enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+     }}}
+     \quad \Oc{} \times \Oc{} = \Oc{}
+   \\
+     \because
+     \ref{enum:th-predict-es-invocations-20}\text{ of }\Thref{th:predict-es-invocations},
+     \Eref{eq:th-predict-es-space-20},
+     \Eref{eq:th-predict-es-space-22},
+     \Eref{eq:th-predict-es-space-24},
+     \Eref{eq:th-predict-es-space-34}.
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-predict-es-space-38}
+\myparbox{%
+   Total exclusive space for
+   line \ref{line:marpa-predict-es-12}
+   for each \Veim{x}
+   is \Oc{}
+   \cuz{} \ref{enum:th-predict-es-invocations-20}~of~\Thref{th:predict-es-invocations},
+     \Eref{eq:th-predict-es-space-18}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-40}
+\myparbox{%
+   Total exclusive space for \proc{Predict-ES}
+   charged to each \Veim{x} is
+   $\Oc{} + \Oc{} = \Oc{}$
+   \cuz{}
+  \Eref{eq:def-predict-es-space-charge},
+  \Eref{eq:th-predict-es-space-12},
+  \Eref{eq:th-predict-es-space-36},
+  \Eref{eq:th-predict-es-space-38}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-42}
+\myparbox{%
+  The only indirect space is \Oc{} at
+       line \ref{line:marpa-predict-es-18}
+      \cuz{}
+      \Obref{obs:direct-vs-indirect},
+      \Aref{alg:predict-es}, \Thref{th:predict1-space}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-44}
+\myparbox{%
+  The indirect space of \proc{Predict-ES} is \Oc{} per \Veim{x},
+       which is re-charged directly to each \Veim{x}
+       \cuz \Eref{eq:def-predict-es-space-charge}, \Eref{eq:th-predict-es-space-42}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-predict-es-space-48}
+\myparbox{%
+  The space charged by \proc{Predict-ES} to each \Veim{x} is
+  $\Oc + \Oc = \Oc$
+  \cuz
+  \Eref{eq:th-predict-es-space-12},
+  \Eref{eq:th-predict-es-space-40},
+  \Eref{eq:th-predict-es-space-44}.
+}
+\end{equation}
+The theorem follows directly from
+\Eref{eq:th-predict-es-space-32}
+and \Eref{eq:th-predict-es-space-48}.
 \myqed
 \end{proof}
 
