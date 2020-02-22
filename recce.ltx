@@ -785,16 +785,16 @@ $\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate o
 \type{STR} & The type for a string \\
 \type{EIM} & The type for an Earley item \\
 \type{RULE} & The type for the rule of a grammar\\
-\Tvar{a}{SYM} & A variable \var{a} of type \type{SYM}, subscripted form \\
-\Vsym{a} & A variable \var{a} of type \type{SYM}, angle bracket form \\
-\Tvar{a}{STR} & A variable \var{a} of type \type{STR}, subscripted form \\
-\Vstr{a} & A variable \var{a} of type \type{STR}, angle bracket form \\
-\Veim{a} & A variable \var{a} of type \type{EIM} \\
-\Vrule{a} & A variable \var{a} of type \type{RULE} \\
-\Vsymset{agg-two} & The variable \var{agg-two}, an aggreggate  of strings \\
-\Vstrset{strings} & The variable \var{strings}, an aggreggate of strings \\
-\Veimset{agg-three} & The variable \var{agg-three}, an aggregate of Earley items \\
-\Vruleset{agg-four} & The variable \var{agg-four}, an aggregate of grammar rules \\
+\Tvar{a}{SYM} & Variable \var{a} of type \type{SYM}, subscripted form \\
+\Vsym{a} & Variable \var{a} of type \type{SYM}, angle bracket form \\
+\Tvar{a}{STR} & Variable \var{a} of type \type{STR}, subscripted form \\
+\Vstr{a} & Variable \var{a} of type \type{STR}, angle bracket form \\
+\Veim{a} & Variable \var{a} of type \type{EIM} \\
+\Vrule{a} & Variable \var{a} of type \type{RULE} \\
+\Vsymset{agg-two} & Variable \var{agg-two}, an aggreggate  of strings \\
+\Vstrset{strings} & Variable \var{strings}, an aggreggate of strings \\
+\Veimset{agg-three} & Variable \var{agg-three}, an aggregate of Earley items \\
+\Vruleset{agg-four} & Variable \var{agg-four}, an aggregate of grammar rules \\
 \hline
 \end{tabular}
 \label{tab:type-notation}
@@ -804,34 +804,51 @@ This paper will
 use subscripts to indicate commonly occurring types,
 as shown in
 \Tref{tab:type-notation}.
-The type system of this paper is
-emphatically not intended as a contribution to
-the theory of types.
-It is opportunistic,
-intended as an aid to the reader of this paper.
+This type system
+is intended solely as a convenient way to remind
+the reader of the definitions
+of the variables that are stated in the text.
+As such,
+the type system of this paper is opportunistic.
+It is emphatically not intended as a contribution to
+set theory or the theory of types.
 
-Our ``aggregates'' are collections of other objects.
+Type subscripts are often omitted when the type
+is clear from the context.
+Symbols and strings
+have an alternate type notation,
+which uses brackets.
+Type names are often used in the text
+as a convenient way to refer to
+their type.
+
+Occasionally we will have two or more distinct variables
+in a scope that have the same name and differ only only in type.
+This is helpful, for example, when two tuples of the same type are
+in scope.
+The elements of each tuple can share a variable name,
+and be distinguished by type.
+We overload in this fashion only when the advantages for clarity
+seem to outweigh the disadvantages.
+
+In our opportunistic type system,
+``aggregates'' are collections of other objects.
 Mathematically they may be any of
-a set, a multiset, an indexable sequence, etc.,
-as specified when the specific object or type is defined.
-The theory of this paper is intended for implementation,
-and implemented data structure often can be treated
-as more than one mathematical entity.
+a set, a multiset, an ordered set, an indexable sequence, etc.
+As implemented, aggregates might be an array, a dynamic array, an AVL,
+a Lua table, or a hash table.
+Many of these implementations can be used as more than one kind of
+set-theoretic notions,
+so we find it convenient to lump them together as ``aggregates'',
+and to specify their nature more precisely
+when the specific aggregate is defined.
+
 For example, the Earley sets in \Marpa{}
 have an implementation that allows them to be
 treated both as a set and an indexed sequence.
 For all aggregates,
 the notation $\var{element} \in \var{aggregate}$
-means "\var{element} is contained in \var{aggregate}".
-
-Subscripts may be omitted when the type
-is obvious from the context.
-Symbols and strings
-have an alternate type notation,
-which uses angle brackets.
-Type names are often used in the text
-as a convenient way to refer to
-their type.
+means ``\var{element} is contained in \var{aggregate}''
 
 Multi-character variable names will be common.
 When the angle bracket notation is used,
@@ -3684,8 +3701,9 @@ Space for \var{Predict1} is
 \end{equation}
 \begin{equation}
 \myparbox{%
-  Space for \proc{Predict1} is \Oc{} space,
-  charged to the prediction that it adds
+  Space for \proc{Predict1} is \Oc{} space
+  per prediction added,
+  which is charged to the prediction that it adds
   \cuz{} \Eref{eq:def-predict1-space-charge},
     \Eref{eq:th-predict1-space-25}.
   \quad \myqed}
@@ -4169,10 +4187,19 @@ and \Oc{} charged to each prediction added.
      Total exclusive space for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
    is}
    \\
+     \left(
+         \smashoperator[r]{\sum_{\textstyle{
+           \var{line}\in\set{\ref{line:marpa-predict-es-05}}
+         }}}
+         \;\; \Oc \times \Oc
+     \right)
+     + \left(
      \smashoperator[r]{\sum_{\textstyle{
        \var{line}\in\set{\enRefs{line:marpa-predict-es-10}{line:marpa-predict-es-18}}
      }}}
-     \quad 0 \times \Oc{}
+     \;\; 0 \times \Oc
+     \right)
+     = \Oc
    \\
      \because
      \ref{enum:th-predict-es-invocations-10}\text{ of }\Thref{th:predict-es-invocations},
@@ -4186,7 +4213,7 @@ and \Oc{} charged to each prediction added.
 \label{eq:th-predict-es-space-30}
 \myparbox{%
    Total exclusive space for the final invocation of
-   line \ref{line:marpa-predict-es-12} is \Oc{}
+   line \ref{line:marpa-predict-es-12} is 0
    \cuz{} \Eref{eq:th-predict-es-space-18}.
 }
 \end{equation}
@@ -4196,7 +4223,7 @@ and \Oc{} charged to each prediction added.
 \myparbox{%
    Total exclusive space for \proc{Predict-ES}
    charged to the Earley set is
-   $\Oc{} + \Oc{} = \Oc{}$
+   $\Oc{} + 0 = \Oc{}$
    \cuz{}
   \Eref{eq:def-predict-es-space-charge},
   \Eref{eq:th-predict-es-space-12},
@@ -4224,7 +4251,7 @@ and \Oc{} charged to each prediction added.
      \smashoperator[r]{\sum_{\textstyle{
        \var{line}\in\set{\enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
      }}}
-     \quad \Oc{} \times \Oc{} = \Oc{}
+     \;\; \Oc \times 0 = 0
    \\
      \because
      \ref{enum:th-predict-es-invocations-20}\text{ of }\Thref{th:predict-es-invocations},
@@ -4241,7 +4268,7 @@ and \Oc{} charged to each prediction added.
    Total exclusive space for
    line \ref{line:marpa-predict-es-12}
    for each \Veim{x}
-   is \Oc{}
+   is 0
    \cuz{} \ref{enum:th-predict-es-invocations-20}~of~\Thref{th:predict-es-invocations},
      \Eref{eq:th-predict-es-space-18}.
 }
@@ -4251,7 +4278,7 @@ and \Oc{} charged to each prediction added.
 \myparbox{%
    Total exclusive space for \proc{Predict-ES}
    charged to each \Veim{x} is
-   $\Oc{} + \Oc{} = \Oc{}$
+   $0 + 0 = 0$
    \cuz{}
   \Eref{eq:def-predict-es-space-charge},
   \Eref{eq:th-predict-es-space-12},
@@ -4270,33 +4297,34 @@ and \Oc{} charged to each prediction added.
 \begin{equation}
 \label{eq:th-predict-es-space-44}
 \myparbox{%
-  The indirect space of \proc{Predict-ES} is \Oc{} per \Veim{x},
-       which is re-charged directly to each \Veim{x}
-       \cuz \Eref{eq:def-predict-es-space-charge}, \Eref{eq:th-predict-es-space-42}.}
+  The indirect space of \proc{Predict-ES} is \Oc{} per prediction added,
+       which is charged to the prediction it adds.
+       \cuz \Aref{alg:predict-es}, \Thref{th:predict1-space},
+           \Eref{eq:th-predict-es-space-42}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-48}
 \myparbox{%
   The space charged by \proc{Predict-ES} to each \Veim{x} is
-  $\Oc + \Oc = \Oc$
-  \cuz
+  $0 + 0 = 0$
+  \cuz{}
   \Eref{eq:th-predict-es-space-12},
   \Eref{eq:th-predict-es-space-40},
   \Eref{eq:th-predict-es-space-44}.
 }
 \end{equation}
 The theorem follows directly from
-\Eref{eq:th-predict-es-space-32}
+\Eref{eq:th-predict-es-space-32},
+\Eref{eq:th-predict-es-space-44},
 and \Eref{eq:th-predict-es-space-48}.
 \myqed
 \end{proof}
 
 If precomputation is used
 \Aref{alg:predict-es} can be sped up using Warshall's algorithm.
-A version of \var{Predict} using precomputation
+A version of \proc{Predict-ES} using precomputation
 will clearly run no worse than
-\Aref{alg:predict-es}, and therefore its
-time complexity will be \Oc{}.
+\proc{Predict-ES}.
 
 \begin{observation}[Ancestry]
 \label{obs:common-predict-ancestry}
@@ -4310,10 +4338,16 @@ set.
 Conceptually,
 predictions have predecessors, but no causes,
 and the link pair generated for
-\Veim{pred} in line
-\ref{line:marpa-predict-es-16} of \Aref{alg:predict-es}
+\Veim{prediction} in
+line \ref{line:marpa-predict-80} of \proc{Predict1}~\Aref{alg:predict1}
 would be
-$\tuple{\Veim{x}, \Lambda}$.
+$\tuple{\Veim{x}, \Lambda}$,
+where \Veim{x}
+is the variable of line \ref{line:marpa-predict-es-16}
+of \proc{Predict-ES}~\Aref{alg:predict-es},
+which is not actually in scope at
+line \ref{line:marpa-predict-80} of \proc{Predict1}.
+
 If link pairs were generated,
 for the arbitrary prediction
 \begin{equation}
@@ -4360,10 +4394,32 @@ the transition array
 \end{algorithmic}
 \end{algorithm}
 
-\begin{observation}[Complexity]
-\TODO{}
-\dispEnd{}
-\end{observation}
+\begin{theorem}[\proc{Initializer} Invocations]
+\label{th:initializer-invocations}
+Every line of \proc{Initializer} is invoked exactly once.
+\end{theorem}
+
+\begin{proof}
+The flow of control in
+\proc{Initializer}~\Aref{alg:marpa-initializer}
+consists entirely of sequential executions.
+\qedhere
+\end{proof}
+
+\begin{theorem}[\op{Initializer} Time Complexity]
+\label{th:initializer-time}
+The inclusive time of $\op{Initializer}$
+is
+\Oc{} charged to each EIM of Earley set 0,
+and \Oc{} charged to Earley set 0 itself.
+\end{theorem}
+
+\begin{proof}
+\TODO{Finish}
+\qedhere
+\end{proof}
+
+\TODO{To here}
 
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
@@ -4526,12 +4582,12 @@ or $\Lambda$.
 \begin{observation}[Original Earley algorithm: Completer Operation]
 \label{obs:earley-completer-operation}
 When there are no LIM's in \Ves{predecessor}
-\Marpa{}'s \var{Reducer} operation has the same effect as the ``Completer''
+\Marpa{}'s \var{Reducer} op has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.\footnote{
-For all other \Marpa{} operations we have used the name of its
+For all other \Marpa{} ops we have used the name of its
 equivalent in \Earley{}.
 It is convenient to use a different name
-for \Marpa{}'s \var{Reducer} operation,
+for \Marpa{}'s \var{Reducer} op,
 however,
 because it differs in effect from the \Earley{}
 ``Completer'' operation,
@@ -4540,7 +4596,7 @@ overloaded in confusing ways.
 For example, the result of an \Earley{} ``Completer'' operation
 is not necessarily an EIM completion.
 }
-Put another way, \Marpa{}'s \var{Reducer} operation
+Put another way, \Marpa{}'s \var{Reducer} op
 is the same as the Completer operation of \Earley{},
 if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
 \[
@@ -4618,8 +4674,8 @@ For details, see \Obref{obs:common-predict-ancestry}.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Predictor Operation]
-\label{obs:earley-predictor-operation}
-\Marpa{}'s predictor operation has the same effect as the ``Predictor''
+\label{obs:earley-predictor-op}
+\Marpa{}'s predictor op has the same effect as the ``Predictor''
 operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
@@ -4782,7 +4838,7 @@ This can be seen from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-operation},
 \Obref{obs:earley-completer-operation},
-\Obref{obs:earley-predictor-operation},
+\Obref{obs:earley-predictor-op},
 and
 \Obref{obs:earley-memoizer-operation}.
 \dispEnd
@@ -4842,7 +4898,7 @@ This follows from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-operation},
 \Obref{obs:earley-completer-operation},
-\Obref{obs:earley-predictor-operation},
+\Obref{obs:earley-predictor-op},
 \Obref{obs:earley-memoizer-operation}, and
 \Obref{obs:marpa-operation-by-result}.
 \dispEnd
@@ -4873,7 +4929,7 @@ This observation follows from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-operation},
 \Obref{obs:earley-completer-operation},
-\Obref{obs:earley-predictor-operation} and
+\Obref{obs:earley-predictor-op} and
 \Obref{obs:earley-memoizer-operation}.
 \dispEnd
 \end{observation}
@@ -7275,7 +7331,7 @@ scanner operations
 The \Marpa{} predictor operation
 creates the same PIM's as the \Earley{}
 predictor operations
-\Obref{obs:earley-predictor-operation}.
+\Obref{obs:earley-predictor-op}.
 These two operations preserve
 validity because the \Earley{} algorithm is
 correct
