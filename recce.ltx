@@ -67,8 +67,16 @@
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
-\newcommand{\op}[1]{\ensuremath{\texttt{#1}}}
-\newcommand{\proc}[2][]{\ensuremath{\texttt{#2}(#1)}}
+\newcommand{\op}[1]{%
+  \ifmmode\texttt{#1}
+  \else\texttt{#1}
+  \fi%
+}
+\newcommand{\proc}[2][]{%
+  \ifmmode\texttt{#2}(#1)%
+  \else\texttt{#2}(#1)%
+  \fi%
+}
 \newcommand{\sep}{\,\mid\,}
 \newcommand{\mydot}{\raisebox{.05em}{$\,\bullet\,$}}
 \newcommand{\cat}{\,.\,}
@@ -641,7 +649,9 @@ uses ambiguity in this way.
 \subsection{Auto-generated languages}
 \cite[pp. 6-7]{Culik1973} points out that the ability
 to efficiently parse LRR languages
-opens the way to auto-generated languages.
+opens the way to
+auto-\linebreak[4]generated % LINEBREAK HACK
+languages.
 In particular,
 \cite{Culik1973} notes that a parser which
 can parse any LRR language will be
@@ -1544,9 +1554,9 @@ in any of its intermediate steps.
 
 
 \subsection{Unproductive symbols}
-
-The current implementation of \Marpa{} supports
-unproductive symbols.
+The current implementation of
+\Marpa{} supports unproductive
+symbols.
 By default, \Marpa{} treats an unproductive symbol
 as a fatal error,
 but the user may bypass the fatal error
@@ -3120,12 +3130,18 @@ re-charged at some point,
 and eventually every charge is re-charged to an
 ultimate destination.
 
+\begin{definition}[Charging to the parse]
+\label{def:charging-to-parse}
 A resource ``charged to the parse'' is re-charged to the first PIM
 of Earley set 0.
 There is always a start EIM in Earley set 0,
 so that the first PIM of Earley set 0
 exists in every parse.
+\dispEnd
+\end{definition}
 
+\begin{definition}[Charging to the Earley set]
+\label{def:charging-to-es}
 A resource ``charged to an Earley set'' is re-charged to the first PIM
 of that Earley set.
 In a successful parse, every Earley set will have at least one PIM,
@@ -3135,11 +3151,17 @@ so that in a failed parse, every Earley set except the last will have at least o
 and resource charged to those Earley sets can be charged to their first PIM.
 In the last Earley set of a failed parse,
 resource charged to the Earley set is charged to the parse.
+\dispEnd
+\end{definition}
 
+\begin{definition}[Charging to the caller]
+\label{def:charging-to-caller}
 If a resource is ``charged to the caller'',
 the decision of how
 to re-charge the resource is made by
 the pseudocode procedure that called the current pseudocode procedure.
+\dispEnd
+\end{definition}
 
 Reads and writes do not consume space -- only allocations of space
 consume space.
@@ -3150,21 +3172,25 @@ resides in a data structure
 (in common implementations, a stack)
 whose maximum space consumed to \Oc{}.
 
+\begin{definition}
+\label{obs:housekeeping-vs-body-execution}
 For the purposes of complexity analysis,
 we find it helpful to divide the resource consumption
-of a called pseudocode procedure into ``housekeeping''
-and ``body execution''.
-As a matter of definition
-``housekeeping'' is limited to \Oc{} time and zero space.
+of a called pseudocode procedure into \dfn{housekeeping}
+and \dfn{body execution}.
+Resource not consumed by housekeeping
+is considered to be consumed by body execution.
+
+Housekeeping consumes \Oc{} time and zero space.
+Body execution may consume arbitrary resource.
+\dispEnd
+\end{definition}
+
 In a common implementation, the housekeeping will be execution of
 one or more prologues, which set up registers and stack for
 the procedure,
 and the execution of one more more epilogues,
 which restore the registers and stack.
-
-Resource not consumed by housekeeping
-is considered to be consumed by ``body execution''.
-Body execution may consume arbitrary resource.
 
 \begin{observation}
 \label{obs:direct-vs-indirect}
@@ -3974,7 +4000,7 @@ and \Oc{} charged to \Ves{j} itself.
 \begin{equation}
 \label{eq:th-predict-es-time-24}
 \Time{\ref{line:marpa-predict-es-18}} = \Oc{}
-  \because \Thref{th:predict1-time}.
+  \because \Thref{th:predict-es-time}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-26}
@@ -4376,16 +4402,18 @@ the transition array
 \end{observation}
 
 \begin{algorithm}[tb]
-\caption{\var{Initializer}}
+\caption{\op{Initializer}}
 \label{alg:marpa-initializer}
 \begin{algorithmic}[1]
 \Procedure{Initializer}{}
-\label{line:marpa-initializer-10}
 \State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
+\label{line:marpa-initializer-10}
 \Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
 \State $\LinkPairs{\Veim{start}} = \set{}$
+\label{line:marpa-initializer-20}
 \State Add \Veim{start} to \es{(0)}
   \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
+\label{line:marpa-initializer-30}
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:marpa-initializer-60}
 \State \Call{Predict-ES}{\Ves{(0)}} \Comment Ind
@@ -4396,7 +4424,7 @@ the transition array
 
 \begin{theorem}[\proc{Initializer} invocations]
 \label{th:initializer-invocations}
-Every line of \proc{Initializer} is invoked exactly once.
+Every line of \proc{Ini\-tial\-izer} is invoked exactly once.
 \end{theorem}
 
 \begin{proof}
@@ -4409,7 +4437,7 @@ consists entirely of sequential executions.
 \begin{equation}
 \label{eq:def-initializer-time-charge}
 \myparbox{%
-  Direct time in \var{Initializer} is charged to the
+  Direct time in \proc{Ini\-tial\-izer} is charged to the
   start EIM.
   \cuz{} AF complexity analysis.}
 \end{equation}
@@ -4422,6 +4450,106 @@ is
 \end{theorem}
 
 \begin{proof}
+\begin{equation}
+\label{eq:th-initializer-time-14}
+\Time{\ref{line:marpa-initializer-10}} = \Oc{}
+  \because \text{ direct from \Aref{alg:marpa-initializer}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-16}
+\Time{\ref{line:marpa-initializer-20}} = \Oc{}
+  \because \text{ direct from \Aref{alg:marpa-initializer}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-18}
+\Time{\ref{line:marpa-initializer-30}} = \Oc{}
+   \because \Obref{obs:es-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-20}
+\Time{\ref{line:marpa-initializer-60}} = \Oc{}
+  \because
+  \Obref{obs:rule-ID},
+  \Obref{obs:dotzeroused-bitmap}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-22}
+\Time{\ref{line:marpa-initializer-70}} = \Oc{}
+  \because \Obref{obs:housekeeping-vs-body-execution},
+    \Thref{th:predict-es-time}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-24}
+\myparbox{%
+   Total exclusive time
+   for \op{Initializer}
+   is the number of invocations of each line
+   multiplied by the exclusive time for each invocation.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-26}
+\begin{gathered}
+   \myparbox{%
+     Total exclusive time
+     by \op{Initializer} is
+     }
+   \\
+     \smashoperator[r]{\sum_{\textstyle{
+       \var{line}\in\set{\enRefs{line:marpa-initializer-10}{line:marpa-initializer-70}}
+     }}}
+     \;\; \Oc \times \Oc = \Oc
+   \\
+     \because
+     \Eref{eq:th-initializer-time-14},
+     \Eref{eq:th-initializer-time-16},
+     \Eref{eq:th-initializer-time-18},
+     \Eref{eq:th-initializer-time-20},
+     \Eref{eq:th-initializer-time-22},
+     \Eref{eq:th-initializer-time-24}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-28}
+\myparbox{Total indirect time charged to \Veim{start}
+     by \op{Initializer} is \Oc{}
+   \cuz{}
+       \Thref{th:predict-es-time},
+       \longDfref{Charging to the ES}{def:charging-to-es},
+       \Aref{alg:marpa-initializer}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-30}
+\myparbox{Total indirect time charged
+    to every EIM of Earley set 0
+     by \op{Initializer}
+    is \Oc{}
+   \cuz{} \Thref{th:predict-es-time},
+       \Aref{alg:marpa-initializer}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-32}
+\myparbox{Total time charged to every EIM of Earley set 0
+     by \op{Initializer} is \Oc{}
+   \cuz{}
+       \Eref{eq:def-initializer-time-charge},
+       \Eref{eq:th-initializer-time-30}.
+       }
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-34}
+\myparbox{%
+    Total time charged to \Veim{start}
+     by \op{Initializer} is $\Oc+\Oc+\Oc=\Oc$
+   \cuz{}
+       \Eref{eq:def-initializer-time-charge},
+       \Eref{eq:th-initializer-time-26},
+       \Eref{eq:th-initializer-time-28},
+       \Eref{eq:th-initializer-time-30}.%
+}
+\end{equation}
+The theorem follows from
+\Eref{eq:th-initializer-time-32} and
+\Eref{eq:th-initializer-time-34}.
 \TODO{Finish}
 \qedhere
 \end{proof}
@@ -4443,7 +4571,7 @@ predictions.
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
 \Marpa{}'s % \linebreak
-\var{Initialization} operation has the same effect as the construction
+\op{Ini\-tial\-iza\-tion} operation has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
@@ -4571,11 +4699,11 @@ The cause of a reducer-generated EIM will always be
 a completed EIM.
 The predecessor of a reducer-generated EIM varies depending on whether the attempt
 to create the reducer-generated EIM was a \var{Leo-reducer} operation
-or an \var{Earley-reducer} operation.
+or an \op{Earley-reducer} operation.
 For an
-\var{Earley-reducer} operation,
+\op{Earley-reducer} operation,
 the predecessor will be an incomplete EIM.
-For a \var{Leo-reducer} operation,
+For a \op{Leo-reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
 \dispEnd{}
