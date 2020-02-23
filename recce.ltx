@@ -68,8 +68,8 @@
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
 \newcommand{\op}[1]{%
-  \ifmmode\texttt{#1}
-  \else\texttt{#1}
+  \ifmmode\texttt{#1}%
+  \else\texttt{#1}%
   \fi%
 }
 \newcommand{\proc}[2][]{%
@@ -4403,21 +4403,21 @@ the transition array
 
 \begin{algorithm}[tb]
 \caption{\op{Initializer}}
-\label{alg:marpa-initializer}
+\label{alg:initializer-op}
 \begin{algorithmic}[1]
 \Procedure{Initializer}{}
 \State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
-\label{line:marpa-initializer-10}
+\label{line:initializer-op-10}
 \Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
 \State $\LinkPairs{\Veim{start}} = \set{}$
-\label{line:marpa-initializer-20}
+\label{line:initializer-op-20}
 \State Add \Veim{start} to \es{(0)}
   \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
-\label{line:marpa-initializer-30}
+\label{line:initializer-op-30}
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
-\label{line:marpa-initializer-60}
+\label{line:initializer-op-60}
 \State \Call{Predict-ES}{\Ves{(0)}} \Comment Ind
-\label{line:marpa-initializer-70}
+\label{line:initializer-op-70}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -4429,9 +4429,9 @@ Every line of \proc{Ini\-tial\-izer} is invoked exactly once.
 
 \begin{proof}
 The flow of control in
-\proc{Initializer}~\Aref{alg:marpa-initializer}
+\proc{Initializer}~\Aref{alg:initializer-op}
 consists entirely of sequential executions.
-\qedhere
+\myqed
 \end{proof}
 
 \begin{equation}
@@ -4452,29 +4452,29 @@ is
 \begin{proof}
 \begin{equation}
 \label{eq:th-initializer-time-14}
-\Time{\ref{line:marpa-initializer-10}} = \Oc{}
-  \because \text{ direct from \Aref{alg:marpa-initializer}.}
+\Time{\ref{line:initializer-op-10}} = \Oc{}
+  \because \text{ direct from \Aref{alg:initializer-op}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-16}
-\Time{\ref{line:marpa-initializer-20}} = \Oc{}
-  \because \text{ direct from \Aref{alg:marpa-initializer}.}
+\Time{\ref{line:initializer-op-20}} = \Oc{}
+  \because \text{ direct from \Aref{alg:initializer-op}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-18}
-\Time{\ref{line:marpa-initializer-30}} = \Oc{}
+\Time{\ref{line:initializer-op-30}} = \Oc{}
    \because \Obref{obs:es-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-20}
-\Time{\ref{line:marpa-initializer-60}} = \Oc{}
+\Time{\ref{line:initializer-op-60}} = \Oc{}
   \because
   \Obref{obs:rule-ID},
   \Obref{obs:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-22}
-\Time{\ref{line:marpa-initializer-70}} = \Oc{}
+\Time{\ref{line:initializer-op-70}} = \Oc{}
   \because \Obref{obs:housekeeping-vs-body-execution},
     \Thref{th:predict-es-time}.
 \end{equation}
@@ -4488,31 +4488,30 @@ is
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-26}
-\begin{gathered}
-   \myparbox{%
+\myparbox{%
      Total exclusive time
      by \op{Initializer} is
-     }
-   \\
+   \[
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-initializer-10}{line:marpa-initializer-70}}
+       \var{line}\in\set{\enRefs{line:initializer-op-10}{line:initializer-op-70}}
      }}}
      \;\; \Oc \times \Oc = \Oc
-   \\
-     \because
+   \]
+     \cuz{}
+     \Thref{th:initializer-invocations},
      \Eref{eq:th-initializer-time-14},
      \Eref{eq:th-initializer-time-16},
      \Eref{eq:th-initializer-time-18},
      \Eref{eq:th-initializer-time-20},
      \Eref{eq:th-initializer-time-22},
      \Eref{eq:th-initializer-time-24}.
-\end{gathered}
+}
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-27}
 \myparbox{%
    Indirect time is charged by \op{Initializer}
-   only at line {line:marpa-initializer-70}.
+   only at line \ref{line:initializer-op-70}.
 }
 \end{equation}
 \begin{equation}
@@ -4562,8 +4561,151 @@ is
 The theorem follows from
 \Eref{eq:th-initializer-time-32} and
 \Eref{eq:th-initializer-time-34}.
-\TODO{Finish}
-\qedhere
+\myqed
+\end{proof}
+
+\begin{equation}
+\label{eq:def-initializer-space-charge}
+\myparbox{%
+  Direct space in \proc{Ini\-tial\-izer} is charged to the
+  start EIM.
+  \cuz{} AF complexity analysis.}
+\end{equation}
+
+\begin{theorem}[\op{Initializer} space complexity]
+\label{th:initializer-space}
+The inclusive space of $\op{Initializer}$
+is
+\Oc{} charged to each EIM of Earley set 0.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-initializer-space-14}
+\Space{\ref{line:initializer-op-10}} = 0
+  \because \text{ direct from \Aref{alg:initializer-op}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-16}
+\Space{\ref{line:initializer-op-20}} = 0
+  \because \text{ direct from \Aref{alg:initializer-op}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-18}
+\Space{\ref{line:initializer-op-30}} = \Oc{}
+   \because \Obref{obs:es-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-20}
+\Space{\ref{line:initializer-op-60}} = 0
+  \because
+  \Obref{obs:rule-ID},
+  \Obref{obs:dotzeroused-bitmap}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-22}
+\Space{\ref{line:initializer-op-70}} = 0
+  \because \Obref{obs:housekeeping-vs-body-execution},
+    \Thref{th:predict-es-space}.
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-24}
+\myparbox{%
+   Total exclusive space
+   for \op{Initializer}
+   is the number of invocations of each line
+   multiplied by the exclusive space for each invocation.}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-26}
+\myparbox{%
+     Total exclusive space
+     by \op{Initializer} is
+   \[
+     \left(
+         \smashoperator[r]{\sum_{\textstyle{
+           \var{line}\in\set{\ref{line:initializer-op-30}
+           }
+         }}}
+         \;\; \Oc \times \Oc
+     \right)
+     + \left(
+         \smashoperator[r]{\sum_{\textstyle{
+           \var{line}\in\set{
+               \enRefs{line:initializer-op-10}{line:initializer-op-20},
+               \enRefs{line:initializer-op-60}{line:initializer-op-70}
+           }
+         }}}
+         \;\; \Oc \times 0
+     \right)
+     = \Oc
+   \]
+     \cuz{}
+     \Thref{th:initializer-invocations},
+     \Eref{eq:th-initializer-space-14},
+     \Eref{eq:th-initializer-space-16},
+     \Eref{eq:th-initializer-space-18},
+     \Eref{eq:th-initializer-space-20},
+     \Eref{eq:th-initializer-space-22},
+     \Eref{eq:th-initializer-space-24}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-27}
+\myparbox{%
+   Indirect space is charged by \op{Initializer}
+   only at line \ref{line:initializer-op-70}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-28}
+\myparbox{%
+    Total indirect space
+    consumed by \op{Initializer} is
+    \Oc{} charged to \Veim{start},
+    and \Oc{} charged to every prediction added by \proc{Predict-ES}
+    \cuz{}
+       \Thref{th:predict-es-space},
+       \Eref{eq:th-initializer-space-27}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-32}
+\myparbox{%
+    Total space charged by \op{Initializer}
+    is
+    $\Oc+\Oc=\Oc$ charged to \Veim{start},
+    and \Oc{} charged to every prediction added by \proc{Predict-ES}
+    \cuz{}
+    \Eref{eq:def-initializer-space-charge},
+    \Eref{eq:th-initializer-space-26},
+    \Eref{eq:th-initializer-space-28}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-36}
+\myparbox{%
+    Every PIM added by
+    \op{Initializer} is either \Veim{start}
+    or a prediction \cuz
+    \Aref{alg:predict1},
+    \Aref{alg:predict-es},
+    \Aref{alg:initializer-op}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-38}
+\myparbox{%
+    The space consumed by \op{Initializer} is \Oc{}
+    for each PIM that it adds,
+    which is charged to that PIM \cuz{}
+    \Eref{eq:th-initializer-space-32},
+    \Eref{eq:th-initializer-space-36}.
+}
+\end{equation}
+The theorem is
+\Eref{eq:th-initializer-space-38}.
+\myqed
 \end{proof}
 
 \TODO{To here}
@@ -5025,7 +5167,7 @@ if and only if
 \Marpa{} \var{Memoizer} operation.
 \end{itemize}
 This observation follows from
-\Aref{alg:marpa-initializer},
+\Aref{alg:initializer-op},
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
@@ -5058,7 +5200,7 @@ operation, that operation is the \var{Reducer} operation.
 If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
-\Aref{alg:marpa-initializer},
+\Aref{alg:initializer-op},
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
