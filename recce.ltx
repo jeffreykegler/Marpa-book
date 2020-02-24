@@ -273,6 +273,7 @@
 \newcommand{\Symbol}[1]{\ensuremath{\mymathop{Symbol}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}(#1)}}
+\newcommand{\Transitions}[2]{\ensuremath{\mymathop{Transitions}(#1,#2)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
@@ -4438,7 +4439,7 @@ consists entirely of sequential executions.
 \label{eq:def-initializer-time-charge}
 \myparbox{%
   Direct time in \proc{Ini\-tial\-izer} is charged to the
-  start EIM.
+  start EIM
   \cuz{} AF complexity analysis.}
 \end{equation}
 
@@ -4495,7 +4496,7 @@ is
      \smashoperator[r]{\sum_{\textstyle{
        \var{line}\in\set{\enRefs{line:initializer-op-10}{line:initializer-op-70}}
      }}}
-     \;\; \Oc \times \Oc = \Oc
+     \;\; \Oc \times \Oc
    \]
      \cuz{}
      \Thref{th:initializer-invocations},
@@ -4505,6 +4506,17 @@ is
      \Eref{eq:th-initializer-time-20},
      \Eref{eq:th-initializer-time-22},
      \Eref{eq:th-initializer-time-24}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-time-26-50}
+\myparbox{%
+     Total exclusive time
+     by \op{Initializer} is \Oc{},
+     which is charged to \Veim{start}
+     \cuz{}
+        \Eref{eq:def-initializer-time-charge},
+        \Eref{eq:th-initializer-time-26}.%
 }
 \end{equation}
 \begin{equation}
@@ -4553,7 +4565,7 @@ is
      by \op{Initializer} is $\Oc+\Oc+\Oc=\Oc$
    \cuz{}
        \Eref{eq:def-initializer-time-charge},
-       \Eref{eq:th-initializer-time-26},
+       \Eref{eq:th-initializer-time-26-50},
        \Eref{eq:th-initializer-time-28},
        \Eref{eq:th-initializer-time-30}.%
 }
@@ -4638,7 +4650,6 @@ is
          }}}
          \;\; \Oc \times 0
      \right)
-     = \Oc
    \]
      \cuz{}
      \Thref{th:initializer-invocations},
@@ -4648,6 +4659,17 @@ is
      \Eref{eq:th-initializer-space-20},
      \Eref{eq:th-initializer-space-22},
      \Eref{eq:th-initializer-space-24}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-initializer-space-26-50}
+\myparbox{%
+     Total exclusive space
+     by \op{Initializer} is \Oc{},
+     which is charged to \Veim{start}
+     \cuz{}
+        \Eref{eq:def-initializer-space-charge},
+        \Eref{eq:th-initializer-space-26}.%
 }
 \end{equation}
 \begin{equation}
@@ -4678,7 +4700,7 @@ is
     and \Oc{} charged to every prediction added by \proc{Predict-ES}
     \cuz{}
     \Eref{eq:def-initializer-space-charge},
-    \Eref{eq:th-initializer-space-26},
+    \Eref{eq:th-initializer-space-26-50},
     \Eref{eq:th-initializer-space-28}.%
 }
 \end{equation}
@@ -4718,14 +4740,15 @@ any link pairs for any PIM in Earley set 0.
 so that a link pair does not exist for it,
 even conceptually.
 And \Marpa{} does not track link pairs for
-predictions.
+predictions
+\Obref{obs:common-predict-ancestry}.
 \dispEnd{}
 \end{observation}
 
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
 \Marpa{}'s % \linebreak
-\op{Ini\-tial\-iza\-tion} operation has the same effect as the construction
+\op{Ini\-tial\-iza\-tion} op has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
@@ -4741,17 +4764,19 @@ of Earley set 0 by \Earley{}.
 \Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{prefix}{\var{j}\subtract 1}, \var{val}}$.
   See \Dfref{def:token}.
 }
-\ForNoDo{every $\var{lp} = \tuple{\var{pred}, \var{token}}$ such that}
-\Statex \hskip\algorithmicindent \hskip\algorithmicindent \hskip\algorithmicindent
-    $\var{lp} \in \Matches{\Veim{pred}, \var{token}}$ \algorithmicdo
+\State $\var{matches} = \Transitions{\Symbol{\var{token}}}{\var{j}\subtract 1}$
+\label{line:scanner-op-05}
+\For{every $\Veim{match} \in \Veimset{matches}$}
 \label{line:scanner-op-10}
 \State $\Veim{trial} = \tuple{\Next{\var{pred}},\Origin{\var{pred}}}@\Vloc{j}$
    \Comment $\var{try}\plusplus$
 \label{line:scanner-op-20}
+\State $\var{lp} = \tuple{\Veim{match},\var{token}}_\type{LP}$
+\label{line:scanner-op-25}
   \If{\Seen{\var{trial}}}
 \label{line:scanner-op-30}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-      \Comment $link=\Oc$
+      \Comment $\var{link}=\Oc$
 \label{line:scanner-op-40}
   \Else \Comment $\var{add}\plusplus$
     \State $\Seen{\var{trial}} = \var{true}$
@@ -4782,9 +4807,9 @@ In an ambiguous parse, a scanned EIM will have one or more link pairs.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
-\label{obs:earley-scanner-operation}
-\Marpa{}'s scanner operation has the same effect as the ``Scanner''
-operation of \Earley{}\cite{Earley1970}.
+\label{obs:earley-scanner-op}
+\Marpa{}'s scanner op has the same effect as the ``Scanner''
+operation of \Earley{}.
 \dispEnd
 \end{observation}
 
@@ -4875,7 +4900,7 @@ or $\Lambda$.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
-\label{obs:earley-completer-operation}
+\label{obs:earley-completer-op}
 When there are no LIM's in \Ves{predecessor}
 \Marpa{}'s \var{Reducer} op has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.\footnote{
@@ -4980,7 +5005,7 @@ operation of \Earley{}\cite{Earley1970}.
 
 Let
 \begin{align}
-\label{eq:memoizer-operation-10}
+\label{eq:memoizer-op-10}
 & \LeoEligible{\Ves{i}} \defined \\
 \nonumber
 & \qquad \left\lbrace \;\;
@@ -4993,7 +5018,7 @@ Let
 \end{align}
 %
 \begin{align}
-\label{eq:memoizer-operation-20}
+\label{eq:memoizer-op-20}
 & \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
 \nonumber
 & \qquad \left\lbrace \;\;
@@ -5013,7 +5038,7 @@ Let
 \end{align}
 and
 \begin{align}
-\label{eq:memoizer-operation-30}
+\label{eq:memoizer-op-30}
 & \mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined \\
 \nonumber
 & \qquad \left\lbrace \;\;
@@ -5032,7 +5057,7 @@ and
 \end{align}
 Then
 \begin{align}
-\label{eq:memoizer-operation-40}
+\label{eq:memoizer-op-40}
 & \var{Memoizer}(\Ves{i}) \defined \\
 \nonumber
 & \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
@@ -5095,7 +5120,7 @@ but we have yet to prove these things.
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
-\label{obs:earley-memoizer-operation}
+\label{obs:earley-memoizer-op}
 \Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
@@ -5130,18 +5155,18 @@ If line \ref{alg:marpa-line-80} is removed,
 This can be seen from
 \Aref{alg:marpa},
 \Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-operation},
-\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-scanner-op},
+\Obref{obs:earley-completer-op},
 \Obref{obs:earley-predictor-op},
 and
-\Obref{obs:earley-memoizer-operation}.
+\Obref{obs:earley-memoizer-op}.
 \dispEnd
 \end{observation}
 
 \subsection{Summary}
 
 \begin{observation}[\Marpa{} operation by type of result]
-\label{obs:marpa-operation-by-result}
+\label{obs:marpa-op-by-result}
 Let \Vpim{rez} be the result of a \Marpa{} operation.
 Every PIM is the result of exactly \Marpa{} operation,
 as follows:
@@ -5176,30 +5201,30 @@ This observation follows from
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
-\Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by type of result]
-\label{obs:earley-operation-by-result}
+\label{obs:earley-op-by-result}
 The operation of the original \Earley{} algorithm can be determined
 from the result as described in
-\Obref{obs:marpa-operation-by-result},
+\Obref{obs:marpa-op-by-result},
 except
 in \Earley{} there is no \var{Memoizer} operation,
 and there are no LIM's.
 This follows from
 \Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-operation},
-\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-scanner-op},
+\Obref{obs:earley-completer-op},
 \Obref{obs:earley-predictor-op},
-\Obref{obs:earley-memoizer-operation}, and
-\Obref{obs:marpa-operation-by-result}.
+\Obref{obs:earley-memoizer-op}, and
+\Obref{obs:marpa-op-by-result}.
 \dispEnd
 \end{observation}
 
 \begin{observation}[\Marpa{} operation by direct ancestor]
-\label{obs:marpa-operation-by-direct-ancestor}
+\label{obs:marpa-op-by-direct-ancestor}
 If a completion is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Reducer} operation.
 If a token is a direct ancestor of a \Marpa{}
@@ -5209,22 +5234,22 @@ This observation follows from
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor}, and
-\Eref{eq:memoizer-operation-10}--\Eref{eq:memoizer-operation-40}.
+\Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by direct ancestor]
-\label{obs:earley-operation-by-direct-ancestor}
+\label{obs:earley-op-by-direct-ancestor}
 If a completion is a direct ancestor of an \Earley{}
 operation, that operation is the Completer operation.
 If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the Scanner operation.
 This observation follows from
 \Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-operation},
-\Obref{obs:earley-completer-operation},
+\Obref{obs:earley-scanner-op},
+\Obref{obs:earley-completer-op},
 \Obref{obs:earley-predictor-op} and
-\Obref{obs:earley-memoizer-operation}.
+\Obref{obs:earley-memoizer-op}.
 \dispEnd
 \end{observation}
 
@@ -6683,8 +6708,8 @@ assumption for the theorem.}
   \begin{gathered}
   \Postdot{\Veim{source}} = \Transition{\ell} \\
   \because
-  \Eref{eq:memoizer-operation-20},
-  \Eref{eq:memoizer-operation-30}.
+  \Eref{eq:memoizer-op-20},
+  \Eref{eq:memoizer-op-30}.
   \end{gathered}
 \end{equation}
 
@@ -6720,18 +6745,18 @@ The proof is by a reductio.
 \label{eq-th-LIM-chain-dr+origin-12}
 \myparbox{LIM's are only added by the
 \Marpa{} \var{Memoizer} operation
-$\because$ \Obref{obs:marpa-operation-by-result}.%
+$\because$ \Obref{obs:marpa-op-by-result}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-14}
 \myparbox{LIM's are added by either the
 \var{Start-Leo-Chain} or
-\var{Extend-Leo-Chain} sub-operation
+\var{Extend-Leo-Chain} sub-op
 $\because$
 \Eref{eq-th-LIM-chain-dr+origin-12},
-\Eref{eq:memoizer-operation-20},
-\Eref{eq:memoizer-operation-30}.%
+\Eref{eq:memoizer-op-20},
+\Eref{eq:memoizer-op-30}.%
 }
 \end{equation}
 \begin{equation}
@@ -6751,8 +6776,8 @@ where \Vlimset{partial} is the partial Leo chain
 of \Vlim{first}
 $\because$
 \Dfref{def:leo-chain},
-\Eref{eq:memoizer-operation-20},
-\Eref{eq:memoizer-operation-30}.%
+\Eref{eq:memoizer-op-20},
+\Eref{eq:memoizer-op-30}.%
 }
 \end{equation}
 
@@ -6761,7 +6786,7 @@ We now proceed by subcase, starting with
 \begin{equation}
 \label{eq-th-LIM-chain-dr+origin-16}
 \myparbox{\Vlim{first} was added by a
-\var{Start-Leo-Chain} sub-operation
+\var{Start-Leo-Chain} sub-op
 $\because$ AF subcase.%
 }
 \end{equation}
@@ -6900,7 +6925,7 @@ $\because$ AF theorem, WLOG.
 \Veim{source} \in \LeoEligible{\Vloc{j}} \\
 \qquad \because
 \Eref{eq:memoizer-link-pair},
-\Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30},
+\Eref{eq:memoizer-op-20}, \Eref{eq:memoizer-op-30},
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -6908,7 +6933,7 @@ $\because$ AF theorem, WLOG.
 \begin{gathered}
 \Veim{source} \in \LeoUnique{\Vloc{j}} \\
 \because
-\Eref{eq:th-leo-chain-source-properties-20}, \Eref{eq:memoizer-operation-10}.
+\Eref{eq:th-leo-chain-source-properties-20}, \Eref{eq:memoizer-op-10}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -7018,7 +7043,7 @@ whose ancestry includes
 $\left[ \Veim{source},
   \var{edge}[\var{n}] \right]_\type{LP}$
 $\because$
-\Obref{obs:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-op-by-direct-ancestor},
 \Eref{eq:edge-elements-are-complete-20},
 \Eref{eq:edge-elements-are-complete-30}.
 }
@@ -7166,7 +7191,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred}, \var{lo} \right]_\type{LP}$
 $\because$
-\Obref{obs:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-op-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-12},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -7190,7 +7215,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred2}, \var{lo} \right]_\type{LP}$
 $\because$
-\Obref{obs:earley-operation-by-direct-ancestor},
+\Obref{obs:earley-op-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-14},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -7280,7 +7305,7 @@ $\because$
 \begin{gathered}
 \Veim{pred2} \in \LeoEligible{\Current{\Vlim{match}}} \\
 \because \Eref{th:edge-descendant-uniqueness-36},
-\Eref{eq:memoizer-operation-20}, \Eref{eq:memoizer-operation-30}.
+\Eref{eq:memoizer-op-20}, \Eref{eq:memoizer-op-30}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -7288,7 +7313,7 @@ $\because$
   \begin{gathered}
     \Veim{pred2} \in \LeoUnique{\Current{\Vlim{match}}} \\
     \because
-    \Eref{th:edge-descendant-uniqueness-42}, \Eref{eq:memoizer-operation-10}.
+    \Eref{th:edge-descendant-uniqueness-42}, \Eref{eq:memoizer-op-10}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -7537,7 +7562,7 @@ result of an \Earley{} completer
 operation with link pair
 $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 } \\
-\because \Obref{obs:earley-operation-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
+\because \Obref{obs:earley-op-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
   \Eref{eq:th-leo-edge-top-14}.
 \end{gathered}
 \end{equation}
@@ -7572,7 +7597,7 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 
 \begin{theorem}
 \label{th:leo-reducer-is-consistent}
-The \var{Leo-reducer} sub-operation
+The \var{Leo-reducer} sub-op
 of the \Marpa{} \var{Reducer} operation
 preserves validity.
 \end{theorem}
@@ -7621,7 +7646,7 @@ operation.
 The \Marpa{} scanner operation
 creates the same PIM's as the \Earley{}
 scanner operations
-\Obref{obs:earley-scanner-operation}.
+\Obref{obs:earley-scanner-op}.
 The \Marpa{} predictor operation
 creates the same PIM's as the \Earley{}
 predictor operations
@@ -7637,7 +7662,7 @@ preserves validity
 The remaining subcase is the \Marpa{} \var{Reducer} operation.
 
 The \Marpa{} \var{Reducer} operation consists of two
-sub-operations:
+sub-ops:
 \var{Earley-reducer} and
 \var{Leo-reducer}.
 We have shown that the
@@ -7645,7 +7670,7 @@ We have shown that the
 \Thref{th:leo-reducer-is-consistent}.
 
 From
-\Obref{obs:earley-completer-operation}
+\Obref{obs:earley-completer-op}
 and the description of the
 \var{Earley-reducer}
 \Eref{eq:def-reducer-10},
@@ -7654,7 +7679,7 @@ the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
 \Marpa{}'s \var{Earley-reducer}.
 Therefore the PIM's created by
-the \Marpa{} \var{Earley-reducer} sub-operation
+the \Marpa{} \var{Earley-reducer} sub-op
 are a subset of those created by the \Earley{}
 completer operation.
 We know the \Earley{} completer operation preserves
