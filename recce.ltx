@@ -4816,6 +4816,27 @@ operation of \Earley{}.
 \subsection{Reducer op}
 \label{def:reducer}
 
+\begin{algorithm}[tb]
+\caption{\var{Reducer}}
+\label{alg:marpa-reducer}
+\begin{algorithmic}[1]
+\Procedure{Reducer}{\Ves{j}}
+\For{$\Veim{x} \in \Ves{j}$ where \var{x} is a completion}
+\State $\Veimset{matches} = \Transitions{\LHS{\Veim{x}}}{\Origin{\var{x}}}$
+\label{line:reducer-op-05}
+\State $\var{match0} = \Velement{matches}{0}$
+\If{$\var{match0} = \Lambda$}
+  \State Do nothing
+\ElsIf{\var{match0} is a LIM}
+    \State \Call{Leo-Reducer}{\Ves{j},\Vlim{match0}}
+\Else
+    \State \Call{Earley-Reducer}{\Ves{j},\Veimset{matches}}
+\EndIf
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
 \begin{align}
 \label{eq:def-reducer-10}
 & \var{Reducer}(\Ves{i}) \defined
