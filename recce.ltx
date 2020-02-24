@@ -67,9 +67,9 @@
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
-\newcommand{\op}[1]{%
-  \ifmmode\texttt{#1}%
-  \else\texttt{#1}%
+\newcommand{\op}[2][]{%
+  \ifmmode\texttt{#2}(#1)%
+  \else\texttt{#2}(#1)%
   \fi%
 }
 \newcommand{\proc}[2][]{%
@@ -4154,7 +4154,7 @@ and \Eref{eq:th-predict-es-time-48}.
 The space consumed by
 \proc[\Ves{j}]{Predict-ES}
 is \Oc{} charged to \Ves{j}
-and \Oc{} charged to each prediction added.
+and \Oc{} charged to each PIM added.
 \end{theorem}
 
 \begin{proof}
@@ -4753,6 +4753,60 @@ of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
 
+\subsection{Predictor op}
+\label{sec:predictor-op}
+
+The \Marpa{} Predictor op is equivalent to the
+\proc{Predict-ES} pseudocode procedure \Aref{alg:predict-es}.
+
+\begin{equation}
+\label{eq:def-predictor-op}
+\op[\Ves{j}]{Predictor} \;\; \defined \;\; \proc[\Ves{j}]{Predict-ES}
+\end{equation}
+
+\begin{theorem}[\op{Predictor} time complexity]
+\label{th:predictor-time}
+The time of $\op{Predictor}(\Ves{j})$
+is
+\Oc{} charged to each EIM of \Ves{j},
+and \Oc{} charged to \Ves{j} itself.
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Thref{th:predict-es-time} and \Eref{eq:def-predictor-op}.
+\end{proof}
+
+\begin{theorem}[\op{Predictor} space complexity]
+\label{th:predictor-space}
+The space of $\op{Predictor}(\Ves{j})$
+\Aref{alg:predict-es}
+is
+\Oc{} charged to each EIM of \Ves{j},
+and \Oc{} charged to each PIM added.
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Thref{th:predict-es-space} and \Eref{eq:def-predictor-op}.
+\end{proof}
+
+\begin{observation}[Ancestry]
+\label{obs:predictor-ancestry}
+The \Marpa{} implementation does not track
+link pairs
+for predictions.
+For details, see \Obref{obs:common-predict-ancestry}.
+\dispEnd{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm: Predictor Operation]
+\label{obs:earley-predictor-op}
+\Marpa{}'s predictor op has the same effect as the ``Predictor''
+operation of \Earley{}\cite{Earley1970}.
+\dispEnd{}
+\end{observation}
+
 \subsection{Scanner op}
 \label{def:scanner}
 
@@ -5028,37 +5082,6 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
-\subsection{Predictor op}
-\label{sec:prediction}
-
-\begin{equation}
-\label{eq:def-predictor}
-\var{Predictor}(\Ves{i}) \;\; \defined \;\;
-\smashoperator[r]{\mathop{\bigcup}_{\textstyle \var{eim}\in\Ves{i}}}
-\;\; \var{Predict}(\Veim{eim}, \Vloc{i})
-\end{equation}
-
-\begin{observation}[Ancestry]
-\label{obs:predictor-ancestry}
-The \Marpa{} implementation does not track
-link pairs
-for predictions.
-For details, see \Obref{obs:common-predict-ancestry}.
-\dispEnd{}
-\end{observation}
-
-\begin{observation}[Complexity]
-\TODO{}
-\dispEnd{}
-\end{observation}
-
-\begin{observation}[Original Earley algorithm: Predictor Operation]
-\label{obs:earley-predictor-op}
-\Marpa{}'s predictor op has the same effect as the ``Predictor''
-operation of \Earley{}\cite{Earley1970}.
-\dispEnd{}
-\end{observation}
-
 \subsection{Memoizer op}
 \label{def:memoizer}
 
@@ -5259,7 +5282,7 @@ This observation follows from
 \Aref{alg:initializer-op},
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
-\Eref{eq:def-predictor}, and
+\Eref{eq:def-predictor-op}, and
 \Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
@@ -5292,7 +5315,7 @@ This observation follows from
 \Aref{alg:initializer-op},
 \Eref{alg:marpa-scanner},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
-\Eref{eq:def-predictor}, and
+\Eref{eq:def-predictor-op}, and
 \Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
