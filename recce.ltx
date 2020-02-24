@@ -3101,21 +3101,24 @@ Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
 In the complexity context,
 ``resource'' means time or space.
+We divide space into two kinds:
+\dfn{PIM space} and \dfn{link space}.
 
-We ``charge'' all resource to adds and tries.
+We ``charge'' all resource to ``tries'' ---
+attempts to add a PIM.
 Recall that when an attempt is made to add a duplicate PIM to an Earley set,
 that it does not change the Earley set.
-An attempt to add a duplicate PIM is a ``try''.
-If the PIM is not a duplicate,
-and therefore new to the Earley set,
-the attempt to add it is an ``add''.
-Every ``add'' is also a ``try'',
-but not every ``try'' is an ``add''.
+A ``try'' is either
+\begin{itemize}
+\item an attempt to union a duplicate in the Earley set,
+  which is called a ``dup''; or
+\item a successful attempt to add a new PIM to the Earley set,
+  which is called an ``add''.
+\end{itemize}
 We have yet to show this,
-but we will find the time charged to every ``add'' is \Oc{};
-the time charged to every ``try'' is \Oc{};
-the space charged to every ``add'' is \Oc{}; and
-the space charged to every ``try'' is zero.
+but we will find the time charged to every ``try'' is \Oc{};
+the PIM space charged to every ``add'' is \Oc{}; and
+the link space charged to every ``dup'' is \Oc{}.
 
 In a pseudocode procedure,
 charges are made either to a ``destination'',
@@ -3232,15 +3235,6 @@ or an algorithm:
 \end{itemize}
 The calls ``module a unit'' are for counting invocations and passes at a level finer than the total count for the pseudocode procedure.
 Their precise meaning will defined in the context in which they are used.
-
-PIM adds and tries will usually require multiple pseudocode
-lines,
-but it will be convenient
-to indicate the line where each add or attempt begins.
-The adds will be marked with the
-tag $\var{add}\plusplus$,
-and the tries with the tag
-$\var{try}\plusplus$.
 
 \subsection{Earley set indexing}
 \label{sec:es-indexing}
@@ -3559,7 +3553,7 @@ Line \ref{line:toy-50}
 is invoked once per pass of the inner loop, or 6 times.
 \end{itemize}
 
-\section{The \Marpa{} algorithm}
+\section{The \texorpdfstring{\Marpa{}}{Marpa} algorithm}
 \label{sec:marpa}
 
 For the purpose of defining the \Marpa{} algorithm,
@@ -3575,12 +3569,12 @@ let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 \Procedure{Predict1}{\Veim{prediction}}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
 \label{line:marpa-predict-65}
-  \State return
-    \Comment Return if \var{prediction} is already in \Ves{j}
+\Statex \Comment $\times 1/\var{try}$
+  \State return \Comment $\times 1/\var{dup}$
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\var{add}\plusplus;\times 1/\var{add}$
+\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment $\times 1/\var{add}$
 \label{line:marpa-predict-80}
 \State Add \var{prediction} to \ES{\Current{\var{prediction}}}
 \Statex  \Comment $\var{s}=\Oc;\times 1/\var{add}$
@@ -4413,7 +4407,7 @@ the transition array
 \State $\LinkPairs{\Veim{start}} = \set{}$
 \label{line:initializer-op-20}
 \State Add \Veim{start} to \es{(0)}
-  \Comment $\var{try}\plusplus;\var{add}\plusplus;\var{s}=\Oc$
+  \Comment $\var{s}=\Oc$
 \label{line:initializer-op-30}
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:initializer-op-60}
@@ -4821,24 +4815,29 @@ operation of \Earley{}\cite{Earley1970}.
 \State $\var{matches} = \Transitions{\Symbol{\var{token}}}{\var{j}\subtract 1}$
 \label{line:scanner-op-05}
 \For{every $\Veim{match} \in \Veimset{matches}$}
+   \Comment $\times(1/\var{try})+1$
 \label{line:scanner-op-10}
 \State $\Veim{trial} = \tuple{\Next{\var{pred}},\Origin{\var{pred}}}@\Vloc{j}$
-   \Comment $\var{try}\plusplus$
+        \Comment $\times 1/\var{try}$
 \label{line:scanner-op-20}
 \State $\var{lp} = \tuple{\Veim{match},\var{token}}_\type{LP}$
+   \Comment $\times 1/\var{try}$
 \label{line:scanner-op-25}
   \If{\Seen{\var{trial}}}
+   \Comment $\times 1/\var{try}$
 \label{line:scanner-op-30}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-      \Comment $\var{link}=\Oc$
+\Statex  \Comment $\var{link}=\Oc;\times 1/\var{dup}$
 \label{line:scanner-op-40}
-  \Else \Comment $\var{add}\plusplus$
+  \Else \Comment $\times 1/\var{add}$
     \State $\Seen{\var{trial}} = \var{true}$
+      \Comment $\times 1/\var{add}$
 \label{line:scanner-op-50}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+      \Comment $\times 1/\var{add}$
 \label{line:scanner-op-60}
     \State Add \var{trial} to \Ves{j}
-      \Comment $s=\Oc$
+      \Comment $s=\Oc;\times 1/\var{add}$
 \label{line:scanner-op-70}
   \EndIf
 \EndFor
