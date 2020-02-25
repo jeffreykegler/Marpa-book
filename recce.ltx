@@ -1,16 +1,33 @@
 % Copyright 2013 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
-\documentclass[12pt]{amsart}
+\documentclass[draft,12pt]{amsart}
+\usepackage{ifdraft}
+\usepackage[obeyDraft]{todonotes}
+\ifdraft{
+    \usepackage{datetime2}
+}{}
+
+\makeatletter
+\providecommand\@dotsep{5}
+\def\listtodoname{List of Todos}
+\def\listoftodos{\@starttoc{tdo}\listtodoname}
+\makeatother
+
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage{varioref}
-\usepackage{hyperref}
+\usepackage[final]{hyperref} % ignore draft status
 \usepackage{ragged2e}
 \allowdisplaybreaks[3]
+
+\raggedbottom
+
+% Re hbox's, see
+% https://tex.stackexchange.com/questions/241343/what-is-the-meaning-of-fussy-sloppy-emergencystretch-tolerance-hbadness
 
 % * Reference meta tags ("classifying prefixes") use in this document:
 % * From fancyref:
@@ -59,7 +76,7 @@
 \setlength\abovedisplayshortskip{3pt}
 \setlength\belowdisplayshortskip{3pt}
 
-\newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
+% \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
 % For a type name, when it occurs in text
@@ -310,13 +327,16 @@
 
 \begin{document}
 
-\date{\today}
-
 \title{Marpa, a practical general parser: the recognizer}
 
 \author{Jeffrey Kegler}
+\thanks{\ifdraft{%
+    DRAFT as of \DTMnow%
+}{%
+    TODO: No date set
+}}
 \thanks{%
-Copyright \copyright\ 2019 Jeffrey Kegler.
+Copyright \copyright\ 2020 Jeffrey Kegler.
 }
 \thanks{%
 This document is licensed under
@@ -324,6 +344,7 @@ a Creative Commons Attribution-NoDerivs 3.0 United States License.
 }
 
 \begin{abstract}
+[ THIS IS A DRAFT. ]
 The \Marpa{} recognizer is described.
 \Marpa{} is
 a fully implemented
@@ -348,6 +369,12 @@ to the parser's expectations.
 \end{abstract}
 
 \maketitle
+
+\ifdraft{
+\section{Draft Status}
+
+THIS DOCUMENT IS A DRAFT.
+}{}
 
 \section{Introduction}
 
@@ -2082,7 +2109,7 @@ is a one-to-one correspondence
 (bijection). \dispEnd{}
 \end{definition}
 
-\section{\Marpa{} internal grammars}
+\section{\texorpdfstring{\Marpa{}}{Marpa} internal grammars}
 \label{sec:INTs}
 
 The formal definition of
@@ -2578,7 +2605,7 @@ for some \Vstr{rhs},
 \left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
 \end{gather*}
 
-\TODO{Revisit productivity, accessiblity.  Require in INT?}
+\todo{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}[EIM validity]
 \label{def:eim-validity}
 Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
@@ -3239,7 +3266,7 @@ Their precise meaning will defined in the context in which they are used.
 \subsection{Earley set indexing}
 \label{sec:es-indexing}
 
-\TODO{Rewrite this section.}
+\todo{Rewrite this section.}
 
 \begin{gather}
 \label{eq:def-loc-of_pim}
@@ -3302,8 +3329,8 @@ minimal.
 
 We will use several data structures which are global.
 In some cases these will need to grow.
-\TODO{Talk about charging?}
-\TODO{Account for Earley sets}
+\todo{Talk about charging?}
+\todo{Account for Earley sets}
 
 Our context grammar is \Vint{g}.
 The grammar is a constant, so the space consumed by
@@ -4194,7 +4221,7 @@ and \Oc{} charged to each PIM added.
 \Space{\ref{line:marpa-predict-es-18}} = 0
   \because \Thref{th:predict1-space}.
 \end{equation}
-\TODO{To here}
+\todo{To here}
 \begin{equation}
 \label{eq:th-predict-es-space-26}
 \myparbox{%
@@ -4724,7 +4751,7 @@ The theorem is
 \myqed
 \end{proof}
 
-\TODO{To here}
+\todo{To here}
 
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
@@ -4846,7 +4873,7 @@ operation of \Earley{}\cite{Earley1970}.
 \end{algorithm}
 
 \begin{observation}[Complexity]
-\TODO{}
+\todo{}
 \dispEnd
 \end{observation}
 
@@ -5007,7 +5034,7 @@ or $\Lambda$.
 \end{observation}
 
 \begin{observation}[Complexity]
-\TODO{}
+\todo{}
 \dispEnd
 \end{observation}
 
@@ -5193,10 +5220,10 @@ and if its element exists, it is a valid LIM,
 \end{itemize}
 but we have yet to prove these things.
 
-\TODO{Prove the above later.}
+\todo{Prove the above later.}
 
 \begin{observation}[Complexity]
-\TODO{}
+\todo{}
 \dispEnd{}
 \end{observation}
 
@@ -5206,7 +5233,7 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
-\subsection{Top level of \Marpa{}}
+\subsection{Top level of \texorpdfstring{\Marpa{}}{Marpa}}
 
 The top-level view of \Marpa{} is
 shown in \Aref{alg:marpa}.
@@ -5334,11 +5361,11 @@ This observation follows from
 \dispEnd
 \end{observation}
 
-\TODO{complexity observations}
+\todo{complexity observations}
 
 \section{Ambiguity}
 
-\TODO{Discuss the sources of this approach.}
+\todo{Discuss the sources of this approach.}
 
 We say that a parse $[ \Vcfg{g}, \Vstr{w1} ]$
 is ambiguous, if there is more than one derivation tree for it.
@@ -6204,7 +6231,7 @@ should consider evaluate their grammar treating
 \subsection{Transition tables}
 \label{sec:transition-tables}
 
-\TODO{}
+\todo{}
 
 \section{Per-set lists}
 \label{sec:per-set-lists}
@@ -6330,7 +6357,7 @@ The simpler approach, which omits the boolean,
 is the one that
 the \Marpa{} implementation sometimes uses.
 
-\section{\Marpa{} is correct}
+\section{\texorpdfstring{\Marpa{}}{Marpa} is correct}
 \label{sec:correctness}
 
 In this paper,
@@ -6761,7 +6788,7 @@ Then
 \end{theorem}
 
 \begin{proof}
-\TODO{Prove this}
+\todo{Prove this}
 \myqed
 \end{proof}
 
@@ -6794,7 +6821,7 @@ assumption for the theorem.}
   \end{gathered}
 \end{equation}
 
-\TODO{second proof merged in what follows}
+\todo{second proof merged in what follows}
 
 % \begin{theorem}[LIM chain dotted rule and origin]
 % \label{th:LIM-chain-dr+origin}
@@ -6871,7 +6898,7 @@ We now proceed by subcase, starting with
 $\because$ AF subcase.%
 }
 \end{equation}
-\TODO{Finish proof from here.  Look at use of \var{LIMPredecessor}}
+\todo{Finish proof from here.  Look at use of \var{LIMPredecessor}}
 \myqed
 \end{proof}
 
@@ -6962,7 +6989,7 @@ Then
         \Eref{eq:th-leo-edge-length-10}.
   \end{aligned}
 \end{equation}
-\TODO{\var{Source} changed.  Revise from here.}
+\todo{\var{Source} changed.  Revise from here.}
 \begin{equation}
 \label{eq:th-leo-edge-length-16}
 \myparbox{edge index is monotonically increasing
@@ -7115,7 +7142,7 @@ $\because$ assumption for step of the induction.
       \Dfref{def:leo-edge}}.
     \end{gathered}
 \end{equation}
-\TODO{\var{Source} changed.  Recheck from here.}
+\todo{\var{Source} changed.  Recheck from here.}
 \begin{equation}
 \label{eq:edge-elements-are-complete-36}
 \myparbox{$\var{edge}[\var{n}+1]$
@@ -7686,7 +7713,7 @@ preserves validity.
 Recall that \var{Leo-reducer}
 is defined at
 \Eref{eq:def-reducer-23}.
-\TODO{prove this}
+\todo{prove this}
 \myqed
 \end{proof}
 
@@ -7792,7 +7819,7 @@ PIM's.
 \end{theorem}
 
 \begin{proof}
-\TODO{prove this}
+\todo{prove this}
 \myqed
 \end{proof}
 
@@ -7929,7 +7956,7 @@ with respect to the
 the EIM's of visible depth \var{ix}.}
 \end{equation}
 
-\TODO{finish this proof}
+\todo{finish this proof}
 \myqed
 \end{proof}
 
@@ -7947,7 +7974,7 @@ Earley set \Ves{j}.
 \end{lemma}
 \begin{proof}
 The proof is by a reductio.
-\TODO{presence in physical Earley set (PES?) vs theoretical {ES?}.}
+\todo{presence in physical Earley set (PES?) vs theoretical {ES?}.}
 \begin{equation}
 \label{eq:lem-marpa-visible-depth-completeness-08}
 \myparbox{Let $\Vpim{rez}@\Ves{j}$ be a valid PIM where
@@ -7982,11 +8009,11 @@ $\because$ only confirmed EIM's have a visible depth
 \Eref{eq:lem-marpa-visible-depth-completeness-12},
 \Eref{eq:lem-marpa-visible-depth-completeness-14}.
 \end{equation}
-\TODO{finish proof}
+\todo{finish proof}
 \myqed
 \end{proof}
 
-\TODO{Prove Marpa + Reverse Leo = Original Earley}
+\todo{Prove Marpa + Reverse Leo = Original Earley}
 
 \begin{theorem}
 In an unambiguous grammar,
@@ -7996,7 +8023,7 @@ in the other,
 or they are disjoint
 \end{theorem}
 \begin{proof}
-\TODO{Need this proof?}
+\todo{Need this proof?}
 \myqed
 \end{proof}
 
@@ -8011,14 +8038,14 @@ or \On{}.
 \end{theorem}
 
 \begin{proof}
-\TODO{Need this proof?}
+\todo{Need this proof?}
 \myqed
 \end{proof}
 
 \section{Reversing Leo memoization}
 \label{sec:reverse-leo}
 
-\TODO{Finish writing this section}
+\todo{Finish writing this section}
 
 At evaluation time,
 it is desirable to expand the Leo memoizations,
@@ -8033,7 +8060,7 @@ where $\var{n} = \Vsize{partial}$.
 \end{theorem}
 
 \begin{proof}
-\TODO{Prove this}
+\todo{Prove this}
 \myqed
 \end{proof}
 
@@ -8052,7 +8079,7 @@ in an unambiguous parse is \On{}.
 \end{theorem}
 
 \begin{proof}
-\TODO{Prove this}
+\todo{Prove this}
 \myqed
 \end{proof}
 
@@ -8121,7 +8148,7 @@ We assume for the reductio that
 
 Confirmed EIMs are only unioned by the Scanner and the Completer.
 
-\TODO{Finish proof}
+\todo{Finish proof}
 \myqed
 
 \end{proof}
@@ -9140,7 +9167,7 @@ For every LRR grammar,
 \end{theorem}
 
 \begin{proof}
-\TODO{Add proof}
+\todo{Add proof}
 \myqed
 \end{proof}
 
@@ -9153,7 +9180,7 @@ For every unambiguous grammar,
 \end{theorem}
 
 \begin{proof}
-\TODO{Add proof}
+\todo{Add proof}
 \myqed
 \end{proof}
 
@@ -9163,7 +9190,7 @@ For every context-free grammar,
 \end{theorem}
 
 \begin{proof}
-\TODO{Add proof}
+\todo{Add proof}
 \myqed
 \end{proof}
 
@@ -9174,7 +9201,7 @@ if it does not track links.
 \end{theorem}
 
 \begin{proof}
-\TODO{Add proof}
+\todo{Add proof}
 \myqed
 \end{proof}
 
@@ -9196,7 +9223,7 @@ including the space for tracking links.
 \end{theorem}
 
 \begin{proof}
-\TODO{Add proof}
+\todo{Add proof}
 \myqed
 \end{proof}
 
@@ -9348,7 +9375,15 @@ his support.
 
 \bibliographystyle{plain}
 
-{\RaggedRight
+{
+% Ragged right, do not hyphenate.
+\RaggedRight
+\hyphenpenalty=10000
+\exhyphenpenalty=10000
+
+% Silence current hbox warnings, but allow them if
+% badness increases further
+\hbadness=2000
 
 \begin{thebibliography}{10}
 
@@ -9464,6 +9499,12 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \tableofcontents
+
+
+\ifdraft{
+    \clearpage
+    \listoftodos
+}{}
 
 \end{document}
 % vim: expandtab shiftwidth=4:
