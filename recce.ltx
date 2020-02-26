@@ -4861,7 +4861,7 @@ operation of \Earley{}\cite{Earley1970}.
 
 \begin{algorithm}[tb]
 \caption{\var{Scanner}}
-\label{alg:marpa-scanner}
+\label{alg:scanner-op}
 \begin{algorithmic}[1]
 \Procedure{Scanner}{\Ves{j}}
 \Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{prefix}{\var{j}\subtract 1}, \var{val}}$.
@@ -4872,8 +4872,8 @@ operation of \Earley{}\cite{Earley1970}.
 \For{every $\Veim{match} \in \Veimset{matches}$}
    \Comment \tightMath{\var{x}=(1\times\var{try})+1}
 \label{line:scanner-op-3}
-\State $\Veim{trial} = \tuple{\Next{\var{pred}},\Origin{\var{pred}}}@\Vloc{j}$
-        \Comment \tightMath{\var{x}= 1\times\var{try}}
+\State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}@\Ves{j}$
+\Statex \Comment \tightMath{\var{x}= 1\times\var{try}}
 \label{line:scanner-op-4}
 \State $\var{lp} = \tuple{\Veim{match},\var{token}}_\type{LP}$
    \Comment \tightMath{\var{x}= 1\times\var{try}}
@@ -4933,8 +4933,35 @@ Consider the call \op[\Ves{j}]{Scanner}.
     \because \Eref{eq:th-scanner-invocations-12},
         \Eref{eq:th-scanner-invocations-14}.
 \end{equation}
+\begin{equation}
+\label{eq:th-scanner-invocations-18}
+\Invocs{\ref{line:scanner-op-3}} = \order{\var{j}}+1 = \order{\var{j}}
+    \because \Obref{obs:loop-invocation-counting}.
+        \Eref{eq:th-scanner-invocations-16}.
+\end{equation}
+\todo{Show that \Veimset{matches} only contains EIM's}
+\begin{equation}
+\label{eq:th-scanner-invocations-20}
+\myparbox{%
+  \Veimset{matches} is a set
+  of EIM's which all the have the same current location.
+  Therefore every EIM in \var{matches} is distinct from
+  all the others in either dotted rule or origin.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-invocations-22}
+\myparbox{%
+  Every pass of loop \enRefs{line:scanner-op-3}{line:scanner-op-11}
+  sets a unique value of \Veim{trial}
+  \cuz{}
+    line \ref{line:scanner-op-4} of \Aref{alg:scanner-op},
+    \Eref{eq:th-scanner-invocations-20}.%
+}
+\end{equation}
 %
 \todo{Finish proof: Scanner invocations}
+\myqed
 \end{proof}
 
 \todo{Scanner complexity}
@@ -5368,7 +5395,7 @@ if and only if
 \end{itemize}
 This observation follows from
 \Aref{alg:initializer-op},
-\Eref{alg:marpa-scanner},
+\Eref{alg:scanner-op},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor-op}, and
 \Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
@@ -5401,7 +5428,7 @@ If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
 \Aref{alg:initializer-op},
-\Eref{alg:marpa-scanner},
+\Eref{alg:scanner-op},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor-op}, and
 \Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
