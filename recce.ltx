@@ -17,8 +17,7 @@
 \def\listoftodos{\@starttoc{tdo}\listtodoname}
 \makeatother
 
-
-\emergencystretch=4em
+\emergencystretch=3em
 
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -29,8 +28,14 @@
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
 \usepackage{ragged2e}
+% \usepackage{showkeys}
 \allowdisplaybreaks[3]
 
+% In this document, we have many multi-line displays throughout.
+% Tex often tries to deal with these by stretching vertical space
+% to an annoying degree.  In this document, good page breaks for
+% flush bottoms are often simply not to be found.  We therefore
+% simply give up, and let page bottoms be ragged.
 \raggedbottom
 
 % Re hbox's, see
@@ -4903,8 +4908,15 @@ operation of \Earley{}\cite{Earley1970}.
 
 \begin{theorem}[\proc{Scanner} invocations]
 \label{th:scanner-invocations}
-\todo{Statement of theorem: Scanner invocations}
-Consider \proc[\Ves{es}]{Scanner}.
+\op{Scanner} invokes
+\begin{align*}
+ \text{line }\ref{line:scanner-op-2} & \quad\text{once;} \\
+ \text{line }\ref{line:scanner-op-3} & \quad\text{once, plus once for each try;} \\
+ \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-6} & \quad\text{once for each try;} \\
+ \text{line }\ref{line:scanner-op-7} & \quad\text{once for each dup; and} \\
+ \text{lines }\enRefs{line:scanner-op-8}{line:scanner-op-11} & \quad\text{once for each add.}
+\end{align*}
+
 \end{theorem}
 
 \begin{proof}
