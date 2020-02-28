@@ -28,7 +28,7 @@
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
 \usepackage{ragged2e}
-% \usepackage{showkeys}
+% \usepackage[notcite,notref]{showkeys}
 \allowdisplaybreaks[3]
 
 % In this document, we have many multi-line displays throughout.
@@ -3151,6 +3151,8 @@ In the complexity context,
 We divide space into two kinds:
 \dfn{PIM space} and \dfn{link space}.
 
+\begin{definition}[Try, dup and add]
+\label{def:try-dup-add}
 We ``charge'' all resource to ``tries'' ---
 attempts to add a PIM.
 Recall that when an attempt is made to add a duplicate PIM to an Earley set,
@@ -3162,6 +3164,8 @@ A ``try'' is either
 \item a successful attempt to add a new PIM to the Earley set,
   which is called an ``add''.
 \end{itemize}
+\end{definition}
+
 We have yet to show this,
 but we will find the time charged to every ``try'' is \Oc{};
 the PIM space charged to every ``add'' is \Oc{}; and
@@ -3359,7 +3363,12 @@ is \Oc{} and is charged to the parse.
 
 \begin{observation}[Earley set complexity]
 \label{obs:es-complexity}
-Adding an EIM to an Earley set consumes \Oc{} time
+Adding an EIM to an Earley set (an ``add''),
+including the add of the intial link pair,
+consumes \Oc{} time
+and \Oc{} space.
+Adding an addition link pair (a ``dup'')
+consumes \Oc{} time
 and \Oc{} space.
 Traversal of an Earley set requires \Oc{} time per PIM.
 Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
@@ -3369,9 +3378,11 @@ An Earley set is kept as a linked list.
 When \Marpa{} reaches a new current location,
 it creates an empty Earley set, in time and
 space which may be charged to the Earley set.
-Each PIM is added at the end of a linked list,
-so that each add of a PIM takes \Oc{} time.
-Each PIM data structure requires \Oc{} space.
+Each EIM is added at the end of a linked list,
+so that each add of a EIM takes \Oc{} time.
+Each EIM data structure requires \Oc{} space.
+Link pairs are kept in a set of linked lists,
+with the heads of the lists stored with the EIM.
 \dispEnd
 \end{observation}
 
@@ -4875,7 +4886,7 @@ operation of \Earley{}\cite{Earley1970}.
 \State $\var{matches} = \Transitions{\Symbol{\var{token}}}{\var{j}\subtract 1}$
 \label{line:scanner-op-2}
 \For{every $\Veim{match} \in \Veimset{matches}$}
-   \Comment \tightMath{\var{x}=(1\times\var{try})+1}
+   \Comment \tightMath{\var{x}=1+1\times\var{try}}
 \label{line:scanner-op-3}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}@\Ves{j}$
 \Statex \Comment \tightMath{\var{x}= 1\times\var{try}}
@@ -4887,7 +4898,7 @@ operation of \Earley{}\cite{Earley1970}.
    \Comment \tightMath{\var{x}= 1\times\var{try}}
 \label{line:scanner-op-6}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-\Statex  \Comment \tightMath{\var{x}= 1\times\var{dup}}
+        \Comment \tightMath{\var{ln}=\Oc;\var{x}= 1\times\var{dup}}
 \label{line:scanner-op-7}
   \Else \Comment \tightMath{\var{x}= 1\times\var{add}}
 \label{line:scanner-op-8}
@@ -4895,10 +4906,10 @@ operation of \Earley{}\cite{Earley1970}.
       \Comment \tightMath{\var{x}= 1\times\var{add}}
 \label{line:scanner-op-9}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{ln}=\Oc\var{x}= 1\times\var{add}}
 \label{line:scanner-op-10}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{s=\Oc;\var{x}=1\times\var{add}}
+      \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{add}}
 \label{line:scanner-op-11}
   \EndIf
 \EndFor
@@ -4910,70 +4921,169 @@ operation of \Earley{}\cite{Earley1970}.
 \label{th:scanner-invocations}
 \op{Scanner} invokes
 \begin{align*}
- \text{line }\ref{line:scanner-op-2} & \quad\text{once;} \\
- \text{line }\ref{line:scanner-op-3} & \quad\text{once, plus once for each try;} \\
- \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-6} & \quad\text{once for each try;} \\
- \text{line }\ref{line:scanner-op-7} & \quad\text{once for each dup; and} \\
- \text{lines }\enRefs{line:scanner-op-8}{line:scanner-op-11} & \quad\text{once for each add.}
+ \text{line }\ref{line:scanner-op-2} & \;\;\text{once;} \\
+ \text{line }\ref{line:scanner-op-3} & \;\;\text{once, plus once for each try;} \\
+ \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-6} & \;\;\text{once for each try;} \\
+ \text{line }\ref{line:scanner-op-7} & \;\;\text{once for each dup; and} \\
+ \text{lines }\enRefs{line:scanner-op-8}{line:scanner-op-11} & \;\;\text{once for each add.}
 \end{align*}
 
 \end{theorem}
 
 \begin{proof}
-Let the partial parse $[\Vint{g}, \Vstr{w}]$ be the context
-parse.
-Consider the call \op[\Ves{j}]{Scanner}.
 \begin{equation}
 \label{eq:th-scanner-invocations-10}
-\Invocs{\ref{line:scanner-op-2}} = 1
-    \because \text{sequential execution.}
+\myparbox{%
+    $\Invocs{\ref{line:scanner-op-2}} = 1$
+    \cuz{} sequential execution.
+    This is the theorem for
+    line \ref{line:scanner-op-2}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-12}
-\size{\text{\Veimset{matches} on line \ref{line:scanner-op-2}}}
-    = \order{\var{j}\subtract 1} = \order{\var{j}}
-    \because \Obref{obs:transitions-set-size}
+\myparbox{%
+    $\Invocs{\ref{line:scanner-op-7}} = 1\times\var{dup}$ \\
+    \cuz{} line \ref{line:scanner-op-7}
+    adds a duplicate link for \Veim{trial}.
+    This is the theorem for
+    line \ref{line:scanner-op-7}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-14}
-\Invocs{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-11}} = 1
-    \because \text{sequential execution.}
+\myparbox{%
+    $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{add}$ \\
+    \cuz{} line \ref{line:scanner-op-11}
+    adds a new link for \Veim{trial}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-16}
-\Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-11}} = \order{\var{j}}
-    \because \Eref{eq:th-scanner-invocations-12},
-        \Eref{eq:th-scanner-invocations-14}.
+\myparbox{%
+    $\Invocs{\ref{line:scanner-op-8}}
+        = \Invocs{\ref{line:scanner-op-9}}
+        = \Invocs{\ref{line:scanner-op-10}}$ \\
+    $= \Invocs{\ref{line:scanner-op-11}}
+        = 1\times\var{add}$ \\
+    \cuz{} \
+    \Eref{eq:th-scanner-invocations-14},
+    sequential execution.
+    This is the theorem for
+    lines \enRefs{line:scanner-op-8}{line:scanner-op-11}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-18}
-\Invocs{\ref{line:scanner-op-3}} = \order{\var{j}}+1 = \order{\var{j}}
-    \because \Obref{obs:loop-invocation-counting}.
-        \Eref{eq:th-scanner-invocations-16}.
+\myparbox{%
+    $\Invocs{\ref{line:scanner-op-6}}
+        = 1\times(\var{add}+\var{dup})$
+    \cuz{} \
+    combining both branches of the if statement.}
 \end{equation}
-\todo{Show that \Veimset{matches} only contains EIM's}
 \begin{equation}
 \label{eq:th-scanner-invocations-20}
 \myparbox{%
-  \Veimset{matches} is a set
-  of EIM's which all the have the same current location.
-  Therefore every EIM in \var{matches} is distinct from
-  all the others in either dotted rule or origin.%
-}
+    $\Invocs{\ref{line:scanner-op-4}}
+        = \Invocs{\ref{line:scanner-op-5}}
+        = \Invocs{\ref{line:scanner-op-6}}
+        = 1\times\var{add}$ \\
+    \cuz{}
+    \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
+    sequential execution.
+    This is the theorem for
+    lines \enRefs{line:scanner-op-4}{line:scanner-op-6}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-22}
+\Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-11}}
+    = \Invocs{\ref{line:scanner-op-4}}
+    \because \Obref{obs:loop-invocation-counting}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-invocations-24}
+\Invocs{\ref{line:scanner-op-3}}
+    = \Invocs{\ref{line:scanner-op-4}} + 1
+    \because \Obref{obs:loop-invocation-counting},
+        \Eref{eq:th-scanner-invocations-22}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-invocations-26}
 \myparbox{%
-  Every pass of loop \enRefs{line:scanner-op-3}{line:scanner-op-11}
-  sets a unique value of \Veim{trial}
-  \cuz{}
-    line \ref{line:scanner-op-4} of \Aref{alg:scanner-op},
-    \Eref{eq:th-scanner-invocations-20}.%
+    $\Invocs{\ref{line:scanner-op-3}} = 1+1\times\var{try}
+    \because \Eref{eq:th-scanner-invocations-20},
+        \Eref{eq:th-scanner-invocations-24}$ \\
+    This is the theorem for line \ref{line:scanner-op-3}.}
+\end{equation}
+We now have the theorem for lines
+\enRefs{line:scanner-op-2}{line:scanner-op-11},
+which is what we needed for the theorem.
+\myqed
+\end{proof}
+
+\begin{equation}
+\label{eq:def-scanner-charges}
+\myparbox{%
+  Direct resource in \op{Scanner} is charged as indicated
+  in \Thref{th:scanner-invocations}.
+  Specifically, resource incurred by an add is charged
+  to an add of \Veim{trial};
+  resource incurred by a try is charged
+  to an attempt to add \Veim{trial}; and
+  resource not associated with an EIM add or try is
+  charged to the Earley set.
+  \cuz{} AF complexity analysis.}
+\end{equation}
+
+\begin{theorem}
+\label{eq:th-scanner-times}
+\op{Scanner}
+charges \Oc{} time to
+each add;
+\op{Scanner} charges \Oc{} time to
+each try; and
+\Oc{} time to the Earley set which is
+its argument.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-scanner-times-10}
+\Time{\ref{line:scanner-op-2}} = \Oc{}
+\because \Obref{obs:transition-array}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-times-12}
+\Time{\ref{line:scanner-op-3}} = \Time{\ref{line:scanner-op-4}} = \Time{\ref{line:scanner-op-5}}
+    = \Time{\ref{line:scanner-op-8}}
+    = \Oc
+    \because \Aref{alg:scanner-op}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-times-14}
+\Time{\ref{line:scanner-op-6}} = \Time{\ref{line:scanner-op-9}}
+    = \Oc{} \because \Obref{obs:seen-psl}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-times-16}
+    \Time{\ref{line:scanner-op-7}}
+    = \Time{\ref{line:scanner-op-10}}
+    = \Time{\ref{line:scanner-op-11}}
+    = \Oc{} \because \Obref{obs:es-complexity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-scanner-times-17}
+\myparbox{%
+  No line of \op{Scanner} consumes indirect
+  resource \cuz{} \Aref{alg:scanner-op}.
 }
 \end{equation}
-%
-\todo{Finish proof: Scanner invocations}
-\myqed
+\begin{equation}
+\label{eq:th-scanner-times-18}
+\myparbox{%
+   All lines of \op{Scanner} consume \Oc{}
+   time \cuz{}
+    \Eref{eq:th-scanner-times-10}\text{--}%
+    \Eref{eq:th-scanner-times-17}.
+}
+\end{equation}
+\todo{Finish scanner time complexity proof}
 \end{proof}
 
 \todo{Scanner complexity}
