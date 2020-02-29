@@ -4917,36 +4917,6 @@ operation of \Earley{}\cite{Earley1970}.
 \end{algorithmic}
 \end{algorithm}
 
-% Headers that allow line ranges -- just in case I want
-% to go back to this.
-% \hline
-% &&&Direct&Indirect&& \\
-% &&Invoc-&time&time&& \\
-% &Line&cations&per in-&per in-&& \\
-% Lines&Count&per line&vocation&vocation&Total&\multicolumn{1}{c|}{Because}
-% \\ \hline
-
-\begin{table}[tb]
-\caption{Inclusive time charged to Earley set for \op{Scanner}}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Because}
-\\ \hline
-    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
-\\ \hline
-    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{Also by \Sref{sec:complexity-tables},
-    \Aref{alg:scanner-op},
-    \Thref{th:scanner-invocations},
-    \Eref{eq:def-scanner-charges}.}
-\\ \hline
-\end{tabular}
-\end{table}
-
 \begin{theorem}[\proc{Scanner} invocations]
 \label{th:scanner-invocations}
 \op{Scanner} invokes
@@ -5061,6 +5031,109 @@ which is what we needed for the theorem.
   \cuz{} AF complexity analysis.}
 \end{equation}
 
+% Headers that allow line ranges -- just in case I want
+% to go back to this.
+% \hline
+% &&&Direct&Indirect&& \\
+% &&Invoc-&time&time&& \\
+% &Line&cations&per in-&per in-&& \\
+% Lines&Count&per line&vocation&vocation&Total&\multicolumn{1}{c|}{Because}
+% \\ \hline
+
+\begin{table}[tb]
+\caption{Inclusive time charged to Earley set for \op{Scanner}}
+\label{tab:scanner-es-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+\\ \hline
+    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:scanner-op},
+    \Thref{th:scanner-invocations},
+    \Eref{eq:def-scanner-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to each try for \op{Scanner}}
+\label{tab:scanner-try-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-4}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to each add for \op{Scanner}}
+\label{tab:scanner-add-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
 \begin{theorem}
 \label{eq:th-scanner-times}
 \op{Scanner}
@@ -5073,47 +5146,32 @@ its argument.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-scanner-times-10}
-\Time{\ref{line:scanner-op-2}} = \Oc{}
-\because \Obref{obs:transition-array}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-times-12}
-\Time{\ref{line:scanner-op-3}} = \Time{\ref{line:scanner-op-4}} = \Time{\ref{line:scanner-op-5}}
-    = \Time{\ref{line:scanner-op-8}}
-    = \Oc
-    \because \Aref{alg:scanner-op}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-times-14}
-\Time{\ref{line:scanner-op-6}} = \Time{\ref{line:scanner-op-9}}
-    = \Oc{} \because \Obref{obs:seen-psl}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-times-16}
-    \Time{\ref{line:scanner-op-7}}
-    = \Time{\ref{line:scanner-op-10}}
-    = \Time{\ref{line:scanner-op-11}}
-    = \Oc{} \because \Obref{obs:es-complexity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-times-17}
-\myparbox{%
-  No line of \op{Scanner} consumes indirect
-  resource \cuz{} \Aref{alg:scanner-op}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-times-18}
-\myparbox{%
-   All lines of \op{Scanner} consume \Oc{}
-   time \cuz{}
-    \Eref{eq:th-scanner-times-10}\text{--}%
-    \Eref{eq:th-scanner-times-17}.
-}
-\end{equation}
-\todo{Finish scanner time complexity proof}
+The proof is laid out in
+\Tref{tab:scanner-es-time},
+\Tref{tab:scanner-try-time}, and
+\Tref{tab:scanner-add-time}.
+\end{proof}
+
+\begin{theorem}
+\label{eq:th-scanner-eim-space}
+\op{Scanner}
+charges \Oc{} EIM space to
+each add.
+\end{theorem}
+
+\begin{proof}
+\todo{Finish scanner EIM space proof}
+\end{proof}
+
+\begin{theorem}
+\label{eq:th-scanner-link-space}
+\op{Scanner}
+charges \Oc{} EIM space to
+each try.
+\end{theorem}
+
+\begin{proof}
+\todo{Finish scanner link space proof}
 \end{proof}
 
 \todo{Scanner complexity}
