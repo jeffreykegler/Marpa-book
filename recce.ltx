@@ -28,6 +28,7 @@
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
 \usepackage{ragged2e}
+\usepackage{thmtools}
 % \usepackage[notcite,notref]{showkeys}
 \allowdisplaybreaks[3]
 
@@ -420,8 +421,8 @@ in the first version of this paper.
 
 While the presentation in this paper is theoretical,
 the approach is practical.
-The Marpa::R2 implementation has been widely available
-and seen considerable use.
+The Marpa::R2 implementation is widely available
+and has seen considerable use.
 
 In this paper,
 internal references will be of the form
@@ -1379,7 +1380,7 @@ we introduce parse items.
 
 \section{LR Grammars}
 
-\begin{definition}
+\begin{definition}[Handle]
 Let \Vstr{sf} be a sentential form of \Vcfg{g}.
 A \dfn{handle} of \Vstr{sf} is an ordered pair $[\Vrule{r}, \var{i}]$ such
 that,
@@ -1490,7 +1491,7 @@ for the partition of infinite cardinality,
 \Thref{th:LR}
 presents \Dfref{def:LR}
 in a way that is easier to apply.
-\begin{theorem}
+\begin{theorem}[LR($\pi$) grammar]
 \label{th:LR}
 \footnote{
 The statement of the theorem follows \cite[p. 70]{Culik1973}.
@@ -2169,7 +2170,7 @@ definitions, for example \Dfref{def:rr},
 more simply than we could if they had to apply
 to EXT's, or to CFG's,
 
-\begin{definition}
+\begin{definition}[Right recursion]
 \label{def:rr}
 Let \Vint{g} be an internal grammar.
 Let \Vstr{sf} be a sentential form of \var{g} non-trivially derived from
@@ -2202,7 +2203,7 @@ we have
 \end{gathered}
 \end{equation}
 
-\begin{theorem}
+\begin{theorem}[Right-recursive step uses right recursive rule]
 Let \Vint{g} be a \Marpa{} internal grammar.
 If \Vrule{r} is a rule used in a step of a right recursive derivation,
 then \Vrule{r} is right recursive.
@@ -2707,7 +2708,7 @@ The match of an EIM with a location:
 \end{equation*}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[ES predictions \Oc{}]
 \label{th:es-prediction-count}
 The count of valid predictions in an Earley set is \Oc{}.
 \end{theorem}
@@ -2812,7 +2813,7 @@ Let \var{count} be the maximum number of predictions possible in \Ves{j}.
 \end{equation}
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[ES EIM count]
 \label{th:es-eim-count}
 The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
 \end{theorem}
@@ -3227,7 +3228,7 @@ resides in a data structure
 (in common implementations, a stack)
 whose maximum space consumed to \Oc{}.
 
-\begin{definition}
+\begin{definition}[Housekeeping and body execution resource]
 \label{obs:housekeeping-vs-body-execution}
 For the purposes of complexity analysis,
 we find it helpful to divide the resource consumption
@@ -3247,7 +3248,7 @@ the procedure,
 and the execution of one more more epilogues,
 which restore the registers and stack.
 
-\begin{observation}
+\begin{observation}[Direct and indirect resource]
 \label{obs:direct-vs-indirect}
 From the point of view of a current pseudocode procedure,
 \begin{itemize}
@@ -3525,16 +3526,16 @@ We first define our conventions for counting line
 invocations,
 and will then follow with a toy example.
 
-\begin{observation}
-\label{obs:invocation-counting}
+\begin{definition}[Line invocation]
+\label{def:line-invocation}
 The number of \dfn{invocations} of a line
 is the number of executions of
 that line's logic.
 \dispEnd
-\end{observation}
+\end{definition}
 
-\begin{observation}
-\label{obs:loop-invocation-counting}
+\begin{definition}[Loop invocation]
+\label{def:loop-invocation}
 The number of \dfn{invocations} of a loop is the number of times
 the loop is initialized.
 Every line in a loop is either its \dfn{first line},
@@ -3553,7 +3554,7 @@ that the first line of the loop is invoked at last once.
 There is one successful test of the loop condition for every
 pass of the loop.
 \dispEnd
-\end{observation}
+\end{definition}
 
 Note that these definitions imply that the number of
 invocations of the first line of a loop
@@ -3905,7 +3906,7 @@ Consider \proc[\Ves{es}]{Predict-ES}.
 \myparbox{%
    There is exactly one final, test-failure invocation of
     line \ref{line:marpa-predict-es-12} \cuz{}
-    \Obref{obs:loop-invocation-counting}.
+    \Obref{def:loop-invocation}.
     \Eref{eq:th-predict-es-invocations-16},
     \text{sequential execution}.}
 \end{equation}
@@ -3915,7 +3916,7 @@ Consider \proc[\Ves{es}]{Predict-ES}.
    There is exactly one successful invocation of
     line \ref{line:marpa-predict-es-12} for each
     $\Veim{x} \in \Ves{es}$
-    \cuz{} \Obref{obs:loop-invocation-counting}.}
+    \cuz{} \Obref{def:loop-invocation}.}
 \end{equation}
 In the rest of this proof,
 we will write $\Passes{\var{lp}}/\Veim{x}$
@@ -3954,7 +3955,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
       \times
       \bigsize{\set{\Vrule{r} : \Postdot{\var{x}}}}
     \\
-      \because \Obref{obs:loop-invocation-counting}.
+      \because \Obref{def:loop-invocation}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3976,7 +3977,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
       +1
     \\
     \because
-    \Obref{obs:loop-invocation-counting}.
+    \Obref{def:loop-invocation}.
   \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5011,13 +5012,13 @@ operation of \Earley{}\cite{Earley1970}.
 \label{eq:th-scanner-invocations-22}
 \Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-11}}
     = \Invocs{\ref{line:scanner-op-4}}
-    \because \Obref{obs:loop-invocation-counting}.
+    \because \Obref{def:loop-invocation}.
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-24}
 \Invocs{\ref{line:scanner-op-3}}
     = \Invocs{\ref{line:scanner-op-4}} + 1
-    \because \Obref{obs:loop-invocation-counting},
+    \because \Obref{def:loop-invocation},
         \Eref{eq:th-scanner-invocations-22}.
 \end{equation}
 \begin{equation}
@@ -5151,7 +5152,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}
+\begin{theorem}[\op{Scanner} time]
 \label{eq:th-scanner-times}
 The time consumed by \op{Scanner}
 is charged as follows:
@@ -5272,7 +5273,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}
+\begin{theorem}[\op{Scanner} EIM space]
 \label{eq:th-scanner-eim-space}
 \op{Scanner}
 consumes \Oc{} EIM space per add,
@@ -5388,7 +5389,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}
+\begin{theorem}[\op{Scanner} link space]
 \label{eq:th-scanner-link-space}
 \op{Scanner}
 consumes \Oc{} link space per
@@ -5989,7 +5990,7 @@ $\var{overlap1} = \var{overlap2}$.
 Among other things, this implies that a unit rule
 cannot be the rule of a horizontally ambiguity.
 
-\begin{theorem}
+\begin{theorem}[Grammar of horizontally ambiguous parse is ambiguous]
 \label{th:h-ambig-g}
 If a parse is horizontally ambiguous,
 then its grammar is ambiguous.
@@ -6170,7 +6171,7 @@ A grammar is \dfn{vertically ambiguous} if and only if it has a
 vertically ambiguous parse. \dispEnd{}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[Grammar of vertically ambiguous parse is ambiguous]
 \label{th:v-ambig-g}
 If a parse is vertically ambiguous,
 then its grammar is ambiguous.
@@ -6350,7 +6351,7 @@ and the EIM is
 \end{equation}
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[Parse with horizontal ambiguity is ambiguous]
 \label{th:h-EIM-g-ambig}
 If a partial parse has a horizontally ambiguous EIM,
 then any full parse consistent with that partial parse is
@@ -6470,7 +6471,7 @@ its grammar is horizontally ambiguous,
 we see that \Vcfg{g} is horizontally ambiguous. \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Parse with vertical ambiguity is ambiguous]
 \label{th:v-EIM-g-ambig}
 If a partial parse has a vertically ambiguous EIM,
 then any full parse consistent with that partial parse is vertically ambiguous,
@@ -6624,7 +6625,7 @@ we have
 \end{equation}
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Grammar of parse with ambiguity is ambiguous]
 \label{th:ambig-EIM-ambig-g}
 If a partial parse has an ambiguous EIM,
 then its grammar is ambiguous.
@@ -6657,7 +6658,7 @@ By \Thref{th:v-ambig-g} if \var{full} is vertically ambiguous,
 then \Vcfg{g} is ambiguous. \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Unambiguous grammar does not have ambiguity]
 \label{th:unambig-g-unambig-EIM}
 If a grammar is unambiguous, then it does not have
 an ambiguous EIM.
@@ -6889,7 +6890,7 @@ it produces only valid Earley items.
 We call a parsing algorithm \dfn{complete} if
 it produces all of the valid Earley items.
 
-\begin{theorem}
+\begin{theorem}[\texorpdfstring{\Earley{}}{Earley} is correct]
 \label{th:earley-is-correct}
 \Earley{} is correct.
 \end{theorem}
@@ -10019,6 +10020,8 @@ J.~M. I.~M. Leo.
 \clearpage
 \tableofcontents
 
+\clearpage
+\listoftheorems
 
 \ifdraft{
     \clearpage
