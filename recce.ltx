@@ -29,6 +29,7 @@
 \hypersetup{pdfborder=0 0 .1}
 \usepackage{ragged2e}
 \usepackage{thmtools}
+\renewcommand{\listtheoremname}{List of Displayed Statements}
 % \usepackage[notcite,notref]{showkeys}
 \allowdisplaybreaks[3]
 
@@ -254,7 +255,7 @@
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 
-\newcommand{\algo}[1]{\ensuremath{\mathbb{\uppercase{#1}}}}
+\newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
 \newcommand{\Earley}{\algo{Earley}}
 \newcommand{\Leo}{\algo{Leo}}
 \newcommand{\Marpa}{\algo{Marpa}}
@@ -2130,7 +2131,7 @@ is a one-to-one correspondence
 (bijection). \dispEnd{}
 \end{definition}
 
-\section{\texorpdfstring{\Marpa{}}{Marpa} internal grammars}
+\section{\Marpa{} internal grammars}
 \label{sec:INTs}
 
 The formal definition of
@@ -3645,7 +3646,7 @@ and its complexity on the other.
 We have opted for perspicuity and readability over
 brevity.
 
-\section{The \texorpdfstring{\Marpa{}}{Marpa} algorithm}
+\section{The \Marpa{} algorithm}
 \label{sec:marpa}
 
 For the purpose of defining the \Marpa{} algorithm,
@@ -5759,7 +5760,7 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
-\subsection{Top level of \texorpdfstring{\Marpa{}}{Marpa}}
+\subsection{Top level of \Marpa{}}
 
 The top-level view of \Marpa{} is
 shown in \Aref{alg:marpa}.
@@ -6878,7 +6879,7 @@ The simpler approach, which omits the boolean,
 is the one that
 the \Marpa{} implementation sometimes uses.
 
-\section{\texorpdfstring{\Marpa{}}{Marpa} is correct}
+\section{\Marpa{} is correct}
 \label{sec:correctness}
 
 In this paper,
@@ -6890,7 +6891,7 @@ it produces only valid Earley items.
 We call a parsing algorithm \dfn{complete} if
 it produces all of the valid Earley items.
 
-\begin{theorem}[\texorpdfstring{\Earley{}}{Earley} is correct]
+\begin{theorem}[\Earley{} is correct]
 \label{th:earley-is-correct}
 \Earley{} is correct.
 \end{theorem}
@@ -8224,7 +8225,7 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 \end{proof}
 
 
-\begin{theorem}
+\begin{theorem}[\op{Leo-Reducer} is consistent]
 \label{th:leo-reducer-is-consistent}
 The \var{Leo-reducer} sub-op
 of the \Marpa{} \var{Reducer} operation
@@ -8238,7 +8239,7 @@ is defined at
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} is consistent]
 \Marpa{} is consistent.
 That is, every PIM created by a \Marpa{} parser
 is valid.
@@ -8334,7 +8335,7 @@ of a Leo edge.
 All other PIM's are \dfn{visible}.
 \end{definition}
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} visible PIM's are complete]
 \Marpa{} is complete, except for the hidden
 PIM's.
 \end{theorem}
@@ -8536,10 +8537,10 @@ $\because$ only confirmed EIM's have a visible depth
 
 \todo{Prove Marpa + Reverse Leo = Original Earley}
 
-\begin{theorem}
+\begin{theorem}[Useful completions are disjoint or contained]
 In an unambiguous grammar,
 in every pair of useful complete EIMs,
-one is either contained contained
+one is either contained
 in the other,
 or they are disjoint
 \end{theorem}
@@ -8548,7 +8549,7 @@ or they are disjoint
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Useful RR bound]
 \label{th:useful-RR-count}
 Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
 be an unambiguous parse,
@@ -8594,7 +8595,7 @@ the time and space complexity of
 a right recursion become
 $\On{} + \On{} = \On{}$.
 
-\begin{theorem}
+\begin{theorem}[Leo reversal is linear]
 The time and space to reverse the Leo memoization
 in an unambiguous parse is \On{}.
 \end{theorem}
@@ -8609,7 +8610,8 @@ in an unambiguous parse is \On{}.
 
 The following theorem will prove useful.
 
-\begin{theorem}\label{th:es-size}
+\begin{theorem}[ES size bound]
+\label{th:es-size}
 The maximum size of an Earley set at \Vloc{j}
 is
 \order{\var{j}}.
@@ -8637,7 +8639,8 @@ set at \Vloc{j} is
 \end{equation*}
 \end{proof}
 
-\begin{theorem}\label{th:ambiguous-links-pair}
+\begin{theorem}[A grammar which allows an ambiguity is ambiguous: duplicate?]
+\label{th:ambiguous-links-pair}
 \footnote{This theorem and its proof are adapted from
 Lemma 4.6 in
 \cite[Vol. 1, p. 325-326]{AU1972}.
@@ -8668,7 +8671,7 @@ We assume for the reductio that
 
 Confirmed EIMs are only unioned by the Scanner and the Completer.
 
-\todo{Finish proof}
+\todo{Does this duplicate the proof in the ambiguity section?}
 \myqed
 
 \end{proof}
@@ -8676,7 +8679,7 @@ Confirmed EIMs are only unioned by the Scanner and the Completer.
 \subsection{Complexity of each Earley item}
 
 % TODO: Is this theorem used?
-\begin{theorem}
+\begin{theorem}[Right recursion bound]
 \label{th:leo-right-recursion}
 In a \Marpa{} internal grammar,
 either
@@ -9361,7 +9364,7 @@ and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Incompletions bound]
 \label{th:incompletion-bound}
 \footnote{
 This theorem and its proof are adapted from
@@ -9540,7 +9543,7 @@ is the constant required by the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[Completions bound medials]
 \label{th:completion-bound}
 \footnote{
 This theorem and its proof are adapted from
@@ -9681,7 +9684,7 @@ and we have the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} LRR time and space is linear]
 For every LRR grammar,
 \Marpa{} runs in $\On{}$ time and space.
 \end{theorem}
@@ -9694,7 +9697,7 @@ For every LRR grammar,
 \section{General complexity}
 \label{sec:complexity}
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} unambiguous time and space is quadratic]
 For every unambiguous grammar,
 \Marpa{} runs in $\order{n^2}$ time and space.
 \end{theorem}
@@ -9704,7 +9707,7 @@ For every unambiguous grammar,
 \myqed
 \end{proof}
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} context-free time is cubic]
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ time.
 \end{theorem}
@@ -9714,7 +9717,35 @@ For every context-free grammar,
 \myqed
 \end{proof}
 
-\begin{theorem}\label{th:cfg-space}
+\begin{theorem}[\Marpa{} context-free space is cubic]
+\label{th:cfg-space-is-cubic}
+For every context-free grammar,
+\Marpa{} runs in $\order{\var{n}^3}$ space,
+including the space for tracking links.
+\end{theorem}
+
+\begin{proof}
+\todo{Add proof}
+\myqed
+\end{proof}
+
+The result of
+\Thref{th:cfg-space-is-cubic} is worse than the one usually reported
+in the literature,
+because the literature traditionally reports the space consumed without
+link pairs.
+Space without link pairs is more relevant when \Marpa{} is used
+as a language recognizer,
+but this is rarely the case in practice.
+In practice, \Marpa{} and its competitors are almost used to
+parse.
+The next theorem
+\Thref{th:cfg-space-is-quadration-wo-links}
+shows that, in an apples-to-applies, \Marpa{} has
+the same space bound for CFG's as \Earley{}.
+
+\begin{theorem}\label{th:cfg-space}[\Marpa{} context-free space is quadratic without links]
+\label{th:cfg-space-is-quadration-wo-links}
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^2}$ space,
 if it does not track links.
@@ -9736,7 +9767,7 @@ are typically used in anticipation
 of an evaluation phase,
 for which links are necessary.
 
-\begin{theorem}
+\begin{theorem}[\Marpa{} context-free space is cubic]
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ space,
 including the space for tracking links.
@@ -9747,7 +9778,7 @@ including the space for tracking links.
 \myqed
 \end{proof}
 
-\section{The \texorpdfstring{\Marpa{}}{Marpa} Input Model}
+\section{The \Marpa{} Input Model}
 \label{sec:input}
 
 In this paper,
