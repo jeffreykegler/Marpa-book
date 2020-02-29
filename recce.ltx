@@ -3627,6 +3627,23 @@ is invoked once per pass of the inner loop, or 6 times.
 
 \todo{Write complexity tables section}
 
+Many of these proofs are similar,
+a fact that the table format brings out.
+Some repetition could be eliminated
+by introducing another layer of abstraction.
+But this additional layer of abstraction above
+the algorithms
+would make the proofs much harder to
+follow.
+More important,
+the additional abstraction
+would obscure
+the connection between the algorithm and its implementation,
+on one hand,
+and its complexity on the other.
+We have opted for perspicuity and readability over
+brevity.
+
 \section{The \texorpdfstring{\Marpa{}}{Marpa} algorithm}
 \label{sec:marpa}
 
@@ -4906,10 +4923,10 @@ operation of \Earley{}\cite{Earley1970}.
       \Comment \tightMath{\var{x}= 1\times\var{add}}
 \label{line:scanner-op-9}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
-      \Comment \tightMath{\var{ln}=\Oc\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{add}}
 \label{line:scanner-op-10}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{add}}
+      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{add}}
 \label{line:scanner-op-11}
   \EndIf
 \EndFor
@@ -4985,7 +5002,7 @@ operation of \Earley{}\cite{Earley1970}.
         = \Invocs{\ref{line:scanner-op-6}}
         = 1\times\var{add}$ \\
     \cuz{}
-    \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
+    \longDfref{Try is dup or add}{def:try-dup-add},
     sequential execution.
     This is the theorem for
     lines \enRefs{line:scanner-op-4}{line:scanner-op-6}.}
@@ -5052,7 +5069,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \Aref{alg:scanner-op},
@@ -5063,8 +5080,47 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive time charged to each try for \op{Scanner}}
-\label{tab:scanner-try-time}
+\caption{Inclusive time charged to each add for \op{Scanner}}
+\label{tab:scanner-add-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-4}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to each dup for \op{Scanner}}
+\label{tab:scanner-dup-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
@@ -5080,51 +5136,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
-\\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
-\\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
-        \Sref{sec:complexity-tables},
-        \Aref{alg:scanner-op},
-        \Thref{th:scanner-invocations},
-        \Eref{eq:def-scanner-charges}.}%
-}
-\\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[tb]
-\caption{Inclusive time charged to each add for \op{Scanner}}
-\label{tab:scanner-add-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
-\\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
-\\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{2}{l|}{\Oc{}}
-\\ \hline
-\multicolumn{6}{|l|}{
-    \myparbox[4.5in]{%
-        \cuz{}
-        \longDfref{$\var{try}=\var{dup}+\var{add}$}{def:try-dup-add},
+        \longDfref{Try is dup or add}{def:try-dup-add},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5136,54 +5153,263 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 
 \begin{theorem}
 \label{eq:th-scanner-times}
-\op{Scanner}
-charges \Oc{} time to
+The time consumed by \op{Scanner}
+is charged as follows:
+\Oc{} time to
 each add;
-\op{Scanner} charges \Oc{} time to
+\Oc{} time to
 each try; and
 \Oc{} time to the Earley set which is
-its argument.
+the argument of \op{Scanner}.
 \end{theorem}
 
 \begin{proof}
-The proof is laid out in
-\Tref{tab:scanner-es-time},
-\Tref{tab:scanner-try-time}, and
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:scanner-es-time}.
+For the EIM add charge,
+the theorem follows from
 \Tref{tab:scanner-add-time}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:scanner-add-time},
+\Tref{tab:scanner-dup-time},
+and
+\longDfref{Try is dup or add}{def:try-dup-add},
 \end{proof}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to Earley set for \op{Scanner}}
+\label{tab:scanner-es-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-2}&1&0&&0&\Obref{obs:transition-array}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:scanner-op},
+    \Thref{th:scanner-invocations},
+    \Eref{eq:def-scanner-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to each add for \op{Scanner}}
+\label{tab:scanner-add-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-5}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-8}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-10}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to each dup for \op{Scanner}}
+\label{tab:scanner-dup-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-5}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-7}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
 
 \begin{theorem}
 \label{eq:th-scanner-eim-space}
 \op{Scanner}
-charges \Oc{} EIM space to
-each add.
+consumes \Oc{} EIM space per add,
+which is charged to each add.
 \end{theorem}
 
 \begin{proof}
-\todo{Finish scanner EIM space proof}
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:scanner-es-eim-space}.
+For the EIM add charge,
+the theorem follows from
+\Tref{tab:scanner-add-eim-space}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:scanner-add-eim-space},
+\Tref{tab:scanner-dup-eim-space},
+and
+\longDfref{Try is dup or add}{def:try-dup-add},
 \end{proof}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to Earley set for \op{Scanner}}
+\label{tab:scanner-es-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-2}&1&0&&0&\Obref{obs:transition-array}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:scanner-op},
+    \Thref{th:scanner-invocations},
+    \Eref{eq:def-scanner-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to each add for \op{Scanner}}
+\label{tab:scanner-add-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-5}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-8}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-10}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to each dup for \op{Scanner}}
+\label{tab:scanner-dup-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:scanner-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-5}&1&0&&0&
+\\ \hline
+    \ref{line:scanner-op-6}&1&\c{}&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:scanner-op},
+        \Thref{th:scanner-invocations},
+        \Eref{eq:def-scanner-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
 
 \begin{theorem}
 \label{eq:th-scanner-link-space}
 \op{Scanner}
-charges \Oc{} EIM space to
-each try.
+consumes \Oc{} link space per
+try,
+which is charged to each try.
 \end{theorem}
 
 \begin{proof}
-\todo{Finish scanner link space proof}
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:scanner-es-link-space}.
+For the EIM add charge,
+the theorem follows from
+\Tref{tab:scanner-add-link-space}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:scanner-add-link-space},
+\Tref{tab:scanner-dup-link-space},
+and
+\longDfref{Try is dup or add}{def:try-dup-add}.
 \end{proof}
-
-\todo{Scanner complexity}
-
-\begin{observation}[Ancestry]
-\label{obs:scanner-ancestry}
-The \Marpa{} implementation tracks all link pairs for scanned EIM's.
-In an unambiguous parse, a scanned EIM will always have
-exactly one link pair.
-In an ambiguous parse, a scanned EIM will have one or more link pairs.
-\dispEnd
-\end{observation}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
 \label{obs:earley-scanner-op}
