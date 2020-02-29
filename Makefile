@@ -16,7 +16,7 @@
 all: ah2002_notes.pdf recce.pdf finite.pdf
 
 clean:
-	rm recce.out recce.aux recce.toc recce.tdo
+	rm recce.out recce.aux recce.toc recce.tdo recce.loe
 
 recce.pdf: recce.ltx
 	pdflatex $?
