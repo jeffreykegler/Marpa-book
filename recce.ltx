@@ -480,24 +480,43 @@ describes the important features of \Marpa{}
 and
 \Sref{sec:using-features}
 goes into detail about their application.
-\Sref{sec:preliminaries} describes the notation and conventions
-of this paper.
-\Sref{sec:CFGs} defines context-free grammars.
-\Sref{sec:EXTs} introduces \Marpa{}'s external grammars ---
-the grammars which the users see.
-\Sref{sec:rewrite} explain how \Marpa{} rewrites its external
-grammars into internal grammars, and
-\Sref{sec:INTs} describes \Marpa{}'s internal grammars.
-\Sref{sec:earley-table} describes the data structures used
-in parsing \Marpa{} internal grammars.
-\Sref{sec:leo} describes Leo's modification
-to Earley's algorithm.
-\Sref{sec:marpa}
-describes the \Marpa{} algorithm.
-\Sref{sec:per-set-lists} describes \Marpa{}'s
+
+Section \Sref{sec:preliminaries}
+begins the formal part of this paper
+with preliminary remarks
+on notation and conventions.
+Section \Sref{sec:CFGs} defines context-free grammars.
+Section \Sref{sec:lr-grammars} defines LR grammars.
+Section \Sref{sec:EXTs} defines \Marpa{}'s external grammars.
+Section \Sref{sec:useless-symbols} describes \Marpa{}'s handling of ``useless''
+symbols.
+
+Section \Sref{sec:rewrite} describes the way in which \Marpa{}
+rewrites its external grammars into internal grammars.
+Section \Sref{sec:INTs} defines \Marpa{}'s internal grammars.
+Section \Sref{sec:earley-table} introduces Earley parsing.
+Section \Sref{sec:leo} describes Joop Leo's modification
+of Earley's algorithm.
+Section \Sref{sec:ancestry} describes the tracking
+of the ``ancestry'' of Earley items.
+\Sref{sec:complexity-preliminaries} lays our strategy
+for showing the time and speed complexity of \Marpa{}.
+
+\Sref{sec:marpa} describes the \Marpa{} algorithm.
+It includes pseudocode, as well as the low-level complexity analysis.
+
+Section \Sref{sec:ambiguity} contains a treatment of parsing ambiguity,
+with particular relevance to \Marpa{}.
+Section \Sref{sec:per-set-lists} describes \Marpa{}'s
 per-set lists.
-while \Sref{sec:complexity} contains
-its complexity results.
+Section \Sref{sec:correctness} contains
+a correctness proof for \Marpa{}.
+Section \Sref{sec:reverse-leo} describes our method
+for reversing the Leo memoizations.
+Section \Sref{sec:lrr-complexity} shows that Marpa
+has linear complexity for for LRR grammars.
+Section \Sref{sec:complexity} lays out Marpa's non-linear
+complexity results, which match those of \Earley{}.
 Finally,
 section \Sref{sec:input}
 generalizes \Marpa{}'s input model.
@@ -1385,6 +1404,7 @@ The usefulness of these notations will be clearer later, when
 we introduce parse items.
 
 \section{LR Grammars}
+\label{sec:lr-grammars}
 
 \begin{definition}[Handle]
 Let \Vstr{sf} be a sentential form of \Vcfg{g}.
@@ -1607,7 +1627,6 @@ in any of its intermediate steps.
 \section{Useless symbols}
 \label{sec:useless-symbols}
 
-
 \subsection{Unproductive symbols}
 The current implementation of
 \Marpa{} supports unproductive
@@ -1678,6 +1697,13 @@ Marpa can be configured to trigger a run-time event
 when the unicorn is expected.
 The application will receive control when the event occurs,
 and it can then invoke the custom lexer.
+
+For our theoretical results in this paper,
+we treat all symbols as if they were productive.
+This is consistent with being conservative,
+since a ``unicorn'' can always be feed to the parser
+by a custom lexer and,
+in that sense, all \Marpa{} symbols are productive.
 
 \subsection{Inaccessible symbols}
 
@@ -3068,6 +3094,74 @@ We overload \var{Matches} to deal with LIM's as follows.
 \end{aligned}
 \end{equation*}
 \end{definition}
+
+\subsection{Leo eligibility and right recursion}
+
+\Marpa{} restricts Leo memoization to right recursive
+rules:
+
+\begin{align}
+\label{eq:def-leo-eligible}
+& \LeoEligible{\Ves{i}} \defined \\
+\nonumber
+& \qquad \left\lbrace \;\;
+\begin{gathered}
+\Veim{eligible} \in \Ves{i} : \\
+\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
+\land \; \RightRecursive{\Veim{eligible}}
+\end{gathered}
+\;\; \right\rbrace,
+\end{align}
+
+Recall that we
+call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
+In Leo's original algorithm, any penult
+was treated as a potential right-recursion.
+\Marpa{} applies the Leo memoizations in more restricted circumstances.
+For \Marpa{} to consider a dotted rule
+\begin{equation*}
+\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
+\end{equation*}
+for Leo memoization,
+not only must \Vdr{candidate} be a penult
+but \Vrule{candidate} must be right-recursive.
+
+By restricting Leo memoization to right-recursive rules,
+\Marpa{} incurs the cost of Leo memoization only in cases
+where Leo sequences could be infinitely
+long.
+This more careful targeting of the memoization is for efficiency reasons.
+If all penults are memoized,
+many memoizations will be performed where
+the longest potential Leo sequence is short,
+and the payoff is therefore limited.
+
+A future extension might be to identify
+non-right-recursive rules
+which generate Leo sequences long enough to
+justify inclusion in the Leo memoizations.
+Such cases would be unusual, but may occur.
+
+Omission of a memoization does not affect correctness,
+so \Marpa{}'s restriction of Leo memoization
+preserves the correctness as shown in Leo\cite{Leo1991}.
+% TODO Add ref instead of "Later"
+Later in this paper
+we will
+show that this change also leaves
+the complexity results of
+Leo\cite{Leo1991} intact.
+
+% TODO: Reference to Leo chain -- cataphoric?
+The \Marpa{} implementation does not implement
+Leo memoization in Earley set 0.
+$\es{(0)}$ memoization
+would have to be implemented as a special case,
+and omission of a Leo memoization at one end of a Leo
+chain unions at one EIM into the Earley tables.
+If the difference is measurable
+$\es{(0)}$ memoization will probably be found to
+be counter-productive.
 
 \section{Ancestry}
 \label{sec:ancestry}
@@ -5428,20 +5522,40 @@ operation of \Earley{}.
 \subsection{Reducer op}
 \label{def:reducer}
 
+\todo{Rewrite Reducer op section}
+
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
 \label{alg:marpa-earley-reducer}
 \begin{algorithmic}[1]
 \Procedure{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
 \For{every $\Veim{match} \in \Veimset{matches}$}
+      \Comment \tightMath{\var{x}= 1+1\times\var{try}}
+      \label{line:earley-reducer-op-2}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}$
+      \Comment \tightMath{\var{x}= 1\times\var{try}}
+      \label{line:earley-reducer-op-3}
 \State $\Vlp{lp} = \tuple{\Veim{match},\Veim{cuz}}$
+      \Comment \tightMath{\var{x}= 1\times\var{try}}
+      \label{line:earley-reducer-op-4}
 \If{$\Seen{\Veim{trial}}$}
+      \Comment \tightMath{\var{x}= 1\times\var{try}}
+      \label{line:earley-reducer-op-5}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
+      \Comment \tightMath{\var{ln}=\Oc;\var{x}=1\times\var{add}}
+      \label{line:earley-reducer-op-6}
 \Else
+      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \label{line:earley-reducer-op-7}
     \State $\Seen{\Veim{trial}} = \var{true}$
+      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \label{line:earley-reducer-op-8}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \label{line:earley-reducer-op-9}
     \State Add \var{trial} to \Ves{j}
+      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{add}}
+      \label{line:earley-reducer-op-10}
 \EndIf
 \EndFor
 \EndProcedure
@@ -5643,20 +5757,9 @@ into the Earley table with the link pair
 \subsection{Memoizer op}
 \label{def:memoizer}
 
+\todo{Rewrite Memoizer op section}
+
 Let
-\begin{align}
-\label{eq:memoizer-op-10}
-& \LeoEligible{\Ves{i}} \defined \\
-\nonumber
-& \qquad \left\lbrace \;\;
-\begin{gathered}
-\Veim{eligible} : \\
-\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
-\land \; \RightRecursive{\Veim{eligible}}
-\end{gathered}
-\;\; \right\rbrace,
-\end{align}
-%
 \begin{align}
 \label{eq:memoizer-op-20}
 & \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
@@ -5767,6 +5870,8 @@ but we have yet to prove these things.
 
 \subsection{Top level of \Marpa{}}
 
+\todo{Rewrite \Marpa{} top level section}
+
 The top-level view of \Marpa{} is
 shown in \Aref{alg:marpa}.
 \begin{algorithm}[tb]
@@ -5805,6 +5910,8 @@ and
 
 \subsection{Summary}
 
+\todo{Rewrite operations summary}
+
 \begin{observation}[\Marpa{} operation by type of result]
 \label{obs:marpa-op-by-result}
 Let \Vpim{rez} be the result of a \Marpa{} operation.
@@ -5841,7 +5948,7 @@ This observation follows from
 \Eref{alg:scanner-op},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor-op}, and
-\Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
+\Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
 
@@ -5874,7 +5981,7 @@ This observation follows from
 \Eref{alg:scanner-op},
 \Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
 \Eref{eq:def-predictor-op}, and
-\Eref{eq:memoizer-op-10}--\Eref{eq:memoizer-op-40}.
+\Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
 \dispEnd
 \end{observation}
 
@@ -5896,6 +6003,7 @@ This observation follows from
 \todo{complexity observations}
 
 \section{Ambiguity}
+\label{sec:ambiguity}
 
 \todo{Discuss the sources of this approach.}
 
@@ -6673,92 +6781,6 @@ an ambiguous EIM.
 \begin{proof}
 This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}. \myqed
 \end{proof}
-
-\section{Implementation}
-\label{sec:implementation}
-
-\subsection{Leo memoization}
-
-\begin{sloppypar}
-Recall that we
-call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
-In Leo's original algorithm, any penult
-was treated as a potential right-recursion.
-\Marpa{} applies the Leo memoizations in more restricted circumstances.
-For \Marpa{} to consider a dotted rule
-\begin{equation*}
-\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
-\end{equation*}
-for Leo memoization,
-not only must \Vdr{candidate} be a penult
-but \Vrule{candidate} must be right-recursive.
-\end{sloppypar}
-
-By restricting Leo memoization to right-recursive rules,
-\Marpa{} incurs the cost of Leo memoization only in cases
-where Leo sequences could be infinitely
-long.
-This more careful targeting of the memoization is for efficiency reasons.
-If all penults are memoized,
-many memoizations will be performed where
-the longest potential Leo sequence is short,
-and the payoff is therefore limited.
-
-A future extension might be to identify
-non-right-recursive rules
-which generate Leo sequences long enough to
-justify inclusion in the Leo memoizations.
-Such cases would be unusual, but may occur.
-
-Omission of a memoization does not affect correctness,
-so \Marpa{}'s restriction of Leo memoization
-preserves the correctness as shown in Leo\cite{Leo1991}.
-% TODO Add ref instead of "Later"
-Later in this paper
-we will
-show that this change also leaves
-the complexity results of
-Leo\cite{Leo1991} intact.
-
-% TODO: Reference to Leo chain -- cataphoric?
-The \Marpa{} implementation does not implement
-Leo memoization in Earley set 0.
-$\es{(0)}$ memoization
-would have to be implemented as a special case,
-and omission of a Leo memoization at one end of a Leo
-chain unions at one EIM into the Earley tables.
-If the difference is measurable
-$\es{(0)}$ memoization will probably be found to
-be counter-productive.
-
-\subsection{Unproductive symbols}
-
-Users using ``unicorns'' symbols
-might be concerned about the assumption for the
-theoretical results
-that \Marpa{}'s symbols are productive.
-Almost always,
-this restriction in the theory is made
-without loss of its relevance to practice.
-
-For example, in cases where
-\Eref{eq:EIM-valid-30}
-in the definition of EIM validity
-is violated,
-the result would be that EIM's that were ``invalid''
-in a pedantic sense would be
-physically present in the Earley sets.
-That these pedantically invalid EIM's should affect correctness
-is probably
-exactly what the user intended.
-The effect of ``unicorns'' on time and space complexity tends
-to be insignificant in practical use.
-
-Users who are using ``unicorns'',
-who are concerned about the theoretical results,
-and who wish to be conservative,
-should consider evaluate their grammar treating
-``unicorns'' as if they were productive symbols.
 
 \section{Per-set lists}
 \label{sec:per-set-lists}
@@ -7568,7 +7590,7 @@ $\because$ AF theorem, WLOG.
 \begin{gathered}
 \Veim{source} \in \LeoUnique{\Vloc{j}} \\
 \because
-\Eref{eq:th-leo-chain-source-properties-20}, \Eref{eq:memoizer-op-10}.
+\Eref{eq:th-leo-chain-source-properties-20}, \Eref{eq:def-leo-eligible}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -7948,7 +7970,7 @@ $\because$
   \begin{gathered}
     \Veim{pred2} \in \LeoUnique{\Current{\Vlim{match}}} \\
     \because
-    \Eref{th:edge-descendant-uniqueness-42}, \Eref{eq:memoizer-op-10}.
+    \Eref{th:edge-descendant-uniqueness-42}, \Eref{eq:def-leo-eligible}.
   \end{gathered}
 \end{equation}
 \begin{equation}
