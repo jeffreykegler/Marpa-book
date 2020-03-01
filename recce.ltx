@@ -5071,7 +5071,7 @@ operation of \Earley{}\cite{Earley1970}.
 \myparbox{%
     $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{add}$ \\
     \cuz{} line \ref{line:scanner-op-11}
-    adds a new link for \Veim{trial}.}
+    adds \Veim{trial} as a new EIM.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-16}
@@ -5526,7 +5526,7 @@ operation of \Earley{}.
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
-\label{alg:marpa-earley-reducer}
+\label{alg:earley-reducer-op}
 \begin{algorithmic}[1]
 \Procedure{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
 \For{every $\Veim{match} \in \Veimset{matches}$}
@@ -5542,7 +5542,7 @@ operation of \Earley{}.
       \Comment \tightMath{\var{x}= 1\times\var{try}}
       \label{line:earley-reducer-op-5}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-      \Comment \tightMath{\var{ln}=\Oc;\var{x}=1\times\var{add}}
+      \Comment \tightMath{\var{ln}=\Oc;\var{x}=1\times\var{dup}}
       \label{line:earley-reducer-op-6}
 \Else
       \Comment \tightMath{\var{x}= 1\times\var{add}}
@@ -5561,6 +5561,454 @@ operation of \Earley{}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\begin{theorem}[\proc{Earley-reducer} invocations]
+\label{th:earley-reducer-invocations}
+\op{Earley-reducer} invokes
+\begin{align*}
+ \text{line }\ref{line:earley-reducer-op-2} & \;\;\text{once, plus once for each try;} \\
+ \text{lines }\enRefs{line:earley-reducer-op-3}{line:earley-reducer-op-5} & \;\;\text{once for each try;} \\
+ \text{line }\ref{line:earley-reducer-op-6} & \;\;\text{once for each dup; and} \\
+ \text{lines }\enRefs{line:earley-reducer-op-7}{line:earley-reducer-op-10} & \;\;\text{once for each add.}
+\end{align*}
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-12}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-6}} = 1\times\var{dup}$ \\
+    \cuz{} line \ref{line:earley-reducer-op-6}
+    adds a duplicate link for \Veim{trial}.
+    This is the theorem for
+    line \ref{line:earley-reducer-op-6}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-14}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-10}} = 1\times\var{add}$ \\
+    \cuz{} line \ref{line:earley-reducer-op-10}
+    adds \Veim{trial} as a new EIM.}
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-16}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-7}}
+        = \Invocs{\ref{line:earley-reducer-op-8}}
+        = \Invocs{\ref{line:earley-reducer-op-9}}$ \\
+    $= \Invocs{\ref{line:earley-reducer-op-10}}
+        = 1\times\var{add}$ \\
+    \cuz{} \
+    \Eref{eq:th-earley-reducer-invocations-14},
+    sequential execution.
+    This is the theorem for
+    lines \enRefs{line:earley-reducer-op-7}{line:earley-reducer-op-10}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-18}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-5}}
+        = 1\times(\var{add}+\var{dup})$
+    \cuz{} \
+    combining both branches of the if statement.}
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-20}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-3}}
+        = \Invocs{\ref{line:earley-reducer-op-4}}
+        = \Invocs{\ref{line:earley-reducer-op-5}}
+        = 1\times\var{add}$ \\
+    \cuz{}
+    \longDfref{Try is dup or add}{def:try-dup-add},
+    sequential execution.
+    This is the theorem for
+    lines \enRefs{line:earley-reducer-op-3}{line:earley-reducer-op-5}.}
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-22}
+\Passes{\text{loop }\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}}
+    = \Invocs{\ref{line:earley-reducer-op-3}}
+    \because \Obref{def:loop-invocation}.
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-24}
+\Invocs{\ref{line:earley-reducer-op-2}}
+    = \Invocs{\ref{line:earley-reducer-op-3}} + 1
+    \because \Obref{def:loop-invocation},
+        \Eref{eq:th-earley-reducer-invocations-22}.
+\end{equation}
+\begin{equation}
+\label{eq:th-earley-reducer-invocations-26}
+\myparbox{%
+    $\Invocs{\ref{line:earley-reducer-op-2}} = 1+1\times\var{try}
+    \because \Eref{eq:th-earley-reducer-invocations-20},
+        \Eref{eq:th-earley-reducer-invocations-24}$ \\
+    This is the theorem for line \ref{line:earley-reducer-op-2}.}
+\end{equation}
+We now have the theorem for lines
+\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10},
+which is what we needed for the theorem.
+\myqed
+\end{proof}
+
+\begin{equation}
+\label{eq:def-earley-reducer-charges}
+\myparbox{%
+  Direct resource in \op{Earley-reducer} is charged as indicated
+  in \Thref{th:earley-reducer-invocations}.
+  Specifically, resource incurred by an add is charged
+  to an add of \Veim{trial};
+  resource incurred by a try is charged
+  to an attempt to add \Veim{trial}; and
+  resource not associated with an EIM add or try is
+  charged to the Earley set.
+  \cuz{} AF complexity analysis.}
+\end{equation}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to Earley set for \op{Earley-reducer}}
+\label{tab:earley-reducer-es-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:earley-reducer-op},
+    \Thref{th:earley-reducer-invocations},
+    \Eref{eq:def-earley-reducer-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to each add for \op{Earley-reducer}}
+\label{tab:earley-reducer-add-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-7}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-8}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive time charged to each dup for \op{Earley-reducer}}
+\label{tab:earley-reducer-dup-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Earley-reducer} time]
+\label{eq:th-earley-reducer-times}
+The time consumed by \op{Earley-reducer}
+is charged as follows:
+\Oc{} time to
+each add;
+\Oc{} time to
+each try; and
+\Oc{} time to the Earley set which is
+the argument of \op{Earley-reducer}.
+\end{theorem}
+
+\begin{proof}
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:earley-reducer-es-time}.
+For the EIM add charge,
+the theorem follows from
+\Tref{tab:earley-reducer-add-time}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:earley-reducer-add-time},
+\Tref{tab:earley-reducer-dup-time},
+and
+\longDfref{Try is dup or add}{def:try-dup-add},
+\end{proof}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to Earley set for \op{Earley-reducer}}
+\label{tab:earley-reducer-es-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&\Obref{obs:transition-array}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:earley-reducer-op},
+    \Thref{th:earley-reducer-invocations},
+    \Eref{eq:def-earley-reducer-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to each add for \op{Earley-reducer}}
+\label{tab:earley-reducer-add-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-7}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive EIM space charged to each dup for \op{Earley-reducer}}
+\label{tab:earley-reducer-dup-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-6}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Earley-reducer} EIM space]
+\label{eq:th-earley-reducer-eim-space}
+The EIM space consumed by \op{Earley-reducer}
+is \Oc{} per add, which
+is charged to each add.
+\end{theorem}
+
+\begin{proof}
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:earley-reducer-es-eim-space}.
+For the EIM add charge,
+the theorem follows from
+\Tref{tab:earley-reducer-add-eim-space}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:earley-reducer-dup-eim-space}.
+\end{proof}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to Earley set for \op{Earley-reducer}}
+\label{tab:earley-reducer-es-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&\Obref{obs:transition-array}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \Aref{alg:earley-reducer-op},
+    \Thref{th:earley-reducer-invocations},
+    \Eref{eq:def-earley-reducer-charges}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to each add for \op{Earley-reducer}}
+\label{tab:earley-reducer-add-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-7}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive link space charged to each dup for \op{Earley-reducer}}
+\label{tab:earley-reducer-dup-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|l|}{
+    \myparbox[4.5in]{%
+        \cuz{}
+        \longDfref{Try is dup or add}{def:try-dup-add},
+        \Sref{sec:complexity-tables},
+        \Aref{alg:earley-reducer-op},
+        \Thref{th:earley-reducer-invocations},
+        \Eref{eq:def-earley-reducer-charges}.}%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Earley-reducer} link space]
+\label{eq:th-earley-reducer-link-space}
+The link space consumed by \op{Earley-reducer}
+is \Oc{} per try, which
+is charged to each try.
+\end{theorem}
+
+\begin{proof}
+For the Earley set charge,
+the theorem follows from
+\Tref{tab:earley-reducer-es-link-space}.
+For the EIM add charge,
+the theorem follows from
+\Tref{tab:earley-reducer-add-link-space}.
+For the EIM dup charge,
+the theorem follows from
+\Tref{tab:earley-reducer-add-link-space},
+\Tref{tab:earley-reducer-dup-link-space},
+and
+\longDfref{Try is dup or add}{def:try-dup-add}.
+\end{proof}
 
 \begin{algorithm}[tb]
 \caption{\var{Leo-Reducer}}
