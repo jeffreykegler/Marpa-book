@@ -3250,27 +3250,50 @@ on the traditional one for \Earley{} variants.
 In the complexity context,
 ``resource'' means time or space.
 We divide space into two kinds:
-\dfn{PIM space} and \dfn{link space}.
+\dfn{EIM space} and \dfn{link space}.
 
-\begin{definition}[Try, dup and add]
-\label{def:try-dup-add}
-We ``charge'' all resource to ``tries'' ---
-attempts to add a PIM.
-Recall that when an attempt is made to add a duplicate PIM to an Earley set,
+\begin{definition}[Try, dup and new resource]
+\label{def:try-dup-new}
+We ``charge'' all resource to EIM's.
+Recall that when an attempt is made to add a duplicate EIM to an Earley set,
 that it does not change the Earley set.
-A ``try'' is either
+\dfn{Try resource} is comsumed by either
 \begin{itemize}
-\item an attempt to union a duplicate in the Earley set,
-  which is called a ``dup''; or
-\item a successful attempt to add a new PIM to the Earley set,
-  which is called an ``add''.
+\item an attempt to add a duplicate to the Earley set,
+  in which case the try resource is also called \dfn{dup resource}; or
+\item a successful attempt to add a new EIM to the Earley set,
+  in which case the try resource is also \dfn{new resource}.
 \end{itemize}
+Execution of logic which consumes which consumes a type of resource is
+named after that resource,
+so that execution of logic which successfully adds an EIM to an Earley set is called
+\dfn{new charge execution}, or a \dfn{new},
+an execution which unsuccessfully attempts to add an EIM is called  \dfn{dup},
+and a dup or a new can also be called
+a \dfn{try charge execution}, or a \dfn{try}.
+\end{definition}
+
+\begin{definition}[Old resource]
+\label{def:old-resource}
+Resource may also be charged to an EIM outside of an
+attempt to add it to the Earley set.
+Resource charged to an existing EIM,
+when it is not dup resource,
+is called \dfn{old resource}.
+Execution of logic which charges resource to an EIM,
+but which is not a try,
+is called an \dfn{old charge execution}, or an \dfn{old}.
 \end{definition}
 
 We have yet to show this,
-but we will find the time charged to every ``try'' is \Oc{};
-the PIM space charged to every ``add'' is \Oc{}; and
-the link space charged to every ``dup'' is \Oc{}.
+but we will find that,
+for each EIM,
+\begin{itemize}
+\item new and dup resource is always \Oc{};
+\item which means that try resource is always \Oc{}; and
+\item total resource for an EIM (old, new and dup)
+    is always \Oc{}.
+\end{itemize}
 
 In a pseudocode procedure,
 charges are made either to a ``destination'',
@@ -3278,7 +3301,7 @@ or ``to the caller''.
 A ``destination'' is either an ``ultimate destination''
 or an ``intermediate desination''.
 
-The ``ultimate destination'' of a charge is always a PIM.
+The ``ultimate destination'' of a charge is always an EIM.
 An ``intermediate destination'' can be either an Earley set,
 or the parse itself.
 All charges not made to an ultimate destination are
@@ -3288,23 +3311,23 @@ ultimate destination.
 
 \begin{definition}[Charging to the parse]
 \label{def:charging-to-parse}
-A resource ``charged to the parse'' is re-charged to the first PIM
+A resource ``charged to the parse'' is re-charged to the first EIM
 of Earley set 0.
 There is always a start EIM in Earley set 0,
-so that the first PIM of Earley set 0
+so that the first EIM of Earley set 0
 exists in every parse.
 \dispEnd
 \end{definition}
 
 \begin{definition}[Charging to the Earley set]
 \label{def:charging-to-es}
-A resource ``charged to an Earley set'' is re-charged to the first PIM
+A resource ``charged to an Earley set'' is re-charged to the first EIM
 of that Earley set.
-In a successful parse, every Earley set will have at least one PIM,
-so that the first PIM of an Earley set will always exist.
-An Earley set without a PIM causes a parse failure,
-so that in a failed parse, every Earley set except the last will have at least one PIM,
-and resource charged to those Earley sets can be charged to their first PIM.
+In a successful parse, every Earley set will have at least one EIM,
+so that the first EIM of an Earley set will always exist.
+An Earley set without a EIM causes a parse failure,
+so that in a failed parse, every Earley set except the last will have at least one EIM,
+and resource charged to those Earley sets can be charged to their first EIM.
 In the last Earley set of a failed parse,
 resource charged to the Earley set is charged to the parse.
 \dispEnd
@@ -3462,13 +3485,12 @@ is \Oc{} and is charged to the parse.
 
 \begin{observation}[Earley set complexity]
 \label{obs:es-complexity}
-Adding an EIM to an Earley set (an ``add''),
-including the add of the intial link pair,
-consumes \Oc{} time
+Adding an EIM to an Earley set occurs as part of a new charge execution.
+and includes the add of the intial link pair.
+A new charge execution consumes \Oc{} time
 and \Oc{} space.
-Adding an addition link pair (a ``dup'')
-consumes \Oc{} time
-and \Oc{} space.
+Adding link pairs after the first occurs as part of a dup.
+Dup's consume \Oc{} time and \Oc{} space.
 Traversal of an Earley set requires \Oc{} time per PIM.
 Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
 
@@ -3583,9 +3605,7 @@ is \Vsym{t}.
 The return
 
 Creation of \var{transition} consumes \Oc{} time
-and \Oc{} space for per-Earley-set overhead,
-and \Oc{} space and \Oc{} time for every PIM in
-the Earley set.
+and \Oc{} space for per-Earley-set overhead.
 Writes after creation do not occur.
 Accesses by symbol
 to the head of each linked list consume \Oc{} time.
@@ -3605,10 +3625,13 @@ therefore consumes \Oc{} time and \Oc{} space.
 Since the array is of fixed-size,
 access to the head of the linked lists
 that it stores is \Oc{}.
-There is a fixed-size link in one of the linked lists of
-\var{transition} for every PIM in the Earley sets,
-and therefore creation time for the links is \Oc{}
-per PIM.
+Every PIM contains a link to the next item in its
+\var{transition} linked link, so that addition of
+a link consumes zero additonal space over that consumed
+when the PIM's are created.
+The lists grow from the head, so that
+Creation time for a new link in one of the
+\var{transitions} linked lists is \Oc{}.
 \dispEnd{}
 \end{observation}
 
@@ -3766,13 +3789,13 @@ let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 \label{line:marpa-predict-70}
 \EndIf
 \label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment \tightMath{\var{x}=1\times\var{add}}
+\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment \tightMath{\var{x}=1\times\var{new}}
 \label{line:marpa-predict-80}
 \State Add \var{prediction} to \ES{\Current{\var{prediction}}}
-\Statex  \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{add}}
+\Statex  \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{new}}
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment \tightMath{\var{x}=1\times\var{add}}
+   \Comment \tightMath{\var{x}=1\times\var{new}}
 \label{line:marpa-predict-90}
 \EndProcedure
 \end{algorithmic}
@@ -4340,7 +4363,7 @@ and \Eref{eq:th-predict-es-time-48}.
 The space consumed by
 \proc[\Ves{j}]{Predict-ES}
 is \Oc{} charged to \Ves{j}
-and \Oc{} charged to each PIM added.
+and \Oc{} charged to each EIM added.
 \end{theorem}
 
 \begin{proof}
@@ -4892,7 +4915,7 @@ is
 \begin{equation}
 \label{eq:th-initializer-space-36}
 \myparbox{%
-    Every PIM added by
+    Every EIM added by
     \op{Initializer} is either \Veim{start}
     or a prediction \cuz
     \Aref{alg:predict1},
@@ -4904,8 +4927,8 @@ is
 \label{eq:th-initializer-space-38}
 \myparbox{%
     The space consumed by \op{Initializer} is \Oc{}
-    for each PIM that it adds,
-    which is charged to that PIM \cuz{}
+    for each new,
+    which is charged to that EIM \cuz{}
     \Eref{eq:th-initializer-space-32},
     \Eref{eq:th-initializer-space-36}.
 }
@@ -5018,16 +5041,16 @@ operation of \Earley{}\cite{Earley1970}.
     \State Add \var{lp} to \LinkPairs{\var{trial}}
         \Comment \tightMath{\var{ln}=\Oc;\var{x}= 1\times\var{dup}}
 \label{line:scanner-op-7}
-  \Else \Comment \tightMath{\var{x}= 1\times\var{add}}
+  \Else \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-8}
     \State $\Seen{\var{trial}} = \var{true}$
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-9}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-10}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{add}}
+      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{new}}
 \label{line:scanner-op-11}
   \EndIf
 \EndFor
@@ -5069,7 +5092,7 @@ operation of \Earley{}\cite{Earley1970}.
 \begin{equation}
 \label{eq:th-scanner-invocations-14}
 \myparbox{%
-    $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{add}$ \\
+    $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{new}$ \\
     \cuz{} line \ref{line:scanner-op-11}
     adds \Veim{trial} as a new EIM.}
 \end{equation}
@@ -5080,7 +5103,7 @@ operation of \Earley{}\cite{Earley1970}.
         = \Invocs{\ref{line:scanner-op-9}}
         = \Invocs{\ref{line:scanner-op-10}}$ \\
     $= \Invocs{\ref{line:scanner-op-11}}
-        = 1\times\var{add}$ \\
+        = 1\times\var{new}$ \\
     \cuz{} \
     \Eref{eq:th-scanner-invocations-14},
     sequential execution.
@@ -5091,7 +5114,7 @@ operation of \Earley{}\cite{Earley1970}.
 \label{eq:th-scanner-invocations-18}
 \myparbox{%
     $\Invocs{\ref{line:scanner-op-6}}
-        = 1\times(\var{add}+\var{dup})$
+        = 1\times(\var{new}+\var{dup})$
     \cuz{} \
     combining both branches of the if statement.}
 \end{equation}
@@ -5101,9 +5124,10 @@ operation of \Earley{}\cite{Earley1970}.
     $\Invocs{\ref{line:scanner-op-4}}
         = \Invocs{\ref{line:scanner-op-5}}
         = \Invocs{\ref{line:scanner-op-6}}
-        = 1\times\var{add}$ \\
+        = 1\times\var{try}$ \\
     \cuz{}
-    \longDfref{Try is dup or add}{def:try-dup-add},
+    \Eref{eq:th-scanner-invocations-18},
+    \longDfref{Try is dup or new}{def:try-dup-new},
     sequential execution.
     This is the theorem for
     lines \enRefs{line:scanner-op-4}{line:scanner-op-6}.}
@@ -5209,7 +5233,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5242,7 +5266,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5276,7 +5300,7 @@ the theorem follows from
 \Tref{tab:scanner-add-time},
 \Tref{tab:scanner-dup-time},
 and
-\longDfref{Try is dup or add}{def:try-dup-add},
+\longDfref{Try is dup or new}{def:try-dup-new},
 \end{proof}
 
 \begin{table}[tb]
@@ -5330,7 +5354,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5363,7 +5387,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5392,7 +5416,7 @@ the theorem follows from
 \Tref{tab:scanner-add-eim-space},
 \Tref{tab:scanner-dup-eim-space},
 and
-\longDfref{Try is dup or add}{def:try-dup-add},
+\longDfref{Try is dup or new}{def:try-dup-new},
 \end{proof}
 
 \begin{table}[tb]
@@ -5446,7 +5470,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5479,7 +5503,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:scanner-op},
         \Thref{th:scanner-invocations},
@@ -5509,7 +5533,7 @@ the theorem follows from
 \Tref{tab:scanner-add-link-space},
 \Tref{tab:scanner-dup-link-space},
 and
-\longDfref{Try is dup or add}{def:try-dup-add}.
+\longDfref{Try is dup or new}{def:try-dup-new}.
 \end{proof}
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
@@ -5530,7 +5554,7 @@ operation of \Earley{}.
 \begin{algorithmic}[1]
 \Procedure{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
 \For{every $\Veim{match} \in \Veimset{matches}$}
-      \Comment \tightMath{\var{x}= 1+1\times\var{try}}
+      \Comment \tightMath{\var{x}= 1\times\var{old}+1\times\var{try}}
       \label{line:earley-reducer-op-2}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}$
       \Comment \tightMath{\var{x}= 1\times\var{try}}
@@ -5545,16 +5569,16 @@ operation of \Earley{}.
       \Comment \tightMath{\var{ln}=\Oc;\var{x}=1\times\var{dup}}
       \label{line:earley-reducer-op-6}
 \Else
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
       \label{line:earley-reducer-op-7}
     \State $\Seen{\Veim{trial}} = \var{true}$
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
       \label{line:earley-reducer-op-8}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
-      \Comment \tightMath{\var{x}= 1\times\var{add}}
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
       \label{line:earley-reducer-op-9}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{add}}
+      \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{new}}
       \label{line:earley-reducer-op-10}
 \EndIf
 \EndFor
@@ -5586,7 +5610,7 @@ operation of \Earley{}.
 \begin{equation}
 \label{eq:th-earley-reducer-invocations-14}
 \myparbox{%
-    $\Invocs{\ref{line:earley-reducer-op-10}} = 1\times\var{add}$ \\
+    $\Invocs{\ref{line:earley-reducer-op-10}} = 1\times\var{new}$ \\
     \cuz{} line \ref{line:earley-reducer-op-10}
     adds \Veim{trial} as a new EIM.}
 \end{equation}
@@ -5597,7 +5621,7 @@ operation of \Earley{}.
         = \Invocs{\ref{line:earley-reducer-op-8}}
         = \Invocs{\ref{line:earley-reducer-op-9}}$ \\
     $= \Invocs{\ref{line:earley-reducer-op-10}}
-        = 1\times\var{add}$ \\
+        = 1\times\var{new}$ \\
     \cuz{} \
     \Eref{eq:th-earley-reducer-invocations-14},
     sequential execution.
@@ -5608,7 +5632,7 @@ operation of \Earley{}.
 \label{eq:th-earley-reducer-invocations-18}
 \myparbox{%
     $\Invocs{\ref{line:earley-reducer-op-5}}
-        = 1\times(\var{add}+\var{dup})$
+        = 1\times(\var{new}+\var{dup})$
     \cuz{} \
     combining both branches of the if statement.}
 \end{equation}
@@ -5618,9 +5642,10 @@ operation of \Earley{}.
     $\Invocs{\ref{line:earley-reducer-op-3}}
         = \Invocs{\ref{line:earley-reducer-op-4}}
         = \Invocs{\ref{line:earley-reducer-op-5}}
-        = 1\times\var{add}$ \\
+        = 1\times\var{try}$ \\
     \cuz{}
-    \longDfref{Try is dup or add}{def:try-dup-add},
+    \Eref{eq:th-earley-reducer-invocations-18},
+    \longDfref{Try is dup or new}{def:try-dup-new},
     sequential execution.
     This is the theorem for
     lines \enRefs{line:earley-reducer-op-3}{line:earley-reducer-op-5}.}
@@ -5667,7 +5692,7 @@ which is what we needed for the theorem.
 \end{equation}
 
 \begin{table}[tb]
-\caption{Inclusive time charged to Earley set for \op{Earley-reducer}}
+\caption{Inclusive time charged to old EIM for \op{Earley-reducer}}
 \label{tab:earley-reducer-es-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5715,7 +5740,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -5748,7 +5773,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -5782,11 +5807,11 @@ the theorem follows from
 \Tref{tab:earley-reducer-add-time},
 \Tref{tab:earley-reducer-dup-time},
 and
-\longDfref{Try is dup or add}{def:try-dup-add},
+\longDfref{Try is dup or new}{def:try-dup-new},
 \end{proof}
 
 \begin{table}[tb]
-\caption{Inclusive EIM space charged to Earley set for \op{Earley-reducer}}
+\caption{Inclusive EIM space charged to old EIM for \op{Earley-reducer}}
 \label{tab:earley-reducer-es-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5834,7 +5859,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -5867,7 +5892,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -5897,7 +5922,7 @@ the theorem follows from
 \end{proof}
 
 \begin{table}[tb]
-\caption{Inclusive link space charged to Earley set for \op{Earley-reducer}}
+\caption{Inclusive link space charged to old EIM for \op{Earley-reducer}}
 \label{tab:earley-reducer-es-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5945,7 +5970,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -5978,7 +6003,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|l|}{
     \myparbox[4.5in]{%
         \cuz{}
-        \longDfref{Try is dup or add}{def:try-dup-add},
+        \longDfref{Try is dup or new}{def:try-dup-new},
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
@@ -6007,7 +6032,7 @@ the theorem follows from
 \Tref{tab:earley-reducer-add-link-space},
 \Tref{tab:earley-reducer-dup-link-space},
 and
-\longDfref{Try is dup or add}{def:try-dup-add}.
+\longDfref{Try is dup or new}{def:try-dup-new}.
 \end{proof}
 
 \begin{algorithm}[tb]
