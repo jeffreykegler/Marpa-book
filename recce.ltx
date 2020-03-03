@@ -63,6 +63,7 @@
 % Theorem th:
 % Lemma lem:
 % Observation obs:
+% Assumption asm:
 
 % The auto-placement of qed's fails a lot and manual
 % replacement with \qedhere often fails as well.  I go with
@@ -347,6 +348,7 @@
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{definition}[theorem]{Definition}
 \newtheorem{observation}[theorem]{Observation}
+\newtheorem{assumption}[theorem]{Assumption}
 
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
@@ -3754,24 +3756,29 @@ is invoked once per pass of the inner loop, or 6 times.
 \subsection{Complexity tables}
 \label{sec:complexity-tables}
 
-\todo{Write complexity tables section}
+Let \var{inv} be the number of invocations,
+Let \var{dir} the direct resource consumed per invocation,
+Let \var{ind} the indirect resource consumed per invocation, and
+Let \var{total} the total resource consumed for that line.
+The tables contain columns for \var{inv}, \var{dir}, \var{ind} and \var{total},
+and
+\[
+  \var{total} = \var{inv} \times ( \var{dir} + \var{ind} ).
+\]
 
-Many of these proofs are similar,
-a fact that the table format brings out.
-Some repetition could be eliminated
-by introducing another layer of abstraction.
-But this additional layer of abstraction above
-the algorithms
-would make the proofs much harder to
-follow.
-More important,
-the additional abstraction
-would obscure
-the connection between the algorithm and its implementation,
-on one hand,
-and its complexity on the other.
-We have opted for perspicuity and readability over
-brevity.
+In the presence of conditional logic, the number of invocations is sometimes
+given as a range \var{lo}--\var{hi}, where \var{lo} and \var{hi} are constants.
+In such cases, note that, by the definition of \order{\var{n}},
+\[
+\order{\var{lo}\text{--}\var{hi}} = \order{\var{hi}} = \Oc,
+\]
+so that, for example, $\order{0\text{--}1} = \Oc$.
+
+The tables also contain columns indicating the pseudocode line number of each row,
+and any per-line justifications used for the line's statements.
+Later rows in the total give the total amount of resource accounted for in
+that table,
+and the per-table justifications.
 
 \section{The \Marpa{} algorithm}
 \label{sec:marpa}
@@ -5552,6 +5559,8 @@ operation of \Earley{}.
 \label{def:reducer}
 
 \todo{Rewrite Reducer op section}
+\todo{Define EIM-charged, link-charged}
+\todo{Define ``ambiguity link pair''}
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
@@ -5583,25 +5592,6 @@ operation of \Earley{}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
-\begin{equation}
-\label{eq:def-earley-reducer-charges}
-\myparbox{%
-  For the purpose of complexity analysis,
-  we assume that direct resource in \op{Earley-reducer} is charged
-  as follows:
-  Resource is charged to
-  \Veim{trial},
-  if it is consumed by a pass of
-  loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10};
-  and to \Veim{cuz}, otherwise.
-  Resource is eim-charged
-     if it is time, or consumed in a pass
-          of loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
-          that adds \Veim{trial} to \Ves{j};
-  link-charged, otherwise.
-  }
-\end{equation}
 
 \begin{theorem}[\proc{Earley-reducer} invocations]
 \label{th:earley-reducer-invocations}
@@ -5708,7 +5698,7 @@ We have the theorem from
 \end{proof}
 
 \begin{table}[tb]
-\caption{Inclusive time charged to \Veim{cuz} for \op{Earley-reducer}}
+\caption{Inclusive time EIM-charged to \Veim{cuz} for \op{Earley-reducer}}
 \label{tab:earley-reducer-es-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5722,13 +5712,13 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \Aref{alg:earley-reducer-op},
     \Thref{th:earley-reducer-invocations},
-    \Eref{eq:def-earley-reducer-charges}.}
+    \Eref{asm:earley-reducer-space-charge}.}
 \\ \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive time charged to \Veim{trial} for \op{Earley-reducer}}
+\caption{Inclusive time EIM-charged to \Veim{trial} for \op{Earley-reducer}}
 \label{tab:earley-reducer-add-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5743,15 +5733,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&0,1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-7}&0,1&\Oc{}&&\Oc{}&
+    \ref{line:earley-reducer-op-7}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-8}&0,1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&0,1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&0,1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-10}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -5762,11 +5752,22 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
-        \Eref{eq:def-earley-reducer-charges}.}%
+        \Eref{asm:earley-reducer-time-charge}.}%
 }
 \\ \hline
 \end{tabular}
 \end{table}
+
+\begin{assumption}[\op{Earley-reducer} time charge]
+\label{asm:earley-reducer-time-charge}
+  For the purpose of complexity analysis,
+  we assume that direct time in \op{Earley-reducer}
+  is EIM-charged to
+  \Veim{trial},
+  if it is consumed by a pass of
+  loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
+  Direct time is EIM-charged to \Veim{cuz}, otherwise.
+\end{assumption}
 
 \begin{theorem}[\op{Earley-reducer} time]
 \label{eq:th-earley-reducer-times}
@@ -5807,7 +5808,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \Aref{alg:earley-reducer-op},
     \Thref{th:earley-reducer-invocations},
-    \Eref{eq:def-earley-reducer-charges}.}
+    \Eref{asm:earley-reducer-space-charge}.}
 \\ \hline
 \end{tabular}
 \end{table}
@@ -5845,7 +5846,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
-        \Eref{eq:def-earley-reducer-charges}.}%
+        \Eref{asm:earley-reducer-time-charge}.}%
 }
 \\ \hline
 \end{tabular}
@@ -5878,11 +5879,31 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
-        \Eref{eq:def-earley-reducer-charges}.}%
+        \Eref{asm:earley-reducer-time-charge}.}%
 }
 \\ \hline
 \end{tabular}
 \end{table}
+
+\begin{assumption}[Earley reducer space charge]
+\label{asm:earley-reducer-space-charge}
+  For the purpose of complexity analysis,
+  we assume that direct space in \op{Earley-reducer} is
+  \begin{itemize}
+  \item link-charged, if it is
+     consumed in a pass
+          of loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
+          that adds an ambiguity link to \Veim{trial}, and
+  \item EIM-charged, otherwise.
+  \end{itemize}
+  Space is charged to
+  \begin{itemize}
+  \item to \Veim{trial},
+  if it is consumed by a pass of
+  loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}; and
+  \item to \Veim{cuz}, otherwise.
+  \end{itemize}
+\end{assumption}
 
 \begin{theorem}[\op{Earley-reducer} EIM space]
 \label{eq:th-earley-reducer-eim-space}
@@ -5918,7 +5939,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \Aref{alg:earley-reducer-op},
     \Thref{th:earley-reducer-invocations},
-    \Eref{eq:def-earley-reducer-charges}.}
+    \Eref{asm:earley-reducer-space-charge}.}
 \\ \hline
 \end{tabular}
 \end{table}
@@ -5956,7 +5977,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
-        \Eref{eq:def-earley-reducer-charges}.}%
+        \Eref{asm:earley-reducer-space-charge}.}%
 }
 \\ \hline
 \end{tabular}
@@ -5989,7 +6010,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
         \Sref{sec:complexity-tables},
         \Aref{alg:earley-reducer-op},
         \Thref{th:earley-reducer-invocations},
-        \Eref{eq:def-earley-reducer-charges}.}%
+        \Eref{asm:earley-reducer-space-charge}.}%
 }
 \\ \hline
 \end{tabular}
