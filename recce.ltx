@@ -3212,8 +3212,12 @@ The \Marpa{} implementation tracks the ancestry of
 PIM's.
 The reasons are tracked in \dfn{link pairs},
 and are essential for efficient evaluation.
-There is at most one link pair for every attempt to union a
-PIM into an Earley set.
+
+As we will see below,
+some PIM's do not track link pairs.
+For those PIM's which do track link pairs,
+there is at exactly one link pair for every attempt to union that
+PIM into its Earley set.
 
 A link pair
 is a duple of predecessor and cause:
@@ -3234,6 +3238,13 @@ The pointers are used as ``links''.
 to other data.
 $\Lambda$ elements are implemented
 as a null pointer.
+
+Every link pair is either an \dfn{initial link pair}
+or an \dfn{ambiguity link pair}.
+An initial link pair is the link pair added when a new PIM is
+added to an Earley set.
+An ambiguity link pair is one added to an existing PIM
+when it is already in an Earley set.
 
 A link pair has type \type{LP}.
 The set of link pairs of a PIM
@@ -5560,7 +5571,6 @@ operation of \Earley{}.
 
 \todo{Rewrite Reducer op section}
 \todo{Define caller-charged, EIM-charged, link-charged}
-\todo{Define ``ambiguity link pair''}
 \todo{Define ``new EIM pass''}
 \todo{Define ``dup EIM pass''}
 
@@ -5758,11 +5768,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 
 \begin{theorem}[\op{Earley-reducer} time]
 \label{eq:th-earley-reducer-times}
-The time consumed by \op{Earley-reducer}
-is charged as follows:
-\Oc{} time to each new EIM pass;
-\Oc{} time to each dup EIM pass; and
-\Oc{} time to the caller.
+Time consumed by \op{Earley-reducer}
+is
+\begin{itemize}
+\item \Oc{} charged to each EIM try; and
+\item \Oc{} charged to the caller.
+\end{itemize}
 \end{theorem}
 
 \begin{proof}
@@ -5859,16 +5870,13 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   we assume that direct space in \op{Earley-reducer} is
   \begin{itemize}
   \item link-charged, if it is
-     consumed in a pass
-          of loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
-          that adds an ambiguity link to \Veim{trial}, and
+     consumed by a dup EIM loop pass; and
   \item EIM-charged, otherwise.
   \end{itemize}
   Space is charged to
   \begin{itemize}
   \item to \Veim{trial},
-  if it is consumed by a pass of
-  loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}; and
+  if it is consumed by a loop pass; and
   \item to \Veim{cuz}, otherwise.
   \end{itemize}
 \end{assumption}
