@@ -5607,33 +5607,21 @@ operation of \Earley{}.
 
 \begin{observation}[\op{Earley-reducer} passes]
 \label{obs:earley-reducer-passes}
-The only loop in
-\op{Earley-reducer} is lines
-\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
+The loop of lines
+\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
+is the only one in
+\op{Earley-reducer}.
 Every pass of loop
-\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10},
+\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
 is a new EIM pass or a dup EIM pass,
 but no pass is both.
+\dispEnd{}
 \end{observation}
 
 For the purposes of analyzing \op{Earley-reducer},
-``loop pass'' or just ``pass'',
-refers to a pass of \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
-Also for the purposes of analyzing \op{Earley-reducer},
-we use the notation
-$\var{res}/\var{unit}$,
-which is read ``\var{res} per \var{unit}''.
-\var{res} is either a resource or a invocation count,
-and \var{unit} is one of
-\begin{itemize}
-\item \var{call}, where \var{call} is one call of
-    \op{Earley-reducer};
-\item \var{pass}, where \var{pass} is one loop pass;
-\item \var{new}, where \var{pass} is one new EIM loop pass; or
-\item \var{dup}, where \var{pass} is one dup EIM loop pass.
-\end{itemize}
-For example, when invocations are being counted,
-$1/\var{dup}$ means one invocation per dup EIM loop pass.
+``loop pass'', or just ``pass'',
+refers to a pass of
+loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
 
 \begin{table}[tb]
 \caption{Line invocations for \op{Earley-reducer}}
@@ -5667,7 +5655,11 @@ Line&Invocations&Justification
     \ref{line:earley-reducer-op-10}&1/\var{new}&directly
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-Order of deduction among lines is
+1/\var{call}: ``once per procedure call''.
+1/\var{pass}: ``once per loop pass''.
+1/\var{dup}: ``once per dup EIM loop pass''.
+1/\var{new}: ``once per new EIM loop pass''.
+Lines are deduced in the order
       \ref{line:earley-reducer-op-3},
       \ref{line:earley-reducer-op-2},
       \ref{line:earley-reducer-op-4},
@@ -5716,7 +5708,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive EIM-charged time for \op{Earley-reducer}}
+\caption{Inclusive time per loop pass for \op{Earley-reducer}}
 \label{tab:earley-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5743,13 +5735,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
-\multicolumn{6}{|l|}{
-    \myparbox[4.5in]{%
-        \cuz{}
-        \Sref{sec:complexity-tables},
-        \Aref{alg:earley-reducer-op},
-        \Thref{th:earley-reducer-invocations},
-        \Eref{asm:earley-reducer-time-charge}.}%
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \Aref{alg:earley-reducer-op},
+    \Thref{th:earley-reducer-invocations},
+    \Eref{asm:earley-reducer-time-charge}.%
 }
 \\ \hline
 \end{tabular}
@@ -5763,7 +5754,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   \Veim{trial},
   if it is consumed by a pass of
   loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
-  Direct time is caller-charged, otherwise.
+  Otherwise, direct time is caller-charged.
 \end{assumption}
 
 \begin{theorem}[\op{Earley-reducer} time]
@@ -5777,7 +5768,6 @@ is
 \end{theorem}
 
 \begin{proof}
-\todo{Rewrite}
 The theorem follows from
 \Obref{obs:earley-reducer-passes},
 \Tref{tab:earley-reducer-caller-time}, and
@@ -5808,13 +5798,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
-\multicolumn{6}{|l|}{
-    \myparbox[4.5in]{%
-        \cuz{}
-        \Sref{sec:complexity-tables},
-        \Aref{alg:earley-reducer-op},
-        \Thref{th:earley-reducer-invocations},
-        \Eref{asm:earley-reducer-time-charge}.}%
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \Aref{alg:earley-reducer-op},
+    \Thref{th:earley-reducer-invocations},
+    \Eref{asm:earley-reducer-time-charge}.
 }
 \\ \hline
 \end{tabular}
@@ -5869,44 +5858,37 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Earley-reducer} is
   \begin{itemize}
+  \item EIM-charged, if it is
+     consumed by a new EIM loop pass; and
   \item link-charged, if it is
      consumed by a dup EIM loop pass; and
-  \item EIM-charged, otherwise.
-  \end{itemize}
-  Space is charged to
-  \begin{itemize}
-  \item to \Veim{trial},
-  if it is consumed by a loop pass; and
-  \item to \Veim{cuz}, otherwise.
+  \item caller-charged, otherwise.
   \end{itemize}
 \end{assumption}
 
 \begin{theorem}[\op{Earley-reducer} EIM space]
 \label{eq:th-earley-reducer-eim-space}
-The EIM space consumed by \op{Earley-reducer}
-is \Oc{} per add, which
-is charged to each add.
+EIM space consumed by \op{Earley-reducer}
+is \Oc{} per new EIM, charged to the new EIM.
 \end{theorem}
 
 \begin{proof}
-\todo{Fix this}
 The theorem follows from
-\Tref{tab:earley-reducer-eim-space}.
+\Tref{tab:earley-reducer-zero-space}.
 and
-\Tref{tab:earley-reducer-link-space}.
+\Tref{tab:earley-reducer-eim-space}.
 \end{proof}
 
 \begin{theorem}[\op{Earley-reducer} link space]
 \label{eq:th-earley-reducer-link-space}
-The link space consumed by \op{Earley-reducer}
-is \Oc{} per try, which
-is charged to each try.
+Link space consumed by \op{Earley-reducer}
+is \Oc{} per EIM try,
+charged to the EIM try.
 \end{theorem}
 
 \begin{proof}
-\todo{Fix this}
 The theorem follows from
-\Tref{tab:earley-reducer-eim-space}.
+\Tref{tab:earley-reducer-zero-space}
 and
 \Tref{tab:earley-reducer-link-space}.
 \end{proof}
