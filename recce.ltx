@@ -166,6 +166,7 @@
   \else``#1''\Dfref{#2}%
   \fi%
 }
+\newcommand{\Asmref}[1]{(\textrm{Asm}\ref{#1}\colonpageref{#1})}
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
@@ -5573,6 +5574,7 @@ operation of \Earley{}.
 \todo{Define caller-charged, EIM-charged, link-charged}
 \todo{Define ``new EIM pass''}
 \todo{Define ``dup EIM pass''}
+\todo{Define ``try EIM pass'', ``EIM try''}
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
@@ -5613,8 +5615,11 @@ is the only one in
 \op{Earley-reducer}.
 Every pass of loop
 \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
-is a new EIM pass or a dup EIM pass,
-but no pass is both.
+is
+\begin{itemize}
+\item exactly one try EIM pass; and
+\item a new EIM pass or a dup EIM pass.
+\end{itemize}
 \dispEnd{}
 \end{observation}
 
@@ -5682,8 +5687,7 @@ Line invocations for
 \end{theorem}
 
 \begin{proof}
-The proof is from the justifications in
-\Tref{tab:earley-reducer-invocations}.
+By \Tref{tab:earley-reducer-invocations}.
 \myqed
 \end{proof}
 
@@ -5708,7 +5712,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive time per loop pass for \op{Earley-reducer}}
+\caption{Inclusive time per EIM try for \op{Earley-reducer}}
 \label{tab:earley-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5750,11 +5754,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \label{asm:earley-reducer-time-charge}
   For the purpose of complexity analysis,
   we assume that direct time in \op{Earley-reducer}
-  is EIM-charged to
-  \Veim{trial},
-  if it is consumed by a pass of
-  loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
-  Otherwise, direct time is caller-charged.
+  is
+  \begin{itemize}
+  \item charged to an EIM try, if it is consumed by a EIM try pass; and
+  \item caller-charged, otherwise.
+  \end{itemize}
 \end{assumption}
 
 \begin{theorem}[\op{Earley-reducer} time]
@@ -5803,14 +5807,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
     \Sref{sec:complexity-tables},
     \Aref{alg:earley-reducer-op},
     \Thref{th:earley-reducer-invocations},
-    \Eref{asm:earley-reducer-time-charge}.
+    \Asmref{asm:earley-reducer-time-charge}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive per-pass EIM-charged space for \op{Earley-reducer}}
+\caption{Inclusive EIM-charged space
+    for each new EIM loop pass of \op{Earley-reducer}}
 \label{tab:earley-reducer-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5826,13 +5831,31 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \Aref{alg:earley-reducer-op},
     \Thref{th:earley-reducer-invocations},
-    \Eref{asm:earley-reducer-space-charge}.}
+    \Asmref{asm:earley-reducer-space-charge}.}
 \\ \hline
 \end{tabular}
 \end{table}
 
+\begin{assumption}[Earley reducer space charge]
+\label{asm:earley-reducer-space-charge}
+  For the purpose of complexity analysis,
+  we assume that direct space in \op{Earley-reducer} is
+  \begin{itemize}
+  \item EIM-charged to a new EIM, if it is
+     consumed by a new EIM loop pass; and
+  \item link-charged to a dup EIM, if it is
+     consumed by a dup EIM loop pass.
+  \end{itemize}
+\end{assumption}
+
+For
+\Asmref{asm:earley-reducer-space-charge},
+note that space is not consumed by
+\op{Earley-reducer} outside of a loop pass.
+
 \begin{table}[tb]
-\caption{Inclusive per-pass link-charged space for \op{Earley-reducer}}
+\caption{Inclusive link-charged space
+    for each dup EIM loop pass of \op{Earley-reducer}}
 \label{tab:earley-reducer-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5853,44 +5876,30 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{assumption}[Earley reducer space charge]
-\label{asm:earley-reducer-space-charge}
-  For the purpose of complexity analysis,
-  we assume that direct space in \op{Earley-reducer} is
-  \begin{itemize}
-  \item EIM-charged, if it is
-     consumed by a new EIM loop pass; and
-  \item link-charged, if it is
-     consumed by a dup EIM loop pass; and
-  \item caller-charged, otherwise.
-  \end{itemize}
-\end{assumption}
-
 \begin{theorem}[\op{Earley-reducer} EIM space]
 \label{eq:th-earley-reducer-eim-space}
-EIM space consumed by \op{Earley-reducer}
-is \Oc{} per new EIM, charged to the new EIM.
+EIM-charged space for \op{Earley-reducer}
+is \Oc{} per new EIM.
 \end{theorem}
 
 \begin{proof}
 The theorem follows from
-\Tref{tab:earley-reducer-zero-space}
-and
-\Tref{tab:earley-reducer-eim-space}.
+\Tref{tab:earley-reducer-zero-space},
+\Tref{tab:earley-reducer-eim-space},
+and \Asmref{asm:earley-reducer-space-charge}.
 \end{proof}
 
 \begin{theorem}[\op{Earley-reducer} link space]
 \label{eq:th-earley-reducer-link-space}
-Link space consumed by \op{Earley-reducer}
-is \Oc{} per EIM try,
-charged to the EIM try.
+Link-charged space for \op{Earley-reducer}
+is \Oc{} per EIM dup.
 \end{theorem}
 
 \begin{proof}
 The theorem follows from
-\Tref{tab:earley-reducer-zero-space}
-and
-\Tref{tab:earley-reducer-link-space}.
+\Tref{tab:earley-reducer-zero-space},
+\Tref{tab:earley-reducer-link-space},
+and \Asmref{asm:earley-reducer-space-charge}.
 \end{proof}
 
 \begin{algorithm}[tb]
