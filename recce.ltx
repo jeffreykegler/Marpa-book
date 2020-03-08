@@ -5843,7 +5843,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{assumption}[Earley reducer space charge]
+\begin{assumption}[\op{Earley-Reducer} space charge]
 \label{asm:earley-reducer-space-charge}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Earley-Reducer} is
@@ -5913,7 +5913,7 @@ and \Asmref{asm:earley-reducer-space-charge}.
 
 \begin{algorithm}[tb]
 \caption{\op{Leo-Reducer}}
-\label{alg:leo-reducer}
+\label{alg:leo-reducer-op}
 \begin{algorithmic}[1]
 \Procedure{Leo-Reducer}{\Ves{j},\Vlim{blocker},\Veim{cuz}}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{blocker}}},\Origin{\var{blocker}}}$
@@ -5939,6 +5939,16 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \end{algorithmic}
 \end{algorithm}
 
+\begin{observation}[\op{Leo-Reducer} calls]
+\label{obs:leo-reducer-calls}
+Every call of
+\op{Leo-Reducer} is
+\begin{itemize}
+\item exactly one EIM try pass; and
+\item a new EIM pass or a dup EIM pass.  \dispEnd{}
+\end{itemize}
+\end{observation}
+
 \begin{table}[tb]
 \caption{Line invocations for \op{Leo-Reducer}}
 \label{tab:leo-reducer-invocations}
@@ -5946,12 +5956,12 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \hline
 Line&Invocations&Justification
 \\ \hline
-    \ref{line:leo-reducer-op-2}&1/\var{pass}&directly,\Obref{def:loop-invocation}
+    \ref{line:leo-reducer-op-2}&1/\var{call}&directly,\Obref{def:loop-invocation}
 \\ \hline
-    \ref{line:leo-reducer-op-3}&1/\var{pass}&
+    \ref{line:leo-reducer-op-3}&1/\var{call}&
        line \ref{line:leo-reducer-op-2}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1/\var{pass}&
+    \ref{line:leo-reducer-op-4}&1/\var{call}&
        line \ref{line:leo-reducer-op-2}, sequential execution
 \\ \hline
     \ref{line:leo-reducer-op-5}&1/\var{dup}&directly
@@ -5968,9 +5978,9 @@ Line&Invocations&Justification
     \ref{line:leo-reducer-op-9}&1/\var{new}&directly
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-1/\var{pass}: ``once per loop pass''.
-1/\var{dup}: ``once per dup EIM loop pass''.
-1/\var{new}: ``once per new EIM loop pass''.
+1/\var{call}: ``once per call of \op{Leo-Reducer}''.
+1/\var{dup}: ``once per dup EIM''.
+1/\var{new}: ``once per new EIM''.
 Lines are deduced in the order
       \ref{line:leo-reducer-op-2},
       \ref{line:leo-reducer-op-3},
@@ -5984,6 +5994,190 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
+
+\begin{theorem}[\proc{Leo-reducer} invocations]
+\label{th:leo-reducer-invocations}
+Line invocations for
+\op{Leo-Reducer} are as in
+\Tref{tab:leo-reducer-invocations}.
+\end{theorem}
+
+\begin{proof}
+By \Tref{tab:leo-reducer-invocations}.
+\myqed
+\end{proof}
+
+\begin{table}[tb]
+\caption{Inclusive time per EIM try of \op{Leo-Reducer}}
+\label{tab:leo-reducer-eim-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:leo-reducer-op-2}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:leo-reducer-op-3}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:leo-reducer-op-4}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:leo-reducer-op-5}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:leo-reducer-op-6}&0--1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:leo-reducer-op-7}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:leo-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:leo-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:leo-reducer-op},
+    \ThFref{th:leo-reducer-invocations},
+    \AsmFref{asm:leo-reducer-time-charge}.%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{assumption}[\op{Leo-Reducer} time charge]
+\label{asm:leo-reducer-time-charge}
+  For the purpose of complexity analysis,
+  we assume that direct time in \op{Leo-Reducer}
+  is
+  charged to an EIM try.
+\end{assumption}
+
+\begin{theorem}[\op{Leo-Reducer} time]
+\label{eq:th-leo-reducer-times}
+Inclusive time consumed by \op{Leo-Reducer}
+is \Oc{} charged to each EIM try.
+\end{theorem}
+
+\begin{table}[tb]
+\caption{Zero EIM space lines for \op{Leo-Reducer}}
+\label{tab:leo-reducer-zero-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:leo-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:leo-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:leo-reducer-op-4}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:leo-reducer-op-6}&1&0&&0&
+\\ \hline
+    \ref{line:leo-reducer-op-7}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:leo-reducer-op-8}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:leo-reducer-op},
+    \ThFref{th:leo-reducer-invocations},
+    \AsmFref{asm:leo-reducer-time-charge}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[tb]
+\caption{Inclusive EIM-charged space
+    for each new EIM loop pass of \op{Leo-Reducer}}
+\label{tab:leo-reducer-eim-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:leo-reducer-op-5}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:leo-reducer-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \AFref{alg:leo-reducer-op},
+    \ThFref{th:leo-reducer-invocations},
+    \AsmFref{asm:leo-reducer-space-charge}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{assumption}[\op{Leo-Reducer} space charge]
+\label{asm:leo-reducer-space-charge}
+  For the purpose of complexity analysis,
+  we assume that direct space in \op{Leo-Reducer} is
+  \begin{itemize}
+  \item EIM-charged to a new EIM, if it is
+     by a new EIM call of \op{Leo-Reducer}; and
+  \item link-charged to a dup EIM, if it is
+     consumed by a dup EIM call of \op{Leo-Reducer}. \dispEnd
+  \end{itemize}
+\end{assumption}
+
+\begin{table}[tb]
+\caption{Inclusive link-charged space
+    for each dup EIM loop pass of \op{Leo-Reducer}}
+\label{tab:leo-reducer-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:leo-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:leo-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \AFref{alg:leo-reducer-op},
+    \ThFref{th:leo-reducer-invocations},
+    \AsmFref{asm:leo-reducer-space-charge}.}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Leo-Reducer} EIM space]
+\label{eq:th-leo-reducer-eim-space}
+Inclusive EIM-charged space for \op{Leo-Reducer}
+is \Oc{} per new EIM.
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Tref{tab:leo-reducer-zero-space},
+\Tref{tab:leo-reducer-eim-space},
+and \Asmref{asm:leo-reducer-space-charge}.
+\myqed
+\end{proof}
+
+\begin{theorem}[\op{Leo-Reducer} link space]
+\label{eq:th-leo-reducer-link-space}
+Inclusive link-charged space for \op{Leo-Reducer}
+is \Oc{} per EIM dup.
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Tref{tab:leo-reducer-zero-space},
+\Tref{tab:leo-reducer-link-space},
+and \Asmref{asm:leo-reducer-space-charge}.
+\myqed
+\end{proof}
+
+\todo{Finish reducer op}
 
 \begin{algorithm}[tb]
 \caption{\op{Reducer}}
