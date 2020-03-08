@@ -5579,11 +5579,10 @@ operation of \Earley{}.
 \subsection{Reducer op}
 \label{def:reducer}
 
-\todo{Rewrite Reducer op section}
 \todo{Define caller-charged, EIM-charged, link-charged}
 \todo{Define ``new EIM pass''}
 \todo{Define ``dup EIM pass''}
-\todo{Define ``try EIM pass'', ``EIM try''}
+\todo{Define ``EIM try pass'', ``EIM try''}
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
@@ -5616,28 +5615,28 @@ operation of \Earley{}.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{observation}[\op{Earley-reducer} passes]
+\begin{observation}[\op{Earley-Reducer} passes]
 \label{obs:earley-reducer-passes}
 The loop of lines
 \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
 is the only one in
-\op{Earley-reducer}.
+\op{Earley-Reducer}.
 Every pass of loop
 \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
 is
 \begin{itemize}
-\item exactly one try EIM pass; and
+\item exactly one EIM try pass; and
 \item a new EIM pass or a dup EIM pass.  \dispEnd{}
 \end{itemize}
 \end{observation}
 
-For the purposes of analyzing \op{Earley-reducer},
+For the purposes of analyzing \op{Earley-Reducer},
 ``loop pass'', or just ``pass'',
 refers to a pass of
 loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
 
 \begin{table}[tb]
-\caption{Line invocations for \op{Earley-reducer}}
+\caption{Line invocations for \op{Earley-Reducer}}
 \label{tab:earley-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
@@ -5690,7 +5689,7 @@ Lines are deduced in the order
 \begin{theorem}[\proc{Earley-reducer} invocations]
 \label{th:earley-reducer-invocations}
 Line invocations for
-\op{Earley-reducer} are as in
+\op{Earley-Reducer} are as in
 \Tref{tab:earley-reducer-invocations}.
 \end{theorem}
 
@@ -5700,7 +5699,7 @@ By \Tref{tab:earley-reducer-invocations}.
 \end{proof}
 
 \begin{table}[tb]
-\caption{Inclusive caller-charged time for \op{Earley-reducer}}
+\caption{Inclusive caller-charged time for \op{Earley-Reducer}}
 \label{tab:earley-reducer-caller-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5709,7 +5708,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
@@ -5720,7 +5719,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[tb]
-\caption{Inclusive time per EIM try for \op{Earley-reducer}}
+\caption{Inclusive time per EIM try for \op{Earley-Reducer}}
 \label{tab:earley-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5745,7 +5744,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-10}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     \cuz{}
@@ -5758,10 +5757,10 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{assumption}[\op{Earley-reducer} time charge]
+\begin{assumption}[\op{Earley-Reducer} time charge]
 \label{asm:earley-reducer-time-charge}
   For the purpose of complexity analysis,
-  we assume that direct time in \op{Earley-reducer}
+  we assume that direct time in \op{Earley-Reducer}
   is
   \begin{itemize}
   \item charged to an EIM try, if it is consumed by a EIM try pass; and
@@ -5769,9 +5768,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   \end{itemize}
 \end{assumption}
 
-\begin{theorem}[\op{Earley-reducer} time]
+\begin{theorem}[\op{Earley-Reducer} time]
 \label{eq:th-earley-reducer-times}
-Time consumed by \op{Earley-reducer}
+Inclusive time consumed by \op{Earley-Reducer}
 is
 \begin{itemize}
 \item \Oc{} charged to each EIM try; and
@@ -5787,7 +5786,7 @@ The theorem follows from
 \end{proof}
 
 \begin{table}[tb]
-\caption{Zero EIM space lines for \op{Earley-reducer}}
+\caption{Zero EIM space lines for \op{Earley-Reducer}}
 \label{tab:earley-reducer-zero-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5808,7 +5807,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     \cuz{}
@@ -5823,7 +5822,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 
 \begin{table}[tb]
 \caption{Inclusive EIM-charged space
-    for each new EIM loop pass of \op{Earley-reducer}}
+    for each new EIM loop pass of \op{Earley-Reducer}}
 \label{tab:earley-reducer-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5834,7 +5833,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{0}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
@@ -5847,7 +5846,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \begin{assumption}[Earley reducer space charge]
 \label{asm:earley-reducer-space-charge}
   For the purpose of complexity analysis,
-  we assume that direct space in \op{Earley-reducer} is
+  we assume that direct space in \op{Earley-Reducer} is
   \begin{itemize}
   \item EIM-charged to a new EIM, if it is
      consumed by a new EIM loop pass; and
@@ -5859,11 +5858,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 For
 \Asmref{asm:earley-reducer-space-charge},
 note that space is not consumed by
-\op{Earley-reducer} outside of a loop pass.
+\op{Earley-Reducer} outside of a loop pass.
 
 \begin{table}[tb]
 \caption{Inclusive link-charged space
-    for each dup EIM loop pass of \op{Earley-reducer}}
+    for each dup EIM loop pass of \op{Earley-Reducer}}
 \label{tab:earley-reducer-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5874,7 +5873,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-10}&1&0&&0&\Obref{obs:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
@@ -5884,9 +5883,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\op{Earley-reducer} EIM space]
+\begin{theorem}[\op{Earley-Reducer} EIM space]
 \label{eq:th-earley-reducer-eim-space}
-Inclusive EIM-charged space for \op{Earley-reducer}
+Inclusive EIM-charged space for \op{Earley-Reducer}
 is \Oc{} per new EIM.
 \end{theorem}
 
@@ -5898,9 +5897,9 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \myqed
 \end{proof}
 
-\begin{theorem}[\op{Earley-reducer} link space]
+\begin{theorem}[\op{Earley-Reducer} link space]
 \label{eq:th-earley-reducer-link-space}
-Inclusive link-charged space for \op{Earley-reducer}
+Inclusive link-charged space for \op{Earley-Reducer}
 is \Oc{} per EIM dup.
 \end{theorem}
 
@@ -5913,99 +5912,107 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \end{proof}
 
 \begin{algorithm}[tb]
-\caption{\var{Leo-Reducer}}
-\label{alg:marpa-leo-reducer}
+\caption{\op{Leo-Reducer}}
+\label{alg:leo-reducer}
 \begin{algorithmic}[1]
 \Procedure{Leo-Reducer}{\Ves{j},\Vlim{blocker},\Veim{cuz}}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{blocker}}},\Origin{\var{blocker}}}$
+  \label{line:leo-reducer-op-2}
 \State $\Vlp{lp} = \tuple{\Vlim{blocker},\Veim{cuz}}$
+  \label{line:leo-reducer-op-3}
 \If{$\Seen{\Veim{trial}}$}
+  \label{line:leo-reducer-op-4}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
+      \Comment \tightMath{\var{ln}=\Oc}
+  \label{line:leo-reducer-op-5}
 \Else
+  \label{line:leo-reducer-op-6}
     \State $\Seen{\Veim{trial}} = \var{true}$
+  \label{line:leo-reducer-op-7}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+  \label{line:leo-reducer-op-8}
     \State Add \var{trial} to \Ves{j}
+      \Comment \tightMath{\var{s}=\Oc}
+  \label{line:leo-reducer-op-9}
 \EndIf
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
+\begin{table}[tb]
+\caption{Line invocations for \op{Leo-Reducer}}
+\label{tab:leo-reducer-invocations}
+\begin{tabular}{|c|c|p{2.75in}|}
+\hline
+Line&Invocations&Justification
+\\ \hline
+    \ref{line:leo-reducer-op-2}&1/\var{pass}&directly,\Obref{def:loop-invocation}
+\\ \hline
+    \ref{line:leo-reducer-op-3}&1/\var{pass}&
+       line \ref{line:leo-reducer-op-2}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-4}&1/\var{pass}&
+       line \ref{line:leo-reducer-op-2}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-5}&1/\var{dup}&directly
+\\ \hline
+    \ref{line:leo-reducer-op-6}&1/\var{new}&
+       line \ref{line:leo-reducer-op-9}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-7}&1/\var{new}&
+       line \ref{line:leo-reducer-op-9}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-8}&1/\var{new}&
+       line \ref{line:leo-reducer-op-9}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-9}&1/\var{new}&directly
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+1/\var{pass}: ``once per loop pass''.
+1/\var{dup}: ``once per dup EIM loop pass''.
+1/\var{new}: ``once per new EIM loop pass''.
+Lines are deduced in the order
+      \ref{line:leo-reducer-op-2},
+      \ref{line:leo-reducer-op-3},
+      \ref{line:leo-reducer-op-4},
+      \ref{line:leo-reducer-op-5},
+      \ref{line:leo-reducer-op-9},
+      \ref{line:leo-reducer-op-6},
+      \ref{line:leo-reducer-op-7},
+      \ref{line:leo-reducer-op-8}.
+    }
+\\ \hline
+\end{tabular}
+\end{table}
+
 \begin{algorithm}[tb]
-\caption{\var{Reducer}}
-\label{alg:marpa-reducer}
+\caption{\op{Reducer}}
+\label{alg:reducer-op}
 \begin{algorithmic}[1]
 \Procedure{Reducer}{\Ves{j}}
 \For{$\Veim{cuz} \in \Ves{j}$ where \var{cuz} is a completion}
+  \label{line:reducer-op-2}
 \State $\Veimset{matches} = \Transitions{\LHS{\Veim{cuz}}}{\Origin{\var{x}}}$
-\label{line:reducer-op-05}
+  \label{line:reducer-op-3}
 \State $\var{match0} = \Velement{matches}{0}$
+  \label{line:reducer-op-4}
 \If{$\var{match0} = \Lambda$}
+  \label{line:reducer-op-5}
   \State Do nothing
+      \label{line:reducer-op-6}
 \ElsIf{\var{match0} is a LIM}
+  \label{line:reducer-op-7}
     \State \Call{Leo-Reducer}{\Ves{j},\Vlim{match0},\Veim{cuz}}
+      \label{line:reducer-op-8}
 \Else
+  \label{line:reducer-op-9}
     \State \Call{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
+      \label{line:reducer-op-10}
 \EndIf
 \EndFor
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-
-\begin{align}
-\label{eq:def-reducer-10}
-& \var{Reducer}(\Ves{i}) \defined
-\\ \nonumber \displaybreak[0]
-& \qquad \var{Earley-reducer}(\Ves{i}) \cup \var{Leo-reducer}(\Ves{i})
-\end{align}
-where
-\begin{align}
-\label{eq:def-reducer-20}
-& \var{Earley-reducer}(\Ves{i}) \defined
-\\ \nonumber \displaybreak[0]
-& \qquad
-\left\lbrace
-\begin{gathered}
-  \left [ \Next{\Veim{pred}}, \Origin{\var{pred}} \right] @ \Ves{i} :
-  \\
-  \begin{gathered}
-    \Veim{cuz} \in \Ves{i} \\
-    \land \; \Veim{pred} \in \Origin{\var{cuz}} \\
-    \land \; \Postdot{\var{pred}} = \LHS{\var{cuz}} \\
-    \land \; \neg \; \var{Blocker}(\var{cuz})
-  \end{gathered}
-\end{gathered}
-\right\rbrace,
-\end{align}
-%
-\begin{align}
-\label{eq:def-reducer-23}
-& \var{Leo-reducer}(\Ves{i}) \defined
-\\ \nonumber \displaybreak[0]
-& \qquad
-\left\lbrace
-\begin{gathered}
-  \left[
-    \DR{\var{blocker}}, \Origin{\var{blocker}}
-  \right]_\var{EIM}
-  :
-\\
-    \Veim{cuz} \in \Ves{i}
-\\
-    \land \; \var{Blocker}(\var{cuz})
-\end{gathered}
-\right\rbrace,
-\end{align}
-and
-\begin{align}
-\label{eq:def-reducer-24}
-& \var{Blocker}(\Veim{cuz}) \defined
-\\ \nonumber \displaybreak[0]
-& \qquad \qquad
-   \begin{gathered}
-    \exists \; \Vlim{blocker} \in \Origin{\var{cuz}} : \\
-    \Transition{\var{blocker}} = \LHS{\var{cuz}}
-   \end{gathered}
-\end{align}
 
 \begin{observation}[Ancestry]
 \label{obs:reducer-ancestry}
@@ -6018,12 +6025,12 @@ In an ambiguous parse, a reducer-generated EIM will have one or more link pairs.
 The cause of a reducer-generated EIM will always be
 a completed EIM.
 The predecessor of a reducer-generated EIM varies depending on whether the attempt
-to create the reducer-generated EIM was a \var{Leo-reducer} operation
-or an \op{Earley-reducer} operation.
+to create the reducer-generated EIM was a \op{Leo-Reducer} operation
+or an \op{Earley-Reducer} operation.
 For an
-\op{Earley-reducer} operation,
+\op{Earley-Reducer} operation,
 the predecessor will be an incomplete EIM.
-For a \op{Leo-reducer} operation,
+For a \op{Leo-Reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
 \dispEnd{}
@@ -6053,22 +6060,10 @@ is not necessarily an EIM completion.
 }
 Put another way, \Marpa{}'s \var{Reducer} op
 is the same as the Completer operation of \Earley{},
-if, for all \Vdr{top}, \Vsym{completed}, \Vloc{top},
-\[
-\bigl([ \Vdr{top}, \Vsym{completed}, \Vloc{top} ]\bigr)_\var{LIM}
-\in \Ves{predecessor}
-\]
-is false in
-\Eref{eq:def-reducer-20}
-and
-\Eref{eq:def-reducer-23}.
+if there never is a LIM in \Vpimset{matches} on
+line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}.
 In this case,
-we will always have
-\[
-\var{Leo-reducer}(\Ves{i}) = \emptyset
-\]
-so that we may also the \Earley{} completer is equivalent
-in effect to $\var{Earley-reducer}(\Ves{i})$.
+we never execute \op{Leo-Reducer}.
 \dispEnd
 \end{observation}
 
@@ -6295,8 +6290,8 @@ if and only if
 \end{itemize}
 This observation follows from
 \Aref{alg:initializer-op},
-\Eref{alg:scanner-op},
-\Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
+\Aref{alg:scanner-op},
+\Aref{alg:reducer-op},
 \Eref{eq:def-predictor-op}, and
 \Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
 \dispEnd
@@ -6328,8 +6323,8 @@ If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
 \Aref{alg:initializer-op},
-\Eref{alg:scanner-op},
-\Eref{eq:def-reducer-10}--\Eref{eq:def-reducer-23},
+\Aref{alg:scanner-op},
+\Aref{alg:reducer-op},
 \Eref{eq:def-predictor-op}, and
 \Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
 \dispEnd
@@ -8604,14 +8599,11 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 
 \begin{theorem}[\op{Leo-Reducer} is consistent]
 \label{th:leo-reducer-is-consistent}
-The \var{Leo-reducer} sub-op
-of the \Marpa{} \var{Reducer} operation
+The \op{Leo-Reducer} sub-op
+of the \Marpa{} \op{Reducer} operation
 preserves validity.
 \end{theorem}
 \begin{proof}
-Recall that \var{Leo-reducer}
-is defined at
-\Eref{eq:def-reducer-23}.
 \todo{prove this}
 \myqed
 \end{proof}
@@ -8666,27 +8658,25 @@ correct
 We have shown that the memoizer operation
 preserves validity
 \Eref{th:memoizer-consistency}.
-The remaining subcase is the \Marpa{} \var{Reducer} operation.
+The remaining subcase is the \Marpa{} \op{Reducer} operation.
 
-The \Marpa{} \var{Reducer} operation consists of two
+The \Marpa{} \op{Reducer} operation consists of two
 sub-ops:
-\var{Earley-reducer} and
-\var{Leo-reducer}.
+\op{Earley-Reducer} and
+\op{Leo-Reducer}.
 We have shown that the
-\var{Leo-reducer} preserves validity
+\op{Leo-Reducer} preserves validity
 \Thref{th:leo-reducer-is-consistent}.
 
 From
 \Obref{obs:earley-completer-op}
-and the description of the
-\var{Earley-reducer}
-\Eref{eq:def-reducer-10},
-the \var{Earley-reducer} creates the EIM that
+and \Aref{alg:earley-reducer-op},
+\op{Earley-Reducer}, creates the EIM that
 the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
-\Marpa{}'s \var{Earley-reducer}.
+\Marpa{}'s \op{Earley-Reducer}.
 Therefore the PIM's created by
-the \Marpa{} \var{Earley-reducer} sub-op
+the \Marpa{} \op{Earley-Reducer} sub-op
 are a subset of those created by the \Earley{}
 completer operation.
 We know the \Earley{} completer operation preserves
@@ -8752,7 +8742,7 @@ $\because$ DFPP.
 \begin{equation}
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
-the \Marpa{} \var{Reducer} operation of Earley set \var{j},
+the \Marpa{} \op{Reducer} operation of Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
 and if they contain all the visible valid confirmed EIM's
 $\because$ DFPP.
@@ -8838,7 +8828,7 @@ If the parse is complete as far as the
 \Marpa{} \var{Scanner} operation of
 Earley set \Ves{j},
 then the parse is complete as far as the
-\Marpa{} \var{Reducer} operation of
+\Marpa{} \op{Reducer} operation of
 Earley set \Ves{j}.
 \end{lemma}
 
@@ -8849,7 +8839,7 @@ visible depth.
 We take for the induction hypothesis
 \begin{equation}
 \label{lem:marpa-reducer-completeness-28}
-\myparbox{After a \Marpa{} \var{Reducer} operation at \Ves{j},
+\myparbox{After a \Marpa{} \op{Reducer} operation at \Ves{j},
 \Ves{j} is complete
 with respect to the
 the EIM's of visible depth \var{ix}.}
