@@ -5584,6 +5584,9 @@ operation of \Earley{}.
 \todo{Define ``new EIM pass''}
 \todo{Define ``dup EIM pass''}
 \todo{Define ``EIM try pass'', ``EIM try''}
+\todo{Accounts: open vs. closed}
+\todo{Accounts: parse, es, eim, new, dup, try, link,
+caller}
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
@@ -5687,7 +5690,7 @@ Lines are deduced in the order
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\proc{Earley-reducer} invocations]
+\begin{theorem}[\op{Earley-Reducer} invocations]
 \label{th:earley-reducer-invocations}
 Line invocations for
 \op{Earley-Reducer} are as in
@@ -5770,13 +5773,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{assumption}
 
 \begin{theorem}[\op{Earley-Reducer} time]
-\label{eq:th-earley-reducer-times}
+\label{th:earley-reducer-time}
 Inclusive time consumed by \op{Earley-Reducer}
 is
 \begin{itemize}
 \item \Oc{} charged to each EIM try; and
 \item \Oc{} charged to the caller.
 \end{itemize}
+The \var{dup} and \var{new} time accounts are closed
+by \op{Earley-Reducer}.
 \end{theorem}
 
 \begin{proof}
@@ -5849,17 +5854,17 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Earley-Reducer} is
   \begin{itemize}
-  \item EIM-charged to a new EIM, if it is
-     consumed by a new EIM loop pass; and
-  \item link-charged to a dup EIM, if it is
-     consumed by a dup EIM loop pass. \dispEnd
+  \item charged to the \var{new} account of the newly created EIM,
+     if it is consumed by a new EIM loop pass of \op{Earley-Reducer}; and
+  \item charged to the \var{link} account of a new ambiguous link pair,
+     if it is consumed by a dup EIM loop pass of \op{Earley-Reducer}.
   \end{itemize}
-\end{assumption}
-
-For
-\Asmref{asm:earley-reducer-space-charge},
-note that space is not consumed by
+Note that space is not consumed by
 \op{Earley-Reducer} outside of a loop pass.
+    The \var{new} and \var{link} accounts are closed
+as of the return from \op{Earley-Reducer}.
+     \dispEnd
+\end{assumption}
 
 \begin{table}[t]
 \caption{Inclusive link-charged space
@@ -6054,10 +6059,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{assumption}
 
 \begin{theorem}[\op{Leo-Reducer} time]
-\label{eq:th-leo-reducer-times}
+\label{th:leo-reducer-time}
 Inclusive time consumed by \op{Leo-Reducer}
 is \Oc{} charged to each EIM try.
 \end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Tref{tab:leo-reducer-eim-time}.
+\end{proof}
 
 \begin{table}[t]
 \caption{Zero EIM space lines for \op{Leo-Reducer}}
@@ -6120,11 +6130,14 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Leo-Reducer} is
   \begin{itemize}
-  \item EIM-charged to a new EIM, if it is
-     by a new EIM call of \op{Leo-Reducer}; and
-  \item link-charged to a dup EIM, if it is
-     consumed by a dup EIM call of \op{Leo-Reducer}. \dispEnd
+  \item charged to the \var{new} account of the newly created EIM,
+     if it is consumed by a new EIM call of \op{Leo-Reducer}; and
+  \item charged to the \var{link} account of a new ambiguous link pair,
+     if it is consumed by a dup EIM call of \op{Leo-Reducer}.
   \end{itemize}
+    The \var{new} and \var{link} accounts are closed
+as of the return from \op{Leo-Reducer}.
+     \dispEnd
 \end{assumption}
 
 \begin{table}[t]
@@ -6178,8 +6191,6 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \myqed
 \end{proof}
 
-\todo{Finish reducer op}
-
 \begin{algorithm}[tb]
 \caption{\op{Reducer}}
 \label{alg:reducer-op}
@@ -6198,10 +6209,12 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \ElsIf{\var{match0} is a LIM}
   \label{line:reducer-op-7}
     \State \Call{Leo-Reducer}{\Ves{j},\Vlim{match0},\Veim{cuz}}
+      \Comment space
       \label{line:reducer-op-8}
 \Else
   \label{line:reducer-op-9}
     \State \Call{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
+      \Comment space
       \label{line:reducer-op-10}
 \EndIf
 \EndFor
@@ -6209,14 +6222,188 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \end{algorithmic}
 \end{algorithm}
 
+\begin{table}[t]
+\caption{Line invocations for \op{Reducer}}
+\label{tab:reducer-invocations}
+\begin{tabular}{|c|c|p{2.75in}|}
+\hline
+Line&Invocations&Justification
+\\ \hline
+    \ref{line:reducer-op-2}&1/\var{call}+1/\var{pass}&
+       line \ref{line:reducer-op-3}, \Obref{def:loop-invocation}, sequential execution
+\\ \hline
+    \ref{line:reducer-op-3}&1/\var{pass}&directly,\Obref{def:loop-invocation}
+\\ \hline
+    \ref{line:reducer-op-4}&1/\var{pass}&
+       line \ref{line:reducer-op-3}, sequential execution
+\\ \hline
+    \ref{line:reducer-op-5}&1/\var{pass}&
+       line \ref{line:reducer-op-3}, sequential execution
+\\ \hline
+    \ref{line:reducer-op-6}&1/\var{pass}&directly
+\\ \hline
+    \ref{line:reducer-op-7}&1/\var{pass}&
+       line \ref{line:reducer-op-8}, sequential execution
+\\ \hline
+    \ref{line:reducer-op-8}&1/\var{lim}&directly
+\\ \hline
+    \ref{line:reducer-op-9}&1/\var{eim}&
+       line \ref{line:reducer-op-10}, sequential execution
+\\ \hline
+    \ref{line:reducer-op-10}&1/\var{eim}&directly
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+1/\var{call}: ``once per procedure call''.
+1/\var{pass}: ``at most once per loop pass''.
+1/\var{lim}: ``once per LIM loop pass''.
+1/\var{eim}: ``once per EIM loop pass''.
+Lines are deduced in the order
+      \ref{line:reducer-op-3},
+      \ref{line:reducer-op-2},
+      \ref{line:reducer-op-4},
+      \ref{line:reducer-op-5},
+      \ref{line:reducer-op-6},
+      \ref{line:reducer-op-10},
+      \ref{line:reducer-op-7},
+      \ref{line:reducer-op-8},
+      \ref{line:reducer-op-9}.
+    }
+\\ \hline
+\end{tabular}
+\end{table}
+
+For the purposes of analyzing \op{Reducer},
+``loop pass'', or just ``pass'',
+refers to a pass of
+loop \enRefs{line:reducer-op-2}{line:reducer-op-9}.
+Each loop pass is exactly one of a ``LIM pass'' or an ``EIM pass''.
+It is a LIM pass if it invokes \op{Leo-Reducer} and
+an EIM pass if it invokes \op{Earley-Reducer}.
+
+\begin{theorem}[\op{Reducer} invocations]
+\label{th:reducer-invocations}
+Line invocations for
+\op{Reducer} are as in
+\Tref{tab:reducer-invocations}.
+\end{theorem}
+
+\begin{proof}
+By \Tref{tab:reducer-invocations}.
+\myqed
+\end{proof}
+
+\begin{assumption}[\op{Reducer} time charge]
+\label{asm:reducer-time-charge}
+  For the purpose of complexity analysis,
+  we assume that direct time in \op{Reducer}
+  is
+  \begin{itemize}
+  \item charged to the \var{eim} account of, \Veim{cuz},
+  the EIM that is the loop variable,
+  if it is consumed by a loop pass; and
+  \item charged to the \var{caller} account of \op{Reducer}, otherwise. \dispEnd
+  \end{itemize}
+\end{assumption}
+
+\begin{table}[t]
+\caption{Inclusive open time charged to \var{caller} account
+  for \op{Reducer}}
+\label{tab:reducer-caller-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:reducer-op},
+    \ThFref{th:reducer-invocations},
+    \AsmFref{asm:reducer-time-charge}.%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{table}[t]
+\caption{Inclusive open time charged to \var{eim}
+  account of each \Veim{cuz} by \op{Reducer}}
+\label{tab:reducer-eim-time}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:reducer-op-3}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+\\ \hline
+    \ref{line:reducer-op-4}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:reducer-op-5}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:reducer-op-6}&0--1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:reducer-op-7}&0--1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:reducer-op-8}&0--1&\Oc{}&0&\Oc{}&\Thref{th:leo-reducer-time}
+\\ \cline{1-5}
+    \multicolumn{6}{|p{4.5in}|}{
+    \var{caller} account time of \op{Leo-Reducer} of \Oc{} included in
+    line \ref{line:reducer-op-8} direct time.%
+}
+\\ \hline
+    \ref{line:reducer-op-9}&0--1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:reducer-op-10}&0--1&\Oc{}&0&\Oc{}&\Thref{th:earley-reducer-time}
+\\ \cline{1-5}
+    \multicolumn{6}{|p{4.5in}|}{
+    \var{caller} account time of \op{Earley-Reducer} of \Oc{} included in
+    line \ref{line:reducer-op-10} direct time.%
+}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:reducer-op},
+    \ThFref{th:reducer-invocations},
+    \AsmFref{asm:reducer-time-charge}.%
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Reducer} time]
+\label{th:reducer-time}
+Inclusive time consumed by \op{Leo-Reducer}
+is
+\begin{itemize}
+\item \Oc{} charged to the \var{caller} account of \op{Leo-Reducer};
+and
+\item \Oc{} charged to \var{eim} account
+of every EIM in \Ves{j},
+at the time of the return from \op{Leo-Reducer}.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Tref{tab:reducer-caller-time} and
+\Tref{tab:reducer-eim-time}.
+\end{proof}
+
+\todo{Finish reducer op}
+
 \begin{observation}[Ancestry]
 \label{obs:reducer-ancestry}
 The \Marpa{} implementation tracks all link pairs for reducer-generated
 EIM's.
-Completer-generated EIM's will have a link pair for every attempt to create them.
-In an unambiguous parse, a reducer-generated EIM will always have exactly one link pair.
-In an ambiguous parse, a reducer-generated EIM will have one or more link pairs.
-
 The cause of a reducer-generated EIM will always be
 a completed EIM.
 The predecessor of a reducer-generated EIM varies depending on whether the attempt
