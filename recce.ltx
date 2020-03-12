@@ -3267,6 +3267,7 @@ for the PIM subtypes.
 
 \section{Complexity preliminaries}
 \label{sec:complexity-preliminaries}
+\todo{Rewrite ``Complexity preliminaries'' section.}
 
 Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
@@ -3441,8 +3442,6 @@ Their precise meaning will defined in the context in which they are used.
 
 \subsection{Earley set indexing}
 \label{sec:es-indexing}
-
-\todo{Rewrite this section.}
 
 \begin{gather}
 \label{eq:def-loc-of_pim}
@@ -3800,6 +3799,63 @@ and any per-line justifications used for the line's statements.
 Later rows in the total give the total amount of resource accounted for in
 that table,
 and the per-table justifications.
+
+\subsection{Accounts}
+\label{sec:accounts}
+
+In the low-level complexity analysis,
+initially all resource will be charged to an \dfn{account}.
+\begin{itemize}
+\item \var{parse}: An account for resource charged to the parse itself.
+\item \var{es}: One account per ES,
+    for resource charged to the current working Earley set.
+\item \var{eim}: One account per EIM,
+  for resource charged to an eim which already exists.
+\item \var{new}: A per-EIM account, for resource charged to a newly created EIM.
+\item \var{dup}: A per-link-pair account,
+    for resource charged to an ambiguous link pair.
+\item \var{try}: An alternative name for either a \var{new} or a \var{dup}
+    account, for convenient in referring to them in the alternative.
+\item \var{pred}: An per-EIM account,
+    for resource charged to a prediction EIM.
+\item \var{lim}: A per-LIM account, for resource charged to a LIM.
+\item \var{proc}: A per-pseudocode-procedure account,
+  for resource charged to the current pseudocode procedure.
+\end{itemize}
+
+Accounts start \dfn{open},
+and are \dfn{closed} during the low-level complexity analysis.
+The complexity analysis starts from the bottom of the pseudocode
+procedure call hierarchy, and proceeds upward.
+As of exit from the top-level pseudocode procedure,
+all accounts are closed.
+
+The following theorem allows some useful simplifications.
+It states a condition under which we
+may safely ignore \var{proc} time.
+
+\begin{theorem}[Procedure overhead discard]
+\label{th:procedure-overhead-discard}
+When a pseudocode procedure (``caller'') calls another
+pseudocode procedure (``callee''), caller may treat \Oc{} time
+charged to the \var{proc} account of callee as part of the ``housekeeping''
+for callee.
+\end{theorem}
+
+\begin{proof}
+By \Obref{obs:housekeeping-vs-body-execution},
+a caller always incurs \Oc{} ``housekeeping''
+time when it calls a callee.
+If we add \Oc{} of time from the callee's
+\var{proc} account to the housekeeping time
+of the callee, the total time is
+\[
+    \Oc + \Oc = \Oc,
+\]
+so that, in Landau notation terms,
+the housekeeping time of the callee is unchanged.
+\myqed
+\end{proof}
 
 \section{The \Marpa{} algorithm}
 \label{sec:marpa}
@@ -5584,9 +5640,6 @@ operation of \Earley{}.
 \todo{Define ``new EIM pass''}
 \todo{Define ``dup EIM pass''}
 \todo{Define ``EIM try pass'', ``EIM try''}
-\todo{Accounts: open vs. closed}
-\todo{Accounts: parse, es, eim, new, dup, try, link,
-caller}
 
 \begin{algorithm}[tb]
 \caption{\var{Earley-Reducer}}
@@ -6350,11 +6403,13 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-7}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:reducer-op-8}&0--1&\Oc{}&0&\Oc{}&\Thref{th:leo-reducer-time}
+    \ref{line:reducer-op-8}&0--1&\Oc{}&0&\Oc{}&\Thref{th:leo-reducer-time},
+        \Thref{th:procedure-overhead-discard}
 \\ \hline
     \ref{line:reducer-op-9}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:reducer-op-10}&0--1&\Oc{}&0&\Oc{}&\Thref{th:earley-reducer-time}
+    \ref{line:reducer-op-10}&0--1&\Oc{}&0&\Oc{}&\Thref{th:earley-reducer-time},
+        \Thref{th:procedure-overhead-discard}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -6364,11 +6419,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
     \AFref{alg:reducer-op},
     \ThFref{th:reducer-invocations},
     \AsmFref{asm:reducer-time-charge}.
-    \var{caller} account times of \Oc{}
-    for \op{Leo-Reducer}
-    and \op{Earley-Reducer} included in
-    the direct time of lines
-    \ref{line:reducer-op-8} and \ref{line:reducer-op-10}.%
 }
 \\ \hline
 \end{tabular}
