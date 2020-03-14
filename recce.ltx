@@ -5655,7 +5655,6 @@ operation of \Earley{}.
 \If{$\Seen{\Veim{trial}}$}
       \label{line:earley-reducer-op-5}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-      \Comment \tightMath{\var{ln}=\Oc}
       \label{line:earley-reducer-op-6}
 \Else
       \label{line:earley-reducer-op-7}
@@ -5664,7 +5663,6 @@ operation of \Earley{}.
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
       \label{line:earley-reducer-op-9}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{\var{s}=\Oc}
       \label{line:earley-reducer-op-10}
 \EndIf
 \EndFor
@@ -5943,7 +5941,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{theorem}[\op{Earley-Reducer} EIM space]
-\label{eq:th-earley-reducer-eim-space}
+\label{th:earley-reducer-eim-space}
 Inclusive EIM-charged space for \op{Earley-Reducer}
 is \Oc{} per new EIM.
 \end{theorem}
@@ -5957,7 +5955,7 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \end{proof}
 
 \begin{theorem}[\op{Earley-Reducer} link space]
-\label{eq:th-earley-reducer-link-space}
+\label{th:earley-reducer-link-space}
 Inclusive link-charged space for \op{Earley-Reducer}
 is \Oc{} per EIM dup.
 \end{theorem}
@@ -5982,7 +5980,6 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \If{$\Seen{\Veim{trial}}$}
   \label{line:leo-reducer-op-4}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-      \Comment \tightMath{\var{ln}=\Oc}
   \label{line:leo-reducer-op-5}
 \Else
   \label{line:leo-reducer-op-6}
@@ -5991,7 +5988,6 @@ and \Asmref{asm:earley-reducer-space-charge}.
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
   \label{line:leo-reducer-op-8}
     \State Add \var{trial} to \Ves{j}
-      \Comment \tightMath{\var{s}=\Oc}
   \label{line:leo-reducer-op-9}
 \EndIf
 \EndProcedure
@@ -6217,7 +6213,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{theorem}[\op{Leo-Reducer} EIM space]
-\label{eq:th-leo-reducer-eim-space}
+\label{th:leo-reducer-eim-space}
 Inclusive EIM-charged space for \op{Leo-Reducer}
 is \Oc{} per new EIM.
 \end{theorem}
@@ -6231,7 +6227,7 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \end{proof}
 
 \begin{theorem}[\op{Leo-Reducer} link space]
-\label{eq:th-leo-reducer-link-space}
+\label{th:leo-reducer-link-space}
 Inclusive link-charged space for \op{Leo-Reducer}
 is \Oc{} per EIM dup.
 \end{theorem}
@@ -6262,12 +6258,10 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \ElsIf{\var{match0} is a LIM}
   \label{line:reducer-op-7}
     \State \Call{Leo-Reducer}{\Ves{j},\Vlim{match0},\Veim{cuz}}
-      \Comment space
       \label{line:reducer-op-8}
 \Else
   \label{line:reducer-op-9}
     \State \Call{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
-      \Comment space
       \label{line:reducer-op-10}
 \EndIf
 \EndFor
@@ -6293,33 +6287,32 @@ Line&Invocations&Justification
     \ref{line:reducer-op-5}&1/\var{pass}&
        line \ref{line:reducer-op-3}, sequential execution
 \\ \hline
-    \ref{line:reducer-op-6}&1/\var{pass}&directly
+    \ref{line:reducer-op-6}&0--1/\var{pass}&conditional execution
 \\ \hline
-    \ref{line:reducer-op-7}&1/\var{pass}&
+    \ref{line:reducer-op-7}&0--1/\var{pass}&
        line \ref{line:reducer-op-8}, sequential execution
 \\ \hline
-    \ref{line:reducer-op-8}&1/\var{lim}&directly
+    \ref{line:reducer-op-8}&0--1/\var{pass}&conditional execution
 \\ \hline
-    \ref{line:reducer-op-9}&1/\var{eim}&
+    \ref{line:reducer-op-9}&0--1/\var{pass}&
        line \ref{line:reducer-op-10}, sequential execution
 \\ \hline
-    \ref{line:reducer-op-10}&1/\var{eim}&directly
+    \ref{line:reducer-op-10}&0--1/\var{pass}&conditional execution
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 1/\var{call}: ``once per procedure call''.
-1/\var{pass}: ``at most once per loop pass''.
-1/\var{lim}: ``once per LIM loop pass''.
-1/\var{eim}: ``once per EIM loop pass''.
+1/\var{pass}: ``once per loop pass''.
+0--1/\var{pass}: ``at most once per loop pass''.
 Lines are deduced in the order
       \ref{line:reducer-op-3},
       \ref{line:reducer-op-2},
       \ref{line:reducer-op-4},
       \ref{line:reducer-op-5},
       \ref{line:reducer-op-6},
-      \ref{line:reducer-op-10},
       \ref{line:reducer-op-7},
       \ref{line:reducer-op-8},
-      \ref{line:reducer-op-9}.
+      \ref{line:reducer-op-9},
+      \ref{line:reducer-op-10}.
     }
 \\ \hline
 \end{tabular}
@@ -6426,14 +6419,14 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 
 \begin{theorem}[\op{Reducer} time]
 \label{th:reducer-time}
-Inclusive time consumed by \op{Leo-Reducer}
+Inclusive time consumed by \op{Reducer}
 is
 \begin{itemize}
-\item \Oc{} charged to the \var{caller} account of \op{Leo-Reducer};
+\item \Oc{} charged to the \var{caller} account of \op{Reducer};
 and
 \item \Oc{} charged to \var{eim} account
 of every EIM in \Ves{j},
-at the time of the return from \op{Leo-Reducer}.
+at the time of the return from \op{Reducer}.
 \end{itemize}
 \end{theorem}
 
@@ -6442,6 +6435,60 @@ The theorem follows from
 \Tref{tab:reducer-caller-time} and
 \Tref{tab:reducer-eim-time}.
 \end{proof}
+
+\begin{table}[t]
+\caption{Open space charged
+  by \op{Reducer}}
+\label{tab:reducer-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:reducer-op-2}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:reducer-op-3}&1&0&&0&\Obref{obs:transition-array}
+\\ \hline
+    \ref{line:reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:reducer-op-5}&1&0&&0&
+\\ \hline
+    \ref{line:reducer-op-6}&0--1&0&&0&
+\\ \hline
+    \ref{line:reducer-op-7}&0--1&0&&0&
+\\ \hline
+    \ref{line:reducer-op-8}&0--1&0&0&0&\Thref{th:leo-reducer-eim-space},
+        \Thref{th:leo-reducer-link-space},
+        \Thref{th:procedure-overhead-discard}
+\\ \hline
+    \ref{line:reducer-op-9}&0--1&0&&0&
+\\ \hline
+    \ref{line:reducer-op-10}&0--1&0&0&0&\Thref{th:earley-reducer-eim-space},
+        \Thref{th:earley-reducer-link-space},
+        \Thref{th:procedure-overhead-discard}
+\\ \hline
+\multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{0}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:reducer-op},
+    \ThFref{th:reducer-invocations},
+    Note that space was charged
+    by \op{Leo-Reducer} in line \ref{line:reducer-op-8} and
+    by \op{Earley-Reducer} in line \ref{line:reducer-op-10},
+    but to closed accounts.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\begin{theorem}[\op{Reducer} space]
+\label{th:reducer-space}
+Per \Tref{tab:reducer-space},
+\op{Reducer} does not charge any space to
+open accounts.
+\end{theorem}
 
 \todo{Finish reducer op}
 
