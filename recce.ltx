@@ -28,6 +28,7 @@
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
 \usepackage{ragged2e}
+\usepackage{placeins}
 \usepackage{thmtools}
 \renewcommand{\listtheoremname}{List of Displayed Statements}
 % \usepackage[notcite,notref]{showkeys}
@@ -5048,6 +5049,7 @@ of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
 
+\clearpage
 \subsection{Predictor op}
 \label{sec:predictor-op}
 
@@ -5102,6 +5104,7 @@ operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
 
+\clearpage
 \subsection{Scanner op}
 \label{def:scanner}
 
@@ -5632,6 +5635,7 @@ operation of \Earley{}.
 \dispEnd
 \end{observation}
 
+\clearpage
 \subsection{Reducer op}
 \label{def:reducer}
 
@@ -5641,7 +5645,8 @@ operation of \Earley{}.
 \todo{Define ``dup EIM pass''}
 \todo{Define ``EIM try pass'', ``EIM try''}
 
-\begin{algorithm}[tb]
+\FloatBarrier
+\begin{algorithm}[H]
 \caption{\var{Earley-Reducer}}
 \label{alg:earley-reducer-op}
 \begin{algorithmic}[1]
@@ -5669,6 +5674,7 @@ operation of \Earley{}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\FloatBarrier
 
 \begin{observation}[\op{Earley-Reducer} passes]
 \label{obs:earley-reducer-passes}
@@ -5690,8 +5696,9 @@ For the purposes of analyzing \op{Earley-Reducer},
 refers to a pass of
 loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
 
-\begin{table}[t]
-\caption{Line invocations for \op{Earley-Reducer}}
+\FloatBarrier
+\begin{table}[H]
+\caption{\op{Earley-Reducer} line invocations}
 \label{tab:earley-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
@@ -5740,22 +5747,32 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
-\begin{theorem}[\op{Earley-Reducer} invocations]
-\label{th:earley-reducer-invocations}
-Line invocations for
-\op{Earley-Reducer} are as in
-\Tref{tab:earley-reducer-invocations}.
-\end{theorem}
+\begin{assumption}[\op{Earley-Reducer} time charge]
+\label{asm:earley-reducer-time-charge}
+  For the purpose of complexity analysis,
+  our strategy in \op{Earley-Reducer} is to charge time
+  \begin{itemize}
+  \item to the \var{new} account of \Veim{trial},
+      if the time is consumed by a new EIM pass;
+  \item to the \var{dup} account of \Veim{trial},
+      if the time is consumed by a dup EIM pass; and
+  \item to the \var{proc} account of \op{Earley-Reducer},
+      otherwise.
+  \end{itemize}
+\op{Earley-Reducer} closes all of these accounts when it returns
+control to its caller.
+      \dispEnd
+\end{assumption}
 
-\begin{proof}
-By \Tref{tab:earley-reducer-invocations}.
-\myqed
-\end{proof}
-
-\begin{table}[t]
-\caption{Inclusive caller-charged time for \op{Earley-Reducer}}
-\label{tab:earley-reducer-caller-time}
+\FloatBarrier
+\begin{table}[H]
+\caption{\op{Earley-Reducer} \var{proc} account time}
+\op{Earley-Reducer} charges \Oc{} time
+to its \var{proc} account, and closes that account.
+\vspace{1ex}
+\label{tab:earley-reducer-proc-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
@@ -5767,14 +5784,19 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \ThFref{th:earley-reducer-invocations},
+    \Tref{tab:earley-reducer-invocations},
     \AsmFref{asm:earley-reducer-time-charge}.}
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
-\begin{table}[t]
-\caption{Inclusive time per EIM try for \op{Earley-Reducer}}
+\begin{table}[H]
+\caption{\op{Earley-Reducer} \var{new} account time}
+\op{Earley-Reducer} charges \Oc{} time
+to the \var{new} account for each new EIM,
+and closes that account.
+\vspace{1ex}
 \label{tab:earley-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -5788,8 +5810,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
     \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
 \\ \hline
     \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
-\\ \hline
-    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
     \ref{line:earley-reducer-op-7}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
@@ -5805,100 +5825,49 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \ThFref{th:earley-reducer-invocations},
+    \Tref{tab:earley-reducer-invocations},
     \AsmFref{asm:earley-reducer-time-charge}.%
 }
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
-\begin{assumption}[\op{Earley-Reducer} time charge]
-\label{asm:earley-reducer-time-charge}
-  For the purpose of complexity analysis,
-  we assume that direct time in \op{Earley-Reducer}
-  is
-  \begin{itemize}
-  \item charged to an EIM try, if it is consumed by a EIM try pass; and
-  \item caller-charged, otherwise. \dispEnd
-  \end{itemize}
-\end{assumption}
-
-\begin{theorem}[\op{Earley-Reducer} time]
-\label{th:earley-reducer-time}
-Inclusive time consumed by \op{Earley-Reducer}
-is
-\begin{itemize}
-\item \Oc{} charged to each EIM try; and
-\item \Oc{} charged to the caller.
-\end{itemize}
-The \var{dup} and \var{new} time accounts are closed
-by \op{Earley-Reducer}.
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Obref{obs:earley-reducer-passes},
-\Tref{tab:earley-reducer-caller-time}, and
-\Tref{tab:earley-reducer-eim-time}.
-\end{proof}
-
-\begin{table}[t]
-\caption{Zero EIM space lines for \op{Earley-Reducer}}
-\label{tab:earley-reducer-zero-space}
+\begin{table}[H]
+\caption{\op{Earley-Reducer} \var{dup} account time}
+\op{Earley-Reducer} charges \Oc{} time
+to the \var{dup} account for each dup EIM,
+and closes that account.
+\vspace{1ex}
+\label{tab:earley-reducer-dup-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1&0&&0&
+    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-3}&1&0&&0&
+    \ref{line:earley-reducer-op-3}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-4}&1&0&&0&
+    \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-7}&1&0&&0&
+    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
-\\ \hline
-    \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{0}&
+\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \ThFref{th:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-time-charge}.
+    \Tref{tab:earley-reducer-invocations},
+    \AsmFref{asm:earley-reducer-time-charge}.%
 }
 \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{table}[t]
-\caption{Inclusive EIM-charged space
-    for each new EIM loop pass of \op{Earley-Reducer}}
-\label{tab:earley-reducer-eim-space}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:earley-reducer-op-6}&1&0&&0&\Obref{obs:es-complexity}
-\\ \hline
-    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{0}&
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
-    \AFref{alg:earley-reducer-op},
-    \ThFref{th:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-space-charge}.}
-\\ \hline
-\end{tabular}
-\end{table}
+\FloatBarrier
 
 \begin{assumption}[\op{Earley-Reducer} space charge]
 \label{asm:earley-reducer-space-charge}
@@ -5917,57 +5886,83 @@ as of the return from \op{Earley-Reducer}.
      \dispEnd
 \end{assumption}
 
-\begin{table}[t]
-\caption{Inclusive link-charged space
-    for each dup EIM loop pass of \op{Earley-Reducer}}
-\label{tab:earley-reducer-link-space}
+\FloatBarrier
+\begin{table}[H]
+\caption{\op{Earley-Reducer} \var{new} account space}
+\op{Earley-Reducer} charges \Oc{} space to the \var{new}
+account of each new EIM, and closes the account.
+\vspace{1ex}
+\label{tab:earley-reducer-new-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-2}&1&0&&0&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-3}&1&0&&0&
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+    \ref{line:earley-reducer-op-4}&1&0&&0&
 \\ \hline
-\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-7}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+\\ \hline
+    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \ThFref{th:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-space-charge}.}
+    \Tref{tab:earley-reducer-invocations},
+    \AsmFref{asm:earley-reducer-space-charge}.
+}
 \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\op{Earley-Reducer} EIM space]
-\label{th:earley-reducer-eim-space}
-Inclusive EIM-charged space for \op{Earley-Reducer}
-is \Oc{} per new EIM.
-\end{theorem}
+\FloatBarrier
+\begin{table}[H]
+\caption{\op{Earley-Reducer} \var{link} account space}
+\op{Earley-Reducer} charges \Oc{} space to the \var{link}
+account of each dup EIM, and closes the account.
+\vspace{1ex}
+\label{tab:earley-reducer-link-space}
+\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\hline
+&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
+Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:earley-reducer-op-2}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-3}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4}&1&0&&0&
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+\\ \hline
+\multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
+\\ \hline
+\multicolumn{6}{|p{4.5in}|}{
+    \cuz{}
+    \Sref{sec:complexity-tables},
+    \AFref{alg:earley-reducer-op},
+    \Tref{tab:earley-reducer-invocations},
+    \AsmFref{asm:earley-reducer-space-charge}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
 
-\begin{proof}
-The theorem follows from
-\Tref{tab:earley-reducer-zero-space},
-\Tref{tab:earley-reducer-eim-space},
-and \Asmref{asm:earley-reducer-space-charge}.
-\myqed
-\end{proof}
-
-\begin{theorem}[\op{Earley-Reducer} link space]
-\label{th:earley-reducer-link-space}
-Inclusive link-charged space for \op{Earley-Reducer}
-is \Oc{} per EIM dup.
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Tref{tab:earley-reducer-zero-space},
-\Tref{tab:earley-reducer-link-space},
-and \Asmref{asm:earley-reducer-space-charge}.
-\myqed
-\end{proof}
-
+\FloatBarrier
 \begin{algorithm}[tb]
 \caption{\op{Leo-Reducer}}
 \label{alg:leo-reducer-op}
@@ -5993,18 +5988,18 @@ and \Asmref{asm:earley-reducer-space-charge}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+\FloatBarrier
 
 \begin{observation}[\op{Leo-Reducer} calls]
 \label{obs:leo-reducer-calls}
 Every call of
 \op{Leo-Reducer} is
-\begin{itemize}
-\item exactly one EIM try pass; and
-\item a new EIM pass or a dup EIM pass.  \dispEnd{}
-\end{itemize}
+a new EIM pass or a dup EIM pass,
+but never both.  \dispEnd{}
 \end{observation}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Line invocations for \op{Leo-Reducer}}
 \label{tab:leo-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -6049,6 +6044,7 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \begin{theorem}[\proc{Leo-reducer} invocations]
 \label{th:leo-reducer-invocations}
@@ -6062,7 +6058,8 @@ By \Tref{tab:leo-reducer-invocations}.
 \myqed
 \end{proof}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Inclusive time per EIM try of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -6118,7 +6115,8 @@ The theorem follows from
 \Tref{tab:leo-reducer-eim-time}.
 \end{proof}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Zero EIM space lines for \op{Leo-Reducer}}
 \label{tab:leo-reducer-zero-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -6151,7 +6149,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Inclusive EIM-charged space
     for each new EIM loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-space}
@@ -6173,6 +6172,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \begin{assumption}[\op{Leo-Reducer} space charge]
 \label{asm:leo-reducer-space-charge}
@@ -6189,7 +6189,8 @@ as of the return from \op{Leo-Reducer}.
      \dispEnd
 \end{assumption}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Inclusive link-charged space
     for each dup EIM loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-link-space}
@@ -6211,6 +6212,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 \begin{theorem}[\op{Leo-Reducer} EIM space]
 \label{th:leo-reducer-eim-space}
@@ -6240,7 +6242,8 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \myqed
 \end{proof}
 
-\begin{algorithm}[tb]
+\FloatBarrier
+\begin{algorithm}[H]
 \caption{\op{Reducer}}
 \label{alg:reducer-op}
 \begin{algorithmic}[1]
@@ -6269,7 +6272,8 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Line invocations for \op{Reducer}}
 \label{tab:reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -6317,6 +6321,7 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
+\FloatBarrier
 
 For the purposes of analyzing \op{Reducer},
 ``loop pass'', or just ``pass'',
@@ -6351,10 +6356,11 @@ By \Tref{tab:reducer-invocations}.
   \end{itemize}
 \end{assumption}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Inclusive open time charged to \var{caller} account
   for \op{Reducer}}
-\label{tab:reducer-caller-time}
+\label{tab:reducer-proc-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
@@ -6375,7 +6381,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Inclusive open time charged to \var{eim}
   account of each \Veim{cuz} by \op{Reducer}}
 \label{tab:reducer-eim-time}
@@ -6401,7 +6408,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-9}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:reducer-op-10}&0--1&\Oc{}&0&\Oc{}&\Thref{th:earley-reducer-time},
+    \ref{line:reducer-op-10}&0--1&\Oc{}&0&\Oc{}&\Tref{tab:earley-reducer-proc-time},
         \Thref{th:procedure-overhead-discard}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
@@ -6432,11 +6439,12 @@ at the time of the return from \op{Reducer}.
 
 \begin{proof}
 The theorem follows from
-\Tref{tab:reducer-caller-time} and
+\Tref{tab:reducer-proc-time} and
 \Tref{tab:reducer-eim-time}.
 \end{proof}
 
-\begin{table}[t]
+\FloatBarrier
+\begin{table}[H]
 \caption{Open space charged
   by \op{Reducer}}
 \label{tab:reducer-space}
@@ -6463,8 +6471,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-9}&0--1&0&&0&
 \\ \hline
-    \ref{line:reducer-op-10}&0--1&0&0&0&\Thref{th:earley-reducer-eim-space},
-        \Thref{th:earley-reducer-link-space},
+    \ref{line:reducer-op-10}&0--1&0&0&0&\Tref{tab:earley-reducer-new-space},
+        \Tref{tab:earley-reducer-link-space},
         \Thref{th:procedure-overhead-discard}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{0}&
@@ -6573,6 +6581,7 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
+\clearpage
 \subsection{Memoizer op}
 \label{def:memoizer}
 
@@ -6687,6 +6696,7 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
+\clearpage
 \subsection{Top level of \Marpa{}}
 
 \todo{Rewrite \Marpa{} top level section}
@@ -6727,6 +6737,7 @@ and
 \dispEnd
 \end{observation}
 
+\clearpage
 \subsection{Summary}
 
 \todo{Rewrite operations summary}
@@ -10898,6 +10909,8 @@ J.~M. I.~M. Leo.
 \clearpage
 \listoftheorems
 
+\clearpage
+\listoftables
 
 \ifdraft{
     \clearpage
