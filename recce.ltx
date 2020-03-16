@@ -3073,24 +3073,27 @@ even those which are not penults.
 Tracking the Leo chains requires that there
 be an analog to the concept of predecessor EIM
 for LIMs.
-We say that \Vlim{pred}
+We say that \LIMPredecessor{\var{succ}}
 is the \dfn{LIM predecessor} of \Veim{succ}
-if and only if
-$\Vlim{pred} = \LIMPredecessor{\var{succ}}$ where
+where
 \begin{equation*}
   \begin{aligned}
   & \LIMPredecessor{\var{succ}} \defined \\
-  & \qquad \qquad \left\lbrace
-      \begin{gathered}
-      \Vlim{x} : \Matches{ \var{source},\var{succ}} \\
-      \land \; \Source{\var{x}} = \set{\Veim{source}}
-      \end{gathered}
-    \right\rbrace{}.
+  & \qquad \begin{cases}
+          \begin{aligned}
+          & \text{\Vlim{x}, if there exists \var{x} such that} \\
+          & \qquad \Source{\var{x}} = \set{\Veim{source}} \\
+          & \qquad \land \; \Matches{ \var{source},\var{succ}} \\
+          \end{aligned}
+          \\
+      \Lambda, \text{ otherwise}
+    \end{cases}
   \end{aligned}
 \end{equation*}
 In \Marpa{},
-the \var{LIM-Processor} set is a singleton,
+\var{LIM-Predecessor} is a function,
 but we have yet to prove this. \dispEnd{}
+\todo{Prove \var{Lim-Predecesser} is well-defined here?}
 \end{definition}
 
 \begin{definition}[LIM matching]
@@ -6708,8 +6711,10 @@ shown in \Aref{alg:marpa}.
 \label{alg:marpa}
 \begin{algorithmic}[1]
 \Procedure{Main}{}
+\State $\Call{Parse-Setup}{{}}$
 \State $\Call{Initializer}{{}}$
 \For{ $\Ves{j}, 1 \le \var{j} \le \Vsize{w}$ }
+\State $\Call{ES-Setup}{\Ves{j}}$
 \State $\Call{Scanner}{\Ves{j}}$
 \If{$\size{\Ves{j}} = 0$}
 \State return \Comment Reject \Cw{}
@@ -6718,6 +6723,7 @@ shown in \Aref{alg:marpa}.
 \State $\Call{Predictor}{\Ves{j}}$
 \label{alg:marpa-line-80}
 \State $\Call{Memoizer}{\Ves{j}}$
+\State $\Call{Bookkeeper}{\Ves{j}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
