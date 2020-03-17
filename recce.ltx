@@ -6584,78 +6584,47 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
-\clearpage
 \subsection{Memoizer op}
 \label{def:memoizer}
 
-\todo{Rewrite Memoizer op section}
+\FloatBarrier
+\begin{algorithm}[H]
+\caption{\op{Memoizer}}
+\label{alg:memoizer-op}
+\begin{algorithmic}[1]
+\Procedure{Memoizer}{\Ves{j}}
+\For{$\Veim{source} \in \LeoEligible{\Ves{j}}$}
+  \label{line:reducer-op-2}
+\State $\Veim{pred} = \LIMPredecessor{\var{source}}$
+  \label{line:reducer-op-3}
+\State $\Vlp{lp} = \tuple{\var{pred},\var{source}}$
+  \label{line:reducer-op-4}
+\If{$\var{pred} \neq \Lambda$}
+  \label{line:reducer-op-5}
+  \State $\Vlim{lim} = \tuple{\DR{\var{pred}}, \Postdot{\var{source}}, \Origin{\var{pred}}}$
+      \label{line:reducer-op-6}
+\Else
+  \label{line:reducer-op-7}
+  \State $ \Vlim{lim} = [\DR{\var{source}}, \Postdot{\var{source}},$
+  \Statex \hspace\algorithmicindent \hspace\algorithmicindent \hspace\algorithmicindent
+          $\qquad \qquad \qquad \Origin{\var{source}} ]$
+      \label{line:reducer-op-8}
+\EndIf
+    \State Add \Vlim{lim} to \Ves{j}
+  \label{line:reducer-op-9}
+    \State $\LinkPairs{\var{lim}} = \set{\var{lp}}$
+      \label{line:reducer-op-10}
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
 
-Let
-\begin{align}
-\label{eq:memoizer-op-20}
-& \mymathop{Start-Leo-Chain}({\Ves{i}}) \defined \\
-\nonumber
-& \qquad \left\lbrace \;\;
-\begin{gathered}
-\left[
-  \begin{gathered}
-  \DR{\var{source}},
-  \Postdot{\Veim{source}}, \\
-  \Origin{\var{source}}
-  \end{gathered}
-\right]_\type{LIM} @ \Ves{i}
-: \\
-\Veim{source} \in \LeoEligible{\Ves{i}} \\
-\land \; \LIMPredecessor{\Veim{source}} = \emptyset
-\end{gathered}
-\;\; \right\rbrace,
-\end{align}
-and
-\begin{align}
-\label{eq:memoizer-op-30}
-& \mymathop{Extend-Leo-Chain}({\Ves{i}}) \defined \\
-\nonumber
-& \qquad \left\lbrace \;\;
-\begin{gathered}
-\left[
-  \begin{gathered}
-  \DR{\var{pred}}, \Postdot{\Veim{source}}, \\
-  \Origin{\var{pred}}
-  \end{gathered}
-\right]_\type{LIM} @ \Ves{i}
-: \\
-\Veim{source} \in \LeoEligible{\Ves{i}} \\
-\land \; \Vlim{pred} \in \LIMPredecessor{\Veim{source}}
-\end{gathered}
-\;\; \right\rbrace .
-\end{align}
-Then
-\begin{align}
-\label{eq:memoizer-op-40}
-& \var{Memoizer}(\Ves{i}) \defined \\
-\nonumber
-& \qquad \qquad \var{Start-Leo-Chain}(\Ves{i})
-\cup
-\var{Extend-Leo-Chain}(\Ves{i})
-\end{align}
+\todo{Rewrite Memoizer op section}
 
 \begin{observation}[Ancestry]
 \label{obs:memoizer-ancestry}
 The \Marpa{} implementation tracks the link pairs
 for the LIM's.
-\begin{align}
-\label{eq:memoizer-link-pair}
-& \LinkPairs{\mylim{\ell}} =
-\\ \nonumber
-& \qquad \left\lbrace
-  \begin{gathered}
-\left[ \var{pred}, \Veim{source} \right] : \\
-\Veim{source} \in \Source{\mylim{\ell}} \\
-\land \; \var{pred} \in \LIMPredecessor{\Veim{source}}
-  \end{gathered}
-\right\rbrace
-\end{align}
-
 In the link pair for a LIM, call it \Vlim{$\ell$},
 the ``cause''
 is more often called the \dfn{source} of the LIM;
