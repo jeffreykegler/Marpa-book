@@ -2900,6 +2900,8 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 \section{The Leo algorithm}
 \label{sec:leo}
 
+\subsection{Joop Leo's discovery}
+
 Jay Earley conjectured~\cite[p. 60]{Earley1968}
 that \Earley{} could be
 modified to be \On{} for
@@ -2925,9 +2927,11 @@ The problem both investigators noticed was that,
 while \Earley{} is \On{}
 for left recursion,
 it is $\order{\var{n}^2}$ for right recursion.
-This is because all EIM's for a right
-recursion are created at every parse location
+This is because \Earley creates EIM's
+to represent a right recursion at every parse location
 where the right recursion might end.
+For those locations where the right recursion does not end,
+most of these EIM's will be useless.
 
 Leo's solution was to
 memoize penults.
@@ -2940,194 +2944,7 @@ showed that,
 with his modification, \Earley{}
 is \On{} for all LR-regular grammars.
 
-\begin{definition}[Leo items]
-\label{def:LIMs}
-
-In \cite{Leo1991}, penults were memoized
-using what Leo called ``transitive items''.
-In this paper Leo's ``transitive items''
-will be called \dfn{Leo items}.
-Leo items will have type \type{LIM}.
-Recall that every parse item (\type{PIM})
-is either
-an Earley item or a Leo item.
-
-A Leo item (LIM) is a triple.
-Let
-\begin{equation*}
-\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
-\end{equation*}
-be an arbitrary Leo item.
-\Vsym{transition} is the transition symbol of \Vlim{x},
-and
-\begin{equation*}
-\Veim{top} = [\Vdr{top}, \Vorig{top}]
-\end{equation*}
-is the Earley item to be unioned as a result of a operation
-using the LIM.
-\dispEnd{}
-\end{definition}
-
-To say that \Vlim{x}
-is at \Ves{j}, we may write
-\begin{gather*}
-    \Vlim{x} @ \Ves{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
-    \text{$[ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j}$, etc.}
-\end{gather*}
-Also,
-\begin{align}
-\DR{\Vlim{x}} & \defined \Vdr{top}, \\
-\Transition{\Vlim{x}} & \defined \Vsym{transition},
-\;\; \text{and} \\
-\Origin{\Vlim{x}} & \defined \Vorig{top},
-\end{align}
-and, for arbitrary $\Vlim{x}@\Vloc{j}$,
-\[
-\Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
-\]
-
-\begin{definition}[Transition of a PIM]
-\label{def:transition}
-Let \Vpim{pim} be an arbitrary PIM.
-The \dfn{transition symbol},
-or \dfn{transition},
-of \var{pim} is
-\begin{equation*}
-\begin{cases}
-\Transition{\Vlim{pim}} \text{ if \var{pim} is a LIM, and} \\
-\Postdot{\Veim{pim}} \text{ if \var{pim} is an EIM.}
-\end{cases}
-\end{equation*}
-In either case, the transition symbol
-of \var{pim}
-may be written
-\Transition{\var{pim}}. \dispEnd
-\end{definition}
-
-\begin{definition}[Leo item source]
-\label{def:leo-item-source}
-Leo items ``stand in'' for an EIM source.
-Let \mylim{\ell} be a Leo item.
-The \dfn{source} of \mylim{\ell},
-is
-\begin{equation}
-\begin{aligned}
-& \Source{\mylim{\ell}} \defined \\
-& \qquad \qquad \left\lbrace
-   \begin{gathered}
-   \Veim{source}: \\
-   \Transition{\ell} = \Postdot{\var{source}} \\
-   \land \; \Current{\ell} = \Current{\var{source}}.
-   \end{gathered}
-  \right\rbrace \quad \dispEnd
-\end{aligned}
-\end{equation}
-\end{definition}
-
-The source of a LIM is unique,
-and in each Earley set, there is at most one Leo item
-for each transition symbol.
-To guarantee this,
-\cite{Leo1991} and \Marpa{} enforce ``Leo uniqueness''.
-
-\begin{definition}[Leo unique]
-\label{def:leo-unique}
-
-An EIM \Veim{uniq}
-is \dfn{Leo unique} in \Ves{j}
-if and only if
-\[
-\Veim{uniq} \in \LeoUnique{\Ves{j}},
-\]
-where
-\begin{align*}
-& \LeoUnique{\Vloc{j}} \defined \\
-& \qquad \qquad
-  \left\lbrace
-    \begin{gathered}
-      \Penult{\var{uniq}} \neq \Lambda \; \land \; \Current{\var{uniq}} = \Vloc{j} \\
-        \land \; \forall \Veim{x} \;
-        \left(
-          \begin{gathered}
-          \left(
-            \begin{gathered}
-            \Current{\var{uniq}} = \Current{\var{x}} \\
-            \land \; \Penult{\var{uniq}} = \Postdot{\var{x}}
-            \end{gathered}
-          \right) \\
-          \implies \var{uniq} = \var{x}.
-          \end{gathered}
-        \right)
-    \end{gathered}
-  \right\rbrace
-\end{align*}
-Note that \Veim{x} ranges over all the
-EIMs of Earley set \Ves{j},
-even those which are not penults.
-\dispEnd{}
-\end{definition}
-
-\begin{definition}[LIM predecessor]
-\label{def:lim-predecessor}
-Tracking the Leo chains requires that there
-be an analog to the concept of predecessor EIM
-for LIMs.
-We say that \LIMPredecessor{\var{succ}}
-is the \dfn{LIM predecessor} of \Veim{succ}
-where
-\begin{equation*}
-  \begin{aligned}
-  & \LIMPredecessor{\var{succ}} \defined \\
-  & \qquad \begin{cases}
-          \begin{aligned}
-          & \text{\Vlim{x}, if there exists \var{x} such that} \\
-          & \qquad \Source{\var{x}} = \set{\Veim{source}} \\
-          & \qquad \land \; \Matches{ \var{source},\var{succ}} \\
-          \end{aligned}
-          \\
-      \Lambda, \text{ otherwise}
-    \end{cases}
-  \end{aligned}
-\end{equation*}
-In \Marpa{},
-\var{LIM-Predecessor} is a function,
-but we have yet to prove this. \dispEnd{}
-\todo{Prove \var{Lim-Predecesser} is well-defined here?}
-\end{definition}
-
-\begin{definition}[LIM matching]
-We overload \var{Matches} to deal with LIM's as follows.
-\begin{equation*}
-\begin{aligned}
-& \Matches{\mylim{\ell},\Veim{cuz}} \defined \\
-& \qquad \qquad \begin{aligned}
-         & \Postdot{\var{cuz}} = \Lambda \\
-\land \; & \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
-\land \; & \Current{\mylim{\ell}} = \Origin{\var{cuz}}
-  \quad \dispEnd
-\end{aligned}
-\end{aligned}
-\end{equation*}
-\end{definition}
-
-\subsection{Leo eligibility and right recursion}
-
-\Marpa{} restricts Leo memoization to right recursive
-rules:
-
-\begin{align}
-\label{eq:def-leo-eligible}
-& \LeoEligible{\Ves{i}} \defined \\
-\nonumber
-& \qquad \left\lbrace \;\;
-\begin{gathered}
-\Veim{eligible} \in \Ves{i} : \\
-\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
-\land \; \RightRecursive{\Veim{eligible}}
-\end{gathered}
-\;\; \right\rbrace,
-\end{align}
+\subsection{\Marpa{} and right recursion}
 
 Recall that we
 call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
@@ -3178,6 +2995,201 @@ chain unions at one EIM into the Earley tables.
 If the difference is measurable
 $\es{(0)}$ memoization will probably be found to
 be counter-productive.
+
+\begin{definition}[Leo items]
+\label{def:LIMs}
+
+In \cite{Leo1991}, penults were memoized
+using what Leo called ``transitive items''.
+In this paper Leo's ``transitive items''
+will be called \dfn{Leo items}.
+Leo items will have type \type{LIM}.
+Recall that every parse item (\type{PIM})
+is either
+an Earley item or a Leo item.
+
+A Leo item (LIM) is a triple.
+Let
+\begin{equation*}
+\Vlim{x} = [ \Next{\Vdr{top}}, \Vsym{transition}, \Vorig{top} ]
+\end{equation*}
+be an arbitrary Leo item.
+\Vsym{transition} is the transition symbol of \Vlim{x},
+and
+\begin{equation*}
+\Veim{top} = [\Vdr{top}, \Vorig{top}]
+\end{equation*}
+is the Earley item to be unioned as a result of a operation
+using the LIM.
+\dispEnd{}
+\end{definition}
+
+To say that \Vlim{x}
+is at \Ves{j}, we may write
+\begin{gather*}
+    \Vlim{x} @ \Ves{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
+    \text{$[ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j}$, etc.}
+\end{gather*}
+Also, for an arbitrary
+$\Vlim{x} = [ \Next{\Vdr{top}}, \Vsym{transition}, \Vorig{top} ]$,
+we write
+\begin{align}
+\DR{\Vlim{x}} & \defined \Vdr{top}, \\
+\Transition{\Vlim{x}} & \defined \Vsym{transition},
+\;\; \text{and} \\
+\Origin{\Vlim{x}} & \defined \Vorig{top}
+\end{align}
+and for arbitrary $\Vlim{x}@\Vloc{j}$, we write
+\[
+\Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
+\]
+
+\begin{definition}[Transition of a PIM]
+\label{def:transition}
+Let \Vpim{pim} be an arbitrary PIM.
+The \dfn{transition symbol},
+or \dfn{transition},
+of \var{pim} is
+\begin{equation*}
+\begin{cases}
+\Transition{\Vlim{pim}} \text{ if \var{pim} is a LIM, and} \\
+\Postdot{\Veim{pim}} \text{ if \var{pim} is an EIM.}
+\end{cases}
+\end{equation*}
+In either case, the transition symbol
+of \var{pim}
+may be written
+\Transition{\var{pim}}. \dispEnd
+\end{definition}
+
+\begin{definition}[Leo item source]
+\label{def:leo-item-source}
+Leo items ``stand in'' for an EIM source.
+Let \mylim{\ell} be a Leo item.
+The \dfn{source} of \mylim{\ell},
+is
+\begin{equation}
+\begin{aligned}
+& \Source{\mylim{\ell}} \defined \\
+& \qquad \qquad \left\lbrace
+   \begin{gathered}
+   \Veim{source}: \\
+   \Transition{\ell} = \Postdot{\var{source}} \\
+   \land \; \Current{\ell} = \Current{\var{source}}.
+   \end{gathered}
+  \right\rbrace \quad \dispEnd
+\end{aligned}
+\end{equation}
+\end{definition}
+\todo{Convert \var{Source} from set to function.}
+
+The source of a LIM is unique,
+and in each Earley set, there is at most one Leo item
+for each transition symbol.
+To guarantee this,
+\cite{Leo1991} and \Marpa{} enforce ``Leo uniqueness''.
+
+\begin{definition}[Leo unique]
+\label{def:leo-unique}
+\LeoUnique{\Ves{j}} is defined as
+\begin{equation}
+\label{eq:def-leo-unique}
+  \left\lbrace
+    \begin{gathered}
+    \Veim{x} \in \set{\var{x} \in \Ves{j} :
+        \Penult{\var{x}} \neq \Lambda} :
+    \\
+        \forall \Veim{y} \in \Ves{j} : \\
+          \left(
+            \begin{gathered}
+            \Penult{\var{x}} = \Postdot{\var{y}}
+            \implies
+            \var{x} = \var{y}
+            \end{gathered}
+          \right) \\
+    \end{gathered}
+  \right\rbrace
+\end{equation}
+Note in 
+\Eref{eq:def-leo-unique}
+that,
+while \Veim{x} is restricted to penults,
+\Veim{y} ranges over all the
+EIMs of Earley set \Ves{j},
+including those EIM's which are not penults.
+We say that
+an EIM \Veim{uniq}
+is \dfn{Leo unique} in \Ves{j}
+if and only if
+$\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
+\dispEnd{}
+\end{definition}
+
+\begin{definition}[Leo Eligible]
+\label{def:leo-eligible}
+\LeoEligible{\Ves{i}} is defined as
+\begin{equation}
+\label{eq:def-leo-eligible}
+\left\lbrace \;\;
+\begin{gathered}
+\Veim{eligible} \in \Ves{i} : \\
+\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
+\land \; \RightRecursive{\Veim{eligible}}.
+\end{gathered}
+\;\; \right\rbrace
+\end{equation}
+We say that
+an EIM \Veim{eligible}
+is \dfn{Leo eligible} in \Ves{j}
+if and only if
+$\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
+\dispEnd{}
+\end{definition}
+
+\begin{definition}[LIM predecessor]
+\label{def:lim-predecessor}
+Tracking the Leo chains requires that there
+be an analog to the concept of predecessor EIM
+for LIMs.
+We say that \LIMPredecessor{\var{succ}}
+is the \dfn{LIM predecessor} of \Veim{succ}
+where
+\begin{equation*}
+  \begin{aligned}
+  & \LIMPredecessor{\var{succ}} \defined \\
+  & \qquad \begin{cases}
+          \begin{aligned}
+          & \text{\Vlim{x}, if there exists \var{x} such that} \\
+          & \qquad \Source{\var{x}} = \set{\Veim{source}} \\
+          & \qquad \land \; \Matches{ \var{source},\var{succ}} \\
+          \end{aligned}
+          \\
+      \Lambda, \text{ otherwise}
+    \end{cases}
+  \end{aligned}
+\end{equation*}
+In \Marpa{},
+\var{LIM-Predecessor} is a function,
+but we have yet to prove this. \dispEnd{}
+\todo{Prove \var{Lim-Predecesser} is well-defined here?}
+\end{definition}
+
+\begin{definition}[LIM matching]
+We overload \var{Matches} to deal with LIM's as follows.
+\begin{equation*}
+\begin{aligned}
+& \Matches{\mylim{\ell},\Veim{cuz}} \defined \\
+& \qquad \qquad \begin{aligned}
+         & \Postdot{\var{cuz}} = \Lambda \\
+\land \; & \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
+\land \; & \Current{\mylim{\ell}} = \Origin{\var{cuz}}
+  \quad \dispEnd
+\end{aligned}
+\end{aligned}
+\end{equation*}
+\end{definition}
+
 
 \section{Ancestry}
 \label{sec:ancestry}
@@ -5052,7 +5064,6 @@ of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
 
-\clearpage
 \subsection{Predictor op}
 \label{sec:predictor-op}
 
@@ -5107,7 +5118,6 @@ operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
 
-\clearpage
 \subsection{Scanner op}
 \label{def:scanner}
 
@@ -5638,7 +5648,6 @@ operation of \Earley{}.
 \dispEnd
 \end{observation}
 
-\clearpage
 \subsection{Reducer op}
 \label{def:reducer}
 
@@ -6668,7 +6677,6 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
-\clearpage
 \subsection{Top level of \Marpa{}}
 
 \todo{Rewrite \Marpa{} top level section}
@@ -6712,7 +6720,6 @@ and
 \dispEnd
 \end{observation}
 
-\clearpage
 \subsection{Summary}
 
 \todo{Rewrite operations summary}
@@ -10572,7 +10579,7 @@ The next theorem
 shows that, in an apples-to-applies, \Marpa{} has
 the same space bound for CFG's as \Earley{}.
 
-\begin{theorem}\label{th:cfg-space}[\Marpa{} context-free space is quadratic without links]
+\begin{theorem}[\Marpa{} context-free space is quadratic without links]
 \label{th:cfg-space-is-quadration-wo-links}
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^2}$ space,
@@ -10586,7 +10593,8 @@ if it does not track links.
 
 Traditionally only the space result stated for a parsing algorithm
 is that
-without links, as in \ref{th:cfg-space}.
+without links, as in
+\Thref{th:cfg-space-is-quadration-wo-links}.
 This is sufficiently relevant
 if the parser is only used as a recognizer.
 In practice, however,
