@@ -6286,7 +6286,7 @@ Line&Invocations&Justification
     \ref{line:reducer-op-2}&1/\var{call}+1/\var{pass}&
        line \ref{line:reducer-op-3}, \Obref{def:loop-invocation}, sequential execution
 \\ \hline
-    \ref{line:reducer-op-3}&1/\var{pass}&directly,\Obref{def:loop-invocation}
+    \ref{line:reducer-op-3}&1/\var{pass}&directly, \Obref{def:loop-invocation}
 \\ \hline
     \ref{line:reducer-op-4}&1/\var{pass}&
        line \ref{line:reducer-op-3}, sequential execution
@@ -6594,26 +6594,26 @@ into the Earley table with the link pair
 \begin{algorithmic}[1]
 \Procedure{Memoizer}{\Ves{j}}
 \For{$\Veim{source} \in \LeoEligible{\Ves{j}}$}
-  \label{line:reducer-op-2}
+  \label{line:memoizer-op-2}
 \State $\Veim{pred} = \LIMPredecessor{\var{source}}$
-  \label{line:reducer-op-3}
+  \label{line:memoizer-op-3}
 \State $\Vlp{lp} = \tuple{\var{pred},\var{source}}$
-  \label{line:reducer-op-4}
+  \label{line:memoizer-op-4}
 \If{$\var{pred} \neq \Lambda$}
-  \label{line:reducer-op-5}
+  \label{line:memoizer-op-5}
   \State $\Vlim{lim} = \tuple{\DR{\var{pred}}, \Postdot{\var{source}}, \Origin{\var{pred}}}$
-      \label{line:reducer-op-6}
+      \label{line:memoizer-op-6}
 \Else
-  \label{line:reducer-op-7}
+  \label{line:memoizer-op-7}
   \State $ \Vlim{lim} = [\DR{\var{source}}, \Postdot{\var{source}},$
   \Statex \hspace\algorithmicindent \hspace\algorithmicindent \hspace\algorithmicindent
           $\qquad \qquad \qquad \Origin{\var{source}} ]$
-      \label{line:reducer-op-8}
+      \label{line:memoizer-op-8}
 \EndIf
     \State Add \Vlim{lim} to \Ves{j}
-  \label{line:reducer-op-9}
+  \label{line:memoizer-op-9}
     \State $\LinkPairs{\var{lim}} = \set{\var{lp}}$
-      \label{line:reducer-op-10}
+      \label{line:memoizer-op-10}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -6753,7 +6753,7 @@ This observation follows from
 \Aref{alg:scanner-op},
 \Aref{alg:reducer-op},
 \Eref{eq:def-predictor-op}, and
-\Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
+\Aref{alg:memoizer-op}.
 \dispEnd
 \end{observation}
 
@@ -6786,7 +6786,7 @@ This observation follows from
 \Aref{alg:scanner-op},
 \Aref{alg:reducer-op},
 \Eref{eq:def-predictor-op}, and
-\Eref{eq:def-leo-eligible}--\Eref{eq:memoizer-op-40}.
+\Aref{alg:memoizer-op}.
 \dispEnd
 \end{observation}
 
@@ -8170,20 +8170,20 @@ assumption for the theorem.}
   \begin{gathered}
   \Postdot{\Veim{source}} = \Transition{\ell} \\
   \because
-  \Eref{eq:memoizer-op-20},
-  \Eref{eq:memoizer-op-30}.
+  \text{TODO}
   \end{gathered}
 \end{equation}
+\todo{Add justification for this equation}
 
 \todo{second proof merged in what follows}
 
 % \begin{theorem}[LIM chain dotted rule and origin]
-% \label{th:LIM-chain-dr+origin}
+% \label{th:LIM-chain-dr-origin}
 % In a \Marpa{} parse,
 % let \Vlimset{chain} be a valid partial LIM chain.
 % For every element \mylim{\ell} of \var{chain},
 % \begin{equation}
-% \label{eq-th-LIM-chain-dr+origin-05}
+% \label{eq-th-LIM-chain-dr-origin-05}
 % \begin{gathered}
 % \text{$\DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}}$ and} \\
 % \Origin{\ell} = \Origin{\Source{\Velement{chain}{\Vlastix{chain}}}}
@@ -8195,7 +8195,7 @@ assumption for the theorem.}
 
 The proof is by a reductio.
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-10}
+\label{eq-th-LIM-chain-dr-origin-10}
 \begin{gathered}
 \exists \mylim{\ell}, \mylim{\ell} \in \var{chain} : \\
 \DR{\ell} = \DR{\Source{\Velement{chain}{\Vlastix{chain}}}} \\
@@ -8204,49 +8204,49 @@ The proof is by a reductio.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-12}
+\label{eq-th-LIM-chain-dr-origin-12}
 \myparbox{LIM's are only added by the
 \Marpa{} \var{Memoizer} operation
 $\because$ \Obref{obs:marpa-op-by-result}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-14}
+\label{eq-th-LIM-chain-dr-origin-14}
 \myparbox{LIM's are added by either the
 \var{Start-Leo-Chain} or
 \var{Extend-Leo-Chain} sub-op
 $\because$
-\Eref{eq-th-LIM-chain-dr+origin-12},
-\Eref{eq:memoizer-op-20},
-\Eref{eq:memoizer-op-30}.%
+\Eref{eq-th-LIM-chain-dr-origin-12},
+\text{TODO: Add ref to memoizer code}.%
 }
 \end{equation}
+\todo{Add ref to memoizer code to justification for above equation}
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-15-20}
+\label{eq-th-LIM-chain-dr-origin-15-20}
 \myparbox{Of the LIM's added which
 satisfy
-\Eref{eq-th-LIM-chain-dr+origin-10}
+\Eref{eq-th-LIM-chain-dr-origin-10}
 one, call it \Vlim{first} is added first
 $\because$
-\Eref{eq-th-LIM-chain-dr+origin-14}.%
+\Eref{eq-th-LIM-chain-dr-origin-14}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-15-25}
+\label{eq-th-LIM-chain-dr-origin-15-25}
 \myparbox{\Vlim{first} = \Velement{partial}{0},
 where \Vlimset{partial} is the partial Leo chain
 of \Vlim{first}
 $\because$
 \Dfref{def:leo-chain},
-\Eref{eq:memoizer-op-20},
-\Eref{eq:memoizer-op-30}.%
+\text{TODO: Add ref to memoizer code}.%
 }
 \end{equation}
+\todo{Add ref to memoizer code to justification for above equation}
 
 We now proceed by subcase, starting with
 \var{Start-Leo-Chain}.
 \begin{equation}
-\label{eq-th-LIM-chain-dr+origin-16}
+\label{eq-th-LIM-chain-dr-origin-16}
 \myparbox{\Vlim{first} was added by a
 \var{Start-Leo-Chain} sub-op
 $\because$ AF subcase.%
@@ -8386,10 +8386,10 @@ $\because$ AF theorem, WLOG.
 \begin{gathered}
 \Veim{source} \in \LeoEligible{\Vloc{j}} \\
 \qquad \because
-\Eref{eq:memoizer-link-pair},
-\Eref{eq:memoizer-op-20}, \Eref{eq:memoizer-op-30},
+\text{TODO: Add ref to memoizer code},
 \end{gathered}
 \end{equation}
+\todo{Add ref to memoizer code to justification for above equation}
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-22}
 \begin{gathered}
@@ -8767,9 +8767,10 @@ $\because$
 \begin{gathered}
 \Veim{pred2} \in \LeoEligible{\Current{\Vlim{match}}} \\
 \because \Eref{th:edge-descendant-uniqueness-36},
-\Eref{eq:memoizer-op-20}, \Eref{eq:memoizer-op-30}.
+\text{TODO: Add ref to memoizer code}.
 \end{gathered}
 \end{equation}
+\todo{Add ref to memoizer code to justification for above equation}
 \begin{equation}
 \label{th:edge-descendant-uniqueness-44}
   \begin{gathered}
