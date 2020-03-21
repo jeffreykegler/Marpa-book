@@ -2683,7 +2683,7 @@ Let, without loss of generality,
    \right], \Vorig{i} \right] @ \Ves{j}
 \end{equation}
 be an EIM,
-where $\var{i} \le \var{j} < \Vsize{prefix}$.
+where $\var{i} \le \var{j} \le \Vlastix{prefix}$.
 \Veim{x} is \dfn{valid}
 if and only if
 \begin{gather}
@@ -2702,22 +2702,22 @@ is \dfn{useful}
 if and only if
 \begin{equation*}
 \label{eq:EIM-valid-30}
-\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  (\Vsize{w}\subtract 1)].
+\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
 \quad \dispEnd
 \end{equation*}
 \end{definition}
 
-The following definition will be useful for dealing with ``matching'' EIM's.
+\begin{definition}[Symbol of an EIM]
 \begin{equation*}
-\Symbol{\Veim{eim}} \defined \LHS{\var{eim}}
+\Symbol{\Veim{eim}} \defined \LHS{\var{eim}}. \quad \dispEnd
 \end{equation*}
+\end{definition}
 
 \begin{definition}[Matching]
 We say that a \var{x} of some type \dfn{matches}
 a \var{y} of some type if
 \Matches{\var{x},\var{y}},
 where \var{Matches} is an overloaded boolean function.
-
 Three of the loadings of \var{Matches} are as follows.
 The match of an EIM with another EIM:
 \label{def:matches}
@@ -3164,6 +3164,70 @@ we overload \var{Matches} as follows:
 \end{equation*}
 \end{definition}
 
+\begin{definition}[LIM validity]
+\label{def:lim-validity}
+Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
+Let, without loss of generality,
+\begin{equation}
+\label{eq:LIM-valid-10}
+\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
+\end{equation}
+be a LIM.
+\Vlim{x} is \dfn{valid}
+if and only if
+it is consistent with
+\begin{gather}
+\label{eq:LIM-valid-20}
+\text{a valid source.}
+\end{gather}
+A set of LIM's is considered ``valid'' if and only if
+all of its elements are valid LIM's.
+Note that the empty set of LIM's is valid, vacuously.
+
+We say that an arbitrary LIM,
+\Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
+if
+\begin{gather}
+\label{eq:LIM-valid-22}
+\myfn{Source-2}{\Veim{source} , \Vlim{x}} \\
+\label{eq:LIM-valid-24}
+\Postdot{\var{source}} = \Vsym{transition}\text{, and} \\
+\label{eq:LIM-valid-25}
+\begin{gathered}
+\text{\Vlim{x} is consistent with} \\
+\Vlimset{preds} = \left\lbrace
+   \begin{gathered}
+        \Vlim{pred} : \\
+        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}},
+   \end{gathered}
+\right\rbrace
+\\
+\text{the set of LIM predecessors of \Veim{source}.}
+\end{gathered}
+\end{gather}
+
+\Vlim{x} is consistent with an empty set of LIM predecessors,
+($\var{preds} = \emptyset$)
+if
+\begin{gather}
+\label{eq:LIM-valid-26}
+\DR{\var{x}} = \DR{\Source{\Vlim{x}}}, \text{ and} \\
+\label{eq:LIM-valid-28}
+\Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
+\end{gather}
+
+\Vlim{x} is consistent with a non-empty set of LIM predecessors
+($\var{preds} \neq \emptyset$)
+if there is an element of \Vlimset{preds}, call it \Vlim{pred},
+such that
+\begin{gather}
+\label{eq:LIM-valid-26}
+\DR{\var{x}} = \DR{\Vlim{pred}}, \text{ and} \\
+\label{eq:LIM-valid-28}
+\Origin{\var{x}} = \Origin{\Vlim{pred}}. \quad \dispEnd
+\end{gather}
+\end{definition}
+\todo{Finish this}
 
 \section{Ancestry}
 \label{sec:ancestry}
@@ -7945,30 +8009,6 @@ contained in another chain.
 A chain is \dfn{partial} if it is contained in another chain.
 Note that a maximal chain is a special case of a partial chain.
 Chains are maximal unless stated otherwise.
-\dispEnd{}
-\end{definition}
-
-\begin{definition}[LIM Validity]
-\label{def:lim-validity}
-We say that a LIM,
-call it \mylim{\ell},
-is \dfn{valid}
-if and only if,
-where \var{chain} is the partial LIM chain of $\ell$,
-\begin{gather}
-\Source{\Velement{chain}{\Vlastix{chain}}} = \set{\Veim{top-src}}, \\
-\Source{\ell} = \set{\Veim{src}}, \\
-\var{top-src} \text{ is valid,} \\
-\var{src} \text{ is valid,} \\
-\DR{\var{top-src}} = \DR{\ell}, \\
-\Origin{\var{top-src}} = \Origin{\ell}, \\
-\Postdot{\var{src}} = \Transition{\ell}, \\
-0 \le \size{\PreviousLink{\ell}} \le 1 \\
-\forall \; \mylim{\ell{}2} \in \PreviousLink{\ell} :
-   \mylim{\ell{}2} \text{ is valid}.
-\end{gather}
-We say that a partial Leo chain is \dfn{valid} if and only if
-all the links of the partial chain are valid.
 \dispEnd{}
 \end{definition}
 
