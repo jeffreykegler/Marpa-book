@@ -282,6 +282,7 @@
 \newcommand\mycallname[1]{\textproc{#1}}
 \newcommand\call[2]{\mycallname{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
 
+\newcommand{\myfn}[2]{\ensuremath{\mymathop{#1}(#2)}}
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
@@ -2975,6 +2976,7 @@ which generate Leo sequences long enough to
 justify inclusion in the Leo memoizations.
 Such cases would be unusual, but may occur.
 
+% TODO Refer to proof that omission memoization does not affect correctness
 Omission of a memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
@@ -2996,6 +2998,8 @@ If the difference is measurable
 $\es{(0)}$ memoization will probably be found to
 be counter-productive.
 
+\subsection{Leo items}
+
 \begin{definition}[Leo items]
 \label{def:LIMs}
 
@@ -3011,39 +3015,29 @@ an Earley item or a Leo item.
 A Leo item (LIM) is a triple.
 Let
 \begin{equation*}
-\Vlim{x} = [ \Next{\Vdr{top}}, \Vsym{transition}, \Vorig{top} ]
+\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
 \end{equation*}
 be an arbitrary Leo item.
-\Vsym{transition} is the transition symbol of \Vlim{x},
+We call
+\Vsym{transition} is the \dfn{transition symbol} of \Vlim{x};
 and
-\begin{equation*}
-\Veim{top} = [\Vdr{top}, \Vorig{top}]
-\end{equation*}
-is the Earley item to be unioned as a result of a operation
-using the LIM.
-\dispEnd{}
-\end{definition}
-
-To say that \Vlim{x}
-is at \Ves{j}, we may write
-\begin{gather*}
-    \Vlim{x} @ \Ves{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
-    \text{$[ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j}$, etc.}
-\end{gather*}
-Also, for an arbitrary
-$\Vlim{x} = [ \Next{\Vdr{top}}, \Vsym{transition}, \Vorig{top} ]$,
-we write
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition},
 \;\; \text{and} \\
 \Origin{\Vlim{x}} & \defined \Vorig{top}
 \end{align}
-and for arbitrary $\Vlim{x}@\Vloc{j}$, we write
-\[
-\Current{\Vlim{x}@\Vloc{j}} \defined \Vloc{j}.
-\]
+
+To express the notion that \Vlim{x}
+is at \Ves{j}, we may write any of
+\begin{gather*}
+    \Vlim{x} @ \Ves{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
+    \Current{\Vlim{x}} = \Vloc{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j} \text{, etc.}
+       \quad \dispEnd
+\end{gather*}
+\end{definition}
 
 \begin{definition}[Transition of a PIM]
 \label{def:transition}
@@ -3066,29 +3060,19 @@ may be written
 \begin{definition}[Leo item source]
 \label{def:leo-item-source}
 Leo items ``stand in'' for an EIM source.
-Let \mylim{\ell} be a Leo item.
-The \dfn{source} of \mylim{\ell},
-is
+Let
 \begin{equation}
-\begin{aligned}
-& \Source{\mylim{\ell}} \defined \\
-& \qquad \qquad \left\lbrace
-   \begin{gathered}
-   \Veim{source}: \\
+\begin{gathered}
+    \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
    \Transition{\ell} = \Postdot{\var{source}} \\
    \land \; \Current{\ell} = \Current{\var{source}}.
-   \end{gathered}
-  \right\rbrace \quad \dispEnd
-\end{aligned}
+\end{gathered}
 \end{equation}
+We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
+if \myfn{Source2}{\Veim{source},\mylim{\ell}}.
+\dispEnd
 \end{definition}
 \todo{Convert \var{Source} from set to function.}
-
-The source of a LIM is unique,
-and in each Earley set, there is at most one Leo item
-for each transition symbol.
-To guarantee this,
-\cite{Leo1991} and \Marpa{} enforce ``Leo uniqueness''.
 
 \begin{definition}[Leo unique]
 \label{def:leo-unique}
@@ -3149,44 +3133,34 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 
 \begin{definition}[LIM predecessor]
 \label{def:lim-predecessor}
-Tracking the Leo chains requires that there
-be an analog to the concept of predecessor EIM
-for LIMs.
-We say that \LIMPredecessor{\var{succ}}
-is the \dfn{LIM predecessor} of \Veim{succ}
-where
+\todo{Explain use of LIM predecessor here?}
 \begin{equation*}
-  \begin{aligned}
-  & \LIMPredecessor{\var{succ}} \defined \\
-  & \qquad \begin{cases}
-          \begin{aligned}
-          & \text{\Vlim{x}, if there exists \var{x} such that} \\
-          & \qquad \Source{\var{x}} = \set{\Veim{source}} \\
-          & \qquad \land \; \Matches{ \var{source},\var{succ}} \\
-          \end{aligned}
-          \\
-      \Lambda, \text{ otherwise}
-    \end{cases}
-  \end{aligned}
+  \begin{gathered}
+      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined 
+          \exists \Veim{pred-source} :
+      \\
+      \Matches{ \var{pred-source},\var{succ}} 
+          \land \; \myfn{Source-2}{\var{pred-source},\Vlim{pred}}.
+  \end{gathered}
 \end{equation*}
-In \Marpa{},
-\var{LIM-Predecessor} is a function,
-but we have yet to prove this. \dispEnd{}
+We say that \Vlim{pred} is the \dfn{LIM predecessor}
+of \Veim{succ} if and only if
+\myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
+\dispEnd{}
 \todo{Prove \var{Lim-Predecesser} is well-defined here?}
 \end{definition}
 
 \begin{definition}[LIM matching]
-We overload \var{Matches} to deal with LIM's as follows.
+To deal with LIM's,
+we overload \var{Matches} as follows:
 \begin{equation*}
-\begin{aligned}
-& \Matches{\mylim{\ell},\Veim{cuz}} \defined \\
-& \qquad \qquad \begin{aligned}
-         & \Postdot{\var{cuz}} = \Lambda \\
-\land \; & \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
-\land \; & \Current{\mylim{\ell}} = \Origin{\var{cuz}}
+\begin{gathered}
+\Matches{\mylim{\ell},\Veim{cuz}} \defined \\
+         \Postdot{\var{cuz}} = \Lambda \\
+\land \; \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
+\land \; \Current{\mylim{\ell}} = \Origin{\var{cuz}}.
   \quad \dispEnd
-\end{aligned}
-\end{aligned}
+\end{gathered}
 \end{equation*}
 \end{definition}
 
