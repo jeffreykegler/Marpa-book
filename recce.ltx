@@ -2899,6 +2899,113 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 \end{equation}
 \end{proof}
 
+\begin{lemma}[Reduction lemma]
+Let partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse,
+let
+\begin{equation}
+\label{eq:lem-reduction-lemma-02}
+\begin{gathered}
+  \Veim{pred} \text{ be a valid EIM, where } \Veim{pred} = \\
+  \left[
+      \left[ \Vsym{lhs} \de \Vstr{pt1} \mydot \Vsym{postdot} \Vstr{pt3}
+      \right],
+      \Vloc{i}
+  \right] @\Vloc{j}
+\end{gathered}
+\end{equation}
+and let
+\begin{equation}
+\label{eq:lem-reduction-lemma-04}
+\Vsym{postdot} \destar \boldRangeDecr{prefix}{\Vloc{j}}{\Vloc{k}}.
+\end{equation}
+Then
+\begin{equation}
+\label{eq:lem-reduction-lemma-06}
+\begin{gathered}
+  \Veim{reduced} \text{ is a valid EIM, where } \Veim{reduced} = \\
+  \left[
+      \left[ \Vsym{lhs} \de \Vstr{pt1} \Vsym{postdot} \mydot \Vstr{pt3}
+      \right],
+      \Vloc{i}
+  \right] @\Vloc{k}.
+\end{gathered}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+Let the partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse.
+\begin{equation}
+\label{eq:lem-reduction-lemma-10}
+\begin{gathered}
+\Rule{\Veim{pred}} \in \Rules{\var{g}} \\
+\because \Eref{eq:EIM-valid-22a} \text{ in }
+    \longDfref{EIM validity}{def:eim-validity},
+    \Eref{eq:lem-reduction-lemma-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-12}
+\begin{gathered}
+\Rule{\Veim{pred}} =
+\Rule{\Veim{reduced}}
+\because 
+    \Eref{eq:lem-reduction-lemma-02}
+    \Eref{eq:lem-reduction-lemma-06}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-14}
+\begin{gathered}
+\Rule{\Veim{reduced}} \in \Rules{\var{g}} \\
+\because 
+    \Eref{eq:lem-reduction-lemma-10},
+    \Eref{eq:lem-reduction-lemma-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-16}
+\begin{gathered}
+  \Accept{\var{g}} \destar \Vstr{before} \cat \Vsym{lhs} \cat \Vstr{after} \\
+  \because \Eref{eq:EIM-valid-22b} \text{ in }
+    \longDfref{EIM validity}{def:eim-validity},
+    \Eref{eq:lem-reduction-lemma-02}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-18}
+\begin{gathered}
+  \Vstr{before} \destar \boldRangeDecr{prefix}{0}{\var{i}} \\
+  \because \Eref{eq:EIM-valid-22c} \text{ in }
+    \Dfref{def:eim-validity},
+    \Eref{eq:lem-reduction-lemma-02}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-20}
+\begin{gathered}
+  \Vstr{pt1} \destar \boldRangeDecr{prefix}{\var{i}}{\var{j}} \\
+  \because \Eref{eq:EIM-valid-22d} \text{ in }
+    \Dfref{def:eim-validity},
+    \Eref{eq:lem-reduction-lemma-02}.
+  \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-lemma-22}
+\begin{gathered}
+  \Vstr{pt1}\Vsym{postdot} \destar \boldRangeDecr{prefix}{\var{i}}{\var{k}} \\
+  \because 
+    \Eref{eq:lem-reduction-lemma-04},
+    \Eref{eq:lem-reduction-lemma-20}.
+  \end{gathered}
+\end{equation}
+The validity of
+\Veim{reduced} \Eref{eq:lem-reduction-lemma-06} follows from
+\Eref{eq:lem-reduction-lemma-14},
+\Eref{eq:lem-reduction-lemma-16},
+\Eref{eq:lem-reduction-lemma-18}, and
+\Eref{eq:lem-reduction-lemma-22}.
+\end{proof}
+
 \section{The Leo algorithm}
 \label{sec:leo}
 
