@@ -2948,7 +2948,7 @@ Let the partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse.
 \begin{gathered}
 \Rule{\Veim{pred}} =
 \Rule{\Veim{reduced}}
-\because 
+\because
     \Eref{eq:lem-reduction-lemma-02}
     \Eref{eq:lem-reduction-lemma-06}.
 \end{gathered}
@@ -2957,7 +2957,7 @@ Let the partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse.
 \label{eq:lem-reduction-lemma-14}
 \begin{gathered}
 \Rule{\Veim{reduced}} \in \Rules{\var{g}} \\
-\because 
+\because
     \Eref{eq:lem-reduction-lemma-10},
     \Eref{eq:lem-reduction-lemma-12}.
 \end{gathered}
@@ -2993,7 +2993,7 @@ Let the partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse.
 \label{eq:lem-reduction-lemma-22}
 \begin{gathered}
   \Vstr{pt1}\Vsym{postdot} \destar \boldRangeDecr{prefix}{\var{i}}{\var{k}} \\
-  \because 
+  \because
     \Eref{eq:lem-reduction-lemma-04},
     \Eref{eq:lem-reduction-lemma-20}.
   \end{gathered}
@@ -3004,6 +3004,84 @@ The validity of
 \Eref{eq:lem-reduction-lemma-16},
 \Eref{eq:lem-reduction-lemma-18}, and
 \Eref{eq:lem-reduction-lemma-22}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Reduction by completion]
+Let partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse,
+let
+\begin{equation}
+\label{eq:lem-reduction-by-completion-02}
+\begin{gathered}
+  \Veim{pred} \text{ be a valid EIM, where } \Veim{pred} = \\
+  \left[
+      \left[ \Vsym{lhs} \de \Vstr{pt1} \mydot \Vsym{postdot} \Vstr{pt3}
+      \right],
+      \Vloc{i}
+  \right] @\Vloc{j}
+\end{gathered}
+\end{equation}
+and let
+\begin{gather}
+\label{eq:lem-reduction-by-completion-04}
+\text{\Veim{cuz} be a valid EIM such that} \\
+\label{eq:lem-reduction-by-completion-06}
+\Matches{\var{pred}, \var{cuz}} \text{ and} \\
+\label{eq:lem-reduction-by-completion-08}
+\Current{\var{cuz}} = \Vloc{k}.
+\end{gather}
+Then
+\begin{equation}
+\label{eq:lem-reduction-by-completion-10}
+\begin{gathered}
+  \Veim{reduced} \text{ is a valid EIM, where } \Veim{reduced} = \\
+  \left[
+      \left[ \Vsym{lhs} \de \Vstr{pt1} \Vsym{postdot} \mydot \Vstr{pt3}
+      \right],
+      \Vloc{i}
+  \right] @\Vloc{k}.
+\end{gathered}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:lem-reduction-by-completion-20}
+\text{\Veim{cuz} is a completion }\because \Eref{eq:lem-reduction-by-completion-06}.
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-by-completion-22}
+\Origin{\Veim{cuz}} = \Vloc{j} \because
+    \Eref{eq:lem-reduction-by-completion-02},
+    \Eref{eq:lem-reduction-by-completion-06}.
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-by-completion-24}
+\LHS{\Veim{cuz}} = \Vsym{postdot} \because
+    \Eref{eq:lem-reduction-by-completion-02},
+    \Eref{eq:lem-reduction-by-completion-06}.
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-by-completion-26}
+\begin{gathered}
+\exists \Vstr{rhs} : \Veim{cuz} = \tuple{\tuple{\Vsym{postdot} \de \var{rhs} \mydot}, \Vorig{k}}@\Vloc{j} \\
+\because \Eref{eq:lem-reduction-by-completion-08},
+        \Eref{eq:lem-reduction-by-completion-20},
+        \Eref{eq:lem-reduction-by-completion-22},
+        \Eref{eq:lem-reduction-by-completion-24}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-reduction-by-completion-28}
+\begin{gathered}
+\Vsym{postdot} \destar \boldRangeDecr{prefix}{\Vloc{j}}{\Vloc{k}} \\
+   \because
+        \Eref{eq:lem-reduction-by-completion-04},
+        \Eref{eq:lem-reduction-by-completion-26}
+        \longDfref{EIM validity}{def:eim-validity}.
+\end{gathered}
+\end{equation}
+\todo{Finish Reduction by completion proof}
 \end{proof}
 
 \section{The Leo algorithm}
@@ -3203,7 +3281,7 @@ if \myfn{Source2}{\Veim{source},\mylim{\ell}}.
     \end{gathered}
   \right\rbrace
 \end{equation}
-Note in 
+Note in
 \Eref{eq:def-leo-unique}
 that,
 while \Veim{x} is restricted to penults,
@@ -3244,10 +3322,10 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 \todo{Explain use of LIM predecessor here?}
 \begin{equation*}
   \begin{gathered}
-      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined 
+      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined
           \exists \Veim{pred-source} :
       \\
-      \Matches{ \var{pred-source},\var{succ}} 
+      \Matches{ \var{pred-source},\var{succ}}
           \land \; \myfn{Source-2}{\var{pred-source},\Vlim{pred}}.
   \end{gathered}
 \end{equation*}
