@@ -2724,35 +2724,28 @@ Three of the loadings of \var{Matches} are as follows:
 The match of an EIM with another EIM:
 \label{def:matches}
 \begin{equation*}
-\begin{aligned}
-& \Matches{\Veim{pred},\Veim{cuz}} \defined \\
-& \qquad \qquad \begin{aligned}
-         & \Postdot{\var{cuz}} = \Lambda \\
-\land \; & \Postdot{\var{pred}} = \Symbol{\var{cuz}} \\
-\land \; & \Current{\var{pred}} = \Origin{\var{cuz}}
-\end{aligned}
-\end{aligned}
+\begin{gathered}
+\Matches{\Veim{pred},\Veim{cuz}} \defined \\
+\Postdot{\var{pred}} = \Symbol{\var{cuz}} \\
+\land \; \Current{\var{pred}} = \Origin{\var{cuz}}.
+\end{gathered}
 \end{equation*}
 The match of an EIM with a token:
 \begin{equation*}
-\begin{aligned}
-& \Matches{\Veim{pred},\var{token}} \defined \\
-& \qquad \qquad \begin{aligned}
-         & \Postdot{\var{pred}} = \Symbol{\var{token}} \\
-\land \; & \Current{\var{pred}} = \Origin{\var{token}}
-\end{aligned}
-\end{aligned}
+\begin{gathered}
+\Matches{\Veim{pred},\var{token}} \defined \\
+         \Postdot{\var{pred}} = \Symbol{\var{token}} \\
+\land \; \Current{\var{pred}} = \Origin{\var{token}}.
+\end{gathered}
 \end{equation*}
 The match of an EIM with a location:
 \begin{equation*}
-\begin{aligned}
-& \Matches{\Veim{pred},\Vloc{j}} \defined \\
-& \qquad \qquad \begin{aligned}
-         & \Postdot{\var{pred}} = \Symbol{\Vloc{j}} \\
-\land \; & \Current{\var{pred}} = \Origin{\Vloc{j}}
+\begin{gathered}
+\Matches{\Veim{pred},\Vloc{j}} \defined \\
+         \Postdot{\var{pred}} = \Symbol{\Vloc{j}} \\
+\land \; \Current{\var{pred}} = \Origin{\Vloc{j}}.
 \quad \dispEnd
-\end{aligned}
-\end{aligned}
+\end{gathered}
 \end{equation*}
 \end{definition}
 
@@ -3028,8 +3021,10 @@ and let
 \begin{gather}
 \label{eq:lem-reduction-by-completion-04}
 \text{\Veim{cuz} be a valid EIM such that} \\
+\label{eq:lem-reduction-by-completion-05}
+\Postdot{\var{cuz}} = \Lambda, \\
 \label{eq:lem-reduction-by-completion-06}
-\Matches{\var{pred}, \var{cuz}} \text{ and} \\
+\Matches{\var{pred}, \var{cuz}}, \text{ and} \\
 \label{eq:lem-reduction-by-completion-08}
 \Current{\var{cuz}} = \Vloc{k}.
 \end{gather}
@@ -3049,10 +3044,6 @@ Then
 
 \begin{proof}
 \begin{equation}
-\label{eq:lem-reduction-by-completion-20}
-\text{\Veim{cuz} is a completion }\because \Eref{eq:lem-reduction-by-completion-06}.
-\end{equation}
-\begin{equation}
 \label{eq:lem-reduction-by-completion-22}
 \Origin{\Veim{cuz}} = \Vloc{j} \because
     \Eref{eq:lem-reduction-by-completion-02},
@@ -3068,8 +3059,8 @@ Then
 \label{eq:lem-reduction-by-completion-26}
 \begin{gathered}
 \exists \Vstr{rhs} : \Veim{cuz} = \tuple{\tuple{\Vsym{postdot} \de \var{rhs} \mydot}, \Vorig{k}}@\Vloc{j} \\
-\because \Eref{eq:lem-reduction-by-completion-08},
-        \Eref{eq:lem-reduction-by-completion-20},
+\because \Eref{eq:lem-reduction-by-completion-05},
+        \Eref{eq:lem-reduction-by-completion-08},
         \Eref{eq:lem-reduction-by-completion-22},
         \Eref{eq:lem-reduction-by-completion-24}.
 \end{gathered}
@@ -3291,22 +3282,6 @@ may be written
 \Transition{\var{pim}}. \dispEnd
 \end{definition}
 
-\begin{definition}[Leo item source]
-\label{def:leo-item-source}
-Leo items ``stand in'' for an EIM source.
-Let
-\begin{equation}
-\begin{gathered}
-    \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
-   \Transition{\ell} = \Postdot{\var{source}} \\
-   \land \; \Current{\ell} = \Current{\var{source}}.
-\end{gathered}
-\end{equation}
-We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
-if \myfn{Source2}{\Veim{source},\mylim{\ell}}.
-\dispEnd
-\end{definition}
-
 \begin{definition}[Leo unique]
 \label{def:leo-unique}
 \LeoUnique{\Ves{j}} is defined as
@@ -3364,6 +3339,25 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 \dispEnd{}
 \end{definition}
 
+\begin{definition}[LIM source]
+\label{def:lim-source}
+Leo items ``stand in'' for an EIM source.
+Let
+\begin{equation}
+\begin{gathered}
+    \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
+   \LeoEligible{\var{source}} \in \ES{\Current{\ell}} \\
+   \land \; \Transition{\ell} = \Postdot{\var{source}}.
+\end{gathered}
+\end{equation}
+We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
+if
+\[
+\myfn{Source2}{\Veim{source},\mylim{\ell}}.
+\quad \dispEnd
+\]
+\end{definition}
+
 \begin{definition}[LIM predecessor]
 \label{def:lim-predecessor}
 \begin{equation*}
@@ -3419,7 +3413,7 @@ if
 \label{eq:LIM-valid-22}
 \myfn{Source-2}{\Veim{source} , \Vlim{x}}; \\
 \label{eq:LIM-valid-23}
-\LeoEligible{\Veim{source}}; \\
+\Veim{source} \in \LeoEligible{\ES{\Vlim{x}}}; \\
 \label{eq:LIM-valid-24}
 \Postdot{\var{source}} = \Vsym{transition}\text{; and} \\
 \label{eq:LIM-valid-25}
@@ -3468,6 +3462,30 @@ Every LIM has exactly one source.
 \end{theorem}
 
 \begin{proof}
+The proof strategy is direct:
+we assume that \mylim{\ell} has two source 
+EIM's, \Veim{x} and \Veim{y},
+and show that $\var{x} = \var{y}$.
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-10}
+\myfn{Source-2}{\Veim{x}, \mylim{\ell}} \because \text{ AF proof.}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-12}
+\myfn{Source-2}{\Veim{y}, \mylim{\ell}} \because \text{ AF proof.}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-14}
+\Veim{x} \in \LeoEligible{\ES{\ell}}
+\because \Eref{eq:th-lim-source-uniqueness-10}.
+    \longDfref{LIM source}{def:lim-source}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-16}
+\Veim{y} \in \LeoEligible{\ES{\ell}}
+\because \Eref{eq:th-lim-source-uniqueness-12}.
+    \longDfref{LIM source}{def:lim-source}.
+\end{equation}
 \todo{Prove LIM source uniqueness}
 \myqed
 \end{proof}
