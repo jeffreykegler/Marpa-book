@@ -3250,28 +3250,27 @@ an Earley item or a Leo item.
 A Leo item (LIM) is a triple.
 Let
 \begin{equation*}
-\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]
+\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \Ves{j}
 \end{equation*}
 be an arbitrary Leo item.
-We call
-\Vsym{transition} is the \dfn{transition symbol} of \Vlim{x};
+To express the notion that \Vlim{x}
+is at \Ves{j}, we may also write
+\begin{gather*}
+    \Vlim{x} @ \Ves{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
+    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j} \text{, etc.}
+\end{gather*}
+We say that
+\Vsym{transition} is the \dfn{transition symbol} of \Vlim{x}@\Vloc{j};
 and
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition},
-\;\; \text{and} \\
-\Origin{\Vlim{x}} & \defined \Vorig{top}
+\Origin{\Vlim{x}} & \defined \Vorig{top} \text{ and} \\
+    \Current{\Vlim{x}} & \defined \Vloc{j}.
+       \quad \dispEnd
 \end{align}
 
-To express the notion that \Vlim{x}
-is at \Ves{j}, we may write any of
-\begin{gather*}
-    \Vlim{x} @ \Ves{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
-    \Current{\Vlim{x}} = \Vloc{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j} \text{, etc.}
-       \quad \dispEnd
-\end{gather*}
 \end{definition}
 
 \begin{definition}[Transition of a PIM]
@@ -3307,7 +3306,6 @@ We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
 if \myfn{Source2}{\Veim{source},\mylim{\ell}}.
 \dispEnd
 \end{definition}
-\todo{Convert \var{Source} from set to function.}
 
 \begin{definition}[Leo unique]
 \label{def:leo-unique}
@@ -3319,7 +3317,7 @@ if \myfn{Source2}{\Veim{source},\mylim{\ell}}.
     \Veim{x} \in \set{\var{x} \in \Ves{j} :
         \Penult{\var{x}} \neq \Lambda} :
     \\
-        \forall \Veim{y} \in \Ves{j} : \\
+        \forall \; \Veim{y} \in \Ves{j} : \\
           \left(
             \begin{gathered}
             \Penult{\var{x}} = \Postdot{\var{y}}
@@ -3368,11 +3366,10 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 
 \begin{definition}[LIM predecessor]
 \label{def:lim-predecessor}
-\todo{Explain use of LIM predecessor here?}
 \begin{equation*}
   \begin{gathered}
       \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined
-          \exists \Veim{pred-source} :
+          \exists \; \Veim{pred-source} :
       \\
       \Matches{ \var{pred-source},\var{succ}}
           \land \; \myfn{Source-2}{\var{pred-source},\Vlim{pred}}.
@@ -3382,7 +3379,6 @@ We say that \Vlim{pred} is the \dfn{LIM predecessor}
 of \Veim{succ} if and only if
 \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
 \dispEnd{}
-\todo{Prove \var{Lim-Predecesser} is well-defined here?}
 \end{definition}
 
 \begin{definition}[LIM matching]
@@ -3427,21 +3423,22 @@ if
 \label{eq:LIM-valid-24}
 \Postdot{\var{source}} = \Vsym{transition}\text{; and} \\
 \label{eq:LIM-valid-25}
-\begin{gathered}
 \myparbox{\Vlim{x} is consistent with
-    the set of LIM predecessors of \Veim{source},
-    that is, with
-} \\
-\Vlimset{preds} = \left\lbrace
+    \Vlimset{preds}, the set of LIM predecessors of \Veim{source}.
+}
+\end{gather}
+Formally,
+\Vlimset{preds} in
+\Eref{eq:LIM-valid-25} is
+\[
+ \left\lbrace
    \begin{gathered}
-        \Vlim{pred} : \\
+        \Vlim{pred} :
         \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}.
    \end{gathered}
-\right\rbrace
-\\
-\end{gathered}
-\end{gather}
-
+    \right\rbrace
+\]
+%
 \Vlim{x} is consistent with an empty set of LIM predecessors,
 ($\var{preds} = \emptyset$)
 if
@@ -3451,7 +3448,7 @@ if
 \label{eq:LIM-valid-28}
 \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
 \end{gather}
-
+%
 \Vlim{x} is consistent with a non-empty set of LIM predecessors
 ($\var{preds} \neq \emptyset$)
 if there is an element of \Vlimset{preds}, call it \Vlim{pred},
@@ -3466,6 +3463,7 @@ such that
 \todo{Finish this}
 
 \begin{theorem}[LIM source uniqueness]
+\label{th:lim-source-uniqueness}
 Every LIM has exactly one source.
 \end{theorem}
 
@@ -3473,6 +3471,17 @@ Every LIM has exactly one source.
 \todo{Prove LIM source uniqueness}
 \myqed
 \end{proof}
+
+\begin{definition}[\myfn{Source}{} function]
+\label{def:source-fn}
+From \Thref{th:lim-source-uniqueness}, we see that
+the relation of LIM source is a function, so that
+we can define \myfn{Source}{} such that
+\[
+(\Source{\mylim{\ell}} = \Veim{source}) \equiv
+    \myfn{Source-2}{\var{source},\ell}. \quad \dispEnd
+\]
+\end{definition}
 
 \begin{theorem}[LIM match uniqueness]
 If the source EIM of a LIM matches another
@@ -3486,6 +3495,7 @@ the second EIM, then the EIM match is unique.
 \end{proof}
 
 \begin{theorem}[Sourced LIM uniqueness]
+\label{th:sourced-lim-uniqueness}
 Every EIM is the source of at most one LIM.
 \end{theorem}
 
@@ -3493,6 +3503,18 @@ Every EIM is the source of at most one LIM.
 \todo{Sourced LIM uniqueness}
 \myqed
 \end{proof}
+
+\begin{definition}[\myfn{LIM-Predecessor}{} function]
+\label{def:lim-predecessor-fn}
+\todo{Define LIM-Predecessor function}
+From \Thref{th:sourced-lim-uniqueness}, we see that
+the relation of LIM predecessor is a function,
+so that we can define \myfn{LIM-Predecessor}{} such that
+\begin{gather*}
+(\LIMPredecessor{\Veim{eim}} = \mylim{\ell}) \\
+    \equiv \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}}. \quad \dispEnd
+\end{gather*}
+\end{definition}
 
 \section{Ancestry}
 \label{sec:ancestry}
