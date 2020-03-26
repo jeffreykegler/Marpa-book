@@ -806,10 +806,21 @@ syntax falls within the limits of LALR.
 \section{Preliminaries}
 \label{sec:preliminaries}
 
-The basis of the mathematical presentation to follow is
+The basis of our formal presentation is
 a naive set theory,
 consistent with that of
-Halmos 1960~\cite{Halmos1960}.
+Halmos 1960~\cite{Halmos1960},
+but with
+some of the terminology modernized.
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
+$\myfn{dom}{\var{f}}$ is the domain of \var{f}.
+$\myfn{ran}{\var{f}}$ is the range of \var{f}.
+$\mathbb{N}$ is the set of natural numbers,
+which includes zero.
+
 Alongside the set theoretical notions,
 and in concept based on them,
 are algorithmic notions.
@@ -3290,16 +3301,16 @@ may be written
   \left\lbrace
     \begin{gathered}
     \Veim{x} \in \set{\var{x} \in \Ves{j} :
-        \Penult{\var{x}} \neq \Lambda} :
+        \Penult{\var{x}} = \Postdot{\var{x}} } :
     \\
         \forall \; \Veim{y} \in \Ves{j} : \\
           \left(
             \begin{gathered}
-            \Penult{\var{x}} = \Postdot{\var{y}}
+            \Postdot{\var{x}} = \Postdot{\var{y}}
             \implies
             \var{x} = \var{y}
             \end{gathered}
-          \right) \\
+          \right). \\
     \end{gathered}
   \right\rbrace
 \end{equation}
@@ -3463,9 +3474,9 @@ Every LIM has exactly one source.
 
 \begin{proof}
 The proof strategy is direct:
-we assume that \mylim{\ell} has two source 
+we assume that \mylim{\ell} has two source
 EIM's, \Veim{x} and \Veim{y},
-and show that $\var{x} = \var{y}$.
+and will show that $\var{x} = \var{y}$.
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-10}
 \myfn{Source-2}{\Veim{x}, \mylim{\ell}} \because \text{ AF proof.}
@@ -3486,8 +3497,67 @@ and show that $\var{x} = \var{y}$.
 \because \Eref{eq:th-lim-source-uniqueness-12}.
     \longDfref{LIM source}{def:lim-source}.
 \end{equation}
-\todo{Prove LIM source uniqueness}
-\myqed
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-18}
+\begin{gathered}
+\Current{\Veim{x}} = \Current{\mylim{\ell}} = \Current{\Veim{y}} \\
+   \because
+    \Eref{eq:th-lim-source-uniqueness-14},
+    \Eref{eq:th-lim-source-uniqueness-16},
+    \longDfref{Leo eligible}{def:leo-eligible}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-20}
+\begin{gathered}
+\Postdot{\Veim{x}} = \Transition{\mylim{\ell}} = \Postdot{\Veim{y}} \\
+   \because
+    \Eref{eq:th-lim-source-uniqueness-10},
+    \Eref{eq:th-lim-source-uniqueness-12},
+    \longDfref{LIM source}{def:lim-source}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-22}
+\Veim{x} \in \LeoUnique{\ES{\ell}}
+\because \Eref{eq:th-lim-source-uniqueness-14},
+    \longDfref{LIM source}{def:lim-source}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-24}
+\begin{gathered}
+        \forall \; \Veim{z} \in \Ves{j} : \\
+          \left(
+            \Postdot{\var{x}} = \Postdot{\var{z}}
+            \implies
+            \var{x} = \var{z}
+          \right) \\
+          \because \Eref{eq:th-lim-source-uniqueness-22}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-26}
+\begin{gathered}
+    \Postdot{\var{x}} = \Postdot{\var{y}}
+    \implies
+    \var{x} = \var{y} \\
+    \myparbox{%
+        \cuz{} \Eref{eq:th-lim-source-uniqueness-18} and
+        instantiating \Veim{z} of
+        \Eref{eq:th-lim-source-uniqueness-24} as \Veim{y}.%
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-uniqueness-28}
+\begin{gathered}
+    \var{x} = \var{y}
+    \because
+        \Eref{eq:th-lim-source-uniqueness-20},
+        \Eref{eq:th-lim-source-uniqueness-26}.
+        \quad \myqed
+\end{gathered}
+\end{equation}
 \end{proof}
 
 \begin{definition}[\myfn{Source}{} function]
@@ -3499,6 +3569,21 @@ we can define \myfn{Source}{} such that
 (\Source{\mylim{\ell}} = \Veim{source}) \equiv
     \myfn{Source-2}{\var{source},\ell}. \quad \dispEnd
 \]
+\end{definition}
+
+\begin{definition}
+\label{def:lim-source-chain}
+A \dfn{LIM source chain}, is a chain, call it \Veimset{chain}, of EIM's such
+that for all \var{n}
+\begin{equation}
+\forall \var{n} \in \myfn{dom}{\Vlimset{chain}} : (\exists \mylim{\ell} : Source{\ell} = \VVelement{chain}{n}),
+\end{equation}
+and
+\begin{equation}
+\var{n}+1 \in \myfn{dom}{\Vlimset{chain}} \implies \Matches{\Velement{chain}{\var{n}+1}, \VVelement{chain}{n}} \\
+\end{equation}
+We call \Veim{pred} the predecessor of \Veim{succ},
+\Veim{succ} the successor of \Veim{pred}.
 \end{definition}
 
 \begin{theorem}[LIM match uniqueness]
