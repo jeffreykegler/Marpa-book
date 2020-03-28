@@ -3357,7 +3357,7 @@ Let
 \begin{equation}
 \begin{gathered}
     \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
-   \LeoEligible{\var{source}} \in \ES{\Current{\ell}} \\
+   \var{source} \in \LeoEligible{\ES{\Current{\ell}}} \\
    \land \; \Transition{\ell} = \Postdot{\var{source}}.
 \end{gathered}
 \end{equation}
@@ -3377,7 +3377,7 @@ if
           \exists \; \Veim{pred-source} :
       \\
       \Matches{ \var{pred-source},\var{succ}}
-          \land \; \myfn{Source-2}{\var{pred-source},\Vlim{pred}}.
+          \land \; \myfn{Source2}{\var{pred-source},\Vlim{pred}}.
   \end{gathered}
 \end{equation*}
 We say that \Vlim{pred} is the \dfn{LIM predecessor}
@@ -3422,7 +3422,7 @@ We say that an arbitrary LIM,
 if
 \begin{gather}
 \label{eq:LIM-valid-22}
-\myfn{Source-2}{\Veim{source} , \Vlim{x}}; \\
+\myfn{Source2}{\Veim{source} , \Vlim{x}}; \\
 \label{eq:LIM-valid-23}
 \Veim{source} \in \LeoEligible{\ES{\Vlim{x}}}; \\
 \label{eq:LIM-valid-24}
@@ -3479,22 +3479,22 @@ EIM's, \Veim{x} and \Veim{y},
 and will show that $\var{x} = \var{y}$.
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-10}
-\myfn{Source-2}{\Veim{x}, \mylim{\ell}} \because \text{ AF proof.}
+\myfn{Source2}{\Veim{x}, \mylim{\ell}} \because \text{ AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-12}
-\myfn{Source-2}{\Veim{y}, \mylim{\ell}} \because \text{ AF proof.}
+\myfn{Source2}{\Veim{y}, \mylim{\ell}} \because \text{ AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-14}
 \Veim{x} \in \LeoEligible{\ES{\ell}}
-\because \Eref{eq:th-lim-source-uniqueness-10}.
+\because \Eref{eq:th-lim-source-uniqueness-10},
     \longDfref{LIM source}{def:lim-source}.
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-16}
 \Veim{y} \in \LeoEligible{\ES{\ell}}
-\because \Eref{eq:th-lim-source-uniqueness-12}.
+\because \Eref{eq:th-lim-source-uniqueness-12},
     \longDfref{LIM source}{def:lim-source}.
 \end{equation}
 \begin{equation}
@@ -3514,19 +3514,19 @@ and will show that $\var{x} = \var{y}$.
    \because
     \Eref{eq:th-lim-source-uniqueness-10},
     \Eref{eq:th-lim-source-uniqueness-12},
-    \longDfref{LIM source}{def:lim-source}.
+    \Dfref{def:leo-eligible}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-22}
 \Veim{x} \in \LeoUnique{\ES{\ell}}
 \because \Eref{eq:th-lim-source-uniqueness-14},
-    \longDfref{LIM source}{def:lim-source}.
+    \Dfref{def:leo-eligible}.
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-source-uniqueness-24}
 \begin{gathered}
-        \forall \; \Veim{z} \in \Ves{j} : \\
+        \forall \; \Veim{z} \in \ES{\Current{\ell}} : \\
           \left(
             \Postdot{\var{x}} = \Postdot{\var{z}}
             \implies
@@ -3567,35 +3567,83 @@ the relation of LIM source is a function, so that
 we can define \myfn{Source}{} such that
 \[
 (\Source{\mylim{\ell}} = \Veim{source}) \equiv
-    \myfn{Source-2}{\var{source},\ell}. \quad \dispEnd
+    \myfn{Source2}{\var{source},\ell}. \quad \dispEnd
 \]
 \end{definition}
 
-\begin{definition}
-\label{def:lim-source-chain}
-A \dfn{LIM source chain}, is a chain, call it \Veimset{chain}, of EIM's such
-that for all \var{n}
+\begin{theorem}[LIM source predecessor uniqueness]
+\label{th:lim-source-predecessor-uniqueness}
+Let $[\Vint{g}, \Vterm{prefix}]$ be a partial parse.
+If
+\begin{gather}
+\label{th:lim-source-predecessor-uniqueness-04}
+\exists \; \mylim{\ell2} : \Source{\ell2} = \Veim{pred} \text{ and} \\
+\label{th:lim-source-predecessor-uniqueness-06}
+\Matches{\var{pred}, \Veim{succ}}
+\end{gather}
+then
 \begin{equation}
-\forall \var{n} \in \myfn{dom}{\Vlimset{chain}} : (\exists \mylim{\ell} : Source{\ell} = \VVelement{chain}{n}),
+\label{th:lim-source-predecessor-uniqueness-08}
+\forall \Veim{x} \in \set{\var{x} : \Matches{\var{x}, \var{succ}}} :
+\var{x} = \Veim{pred}.
 \end{equation}
-and
-\begin{equation}
-\var{n}+1 \in \myfn{dom}{\Vlimset{chain}} \implies \Matches{\Velement{chain}{\var{n}+1}, \VVelement{chain}{n}} \\
-\end{equation}
-We call \Veim{pred} the predecessor of \Veim{succ},
-\Veim{succ} the successor of \Veim{pred}.
-\end{definition}
-
-\begin{theorem}[LIM match uniqueness]
-If the source EIM of a LIM matches another
-source EIM of a LIM,
-the second EIM, then the EIM match is unique.
 \end{theorem}
 
 \begin{proof}
+The proof strategy is direct.
+We assume that \Veim{succ} is the second element
+of two matches:
+\Matches{\Veim{pred}, \var{succ}}
+and \Matches{\Veim{x}, \var{succ}},
+where \var{pred} is a LIM source,
+and will show that $\var{x} = \var{pred}$.
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-10}
+\Matches{\var{x}, \var{succ}} \because \text{ AF proof.}
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-12}
+\Postdot{\var{x}} = \LHS{\var{succ}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-10}.
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-14}
+\Postdot{\var{pred}} = \LHS{\var{succ}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-06}.
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-16}
+\Postdot{\var{pred}} = \Postdot{\var{x}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-12},
+    \Eref{th:lim-source-predecessor-uniqueness-14}.
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-18}
+\Current{\var{x}} = \Origin{\var{succ}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-10}.
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-20}
+\Current{\var{pred}} = \Origin{\var{succ}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-06}.
+\end{equation}
+\begin{equation}
+\label{th:lim-source-predecessor-uniqueness-22}
+\Current{\var{pred}} = \Current{\var{x}} \because
+    \Eref{th:lim-source-predecessor-uniqueness-18},
+    \Eref{th:lim-source-predecessor-uniqueness-20}.
+\end{equation}
 \todo{Prove LIM match uniqueness}
 \myqed
 \end{proof}
+
+\begin{definition}
+\label{def:lim-source-chain}
+A \dfn{LIM source chain}, is a chain
+\todo{Define LIM source chain}
+We call \Veim{pred} the predecessor of \Veim{succ},
+\Veim{succ} the successor of \Veim{pred}.
+\end{definition}
 
 \begin{theorem}[Sourced LIM uniqueness]
 \label{th:sourced-lim-uniqueness}
