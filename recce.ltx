@@ -3576,14 +3576,14 @@ we can define \myfn{Source}{} such that
 Let $[\Vint{g}, \Vterm{prefix}]$ be a partial parse.
 If
 \begin{gather}
-\label{th:lim-source-predecessor-uniqueness-04}
+\label{eq:th-lim-source-predecessor-uniqueness-04}
 \exists \; \mylim{\ell2} : \Source{\ell2} = \Veim{pred} \text{ and} \\
-\label{th:lim-source-predecessor-uniqueness-06}
+\label{eq:th-lim-source-predecessor-uniqueness-06}
 \Matches{\var{pred}, \Veim{succ}}
 \end{gather}
 then
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-08}
+\label{eq:th-lim-source-predecessor-uniqueness-08}
 \forall \Veim{x} \in \set{\var{x} : \Matches{\var{x}, \var{succ}}} :
 \var{x} = \Veim{pred}.
 \end{equation}
@@ -3598,43 +3598,121 @@ and \Matches{\Veim{x}, \var{succ}},
 where \var{pred} is a LIM source,
 and will show that $\var{x} = \var{pred}$.
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-10}
+\label{eq:th-lim-source-predecessor-uniqueness-10}
 \Matches{\var{x}, \var{succ}} \because \text{ AF proof.}
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-12}
+\label{eq:th-lim-source-predecessor-uniqueness-12}
 \Postdot{\var{x}} = \LHS{\var{succ}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-10}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-10}.
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-14}
+\label{eq:th-lim-source-predecessor-uniqueness-14}
 \Postdot{\var{pred}} = \LHS{\var{succ}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-06}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-06}.
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-16}
+\label{eq:th-lim-source-predecessor-uniqueness-16}
 \Postdot{\var{pred}} = \Postdot{\var{x}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-12},
-    \Eref{th:lim-source-predecessor-uniqueness-14}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-12},
+    \Eref{eq:th-lim-source-predecessor-uniqueness-14}.
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-18}
+\label{eq:th-lim-source-predecessor-uniqueness-18}
 \Current{\var{x}} = \Origin{\var{succ}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-10}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-10}.
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-20}
+\label{eq:th-lim-source-predecessor-uniqueness-20}
 \Current{\var{pred}} = \Origin{\var{succ}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-06}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-06}.
 \end{equation}
 \begin{equation}
-\label{th:lim-source-predecessor-uniqueness-22}
+\label{eq:th-lim-source-predecessor-uniqueness-22}
 \Current{\var{pred}} = \Current{\var{x}} \because
-    \Eref{th:lim-source-predecessor-uniqueness-18},
-    \Eref{th:lim-source-predecessor-uniqueness-20}.
+    \Eref{eq:th-lim-source-predecessor-uniqueness-18},
+    \Eref{eq:th-lim-source-predecessor-uniqueness-20}.
 \end{equation}
-\todo{Prove LIM match uniqueness}
-\myqed
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-24}
+\Source{\ell} = \Veim{pred} \because
+    \Eref{eq:th-lim-source-predecessor-uniqueness-04}, WLOG.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-26}
+\myfn{Source2}{\var{pred},\ell} \because
+    \Eref{eq:th-lim-source-predecessor-uniqueness-24},
+    \longDfref{\myfn{Source}{} function}{def:source-fn}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-28}
+\begin{gathered}
+\Veim{pred} \in \LeoEligible{\ES{\Current{\ell}} \\
+   \because \Eref{eq:th-lim-source-predecessor-uniqueness-26},
+    \longDfref{LIM source}{def:lim-source}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-30}
+\begin{gathered}
+\Veim{pred} \in \LeoUnique{\ES{\Current{\ell}}} \\
+\because \Eref{eq:th-lim-source-predecessor-uniqueness-28},
+    \longDfref{Leo eligible}{def:leo-eligible}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-32}
+\begin{gathered}
+\Current{\Veim{pred}} = \Current{\mylim{\ell}} \\
+\because \Eref{eq:th-lim-source-predecessor-uniqueness-30},
+    \longDfref{Leo unique}{def:leo-unique}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-44}
+\begin{gathered}
+        \forall \; \Veim{z} \in \ES{\Current{\ell}}} : \\
+          \left(
+            \Postdot{\var{pred}} = \Postdot{\var{z}}
+            \implies
+            \var{pred} = \var{z}
+          \right) \\
+    \because \Eref{eq:th-lim-source-predecessor-uniqueness-30},
+        \longDfref{Leo unique}{def:leo-unique}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-45}
+\begin{gathered}
+\Current{\Veim{x}} = \Current{\mylim{\ell}} \\
+\because
+    \Eref{eq:th-lim-source-predecessor-uniqueness-22},
+    \Eref{eq:th-lim-source-predecessor-uniqueness-32}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-46}
+\begin{gathered}
+    \Postdot{\var{pred}} = \Postdot{\var{x}}
+    \implies
+    \var{pred} = \var{x} \\
+    \myparbox{%
+        \cuz{} \Eref{eq:th-lim-source-predecessor-uniqueness-45} and
+        instantiating \Veim{z} of
+        \Eref{eq:th-lim-source-predecessor-uniqueness-44} as \Veim{x}.%
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-source-predecessor-uniqueness-48}
+\begin{gathered}
+    \var{pred} = \var{x}
+    \because
+        \Eref{eq:th-lim-source-predecessor-uniqueness-16},
+        \Eref{eq:th-lim-source-predecessor-uniqueness-46}.
+        \quad \myqed
+\end{gathered}
+\end{equation}
 \end{proof}
 
 \begin{definition}
