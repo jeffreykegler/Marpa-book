@@ -157,20 +157,26 @@
 }
 
 \newcommand{\Aref}[1]{(a\ref{#1}\colonpageref{#1})}
+\newcommand{\Asmref}[1]{(\textrm{Asm}\ref{#1}\colonpageref{#1})}
+\newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
 \newcommand{\Eref}[1]{(e\ref{#1}\colonpageref{#1})}
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
+\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
+\newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Sref}[1]{(s\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
-\newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
+\newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
+
 \newcommand{\longDfref}[2]{
   \ifmmode \text{``#1''\Dfref{#2}}%
   \else``#1''\Dfref{#2}%
   \fi%
 }
-\newcommand{\Asmref}[1]{(\textrm{Asm}\ref{#1}\colonpageref{#1})}
-\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{#1}\colonpageref{#1})}
-\newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
-\newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
+\newcommand{\longEref}[2]{
+  \ifmmode \text{``#1''\Eref{#2}}%
+  \else``#1''\Eref{#2}%
+  \fi%
+}
 
 % "full" refs -- that is, always include page
 % These exist because if, for example, both refs are to floats
@@ -2504,14 +2510,13 @@ where
 \[
 \Veim{x} = [\Vdr{x}, \Vorig{x}]
 \]
-is an arbitrary EIM, we write
-\begin{equation*}
+is an arbitrary EIM,
+\begin{gather}
 \label{eq:def-dr}
-\begin{alignedat}{3}
-& \DR{\Veim{x}} && \defined && \quad \Vdr{x}, \quad \text{and} \\
-& \Origin{\Veim{x}} && \defined && \quad \Vorig{x}
-\end{alignedat}
-\end{equation*}
+\DR{\Veim{x}} \defined \Vdr{x}, \text{ and} \\
+\label{eq:def-origin}
+\Origin{\Veim{x}} \defined \Vorig{x}.
+\end{gather}
 
 When a dotted rule concept is applied to an EIM,
 it is the same as applying that concept to the EIM's
@@ -2567,6 +2572,9 @@ PIM \Vpim{p} at \Ves{j}, we may write
 \[
     \var{p} @ \var{j}, \text{ etc.}
 \]
+
+\begin{definition}[PIM location]
+\label{def:pim-current}
 Also,
 for arbitrary
 $\Veim{eim}@\Vloc{eLoc}$ and
@@ -2575,6 +2583,7 @@ $\Vpim{pim}@\Vloc{pLoc}$,
 \text{$\Current{\var{x}} \defined \var{eLoc}$, and}\\
 \Current{\var{pim}} \defined \var{pLoc}.
 \end{gather*}
+\end{definition}
 
 Within \Marpa{},
 an Earley set is defined as a set of \dfn{parse items}.
@@ -2724,6 +2733,49 @@ if and only if
 \Symbol{\Veim{eim}} \defined \LHS{\var{eim}}. \quad \dispEnd
 \end{equation*}
 \end{definition}
+
+\begin{theorem}[EIM origin not after current]
+\label{th:eim-origin-not-after-current}
+If \Veim{x} is a valid EIM,
+then its origin is at or before its current location.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-10}
+\begin{gathered}
+\text{Let \Veim{x} be a valid EIM, where} \\
+\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+   \right], \Vorig{i} \right] @ \Ves{j} \\
+   \because \text{ WLOG, \Eref{eq:EIM-valid-10} in \Dfref{def:eim-validity}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-12}
+\begin{gathered}
+\Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
+   \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
+    \Eref{eq:th-eim-origin-not-after-current-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-14}
+\begin{gathered}
+\Origin{\var{x}} + \bigsize{\Vstr{rhs1}} = \Current{\var{x}} \\
+\because
+\Eref{eq:th-eim-origin-not-after-current-10},
+\Eref{eq:th-eim-origin-not-after-current-12},
+\longEref{Origin}{eq:def-origin},
+\longDfref{Current}{def:pim-current}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-16}
+\Origin{\var{x}} \le \Current{\var{x}} \because
+    \Eref{eq:th-eim-origin-not-after-current-14}.
+    \quad \myqed
+\end{equation}
+\end{proof}
 
 \begin{definition}[Matching]
 We say that a \var{x} of some type \dfn{matches}
@@ -3717,7 +3769,7 @@ and will show that $\var{x} = \var{pred}$.
 
 With \Thref{th:lim-source-predecessor-uniqueness},
 we are in a position
-to define the \dfn{reverse LIM source sequence}.
+to define the LIM source sequence.
 
 \begin{definition}[LIM source sequence]
 \label{def:lim-source-sequence}
