@@ -2778,6 +2778,7 @@ then its origin is at or before its current location.
 \end{proof}
 
 \begin{definition}[Matching]
+\label{def:matching-1}
 We say that a \var{x} of some type \dfn{matches}
 a \var{y} of some type if
 \Matches{\var{x},\var{y}},
@@ -2787,6 +2788,7 @@ Three of the loadings of \var{Matches} are as follows:
 The match of an EIM with another EIM:
 \label{def:matches}
 \begin{equation*}
+\label{eq:def-matches-eim-eim}
 \begin{gathered}
 \Matches{\Veim{pred},\Veim{cuz}} \defined \\
 \Postdot{\var{pred}} = \Symbol{\var{cuz}} \\
@@ -2811,6 +2813,31 @@ The match of an EIM with a location:
 \end{gathered}
 \end{equation*}
 \end{definition}
+
+\begin{theorem}[Order of matching EIM's]
+\label{th:order-of-matching-eims}
+\begin{equation}
+\label{eq:th-order-of-matching-eims-03}
+\begin{gathered}
+\Matches{\Veim{left},\Veim{right}} \\
+\implies \Current{\var{left}} \le \Current{\var{right}}.
+\end{gathered}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+By \Eref{eq:th-order-of-matching-eims-03} and
+\Eref{eq:def-matches-eim-eim} in the definitions of
+``matching'' \Dfref{def:matching-1}, we have
+\begin{equation}
+\label{eq:th-order-of-matching-eims-10}
+\Current{\var{left}} = \Origin{\var{right}}.
+\end{equation}
+The theorem follows from 
+\Eref{eq:th-order-of-matching-eims-10}
+and \Thref{th:eim-origin-not-after-current}.
+\todo{}
+\end{proof}
 
 \begin{theorem}[ES predictions \Oc{}]
 \label{th:es-prediction-count}
