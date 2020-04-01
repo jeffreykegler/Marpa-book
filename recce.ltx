@@ -1367,6 +1367,16 @@ a full parse is a special case of a partial parse.
 \dispEnd
 \end{definition}
 
+\begin{definition}[Context parse]
+\label{def:context-parse-cfg}
+Our discussion will assume they context are in
+the context of a parse, called the \dfn{context parse}.
+Unless otherwise stated,
+and until redefined in \Dfref{def:context-parse-int},
+the context parse is
+the partial parse $[\Vcfg{g}, \Vstr{prefix}]$.
+\end{definition}
+
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
 $\Vsym{x} \destar \epsilon$.
 \Vsym{x} is \dfn{nulling} if and only if it always derives the null
@@ -2327,6 +2337,17 @@ so that
 \end{equation}
 \end{proof}
 
+\begin{definition}[Default context parse]
+\label{def:context-parse-int}
+In \Dfref{def:context-parse-cfg}
+we defined the context parse,
+and we stated its default value.
+We now redefine the default value of the context parse.
+Except where otherwise stated,
+the context grammar for the rest of this paper is
+the partial parse $[\Vint{g}, \Vstr{prefix}]$.
+\end{definition}
+
 \section{Earley tables}
 \label{sec:earley-table}
 
@@ -2696,7 +2717,6 @@ for some \Vstr{rhs},
 \todo{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}[EIM validity]
 \label{def:eim-validity}
-Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
 Let, without loss of generality,
 \begin{equation}
 \label{eq:EIM-valid-10}
@@ -2984,7 +3004,6 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 
 \begin{lemma}[Reduction lemma]
 \label{lem:reduction}
-Let partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse,
 let
 \begin{equation}
 \label{eq:lem-reduction-lemma-02}
@@ -3017,7 +3036,6 @@ Then
 \end{lemma}
 
 \begin{proof}
-Let the partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse.
 \begin{equation}
 \label{eq:lem-reduction-lemma-10}
 \begin{gathered}
@@ -3093,8 +3111,7 @@ The validity of
 
 \begin{theorem}[Reduction by completion]
 \label{th:reduction-by-completion}
-Let partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse,
-let
+Let
 \begin{equation}
 \label{eq:lem-reduction-by-completion-02}
 \begin{gathered}
@@ -3173,8 +3190,7 @@ The theorem follows from
 
 \begin{theorem}[Reduction by token]
 \label{th:reduction-by-token}
-Let partial parse $[\Vint{g}, \Vstr{prefix}]$ be the context parse,
-let
+Let
 \begin{equation}
 \label{eq:lem-reduction-by-token-02}
 \begin{gathered}
@@ -3314,10 +3330,6 @@ $\es{(0)}$ memoization will probably be found to
 be counter-productive.
 
 \subsection{Leo items}
-
-Unless otherwise stated, the context parse
-in this section is the partial parse
-$\tuple{\Vint{g}, \Vstr{partial}}$.
 
 \begin{definition}[Leo items]
 \label{def:LIMs}
@@ -3484,7 +3496,6 @@ we overload \var{Matches} as follows:
 
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
-Let $[\Vcfg{g}, \Vterm{prefix}]$ be a partial parse.
 Let, without loss of generality,
 \begin{equation}
 \label{eq:LIM-valid-10}
@@ -3654,7 +3665,6 @@ we can define \myfn{Source}{} such that
 
 \begin{theorem}[LIM source predecessor uniqueness]
 \label{th:lim-source-predecessor-uniqueness}
-Let $[\Vint{g}, \Vterm{prefix}]$ be a partial parse.
 If
 \begin{gather}
 \label{eq:th-lim-source-predecessor-uniqueness-04}
@@ -3798,7 +3808,20 @@ and will show that $\var{x} = \var{pred}$.
 
 With \Thref{th:lim-source-predecessor-uniqueness},
 we are in a position
-to define the LIM source sequence.
+to define a function for the LIM predecessor,
+and to define the LIM source sequence.
+
+\begin{definition}[\myfn{LIM-Predecessor}{} function]
+\label{def:lim-predecessor-fn}
+\todo{Define LIM-Predecessor function}
+From \Thref{th:lim-uniqueness-by-source}, we see that
+the relation of LIM predecessor is a function,
+so that we can define \myfn{LIM-Predecessor}{} such that
+\begin{gather*}
+(\LIMPredecessor{\Veim{eim}} = \mylim{\ell}) \\
+    \equiv \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}}. \quad \dispEnd
+\end{gather*}
+\end{definition}
 
 \begin{definition}[LIM source sequence]
 \label{def:lim-source-sequence}
@@ -3900,18 +3923,6 @@ Every ES has at most
 \todo{LIM's per ES proof}
 \myqed
 \end{proof}
-
-\begin{definition}[\myfn{LIM-Predecessor}{} function]
-\label{def:lim-predecessor-fn}
-\todo{Define LIM-Predecessor function}
-From \Thref{th:lim-uniqueness-by-source}, we see that
-the relation of LIM predecessor is a function,
-so that we can define \myfn{LIM-Predecessor}{} such that
-\begin{gather*}
-(\LIMPredecessor{\Veim{eim}} = \mylim{\ell}) \\
-    \equiv \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}}. \quad \dispEnd
-\end{gather*}
-\end{definition}
 
 \section{Ancestry}
 \label{sec:ancestry}
@@ -4597,9 +4608,6 @@ the housekeeping time of the callee is unchanged.
 
 \section{The \Marpa{} algorithm}
 \label{sec:marpa}
-
-For the purpose of defining the \Marpa{} algorithm,
-let $[\Vint{g}, \Vstr{w}]$ be a partial parse.
 
 \subsection{Initializer op}
 \label{sec:initializer}
