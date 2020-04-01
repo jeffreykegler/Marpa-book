@@ -1375,6 +1375,7 @@ Unless otherwise stated,
 and until redefined in \Dfref{def:context-parse-int},
 the context parse is
 the partial parse $[\Vcfg{g}, \Vstr{prefix}]$.
+\dispEnd
 \end{definition}
 
 We say that symbol \Vsym{x} is \dfn{nullable} if and only if
@@ -2346,6 +2347,7 @@ We now redefine the default value of the context parse.
 Except where otherwise stated,
 the context grammar for the rest of this paper is
 the partial parse $[\Vint{g}, \Vstr{prefix}]$.
+\dispEnd
 \end{definition}
 
 \section{Earley tables}
@@ -3813,7 +3815,6 @@ and to define the LIM source sequence.
 
 \begin{definition}[\myfn{LIM-Predecessor}{} function]
 \label{def:lim-predecessor-fn}
-\todo{Define LIM-Predecessor function}
 From \Thref{th:lim-uniqueness-by-source}, we see that
 the relation of LIM predecessor is a function,
 so that we can define \myfn{LIM-Predecessor}{} such that
@@ -3826,9 +3827,9 @@ so that we can define \myfn{LIM-Predecessor}{} such that
 \begin{definition}[LIM source sequence]
 \label{def:lim-source-sequence}
 Let \Veim{first} be a valid LIM source EIM.
-Then \Veimset{chain} is
+Then \Veimset{seq} is
 the \dfn{LIM source sequence} relative to \Veim{first}
-if and only if $\VVelement{chain}{n}$ is
+if and only if $\VVelement{seq}{n}$ is
 \begin{equation*}
 \left\lbrace
     \begin{array}{ll}
@@ -3837,7 +3838,7 @@ if and only if $\VVelement{chain}{n}$ is
         \begin{gathered}
             \Veim{previous} : \\
             \Matches{\var{previous},
-                \Velement{chain}{\var{n}\subtract 1}}
+                \Velement{seq}{\var{n}\subtract 1}}
         \end{gathered}
         \right)
         & \text{ if } \var{n} > 0.
@@ -3853,23 +3854,57 @@ EIM's in any ES.
 \end{theorem}
 
 \begin{proof}
-\todo{LIM source EIM count proof}
+Assume for a reduction that there are
+$\size{\Vocab{\var{g}}} + 1$ LIM source EIM's
+in an ES, call it \Ves{j}.
+Each LIM source EIM is Leo eligible and therefore
+Leo unique.
+Since each LIM source EIM in \Ves{j} is Leo unique,
+its postdot symbol is unique.
+But there are only
+$\size{\Vocab{\var{g}}}$ symbols in \Vint{g},
+so that at least two of the postdot symbols must
+be identical.
+This shows the reductio and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[LIM source chain finiteness]
-\label{th:lim-source-chain-finiteness}
-Every LIM source chain is of finite length.
+\begin{theorem}[LIM source sequence finiteness]
+\label{th:lim-source-sequence-finiteness}
+Let \Veimset{seq} be the LIM source EIM sequence
+of \Veim{bottom}. Then
+\[
+\bigsize{\Veimset{seq}} \le \Current{\var{bottom}}\times\size{\Vocab{\Vint{g}}}.
+\]
 \end{theorem}
 
 \begin{proof}
-\todo{LIM source chain finiteness proof}
+Let \Veimset{seq} be the LIM source EIM sequence
+of \Veim{bottom}@\Ves{j}, an arbitrary LIM source EIM.
+By induction, and using \Thref{th:order-of-matching-eims},
+we can show that every element of \var{seq} is located
+at or before \Vloc{j}.
+From
+\Thref{th:lim-source-eim-count}, we know that there are
+at most \size{\Vocab{\var{g}}} LIM source EIM's
+in any ES.
+Therefore, there are at most
+$\var{j}\times\size{\Vocab{\var{g}}}$
+EIM's in any LIM source EIM sequence.
 \myqed
 \end{proof}
 
-\begin{definition}[Top of LIM source chain]
-\label{def:top-of-lim-source-chain}
-\todo{}
+With
+\Thref{th:lim-source-sequence-finiteness},
+we know there is a last EIM in any LIM source EIM sequence,
+so we may define its ``top''
+
+\begin{definition}[Top of LIM source sequence]
+\label{def:top-of-lim-source-sequence}
+Let \Veimset{seq} be the LIM source EIM sequence
+of \Veim{bottom}. Then \Veim{bottom} is the \dfn{bottom}
+of \var{seq}
+and \Velement{seq}{\Vlastix{seq}} is the \dfn{top} of \var{seq}.
 \end{definition}
 
 \begin{theorem}[LIM source chain carryforward]
