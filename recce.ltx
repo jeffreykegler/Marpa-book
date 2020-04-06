@@ -1261,7 +1261,7 @@ to writing $\Vstr{x} \derives \Vstr{y}$.
 By convention,
 every string derives itself in zero steps.
 \begin{equation*}
-\Vstr{x} = \Vstr{y} \equiv \Vstr{x} \xderives{0} \Vstr{x}.
+\Vstr{x} = \Vstr{y} \iff \Vstr{x} \xderives{0} \Vstr{x}.
 \end{equation*}
 A derivation of zero steps is called a
 \dfn{trivial derivation}.
@@ -1491,7 +1491,7 @@ When two terminal strings, \Vterm{ss1} and \Vterm{ss2},
 are in the same cell of $\pi$,
 we say that \var{ss1} and \var{ss2} are ``equivalent modulo $\pi$'', or
 \[
-\var{ss1} \equiv \var{ss2} \pmod\pi.
+\var{ss1} \iff \var{ss2} \pmod\pi.
 \]
 
 Informally, an LR($\pi$) grammar is a grammar where two
@@ -1515,7 +1515,7 @@ More formally,
 & = \Vstr{behind}\Vstr{lookahead2},
 \end{aligned}
 \\
-\Vstr{lookahead1} \equiv \Vstr{lookahead2} \pmod \pi,
+\Vstr{lookahead1} \iff \Vstr{lookahead2} \pmod \pi,
 \end{align}
 
 We say that an LR($\pi$) grammar is LR-regular (LRR)
@@ -1579,7 +1579,7 @@ if, given
 \end{aligned}
 \;\; \text{and}
 \\
-\Vstr{lookahead1} \equiv \Vstr{lookahead2} ( \text{mod $\pi$} )
+\Vstr{lookahead1} \iff \Vstr{lookahead2} ( \text{mod $\pi$} )
 \end{gather}
 we have
 \begin{gather*}
@@ -3663,7 +3663,7 @@ From \Thref{th:leo-source-uniqueness}, we see that
 the relation of Leo source is a function, so that
 we can define \myfn{Source}{} such that
 \[
-(\Source{\mylim{\ell}} = \Veim{source}) \equiv
+(\Source{\mylim{\ell}} = \Veim{source}) \iff
     \myfn{Source2}{\var{source},\ell}. \quad \dispEnd
 \]
 \end{definition}
@@ -3820,11 +3820,17 @@ and to define the Leo source sequence.
 \label{def:lim-predecessor-fn}
 From \Thref{th:lim-uniqueness-by-source}, we see that
 the relation of LIM predecessor is a function,
-so that we can define \myfn{LIM-Predecessor}{} such that
-\begin{gather*}
-(\LIMPredecessor{\Veim{eim}} = \mylim{\ell}) \\
-    \equiv \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}}. \quad \dispEnd
-\end{gather*}
+so that
+\begin{equation*}
+\begin{aligned}
+& \myfn{LIM-Predecessor}{\Veim{eim}} \defined  \\
+& \qquad \begin{cases}
+\mylim{\ell}, \text{ if } \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}} \\
+\Lambda, \text{ if } \neg \exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{eim}}.
+  \quad \dispEnd
+\end{cases}
+\end{aligned}
+\end{equation*}
 \end{definition}
 
 \begin{definition}[Leo source sequence]
@@ -3836,15 +3842,14 @@ if and only if $\VVelement{seq}{n}$ is
 \begin{equation*}
 \left\lbrace
     \begin{array}{ll}
-    \Veim{first} & \text{ if } \var{n} = 0 \\[1ex]
+    \Veim{first} & \text{ when } \var{n} = 0 \\[1ex]
         \left(
         \begin{gathered}
-            \Veim{left} : \\
-            \Matches{\var{left},
-                \Velement{seq}{\var{n}\subtract 1}}
+            \Source{\ell} : \\
+            \myfn{LIM-Predecessor-2}{\ell, \Velement{seq}{\var{n}\subtract 1}} \\
         \end{gathered}
         \right)
-        & \text{ if } \var{n} > 0.
+        & \text{ when } \var{n} > 0.
     \end{array}
 \right.
 \end{equation*}
@@ -10460,7 +10465,7 @@ Let
 \\
 \label{eq:handle-unique-10d}
 \text{and} \;\;
-\Vterm{suffixA} \equiv \Vterm{suffixB} (\text{mod $\pi$}),
+\Vterm{suffixA} \iff \Vterm{suffixB} (\text{mod $\pi$}),
 \end{gather}
 where
 \begin{gather*}
@@ -10505,7 +10510,7 @@ so from
 we have
 \begin{equation}
 \label{eq:handle-unique-23}
-\Vterm{postA}\Vterm{suffixA} \equiv \Vterm{postA}\Vterm{suffixB} (\text{mod $\pi$}).
+\Vterm{postA}\Vterm{suffixA} \iff \Vterm{postA}\Vterm{suffixB} (\text{mod $\pi$}).
 \end{equation}
 \Vint{g} is LR and from \Thref{def:LR},
 \Eref{eq:handle-unique-10a},
@@ -10589,7 +10594,7 @@ we have
 and
 \begin{equation}
 \label{eq:left-congruence3}
-\Vterm{suffixA} \equiv \Vterm{suffixB} \pmod \pi,
+\Vterm{suffixA} \iff \Vterm{suffixB} \pmod \pi,
 \end{equation}
 then
 \begin{equation}
@@ -11129,13 +11134,13 @@ are in the same cell of $\pi$,
 so that
 \begin{equation}
 \label{eq:incompletion-bound-3}
-\Vterm{input3A} \equiv \Vterm{input3B} ( \text{mod $\pi$} ),
+\Vterm{input3A} \iff \Vterm{input3B} ( \text{mod $\pi$} ),
 \end{equation}
 which, since $\pi$ is a left congruence,
 is the same as
 \begin{equation}
 \label{eq:incompletion-bound-5}
-\Vterm{input2}\Vterm{input3A} \equiv \Vterm{input2}\Vterm{input3B} ( \text{mod $\pi$} ),
+\Vterm{input2}\Vterm{input3A} \iff \Vterm{input2}\Vterm{input3B} ( \text{mod $\pi$} ),
 \end{equation}
 
 Since an LRR grammar is
