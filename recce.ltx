@@ -2810,7 +2810,7 @@ we say that \var{l} is a \dfn{left match} of \var{r},
 and that \var{r} is a \dfn{left match} of \var{l}.
 
 Three of the loadings of \var{Matches} are as follows.
-The match of an EIM with another EIM:
+The match of an EIM with another EIM,
 \label{def:matches}
 \begin{equation*}
 \label{eq:def-matches-eim-eim}
@@ -2820,7 +2820,7 @@ The match of an EIM with another EIM:
 \land \; \Current{\var{left}} = \Origin{\var{right}}.
 \end{gathered}
 \end{equation*}
-The match of an EIM with a token:
+The match of an EIM with a token,
 \begin{equation*}
 \begin{gathered}
 \Matches{\Veim{left},\var{token}} \defined \\
@@ -2828,7 +2828,7 @@ The match of an EIM with a token:
 \land \; \Current{\var{left}} = \Origin{\var{token}}.
 \end{gathered}
 \end{equation*}
-The match of an EIM with a location:
+The match of an EIM with a location,
 \begin{equation*}
 \begin{gathered}
 \Matches{\Veim{left},\Vloc{j}} \defined \\
@@ -3366,8 +3366,8 @@ We say that
 and
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
-\Transition{\Vlim{x}} & \defined \Vsym{transition},
-\Origin{\Vlim{x}} & \defined \Vorig{top} \text{ and} \\
+\Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
+\Origin{\Vlim{x}} & \defined \Vorig{top} \text{, and} \\
     \Current{\Vlim{x}} & \defined \Vloc{j}.
        \quad \dispEnd
 \end{align}
@@ -3839,15 +3839,32 @@ if and only if $\VVelement{seq}{n}$ is
     \Veim{first} & \text{ if } \var{n} = 0 \\[1ex]
         \left(
         \begin{gathered}
-            \Veim{previous} : \\
-            \Matches{\var{previous},
+            \Veim{left} : \\
+            \Matches{\var{left},
                 \Velement{seq}{\var{n}\subtract 1}}
         \end{gathered}
         \right)
-        & \text{ if } \var{n} > 0.
+        & \text{ if } \var{n} > 0. \quad \dispEnd
     \end{array}
 \right.
 \end{equation*}
+\end{definition}
+
+\begin{definition}[Leo source sequence validity]
+\label{def:leo-source-sequence-validity}
+Let \Veimset{seq} be
+a Leo source EIM sequence.
+\var{seq} is \dfn{valid} if and only if
+for every element of \var{seq},
+call that element \Veim{src},
+\begin{enumerate}
+\item \Veim{src}  is valid, and
+\item
+there is a valid LIM, call it \mylim{\ell}, such that
+\[
+\Source{\ell} = \Veim{src}. \quad \dispEnd
+\]
+\end{enumerate}
 \end{definition}
 
 \begin{theorem}[Leo source EIM count]
@@ -3900,7 +3917,7 @@ EIM's in any Leo source EIM sequence.
 With
 \Thref{th:leo-source-sequence-finiteness},
 we know there is a last EIM in any Leo source EIM sequence,
-so we may define its ``top''
+so we may define its ``top''.
 
 \begin{definition}[Top of Leo source sequence]
 \label{def:top-of-leo-source-sequence}
@@ -3908,7 +3925,52 @@ Let \Veimset{seq} be the Leo source EIM sequence
 of \Veim{bottom}. Then \Veim{bottom} is the \dfn{bottom}
 of \var{seq}
 and \Velement{seq}{\Vlastix{seq}} is the \dfn{top} of \var{seq}.
+\dispEnd
 \end{definition}
+
+\begin{theorem}[Leo source top matching]
+\label{th:leo-source-top-matching}
+A Leo source EIM is the top of a Leo source sequence
+if and only if
+no other Leo source EIM is its left match.
+\end{theorem}
+
+\begin{proof}
+Let \Veimset{seq} be a valid Leo source sequence
+and let $\Veim{lsrc} = \Velement{seq}{i}$
+be an arbitrary element of \var{seq}.
+We show the ``only if'' direction by a reductio.
+\begin{equation}
+\label{eq:th-leo-source-top-matching-10}
+\begin{gathered}
+\neg \exists \mylim{\ell}, \Veim{left} : \\
+\Source{\ell} = \Veim{left} \land \Matches{\var{left}, \Veim{lsrc}} \\
+\because \text{AF ``only if'' direction.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-top-matching-12}
+\var{i} \neq (\Vlastix{seq}).
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-top-matching-14}
+\Velement{seq}{\var{i}+1} \text{ is valid }
+\because
+\Eref{eq:th-leo-source-top-matching-12}.
+\end{equation}
+\todo{Prove Leo source top matching}
+\end{proof}
+
+\begin{theorem}[Leo source top invariance]
+\label{th:leo-source-top-invariance}
+If an EIM is a Leo source top, then
+it is the top of every Leo source sequence
+in which it occurs.
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Leo source top invariance}
+\end{proof}
 
 \begin{theorem}[Leo source subsequence]
 \label{th:leo-source-subsequence}
