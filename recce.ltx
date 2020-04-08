@@ -236,6 +236,7 @@
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
+\newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{[{\var{#2}}]}}}
 \newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
 \newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
 \newcommand{\element}[2]{\ensuremath{#1\left[#2\right]}}
@@ -257,7 +258,7 @@
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
 \newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
-\newcommand{\Vesset}[1]{\Tvarset{#1}{ES}}
+\newcommand{\Vesseq}[1]{\Tvarseq{#1}{ES}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\mylim{\var{#1}}}
@@ -2609,9 +2610,12 @@ $\Vpim{pim}@\Vloc{pLoc}$,
 \end{gather*}
 \end{definition}
 
+\begin{definition}[Earley set]
+\label{def:earley-set}
 Within \Marpa{},
 an Earley set is defined as a set of \dfn{parse items}.
 Earley sets are of type \type{ES}.
+\end{definition}
 We will say that an Earley item is \dfn{unioned into}
 an Earley set,
 or \dfn{unioned},
@@ -2621,18 +2625,26 @@ This is because
 Earley sets are sets in the mathematical sense,
 and ``adding'' a duplicate to a set leaves the set unchanged.
 
+\begin{definition}[Earley set validity]
+\label{def:es-validity}
+An Earley set is \dfn{valid} if and only if all of its
+PIM's are valid.
+The boolean function \Valid{\Ves{x}} is true if and only if
+\Ves{x} is valid.
+\end{definition}
+
 An Earley parser builds a table of Earley sets,
 which is called
 a \dfn{parse table},
 or an \dfn{Earley table}.
 An Earley table
 is a sequence of Earley sets.
-If \Vesset{table} is an Earley table, then
+If \Vesseq{table} is an Earley table, then
 \begin{equation*}
-\size{\Vesset{table}} = \size{\Vstr{w}},
+\size{\Vesseq{table}} = \size{\Vstr{w}},
 \end{equation*}
 where \Vstr{w} is the input of the parse.
-and \Vesset{table} is the parse table.
+and \Vesseq{table} is the parse table.
 Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
@@ -2640,14 +2652,22 @@ If \Ves{work} is an Earley set,
 $\size{\Ves{work}}$ is the number of Earley items
 in \Ves{work}.
 
+\begin{definition}[Earley table validity]
+\label{def:earley-table-validity}
+An Earley table is \dfn{valid} if and only if all of its
+Earley sets are valid.
+The boolean function \Valid{\Ves{x}} is true if and only if
+\Ves{x} is valid.
+\end{definition}
+
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
 Where \Vloc{i} is an integer location,
 the notation \Ves{i} represents an Earley set, so that
-if \Vesset{table}
+if \Vesseq{table}
 is the parse table,
 \begin{equation*}
-\Ves{i} = \Vesset{table}[\Vloc{i}].
+\Ves{i} = \Vesseq{table}[\Vloc{i}].
 \end{equation*}
 
 Unless otherwise stated, use of
@@ -2720,24 +2740,25 @@ for some \Vstr{rhs},
 \todo{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}[EIM validity]
 \label{def:eim-validity}
-Let, without loss of generality,
+Let
 \begin{equation}
 \label{eq:EIM-valid-10}
 \Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i} \right] @ \Ves{j}
 \end{equation}
-be an EIM,
-where $\var{i} \le \var{j} \le \Vlastix{prefix}$.
+be an arbitrary EIM.
 \Veim{x} is \dfn{valid}
 if and only if
 \begin{gather}
+\label{eq:EIM-valid-20}
+\var{i} \le \var{j} \le \Vlastix{prefix}, \\
 \label{eq:EIM-valid-22a}
-\left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}}
+\left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}},
 \\
 \label{eq:EIM-valid-22b}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
 \label{eq:EIM-valid-22c}
-\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \\
+\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
 \label{eq:EIM-valid-22d}
 \Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)].
 \end{gather}
@@ -2747,8 +2768,10 @@ if and only if
 \begin{equation*}
 \label{eq:EIM-valid-30}
 \Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
-\quad \dispEnd
 \end{equation*}
+The boolean function \Valid{\Veim{x}} is true if and only if \Veim{x}
+is valid.
+\dispEnd
 \end{definition}
 
 \begin{definition}[Symbol of an EIM]
@@ -3559,8 +3582,11 @@ such that
 \label{eq:LIM-valid-30}
 \DR{\var{x}} = \DR{\Vlim{pred}} \text{ and} \\
 \label{eq:LIM-valid-32}
-\Origin{\var{x}} = \Origin{\Vlim{pred}}. \quad \dispEnd
+\Origin{\var{x}} = \Origin{\Vlim{pred}}.
 \end{gather}
+The boolean function \Valid{\Vlim{x}} is true
+if and only if \Vlim{x} is valid.
+\dispEnd
 \end{definition}
 
 \begin{theorem}[Leo source uniqueness]
@@ -3819,45 +3845,21 @@ and will show that $\var{x} = \var{y}$.
 
 With \Thref{th:leo-source-predecessor-uniqueness},
 we are in a position
-to define a function for the Leo predecessor,
-and to define the Leo source sequence.
-
-\begin{definition}[\myfn{LIM-Predecessor}{} function]
-\label{def:lim-predecessor-fn}
-From \Thref{th:lim-uniqueness-by-source}, we see that
-the relation of LIM predecessor is a function,
-so that
-\begin{equation*}
-\begin{aligned}
-& \myfn{LIM-Predecessor}{\Veim{eim}} \defined  \\
-& \qquad \begin{cases}
-\mylim{\ell}, \text{ if } \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}} \\
-\Lambda, \text{ if } \neg \exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{eim}}.
-  \quad \dispEnd
-\end{cases}
-\end{aligned}
-\end{equation*}
-\end{definition}
+to define the Leo source sequence.
 
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
 Let \Veim{first} be a valid Leo source EIM.
 Then \Veimset{seq} is
 a \dfn{partial Leo source sequence} relative to \Veim{first}
-if and only if $\VVelement{seq}{n}$ is
+if and only if
 \begin{equation*}
-\left\lbrace
-    \begin{array}{ll}
-    \Veim{first} & \text{ when } \var{n} = 0 \\[1ex]
-        \left(
-        \begin{gathered}
-            \Source{\ell} : \\
-            \myfn{LIM-Predecessor-2}{\ell, \Velement{seq}{\var{n}\subtract 1}} \\
-        \end{gathered}
-        \right)
-        & \text{ when } \var{n} > 0.
-    \end{array}
-\right.
+\begin{gathered}
+\Velement{seq}{0} = \Veim{first}, \text{ and} \\
+\forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
+(\Velement{seq}{n} = \Source{\ell} :
+            \myfn{LIM-Predecessor-2}{\ell, \Velement{seq}{\var{n}\subtract 1}})
+\end{gathered}
 \end{equation*}
 We call \Veim{first} the \dfn{bottom} of \Veimset{seq}.
 A \dfn{Leo source sequence} is \dfn{maximal}
@@ -4089,6 +4091,25 @@ Every EIM is the source of at most one LIM.
 \todo{LIM uniqueness by source}
 \myqed
 \end{proof}
+
+\begin{definition}[\myfn{LIM-Predecessor}{} function]
+\label{def:lim-predecessor-fn}
+From \Thref{th:lim-uniqueness-by-source}, we see that
+the relation of LIM predecessor is a function,
+so that
+\begin{equation*}
+\begin{aligned}
+& \myfn{LIM-Predecessor}{\Veim{eim}} \defined  \\
+& \qquad \left\lbrace
+\begin{array}{ll}
+\mylim{\ell} & \text{ if } \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}} \\
+\Lambda & \text{ if } \neg \exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{eim}}.
+  \quad \dispEnd
+\end{array}
+\right.
+\end{aligned}
+\end{equation*}
+\end{definition}
 
 \begin{theorem}[LIM's per ES]
 \label{th:lims-per-es}
