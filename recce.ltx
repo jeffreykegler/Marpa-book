@@ -338,6 +338,7 @@
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}(#1)}}
 \newcommand{\Transitions}[2]{\ensuremath{\mymathop{Transitions}(#1,#2)}}
+\newcommand{\Valid}[1]{\ensuremath{\mymathop{Valid}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 \newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
@@ -3353,7 +3354,7 @@ Let
 \begin{equation*}
 \Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \Ves{j}
 \end{equation*}
-be an arbitrary Leo item.
+be an arbitrary Leo item at \Ves{j}.
 To express the notion that \Vlim{x}
 is at \Ves{j}, we may also write
 \begin{gather*}
@@ -3381,10 +3382,10 @@ The \dfn{transition symbol},
 or \dfn{transition},
 of \var{pim} is
 \begin{equation*}
-\begin{cases}
-\Transition{\Vlim{pim}} \text{ if \var{pim} is a LIM, and} \\
-\Postdot{\Veim{pim}} \text{ if \var{pim} is an EIM.}
-\end{cases}
+\left\lbrace \begin{array}{ll}
+\Transition{\Vlim{pim}} & \text{ if \var{pim} is a LIM, and} \\
+\Postdot{\Veim{pim}} & \text{ if \var{pim} is an EIM.}
+\end{array} \right.
 \end{equation*}
 In either case, the transition symbol
 of \var{pim}
@@ -3431,7 +3432,7 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \begin{definition}[Leo Eligible]
 \label{def:leo-eligible}
 \LeoEligible{\Ves{i}} is defined as
-\begin{equation}
+\begin{equation*}
 \label{eq:def-leo-eligible}
 \left\lbrace \;\;
 \begin{gathered}
@@ -3440,7 +3441,7 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \land \; \RightRecursive{\Veim{eligible}}.
 \end{gathered}
 \;\; \right\rbrace
-\end{equation}
+\end{equation*}
 We say that
 an EIM \Veim{eligible}
 is \dfn{Leo eligible} in \Ves{j}
@@ -3452,14 +3453,13 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 \begin{definition}[Leo source]
 \label{def:leo-source}
 Leo items ``stand in'' for an EIM source.
-Let
-\begin{equation}
+\begin{equation*}
 \begin{gathered}
     \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
    \var{source} \in \LeoEligible{\ES{\Current{\ell}}} \\
    \land \; \Transition{\ell} = \Postdot{\var{source}}.
 \end{gathered}
-\end{equation}
+\end{equation*}
 We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
 if
 \[
@@ -3472,10 +3472,9 @@ if
 \label{def:lim-predecessor}
 \begin{equation*}
   \begin{gathered}
-      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined
-          \exists \; \Veim{pred-source} :
-      \\
-      \Matches{ \var{pred-source},\var{succ}}
+      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined \\
+          \exists \; \Veim{pred-source} : \\
+      \Matches{ \Veim{pred-source},\Veim{succ}} \\
           \land \; \myfn{Source2}{\var{pred-source},\Vlim{pred}}.
   \end{gathered}
 \end{equation*}
@@ -3492,8 +3491,8 @@ we overload \var{Matches} as follows:
 \begin{gathered}
 \Matches{\mylim{\ell},\Veim{cuz}} \defined \\
          \Postdot{\var{cuz}} = \Lambda \\
-\land \; \Transition{\mylim{\ell}} = \Symbol{\var{cuz}} \\
-\land \; \Current{\mylim{\ell}} = \Origin{\var{cuz}}.
+\land \; \Transition{\ell} = \Symbol{\var{cuz}} \\
+\land \; \Current{\ell} = \Origin{\var{cuz}}.
   \quad \dispEnd
 \end{gathered}
 \end{equation*}
@@ -3509,11 +3508,10 @@ Let, without loss of generality,
 be a LIM.
 \Vlim{x} is \dfn{valid}
 if and only if
-it is consistent with
-\begin{gather}
+\begin{equation}
 \label{eq:LIM-valid-20}
-\text{a valid source.}
-\end{gather}
+\text{\Vlim{x} is consistent with a valid source.}
+\end{equation}
 
 We say that an arbitrary LIM,
 \Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
@@ -3527,13 +3525,14 @@ if
 \Postdot{\var{source}} = \Vsym{transition}\text{; and} \\
 \label{eq:LIM-valid-25}
 \myparbox{\Vlim{x} is consistent with
-    \Vlimset{preds}, the set of LIM predecessors of \Veim{source}.
+    \Vlimset{preds},
 }
 \end{gather}
-Formally,
-\Vlimset{preds} in
-\Eref{eq:LIM-valid-25} is
+where \var{preds} in \Eref{eq:LIM-valid-25}
+is the set of LIM predecessors of \Veim{source} or,
+more formally,
 \[
+\Vlimset{preds} =
  \left\lbrace
    \begin{gathered}
         \Vlim{pred} :
@@ -3542,8 +3541,8 @@ Formally,
     \right\rbrace
 \]
 %
-\Vlim{x} is consistent with an empty set of LIM predecessors,
-($\var{preds} = \emptyset$)
+\Vlim{x} is consistent with an empty set of LIM predecessors
+($\var{preds} = \emptyset$),
 if
 \begin{gather}
 \label{eq:LIM-valid-26}
@@ -3553,7 +3552,7 @@ if
 \end{gather}
 %
 \Vlim{x} is consistent with a non-empty set of LIM predecessors
-($\var{preds} \neq \emptyset$)
+($\var{preds} \neq \emptyset$),
 if there is an element of \Vlimset{preds}, call it \Vlim{pred},
 such that
 \begin{gather}
@@ -3567,6 +3566,11 @@ such that
 \begin{theorem}[Leo source uniqueness]
 \label{th:leo-source-uniqueness}
 Every LIM has exactly one EIM source.
+That is, for all valid \Veim{x}, valid \Veim{y},
+and valid \mylim{\ell},
+\[
+\Source{\var{x},\ell} \iff \Source{\var{y},\ell}.
+\]
 \end{theorem}
 
 \begin{proof}
@@ -3611,7 +3615,7 @@ and will show that $\var{x} = \var{y}$.
    \because
     \Eref{eq:th-leo-source-uniqueness-10},
     \Eref{eq:th-leo-source-uniqueness-12},
-    \Dfref{def:leo-eligible}.
+    \Dfref{def:leo-source}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3660,39 +3664,41 @@ and will show that $\var{x} = \var{y}$.
 \begin{definition}[\myfn{Source}{} function]
 \label{def:source-fn}
 From \Thref{th:leo-source-uniqueness}, we see that
-the relation of Leo source is a function, so that
-we can define \myfn{Source}{} such that
+\myfn{Source2}{}
+is a function, so that
 \[
-(\Source{\mylim{\ell}} = \Veim{source}) \iff
+\Source{\mylim{\ell}} \defined \Veim{source} :
     \myfn{Source2}{\var{source},\ell}. \quad \dispEnd
 \]
 \end{definition}
 
 \begin{theorem}[Leo source predecessor uniqueness]
 \label{th:leo-source-predecessor-uniqueness}
-If
 \begin{gather}
 \label{eq:th-leo-source-predecessor-uniqueness-04}
-\exists \; \mylim{\ell2} : \Source{\ell2} = \Veim{pred} \text{ and} \\
-\label{eq:th-leo-source-predecessor-uniqueness-06}
-\Matches{\var{pred}, \Veim{succ}}
-\end{gather}
-then
-\begin{equation}
+\myfn{LIM-Predecessor-2}{\ell,\var{succ}} \implies \\
 \label{eq:th-leo-source-predecessor-uniqueness-08}
-\forall \Veim{x} \in \set{\var{x} : \Matches{\var{x}, \var{succ}}} :
-\var{x} = \Veim{pred}.
-\end{equation}
+(\forall \Veim{x} \in \set{\var{x} : \Matches{\var{x}, \var{succ}}} :
+\var{x} = \Source{\ell}).
+\end{gather}
 \end{theorem}
 
 \begin{proof}
 The proof strategy is direct.
 We assume that \Veim{succ} is the second element
 of two matches:
-\Matches{\Veim{pred}, \var{succ}}
-and \Matches{\Veim{x}, \var{succ}},
-where \var{pred} is a Leo source,
-and will show that $\var{x} = \var{pred}$.
+\Matches{\Veim{x}, \var{succ}}
+and \Matches{\Veim{y}, \var{succ}},
+where \var{y} is a Leo source,
+and will show that $\var{x} = \var{y}$.
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-09}
+\begin{gathered}
+\Matches{\Source{\ell}, \var{succ}} \\
+\because \longDfref{Leo predecessor}{def:lim-predecessor},
+\Eref{eq:th-leo-source-predecessor-uniqueness-04}.
+\end{gathered}
+\end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-10}
 \Matches{\var{x}, \var{succ}} \because \text{ AF proof.}
@@ -3704,12 +3710,12 @@ and will show that $\var{x} = \var{pred}$.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-14}
-\Postdot{\var{pred}} = \LHS{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-06}.
+\Postdot{\var{\Source{\ell}}} = \LHS{\var{succ}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-09}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-16}
-\Postdot{\var{pred}} = \Postdot{\var{x}} \because
+\Postdot{\var{\Source{\ell}}} = \Postdot{\var{x}} \because
     \Eref{eq:th-leo-source-predecessor-uniqueness-12},
     \Eref{eq:th-leo-source-predecessor-uniqueness-14}.
 \end{equation}
@@ -3720,30 +3726,30 @@ and will show that $\var{x} = \var{pred}$.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-20}
-\Current{\var{pred}} = \Origin{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-06}.
+\Current{\var{\Source{\ell}}} = \Origin{\var{succ}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-09}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-22}
-\Current{\var{pred}} = \Current{\var{x}} \because
+\Current{\var{\Source{\ell}}} = \Current{\var{x}} \because
     \Eref{eq:th-leo-source-predecessor-uniqueness-18},
     \Eref{eq:th-leo-source-predecessor-uniqueness-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-24}
-\Source{\ell} = \Veim{pred} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-04}, WLOG.
+\Source{\ell} = \Veim{y} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-09}, \text{WLOG}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-26}
-\myfn{Source2}{\var{pred},\ell} \because
+\myfn{Source2}{\var{y},\ell} \because
     \Eref{eq:th-leo-source-predecessor-uniqueness-24},
     \longDfref{\myfn{Source}{} function}{def:source-fn}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-28}
 \begin{gathered}
-\Veim{pred} \in \LeoEligible{\ES{\Current{\ell}} \\
+\Veim{y} \in \LeoEligible{\ES{\Current{\ell}} \\
    \because \Eref{eq:th-leo-source-predecessor-uniqueness-26},
     \longDfref{Leo source}{def:leo-source}.
 \end{gathered}
@@ -3751,7 +3757,7 @@ and will show that $\var{x} = \var{pred}$.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-30}
 \begin{gathered}
-\Veim{pred} \in \LeoUnique{\ES{\Current{\ell}}} \\
+\Veim{y} \in \LeoUnique{\ES{\Current{\ell}}} \\
 \because \Eref{eq:th-leo-source-predecessor-uniqueness-28},
     \longDfref{Leo eligible}{def:leo-eligible}.
 \end{gathered}
@@ -3759,7 +3765,7 @@ and will show that $\var{x} = \var{pred}$.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-32}
 \begin{gathered}
-\Current{\Veim{pred}} = \Current{\mylim{\ell}} \\
+\Current{\Veim{y}} = \Current{\mylim{\ell}} \\
 \because \Eref{eq:th-leo-source-predecessor-uniqueness-30},
     \longDfref{Leo unique}{def:leo-unique}.
 \end{gathered}
@@ -3769,9 +3775,9 @@ and will show that $\var{x} = \var{pred}$.
 \begin{gathered}
         \forall \; \Veim{z} \in \ES{\Current{\ell}}} : \\
           \left(
-            \Postdot{\var{pred}} = \Postdot{\var{z}}
+            \Postdot{\var{y}} = \Postdot{\var{z}}
             \implies
-            \var{pred} = \var{z}
+            \var{y} = \var{z}
           \right) \\
     \because \Eref{eq:th-leo-source-predecessor-uniqueness-30},
         \longDfref{Leo unique}{def:leo-unique}.
@@ -3789,9 +3795,9 @@ and will show that $\var{x} = \var{pred}$.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-46}
 \begin{gathered}
-    \Postdot{\var{pred}} = \Postdot{\var{x}}
+    \Postdot{\var{y}} = \Postdot{\var{x}}
     \implies
-    \var{pred} = \var{x} \\
+    \var{y} = \var{x} \\
     \myparbox{%
         \cuz{} \Eref{eq:th-leo-source-predecessor-uniqueness-45} and
         instantiating \Veim{z} of
@@ -3802,7 +3808,7 @@ and will show that $\var{x} = \var{pred}$.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-48}
 \begin{gathered}
-    \var{pred} = \var{x}
+    \var{y} = \var{x}
     \because
         \Eref{eq:th-leo-source-predecessor-uniqueness-16},
         \Eref{eq:th-leo-source-predecessor-uniqueness-46}.
