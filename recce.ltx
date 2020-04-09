@@ -237,8 +237,6 @@
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{[{\var{#2}}]}}}
-\newcommand{\bigset}[1]{{\bigl\lbrace #1 \bigr\rbrace} }
-\newcommand{\Bigset}[1]{{\Bigl\lbrace #1 \Bigr\rbrace} }
 \newcommand{\element}[2]{\ensuremath{#1\left[#2\right]}}
 \newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
@@ -2658,6 +2656,7 @@ An Earley table is \dfn{valid} if and only if all of its
 Earley sets are valid.
 The boolean function \Valid{\Ves{x}} is true if and only if
 \Ves{x} is valid.
+\dispEnd
 \end{definition}
 
 Earley sets are often named by their location,
@@ -3892,8 +3891,25 @@ there is a valid LIM, call it \mylim{\ell}, such that
 
 \begin{theorem}[Leo source EIM count]
 \label{th:leo-source-eim-count}
-There are at most \size{\Vocab{\var{g}}} Leo source
-EIM's in any ES.
+Let the partial parse $\var{cxt} = [\Vint{g}, \Vstr{partial}]$ be the
+context parse,
+and let \Vesseq{table} be a valid Earley table for \var{cxt}.
+Then there are at most \size{\Vocab{\var{g}}} Leo source
+EIM's in any ES.  That is,
+\[
+\begin{gathered}
+\forall \Ves{j} \in \var{table} : \\
+\bigsize{
+   \set{
+       \begin{gathered}
+            \Veim{src} \in \Ves{j} : \\
+            (\exists \mylim{\ell} : \Source{\ell} = \var{src})
+       \end{gathered}
+   }
+}
+\le \bigsize{\Vocab{\var{g}}}.
+\end{gathered}
+\]
 \end{theorem}
 
 \begin{proof}
@@ -3914,7 +3930,9 @@ This shows the reductio and the theorem.
 
 \begin{theorem}[Leo source sequence finiteness]
 \label{th:leo-source-sequence-finiteness}
-Let \Veimset{seq} be the Leo source EIM sequence
+Let the partial parse $\var{cxt} = [\Vint{g}, \Vstr{partial}]$ be the
+context parse.
+Let \Veimset{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
 \bigsize{\Veimset{seq}} \le \Current{\var{bottom}}\times\size{\Vocab{\Vint{g}}}.
@@ -3924,9 +3942,6 @@ of \Veim{bottom}. Then
 \begin{proof}
 Let \Veimset{seq} be the Leo source EIM sequence
 of \Veim{bottom}@\Ves{j}, an arbitrary Leo source EIM.
-By induction, and using \Thref{th:order-of-matching-eims},
-we can show that every element of \var{seq} is located
-at or before \Vloc{j}.
 From
 \Thref{th:leo-source-eim-count}, we know that there are
 at most \size{\Vocab{\var{g}}} Leo source EIM's
@@ -3954,7 +3969,7 @@ of \Veim{bottom}. Then
 \label{th:leo-source-top-matching}
 A Leo source EIM is the top of a Leo source sequence
 if and only if
-no other Leo source EIM is its left match.
+it does not have a LIM predecessor.
 \end{theorem}
 
 \begin{proof}
