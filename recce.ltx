@@ -253,6 +253,7 @@
 \newcommand{\Vdr}[1]{\dr{\var{#1}}}
 \newcommand{\Vdrset}[1]{\Tvarset{#1}{DR}}
 \newcommand{\Veim}[1]{\eim{\var{#1}}}
+\newcommand{\Veimseq}[1]{\Tvarseq{#1}{EIM}}
 \newcommand{\Veimset}[1]{\Tvarset{#1}{EIM}}
 \newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
@@ -3889,11 +3890,12 @@ there is a valid LIM, call it \mylim{\ell}, such that
 \end{enumerate}
 \end{definition}
 
+\todo{define "Marpa parse"}
 \begin{theorem}[Leo source EIM count]
 \label{th:leo-source-eim-count}
-Let the partial parse $\var{cxt} = [\Vint{g}, \Vstr{partial}]$ be the
-context parse,
-and let \Vesseq{table} be a valid Earley table for \var{cxt}.
+Let the valid partial Marpa parse
+$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
+context.
 Then there are at most \size{\Vocab{\var{g}}} Leo source
 EIM's in any ES.  That is,
 \[
@@ -3930,9 +3932,9 @@ This shows the reductio and the theorem.
 
 \begin{theorem}[Leo source sequence finiteness]
 \label{th:leo-source-sequence-finiteness}
-Let the partial parse $\var{cxt} = [\Vint{g}, \Vstr{partial}]$ be the
-context parse,
-and let \Vesseq{table} be a valid Earley table for \var{cxt}.
+Let the valid partial Marpa parse
+$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
+context.
 Let \Veimset{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
@@ -3968,18 +3970,28 @@ of \Veim{bottom}. Then
 
 \begin{theorem}[Leo source top matching]
 \label{th:leo-source-top-matching}
+Let the valid partial Marpa parse
+$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
+context.
 A Leo source EIM is the top of a Leo source sequence
 if and only if
 it does not have a LIM predecessor.
 \end{theorem}
 
 \begin{proof}
+For the if direction,
+let \Veimseq{seq} be an arbitrary Leo source sequence,
+and let \Veim{src} be an arbitrary element from \var{seq}.
+\begin{equation}
+\label{eq:th-leo-source-top-matching-10}
+\LIMPredecessor{\Veim{src}} = \Lambda \because \text{ AF ``if'' directiion.}
+\end{equation}
 Let \Veimset{seq} be a valid Leo source sequence
 and let $\Veim{lsrc} = \Velement{seq}{i}$
 be an arbitrary element of \var{seq}.
 We show the ``only if'' direction by a reductio.
 \begin{equation}
-\label{eq:th-leo-source-top-matching-10}
+\label{eq:th-leo-source-top-matching-11}
 \begin{gathered}
 \neg \exists \mylim{\ell}, \Veim{left} : \\
 \Source{\ell} = \Veim{left} \land \Matches{\var{left}, \Veim{lsrc}} \\
