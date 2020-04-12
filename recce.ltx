@@ -3334,7 +3334,9 @@ A future extension might be to identify
 non-right-recursive rules
 which generate Leo sequences long enough to
 justify inclusion in the Leo memoizations.
-Such cases would be unusual, but may occur.
+Such cases would be unusual,
+but may occur often enough to be worth
+providing for.
 
 % TODO Refer to proof that omission memoization does not affect correctness
 Omission of a memoization does not affect correctness,
@@ -3850,18 +3852,20 @@ to define the Leo source sequence.
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
 Let \Veim{first} be a valid Leo source EIM.
-Then \Veimset{seq} is
-a \dfn{partial Leo source sequence} relative to \Veim{first}
-if and only if
-\begin{equation*}
-\begin{gathered}
-\Velement{seq}{0} = \Veim{first}, \text{ and} \\
-\forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
-(\Velement{seq}{n} = \Source{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell, \Velement{seq}{\var{n}\subtract 1}})
-\end{gathered}
-\end{equation*}
-We call \Veim{first} the \dfn{bottom} of \Veimset{seq}.
+Then
+the \dfn{partial Leo source sequence} relative to \Veim{first},
+call it \Veimset{seq},
+is defined by the induction
+\[
+\Velement{seq}{0} = \Veim{first},
+\]
+and
+\[
+    \begin{gathered}
+        (\myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}} \land \Valid{\ell}) \\
+           \implies (\Velement{seq}{\var{n}+1} = \Source{\ell}).
+    \end{gathered}
+\]
 A \dfn{Leo source sequence} is \dfn{maximal}
 if and only if it is not a proper subsequence of any
 partial Leo source sequence relative to the same bottom.
