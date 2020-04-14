@@ -3851,19 +3851,24 @@ to define the Leo source sequence.
 
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
-Let \Veim{first} be a valid Leo source EIM.
+Let \Veim{first} be an EIM.
 Then
 the \dfn{partial Leo source sequence} relative to \Veim{first},
 call it \Veimset{seq},
 is defined by the induction
 \[
-\Velement{seq}{0} = \Veim{first},
+\Velement{seq}{0} = \Veim{first} :
+\left(\exists \mylim{\ell} : \var{first} = \Source{\ell}
+\right).
 \]
 and
 \[
     \begin{gathered}
-        (\myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}} \land \Valid{\ell}) \\
-           \implies (\Velement{seq}{\var{n}+1} = \Source{\ell}).
+        \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
+        \left(
+            \VVelement{seq}{n} = \Source{\ell} :
+            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}}
+        \right).
     \end{gathered}
 \]
 A \dfn{Leo source sequence} is \dfn{maximal}
@@ -3894,14 +3899,13 @@ there is a valid LIM, call it \mylim{\ell}, such that
 \end{enumerate}
 \end{definition}
 
-\todo{define "Marpa parse"}
 \begin{theorem}[Leo source EIM count]
 \label{th:leo-source-eim-count}
-Let the valid partial Marpa parse
-$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
-context.
+Let the context be the partial parse
+$\var{p} = \tuple{\Vint{g}, \Vstr{partial}}$,
 Then there are at most \size{\Vocab{\var{g}}} Leo source
-EIM's in any ES.  That is,
+EIM's in any ES.
+That is, where \Vesseq{table} is a valid Earley table for \var{p},
 \[
 \begin{gathered}
 \forall \Ves{j} \in \var{table} : \\
@@ -3974,43 +3978,60 @@ of \Veim{bottom}. Then
 
 \begin{theorem}[Leo source top matching]
 \label{th:leo-source-top-matching}
-Let the valid partial Marpa parse
-$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
-context.
-A Leo source EIM is the top of a Leo source sequence
+Let the context be the partial parse
+$\tuple{\Vint{g}, \Vstr{partial}}$.
+Let \Veim{eim} be an element in
+the valid Leo source sequence \Veimseq{seq}.
+\var{eim} is the top of \var{seq}
 if and only if
-it does not have a LIM predecessor.
+it does not have a valid LIM predecessor.
+That is,
+\begin{gather}
+\label{eq:th-leo-source-top-matching-02}
+\Veim{eim} = \Velement{seq}{\Vlastix{seq}} \\
+\iff \left(
+       \neg \exists \mylim{\ell} : \myfn{LIM-Predecessor-2}{\ell, \var{eim}}
+   \right).
+\end{gather}
 \end{theorem}
 
 \begin{proof}
-For the if direction,
-let \Veimseq{seq} be an arbitrary Leo source sequence,
-and let \Veim{src} be an arbitrary element from \var{seq}.
 \begin{equation}
 \label{eq:th-leo-source-top-matching-10}
-\LIMPredecessor{\Veim{src}} = \Lambda \because \text{ AF ``if'' directiion.}
-\end{equation}
-Let \Veimset{seq} be a valid Leo source sequence
-and let $\Veim{lsrc} = \Velement{seq}{i}$
-be an arbitrary element of \var{seq}.
-We show the ``only if'' direction by a reductio.
-\begin{equation}
-\label{eq:th-leo-source-top-matching-11}
-\begin{gathered}
-\neg \exists \mylim{\ell}, \Veim{left} : \\
-\Source{\ell} = \Veim{left} \land \Matches{\var{left}, \Veim{lsrc}} \\
-\because \text{AF ``only if'' direction.}
-\end{gathered}
+    \begin{gathered}
+        \Velement{seq}{0} = \Veim{first} : \\
+        \left(\exists \mylim{\ell} : \var{first} = \Source{\ell}\right)
+        \because \text{AF theorem}.
+    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-top-matching-12}
-\var{i} \neq (\Vlastix{seq}).
+    \begin{gathered}
+        \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
+        \left(
+            \VVelement{seq}{n} = \Source{\ell} :
+            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}}
+        \right) \\
+        \because \text{AF theorem}.
+    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-top-matching-14}
-\Velement{seq}{\var{i}+1} \text{ is valid }
-\because
-\Eref{eq:th-leo-source-top-matching-12}.
+    \begin{gathered}
+        \forall \var{n} \in \set{\var{i} : 0 \le \var{i} \le \Vlastix{seq}} :
+        \Valid{\VVelement{seq}{n}} \\
+        \because \text{AF theorem},
+            \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-top-matching-16}
+    \begin{gathered}
+        \forall \var{n} \in \set{\var{i} : 0 \le \var{i} \le \Vlastix{seq}} : \\
+        \exists \mylim{\ell} : \Valid{\ell} \land \VVelement{seq}{n} = \Source{\ell} \\
+        \because \text{AF theorem},
+            \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
+    \end{gathered}
 \end{equation}
 \todo{Prove Leo source top matching}
 \end{proof}
