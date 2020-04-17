@@ -3976,23 +3976,26 @@ of \Veim{bottom}. Then
 \dispEnd
 \end{definition}
 
-\begin{theorem}[Leo source top matching]
+\begin{theorem}[Leo source maximality]
 \label{th:leo-source-top-matching}
 Let the context be the partial parse
 $\tuple{\Vint{g}, \Vstr{partial}}$.
-Let \Veim{eim} be an element in
-the valid Leo source sequence \Veimseq{seq}.
-\var{eim} is the top of \var{seq}
-if and only if
-it does not have a valid LIM predecessor.
-That is,
-\begin{gather}
+Let \Veimseq{seq}
+be a valid Leo source sequence
+and let $\Veim{top} = \Velement{seq}{\Vlastix{seq}}$
+be its top element.
+\begin{equation}
 \label{eq:th-leo-source-top-matching-02}
-\Veim{eim} = \Velement{seq}{\Vlastix{seq}} \\
-\iff \left(
-       \neg \exists \mylim{\ell} : \myfn{LIM-Predecessor-2}{\ell, \var{eim}}
-   \right).
-\end{gather}
+\text{%
+    \var{seq} is a maximal valid Leo sequence
+    relative to \Velement{seq}{0}.
+}
+\end{equation}
+if and only if
+\begin{equation}
+\label{eq:th-leo-source-top-matching-04}
+\text{\Veim{top} does not have a valid LIM predecessor.}
+\end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -4032,6 +4035,19 @@ That is,
         \because \text{AF theorem},
             \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
     \end{gathered}
+\end{equation}
+We prove the two directions of the equivalent separately.
+For the forward direction, we assume
+\Eref{eq:th-leo-source-top-matching-02}
+to show \Eref{eq:th-leo-source-top-matching-04},
+and proceed via a reductio.
+\begin{equation}
+\label{eq:th-leo-source-top-matching-18}
+\begin{gathered}
+\exists \mylim{\ell} : \Valid{\ell} \land
+            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\Vlastix{seq}}} \\
+            \because \text{ AF reductio.}
+\end{gathered}
 \end{equation}
 \todo{Prove Leo source top matching}
 \end{proof}
