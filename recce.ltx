@@ -823,6 +823,8 @@ An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
 onto is a bijection.
+$\var{A} \subseteq B$ means that \var{A} is a subset of \var{B}, while
+$\var{A} \subset B$ means that \var{A} is a proper subset of \var{B}.
 $\myfn{dom}{\var{f}}$ is the domain of \var{f}.
 $\myfn{ran}{\var{f}}$ is the range of \var{f}.
 $\mathbb{N}$ is the set of natural numbers,
@@ -3389,7 +3391,7 @@ is at \Ves{j}, we may also write
 \end{gather*}
 We say that
 \Vsym{transition} is the \dfn{transition symbol} of \Vlim{x}@\Vloc{j};
-and
+and that
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
@@ -3540,7 +3542,7 @@ if and only if
 
 We say that an arbitrary LIM,
 \Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
-if
+if and only if
 \begin{gather}
 \label{eq:LIM-valid-22}
 \myfn{Source2}{\Veim{source} , \Vlim{x}}; \\
@@ -3568,7 +3570,7 @@ more formally,
 %
 \Vlim{x} is consistent with an empty set of LIM predecessors
 ($\var{preds} = \emptyset$),
-if
+if and only if
 \begin{gather}
 \label{eq:LIM-valid-26}
 \DR{\var{x}} = \DR{\Source{\Vlim{x}}} \text{ and} \\
@@ -3578,13 +3580,14 @@ if
 %
 \Vlim{x} is consistent with a non-empty set of LIM predecessors
 ($\var{preds} \neq \emptyset$),
-if there is an element of \Vlimset{preds}, call it \Vlim{pred},
-such that
+if and only if
 \begin{gather}
+\label{eq:LIM-valid-29}
+\exists \Vlim{pred} : \var{pred} \in \Vlimset{preds} \\
 \label{eq:LIM-valid-30}
-\DR{\var{x}} = \DR{\Vlim{pred}} \text{ and} \\
+\land \DR{\var{x}} = \DR{\Vlim{pred}} \\
 \label{eq:LIM-valid-32}
-\Origin{\var{x}} = \Origin{\Vlim{pred}}.
+\land \Origin{\var{x}} = \Origin{\Vlim{pred}}.
 \end{gather}
 The boolean function \Valid{\Vlim{x}} is true
 if and only if \Vlim{x} is valid.
@@ -3593,11 +3596,19 @@ if and only if \Vlim{x} is valid.
 
 \begin{theorem}[Leo source uniqueness]
 \label{th:leo-source-uniqueness}
-Every LIM has exactly one EIM source.
-That is, for all valid \Veim{x}, valid \Veim{y},
-and valid \mylim{\ell},
+Every valid LIM has exactly one valid EIM source.
+That is,
 \[
-\Source{\var{x},\ell} \iff \Source{\var{y},\ell}.
+\begin{gathered}
+\forall \Veim{x} \; \forall \Veim{y} \; \forall \mylim{\ell} \\
+\left(
+    \begin{gathered}
+        \Valid{\var{x}} \land \Valid{\var{y}} \land \Valid{\ell} \\
+        \land \Source{\var{x},\ell} \land \Source{\var{y},\ell}
+    \end{gathered}
+\right)
+\implies \var{x} = \var{y}.
+\end{gathered}
 \]
 \end{theorem}
 
