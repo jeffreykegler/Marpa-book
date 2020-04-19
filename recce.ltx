@@ -3957,13 +3957,13 @@ This shows the reductio and the theorem.
 
 \begin{theorem}[Leo source sequence finiteness]
 \label{th:leo-source-sequence-finiteness}
-Let the valid partial Marpa parse
-$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$ be the
-context.
+Let the context be the valid partial parse
+$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$.
 Let \Veimset{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
-\bigsize{\Veimset{seq}} \le \Current{\var{bottom}}\times\size{\Vocab{\Vint{g}}}.
+\bigsize{\Veimset{seq}} \le
+    (\Current{\var{bottom}}+1) \times \size{\Vocab{\Vint{g}}}.
 \]
 \end{theorem}
 
@@ -3974,8 +3974,11 @@ From
 \Thref{th:leo-source-eim-count}, we know that there are
 at most \size{\Vocab{\var{g}}} Leo source EIM's
 in any ES.
+The sequence has EIM's in at most
+$\bigsize{\set{0\ldots\var{j}}} = \var{j}+1$
+ES's.
 Therefore, there are at most
-$\var{j}\times\size{\Vocab{\var{g}}}$
+$(\var{j}+1)\times\size{\Vocab{\var{g}}}$
 EIM's in any Leo source EIM sequence.
 \myqed
 \end{proof}
@@ -4000,7 +4003,7 @@ $\tuple{\Vint{g}, \Vstr{partial}}$.
 Let \Veimseq{seq}
 be a valid Leo source sequence
 and let $\Veim{top} = \Velement{seq}{\Vlastix{seq}}$
-be its top element.
+be its top element.  Then
 \begin{equation}
 \label{eq:th-leo-source-top-matching-02}
 \text{%
@@ -4030,7 +4033,7 @@ if and only if
         \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
         \left(
             \VVelement{seq}{n} = \Source{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}}
+            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\var{n}\subtract 1}}
         \right) \\
         \because \text{AF theorem}.
     \end{gathered}
@@ -4048,7 +4051,7 @@ if and only if
 \label{eq:th-leo-source-top-matching-16}
     \begin{gathered}
         \forall \var{n} \in \set{\var{i} : 0 \le \var{i} \le \Vlastix{seq}} : \\
-        \exists \mylim{\ell} : \Valid{\ell} \land \VVelement{seq}{n} = \Source{\ell} \\
+        \exists \mylim{\ell} : \Valid{\ell} \land (\VVelement{seq}{n} = \Source{\ell}) \\
         \because \text{AF theorem},
             \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
     \end{gathered}
@@ -4063,7 +4066,7 @@ and proceed via a reductio.
 \begin{gathered}
 \Valid{\ell} \land
             \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\Vlastix{seq}}} \\
-            \because \text{ AF reductio.}
+            \because \text{negation of \Eref{eq:th-leo-source-top-matching-04} assumed for the reductio.}
 \end{gathered}
 \end{equation}
 \begin{equation}
