@@ -3704,11 +3704,13 @@ and will show that $\var{x} = \var{y}$.
 \label{def:source-fn}
 From \Thref{th:leo-source-uniqueness}, we see that
 \myfn{Source2}{}
-is a function, so that
+is a function, so that the function
 \[
 \Source{\mylim{\ell}} \defined \Veim{source} :
-    \myfn{Source2}{\var{source},\ell}. \quad \dispEnd
+    \myfn{Source2}{\var{source},\ell}
 \]
+exists.
+\dispEnd
 \end{definition}
 
 \begin{theorem}[Leo source predecessor uniqueness]
@@ -3828,6 +3830,7 @@ and will show that $\var{x} = \var{y}$.
 \Current{\Veim{x}} = \Current{\mylim{\ell}} \\
 \because
     \Eref{eq:th-leo-source-predecessor-uniqueness-22},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-24},
     \Eref{eq:th-leo-source-predecessor-uniqueness-32}.
 \end{gathered}
 \end{equation}
@@ -3850,6 +3853,7 @@ and will show that $\var{x} = \var{y}$.
     \var{y} = \var{x}
     \because
         \Eref{eq:th-leo-source-predecessor-uniqueness-16},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-24},
         \Eref{eq:th-leo-source-predecessor-uniqueness-46}.
         \quad \myqed
 \end{gathered}
@@ -3862,15 +3866,16 @@ to define the Leo source sequence.
 
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
-Let \Veim{first} be an EIM.
+Let \Veim{first} be an arbitrary Leo source EIM:
+\[
+    \exists \mylim{\ell} : \Veim{first} = \Source{\ell}.
+\]
 Then
 the \dfn{partial Leo source sequence} relative to \Veim{first},
 call it \Veimset{seq},
 is defined by the induction
 \[
-\Velement{seq}{0} = \Veim{first} :
-\left(\exists \mylim{\ell} : \var{first} = \Source{\ell}
-\right).
+\Velement{seq}{0} = \Veim{first}
 \]
 and
 \[
@@ -3882,9 +3887,11 @@ and
         \right).
     \end{gathered}
 \]
-A \dfn{Leo source sequence} is \dfn{maximal}
+We say that \Velement{seq}{0} is the
+\dfn{bottom EIM}, or \dfn{bottom}, of \Veimseq{seq}.
+We say that \var{seq} is \dfn{maximal}
 if and only if it is not a proper subsequence of any
-partial Leo source sequence relative to the same bottom.
+partial Leo source sequence relative to the same bottom EIM.
 
 Note that a maximal Leo source sequence is a
 special case of a partial Leo source sequence.
@@ -3898,16 +3905,15 @@ is a maximal Leo source sequence.  \dispEnd
 Let \Veimset{seq} be
 a Leo source EIM sequence.
 \var{seq} is \dfn{valid} if and only if
-for every element of \var{seq},
-call that element \Veim{src},
-\begin{enumerate}
-\item \Veim{src}  is valid, and
-\item
-there is a valid LIM, call it \mylim{\ell}, such that
 \[
-\Source{\ell} = \Veim{src}. \quad \dispEnd
+\begin{gathered}
+\forall \; \Veim{src} \in \var{seq} : \\
+\Valid{\var{src}}
+\land \left(
+    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \var{src}
+\right).
+\end{gathered}
 \]
-\end{enumerate}
 \end{definition}
 
 \begin{theorem}[Leo source EIM count]
