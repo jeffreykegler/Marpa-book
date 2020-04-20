@@ -3583,9 +3583,9 @@ if and only if
 if and only if
 \begin{gather}
 \label{eq:LIM-valid-29}
-\exists \Vlim{pred} : \var{pred} \in \Vlimset{preds} \\
+\exists \Vlim{pred} \in \Vlimset{preds} \\
 \label{eq:LIM-valid-30}
-\land \DR{\var{x}} = \DR{\Vlim{pred}} \\
+\DR{\var{x}} = \DR{\Vlim{pred}} \\
 \label{eq:LIM-valid-32}
 \land \Origin{\var{x}} = \Origin{\Vlim{pred}}.
 \end{gather}
@@ -3703,7 +3703,7 @@ and will show that $\var{x} = \var{y}$.
 \begin{definition}[\myfn{Source}{} function]
 \label{def:source-fn}
 From \Thref{th:leo-source-uniqueness}, we see that
-\myfn{Source2}{}
+the inverse of \myfn{Source2}{}
 is a function, so that the function
 \[
 \Source{\mylim{\ell}} \defined \Veim{source} :
@@ -3864,6 +3864,20 @@ With \Thref{th:leo-source-predecessor-uniqueness},
 we are in a position
 to define the Leo source sequence.
 
+\begin{definition}[Leo next source EIM]
+\todo{define Leo next source EIM}
+\dispEnd
+\end{definition}
+
+\begin{theorem}[Leo next source function existence]
+The \myfn{Leo-Next-Source} function exists.
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Leo next source function existence}
+\myqed
+\end{proof}
+
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
 Let \Veim{first} be an arbitrary Leo source EIM:
@@ -3883,21 +3897,13 @@ and
         \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
         \left(
             \VVelement{seq}{n} = \Source{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{n}}
+            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\var{n}\subtract 1}}
         \right).
     \end{gathered}
 \]
 We say that \Velement{seq}{0} is the
 \dfn{bottom EIM}, or \dfn{bottom}, of \Veimseq{seq}.
-We say that \var{seq} is \dfn{maximal}
-if and only if it is not a proper subsequence of any
-partial Leo source sequence relative to the same bottom EIM.
-
-Note that a maximal Leo source sequence is a
-special case of a partial Leo source sequence.
-In what follows,
-unless otherwise specified, every Leo source sequence
-is a maximal Leo source sequence.  \dispEnd
+\dispEnd
 \end{definition}
 
 \begin{definition}[Leo source sequence validity]
@@ -3915,6 +3921,20 @@ a Leo source EIM sequence.
 \end{gathered}
 \]
 \end{definition}
+
+\begin{theorem}[Leo source subsequence validity]
+Let
+\Veimseq{long} be a valid Leo source subsequence;
+and let $0 \le \var{i} \le \var{j} \le \Vlastix{long}$.
+Then there is a valid Leo source subsequence such that
+$\Velement{short}{0} = \VVelement{long}{i}$ and
+$\Velement{short}{\Vlastix{short}} = \VVelement{long}{j}$.
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Leo source subsequence validity}
+\myqed
+\end{proof}
 
 \begin{theorem}[Leo source EIM count]
 \label{th:leo-source-eim-count}
@@ -3958,7 +3978,7 @@ This shows the reductio and the theorem.
 \begin{theorem}[Leo source sequence finiteness]
 \label{th:leo-source-sequence-finiteness}
 Let the context be the valid partial parse
-$\tuple{\Vint{g}, \Vstr{partial}, \Vesseq{table}}$.
+$\tuple{\Vint{g}, \Vstr{partial}}$.
 Let \Veimset{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
@@ -4056,7 +4076,7 @@ if and only if
             \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
     \end{gathered}
 \end{equation}
-We prove the two directions of the equivalent separately.
+We prove the two directions of the equivalence separately.
 For the forward direction, we assume
 \Eref{eq:th-leo-source-top-matching-02}
 to show \Eref{eq:th-leo-source-top-matching-04},
@@ -4135,34 +4155,6 @@ in which it occurs.
 
 \begin{proof}
 \todo{Prove Leo source top invariance}
-\end{proof}
-
-\begin{theorem}[Leo source subsequence]
-\label{th:leo-source-subsequence}
-Let \Veim{bottom} be a Leo source EIM,
-and let \Veimset{seq} be the Leo source sequence of
-\var{bottom},
-and let \Veim{top} be the top of \var{seq}.
-Then every element of \var{seq} is the bottom of a Leo source sequence
-whose top is \var{top}.
-\end{theorem}
-
-\begin{proof}
-Let \Veim{bottom2} be an arbitrary element of \Veimset{seq},
-and let \Veimset{subseq} be the Leo source sequence of \var{bottom}.
-
-We first deal with the special case where $\bigsize{\var{seq}} = 1$.
-In this case both \var{seq} and \var{subseq} have only one element,
-so that both are the same sequence and
-\[
-\Velement{seq}{\Vlastix{seq}}
-= \Velement{subseq}{\Vlastix{seq}} = \Veim{bottom} = \Veim{bottom2},
-\]
-that is the top element of both sequences,
-and the bottom element of both sequences are all the same.
-This proves this special case.
-
-\todo{Prove Leo source subsequence}
 \end{proof}
 
 \begin{theorem}[Leo source EIM sequence carryforward]
