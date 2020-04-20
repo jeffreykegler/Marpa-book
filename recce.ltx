@@ -3595,6 +3595,85 @@ if and only if \Vlim{x} is valid.
 \dispEnd
 \end{definition}
 
+\begin{theorem}[Leo source postdot uniqueness]
+\label{th:leo-source-postdot-uniqueness}
+Let the context be the valid partial parse
+$\tuple{\Vint{g}, \Vstr{prefix}}$.
+If \Veim{x} is a Leo source,
+then it is the only EIM at that location
+with that postdot symbol.
+That is, if
+\begin{gather}
+  \label{eq:th-leo-source-postdot-uniqueness-02}
+    \exists \mylim{\ell} : \Source{\Veim{x},\ell} \\
+  \label{eq:th-leo-source-postdot-uniqueness-04}
+    \land \Current{x} = \Current{\Veim{y}} \\
+  \label{eq:th-leo-source-postdot-uniqueness-06}
+    \land \Postdot{x} = \Postdot{\var{y}}
+\end{gather}
+then
+\begin{gather}
+  \label{eq:th-leo-source-postdot-uniqueness-08}
+  \var{x} = \var{y}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Finish this}
+The proof strategy is direct:
+we assume that \mylim{\ell} has two source
+EIM's, \Veim{x} and \Veim{y},
+and will show that $\var{x} = \var{y}$.
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-14}
+\Veim{x} \in \LeoEligible{\ES{\ell}}
+\because \Eref{eq:th-leo-source-postdot-uniqueness-02},
+    \longDfref{Leo source}{def:leo-source}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-22}
+\Veim{x} \in \LeoUnique{\ES{\ell}}
+\because \Eref{eq:th-leo-source-postdot-uniqueness-14},
+    \Dfref{def:leo-eligible}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-24}
+\begin{gathered}
+        \forall \; \Veim{z} :
+          \left( \begin{gathered}
+	    \Current{\Veim{z}} = \Current{\var{x}} \\
+            \land \Postdot{\var{x}} = \Postdot{\var{z}} \\
+            \implies \var{x} = \var{z}
+          \end{gathered} \right) \\
+          \because \longDfref{Leo unique}{def:leo-unique},
+          \Eref{eq:th-leo-source-postdot-uniqueness-22}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-26}
+\begin{gathered}
+    \Postdot{\var{x}} = \Postdot{\var{y}}
+    \implies
+    \var{x} = \var{y} \\
+    \myparbox{%
+        \cuz{} \Eref{eq:th-leo-source-postdot-uniqueness-04} and
+        instantiating \Veim{z} of
+        \Eref{eq:th-leo-source-postdot-uniqueness-24} as \Veim{y}.%
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-28}
+\begin{gathered}
+    \var{x} = \var{y}
+    \because
+        \Eref{eq:th-leo-source-postdot-uniqueness-06},
+        \Eref{eq:th-leo-source-postdot-uniqueness-26}.
+        \quad \myqed
+\end{gathered}
+\end{equation}
+\end{proof}
+
 \begin{theorem}[Leo source uniqueness]
 \label{th:leo-source-uniqueness}
 Every valid LIM has exactly one valid EIM source.
