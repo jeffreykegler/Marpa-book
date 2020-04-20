@@ -3605,11 +3605,11 @@ with that postdot symbol.
 That is, if
 \begin{gather}
   \label{eq:th-leo-source-postdot-uniqueness-02}
-    \exists \mylim{\ell} : \Source{\Veim{x},\ell} \\
+    \Source{\Veim{x},\mylim{\ell}} \\
   \label{eq:th-leo-source-postdot-uniqueness-04}
-    \land \Current{x} = \Current{\Veim{y}} \\
+    \land \Current{\var{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-source-postdot-uniqueness-06}
-    \land \Postdot{x} = \Postdot{\var{y}}
+    \land \Postdot{\var{x}} = \Postdot{\var{y}}
 \end{gather}
 then
 \begin{gather}
@@ -3619,16 +3619,18 @@ then
 \end{theorem}
 
 \begin{proof}
-\todo{Finish this}
-The proof strategy is direct:
-we assume that \mylim{\ell} has two source
-EIM's, \Veim{x} and \Veim{y},
-and will show that $\var{x} = \var{y}$.
+The proof strategy is direct.
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-14}
 \Veim{x} \in \LeoEligible{\ES{\ell}}
 \because \Eref{eq:th-leo-source-postdot-uniqueness-02},
     \longDfref{Leo source}{def:leo-source}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-16}
+\Current{\var{x}} = \Current{\ell} \because
+    \Eref{eq:th-leo-source-postdot-uniqueness-14}
+    \longDfref{Leo eligible}{def:leo-eligible}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-22}
@@ -3641,7 +3643,7 @@ and will show that $\var{x} = \var{y}$.
 \begin{gathered}
         \forall \; \Veim{z} :
           \left( \begin{gathered}
-	    \Current{\Veim{z}} = \Current{\var{x}} \\
+	    \Current{\Veim{z}} = \Current{\ell} \\
             \land \Postdot{\var{x}} = \Postdot{\var{z}} \\
             \implies \var{x} = \var{z}
           \end{gathered} \right) \\
@@ -3650,13 +3652,18 @@ and will show that $\var{x} = \var{y}$.
 \end{gathered}
 \end{equation}
 \begin{equation}
+\label{eq:th-leo-source-postdot-uniqueness-25}
+\Current{\var{y}} = \Current{\ell} \because
+  \Eref{eq:th-leo-source-postdot-uniqueness-04}, \Eref{eq:th-leo-source-postdot-uniqueness-16}.
+\end{equation}
+\begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-26}
 \begin{gathered}
     \Postdot{\var{x}} = \Postdot{\var{y}}
     \implies
     \var{x} = \var{y} \\
     \myparbox{%
-        \cuz{} \Eref{eq:th-leo-source-postdot-uniqueness-04} and
+        \cuz{} \Eref{eq:th-leo-source-postdot-uniqueness-25} and
         instantiating \Veim{z} of
         \Eref{eq:th-leo-source-postdot-uniqueness-24} as \Veim{y}.%
     }
@@ -3738,43 +3745,14 @@ and will show that $\var{x} = \var{y}$.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-uniqueness-22}
-\Veim{x} \in \LeoUnique{\ES{\ell}}
-\because \Eref{eq:th-leo-source-uniqueness-14},
-    \Dfref{def:leo-eligible}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-uniqueness-24}
-\begin{gathered}
-        \forall \; \Veim{z} \in \ES{\Current{\ell}} : \\
-          \left(
-            \Postdot{\var{x}} = \Postdot{\var{z}}
-            \implies
-            \var{x} = \var{z}
-          \right) \\
-          \because \Eref{eq:th-leo-source-uniqueness-22}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-uniqueness-26}
-\begin{gathered}
-    \Postdot{\var{x}} = \Postdot{\var{y}}
-    \implies
-    \var{x} = \var{y} \\
-    \myparbox{%
-        \cuz{} \Eref{eq:th-leo-source-uniqueness-18} and
-        instantiating \Veim{z} of
-        \Eref{eq:th-leo-source-uniqueness-24} as \Veim{y}.%
-    }
-\end{gathered}
-\end{equation}
-\begin{equation}
 \label{eq:th-leo-source-uniqueness-28}
 \begin{gathered}
     \var{x} = \var{y}
     \because
-        \Eref{eq:th-leo-source-uniqueness-20},
-        \Eref{eq:th-leo-source-uniqueness-26}.
+        \Thref{th:leo-source-postdot-uniqueness},
+        \Eref{eq:th-leo-source-uniqueness-10},
+        \Eref{eq:th-leo-source-uniqueness-18},
+        \Eref{eq:th-leo-source-uniqueness-20}.
         \quad \myqed
 \end{gathered}
 \end{equation}
