@@ -313,6 +313,7 @@
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
+\newcommand{\NextSource}[1]{\ensuremath{\mymathop{Next-Source}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
 \newcommand{\Origin}[1]{\ensuremath{\mymathop{Origin}(#1)}}
 \newcommand{\Passes}[1]{\ensuremath{\mymathop{Passes}(#1)}}
@@ -3856,17 +3857,60 @@ and will show that $\var{x} = \var{y}$.
 \end{equation}
 \end{proof}
 
-\begin{definition}[Leo next source EIM]
-\todo{define Leo next source EIM}
-\dispEnd
+\begin{definition}[\myfn{LIM-Predecessor}{} function]
+\label{def:lim-predecessor-fn}
+From \Thref{th:lim-uniqueness-by-source}, we see that
+the relation of LIM predecessor is a function,
+so that
+\begin{equation*}
+\begin{aligned}
+& \myfn{LIM-Predecessor}{\Veim{eim}} \defined  \\
+& \qquad \left\lbrace
+\begin{array}{ll}
+\mylim{\ell} & \text{ if } \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}} \\
+\Lambda & \text{ if } \neg \exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{eim}}.
+  \quad \dispEnd
+\end{array}
+\right.
+\end{aligned}
+\end{equation*}
+\end{definition}
+
+\begin{definition}[Next source EIM]
+\[
+\begin{gathered}
+\myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
+\defined (\Source{\LIMPredecessor{\var{prev}}} = \var{next}).
+\quad \dispEnd
+\end{gathered}
+\]
+We say that \Veim{next} is the \dfn{Leo next source},
+or \dfn{next source} of \Veim{prev}.
+Another notation for
+\myfn{Next-Source-2}{\Veim{next},\Veim{prev}}
+is
+\[
+\NextSource{\Veim{prev}} = \Veim{prev},
+\]
+and this will be used once we show that the \NextSource{}
+function, as we have just defined it,
+actually exists.
 \end{definition}
 
 \begin{theorem}[Leo next source function existence]
-The \myfn{Leo-Next-Source}{} function exists.
+The \NextSource{} function exists.
 \end{theorem}
 
 \begin{proof}
-\todo{Prove Leo next source function existence}
+For \NextSource{\Veim{next},\Veim{prev}} to be a function
+we must show that
+there is at most one \var{next} such that
+\[
+\Source{\LIMPredecessor{\var{prev}}} = \var{next}.
+\]
+This follows from
+\Thref{th:leo-source-uniqueness} and
+\Thref{th:leo-source-predecessor-uniqueness}.
 \myqed
 \end{proof}
 
@@ -3880,23 +3924,47 @@ Then
 the \dfn{partial Leo source sequence} relative to \Veim{first},
 call it \Veimset{seq},
 is defined by the induction
-\[
+\begin{equation}
+\label{eq:def-leo-source-sequence-10}
 \Velement{seq}{0} = \Veim{first}
-\]
+\end{equation}
 and
-\[
-    \begin{gathered}
-        \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
-        \left(
-            \VVelement{seq}{n} = \Source{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\var{n}\subtract 1}}
-        \right).
-    \end{gathered}
-\]
+\begin{equation}
+\begin{gathered}
+    \label{eq:def-leo-source-sequence-30}
+    \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
+    \left(
+        \VVelement{seq}{n} = \Source{\ell} :
+        \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\var{n}\subtract 1}}
+    \right).
+\end{gathered}
+\end{equation}
 We say that \Velement{seq}{0} is the
 \dfn{bottom EIM}, or \dfn{bottom}, of \Veimseq{seq}.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[Leo source existence]
+\label{th:leo-source-existence}
+Every EIM of a Leo source sequence is the source
+of at least one LIM.
+\end{theorem}
+
+\begin{proof}
+The theorem follows almost immediately from the
+definition of Leo source sequence
+\Dfref{def:leo-source-sequence}.
+Let \Veimseq{seq} be
+an arbitary Leo source sequence.
+For \Velement{seq}{0}, the theorem follows from
+\Eref{eq:def-leo-source-sequence-10} in \Dfref{def:leo-source-sequence}.
+For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
+the theorem follows from
+\Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
+and the definition of LIM Predecessor \Dfref{def:lim-predecessor}.
+\myqed
+\todo{Is this right?}
+\end{proof}
 
 \begin{definition}[Leo source sequence validity]
 \label{def:leo-source-sequence-validity}
@@ -4218,25 +4286,6 @@ Every EIM is the source of at most one LIM.
 \todo{LIM uniqueness by source}
 \myqed
 \end{proof}
-
-\begin{definition}[\myfn{LIM-Predecessor}{} function]
-\label{def:lim-predecessor-fn}
-From \Thref{th:lim-uniqueness-by-source}, we see that
-the relation of LIM predecessor is a function,
-so that
-\begin{equation*}
-\begin{aligned}
-& \myfn{LIM-Predecessor}{\Veim{eim}} \defined  \\
-& \qquad \left\lbrace
-\begin{array}{ll}
-\mylim{\ell} & \text{ if } \myfn{LIM-Predecessor-2}{\ell,\Veim{eim}} \\
-\Lambda & \text{ if } \neg \exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{eim}}.
-  \quad \dispEnd
-\end{array}
-\right.
-\end{aligned}
-\end{equation*}
-\end{definition}
 
 \begin{theorem}[LIM's per ES]
 \label{th:lims-per-es}
