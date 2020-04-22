@@ -4024,6 +4024,27 @@ Then
      \Eref{eq:th-leo-source-subsequence-validity-14}.
 \end{gathered}
 \end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-18}
+\begin{gathered}
+    \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
+    \LIMPredecessor{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+     \because \Eref{eq:th-leo-source-subsequence-validity-03},
+       \Eref{eq:th-leo-source-subsequence-validity-14}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-20}
+\begin{gathered}
+    \forall \var{n} \in \set{\var{m} : \var{i} \le \var{m} \le \var{j}} : \\
+\Valid{\VVelement{long}{n}}
+\land \left(
+    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
+\right) \\
+     \because \Eref{eq:th-leo-source-subsequence-validity-03},
+       \Eref{eq:th-leo-source-subsequence-validity-16}.
+\end{gathered}
+\end{equation}
 \myqed
 \todo{Prove Leo source subsequence validity}
 \end{proof}
@@ -4107,136 +4128,6 @@ of \Veim{bottom}. Then
 \Velement{seq}{\Vlastix{seq}} is the \dfn{top} of \var{seq}.
 \dispEnd
 \end{definition}
-
-\begin{theorem}[Leo source maximality]
-\label{th:leo-source-top-matching}
-Let the context be the partial parse
-$\tuple{\Vint{g}, \Vstr{partial}}$.
-Let \Veimseq{seq}
-be a valid Leo source sequence
-and let $\Veim{top} = \Velement{seq}{\Vlastix{seq}}$
-be its top element.  Then
-\begin{equation}
-\label{eq:th-leo-source-top-matching-02}
-\text{%
-    \var{seq} is a maximal valid Leo sequence
-    relative to \Velement{seq}{0}.
-}
-\end{equation}
-if and only if
-\begin{equation}
-\label{eq:th-leo-source-top-matching-04}
-\text{\Veim{top} does not have a valid LIM predecessor.}
-\end{equation}
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-10}
-    \begin{gathered}
-        \Velement{seq}{0} = \Veim{first} : \\
-        \left(\exists \mylim{\ell} : \var{first} = \Source{\ell}\right)
-        \because \text{AF theorem}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-12}
-    \begin{gathered}
-        \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
-        \left(
-            \VVelement{seq}{n} = \Source{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\var{n}\subtract 1}}
-        \right) \\
-        \because \text{AF theorem}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-14}
-    \begin{gathered}
-        \forall \var{n} \in \set{\var{i} : 0 \le \var{i} \le \Vlastix{seq}} :
-        \Valid{\VVelement{seq}{n}} \\
-        \because \text{AF theorem},
-            \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-16}
-    \begin{gathered}
-        \forall \var{n} \in \set{\var{i} : 0 \le \var{i} \le \Vlastix{seq}} : \\
-        \exists \mylim{\ell} : \Valid{\ell} \land (\VVelement{seq}{n} = \Source{\ell}) \\
-        \because \text{AF theorem},
-            \longDfref{Leo source sequence validity}{def:leo-source-sequence-validity}.
-    \end{gathered}
-\end{equation}
-We prove the two directions of the equivalence separately.
-For the forward direction, we assume
-\Eref{eq:th-leo-source-top-matching-02}
-to show \Eref{eq:th-leo-source-top-matching-04},
-and proceed via a reductio.
-\begin{equation}
-\label{eq:th-leo-source-top-matching-18}
-\begin{gathered}
-\Valid{\ell} \land
-            \myfn{LIM-Predecessor-2}{\ell, \VVelement{seq}{\Vlastix{seq}}} \\
-            \because \text{negation of \Eref{eq:th-leo-source-top-matching-04} assumed for the reductio.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-20}
-\begin{gathered}
-\Valid{\Source{\ell}} \because
-\Eref{eq:th-leo-source-top-matching-18},
-\longDfref{LIM validity}{def:lim-validity}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-22}
-\begin{gathered}
-\Veimseq{seq2} = \tuple{\Velement{seq}{0} \ldots \Velement{seq}{\Vlastix{seq}}, \Source{\ell}} \\
-\text{is a partial Leo source sequence relative to \Velement{seq}{0}} \\
-\myparbox{%
-    \cuz{} \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-leo-source-top-matching-10},
-    \Eref{eq:th-leo-source-top-matching-12},
-    \Eref{eq:th-leo-source-top-matching-18}.%
-}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-24}
-\begin{gathered}
-\Valid{\Veimseq{seq2}} \because
-\Eref{eq:th-leo-source-top-matching-14},
-\Eref{eq:th-leo-source-top-matching-16},
-\Eref{eq:th-leo-source-top-matching-18},
-\Eref{eq:th-leo-source-top-matching-20}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-26}
-\begin{gathered}
-\Veimseq{seq} \subset \Veimseq{seq2} \because
-\Eref{eq:th-leo-source-top-matching-22}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-top-matching-28}
-\myparbox{%
-    \Veimseq{seq} is not a maximal valid Leo sequence
-    \cuz
-    \Eref{eq:th-leo-source-top-matching-22},
-    \Eref{eq:th-leo-source-top-matching-24},
-    \Eref{eq:th-leo-source-top-matching-26}.%
-}
-\end{equation}
-\Eref{eq:th-leo-source-top-matching-28}
-contradicts \Eref{eq:th-leo-source-top-matching-02},
-which shows the reductio,
-and the forward direction of the equivalence.
-
-It remains to show the backward direction of the equivalence.
-\todo{Prove Leo source top matching}
-\end{proof}
 
 \begin{theorem}[Leo source top invariance]
 \label{th:leo-source-top-invariance}
