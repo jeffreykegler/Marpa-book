@@ -3898,9 +3898,10 @@ This follows from
 \begin{definition}[Leo source sequence]
 \label{def:leo-source-sequence}
 Let \Veim{first} be an arbitrary Leo source EIM:
-\[
+\begin{equation}
+\label{eq:def-leo-source-sequence-05}
     \exists \mylim{\ell} : \Veim{first} = \Source{\ell}.
-\]
+\end{equation}
 Then
 the \dfn{partial Leo source sequence} relative to \Veim{first},
 call it \Veimset{seq},
@@ -3911,8 +3912,8 @@ is defined by the induction
 \end{equation}
 and
 \begin{equation}
+\label{eq:def-leo-source-sequence-30}
 \begin{gathered}
-    \label{eq:def-leo-source-sequence-30}
     \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
     \left(
         \VVelement{seq}{n} = \Source{\ell} :
@@ -3954,27 +3955,77 @@ a Leo source EIM sequence.
 \var{seq} is \dfn{valid} if and only if
 \[
 \begin{gathered}
-\forall \; \Veim{src} \in \var{seq} : \\
-\Valid{\var{src}}
+\forall \; \var{j} \in \set{ \var{i} : 0 \le \var{i} \le \Vlastix{seq} } : \\
+\Valid{\VVelement{seq}{j}}
 \land \left(
-    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \var{src}
+    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{seq}{j}
 \right).
 \end{gathered}
 \]
 \end{definition}
 
 \begin{theorem}[Leo source subsequence validity]
-Let
-\Veimseq{long} be a valid Leo source subsequence;
-and let $0 \le \var{i} \le \var{j} \le \Vlastix{long}$.
-Then \Veimseq{short} is a valid Leo source subsequence such that
-$\Velement{short}{0} = \VVelement{long}{i}$ and
-$\Velement{short}{\Vlastix{short}} = \VVelement{long}{j}$.
+\label{th:leo-source-subsequence-validity}
+\begin{gather}
+\label{eq:th-leo-source-subsequence-validity-02}
+\text{Let \Veimseq{long} be a valid Leo source subsequence} \\
+\label{eq:th-leo-source-subsequence-validity-03}
+\text{and let } 0 \le \var{i} \le \var{j} \le \Vlastix{long}.
+\end{gather}
+Then
+\begin{gather}
+\label{eq:th-leo-source-subsequence-validity-04}
+\text{\Veimseq{short} is a valid Leo source subsequence such that} \\
+\label{eq:th-leo-source-subsequence-validity-05}
+\Velement{short}{0} = \VVelement{long}{i} \\
+\label{eq:th-leo-source-subsequence-validity-06}
+\land \; \Velement{short}{\Vlastix{short}} = \VVelement{long}{j}.
+\end{gather}
 \end{theorem}
 
 \begin{proof}
-\todo{Prove Leo source subsequence validity}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-10}
+\begin{gathered}
+\exists \mylim{\ell} : \Source{\ell} = \Velement{long}{0} \\
+     \because \Eref{eq:def-leo-source-sequence-05}
+            \text{ in } \Dfref{def:leo-source-sequence},
+     \Eref{eq:th-leo-source-subsequence-validity-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-12}
+\begin{gathered}
+    \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
+    \LIMPredecessor{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+     \because \Eref{eq:def-leo-source-sequence-30}
+            \text{ in } \Dfref{def:leo-source-sequence},
+     \Eref{eq:th-leo-source-subsequence-validity-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-14}
+\begin{gathered}
+\forall \; \var{n} \in \set{ \var{m} : 0 \le \var{m} \le \Vlastix{long} } : \\
+\Valid{\VVelement{long}{n}}
+\land \left(
+    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
+\right) \\
+    \because \longDfref{Leo source validity}{def:leo-source-sequence-validity},
+     \Eref{eq:th-leo-source-subsequence-validity-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-16}
+\begin{gathered}
+\exists \mylim{\ell} : \Source{\ell} = \VVelement{long}{i} \\
+     \because \Eref{eq:th-leo-source-subsequence-validity-02},
+     \Eref{eq:th-leo-source-subsequence-validity-03},
+     \Eref{eq:th-leo-source-subsequence-validity-14}.
+\end{gathered}
+\end{equation}
 \myqed
+\todo{Prove Leo source subsequence validity}
 \end{proof}
 
 \begin{theorem}[Leo source EIM count]
