@@ -3953,9 +3953,9 @@ For \Velement{seq}{0}, the theorem follows from
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
-and the definition of LIM Predecessor \Dfref{def:lim-predecessor}.
+and the definition of \longDfref{LIM Predecessor}{def:lim-predecessor}
+and \longDfref{Leo Source}{def:leo-source}.
 \myqed
-\todo{Is this right?}
 \end{proof}
 
 \begin{definition}[LSS validity]
@@ -4007,7 +4007,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-12}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
-    \LIMPredecessor{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+    \Source{\LIMPredecessor{\Velement{long}{\var{n}\subtract 1}}} = \VVelement{long}{n} \\
      \because \Eref{eq:def-leo-source-sequence-30}
             \text{ in } \Dfref{def:leo-source-sequence},
      \Eref{eq:th-leo-source-subsequence-validity-02}.
@@ -4038,7 +4038,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-18}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \LIMPredecessor{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+    \Source{\LIMPredecessor{\Velement{long}{\var{n}\subtract 1}}} = \VVelement{long}{n} \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
        \Eref{eq:th-leo-source-subsequence-validity-14}.
 \end{gathered}
@@ -4052,29 +4052,28 @@ Then
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
 \right) \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
-       \Eref{eq:th-leo-source-subsequence-validity-16}.
+       \Eref{eq:th-leo-source-subsequence-validity-14}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-22}
 \Veimseq{short} = \Velement{long}{\var{i}\ldots\var{j}} \because
-    \Eref{eq:th-leo-source-subsequence-validity-04}--%
+    \Eref{eq:th-leo-source-subsequence-validity-04}\text{--}%
     \Eref{eq:th-leo-source-subsequence-validity-06}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-24}
 \begin{gathered}
 \exists \mylim{\ell} : \Source{\ell} = \Velement{short}{0} \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-02},
-     \Eref{eq:th-leo-source-subsequence-validity-16},
+     \because \Eref{eq:th-leo-source-subsequence-validity-16},
      \Eref{eq:th-leo-source-subsequence-validity-22}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-26}
 \begin{gathered}
-    \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \LIMPredecessor{\Velement{short}{\var{n}\subtract 1}} = \VVelement{short}{n} \\
+    \forall \var{n} \in \set{\var{m} : \var{i} < 0 \le \Vlastix{short}} : \\
+    \Source{\LIMPredecessor{\Velement{short}{\var{n}\subtract 1}}} = \VVelement{short}{n} \\
      \because \Eref{eq:th-leo-source-subsequence-validity-18},
        \Eref{eq:th-leo-source-subsequence-validity-22}.
 \end{gathered}
@@ -4191,64 +4190,6 @@ of \Veim{bottom}. Then
 \Velement{seq}{\Vlastix{seq}} is the \dfn{top} of \var{seq}.
 \dispEnd
 \end{definition}
-
-\begin{theorem}[Leo source top invariance]
-\label{th:leo-source-top-invariance}
-If an EIM is a Leo source top, then
-it is the top of every LSS
-in which it occurs.
-\end{theorem}
-
-\begin{proof}
-\todo{Prove Leo source top invariance}
-\end{proof}
-
-\begin{theorem}[Leo source EIM sequence carryforward]
-\label{th:leo-source-sequence-carryforward}
-Let \Veimset{seq} be an LSS,
-let \Veim{top-source} be the top of \var{seq},
-let \Vlim{top} be a LIM of \var{top-source}.
-Then, if $\ell$ is a valid LIM of an element,
-of \var{seq}
-\begin{gather}
-\DR{\ell} = \DR{\Vlim{top}} \text{ and} \\
-\Origin{\ell} = \Origin{\Vlim{top}}.
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-Let \Veimset{seq} be the Leo source EIM sequence
-of \Veim{bottom}, an arbitrary Leo source EIM.
-The proof is by induction on the length of \var{seq}.
-
-We take for the basis
-of the induction
-that $\bigsize{\var{seq}} = 1$.
-Let in the sequence of length 1, \mylim{\ell1} and \mylim{\ell2}
-be two LIM's.  \var{seq} has only one element, \var{bottom}.
-Since \var{bottom} is the only element,
-\[
-\neg \exists \Veim{left} : \Matches{\Veim{left},\Veim{bottom}}
-\]
-and therefore
-\[
- \left\lbrace
-   \begin{gathered}
-        \Vlim{pred} :
-        \myfn{LIM-Predecessor-2}{\var{pred}, \var{bottom}}.
-   \end{gathered}
-    \right\rbrace
-    = \emptyset
-\]
-So that by \longDfref{LIM validity}{def:lim-validity}
-\begin{gather}
-\DR{\ell1} = \DR{\var{bottom}} = \DR{\ell2} \text{ and} \\
-\Origin{\ell1} = \Origin{\var{bottom}} = \Origin{\ell2} .
-\end{gather}
-
-\todo{Finish Leo source chain carryforward proof}
-\myqed
-\end{proof}
 
 \begin{theorem}[LIM uniqueness by symbol]
 \label{th:lim-uniqueness-by-symbol}
