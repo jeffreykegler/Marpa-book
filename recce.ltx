@@ -3489,11 +3489,20 @@ Leo items ``stand in'' for an EIM source.
 \end{gathered}
 \end{equation*}
 We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
-if
+if and only if
 \[
 \myfn{Source2}{\Veim{source},\mylim{\ell}}.
-\quad \dispEnd
 \]
+We can also write
+\myfn{Source2}{\Veim{source},\mylim{\ell}} as
+\[
+\Source{\mylim{\ell}} = \Veim{source}
+\]
+and this alternative notation will be used once
+we show that the \Source{} function,
+as we have just defined it,
+exists.
+\dispEnd
 \end{definition}
 
 \begin{definition}[LIM predecessor]
@@ -3509,6 +3518,15 @@ if
 We say that \Vlim{pred} is the \dfn{LIM predecessor}
 of \Veim{succ} if and only if
 \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
+We can also write
+\myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} as
+\[
+\LIMPredecessor{\var{succ}} = \var{pred}
+\]
+and this alternative notation will be used once
+we show that the \LIMPredecessor{} function,
+as we have just defined it,
+exists.
 \dispEnd{}
 \end{definition}
 
@@ -3686,7 +3704,8 @@ The proof strategy is direct.
 \label{th:leo-source-uniqueness}
 Every valid LIM has exactly one valid EIM source.
 That is,
-\[
+\begin{equation}
+\label{eq:th-leo-source-uniqueness-02}
 \begin{gathered}
 \forall \Veim{x} \; \forall \Veim{y} \; \forall \mylim{\ell} \\
 \left(
@@ -3697,7 +3716,8 @@ That is,
 \right)
 \implies \var{x} = \var{y}.
 \end{gathered}
-\]
+\end{equation}
+Also, the function \Source{} exists.
 \end{theorem}
 
 \begin{proof}
@@ -3754,23 +3774,14 @@ and will show that $\var{x} = \var{y}$.
         \Eref{eq:th-leo-source-uniqueness-10},
         \Eref{eq:th-leo-source-uniqueness-18},
         \Eref{eq:th-leo-source-uniqueness-20}.
-        \quad \myqed
 \end{gathered}
 \end{equation}
+This shows
+\Eref{eq:th-leo-source-uniqueness-02} of the theorem,
+From \Eref{eq:th-leo-source-uniqueness-02},
+it directly follows that the \Source{} function exists.
+\myqed
 \end{proof}
-
-\begin{definition}[\myfn{Source}{} function]
-\label{def:source-fn}
-From \Thref{th:leo-source-uniqueness}, we see that
-the inverse of \myfn{Source2}{}
-is a function, so that the function
-\[
-\Source{\mylim{\ell}} \defined \Veim{source} :
-    \myfn{Source2}{\var{source},\ell}
-\]
-exists.
-\dispEnd
-\end{definition}
 
 \begin{theorem}[Leo source predecessor uniqueness]
 \label{th:leo-source-predecessor-uniqueness}
@@ -3867,13 +3878,13 @@ and will show that $\var{x} = \var{y}$.
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
 or \dfn{next source} of \Veim{prev}.
-Another notation for
-\myfn{Next-Source-2}{\Veim{next},\Veim{prev}}
-is
+We may also write
+\myfn{Next-Source-2}{\Veim{next},\Veim{prev}} as
 \[
 \NextSource{\Veim{prev}} = \Veim{prev},
 \]
-and this will be used once we show that the \NextSource{}
+and this alternative notation
+will be used once we show that the \NextSource{}
 function, as we have just defined it,
 actually exists.
 \end{definition}
@@ -3895,17 +3906,17 @@ This follows from
 \myqed
 \end{proof}
 
-\begin{definition}[Leo source sequence]
+\begin{definition}[Leo source sequence (LSS)]
 \label{def:leo-source-sequence}
-Let \Veim{first} be an arbitrary Leo source EIM:
+We define the \dfn{Leo source EIM sequence},
+or \dfn{Leo source sequence}
+whose \dfn{bottom} is \Veim{first}
+by induction, as follows.
 \begin{equation}
 \label{eq:def-leo-source-sequence-05}
     \exists \mylim{\ell} : \Veim{first} = \Source{\ell}.
 \end{equation}
-Then
-the \dfn{partial Leo source sequence} relative to \Veim{first},
-call it \Veimset{seq},
-is defined by the induction
+and
 \begin{equation}
 \label{eq:def-leo-source-sequence-10}
 \Velement{seq}{0} = \Veim{first}
@@ -3921,14 +3932,13 @@ and
     \right).
 \end{gathered}
 \end{equation}
-We say that \Velement{seq}{0} is the
-\dfn{bottom EIM}, or \dfn{bottom}, of \Veimseq{seq}.
+A Leo source EIM sequence has type \type{LSS}.
 \dispEnd
 \end{definition}
 
 \begin{theorem}[Leo source existence]
 \label{th:leo-source-existence}
-Every EIM of a Leo source sequence is the source
+Every EIM of an LSS is the source
 of at least one LIM.
 \end{theorem}
 
@@ -3937,7 +3947,7 @@ The theorem follows almost immediately from the
 definition of Leo source sequence
 \Dfref{def:leo-source-sequence}.
 Let \Veimseq{seq} be
-an arbitary Leo source sequence.
+an arbitary LSS.
 For \Velement{seq}{0}, the theorem follows from
 \Eref{eq:def-leo-source-sequence-10} in \Dfref{def:leo-source-sequence}.
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
@@ -3948,7 +3958,7 @@ and the definition of LIM Predecessor \Dfref{def:lim-predecessor}.
 \todo{Is this right?}
 \end{proof}
 
-\begin{definition}[Leo source sequence validity]
+\begin{definition}[LSS validity]
 \label{def:leo-source-sequence-validity}
 Let \Veimset{seq} be
 a Leo source EIM sequence.
@@ -4071,7 +4081,7 @@ Then
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-28}
-\myparbox{\Veimseq{short} is a Leo source sequence
+\myparbox{\Veimseq{short} is an LSS
    \cuz
         \longDfref{Leo source sequence}{def:leo-source-sequence},
         \Eref{eq:th-leo-source-subsequence-validity-24},
@@ -4093,7 +4103,7 @@ Then
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-32}
-\myparbox{\Veimseq{short} is a valid Leo source sequence
+\myparbox{\Veimseq{short} is a valid LSS
    \cuz \longDfref{Leo source validity}{def:leo-source-sequence-validity},
         \Eref{eq:th-leo-source-subsequence-validity-28},
         \Eref{eq:th-leo-source-subsequence-validity-30}.
@@ -4141,7 +4151,7 @@ This shows the reductio and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[Leo source sequence finiteness]
+\begin{theorem}[LSS finiteness]
 \label{th:leo-source-sequence-finiteness}
 Let the context be the valid partial parse
 $\tuple{\Vint{g}, \Vstr{partial}}$.
@@ -4174,7 +4184,7 @@ With
 we know there is a last EIM in any Leo source EIM sequence,
 so we may define its ``top''.
 
-\begin{definition}[Top of Leo source sequence]
+\begin{definition}[Top of LSS]
 \label{def:top-of-leo-source-sequence}
 Let \Veimset{seq} be the Leo source EIM sequence
 of \Veim{bottom}. Then
@@ -4185,7 +4195,7 @@ of \Veim{bottom}. Then
 \begin{theorem}[Leo source top invariance]
 \label{th:leo-source-top-invariance}
 If an EIM is a Leo source top, then
-it is the top of every Leo source sequence
+it is the top of every LSS
 in which it occurs.
 \end{theorem}
 
@@ -4195,7 +4205,7 @@ in which it occurs.
 
 \begin{theorem}[Leo source EIM sequence carryforward]
 \label{th:leo-source-sequence-carryforward}
-Let \Veimset{seq} be a Leo source sequence,
+Let \Veimset{seq} be an LSS,
 let \Veim{top-source} be the top of \var{seq},
 let \Vlim{top} be a LIM of \var{top-source}.
 Then, if $\ell$ is a valid LIM of an element,
