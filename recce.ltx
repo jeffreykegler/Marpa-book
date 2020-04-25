@@ -3947,7 +3947,7 @@ definition of Leo source sequence
 Let \Veimseq{seq} be
 an arbitary LSS.
 For \Velement{seq}{0}, the theorem follows from
-\Eref{eq:def-leo-source-sequence-10} in \Dfref{def:leo-source-sequence}.
+\Eref{eq:def-leo-source-sequence-05} in \Dfref{def:leo-source-sequence}.
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
@@ -4190,6 +4190,7 @@ of \Veim{bottom}. Then
 \end{definition}
 
 \begin{theorem}[LSS uniqueness by length]
+\label{th:lss-uniqueness-by-length}
 Let the context be the valid partial parse
 $\tuple{\Vint{g}, \Vstr{partial}}$.
 \label{th:LSS-uniqueness-by-length}
@@ -4246,11 +4247,10 @@ Our basis is
     of the induction.
 
 For the step we assume
+the induction hypothesis
 \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$,
 to show
 \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$.
-\todo{Finish LSS uniqueness by length proof}
-\myqed
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-28}
 \begin{gathered}
@@ -4275,10 +4275,116 @@ to show
 \end{equation}
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-34}
-\Vsize{lssA1} = \Vsize{lssA2} \because
+\Vsize{lssA1} = \Vsize{lssA2} = \var{n} \because
     \Eref{eq:th-LSS-uniqueness-by-length-30},
     \Eref{eq:th-LSS-uniqueness-by-length-32}.
 \end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-36}
+\Velement{lssA1}{0} = \Velement{lssB1}{0} = \Veim{bottom} \because
+    \Eref{eq:th-LSS-uniqueness-by-length-28},
+    \Eref{eq:th-LSS-uniqueness-by-length-30}.
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-38}
+\Velement{lssA2}{0} = \Velement{lssB2}{0} = \Veim{bottom} \because
+    \Eref{eq:th-LSS-uniqueness-by-length-28},
+    \Eref{eq:th-LSS-uniqueness-by-length-32}.
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-40}
+\Velement{lssA1}{0} = \Velement{lssA2}{0} \because
+    \Eref{eq:th-LSS-uniqueness-by-length-36},
+    \Eref{eq:th-LSS-uniqueness-by-length-38}.
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-42}
+\begin{gathered}
+\myparbox{
+$\var{lssA1} = \var{lssA2}$ \cuz{}
+    \Eref{eq:th-LSS-uniqueness-by-length-34},
+    \Eref{eq:th-LSS-uniqueness-by-length-40},
+    and using the induction hypothesis
+        \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$,
+        which was assumed for the step of the induction.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-44}
+\begin{gathered}
+\var{lssB1} = \tuple{\Velement{lssA1}{0} \ldots
+        \VVelement{lssA1}{n}, \Veim{topB1}} \\
+        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-30}, WLOG.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-46}
+\begin{gathered}
+\var{lssB2} = \tuple{\Velement{lssA2}{0} \ldots
+        \VVelement{lssA2}{n}, \Veim{topB2}} \\
+        \text{\cuz{}
+        \Eref{eq:th-LSS-uniqueness-by-length-32},
+        WLOG.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-48}
+\begin{gathered}
+\var{lssB2} = \tuple{\Velement{lssA1}{0} \ldots
+        \VVelement{lssA1}{n}, \Veim{topB2}} \\
+        \text{\cuz{}
+        \Eref{eq:th-LSS-uniqueness-by-length-42}
+        \Eref{eq:th-LSS-uniqueness-by-length-46}.%
+        }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-50}
+\begin{gathered}
+\var{topB1} = \NextSource{\VVelement{lssA1}{n}} \\
+        \text{\cuz{}
+        \longDfref{Leo source sequence}{def:leo-source-sequence},
+        \Eref{eq:th-LSS-uniqueness-by-length-44}.%
+        }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-52}
+\begin{gathered}
+\var{topB2} = \NextSource{\VVelement{lssA1}{n}} \\
+        \text{\cuz{}
+        \Dfref{def:leo-source-sequence},
+        \Eref{eq:th-LSS-uniqueness-by-length-48}.%
+        }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-54}
+\begin{gathered}
+\var{topB1} = \var{topB2} \\
+        \because
+        \Eref{eq:th-LSS-uniqueness-by-length-50}.
+        \Eref{eq:th-LSS-uniqueness-by-length-52}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-56}
+\begin{gathered}
+\var{lssB1} = \var{lssB2} \\
+        \because
+        \Eref{eq:th-LSS-uniqueness-by-length-44},
+        \Eref{eq:th-LSS-uniqueness-by-length-48},
+        \Eref{eq:th-LSS-uniqueness-by-length-54}.
+\end{gathered}
+\end{equation}
+\Eref{eq:th-LSS-uniqueness-by-length-56} is the consequent
+of the induction hypothesis
+\Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$,
+which we sought to show beginning at
+\Eref{eq:th-LSS-uniqueness-by-length-28}.
+With the step of the induction we have the induction, and the theorem.
+\myqed
 \end{proof}
 
 \begin{theorem}[LIM uniqueness by source]
