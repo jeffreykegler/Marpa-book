@@ -922,6 +922,11 @@ $\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate o
 \label{tab:type-notation}
 \end{table}
 
+\todo{Rewrite type system description, add "context" discussion}
+For the purposes of this paper,
+we use a simple and opportunistic type system.
+A \dfn{type} is a set of values which
+a variable may take.
 This paper will
 use subscripts to indicate commonly occurring types,
 as shown in
@@ -930,10 +935,6 @@ This type system
 is intended solely as a convenient way to remind
 the reader of the definitions
 of the variables that are stated in the text.
-As such,
-the type system of this paper is opportunistic.
-It is emphatically not intended as a contribution to
-set theory or the theory of types.
 
 Type subscripts are often omitted when the type
 is clear from the context.
@@ -953,24 +954,14 @@ and be distinguished by type.
 We overload in this fashion only when the advantages for clarity
 seem to outweigh the disadvantages.
 
-In our opportunistic type system,
-``aggregates'' are collections of other objects.
-Mathematically they may be any of
-a set, a multiset, an ordered set, an indexable sequence, etc.
-As implemented, aggregates might be an array, a dynamic array, an AVL,
-a Lua table, or a hash table.
-Many of these implementations can be used as more than one kind of
-set-theoretic notions,
-so we find it convenient to lump them together as ``aggregates'',
-and to specify their nature more precisely
-when the specific aggregate is defined.
-
-For example, the Earley sets in \Marpa{}
-have an implementation that allows them to be
-treated both as a set and an indexed sequence.
-For all aggregates,
-the notation $\var{element} \in \var{aggregate}$
-means ``\var{element} is contained in \var{aggregate}''
+Types are defined explicitly, when they are introduced.
+In addition, for every type \var{T},
+\begin{itemize}
+\item the powerset of \var{T} is a type; and
+\item the sequence whose range is \var{T} and
+whose index set is 
+$\mathbb{N}$ is a type.
+\end{itemize}
 
 Multi-character variable names will be common.
 When the angle bracket notation is used,
@@ -1031,6 +1022,13 @@ is the empty sequence, which we may write as $\epsilon$:
 \[
 \var{z} < \var{a} \implies \var{s}[\var{a} \ldots \var{z}] = \epsilon.
 \]
+
+Where $0 \le \var{j} \le \Vlastix{j}$,
+the sequence \Velement{seq}{0\ldots \var{j}} is a \dfn{prefix}
+of \var{seq}.
+When $0 \le \var{j} < \Vlastix{seq}$, then
+the sequence \Velement{seq}{0\ldots \var{j}} is a \dfn{proper prefix}
+of \var{seq}.
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -4391,6 +4389,29 @@ which we sought to show beginning at
 \Eref{eq:th-LSS-uniqueness-by-length-28}.
 With the step of the induction we have the induction, and the theorem.
 \myqed
+\end{proof}
+
+\begin{definition}[Maximal LSS]
+An LSS is maximal if it is not the proper prefix
+of another LSS.
+\end{definition}
+
+\begin{theorem}[Maximal LSS length]
+Maximal LSS's with the same bottom have
+the same length.
+\end{theorem}
+
+\begin{proof}
+\todo{Prove maximal LSS length}
+\end{proof}
+
+\begin{theorem}[Maximal LSS uniqueness]
+Every Leo source EIM is the bottom of exactly one
+maximal LSS.
+\end{theorem}
+
+\begin{proof}
+\todo{Prove maximal LSS uniqueness}
 \end{proof}
 
 \begin{theorem}[LIM uniqueness by source]
