@@ -16,8 +16,8 @@
 all: recce.pdf
 
 travis:
-	pdflatex recce.pdf
-	pdflatex recce.pdf
+	pdflatex recce.ltx
+	pdflatex recce.ltx
 
 full: ah2002_notes.pdf recce.pdf finite.pdf
 
