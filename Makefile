@@ -13,7 +13,9 @@
 # General Public License along with Marpa::R2.  If not, see
 # http://www.gnu.org/licenses/.
 
-all: ah2002_notes.pdf recce.pdf finite.pdf
+all: recce.pdf
+
+full: ah2002_notes.pdf recce.pdf finite.pdf
 
 clean:
 	rm recce.out recce.aux recce.toc recce.tdo recce.loe
