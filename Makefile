@@ -17,6 +17,11 @@ all: recce.pdf
 
 full: ah2002_notes.pdf recce.pdf finite.pdf
 
+travis:
+	pdflatex recce.ltx
+	pdflatex recce.ltx
+	pdflatex recce.ltx
+
 clean:
 	rm recce.out recce.aux recce.toc recce.tdo recce.loe
 
