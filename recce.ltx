@@ -167,7 +167,7 @@
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
 
-\newcommand{\longDfref}[2]{
+\newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
   \else``#1''\Dfref{#2}%
   \fi%
@@ -4556,16 +4556,18 @@ maximal LSS with the same top EIM.
 \end{theorem}
 
 \begin{proof}
+Let \Vlss{max} be an arbitrary maximal LSS,
+and \Vlss{suf} an arbitrary suffix of \var{max}:
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-10}
-\text{\Vlss{max} is maximal \cuz{} AF reductio.}
+\text{\Vlss{max} is maximal \cuz{} AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-12}
 \begin{gathered}
 \Vlss{suf} = \Velement{max}{\var{i}\ldots \Vlastix{max}}
 \land 0 \le \var{i} \le \Vlastix{max} \\
-\because \text{AF reductio, definition of ``suffix''.}
+\because \text{AF proof, definition of ``suffix''.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4624,7 +4626,64 @@ We assume that a suffix of a maximal LSS is not maximal.
     \Eref{eq:th-maximal-lss-suffixes-10}.
 \end{gathered}
 \end{equation}
-\todo{Prove Maximal LSS suffixes}
+\begin{equation}
+\label{eq:th-maximal-lss-suffixes-24}
+\begin{gathered}
+\Vlss{longer2} = \tuple{
+    \Velement{max}{0} \ldots \Velement{max}{\Vlastix{suf}},
+    \Veim{extend1}
+    } \\
+    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
+    \Eref{eq:th-maximal-lss-suffixes-18},
+    \Eref{eq:th-maximal-lss-suffixes-20},
+    \Eref{eq:th-maximal-lss-suffixes-22}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-suffixes-26}
+\myparbox{%
+   \var{max} is a proper prefix of \var{longer2} \cuz{}
+    \Eref{eq:th-maximal-lss-suffixes-24}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-suffixes-28}
+\text{\var{max} is not maximal \cuz{}
+    \longDfref{maximal LSS}{def:maximal-lss},
+    \Eref{eq:th-maximal-lss-suffixes-26}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-suffixes-30}
+\myparbox{\var{suf} is maximal \cuz{}
+    contradiction
+    \Eref{eq:th-maximal-lss-suffixes-10} vs.
+    \Eref{eq:th-maximal-lss-suffixes-28},
+    showing reductio from
+    \Eref{eq:th-maximal-lss-suffixes-14}.
+}
+\end{equation}
+The theorem is
+\Eref{eq:th-maximal-lss-suffixes-13}
+and
+\Eref{eq:th-maximal-lss-suffixes-30}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Bottom LIM invariant]
+\label{th:bottom lim invariant}
+Let \mylim{\ell} be a
+LIM of the bottom EIM of a maximal
+LSS.
+Then
+\[
+\DR{\var{top}} = \DR{\ell} \land \Origin{\var{top}} = \Origin{\ell},
+\]
+where \Veim{top} is the top of the LSS.
+\end{theorem}
+
+\begin{proof}
+\todo{prove bottom lim invariant}
 \end{proof}
 
 \begin{theorem}[LIM uniqueness by source]
@@ -4634,6 +4693,7 @@ Also, the \LIMPredecessor{} function exists.
 \end{theorem}
 
 \begin{proof}
+The proof is by induction on the length of the LSS.
 \todo{LIM uniqueness by source}
 \myqed
 \end{proof}
