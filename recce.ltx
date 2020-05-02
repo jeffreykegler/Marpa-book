@@ -3290,14 +3290,14 @@ Earley left the field shortly thereafter ---
 by 1973 he had earned a second Ph.D. and
 was a practicing psychotherapist in California.
 
-In the late 1980's, Joop Leo
-also conjectured that
-Earley's algorithm could be modified to be linear for all
+In a 1991 paper, Joop Leo~\cite{Leo1991}
+showed that Earley had been correct ---
+the algorithm of Earley 1968~\cite{Earley1968}
+could be modified to be linear for all
 DCFG's.
-Leo was initially unaware of Earley's earlier conjecture ---
+Leo did his work while unaware of Earley's earlier conjecture ---
 he discovered it in the course of writing up his
 discovery.
-Leo published his method in~\cite{Leo1991}.
 
 The problem both investigators noticed was that,
 while \Earley{} is \On{}
@@ -3311,17 +3311,17 @@ most of these EIM's will be useless.
 
 Leo's solution was to
 memoize penults.
-Leo restricts the memoization to situations where
+Leo restricted the memoization to situations where
 the penult is unambiguous.
+
+\subsection{\Marpa{} and right recursion}
+
 Every right recursion involves a penult,
 so that Leo's method memoizes right recursions.
 In \cite{Leo1991}, Leo
 showed that,
 with his modification, \Earley{}
 is \On{} for all LR-regular grammars.
-
-\subsection{\Marpa{} and right recursion}
-
 Recall that we
 call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
@@ -3364,13 +3364,14 @@ show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
 
-% TODO: Reference to Leo chain -- cataphoric?
+\todo{Reference to Leo chain -- cataphoric?}
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
 $\es{(0)}$ memoization
 would have to be implemented as a special case,
 and omission of a Leo memoization at one end of a Leo
 chain unions at one EIM into the Earley tables.
+\todo{Check claim about Leo omissions}
 If the difference is measurable
 $\es{(0)}$ memoization will probably be found to
 be counter-productive.
@@ -3500,22 +3501,30 @@ Leo items ``stand in'' for an EIM source.
    \land \; \Transition{\ell} = \Postdot{\var{source}}.
 \end{gathered}
 \end{equation*}
-We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}
-if and only if
+We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}.
+We will also use the alternative notation
 \[
-\myfn{Source2}{\Veim{source},\mylim{\ell}}.
+\Source{\mylim{\ell}} \defined \Veim{source} :
+\myfn{Source2}{\Veim{source},\mylim{\ell}}
 \]
-We can also write
-\myfn{Source2}{\Veim{source},\mylim{\ell}} as
-\[
-\Source{\mylim{\ell}} = \Veim{source}
-\]
-and this alternative notation will be used once
-we show that the \Source{} function,
-as we have just defined it,
-exists.
+once we prove that \Source{} is, in fact, a function.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[Source--LIM connection]
+\label{th:source-lim-connection}
+\[
+\begin{gathered}
+    \myfn{Source2}{\Veim{source},\mylim{\ell}} \implies \\
+    \Current{\var{source}} = \Current{\ell} \\
+    \land \; \Postdot{\var{source}} = \Transition{\ell}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Source--LIM connection}
+\end{proof}
 
 \begin{definition}[LIM predecessor]
 \label{def:lim-predecessor}
@@ -3530,17 +3539,31 @@ exists.
 We say that \Vlim{pred} is the \dfn{LIM predecessor}
 of \Veim{succ} if and only if
 \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
-We can also write
-\myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} as
+We will also use the alternative notation
 \[
-\LIMPredecessor{\var{succ}} = \var{pred}
+\begin{gathered}
+\LIMPredecessor{\var{succ}} \defined \\
+\var{pred} : \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}
+\end{gathered}
 \]
-and this alternative notation will be used once
-we show that the \LIMPredecessor{} function,
-as we have just defined it,
-exists.
+once we prove that \LIMPredecessor{} is, in fact, a function.
 \dispEnd{}
 \end{definition}
+
+\begin{theorem}[LIM predecessor connection]
+\label{th:lim-predecessor-connection}
+\[
+\begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \implies \\
+    \Origin{\var{prev}} = \Current{\ell} \\
+    \land \; \LHS{\var{prev}} = \Transition{\ell}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Prove LIM predecessor connection}
+\end{proof}
 
 \begin{definition}[LIM matching]
 To deal with LIM's,
@@ -3573,14 +3596,10 @@ if and only if
 
 We say that an arbitrary LIM,
 \Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
-if and only if
+if and only if we have both
 \begin{gather}
 \label{eq:LIM-valid-22}
-\myfn{Source2}{\Veim{source} , \Vlim{x}}; \\
-\label{eq:LIM-valid-23}
-\Veim{source} \in \LeoEligible{\ES{\Vlim{x}}}; \\
-\label{eq:LIM-valid-24}
-\Postdot{\var{source}} = \Vsym{transition}\text{; and} \\
+\myfn{Source2}{\Veim{source} , \Vlim{x}} \text{ and} \\
 \label{eq:LIM-valid-25}
 \myparbox{\Vlim{x} is consistent with
     \Vlimset{preds},
@@ -3594,9 +3613,9 @@ more formally,
  \left\lbrace
    \begin{gathered}
         \Vlim{pred} :
-        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}.
+        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
    \end{gathered}
-    \right\rbrace
+    \right\rbrace .
 \]
 %
 \Vlim{x} is consistent with an empty set of LIM predecessors
@@ -3606,7 +3625,7 @@ if and only if
 \label{eq:LIM-valid-26}
 \begin{gathered}
 \DR{\var{x}} = \DR{\Source{\Vlim{x}}} \\
-\land \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
+\land \; \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
 \end{gathered}
 \end{equation}
 %
@@ -3618,7 +3637,7 @@ if and only if
 \begin{gathered}
 \exists \; \Vlim{pred} \in \Vlimset{preds} : \\
 \DR{\var{x}} = \DR{\Vlim{pred}} \\
-\land \Origin{\var{x}} = \Origin{\Vlim{pred}}.
+\land \; \Origin{\var{x}} = \Origin{\Vlim{pred}}.
 \end{gathered}
 \end{equation}
 The boolean function \Valid{\Vlim{x}} is true
@@ -3628,8 +3647,8 @@ if and only if \Vlim{x} is valid.
 
 \begin{theorem}[Leo source postdot uniqueness]
 \label{th:leo-source-postdot-uniqueness}
-Let the context be the valid partial parse
-$\tuple{\Vint{g}, \Vstr{prefix}}$.
+Let the context be the parse
+$\tuple{\Vint{g}, \Vstr{w}}$.
 If \Veim{x} is a Leo source,
 then it is the only EIM at that location
 with that postdot symbol.
@@ -3638,9 +3657,9 @@ That is, if
   \label{eq:th-leo-source-postdot-uniqueness-02}
     \Source{\Veim{x},\mylim{\ell}} \\
   \label{eq:th-leo-source-postdot-uniqueness-04}
-    \land \Current{\var{x}} = \Current{\Veim{y}} \\
+    \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-source-postdot-uniqueness-06}
-    \land \Postdot{\var{x}} = \Postdot{\var{y}}
+    \land \; \Postdot{\var{x}} = \Postdot{\var{y}}
 \end{gather}
 then
 \begin{gather}
@@ -3675,7 +3694,7 @@ The proof strategy is direct.
         \forall \; \Veim{z} :
           \left( \begin{gathered}
 	    \Current{\Veim{z}} = \Current{\ell} \\
-            \land \Postdot{\var{x}} = \Postdot{\var{z}} \\
+            \land \; \Postdot{\var{x}} = \Postdot{\var{z}} \\
             \implies \var{x} = \var{z}
           \end{gathered} \right) \\
           \because \longDfref{Leo unique}{def:leo-unique},
@@ -3789,7 +3808,7 @@ and will show that $\var{x} = \var{y}$.
 \end{gathered}
 \end{equation}
 This shows
-\Eref{eq:th-leo-source-uniqueness-02} of the theorem,
+\Eref{eq:th-leo-source-uniqueness-02} of the theorem.
 From \Eref{eq:th-leo-source-uniqueness-02},
 it directly follows that the \Source{} function exists.
 \myqed
@@ -3799,8 +3818,8 @@ it directly follows that the \Source{} function exists.
 \[
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
-\defined
-\myfn{LIM-Predecessor-2}{\ell,\var{prev}} \land (\Veim{next} = \Source{\ell}).
+\defined \;
+\exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \land \Veim{next} = \Source{\ell}.
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
@@ -3811,8 +3830,9 @@ We will also use the alternative notation
 \NextSource{\Veim{prev}} \defined \\
 \left\lbrace
     \begin{array}{ll}
-    \Lambda, & \text{if }\neg \exists \mylim{\ell} :
-        \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+    \Lambda, & \text{if } \neg
+        (\exists \mylim{\ell} :
+            \myfn{LIM-Predecessor-2}{\ell,\var{prev}}) \\
     \Source{\ell}, & \text{if }\myfn{LIM-Predecessor-2}{\mylim{\ell},\var{prev}}
     \end{array}
 \right.
@@ -3825,93 +3845,150 @@ function, as defined, actually exists.
 
 \begin{theorem}[Leo next source uniqueness]
 \label{th:leo-source-predecessor-uniqueness}
-\begin{gather}
+\begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-04}
-\myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \implies \\
-\label{eq:th-leo-source-predecessor-uniqueness-08}
-\left(
-    \begin{gathered}
-    \forall \; \Veim{next} \in \set{\Veim{x} : \Matches{\var{x}, \var{prev}}} : \\
-    \var{next} = \Source{\ell}.
-    \end{gathered}
-\right)
-\end{gather}
+\begin{gathered}
+    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
+    \land \; \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \\
+    \implies \var{next1} = \var{next2}.
+\end{gathered}
+\end{equation}
 Also, the \NextSource{} function exists.
 \end{theorem}
 
 \begin{proof}
 \todo{Review and revise}
 The proof strategy is direct.
-We assume that \Veim{succ} is the second element
-of two matches:
-\Matches{\Veim{x}, \var{succ}}
-and \Matches{\Veim{y}, \var{succ}},
-where \var{y} is a Leo source,
-and will show that $\var{x} = \var{y}$.
 \begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-10-20}
-\begin{gathered}
-\Source{\ell} = \Veim{y} \\
-\because \longDfref{LIM predecessor}{def:lim-predecessor},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-04},
-    \text{AF proof.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-10-30}
-\Matches{\var{y}, \var{succ}} \because
-    \Dfref{def:lim-predecessor},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-04},
-    \text{AF proof.}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-10-40}
-\Matches{\var{x}, \var{succ}} \because \text{AF proof.}
+\label{eq:th-leo-source-predecessor-uniqueness-10}
+    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-12}
-\Postdot{\var{x}} = \LHS{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-10-40}.
+    \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-14}
-\Postdot{\var{y}} = \LHS{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-10-30}.
+\myfn{LIM-Predecessor-2}{\ell1,\var{prev}}
+\because \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-15}
+\Veim{next1} = \Source{\ell1}
+\because \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-16}
-\Postdot{\var{y}} = \Postdot{\var{x}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-12},
+\myfn{LIM-Predecessor-2}{\ell2,\var{prev}}
+\because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-17}
+\Veim{next2} = \Source{\ell1}
+\because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-34}
+\LHS{\var{prev}} = \Transition{\ell1}
+    \because \Thref{th:source-lim-connection},
     \Eref{eq:th-leo-source-predecessor-uniqueness-14}.
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-18}
-\Current{\var{x}} = \Origin{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-10-40}.
+\label{eq:th-leo-source-predecessor-uniqueness-36}
+\Postdot{\var{next1}} = \Transition{\ell1}
+    \because \Thref{th:lim-predecessor-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-15}.
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-20}
-\Current{\var{y}} = \Origin{\var{succ}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-10-30}.
+\label{eq:th-leo-source-predecessor-uniqueness-38}
+\Postdot{\var{next1}} = \LHS{\var{prev}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-34},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-36}.
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-40}
+\LHS{\var{prev}} = \Transition{\ell2}
+    \because \Thref{th:source-lim-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-16}.
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-22}
-\Current{\var{y}} = \Current{\var{x}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-18},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-20}.
+\label{eq:th-leo-source-predecessor-uniqueness-42}
+\Postdot{\var{next2}} = \Transition{\ell2}
+    \because \Thref{th:lim-predecessor-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-17}.
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-48}
+\label{eq:th-leo-source-predecessor-uniqueness-44}
+\Postdot{\var{next2}} = \LHS{\var{prev}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-40},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-42}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-46}
+\Postdot{\var{next1}} = \Postdot{\var{next2}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-38},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-44}.
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-54}
+\Origin{\var{prev}} = \Current{\ell1}
+    \because \Thref{th:source-lim-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-56}
+\Current{\var{next1}} = \Current{\ell1}
+    \because \Thref{th:lim-predecessor-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-15}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-58}
+\Current{\var{next1}} = \Origin{\var{prev}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-54},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-56}.
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-60}
+\Origin{\var{prev}} = \Current{\ell2}
+    \because \Thref{th:source-lim-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-16}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-62}
+\Current{\var{next2}} = \Current{\ell2}
+    \because \Thref{th:lim-predecessor-connection},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-17}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-64}
+\Current{\var{next2}} = \Origin{\var{prev}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-60},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-62}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-66}
+\Current{\var{next1}} = \Current{\var{next2}} \because
+    \Eref{eq:th-leo-source-predecessor-uniqueness-58},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-64}.
+\end{equation}
+
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-80}
 \begin{gathered}
     \var{y} = \var{x}
     \because
         \Thref{th:leo-source-postdot-uniqueness},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-10-20},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-16},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-22}.
+        \Eref{eq:th-leo-source-predecessor-uniqueness-15},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-46},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-66}.
         \quad \myqed
 \end{gathered}
 \end{equation}
+\myqed
 \end{proof}
 
 \begin{definition}[Leo source sequence [LSS]]
