@@ -3681,72 +3681,6 @@ we overload \var{Matches} as follows:
 \end{equation*}
 \end{definition}
 
-\begin{definition}[LIM validity]
-\label{def:lim-validity}
-Let, without loss of generality,
-\begin{equation}
-\label{eq:LIM-valid-10}
-\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
-\end{equation}
-be a LIM.
-\Vlim{x} is \dfn{valid}
-if and only if
-\begin{equation}
-\label{eq:LIM-valid-20}
-\text{\Vlim{x} is consistent with a valid source.}
-\end{equation}
-
-We say that an arbitrary LIM,
-\Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
-if and only if we have both of the following:
-\begin{gather}
-\label{eq:LIM-valid-22}
-\myfn{Source2}{\Veim{source} , \Vlim{x}} \text{ and} \\
-\label{eq:LIM-valid-25}
-\myparbox{\Vlim{x} is consistent with
-    \Vlimset{preds}.
-}
-\end{gather}
-In \Eref{eq:LIM-valid-25},
-\var{preds} is the set of LIM predecessors of \Veim{source} or,
-more formally,
-\[
-\Vlimset{preds} =
- \left\lbrace
-   \begin{gathered}
-        \Vlim{pred} :
-        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
-   \end{gathered}
-    \right\rbrace .
-\]
-%
-\Vlim{x} is consistent with an empty set of LIM predecessors
-($\var{preds} = \emptyset$),
-if and only if
-\begin{equation}
-\label{eq:LIM-valid-26}
-\begin{gathered}
-\DR{\var{x}} = \DR{\Source{\Vlim{x}}} \\
-\land \; \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
-\end{gathered}
-\end{equation}
-%
-\Vlim{x} is consistent with a non-empty set of LIM predecessors
-($\var{preds} \neq \emptyset$),
-if and only if
-\begin{equation}
-\label{eq:LIM-valid-30}
-\begin{gathered}
-\exists \; \Vlim{pred} \in \Vlimset{preds} : \\
-\DR{\var{x}} = \DR{\Vlim{pred}} \\
-\land \; \Origin{\var{x}} = \Origin{\Vlim{pred}}.
-\end{gathered}
-\end{equation}
-The boolean function \Valid{\Vlim{x}} is true
-if and only if \Vlim{x} is valid.
-\dispEnd
-\end{definition}
-
 \begin{theorem}[Leo source postdot uniqueness]
 \label{th:leo-source-postdot-uniqueness}
 Let the context be the parse
@@ -3904,6 +3838,74 @@ it directly follows that the \Source{} function exists.
 \myqed
 \end{proof}
 
+\subsection{Leo item validity}
+
+\begin{definition}[LIM validity]
+\label{def:lim-validity}
+Let, without loss of generality,
+\begin{equation}
+\label{eq:LIM-valid-10}
+\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
+\end{equation}
+be a LIM.
+\Vlim{x} is \dfn{valid}
+if and only if
+\begin{equation}
+\label{eq:LIM-valid-20}
+\text{\Vlim{x} is consistent with a valid source.}
+\end{equation}
+
+We say that an arbitrary LIM,
+\Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
+if and only if we have both of the following:
+\begin{gather}
+\label{eq:LIM-valid-22}
+\myfn{Source2}{\Veim{source} , \Vlim{x}} \text{ and} \\
+\label{eq:LIM-valid-25}
+\myparbox{\Vlim{x} is consistent with
+    \Vlimset{preds}.
+}
+\end{gather}
+In \Eref{eq:LIM-valid-25},
+\var{preds} is the set of LIM predecessors of \Veim{source} or,
+more formally,
+\[
+\Vlimset{preds} =
+ \left\lbrace
+   \begin{gathered}
+        \Vlim{pred} :
+        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
+   \end{gathered}
+    \right\rbrace .
+\]
+%
+\Vlim{x} is consistent with an empty set of LIM predecessors
+($\var{preds} = \emptyset$),
+if and only if
+\begin{equation}
+\label{eq:LIM-valid-26}
+\begin{gathered}
+\DR{\var{x}} = \DR{\Source{\Vlim{x}}} \\
+\land \; \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
+\end{gathered}
+\end{equation}
+%
+\Vlim{x} is consistent with a non-empty set of LIM predecessors
+($\var{preds} \neq \emptyset$),
+if and only if
+\begin{equation}
+\label{eq:LIM-valid-30}
+\begin{gathered}
+\exists \; \Vlim{pred} \in \Vlimset{preds} : \\
+\DR{\var{x}} = \DR{\Vlim{pred}} \\
+\land \; \Origin{\var{x}} = \Origin{\Vlim{pred}}.
+\end{gathered}
+\end{equation}
+The boolean function \Valid{\Vlim{x}} is true
+if and only if \Vlim{x} is valid.
+\dispEnd
+\end{definition}
+
 \begin{definition}[Next source EIM]
 \label{def:next-source-EIM}
 \[
@@ -3937,8 +3939,10 @@ function, as defined, actually exists.
 \begin{theorem}[Equivalence of next source and LIM predecessor]
 \label{th:next-source-lim-predecessor-equivalence}
 \[
-(\exists \Veim{next} : \myfn{Next-Source-2}{\Veim{next},\Veim{prev}})
+\begin{gathered}
+(\exists \Veim{next} : \myfn{Next-Source-2}{\Veim{next},\Veim{prev}}) \\
 \iff (\exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{prev}}).
+\end{gathered}
 \]
 \end{theorem}
 
@@ -3961,7 +3965,6 @@ Also, the \NextSource{} function exists.
 \end{theorem}
 
 \begin{proof}
-\todo{Review and revise}
 The proof strategy is direct.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-10}
