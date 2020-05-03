@@ -2850,15 +2850,14 @@ and that \var{r} is a \dfn{left match} of \var{l}.
 
 Three of the loadings of \var{Matches} are as follows.
 The match of an EIM with another EIM,
-\label{def:matches}
-\begin{equation*}
+\begin{equation}
 \label{eq:def-matches-eim-eim}
 \begin{gathered}
 \Matches{\Veim{left},\Veim{right}} \defined \\
 \Postdot{\var{left}} = \Symbol{\var{right}} \\
 \land \; \Current{\var{left}} = \Origin{\var{right}}.
 \end{gathered}
-\end{equation*}
+\end{equation}
 The match of an EIM with a token,
 \begin{equation*}
 \begin{gathered}
@@ -3599,6 +3598,77 @@ once we prove that \LIMPredecessor{} is, in fact, a function.
 \end{theorem}
 
 \begin{proof}
+The proof strategy is direct, assuming the antecedant of
+the theorem to show the consequent.
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-10}
+    \begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
+    \because \text{antecedant of theorem, AF proof.}
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-12}
+    \begin{gathered}
+    \Matches{\Veim{lim-source},\Veim{prev}} \\
+    \because \longDfref{LIM Predecessor}{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-connection-10}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-14}
+    \myfn{Source2}{\var{lim-source},\ell}
+    \because \Dfref{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-connection-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-16}
+    \begin{gathered}
+        \Current{\var{lim-source}} = \Origin{\var{prev}} \\
+            \because \Eref{eq:def-matches-eim-eim}\text{ in }
+                \longDfref{Matching}{def:matching-1},
+            \Eref{eq:th-lim-predecessor-connection-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-18}
+    \begin{gathered}
+        \Postdot{\var{lim-source}} = \LHS{\var{prev}} \\
+        \because \Eref{eq:def-matches-eim-eim}
+        \text{ in }\Dfref{def:matching-1},
+        \Eref{eq:th-lim-predecessor-connection-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-20}
+    \Current{\var{lim-source}} = \Current{\ell} \\
+    \because \Thref{th:source-lim-connection},
+    \Eref{eq:th-lim-predecessor-connection-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-22}
+    \begin{gathered}
+        \Postdot{\var{lim-source}} = \Transition{\ell} \\
+        \because \Thref{th:source-lim-connection},
+        \Eref{eq:th-lim-predecessor-connection-14}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-24}
+    \Origin{\var{prev}} = \Current{\ell} \\
+    \because \Eref{eq:th-lim-predecessor-connection-16},
+    \Eref{eq:th-lim-predecessor-connection-20}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-26}
+    \LHS{\var{prev}} = \Transition{\ell} \\
+    \because \Eref{eq:th-lim-predecessor-connection-18},
+    \Eref{eq:th-lim-predecessor-connection-22}.
+\end{equation}
+The consequent is
+\Eref{eq:th-lim-predecessor-connection-24} and
+    \Eref{eq:th-lim-predecessor-connection-26}.
+\myqed
 \todo{Prove LIM predecessor connection}
 \end{proof}
 
