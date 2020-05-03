@@ -3290,10 +3290,10 @@ by 1973 he had earned a second Ph.D. and
 was a practicing psychotherapist in California.
 
 In a 1991 paper, Joop Leo~\cite{Leo1991}
-showed that Earley had been correct ---
-the algorithm of Earley 1968~\cite{Earley1968}
-could be modified to be linear for all
-DCFG's.
+showed that Earley had been correct.
+Leo modified the algorithm of Earley 1968~\cite{Earley1968}
+to be linear, not just for all DCFG's,
+but for a superset, the LR-regular grammars.
 Leo did his work while unaware of Earley's earlier conjecture ---
 he discovered it in the course of writing up his
 discovery.
@@ -3317,10 +3317,6 @@ the penult is unambiguous.
 
 Every right recursion involves a penult,
 so that Leo's method memoizes right recursions.
-In \cite{Leo1991}, Leo
-showed that,
-with his modification, \Earley{}
-is \On{} for all LR-regular grammars.
 Recall that we
 call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
@@ -3504,7 +3500,7 @@ We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}.
 We will also use the alternative notation
 \[
 \Source{\mylim{\ell}} \defined \Veim{source} :
-\myfn{Source2}{\Veim{source},\mylim{\ell}}
+\myfn{Source2}{\var{source},\ell}
 \]
 once we prove that \Source{} is, in fact, a function.
 \dispEnd
@@ -3669,7 +3665,6 @@ The consequent is
 \Eref{eq:th-lim-predecessor-connection-24} and
     \Eref{eq:th-lim-predecessor-connection-26}.
 \myqed
-\todo{Prove LIM predecessor connection}
 \end{proof}
 
 \begin{definition}[LIM matching]
@@ -3703,17 +3698,17 @@ if and only if
 
 We say that an arbitrary LIM,
 \Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
-if and only if we have both
+if and only if we have both of the following:
 \begin{gather}
 \label{eq:LIM-valid-22}
 \myfn{Source2}{\Veim{source} , \Vlim{x}} \text{ and} \\
 \label{eq:LIM-valid-25}
 \myparbox{\Vlim{x} is consistent with
-    \Vlimset{preds},
+    \Vlimset{preds}.
 }
 \end{gather}
-where \var{preds} in \Eref{eq:LIM-valid-25}
-is the set of LIM predecessors of \Veim{source} or,
+In \Eref{eq:LIM-valid-25},
+\var{preds} is the set of LIM predecessors of \Veim{source} or,
 more formally,
 \[
 \Vlimset{preds} =
@@ -3762,7 +3757,7 @@ with that postdot symbol.
 That is, if
 \begin{gather}
   \label{eq:th-leo-source-postdot-uniqueness-02}
-    \Source{\Veim{x},\mylim{\ell}} \\
+    \Source2{\Veim{x},\mylim{\ell}} \\
   \label{eq:th-leo-source-postdot-uniqueness-04}
     \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-source-postdot-uniqueness-06}
@@ -3780,14 +3775,14 @@ The proof strategy is direct.
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-14}
 \Veim{x} \in \LeoEligible{\ES{\ell}}
-\because \Eref{eq:th-leo-source-postdot-uniqueness-02},
-    \longDfref{Leo source}{def:leo-source}.
+\because \longDfref{Leo source}{def:leo-source},
+    \Eref{eq:th-leo-source-postdot-uniqueness-02}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-16}
 \Current{\var{x}} = \Current{\ell} \because
-    \Eref{eq:th-leo-source-postdot-uniqueness-14}
-    \longDfref{Leo eligible}{def:leo-eligible}.
+    \longDfref{Leo eligible}{def:leo-eligible},
+    \Eref{eq:th-leo-source-postdot-uniqueness-14}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-22}
@@ -3872,25 +3867,13 @@ and will show that $\var{x} = \var{y}$.
 \myfn{Source2}{\Veim{y}, \mylim{\ell}} \because \text{ AF proof.}
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-uniqueness-14}
-\Veim{x} \in \LeoEligible{\ES{\ell}}
-\because \Eref{eq:th-leo-source-uniqueness-10},
-    \longDfref{Leo source}{def:leo-source}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-uniqueness-16}
-\Veim{y} \in \LeoEligible{\ES{\ell}}
-\because \Eref{eq:th-leo-source-uniqueness-12},
-    \longDfref{Leo source}{def:leo-source}.
-\end{equation}
-\begin{equation}
 \label{eq:th-leo-source-uniqueness-18}
 \begin{gathered}
 \Current{\Veim{x}} = \Current{\mylim{\ell}} = \Current{\Veim{y}} \\
    \because
-    \Eref{eq:th-leo-source-uniqueness-14},
-    \Eref{eq:th-leo-source-uniqueness-16},
-    \longDfref{Leo eligible}{def:leo-eligible}.
+    \Thref{th:source-lim-connection},
+    \Eref{eq:th-leo-source-uniqueness-10},
+    \Eref{eq:th-leo-source-uniqueness-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3898,9 +3881,9 @@ and will show that $\var{x} = \var{y}$.
 \begin{gathered}
 \Postdot{\Veim{x}} = \Transition{\mylim{\ell}} = \Postdot{\Veim{y}} \\
    \because
+    \Thref{th:source-lim-connection},
     \Eref{eq:th-leo-source-uniqueness-10},
-    \Eref{eq:th-leo-source-uniqueness-12},
-    \Dfref{def:leo-source}.
+    \Eref{eq:th-leo-source-uniqueness-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3922,6 +3905,7 @@ it directly follows that the \Source{} function exists.
 \end{proof}
 
 \begin{definition}[Next source EIM]
+\label{def:next-source-EIM}
 \[
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
@@ -3949,6 +3933,19 @@ once we show that the \NextSource{}
 function, as defined, actually exists.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[Equivalence of next source and LIM predecessor]
+\label{th:next-source-lim-predecessor-equivalence}
+\[
+(\exists \Veim{next} : \myfn{Next-Source-2}{\Veim{next},\Veim{prev}})
+\iff (\exists \ell : \myfn{LIM-Predecessor-2}{\ell,\var{prev}}).
+\]
+\end{theorem}
+
+\begin{proof}
+Both directions of this equivalence follow directly from
+\longDfref{Next source EIM}{def:next-source-EIM}.
+\end{proof}
 
 \begin{theorem}[Leo next source uniqueness]
 \label{th:leo-source-predecessor-uniqueness}
@@ -4098,6 +4095,8 @@ The proof strategy is direct.
 \myqed
 \end{proof}
 
+\subsection{Leo source sequences}
+
 \begin{definition}[Leo source sequence [LSS]]
 \label{def:leo-source-sequence}
 A \dfn{Leo source EIM sequence},
@@ -4158,8 +4157,7 @@ a Leo source EIM sequence.
 \[
 \begin{gathered}
 \forall \; \var{j} \in \set{ \var{i} : 0 \le \var{i} \le \Vlastix{seq} } : \\
-\Valid{\VVelement{seq}{j}}
-\land \left(
+\left(
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{seq}{j}
 \right).
 \end{gathered}
@@ -4506,7 +4504,7 @@ $\var{lssA1} = \var{lssA2}$ \cuz{}
     \Eref{eq:th-LSS-uniqueness-by-length-40},
     and using the induction hypothesis
         \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$,
-        which was assumed for the step of the induction.%
+        which is assumed for the step of the induction.%
 }
 \end{gathered}
 \end{equation}
@@ -4583,7 +4581,9 @@ of the induction hypothesis
 \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$,
 which we sought to show beginning at
 \Eref{eq:th-LSS-uniqueness-by-length-28}.
-With the step of the induction we have the induction, and the theorem.
+With the consequent we have the step of the induction,
+with the step of the induction we have the induction,
+and with the induction we have the theorem.
 \myqed
 \end{proof}
 
