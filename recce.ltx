@@ -3838,6 +3838,44 @@ it directly follows that the \Source{} function exists.
 \myqed
 \end{proof}
 
+\begin{theorem}[Leo source EIM count]
+\label{th:leo-source-eim-count}
+There are at most \size{\Vocab{\var{g}}} Leo source
+EIM's in any valid ES.
+That is, if \Vesseq{table} is a valid Earley table for the
+context parse,
+\[
+\begin{gathered}
+\forall \Ves{j} \in \var{table} : \\
+\bigsize{
+   \set{
+       \begin{gathered}
+            \Veim{src} \in \Ves{j} : \\
+            (\exists \mylim{\ell} : \Source{\ell} = \var{src})
+       \end{gathered}
+   }
+}
+\le \bigsize{\Vocab{\var{g}}}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+Let \Veim{ls} be a Leo source EIM in \Ves{j}.
+By \Thref{th:leo-source-postdot-uniqueness},
+\Veim{ls} is the only EIM in \Ves{j}
+with \Postdot{\var{ls}} as its postdot symbol.
+This means there cannot be more Leo source EIM's
+in \Ves{j} than there are postdot symbols.
+There are only
+$\size{\Vocab{\var{g}}}$ symbols in \Vint{g},
+so the number of postdot symbols,
+and therefore the number of Leo source EIM's,
+cannot exceed
+$\size{\Vocab{\var{g}}}$.
+\myqed
+\end{proof}
+
 \subsection{Leo item validity}
 
 \begin{definition}[LIM validity]
@@ -4302,45 +4340,6 @@ Then
         \myqed%
 }
 \end{equation}
-\end{proof}
-
-\begin{theorem}[Leo source EIM count]
-\label{th:leo-source-eim-count}
-Let the context be the partial parse
-$\var{p} = \tuple{\Vint{g}, \Vstr{partial}}$,
-Then there are at most \size{\Vocab{\var{g}}} Leo source
-EIM's in any ES.
-That is, where \Vesseq{table} is a valid Earley table for \var{p},
-\[
-\begin{gathered}
-\forall \Ves{j} \in \var{table} : \\
-\bigsize{
-   \set{
-       \begin{gathered}
-            \Veim{src} \in \Ves{j} : \\
-            (\exists \mylim{\ell} : \Source{\ell} = \var{src})
-       \end{gathered}
-   }
-}
-\le \bigsize{\Vocab{\var{g}}}.
-\end{gathered}
-\]
-\end{theorem}
-
-\begin{proof}
-Assume for a reductio that there are
-$\size{\Vocab{\var{g}}} + 1$ Leo source EIM's
-in an ES, call it \Ves{j}.
-Each Leo source EIM is Leo eligible and therefore
-Leo unique.
-Since each Leo source EIM in \Ves{j} is Leo unique,
-its postdot symbol is unique.
-But there are only
-$\size{\Vocab{\var{g}}}$ symbols in \Vint{g},
-so that at least two of the postdot symbols must
-be identical.
-This shows the reductio and the theorem.
-\myqed
 \end{proof}
 
 \begin{theorem}[LSS finiteness]
