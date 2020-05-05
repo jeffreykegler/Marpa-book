@@ -924,6 +924,54 @@ $\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate o
 \end{table}
 
 \todo{Rewrite type system description, add "context" discussion}
+Parsing theory examples usually require a cumbersome ``setup''
+during which the various variables are introducted and related to
+each other.
+These setups are repetitive, tedious,
+and usually obvious in their details.
+In this paper we try to avoid them in favor of
+a system of ``contextual binding''.
+We believe
+that the reader will find this system intuitive
+to the degree that the reader is able to ignore it.
+
+Variables in this paper are bound to a ``scope''.
+Our concept of scope is almost exactly the same as
+that implicitly in use
+in most mathematical texts.
+In this paper, scope is part
+The idea of ``scope'' plays a role in the contextual
+bindings, so we will state it explicitly.
+
+Every definition is a scope.
+The defiens is visible only within a definition's
+scope, but the defiendum is visible outside it.
+
+Every theorem or lemma is a scope, and
+the associated proof is also within that scope.
+Only the theorem or lemma itself is visible outside
+that scope.
+Every proof also creates its own scope.
+An observation is a scope, with only the observation
+itself begin visible outside the scope.
+
+A top-level scope begins at a specific point in the
+main text of the paper and,
+unless stated otherwise,
+continues to the end of the paper.
+The entire paper is a top-level scope.
+Other top-level scopes will be introduced
+explicitly.
+
+When a new variable is introduced,
+unless otherwise stated,
+it is bound to,
+and visible only within,
+the most recent scope.
+Also, the opening of a scope can
+implicitly introduce new ``context variables''.
+The specifics of context variables will be described later.
+
 For the purposes of this paper,
 we use a simple and opportunistic type system.
 A \dfn{type} is a set of values which
@@ -1193,6 +1241,20 @@ $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
 \dispEnd
 \end{definition}
 
+\begin{definition}[Context grammar]
+From this point on, every newly
+created scope has a \dfn{context grammar}.
+Until redefined,
+and unless stated otherwise,
+the context grammar of
+every new scope will be \Vcfg{g}.
+A new top-level scope begins immediately after
+this definition.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Rule size]
+\label{def:rule-size}
 The size of \var{r}, $\size{\Vrule{r}}$,
 is the number of symbols on its RHS,
 so that
@@ -1203,6 +1265,7 @@ If $\size{\Vrule{r}} = 0$, then \Vrule{r}
 is an \dfn{empty rule}.
 If $\size{\Vrule{r}} = 1$, then \Vrule{r}
 is a \dfn{unit rule}.
+\end{definition}
 
 \begin{definition}[Terminal string convention]
 \label{def:terminal-string}
