@@ -1277,13 +1277,29 @@ for the ``floor'' operation: for example,
 \Vterm{terminal}.
 \end{definition}
 
-Where the choice of \Vcfg{g} is clear in context,
-and unless otherwise specified,
-use of the types \type{SYM}, \type{STR} and \type{RULE},
-and of bracketing in angle brackets or ``floor'' brackets,
-will bind
-their variables.
-Specifically,
+We now introduce the first of the ``binding assumptions'' ---
+assumptions that are by default implicitly made,
+when a new variable
+is introduced.
+We will use these ``binding assumptions'' to eliminate
+the tedious and repetitive ``setup'' of each new scope
+that has been used in the parsing literature.
+
+\begin{definition}[SYM, STR and RULE binding assumptions]
+\label{def:sym-str-rule-binding}
+Let \var{cg} be the context grammar of the most recent scope
+when a variable is bound.
+Unless otherwise stated,
+\begin{itemize}
+\item a variable of \type{SYM} is assumed to be an element of \Vocab{\var{cg}};
+\item a variable of \type{STR} is assumed to be an element of $\Vocab{\var{cg}}^\ast$; and
+\item a variable of \type{RULE} is assumed to be an element of \Rules{\var{cg}}.
+\end{itemize}
+\dispEnd
+\end{definition}
+
+As examples of
+\Dfref{def:sym-str-rule-binding},
 \begin{align*}
 & \text{\Vsym{sym} will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
 & \text{$\var{sym}_\type{SYM}$ will imply that $\Vsym{sym} \in \Vocab{\var{g}}$}, \\
