@@ -1464,12 +1464,18 @@ a full parse is a special case of a partial parse.
 
 \begin{definition}[Context parse]
 \label{def:context-parse-cfg}
-Our discussion will assume they context are in
-the context of a parse, called the \dfn{context parse}.
-Unless otherwise stated,
-and until redefined in \Dfref{def:context-parse-int},
-the context parse is
-the partial parse $[\Vcfg{g}, \Vstr{prefix}]$.
+From this point on, every newly
+created scope has a \dfn{context parse},
+and a \dfn{context input}.
+Until redefined,
+and unless stated otherwise,
+the context parse of
+every new scope will be
+the partial parse $[\Vcfg{g}, \Vstr{w}]$,
+the context input will be \Vstr{w},
+and the context grammar will be \Vcfg{g}.
+A new top-level scope begins immediately after
+this definition.
 \dispEnd
 \end{definition}
 
@@ -2433,15 +2439,17 @@ so that
 \end{equation}
 \end{proof}
 
-\begin{definition}[Default context parse]
+\begin{definition}[Internal grammar context parse]
 \label{def:context-parse-int}
-In \Dfref{def:context-parse-cfg}
-we defined the context parse,
-and we stated its default value.
-We now redefine the default value of the context parse.
-Except where otherwise stated,
-the context grammar for the rest of this paper is
-the partial parse $[\Vint{g}, \Vstr{prefix}]$.
+From this point on,
+and unless stated otherwise,
+the context parse of
+every new scope will be
+the partial parse $[\Vint{g}, \Vstr{w}]$,
+the context input will be \Vstr{w},
+and the context grammar will be \Vint{g}.
+A new top-level scope begins immediately after
+this definition.
 \dispEnd
 \end{definition}
 
@@ -3356,8 +3364,9 @@ The theorem follows from
 
 \subsection{Joop Leo's discovery}
 
-Jay Earley conjectured~\cite[p. 60]{Earley1968}
-that \Earley{} could be
+In this 1968 Ph.D. thesis~\cite[p. 60]{Earley1968},
+Jay Earley conjectured
+that \Earley\! could be
 modified to be \On{} for
 all deterministic context-free grammars (DCFG's).
 (Recall that the DCFG's are the union of the
@@ -3370,8 +3379,8 @@ was a practicing psychotherapist in California.
 
 In a 1991 paper, Joop Leo~\cite{Leo1991}
 showed that Earley had been correct.
-Leo modified the algorithm of Earley 1968~\cite{Earley1968}
-to be linear, not just for all DCFG's,
+Leo modified the algorithm of Earley to be linear,
+not just for all DCFG's,
 but for a superset, the LR-regular grammars.
 Leo did his work while unaware of Earley's earlier conjecture ---
 he discovered it in the course of writing up his
@@ -3381,10 +3390,10 @@ The problem both investigators noticed was that,
 while \Earley{} is \On{}
 for left recursion,
 it is $\order{\var{n}^2}$ for right recursion.
-This is because \Earley creates EIM's
+This is because \Earley\! creates EIM's
 to represent a right recursion at every parse location
 where the right recursion might end.
-For those locations where the right recursion does not end,
+At those locations where the right recursion does not end,
 most of these EIM's will be useless.
 
 Leo's solution was to
@@ -3395,11 +3404,12 @@ the penult is unambiguous.
 \subsection{\Marpa{} and right recursion}
 
 Every right recursion involves a penult,
-so that Leo's method memoizes right recursions.
+so that Leo's method also memoizes right recursions.
 Recall that we
 call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
+
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
 For \Marpa{} to consider a dotted rule
 \begin{equation*}
@@ -3428,7 +3438,7 @@ but may occur often enough to be worth
 providing for.
 
 % TODO Refer to proof that omission memoization does not affect correctness
-Omission of a memoization does not affect correctness,
+Omission of a Leo memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
 % TODO Add ref instead of "Later"
@@ -3510,24 +3520,27 @@ may be written
 
 \begin{definition}[Leo unique]
 \label{def:leo-unique}
-\LeoUnique{\Ves{j}} is defined as
 \begin{equation}
 \label{eq:def-leo-unique}
+\begin{gathered}
+\LeoUnique{\Ves{j}} \defined \\
   \left\lbrace
     \begin{gathered}
-    \Veim{x} \in \set{\var{x} \in \Ves{j} :
-        \Penult{\var{x}} = \Postdot{\var{x}} } :
+    \Veim{x} \in \set{
+        \begin{gathered}
+        \var{x} \in \Ves{j} : \\
+        \Penult{\var{x}} = \Postdot{\var{x}}
+        \end{gathered} } :
     \\
         \forall \; \Veim{y} \in \Ves{j} : \\
           \left(
-            \begin{gathered}
             \Postdot{\var{x}} = \Postdot{\var{y}}
             \implies
             \var{x} = \var{y}
-            \end{gathered}
           \right). \\
     \end{gathered}
   \right\rbrace
+\end{gathered}
 \end{equation}
 Note in
 \Eref{eq:def-leo-unique}
@@ -3546,9 +3559,9 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 
 \begin{definition}[Leo Eligible]
 \label{def:leo-eligible}
-\LeoEligible{\Ves{i}} is defined as
 \begin{equation*}
 \label{eq:def-leo-eligible}
+\LeoEligible{\Ves{i}} \defined \\
 \left\lbrace \;\;
 \begin{gathered}
 \Veim{eligible} \in \Ves{i} : \\
