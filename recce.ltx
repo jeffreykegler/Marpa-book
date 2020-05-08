@@ -3949,7 +3949,7 @@ context parse,
 \begin{proof}
 Let \Veim{ls} be a Leo source EIM in \Ves{j}.
 By \Thref{th:leo-source-postdot-uniqueness},
-\Veim{ls} is the only EIM in \Ves{j}
+\var{ls} is the only EIM in \Ves{j}
 with \Postdot{\var{ls}} as its postdot symbol.
 This means there cannot be more Leo source EIM's
 in \Ves{j} than there are postdot symbols.
@@ -3962,7 +3962,7 @@ $\size{\Vocab{\var{g}}}$.
 \myqed
 \end{proof}
 
-\subsection{Leo item validity}
+\subsection{LIM predecessors}
 
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
@@ -3991,8 +3991,8 @@ if and only if we have both of the following:
 }
 \end{gather}
 In \Eref{eq:LIM-valid-25},
-\var{preds} is the set of LIM predecessors of \Veim{source} or,
-more formally,
+\var{preds} is the set of LIM predecessors of \Veim{source}.
+More formally,
 \[
 \Vlimset{preds} =
  \left\lbrace
@@ -4004,7 +4004,7 @@ more formally,
 \]
 %
 \Vlim{x} is consistent with an empty set of LIM predecessors
-($\var{preds} = \emptyset$),
+($\var{preds} = \emptyset$)
 if and only if
 \begin{equation}
 \label{eq:LIM-valid-26}
@@ -4015,7 +4015,7 @@ if and only if
 \end{equation}
 %
 \Vlim{x} is consistent with a non-empty set of LIM predecessors
-($\var{preds} \neq \emptyset$),
+($\var{preds} \neq \emptyset$)
 if and only if
 \begin{equation}
 \label{eq:LIM-valid-30}
@@ -4031,7 +4031,7 @@ if and only if \Vlim{x} is valid.
 \end{definition}
 
 \begin{definition}[Next source EIM]
-\label{def:next-source-EIM}
+\label{def:next-source-eim}
 \[
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
@@ -4040,7 +4040,7 @@ if and only if \Vlim{x} is valid.
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
-or \dfn{next source} of \Veim{prev}.
+or \dfn{next source}, of \Veim{prev}.
 We will also use the alternative notation
 \[
 \begin{gathered}
@@ -4048,9 +4048,9 @@ We will also use the alternative notation
 \left\lbrace
     \begin{array}{ll}
     \Lambda, & \text{if } \neg
-        (\exists \mylim{\ell} :
-            \myfn{LIM-Predecessor-2}{\ell,\var{prev}}) \\
-    \Source{\ell}, & \text{if }\myfn{LIM-Predecessor-2}{\mylim{\ell},\var{prev}}
+        (\exists \Veim{next} :
+            \myfn{Next-Source-2}{\var{next},\var{prev}}) \\
+    \Veim{next}, & \text{if }\myfn{Next-Source-2}{\var{next},\var{prev}}
     \end{array}
 \right.
 \end{gathered}
@@ -4072,7 +4072,7 @@ function, as defined, actually exists.
 
 \begin{proof}
 Both directions of this equivalence follow directly from
-\longDfref{Next source EIM}{def:next-source-EIM}.
+\longDfref{Next source EIM}{def:next-source-eim}.
 \end{proof}
 
 \begin{theorem}[Leo next source uniqueness]
@@ -4118,7 +4118,9 @@ The proof strategy is direct.
 \Veim{next2} = \Source{\ell1}
 \because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
 \end{equation}
-%
+Note that we will eventually discover that $\ell1 = \ell2$.
+But we have yet to prove this, and so cannot use this identity
+to simplify the proof.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-34}
 \LHS{\var{prev}} = \Transition{\ell1}
@@ -4206,7 +4208,6 @@ The proof strategy is direct.
     \Eref{eq:th-leo-source-predecessor-uniqueness-58},
     \Eref{eq:th-leo-source-predecessor-uniqueness-64}.
 \end{equation}
-
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-80}
 \begin{gathered}
@@ -4271,8 +4272,10 @@ For \Velement{seq}{0}, the theorem follows from
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
-and the definition of \longDfref{LIM Predecessor}{def:lim-predecessor}
-and \longDfref{Leo Source}{def:leo-source}.
+and the definitions
+of \longDfref{Next source EIM}{def:next-source-eim},
+of \longDfref{LIM Predecessor}{def:lim-predecessor},
+and of \longDfref{Leo Source}{def:leo-source}.
 \myqed
 \end{proof}
 
@@ -4280,33 +4283,35 @@ and \longDfref{Leo Source}{def:leo-source}.
 \label{def:leo-source-sequence-validity}
 Let \Veimset{seq} be
 a Leo source EIM sequence.
-\var{seq} is \dfn{valid} if and only if
 \[
 \begin{gathered}
+\Valid{\Veimset{seq}} \defined \\
 \forall \; \var{j} \in \set{ \var{i} : 0 \le \var{i} \le \Vlastix{seq} } : \\
 \left(
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{seq}{j}
 \right).
 \end{gathered}
 \]
+We say that \var{seq} is \dfn{valid} if and only if
+\Valid{\var{seq}}.
 \end{definition}
 
 \begin{theorem}[Leo source subsequence validity]
+\todo{Prove Leo source subsequence with and without validity?}
+\todo{Is proof with validity necessary?}
 \label{th:leo-source-subsequence-validity}
+If
 \begin{gather}
 \label{eq:th-leo-source-subsequence-validity-02}
-\text{Let \Veimseq{long} be a valid Leo source subsequence} \\
+\Valid{\Veimseq{long}} \\
 \label{eq:th-leo-source-subsequence-validity-03}
-\text{and let } 0 \le \var{i} \le \var{j} \le \Vlastix{long}.
+\land \; 0 \le \var{i} \le \var{j} \le \Vlastix{long}.
 \end{gather}
 Then
 \begin{gather}
 \label{eq:th-leo-source-subsequence-validity-04}
-\text{\Veimseq{short} is a valid LSS such that} \\
-\label{eq:th-leo-source-subsequence-validity-05}
-\Velement{short}{0} = \VVelement{long}{i} \\
-\label{eq:th-leo-source-subsequence-validity-06}
-\land \; \Velement{short}{\Vlastix{short}} = \VVelement{long}{j}.
+\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS}
+\land \Valid{\Velement{long}{\var{i}\ldots\var{j}}}
 \end{gather}
 \end{theorem}
 
@@ -4324,7 +4329,12 @@ Then
 \label{eq:th-leo-source-subsequence-validity-12}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
-    \Source{\LIMPredecessor{\Velement{long}{\var{n}\subtract 1}}} = \VVelement{long}{n} \\
+    \left(
+    \begin{gathered}
+    \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
+    \land \; \NextSource{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+    \end{gathered}
+    \right) \\
      \because \Eref{eq:def-leo-source-sequence-30}
             \text{ in } \Dfref{def:leo-source-sequence},
      \Eref{eq:th-leo-source-subsequence-validity-02}.
@@ -4334,8 +4344,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-14}
 \begin{gathered}
 \forall \; \var{n} \in \set{ \var{m} : 0 \le \var{m} \le \Vlastix{long} } : \\
-\Valid{\VVelement{long}{n}}
-\land \left(
+\left(
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
 \right) \\
     \because \longDfref{Leo source validity}{def:leo-source-sequence-validity},
@@ -4346,8 +4355,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-16}
 \begin{gathered}
 \exists \mylim{\ell} : \Source{\ell} = \VVelement{long}{i} \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-02},
-     \Eref{eq:th-leo-source-subsequence-validity-03},
+     \because \Eref{eq:th-leo-source-subsequence-validity-03},
      \Eref{eq:th-leo-source-subsequence-validity-14}.
 \end{gathered}
 \end{equation}
@@ -4355,7 +4363,12 @@ Then
 \label{eq:th-leo-source-subsequence-validity-18}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \Source{\LIMPredecessor{\Velement{long}{\var{n}\subtract 1}}} = \VVelement{long}{n} \\
+    \left(
+    \begin{gathered}
+    \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
+    \land \; \NextSource{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
+    \end{gathered}
+    \right) \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
        \Eref{eq:th-leo-source-subsequence-validity-14}.
 \end{gathered}
@@ -4364,8 +4377,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-20}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} \le \var{m} \le \var{j}} : \\
-\Valid{\VVelement{long}{n}}
-\land \left(
+\left(
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
 \right) \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
@@ -4375,8 +4387,7 @@ Then
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-22}
 \Veimseq{short} = \Velement{long}{\var{i}\ldots\var{j}} \because
-    \Eref{eq:th-leo-source-subsequence-validity-04}\text{--}%
-    \Eref{eq:th-leo-source-subsequence-validity-06}.
+    \text{ WLOG.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-24}
@@ -4390,14 +4401,19 @@ Then
 \label{eq:th-leo-source-subsequence-validity-26}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} < 0 \le \Vlastix{short}} : \\
-    \Source{\LIMPredecessor{\Velement{short}{\var{n}\subtract 1}}} = \VVelement{short}{n} \\
+    \left(
+    \begin{gathered}
+    \NextSource{\Velement{short}{\var{n}\subtract 1}} \neq \Lambda \\
+    \land \; \NextSource{\Velement{short}{\var{n}\subtract 1}} = \VVelement{short}{n} \\
+    \end{gathered}
+    \right) \\
      \because \Eref{eq:th-leo-source-subsequence-validity-18},
        \Eref{eq:th-leo-source-subsequence-validity-22}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-28}
-\myparbox{\Veimseq{short} is an LSS
+\myparbox{$\Veimseq{short} \in \type{LSS}$
    \cuz
         \longDfref{Leo source sequence}{def:leo-source-sequence},
         \Eref{eq:th-leo-source-subsequence-validity-24},
@@ -4408,8 +4424,7 @@ Then
 \label{eq:th-leo-source-subsequence-validity-30}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : 0 \le \var{m} \le \Vlastix{short}} : \\
-\Valid{\VVelement{short}{n}} \\
-\land \left(
+\left(
     \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{short}{n}
 \right) \\
      \because
@@ -4419,39 +4434,46 @@ Then
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-32}
-\myparbox{\Veimseq{short} is a valid LSS
+\myparbox{\Valid{\Veimseq{short}}
    \cuz \longDfref{Leo source validity}{def:leo-source-sequence-validity},
         \Eref{eq:th-leo-source-subsequence-validity-28},
         \Eref{eq:th-leo-source-subsequence-validity-30}.
-        \myqed%
 }
 \end{equation}
+\begin{equation}
+\label{eq:th-leo-source-subsequence-validity-34}
+\myparbox{\Valid{\Velement{long}{\var{i}\ldots\var{j}}}
+   \cuz \Eref{eq:th-leo-source-subsequence-validity-22},
+        \Eref{eq:th-leo-source-subsequence-validity-32}.
+}
+\end{equation}
+        \myqed
 \end{proof}
 
 \begin{theorem}[LSS finiteness]
 \label{th:leo-source-sequence-finiteness}
-Let the context be the valid partial parse
-$\tuple{\Vint{g}, \Vstr{partial}}$.
-Let \Veimset{seq} be a valid Leo source EIM sequence
+Let \Vlss{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
-\bigsize{\Veimset{seq}} \le
-    (\Current{\var{bottom}}+1) \times \size{\Vocab{\Vint{g}}}.
+\bigsize{\var{seq}} \le
+    \left(\Current{\Velement{seq}{0}}+1 \right)
+    \times \size{\Vocab{\Vint{g}}}.
 \]
 \end{theorem}
 
 \begin{proof}
-Let \Veimset{seq} be the Leo source EIM sequence
-of \Veim{bottom}@\Ves{j}, an arbitrary Leo source EIM.
+Let \Vlss{seq} be a Leo source EIM sequence.
 From
 \Thref{th:leo-source-eim-count}, we know that there are
 at most \size{\Vocab{\var{g}}} Leo source EIM's
 in any ES.
-The sequence has EIM's in at most
-$\bigsize{\set{0\ldots\var{j}}} = \var{j}+1$
+\Vlss{seq} has EIM's in at most
+\[
+\bigsize{\set{0\ldots\var{\Current{\Velement{seq}{0}}}}} = \Current{\Velement{seq}{0}}+1
+\]
 ES's.
 Therefore, there are at most
-$(\var{j}+1)\times\size{\Vocab{\var{g}}}$
+$(\Current{\Velement{seq}{0}}+1)\times\size{\Vocab{\var{g}}}$
 EIM's in any Leo source EIM sequence.
 \myqed
 \end{proof}
@@ -4472,9 +4494,6 @@ exists for every LSS.
 
 \begin{theorem}[LSS uniqueness by length]
 \label{th:lss-uniqueness-by-length}
-Let the context be the valid partial parse
-$\tuple{\Vint{g}, \Vstr{partial}}$.
-\label{th:LSS-uniqueness-by-length}
 If two LSS's are of the same length and
 have the same bottom, then they are identical.
 \end{theorem}
