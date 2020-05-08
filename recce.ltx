@@ -951,7 +951,6 @@ Every theorem or lemma is a scope, and
 the associated proof is also within that scope.
 Only the theorem or lemma itself is visible outside
 that scope.
-Every proof also creates its own scope.
 An observation is a scope, with only the observation
 itself begin visible outside the scope.
 
@@ -3634,7 +3633,7 @@ the theorem to show the consequent.
 \begin{equation}
 \label{eq:th-source-lim-connection-16}
     \begin{gathered}
-    \Veim{source} \in \Ves{\ES{\Current{\ell}}} \\
+    \Veim{source} \in \ES{\Current{\ell}} \\
         \because \longDfref{Leo eligible}{def:leo-eligible},
         \Eref{eq:th-source-lim-connection-12}.
     \end{gathered}
@@ -3775,15 +3774,13 @@ we overload \var{Matches} as follows:
 
 \begin{theorem}[Leo source postdot uniqueness]
 \label{th:leo-source-postdot-uniqueness}
-Let the context be the parse
-$\tuple{\Vint{g}, \Vstr{w}}$.
 If \Veim{x} is a Leo source,
 then it is the only EIM at that location
 with that postdot symbol.
 That is, if
 \begin{gather}
   \label{eq:th-leo-source-postdot-uniqueness-02}
-    \Source2{\Veim{x},\mylim{\ell}} \\
+    \myfn{Source2}{\Veim{x},\mylim{\ell}} \\
   \label{eq:th-leo-source-postdot-uniqueness-04}
     \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-source-postdot-uniqueness-06}
@@ -3807,8 +3804,8 @@ The proof strategy is direct.
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-16}
 \Current{\var{x}} = \Current{\ell} \because
-    \longDfref{Leo eligible}{def:leo-eligible},
-    \Eref{eq:th-leo-source-postdot-uniqueness-14}.
+    \Thref{th:source-lim-connection},
+    \Eref{eq:th-leo-source-postdot-uniqueness-02}.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-22}
@@ -3821,7 +3818,7 @@ The proof strategy is direct.
 \begin{gathered}
         \forall \; \Veim{z} :
           \left( \begin{gathered}
-	    \Current{\Veim{z}} = \Current{\ell} \\
+	    \Current{\Veim{z}} \in \ES{\ell} \\
             \land \; \Postdot{\var{x}} = \Postdot{\var{z}} \\
             \implies \var{x} = \var{z}
           \end{gathered} \right) \\
@@ -3831,7 +3828,7 @@ The proof strategy is direct.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-25}
-\Current{\var{y}} = \Current{\ell} \because
+\var{y} in \ES{\ell} \because
   \Eref{eq:th-leo-source-postdot-uniqueness-04}, \Eref{eq:th-leo-source-postdot-uniqueness-16}.
 \end{equation}
 \begin{equation}
@@ -3861,36 +3858,33 @@ The proof strategy is direct.
 
 \begin{theorem}[Leo source uniqueness]
 \label{th:leo-source-uniqueness}
-Every valid LIM has exactly one valid EIM source.
+Every LIM has exactly one EIM source.
 That is,
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-02}
 \begin{gathered}
-\forall \Veim{x} \; \forall \Veim{y} \; \forall \mylim{\ell} \\
-\left(
-    \begin{gathered}
-        \Valid{\var{x}} \land \Valid{\var{y}} \land \Valid{\ell} \\
-        \land \myfn{Source2}{\var{x},\ell} \land \myfn{Source2}{\var{y},\ell}
-    \end{gathered}
-\right)
-\implies \var{x} = \var{y}.
+    \myfn{Source2}{\var{x},\ell} \land \myfn{Source2}{\var{y},\ell}
+    \implies \var{x} = \var{y}.
 \end{gathered}
 \end{equation}
 Also, the function \Source{} exists.
 \end{theorem}
 
 \begin{proof}
-The proof strategy is direct:
-we assume that \mylim{\ell} has two source
-EIM's, \Veim{x} and \Veim{y},
-and will show that $\var{x} = \var{y}$.
+The proof strategy
+for \Eref{eq:th-leo-source-uniqueness-02}
+is direct:
+we assume the antecedant of the theorem
+to show the consequent of the theorem.
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-10}
-\myfn{Source2}{\Veim{x}, \mylim{\ell}} \because \text{ AF proof.}
+\myfn{Source2}{\Veim{x}, \mylim{\ell}}
+    \because \text{ antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-12}
-\myfn{Source2}{\Veim{y}, \mylim{\ell}} \because \text{ AF proof.}
+\myfn{Source2}{\Veim{y}, \mylim{\ell}}
+    \because \text{ antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-18}
@@ -3923,10 +3917,10 @@ and will show that $\var{x} = \var{y}$.
         \Eref{eq:th-leo-source-uniqueness-20}.
 \end{gathered}
 \end{equation}
-This shows
-\Eref{eq:th-leo-source-uniqueness-02} of the theorem.
+\Eref{eq:th-leo-source-uniqueness-10}--\Eref{eq:th-leo-source-uniqueness-28}
+shows \Eref{eq:th-leo-source-uniqueness-02}.
 From \Eref{eq:th-leo-source-uniqueness-02},
-it directly follows that the \Source{} function exists.
+it follows directly that the \Source{} function exists.
 \myqed
 \end{proof}
 
