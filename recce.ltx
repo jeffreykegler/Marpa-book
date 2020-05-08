@@ -220,6 +220,7 @@
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\mapsto\!}\:$}}}
 
+\newcommand{\seq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{{\left[ #1 \right]} }
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
@@ -236,7 +237,7 @@
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
-\newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{[{\var{#2}}]}}}
+\newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{\seq{\var{#2}}}}}
 \newcommand{\element}[2]{\ensuremath{#1\left[#2\right]}}
 \newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
@@ -903,7 +904,8 @@ justifies any risk of confusion.
 \begin{tabular}{ll}
 \hline
 $\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
-$\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate of \type{T}'' \\
+$\var{agg-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
+$\var{agg-one}_\seq{\var{T}}$ & The variable \var{seq-one} of type ``sequence of \type{T}'' \\
 \type{SYM} & The type for a symbol \\
 \type{STR} & The type for a string \\
 \type{EIM} & The type for an Earley item \\
@@ -914,10 +916,12 @@ $\var{agg-one}_\set{\var{T}}$ & The variable \var{agg-one} of type ``aggregate o
 \Vstr{a} & Variable \var{a} of type \type{STR}, angle bracket form \\
 \Veim{a} & Variable \var{a} of type \type{EIM} \\
 \Vrule{a} & Variable \var{a} of type \type{RULE} \\
-\Vsymset{agg-two} & Variable \var{agg-two}, an aggreggate  of strings \\
-\Vstrset{strings} & Variable \var{strings}, an aggreggate of strings \\
-\Veimset{agg-three} & Variable \var{agg-three}, an aggregate of Earley items \\
-\Vruleset{agg-four} & Variable \var{agg-four}, an aggregate of grammar rules \\
+\Vsymset{agg-two} & Variable \var{agg-two}, an set  of strings \\
+\Vstrset{strings} & Variable \var{strings}, an set of strings \\
+\Veimset{agg-three} & Variable \var{agg-three}, an set of Earley items \\
+\Veimseq{agg-three} & Variable \var{agg-three}, an sequence of Earley items \\
+\Vruleset{agg-four} & Variable \var{agg-four}, an set of grammar rules \\
+$\var{i}_\type{$\mathbb{N}$}$ & Variable \var{i}, a non-negative integer \\
 \hline
 \end{tabular}
 \label{tab:type-notation}
@@ -979,10 +983,26 @@ This paper will
 use subscripts to indicate commonly occurring types,
 as shown in
 \Tref{tab:type-notation}.
-This type system
-is intended solely as a convenient way to remind
-the reader of the definitions
-of the variables that are stated in the text.
+
+Since a type is a set,
+we may express facts about types using set notation.
+For example, writing
+\[
+   \var{x} \in \type{T}
+\]
+means that \var{x} has type T,
+and is alternative to writing $\var{x}_\type{T}$.
+We may say that type \type{T1} is a synonym of type \type{T2}
+by writing $\type{T1} = \type{T2}$.
+And if we write that
+\[
+   \type{T1} = \type{T2} \cup \type{T3} \land (\type{T2} \cap \type{T3} = \emptyset)
+\]
+we indicate that a variable type \type{T1} is either
+a variable of type \type{T2}
+or a variable of type \type{T3},
+but that no variable can be both
+of type \type{T2} and of type \type{T3}.
 
 Type subscripts are often omitted when the type
 is clear from the context.
