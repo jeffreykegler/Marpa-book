@@ -3475,7 +3475,7 @@ would have to be implemented as a special case,
 and omission of a Leo memoization at one end of a Leo
 chain unions at one EIM into the Earley tables.
 \todo{Check claim about Leo omissions}
-If the difference is measurable
+If the difference is measurable,
 $\es{(0)}$ memoization will probably be found to
 be counter-productive.
 
@@ -3488,19 +3488,18 @@ In \cite{Leo1991}, penults were memoized
 using what Leo called ``transitive items''.
 In this paper Leo's ``transitive items''
 will be called \dfn{Leo items}.
-Leo items will have type \type{LIM}.
 Recall that every parse item (\type{PIM})
 is either
 an Earley item or a Leo item.
 
-A Leo item (LIM) is a triple.
-Let
-\begin{equation*}
-\Vlim{x} = [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \Ves{j}
-\end{equation*}
-be an arbitrary Leo item at \Ves{j}.
+A Leo item is of type \type{LIM},
+where 
+\[
+\type{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] }.
+\]
+Let \Vlim{x} be a LIM.
 To express the notion that \Vlim{x}
-is at \Ves{j}, we may also write
+is at \Ves{j}, we may write
 \begin{gather*}
     \Vlim{x} @ \Ves{j}, \\
     [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
@@ -3508,7 +3507,7 @@ is at \Ves{j}, we may also write
 \end{gather*}
 We say that
 \Vsym{transition} is the \dfn{transition symbol} of \Vlim{x}@\Vloc{j};
-and that
+and
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
@@ -3548,7 +3547,7 @@ may be written
     \Veim{x} \in \set{
         \begin{gathered}
         \var{x} \in \Ves{j} : \\
-        \Penult{\var{x}} = \Postdot{\var{x}}
+        \Penult{\var{x}} \neq \Lambda
         \end{gathered} } :
     \\
         \forall \; \Veim{y} \in \Ves{j} : \\
@@ -3739,7 +3738,7 @@ The proof strategy is direct.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-25}
-\var{y} in \ES{\ell} \because
+\var{y} \in \ES{\ell} \because
   \Eref{eq:th-leo-source-postdot-uniqueness-04}, \Eref{eq:th-leo-source-postdot-uniqueness-16}.
 \end{equation}
 \begin{equation}
@@ -3790,12 +3789,12 @@ to show the consequent of the theorem.
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-10}
 \myfn{Source2}{\Veim{x}, \mylim{\ell}}
-    \because \text{ antecedant of theorem, AF proof.}
+    \because \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-12}
 \myfn{Source2}{\Veim{y}, \mylim{\ell}}
-    \because \text{ antecedant of theorem, AF proof.}
+    \because \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-18}
@@ -3840,7 +3839,7 @@ it follows directly that the \Source{} function exists.
 There are at most \size{\Vocab{\var{g}}} Leo source
 EIM's in any valid ES.
 That is, if \Vesseq{table} is a valid Earley table for the
-context parse,
+context parse, then
 \[
 \begin{gathered}
 \forall \Ves{j} \in \var{table} : \\
