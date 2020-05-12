@@ -4717,10 +4717,11 @@ We first show that \var{bottom} is the bottom of
 at least one maximal LSS.
 Every Leo source EIM is the bottom of at least one LSS --
 the LSS of length 1 whose only source EIM is \Veim{bottom}.
+Because LSS's are finite, we know that
 \begin{equation}
 \label{th:maximal-lss-uniqueness-10}
 \myparbox{%
-    There is a longest LSS, call it \Vlss{max}
+    there is a longest LSS, call it \Vlss{max},
     such that \Velement{max}{0} = \var{bottom}
     \cuz \Thref{th:leo-source-sequence-finiteness}.%
 }
@@ -4797,6 +4798,10 @@ maximal LSS with the same top EIM.
 Let \Vlss{max} be an arbitrary maximal LSS,
 and \Vlss{suf} an arbitrary suffix of \var{max}:
 \begin{equation}
+\label{eq:th-maximal-lss-suffixes-09}
+\var{max} \in \type{LSS} \cuz{} \text{AF proof.}
+\end{equation}
+\begin{equation}
 \label{eq:th-maximal-lss-suffixes-10}
 \text{\Vlss{max} is maximal \cuz{} AF proof.}
 \end{equation}
@@ -4812,13 +4817,13 @@ and \Vlss{suf} an arbitrary suffix of \var{max}:
 \label{eq:th-maximal-lss-suffixes-13}
 \begin{gathered}
 \Velement{suf}{\Vlastix{suf}} = \Velement{max}{\Vlastix{max}}
-\because \Eref{eq:th-maximal-lss-suffixes-10},
-    \Eref{eq:th-maximal-lss-suffixes-12}.
+\because \Eref{eq:th-maximal-lss-suffixes-12}.
 \end{gathered}
 \end{equation}
 
 From \Eref{eq:th-maximal-lss-suffixes-13}, we see that
 \var{suf} and \var{max} have the same top EIM.
+
 The proof that the suffix is a maximal LSS
 is by reductio.
 We assume that a suffix of a maximal LSS is not maximal.
@@ -4844,24 +4849,46 @@ We assume that a suffix of a maximal LSS is not maximal.
     \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{max}} : \\
     \NextSource{\Velement{max}{\var{n}\subtract 1}} \neq \Lambda \\
     \land \; \VVelement{max}{n} = \NextSource{\Velement{max}{\var{n}\subtract 1}} \\
+    \land \; \left(
+        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{max}{n} \land
+            \Valid{\ell}
+    \right) \\
     \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-maximal-lss-suffixes-10}.
+    \Eref{eq:th-maximal-lss-suffixes-09}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-20}
 \begin{gathered}
-    \Veim{extend1} = \NextSource{\Velement{suf}{\Vlastix{suf}}} \\
+    \NextSource{\Velement{suf}{\Vlastix{suf}}} \neq \Lambda \\
+    \land \; \Veim{extend1} = \NextSource{\Velement{suf}{\Vlastix{suf}}} \\
+    \land \; \left(
+        \exists \; \mylim{\ell} : \Source{\ell} = \Veim{extend1} \land
+            \Valid{\ell}
+    \right) \\
     \because \Dfref{def:leo-source-sequence},
     \Eref{eq:th-maximal-lss-suffixes-16}.
 \end{gathered}
 \end{equation}
 \begin{equation}
+\label{eq:th-maximal-lss-suffixes-21}
+\begin{gathered}
+    \NextSource{\Velement{max}{\Vlastix{max}}} \neq \Lambda \\
+    \land \; \Veim{extend1} = \NextSource{\Velement{max}{\Vlastix{max}}} \\
+    \land \; \left(
+        \exists \; \mylim{\ell} : \Source{\ell} = \Veim{extend1} \land
+            \Valid{\ell}
+    \right) \\
+    \because \Eref{eq:th-maximal-lss-suffixes-13},
+        \Eref{eq:th-maximal-lss-suffixes-20}.
+\end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:th-maximal-lss-suffixes-22}
 \begin{gathered}
-    \exists \mylim{\ell} : \Velement{max}{0} = \Source{\ell} \\
+    \exists \mylim{\ell} : \Velement{max}{0} = \Source{\ell} \land \; \Valid{\ell} \\
     \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-maximal-lss-suffixes-10}.
+    \Eref{eq:th-maximal-lss-suffixes-09}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4871,10 +4898,12 @@ We assume that a suffix of a maximal LSS is not maximal.
     \Velement{max}{0} \ldots \Velement{max}{\Vlastix{suf}},
     \Veim{extend1}
     } \\
-    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-maximal-lss-suffixes-18},
-    \Eref{eq:th-maximal-lss-suffixes-20},
-    \Eref{eq:th-maximal-lss-suffixes-22}.
+    \myparbox{%
+        \cuz{} \longDfref{Leo source sequence}{def:leo-source-sequence},
+        \Eref{eq:th-maximal-lss-suffixes-18},
+        \Eref{eq:th-maximal-lss-suffixes-21},
+        \Eref{eq:th-maximal-lss-suffixes-22}.%
+    }
 \end{gathered}
 \end{equation}
 \begin{equation}
