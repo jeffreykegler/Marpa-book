@@ -4265,14 +4265,14 @@ if and only if \Vlim{x} is valid.
 A \dfn{Leo source EIM sequence},
 or \dfn{Leo source sequence},
 is an EIM sequence defined by the induction
-by induction, as follows.
 \begin{equation}
 \label{eq:def-leo-source-sequence-05}
     \exists \mylim{\ell} :
     \left(
     \begin{gathered}
         \Veim{first} = \Source{\ell} \\
-        \land \; \Velement{seq}{0} = \Veim{first}
+        \land \; \Velement{seq}{0} = \Veim{first} \\
+        \land \; \Valid{\ell}
     \end{gathered}
     \right)
 \end{equation}
@@ -4282,7 +4282,11 @@ and
 \begin{gathered}
     \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
     \NextSource{\Velement{seq}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \VVelement{seq}{n} = \NextSource{\Velement{seq}{\var{n}\subtract 1}}.
+    \land \; \VVelement{seq}{n} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
+    \land \; \left(
+        \forall \; \mylim{\ell} \in \set{ \var{lim} : \Source{\var{lim}} = \VVelement{seq}{n}} :
+            \Valid{\ell}
+    \right).
 \end{gathered}
 \end{equation}
 where \Veim{first} is an EIM.
@@ -4293,7 +4297,7 @@ The type \type{LSS} is the set of Leo source EIM sequences.
 \begin{theorem}[Leo source existence]
 \label{th:leo-source-existence}
 Every EIM of an LSS is the source
-of at least one LIM.
+of at least one valid LIM.
 \end{theorem}
 
 \begin{proof}
@@ -4313,23 +4317,6 @@ of \longDfref{LIM Predecessor}{def:lim-predecessor},
 and of \longDfref{Leo Source}{def:leo-source}.
 \myqed
 \end{proof}
-
-\begin{definition}[LSS validity]
-\label{def:leo-source-sequence-validity}
-Let \Veimset{seq} be
-a Leo source EIM sequence.
-\[
-\begin{gathered}
-\Valid{\Veimset{seq}} \defined \\
-\forall \; \var{j} \in \set{ \var{i} : 0 \le \var{i} \le \Vlastix{seq} } : \\
-\left(
-    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{seq}{j}
-\right).
-\end{gathered}
-\]
-We say that \var{seq} is \dfn{valid} if and only if
-\Valid{\var{seq}}.
-\end{definition}
 
 \begin{theorem}[Leo source subsequence validity]
 \todo{Prove Leo source subsequence with and without validity?}
