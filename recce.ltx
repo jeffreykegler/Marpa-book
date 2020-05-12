@@ -4270,8 +4270,8 @@ is an EIM sequence defined by the induction
     \exists \mylim{\ell} :
     \left(
     \begin{gathered}
-        \Veim{first} = \Source{\ell} \\
-        \land \; \Velement{seq}{0} = \Veim{first} \\
+        \Veim{bottom} = \Source{\ell} \\
+        \land \; \Velement{seq}{0} = \Veim{bottom} \\
         \land \; \Valid{\ell}
     \end{gathered}
     \right)
@@ -4284,12 +4284,12 @@ and
     \NextSource{\Velement{seq}{\var{n}\subtract 1}} \neq \Lambda \\
     \land \; \VVelement{seq}{n} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
     \land \; \left(
-        \forall \; \mylim{\ell} \in \set{ \var{lim} : \Source{\var{lim}} = \VVelement{seq}{n}} :
+        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{seq}{n} \land
             \Valid{\ell}
     \right).
 \end{gathered}
 \end{equation}
-where \Veim{first} is an EIM.
+We say that \Veim{bottom} is the \dfn{bottom} of \var{seq}.
 The type \type{LSS} is the set of Leo source EIM sequences.
 \dispEnd
 \end{definition}
@@ -4318,44 +4318,43 @@ and of \longDfref{Leo Source}{def:leo-source}.
 \myqed
 \end{proof}
 
-\begin{theorem}[Leo source subsequence validity]
-\todo{Prove Leo source subsequence with and without validity?}
-\todo{Is proof with validity necessary?}
+\begin{theorem}[Leo source subsequence]
+\todo{Redo proof of Leo source subsequence}
 \label{th:leo-source-subsequence-validity}
 If
 \begin{gather}
 \label{eq:th-leo-source-subsequence-validity-02}
-\Valid{\Veimseq{long}} \\
+\var{long} \in \type{LSS} \\
 \label{eq:th-leo-source-subsequence-validity-03}
-\land \; 0 \le \var{i} \le \var{j} \le \Vlastix{long}.
+\land \; 0 \le \var{i} \le \var{j} \le \Vlastix{\Vlss{long}}
 \end{gather}
-Then
-\begin{gather}
+then
+\begin{equation}
 \label{eq:th-leo-source-subsequence-validity-04}
-\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS}
-\land \Valid{\Velement{long}{\var{i}\ldots\var{j}}}
-\end{gather}
+\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS}.
+\end{equation}
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-10}
-\begin{gathered}
-\exists \mylim{\ell} : \Source{\ell} = \Velement{long}{0} \\
-     \because \Eref{eq:def-leo-source-sequence-05}
+    \begin{gathered}
+        \exists \mylim{\ell} : \Velement{long}{0} = \Source{\ell}
+            \land \Valid{\ell} \\
+        \because \Eref{eq:def-leo-source-sequence-05}
             \text{ in } \Dfref{def:leo-source-sequence},
-     \Eref{eq:th-leo-source-subsequence-validity-02}.
-\end{gathered}
+        \Eref{eq:th-leo-source-subsequence-validity-02}.
+    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-12}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
-    \left(
-    \begin{gathered}
     \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \NextSource{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
-    \end{gathered}
+    \land \; \VVelement{long}{n} = \NextSource{\Velement{long}{\var{n}\subtract 1}} \\
+    \land \; \left(
+        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{long}{n} \land
+            \Valid{\ell}
     \right) \\
      \because \Eref{eq:def-leo-source-sequence-30}
             \text{ in } \Dfref{def:leo-source-sequence},
@@ -4363,113 +4362,38 @@ Then
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-source-subsequence-validity-14}
-\begin{gathered}
-\forall \; \var{n} \in \set{ \var{m} : 0 \le \var{m} \le \Vlastix{long} } : \\
-\left(
-    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
-\right) \\
-    \because \longDfref{Leo source validity}{def:leo-source-sequence-validity},
-     \Eref{eq:th-leo-source-subsequence-validity-02}.
-\end{gathered}
-\end{equation}
-\begin{equation}
 \label{eq:th-leo-source-subsequence-validity-16}
 \begin{gathered}
-\exists \mylim{\ell} : \Source{\ell} = \VVelement{long}{i} \\
+        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{long}{i} \land
+            \Valid{\ell} \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
-     \Eref{eq:th-leo-source-subsequence-validity-14}.
+     \Eref{eq:th-leo-source-subsequence-validity-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-18}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \left(
-    \begin{gathered}
     \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \NextSource{\Velement{long}{\var{n}\subtract 1}} = \VVelement{long}{n} \\
-    \end{gathered}
+    \land \; \VVelement{long}{n} = \NextSource{\Velement{long}{\var{n}\subtract 1}} \\
+    \land \; \left(
+        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{long}{n} \land
+            \Valid{\ell}
     \right) \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
-       \Eref{eq:th-leo-source-subsequence-validity-14}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-20}
-\begin{gathered}
-    \forall \var{n} \in \set{\var{m} : \var{i} \le \var{m} \le \var{j}} : \\
-\left(
-    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{long}{n}
-\right) \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-03},
-       \Eref{eq:th-leo-source-subsequence-validity-14}.
+       \Eref{eq:th-leo-source-subsequence-validity-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-22}
-\Veimseq{short} = \Velement{long}{\var{i}\ldots\var{j}} \because
-    \text{ WLOG.}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-24}
 \begin{gathered}
-\exists \mylim{\ell} : \Source{\ell} = \Velement{short}{0} \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-16},
-     \Eref{eq:th-leo-source-subsequence-validity-22}.
+\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS} \\
+    \because \Dfref{def:leo-source-sequence},
+    \Eref{eq:th-leo-source-subsequence-validity-16},
+    \Eref{eq:th-leo-source-subsequence-validity-18}.
+        \quad \myqed
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-26}
-\begin{gathered}
-    \forall \var{n} \in \set{\var{m} : \var{i} < 0 \le \Vlastix{short}} : \\
-    \left(
-    \begin{gathered}
-    \NextSource{\Velement{short}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \NextSource{\Velement{short}{\var{n}\subtract 1}} = \VVelement{short}{n} \\
-    \end{gathered}
-    \right) \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-18},
-       \Eref{eq:th-leo-source-subsequence-validity-22}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-28}
-\myparbox{$\Veimseq{short} \in \type{LSS}$
-   \cuz
-        \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-leo-source-subsequence-validity-24},
-        \Eref{eq:th-leo-source-subsequence-validity-26}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-30}
-\begin{gathered}
-    \forall \var{n} \in \set{\var{m} : 0 \le \var{m} \le \Vlastix{short}} : \\
-\left(
-    \exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \VVelement{short}{n}
-\right) \\
-     \because
-        \Eref{eq:th-leo-source-subsequence-validity-20},
-        \Eref{eq:th-leo-source-subsequence-validity-22}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-32}
-\myparbox{\Valid{\Veimseq{short}}
-   \cuz \longDfref{Leo source validity}{def:leo-source-sequence-validity},
-        \Eref{eq:th-leo-source-subsequence-validity-28},
-        \Eref{eq:th-leo-source-subsequence-validity-30}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-34}
-\myparbox{\Valid{\Velement{long}{\var{i}\ldots\var{j}}}
-   \cuz \Eref{eq:th-leo-source-subsequence-validity-22},
-        \Eref{eq:th-leo-source-subsequence-validity-32}.
-}
-\end{equation}
-        \myqed
 \end{proof}
 
 \begin{theorem}[LSS finiteness]
