@@ -4345,6 +4345,24 @@ of \longDfref{Next source function}{def:next-source-fn}.
 \myqed
 \end{proof}
 
+\subsection{Leo source subsequence}
+
+\begin{theorem}[Proper prefix LIM predecessor]
+\label{th:proper-prefix-lim-predecessor}
+Let \var{lss} be a Leo source sequence.
+\begin{gather}
+\label{eq:th-proper-prefix-lim-predecessor-02}
+\exists \; \Veim{next} : \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next} \\
+\nonumber \iff \\
+\label{eq:th-proper-prefix-lim-predecessor-03}
+\text{\Vlss{lss} is a proper prefix of another LSS.}
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Proper prefix LIM predecessor}
+\end{proof}
+
 \begin{theorem}[Leo source subsequence]
 \todo{Redo proof of Leo source subsequence}
 \label{th:leo-source-subsequence-validity}
@@ -4514,9 +4532,24 @@ Our basis is
 
 For the step we assume
 the induction hypothesis
-\Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$,
+\begin{equation}
+\label{eq:th-LSS-uniqueness-by-length-27}
+\begin{gathered}
+\left(
+    \begin{gathered}
+    (\var{n} = \size{\Vlss{lss1}} = \size{\Vlss{lss2}}) \\
+    \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
+    \end{gathered}
+\right) \\
+\implies \Vlss{lss1} = \Vlss{lss2} \\
+\because \text{\Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$}.
+\end{gathered}
+\end{equation}
 to show
 \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$.
+
+We proceed to show the step directly,
+assuming the antecedant of
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-28}
 \begin{gathered}
@@ -4525,25 +4558,29 @@ to show
     \land \; \Velement{lssB1}{0} = \Velement{lssB2}{0} = \Veim{bottom}
     \end{gathered} \\
     \myparbox{%
-        \cuz{} Antecedant of induction hypothesis
+        \cuz{} antecedant of induction hypothesis
             \Eref{eq:th-LSS-uniqueness-by-length-10}
             where $\var{length} = \var{n}+1$.%
     }
 \end{gathered}
 \end{equation}
+to show the consequent
+of \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$.
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-30}
 \Vlss{lssA1} = \Velement{lssB1}{0\ldots\var{n}}
 \because
 \Thref{th:leo-source-subsequence-validity},
-\Eref{eq:th-LSS-uniqueness-by-length-28}.
+\Eref{eq:th-LSS-uniqueness-by-length-28},
+\text{WLOG}.
 \end{equation}
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-32}
 \Vlss{lssA2} = \Velement{lssB2}{0\ldots\var{n}}
 \because
 \Thref{th:leo-source-subsequence-validity},
-\Eref{eq:th-LSS-uniqueness-by-length-28}.
+\Eref{eq:th-LSS-uniqueness-by-length-28},
+\text{WLOG}.
 \end{equation}
 \begin{equation}
 \label{eq:th-LSS-uniqueness-by-length-34}
@@ -4574,11 +4611,9 @@ to show
 \begin{gathered}
 \myparbox{
 $\var{lssA1} = \var{lssA2}$ \cuz{}
+    \Eref{eq:th-LSS-uniqueness-by-length-27},
     \Eref{eq:th-LSS-uniqueness-by-length-34},
-    \Eref{eq:th-LSS-uniqueness-by-length-40},
-    and using the induction hypothesis
-        \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}$,
-        which is assumed for the step of the induction.%
+    \Eref{eq:th-LSS-uniqueness-by-length-40}.%
 }
 \end{gathered}
 \end{equation}
@@ -4587,7 +4622,8 @@ $\var{lssA1} = \var{lssA2}$ \cuz{}
 \begin{gathered}
 \var{lssB1} = \tuple{\Velement{lssA1}{0} \ldots
         \VVelement{lssA1}{n}, \Veim{topB1}} \\
-        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-30}, WLOG.}
+        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-28},
+        \Eref{eq:th-LSS-uniqueness-by-length-30}, WLOG.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4595,7 +4631,7 @@ $\var{lssA1} = \var{lssA2}$ \cuz{}
 \begin{gathered}
 \var{lssB2} = \tuple{\Velement{lssA2}{0} \ldots
         \VVelement{lssA2}{n}, \Veim{topB2}} \\
-        \text{\cuz{}
+        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-28},
         \Eref{eq:th-LSS-uniqueness-by-length-32},
         WLOG.}
 \end{gathered}
@@ -4606,7 +4642,7 @@ $\var{lssA1} = \var{lssA2}$ \cuz{}
 \var{lssB2} = \tuple{\Velement{lssA1}{0} \ldots
         \VVelement{lssA1}{n}, \Veim{topB2}} \\
         \text{\cuz{}
-        \Eref{eq:th-LSS-uniqueness-by-length-42}
+        \Eref{eq:th-LSS-uniqueness-by-length-42},
         \Eref{eq:th-LSS-uniqueness-by-length-46}.%
         }
 \end{gathered}
@@ -4635,7 +4671,7 @@ $\var{lssA1} = \var{lssA2}$ \cuz{}
 \label{eq:th-LSS-uniqueness-by-length-54}
 \var{topB1} = \var{topB2}
         \because
-        \Eref{eq:th-LSS-uniqueness-by-length-50}.
+        \Eref{eq:th-LSS-uniqueness-by-length-50},
         \Eref{eq:th-LSS-uniqueness-by-length-52}.
 \end{equation}
 \begin{equation}
@@ -4664,6 +4700,27 @@ and with the induction we have the theorem.
 An LSS is \dfn{maximal} if it is not the proper prefix
 of another LSS.
 \end{definition}
+
+\begin{theorem}[LSS termination equivalence]
+\label{th:lss-termination-equivalence}
+Let \var{lss} be a Leo source sequence.
+The following statements are equivalent:
+\begin{gather}
+\label{eq:th-lss-termination-equivalence-02}
+\exists \; \mylim{\ell} :
+    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{\Velement{lss}{\Vlastix{lss}}}}. \\
+\label{eq:th-lss-termination-equivalence-03}
+\exists \; \Veim{next} : \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next}. \\
+\label{eq:th-lss-termination-equivalence-04}
+\text{\Vlss{lss} is a proper prefix of another LSS.} \\
+\label{eq:th-lss-termination-equivalence-05}
+\text{\var{lss} is not maximal.}
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Prove LSS termination equivalence}
+\end{proof}
 
 \begin{theorem}[Maximal LSS length]
 \label{th:maximal-lss-length}
