@@ -381,9 +381,14 @@
 
 \begin{document}
 
-\title{Marpa, a practical general parser: the recognizer}
 
-\author{Jeffrey Kegler}
+\ifdraft{%
+    \title{Marpa \DTMnow}
+    \author{Kegler \DTMnow}
+}{%
+    \title{Marpa, a practical general parser: the recognizer}
+    \author{Jeffrey Kegler}
+}
 \thanks{\ifdraft{%
     DRAFT as of \DTMnow%
 }{%
@@ -3887,14 +3892,6 @@ $\size{\Vocab{\var{g}}}$.
 We say that \Vlim{pred} is the \dfn{LIM predecessor}
 of \Veim{succ} if and only if
 \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
-We will also use the alternative notation
-\[
-\begin{gathered}
-\LIMPredecessor{\var{succ}} \defined \\
-\var{pred} : \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}
-\end{gathered}
-\]
-once we prove that \LIMPredecessor{} is, in fact, a function.
 \dispEnd{}
 \end{definition}
 
@@ -3994,26 +3991,11 @@ The consequent is
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
 or \dfn{next source}, of \Veim{prev}.
-We will also use the alternative notation
-\[
-\begin{gathered}
-\NextSource{\Veim{prev}} \defined \\
-\left\lbrace
-    \begin{array}{ll}
-    \Lambda, & \text{if } \neg \;
-        (\exists \; \Veim{next} :
-            \myfn{Next-Source-2}{\var{next},\var{prev}}) \\
-    \Veim{next}, & \text{if }\myfn{Next-Source-2}{\var{next},\var{prev}}
-    \end{array}
-\right.
-\end{gathered}
-\]
-once we show that the \NextSource{}
-function, as defined, actually exists.
 \dispEnd
 \end{definition}
 
 \begin{theorem}[Equivalence of next source and LIM predecessor]
+\todo{Do we use this?  Delete?}
 \label{th:next-source-lim-predecessor-equivalence}
 \[
 \begin{gathered}
@@ -4038,7 +4020,6 @@ Both directions of this equivalence follow directly from
     \implies \var{next1} = \var{next2}.
 \end{gathered}
 \end{equation}
-Also, the \NextSource{} function exists.
 \end{theorem}
 
 \begin{proof}
@@ -4180,40 +4161,45 @@ But we have yet to prove this.
         \quad \myqed
 \end{gathered}
 \end{equation}
-\myqed
 \end{proof}
 
-\subsection{Leo source sequences}
+\subsection{Leo item validity}
 
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
-Let, without loss of generality,
-\begin{equation}
-\label{eq:LIM-valid-10}
-\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
-\end{equation}
-be a LIM,
-let
-\[
-\begin{gathered}
-\myfn{preds}{\Veim{source}} \defined \\
- \left\lbrace
-   \begin{gathered}
-        \Vlim{pred} :
-        \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
-   \end{gathered}
-    \right\rbrace .
-\end{gathered}
-\]
-and let ``consistent'' be a term which we will overload within
-this definition.
-
 \Vlim{x} is \dfn{valid}
 if and only if
 \begin{equation}
 \label{eq:LIM-valid-20}
 \text{\Vlim{x} is ``consistent'' with a valid EIM source.}
 \end{equation}
+Within this definition,
+the term ``consistent'' is specially defined,
+and overloaded.
+The function \Valid{\mylim{\ell}} is true
+if and only if Leo item $\ell$ is \dfn{valid}.
+
+Leo item validity will be defined recursively.
+Let, without loss of generality,
+\begin{equation}
+\label{eq:LIM-valid-10}
+\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
+\end{equation}
+be a LIM.
+Let
+\[
+\begin{gathered}
+\myfn{preds}{\Veim{source}} \defined \\
+ \left\lbrace
+   \begin{gathered}
+        \Vlim{pred} :
+        \Valid{\var{pred}} \land
+            \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
+   \end{gathered}
+    \right\rbrace .
+\end{gathered}
+\]
+
 We say that the arbitrary LIM,
 \Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
 if and only if we have all of the following:
@@ -4223,7 +4209,7 @@ if and only if we have all of the following:
 \label{eq:LIM-valid-23}
 \myfn{Source2}{\var{source} , \Vlim{x},} \text{ and} \\
 \label{eq:LIM-valid-25}
-\myparbox{\Vlim{x} is ``consistent'' with \myfn{preds}{\var{source}}
+\myparbox{\Vlim{x} is ``consistent'' with \myfn{preds}{\var{source}}.
 }
 \end{gather}
 %
@@ -4260,7 +4246,31 @@ if and only if \Vlim{x} is valid.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Leo source sequence [LSS]]
+\begin{definition}[Next source function]
+\label{def:next-source-fn}
+\[
+\begin{gathered}
+\NextSource{\Veim{prev}} \defined \\
+\left\lbrace
+    \begin{array}{ll}
+    \Source{\mylim{\ell}}, &
+\left\lbrace
+\begin{gathered}
+\text{if } \exists \; \ell : \\
+\Valid{\ell} \\
+\land \myfn{LIM-Predecessor-2}{\ell,\var{prev}}; \\
+\end{gathered}
+\right.
+    \\
+    \Lambda, & \text{otherwise.}
+    \end{array}
+\right.
+\end{gathered}
+\]
+\todo{Show that the \NextSource{} function actually exists}
+\end{definition}
+
+\begin{definition}[Leo source sequence {[}LSS{]}]
 \label{def:leo-source-sequence}
 A \dfn{Leo source EIM sequence},
 or \dfn{Leo source sequence},
@@ -4298,6 +4308,10 @@ The type \type{LSS} is the set of Leo source EIM sequences.
 \label{th:leo-source-existence}
 Every EIM of an LSS is the source
 of at least one valid LIM.
+That is,
+\[
+\forall \; \Veim{x} \in \myfn{ran}{\Vlss{lss}} : \Valid{\mylim{\ell}} \land \Source{\ell} = \var{x}.
+\]
 \end{theorem}
 
 \begin{proof}
@@ -4311,10 +4325,8 @@ For \Velement{seq}{0}, the theorem follows from
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
-and the definitions
-of \longDfref{Next source EIM}{def:next-source-eim},
-of \longDfref{LIM Predecessor}{def:lim-predecessor},
-and of \longDfref{Leo Source}{def:leo-source}.
+and from the definition
+of \longDfref{Next source function}{def:next-source-fn}.
 \myqed
 \end{proof}
 
@@ -4964,6 +4976,18 @@ The proof is by induction on the length of the LSS.
 \todo{LIM uniqueness by source}
 \myqed
 \end{proof}
+
+\begin{definition}[LIM predecessor function]
+\todo{State why we know LIM predecessor is a function}
+\label{def:lim-predecessor-fn}
+\[
+\begin{gathered}
+\LIMPredecessor{\var{succ}} \defined \\
+\var{pred} : \Valid{\Vlim{pred}} \land \myfn{LIM-Predecessor-2}{\var{pred},\Veim{succ}}.
+    \quad \dispEnd
+\end{gathered}
+\]
+\end{definition}
 
 \begin{theorem}[LIM's per ES]
 \label{th:lims-per-es}
