@@ -3498,7 +3498,7 @@ is either
 an Earley item or a Leo item.
 
 A Leo item is of type \type{LIM},
-where 
+where
 \[
 \type{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] }.
 \]
@@ -4275,14 +4275,85 @@ if and only if \Vlim{x} is valid.
 Let \Veim{prev} be an arbitrary element of the range of an LSS.
 Then
 \begin{gather}
+\label{eq:th-lim-predecessor-next-source-equivalence-02}
 \exists \; \Veim{next} : \NextSource{\Veim{prev}} = \var{next} \\
 \nonumber \iff \\
+\label{eq:th-lim-predecessor-next-source-equivalence-03}
 \exists \; \mylim{\ell} : \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}}.
 \end{gather}
 \end{theorem}
 
 \begin{proof}
-\todo{Prove LIM-predecessor next-source equivalence}
+The forward direction of the theorem follows directly from
+the definition of \NextSource{} \Dfref{def:next-source-fn}.
+We show the reverse direction directly, assuming its
+antecedant to show its consequent.
+\begin{equation}
+\label{eq:th-lim-predecessor-next-source-equivalence-10}
+\begin{gathered}
+\exists \; \mylim{\ell} : \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+\myparbox{\Eref{eq:th-lim-predecessor-next-source-equivalence-03},
+    antecedant of reverse direction,
+    AF reverse direction.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-next-source-equivalence-12}
+\begin{gathered}
+\exists \; \mylim{\ell} : \Valid{\ell} \\
+      \land
+      \exists \; \Veim{pred-source} :
+          \left(
+          \begin{gathered}
+          \Matches{ \var{pred-source},\Veim{prev}} \\
+          \land \; \myfn{Source2}{\var{pred-source},\ell}
+          \end{gathered}
+          \right) \\
+            \because \longDfref{LIM predecessor}{def:lim-predecessor},
+            \Eref{eq:th-lim-predecessor-next-source-equivalence-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-next-source-equivalence-14}
+\begin{gathered}
+    \exists \; \mylim{\ell} : \Valid{\ell} \\
+    \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+    \land \; \exists \; \Veim{pred-source} : \myfn{Source2}{\var{pred-source},\ell} \\
+    \because \Eref{eq:th-lim-predecessor-next-source-equivalence-10},
+    \Eref{eq:th-lim-predecessor-next-source-equivalence-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-next-source-equivalence-16}
+\begin{gathered}
+    \exists \; \Veim{pred-source} : \\
+    \exists \; \mylim{\ell} : \Valid{\ell} \\
+    \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+    \land \; \var{pred-source} = \Source{\ell} \\
+    \because \longDfref{Leo source}{def:leo-source},
+    \Eref{eq:th-lim-predecessor-next-source-equivalence-14}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-next-source-equivalence-18}
+\begin{gathered}
+    \exists \; \Veim{next} : \NextSource{\var{prev}} = \var{next} \\
+    \myparbox{%
+        \cuz{} \longDfref{Next source}{def:next-source-fn},
+        \Eref{eq:th-lim-predecessor-next-source-equivalence-16},
+        and changing the name of \var{pred-source} to \var{next}.%
+    }
+\end{gathered}
+\end{equation}
+\Eref{eq:th-lim-predecessor-next-source-equivalence-18} is the consequent
+of the reverse direction, so that
+the deduction from
+\Eref{eq:th-lim-predecessor-next-source-equivalence-10} to
+\Eref{eq:th-lim-predecessor-next-source-equivalence-18} shows
+the reverse direction.
+With the reverse direction, we have the theorem.
+\myqed
 \end{proof}
 
 \begin{definition}[Leo source sequence {[}LSS{]}]
