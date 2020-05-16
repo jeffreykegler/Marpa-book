@@ -4251,24 +4251,44 @@ if and only if \Vlim{x} is valid.
 \[
 \begin{gathered}
 \NextSource{\Veim{prev}} \defined \\
-\left\lbrace
-    \begin{array}{ll}
-    \Source{\mylim{\ell}}, &
-\left\lbrace
-\begin{gathered}
-\text{if } \exists \; \ell : \\
-\Valid{\ell} \\
-\land \myfn{LIM-Predecessor-2}{\ell,\var{prev}}; \\
-\end{gathered}
-\right.
-    \\
-    \Lambda, & \text{otherwise.}
-    \end{array}
-\right.
+    \Veim{next} :
+    \left( \begin{gathered}
+    \exists \; \mylim{\ell} : \var{next} = \Source{\ell} \\
+    \land \; \Valid{\ell}
+    \land \; \myfn{LIM-Predecessor-2}{\ell,\var{prev}}.
+    \end{gathered} \right)
 \end{gathered}
 \]
-\todo{Show that the \NextSource{} function actually exists}
 \end{definition}
+
+\begin{theorem}[Next source function existence]
+\label{th:next-source-function-existence}
+The \NextSource{} function exists.
+\end{theorem}
+
+\begin{proof}
+If the \NextSource{} function exists,
+its underlying relation is
+\begin{equation}
+\label{eq:th-next-source-function-existence-10}
+\begin{gathered}
+\set{
+    \begin{gathered}
+    \tuple{ \Veim{prev}, \Veim{next} } : \\
+    \left(
+    \begin{gathered}
+    \exists \; \mylim{\ell} : \var{next} = \Source{\ell} \\
+    \land \; \Valid{\ell}
+    \land \; \myfn{LIM-Predecessor-2}{\ell,\var{prev}}
+    \end{gathered}
+    \right)
+    \end{gathered}
+} \\
+   \because \longDfref{Next source function}{def:next-source-fn}.
+\end{gathered}
+\end{equation}
+\todo{Finish proof that the \NextSource{} function actually exists}
+\end{proof}
 
 \begin{theorem}[LIM-predecessor next-source equivalence]
 \label{th:lim-predecessor-next-source-equivalence}
@@ -4284,6 +4304,7 @@ Then
 \end{theorem}
 
 \begin{proof}
+\todo{Recheck this!}
 The forward direction of the theorem follows immediately from
 the definition of \NextSource{} \Dfref{def:next-source-fn}.
 We show the reverse direction directly, assuming its
