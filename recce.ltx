@@ -4267,11 +4267,10 @@ The \NextSource{} function exists.
 \end{theorem}
 
 \begin{proof}
-If the \NextSource{} function exists,
-its underlying relation is
 \begin{equation}
 \label{eq:th-next-source-function-existence-10}
 \begin{gathered}
+\var{NextSource} = \\
 \set{
     \begin{gathered}
     \tuple{ \Veim{prev}, \Veim{next} } : \\
@@ -4287,7 +4286,80 @@ its underlying relation is
    \because \longDfref{Next source function}{def:next-source-fn}.
 \end{gathered}
 \end{equation}
-\todo{Finish proof that the \NextSource{} function actually exists}
+In \Eref{eq:th-next-source-function-existence-10}, \var{Next-Source} is
+clearly a relation, but it remains to show that is a function.
+To do that, we must show that there is a unique value for each argument.
+To do this we assume the existence of two elements of \var{Next-Source} with 
+the same argument, to show that they must have the same value.
+\begin{equation}
+\label{eq:th-next-source-function-existence-12}
+\tuple{ \Veim{prev}, \Veim{next1} } \in \var{Next-Source} \because \text{AF proof}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-14}
+\tuple{ \Veim{prev}, \Veim{next2} } \in \var{Next-Source} \because \text{AF proof}.
+\end{equation}
+We seek to show that $\var{next1} = \var{next2}$.
+\begin{equation}
+\label{eq:th-next-source-function-existence-16}
+    \begin{gathered}
+    \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
+    \land \; \Valid{\ell1}
+    \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
+    \because \Eref{eq:th-next-source-function-existence-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-18}
+    \begin{gathered}
+    \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
+    \land \; \Valid{\ell2}
+    \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
+    \because \Eref{eq:th-next-source-function-existence-14}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-20}
+    \begin{gathered}
+    \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
+    \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
+    \because \Eref{eq:th-next-source-function-existence-16}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-22}
+    \begin{gathered}
+    \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
+    \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
+    \because \Eref{eq:th-next-source-function-existence-18}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\begin{gathered}
+\label{eq:th-next-source-function-existence-24}
+    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
+    \because
+        \longDfref{Next source}{def:next-source-eim},
+        \Eref{eq:th-next-source-function-existence-20}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-26}
+    \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \because
+        \Dfref{def:next-source-eim},
+        \Eref{eq:th-next-source-function-existence-22}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-function-existence-28}
+\Veim{next1} = \Veim{next2} \because
+        \Thref{th:leo-source-predecessor-uniqueness},
+        \Eref{eq:th-next-source-function-existence-24},
+        \Eref{eq:th-next-source-function-existence-26}.
+\end{equation}
+\Eref{eq:th-next-source-function-existence-28} is what we sought to show
+beginning at
+\Eref{eq:th-next-source-function-existence-12}, and completes the proof.
+\myqed
 \end{proof}
 
 \begin{theorem}[LIM-predecessor next-source equivalence]
