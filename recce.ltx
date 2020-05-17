@@ -3980,6 +3980,22 @@ The consequent is
 \myqed
 \end{proof}
 
+\begin{theorem}[LIM predecessor not after EIM]
+\label{th:lim-predecessor-not-after-eim}
+\[
+\begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
+    \implies \Current{\ell} \le \Current{\var{prev}}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+\Thref{th:eim-origin-not-after-current} and
+\Thref{th:lim-predecessor-connection}.
+\end{proof}
+
 \begin{definition}[Next source EIM]
 \label{def:next-source-eim}
 \[
@@ -4360,6 +4376,33 @@ We seek to show that $\var{next1} = \var{next2}$.
 beginning at
 \Eref{eq:th-next-source-function-existence-12}, and completes the proof.
 \myqed
+\end{proof}
+
+We will see that Leo source sequences,
+when we introduce them, grow backwards -- the bottom is in
+the last Earley set of the sequence,
+and the top is in the first one.
+This reversal of direction can be confusing,
+but Leo sequences are in fact recorded "top first",
+and recreated from bottom to top,
+so that this ``back-and-forth'' is a natural part of
+the method.
+
+\begin{theorem}[Next source EIM not after previous]
+\label{th:next-source-eim-not-after-previous}
+\[
+\begin{gathered}
+    \NextSource{\Veim{prev}} = \Veim{next} \\
+    \implies \Current{\var{next}} \le \Current{\var{prev}}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\Thref{th:source-lim-connection},
+\Thref{th:lim-predecessor-not-after-eim}, and
+\longDfref{Next source}{def:next-source-fn}.
 \end{proof}
 
 \begin{theorem}[LIM-predecessor next-source equivalence]
