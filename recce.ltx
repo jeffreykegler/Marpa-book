@@ -282,7 +282,9 @@
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 \newcommand{\Vbigsize}[1]{\ensuremath{\bigsize{\var{#1}}}}
+\newcommand{\Vnat}[1]{\Tvar{#1}{\naturals}}
 
+\newcommand{\naturals}{\ensuremath{\mathbb{N}}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
 \newcommand{\Earley}{\algo{Earley}}
 \newcommand{\Leo}{\algo{Leo}}
@@ -837,8 +839,7 @@ $\var{A} \subseteq B$ means that \var{A} is a subset of \var{B}, while
 $\var{A} \subset B$ means that \var{A} is a proper subset of \var{B}.
 $\myfn{dom}{\var{f}}$ is the domain of \var{f}.
 $\myfn{ran}{\var{f}}$ is the range of \var{f}.
-$\mathbb{N}$ is the set of natural numbers,
-which includes zero.
+\naturals{} is the set of non-negative integers.
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -4419,7 +4420,6 @@ Then
 \end{theorem}
 
 \begin{proof}
-\todo{Recheck this!}
 The forward direction of the theorem follows immediately from
 the definition of \NextSource{} \Dfref{def:next-source-fn}.
 We show the reverse direction directly, assuming its
@@ -4427,7 +4427,7 @@ antecedant to show its consequent.
 \begin{equation}
 \label{eq:th-lim-predecessor-next-source-equivalence-10}
 \begin{gathered}
-\exists \; \mylim{\ell} : \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+\Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
 \myparbox{\Eref{eq:th-lim-predecessor-next-source-equivalence-03},
     antecedant of reverse direction,
     AF reverse direction.%
@@ -4437,7 +4437,7 @@ antecedant to show its consequent.
 \begin{equation}
 \label{eq:th-lim-predecessor-next-source-equivalence-12}
 \begin{gathered}
-\exists \; \mylim{\ell} : \Valid{\ell} \\
+\Valid{\ell} \\
       \land \; \exists \; \Veim{pred-source} :
           \left(
           \begin{gathered}
@@ -4452,8 +4452,7 @@ antecedant to show its consequent.
 \begin{equation}
 \label{eq:th-lim-predecessor-next-source-equivalence-14}
 \begin{gathered}
-    \exists \; \mylim{\ell} : \Valid{\ell} \\
-    \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
+    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
     \land \; \exists \; \Veim{pred-source} : \myfn{Source2}{\var{pred-source},\ell} \\
     \because \Eref{eq:th-lim-predecessor-next-source-equivalence-10},
     \Eref{eq:th-lim-predecessor-next-source-equivalence-12}.
@@ -4497,9 +4496,18 @@ With the reverse direction, we have the theorem.
 \label{def:leo-source-sequence}
 A \dfn{Leo source EIM sequence},
 or \dfn{Leo source sequence},
-is an EIM sequence defined by the induction
+is an EIM sequence defined by recurrence
 \begin{equation}
-\label{eq:def-leo-source-sequence-05}
+\label{eq:def-leo-source-sequence-30}
+\begin{gathered}
+    \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
+    \exists \; \Veim{next} : \var{next} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
+    \land \; \VVelement{seq}{n} = \var{next}.
+\end{gathered}
+\end{equation}
+with the initial condition
+\begin{equation}
+\label{eq:def-leo-source-sequence-40}
     \exists \mylim{\ell} :
     \left(
     \begin{gathered}
@@ -4508,15 +4516,6 @@ is an EIM sequence defined by the induction
         \land \; \Valid{\ell}
     \end{gathered}
     \right)
-\end{equation}
-and
-\begin{equation}
-\label{eq:def-leo-source-sequence-30}
-\begin{gathered}
-    \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
-    \NextSource{\Velement{seq}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \VVelement{seq}{n} = \NextSource{\Velement{seq}{\var{n}\subtract 1}}.
-\end{gathered}
 \end{equation}
 We say that \Veim{bottom} is the \dfn{bottom} of \var{seq}.
 The type \type{LSS} is the set of Leo source EIM sequences.
@@ -4529,7 +4528,10 @@ Every EIM of an LSS is the source
 of at least one valid LIM.
 That is,
 \[
-\forall \; \Veim{x} \in \myfn{ran}{\Vlss{lss}} : \Valid{\mylim{\ell}} \land \Source{\ell} = \var{x}.
+\begin{gathered}
+\forall \Vnat{j} \in \set{ \Vnat{i} : 0 < \var{i} \le \Vlastix{\Vlss{lss}} } : \\
+    \Valid{\mylim{\ell}} \land \Source{\ell} = \VVelement{lss}{j}.
+\end{gathered}
 \]
 \end{theorem}
 
@@ -4540,7 +4542,7 @@ definition of Leo source sequence
 Let \Veimseq{seq} be
 an arbitary LSS.
 For \Velement{seq}{0}, the theorem follows from
-\Eref{eq:def-leo-source-sequence-05} in \Dfref{def:leo-source-sequence}.
+\Eref{eq:def-leo-source-sequence-40} in \Dfref{def:leo-source-sequence}.
 For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
@@ -4584,21 +4586,11 @@ then
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-leo-source-subsequence-validity-10}
-    \begin{gathered}
-        \exists \mylim{\ell} : \Velement{long}{0} = \Source{\ell}
-            \land \Valid{\ell} \\
-        \because \Eref{eq:def-leo-source-sequence-05}
-            \text{ in } \Dfref{def:leo-source-sequence},
-        \Eref{eq:th-leo-source-subsequence-validity-02}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
 \label{eq:th-leo-source-subsequence-validity-12}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
-    \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \VVelement{long}{n} = \NextSource{\Velement{long}{\var{n}\subtract 1}} \\
+    \exists \; \Veim{next} : \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
+    \land \; \VVelement{long}{n} = \var{next} \\
      \because \Eref{eq:def-leo-source-sequence-30}
             \text{ in } \Dfref{def:leo-source-sequence},
      \Eref{eq:th-leo-source-subsequence-validity-02}.
@@ -4618,8 +4610,8 @@ then
 \label{eq:th-leo-source-subsequence-validity-18}
 \begin{gathered}
     \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \NextSource{\Velement{long}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \VVelement{long}{n} = \NextSource{\Velement{long}{\var{n}\subtract 1}} \\
+    \exists \; \Veim{next} : \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
+    \land \; \VVelement{long}{n} = \var{next} \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
        \Eref{eq:th-leo-source-subsequence-validity-12}.
 \end{gathered}
@@ -4653,7 +4645,11 @@ From
 \Thref{th:leo-source-eim-count}, we know that there are
 at most \size{\Vocab{\var{g}}} Leo source EIM's
 in any ES.
-\Vlss{seq} has EIM's in at most
+From \Thref{th:next-source-eim-not-after-previous}
+and \Dfref{def:leo-source-sequence},
+we know that every EIM in \var{seq} is in an Earley set
+not after \Current{\Velement{seq}{0}}.
+Therefore \Vlss{seq} has EIM's in at most
 \[
 \bigsize{\set{0\ldots\var{\Current{\Velement{seq}{0}}}}} = \Current{\Velement{seq}{0}}+1
 \]
