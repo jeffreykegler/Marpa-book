@@ -831,15 +831,32 @@ consistent with that of
 Halmos 1960~\cite{Halmos1960},
 but with
 some of the terminology modernized.
+Functions are partial unless stated otherwise.
 An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
 onto is a bijection.
-$\var{A} \subseteq B$ means that \var{A} is a subset of \var{B}, while
-$\var{A} \subset B$ means that \var{A} is a proper subset of \var{B}.
+$\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
+$\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
 $\myfn{dom}{\var{f}}$ is the domain of \var{f}.
 $\myfn{ran}{\var{f}}$ is the range of \var{f}.
 \naturals{} is the set of non-negative integers.
+
+Logical quantification is
+always with respect to a specific set,
+which is specified explicitly
+or through the quantified variable's type,
+as described below.
+Where the set is obviously \naturals{}
+the specification may be abbreviated so that, for example,
+\[
+\forall \; \var{j} \in \set{ \var{i} \in \naturals : 0 \le \var{i} \le 42 } :
+    \myfn{P}{\var{j}}
+\]
+would be written as
+\[
+\forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
+\]
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -4513,7 +4530,7 @@ with the initial condition
     \begin{gathered}
         \Veim{bottom} = \Source{\ell} \\
         \land \; \Velement{seq}{0} = \Veim{bottom} \\
-        \land \; \Valid{\ell}
+        \land \; \Valid{\ell}.
     \end{gathered}
     \right)
 \end{equation}
@@ -4529,7 +4546,7 @@ of at least one valid LIM.
 That is,
 \[
 \begin{gathered}
-\forall \Vnat{j} \in \set{ \Vnat{i} : 0 < \var{i} \le \Vlastix{\Vlss{lss}} } : \\
+\forall \; 0 < \Vnat{j} \le \Vlastix{\Vlss{lss}} : 
     \Valid{\mylim{\ell}} \land \Source{\ell} = \VVelement{lss}{j}.
 \end{gathered}
 \]
@@ -4564,6 +4581,79 @@ Let \Vlss{lss} be a Leo source EIM sequence.
 \end{theorem}
 
 \begin{proof}
+For the forward direction,
+we assume the antecedant to show the consequent.
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-10}
+\begin{gathered}
+    \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next} \\
+    \because \text{antecedent AF forward direction.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-12}
+\var{lss} \in \type{LSS} \because \text{AF proof.}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-14}
+\begin{gathered}
+    \forall \; 0 < \Vnat{i} \le \Vlastix{lss} : \\
+    \VVelement{lss}{n} = \NextSource{\Velement{lss}{\var{n}\subtract 1}} \\
+    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
+        \Eref{eq:th-proper-prefix-lim-predecessor-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-16}
+    \begin{gathered}
+        \Velement{lss}{0} = \Source{\ell} \land \; \Valid{\ell} \\
+    \because \Dfref{def:leo-source-sequence},
+        \Eref{eq:th-proper-prefix-lim-predecessor-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-18}
+\Veimseq{longer} = [ \Velement{lss}{0} \ldots \Velement{lss}{\Vlastix{lss}}, \Veim{next} ] \because \text{WLOG}.
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-20}
+\begin{gathered}
+    \forall \; 0 < \Vnat{i} \le \Vlastix{longer} : \\
+    \VVelement{longer}{i} = \NextSource{\Velement{longer}{\var{i}\subtract 1}} \\
+    \because
+        \Eref{eq:th-proper-prefix-lim-predecessor-10},
+        \Eref{eq:th-proper-prefix-lim-predecessor-14},
+        \Eref{eq:th-proper-prefix-lim-predecessor-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-22}
+    \begin{gathered}
+        \Velement{longer}{0} = \Source{\ell} \land \; \Valid{\ell} \\
+    \because
+        \Eref{eq:th-proper-prefix-lim-predecessor-16},
+        \Eref{eq:th-proper-prefix-lim-predecessor-18}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-24}
+\begin{gathered}
+\var{longer} \in \type{LSS} \\
+    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
+    \Eref{eq:th-proper-prefix-lim-predecessor-18},
+    \Eref{eq:th-proper-prefix-lim-predecessor-20},
+    \Eref{eq:th-proper-prefix-lim-predecessor-22}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-24}
+\myparbox{\var{lss} is a proper prefix of \var{longer},
+    another LSS.}
+\end{equation}
+\Eref{eq:th-proper-prefix-lim-predecessor-24} is the consequent of the forward
+direction, so that the derivation
+\Eref{eq:th-proper-prefix-lim-predecessor-10}--%
+\Eref{eq:th-proper-prefix-lim-predecessor-24} shows the forward direction.
 \todo{Prove Proper prefix LIM predecessor}
 \end{proof}
 
