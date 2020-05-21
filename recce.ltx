@@ -238,7 +238,7 @@
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{\seq{\var{#2}}}}}
-\newcommand{\element}[2]{\ensuremath{#1\left[#2\right]}}
+\newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
 \newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
 
@@ -4793,7 +4793,45 @@ we know there is a last EIM in any Leo source EIM sequence,
 so we know that the top of an LSS, as just defined,
 exists for every LSS.
 
+\begin{theorem}[LSS containment]
+\label{th:lss-containment}
+\begin{gather}
+\label{eq:th-lss-containment-02}
+    \var{short} \in \type{LSS} \land \var{long} \in \type{LSS} \\
+\label{eq:th-lss-containment-03}
+    \land \; \Velement{short}{0} = \VVelement{long}{i} \\
+\label{eq:th-lss-containment-04}
+    \land \; \var{i}+\Vsize{short} \le \Vsize{long} \\
+\nonumber
+   \implies \\
+\label{eq:th-lss-containment-06}
+   \forall \; 0 \le \var{j} \le \Vlastix{short} :
+       \Velement{long}{\var{i}+\var{j}} = \VVelement{short}{j}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+The proof is by reductio.
+We assume that the consequent of the theorem is false.
+\begin{equation}
+\label{eq:th-lss-containment-12}
+\begin{gathered}
+   \exists \; \Vnat{bad} : \VVelement{short}{bad} \neq \Velement{long}{\var{i}+\var{bad}}
+      \land 0 \le \var{bad} \le \Vlastix{short} \\
+      \because \text{negation of consequent
+        \Eref{eq:th-lss-containment-06}, AF reductio.}
+\end{gathered}
+\end{equation}
+Let
+\begin{equation}
+\label{eq:th-lss-containment-14}
+\myparbox{\VVelement{short}{bad1} be the first such element \cuz{} WLOG.}
+\end{equation}
+\todo{finish proof of LSS containment}
+\end{proof}
+
 \begin{theorem}[LSS uniqueness by length]
+\todo{Redo "LSS uniqueness by length"}
 \label{th:lss-uniqueness-by-length}
 If two LSS's are of the same length and
 have the same bottom, then they are identical.
