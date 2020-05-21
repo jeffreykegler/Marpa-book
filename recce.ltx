@@ -220,6 +220,8 @@
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\mapsto\!}\:$}}}
 
+\newcommand{\decr}[1]{#1\subtract1}
+\newcommand{\Vdecr}[1]{\var{#1}\subtract1}
 \newcommand{\seq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{{\left[ #1 \right]} }
@@ -4323,7 +4325,7 @@ The \NextSource{} function exists.
 In \Eref{eq:th-next-source-function-existence-10}, \var{Next-Source} is
 clearly a relation, but it remains to show that is a function.
 To do that, we must show that there is a unique value for each argument.
-To do this we assume the existence of two elements of \var{Next-Source} with 
+To do this we assume the existence of two elements of \var{Next-Source} with
 the same argument, to show that they must have the same value.
 \begin{equation}
 \label{eq:th-next-source-function-existence-12}
@@ -4546,7 +4548,7 @@ of at least one valid LIM.
 That is,
 \[
 \begin{gathered}
-\forall \; 0 < \Vnat{j} \le \Vlastix{\Vlss{lss}} : 
+\forall \; 0 < \Vnat{j} \le \Vlastix{\Vlss{lss}} :
     \Valid{\mylim{\ell}} \land \Source{\ell} = \VVelement{lss}{j}.
 \end{gathered}
 \]
@@ -4822,10 +4824,60 @@ We assume that the consequent of the theorem is false.
         \Eref{eq:th-lss-containment-06}, AF reductio.}
 \end{gathered}
 \end{equation}
-Let
+Let \Vnat{bad1} be the first such index so that
 \begin{equation}
 \label{eq:th-lss-containment-14}
-\myparbox{\VVelement{short}{bad1} be the first such element \cuz{} WLOG.}
+\begin{gathered}
+   \VVelement{short}{bad1} \neq \Velement{long}{\var{i}+\var{bad1}} \\
+   \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG; and}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-16}
+\begin{gathered}
+   \nexists \; \Vnat{lesser} < \var{bad1}:
+   \VVelement{short}{lesser} \neq \Velement{long}{\var{i}+\var{lesser}} \\
+   \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-18}
+   0 < \Vnat{bad1} \le \Vlastix{short}
+      \because
+        \Eref{eq:th-lss-containment-03},
+        \Eref{eq:th-lss-containment-12},
+        \Eref{eq:th-lss-containment-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-20}
+\begin{gathered}
+    \NextSource{\VVelement{short}{\Vdecr{bad1}}} = \VVelement{short}{bad1} \\
+        \because \longDfref{Leo source sequence}{def:leo-source-sequence},
+        \Eref{eq:th-lss-containment-02},
+        \Eref{eq:th-lss-containment-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-22}
+\begin{gathered}
+    \NextSource{\Velement{long}{\decr{\var{i}+\var{bad1}}}} = \VVelement{long}{\var{i}+\var{bad1}} \\
+        \because \longDfref{Leo source sequence}{def:leo-source-sequence},
+        \Eref{eq:th-lss-containment-02},
+        \Eref{eq:th-lss-containment-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-24}
+\begin{gathered}
+    \VVelement{short}{\Vdecr{bad1}} \neq \Velement{long}{\decr{\var{i}+\var{bad1}}} \\
+    \myparbox{\cuz{}
+        \longDfref{Next source relation}{def:next-source-eim},
+        \longDfref{Next source function}{def:next-source-fn},
+        \Eref{eq:th-lss-containment-14},
+        \Eref{eq:th-lss-containment-20},
+        \Eref{eq:th-lss-containment-22}.%
+        }
+\end{gathered}
 \end{equation}
 \todo{finish proof of LSS containment}
 \end{proof}
