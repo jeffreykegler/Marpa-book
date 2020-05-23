@@ -4801,9 +4801,9 @@ exists for every LSS.
 Let
 \begin{gather}
 \label{eq:th-lss-containment-02a}
-    \var{short} \in \type{LSS}, \\
+    \var{short} \in \type{LSS} \\
 \label{eq:th-lss-containment-02b}
-    \land \; \var{long} \in \type{LSS}, \\
+    \land \; \var{long} \in \type{LSS} \\
 \label{eq:th-lss-containment-03}
     \land \; \Velement{short}{0} = \VVelement{long}{offset} \\
 \label{eq:th-lss-containment-04}
@@ -4822,7 +4822,8 @@ The proof is by reductio.
 \begin{equation}
 \label{eq:th-lss-containment-12}
 \begin{gathered}
-   \exists \; \Vnat{bad} : \VVelement{short}{bad} \neq \Velement{long}{\var{offset}+\var{bad}} \\
+   \exists \; 0 \le \Vnat{bad} \le \Vlastix{short} : \\
+       \VVelement{short}{bad} \neq \Velement{long}{\var{offset}+\var{bad}} \\
       \because \text{negation of consequent
         \Eref{eq:th-lss-containment-06}, AF reductio.}
 \end{gathered}
@@ -4833,8 +4834,13 @@ in \Eref{eq:th-lss-containment-12}, so that
 \label{eq:th-lss-containment-14}
 \begin{gathered}
    \VVelement{short}{bad1} \neq \Velement{long}{\var{offset}+\var{bad1}} \\
-   \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG; and}
+   \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG;}
 \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-15}
+   0 \le \Vnat{bad1} \le \Vlastix{short}
+   \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG; and}
 \end{equation}
 \begin{equation}
 \label{eq:th-lss-containment-16}
@@ -4853,14 +4859,35 @@ Proceeding to consider \var{bad1},
         \Eref{eq:th-lss-containment-14}.
 \end{equation}
 \begin{equation}
+\label{eq:th-lss-containment-19}
+   1 \le \Vnat{bad1} \le \Vlastix{short}
+       \because \Eref{eq:th-lss-containment-15}, \Eref{eq:th-lss-containment-18}.
+\end{equation}
+\begin{equation}
 \label{eq:th-lss-containment-20}
 \begin{gathered}
     \NextSource{\VVelement{short}{\Vdecr{bad1}}} = \VVelement{short}{bad1} \\
         \because \longDfref{Leo source sequence}{def:leo-source-sequence},
         \Eref{eq:th-lss-containment-02a},
         \Eref{eq:th-lss-containment-03},
-        \Eref{eq:th-lss-containment-18}.
+        \Eref{eq:th-lss-containment-19}.
 \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-21a}
+   1 + \Vnat{offset} \le \Vnat{bad1} + \var{offset} \le \Vlastix{short} + \var{offset}
+       \because \Eref{eq:th-lss-containment-19}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-21b}
+   1 \le \Vnat{bad1} + \var{offset} \le \Vlastix{short} + \var{offset}
+       \because \Eref{eq:th-lss-containment-21a}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-containment-21c}
+   1 \le \Vnat{bad1} + \var{offset} \le \Vlastix{long}
+       \because \Eref{eq:th-lss-containment-04},
+           \Eref{eq:th-lss-containment-21b}.
 \end{equation}
 \begin{equation}
 \label{eq:th-lss-containment-22}
@@ -4870,7 +4897,7 @@ Proceeding to consider \var{bad1},
         \because \longDfref{Leo source sequence}{def:leo-source-sequence},
         \Eref{eq:th-lss-containment-02b},
         \Eref{eq:th-lss-containment-03},
-        \Eref{eq:th-lss-containment-14}.
+        \Eref{eq:th-lss-containment-21c}.
 \end{gathered}
 \end{equation}
 \begin{equation}
