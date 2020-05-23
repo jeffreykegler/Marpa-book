@@ -284,7 +284,8 @@
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
 \newcommand{\Vbigsize}[1]{\ensuremath{\bigsize{\var{#1}}}}
-\newcommand{\Vnat}[1]{\Tvar{#1}{\naturals}}
+\newcommand{\nat}[1]{\ensuremath{#1_\type{\naturals}}}
+\newcommand{\Vnat}[1]{\nat{\var{#1}}}
 
 \newcommand{\naturals}{\ensuremath{\mathbb{N}}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
@@ -4797,55 +4798,58 @@ exists for every LSS.
 
 \begin{theorem}[LSS containment]
 \label{th:lss-containment}
+Let
 \begin{gather}
-\label{eq:th-lss-containment-02}
-    \var{short} \in \type{LSS} \land \var{long} \in \type{LSS} \\
+\label{eq:th-lss-containment-02a}
+    \var{short} \in \type{LSS}, \\
+\label{eq:th-lss-containment-02b}
+    \land \; \var{long} \in \type{LSS}, \\
 \label{eq:th-lss-containment-03}
-    \land \; \Velement{short}{0} = \VVelement{long}{i} \\
+    \land \; \Velement{short}{0} = \VVelement{long}{offset} \\
 \label{eq:th-lss-containment-04}
-    \land \; \var{i}+\Vsize{short} \le \Vsize{long} \\
-\nonumber
-   \implies \\
+    \land \; \var{offset}+\Vlastix{short} \le \Vlastix{long}. \\
+\end{gather}
+Then
+\begin{equation}
 \label{eq:th-lss-containment-06}
    \forall \; 0 \le \var{j} \le \Vlastix{short} :
-       \Velement{long}{\var{i}+\var{j}} = \VVelement{short}{j}.
-\end{gather}
+       \Velement{long}{\var{offset}+\var{j}} = \VVelement{short}{j}.
+\end{equation}
 \end{theorem}
 
 \begin{proof}
 The proof is by reductio.
-We assume that the consequent of the theorem is false.
 \begin{equation}
 \label{eq:th-lss-containment-12}
 \begin{gathered}
-   \exists \; \Vnat{bad} : \VVelement{short}{bad} \neq \Velement{long}{\var{i}+\var{bad}}
-      \land 0 \le \var{bad} \le \Vlastix{short} \\
+   \exists \; \Vnat{bad} : \VVelement{short}{bad} \neq \Velement{long}{\var{offset}+\var{bad}} \\
       \because \text{negation of consequent
         \Eref{eq:th-lss-containment-06}, AF reductio.}
 \end{gathered}
 \end{equation}
-Let \Vnat{bad1} be the first such index so that
+Let \Vnat{bad1} be the first index that satisfies the predicate for \var{bad}
+in \Eref{eq:th-lss-containment-12}, so that
 \begin{equation}
 \label{eq:th-lss-containment-14}
 \begin{gathered}
-   \VVelement{short}{bad1} \neq \Velement{long}{\var{i}+\var{bad1}} \\
+   \VVelement{short}{bad1} \neq \Velement{long}{\var{offset}+\var{bad1}} \\
    \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG; and}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-lss-containment-16}
 \begin{gathered}
-   \nexists \; \Vnat{lesser} < \var{bad1}:
-   \VVelement{short}{lesser} \neq \Velement{long}{\var{i}+\var{lesser}} \\
+   \nexists \; \Vnat{lesser} < \var{bad1} : \\
+   \VVelement{short}{lesser} \neq \Velement{long}{\var{offset}+\var{lesser}} \\
    \text{\cuz{} \Eref{eq:th-lss-containment-12}, WLOG.}
 \end{gathered}
 \end{equation}
+Proceeding to consider \var{bad1},
 \begin{equation}
 \label{eq:th-lss-containment-18}
-   0 < \Vnat{bad1} \le \Vlastix{short}
+   \Vnat{bad1} \neq 0
       \because
         \Eref{eq:th-lss-containment-03},
-        \Eref{eq:th-lss-containment-12},
         \Eref{eq:th-lss-containment-14}.
 \end{equation}
 \begin{equation}
@@ -4853,25 +4857,29 @@ Let \Vnat{bad1} be the first such index so that
 \begin{gathered}
     \NextSource{\VVelement{short}{\Vdecr{bad1}}} = \VVelement{short}{bad1} \\
         \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-lss-containment-02},
+        \Eref{eq:th-lss-containment-02a},
+        \Eref{eq:th-lss-containment-03},
         \Eref{eq:th-lss-containment-18}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-lss-containment-22}
 \begin{gathered}
-    \NextSource{\Velement{long}{\decr{\var{i}+\var{bad1}}}} = \VVelement{long}{\var{i}+\var{bad1}} \\
+    \NextSource{\Velement{long}{\decr{\var{offset}+\var{bad1}}}} \\
+    = \VVelement{long}{\var{offset}+\var{bad1}} \\
         \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-lss-containment-02},
-        \Eref{eq:th-lss-containment-18}.
+        \Eref{eq:th-lss-containment-02b},
+        \Eref{eq:th-lss-containment-03},
+        \Eref{eq:th-lss-containment-14}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-lss-containment-24}
 \begin{gathered}
-    \VVelement{short}{\Vdecr{bad1}} \neq \Velement{long}{\decr{\var{i}+\var{bad1}}} \\
+    \VVelement{short}{\Vdecr{bad1}} \neq \Velement{long}{\var{offset}+(\Vdecr{bad1})} \\
     \myparbox{\cuz{}
         \longDfref{Next source relation}{def:next-source-eim},
+        \Thref{th:leo-source-predecessor-uniqueness},
         \longDfref{Next source function}{def:next-source-fn},
         \Eref{eq:th-lss-containment-14},
         \Eref{eq:th-lss-containment-20},
@@ -4879,7 +4887,20 @@ Let \Vnat{bad1} be the first such index so that
         }
 \end{gathered}
 \end{equation}
-\todo{finish proof of LSS containment}
+We note some simple facts about \decr{\Vnat{bad1}}:
+\begin{equation}
+\label{eq:th-lss-containment-26}
+\begin{gathered}
+   \Vdecr{bad1} \in \naturals \land  \Vdecr{bad1} < \var{bad1} \because \Eref{eq:th-lss-containment-18}.
+\end{gathered}
+\end{equation}
+Taking \Vdecr{bad1} as \var{lesser} in
+\Eref{eq:th-lss-containment-16}, we find that
+\Eref{eq:th-lss-containment-24} and
+\Eref{eq:th-lss-containment-26} contradict
+\Eref{eq:th-lss-containment-16}.
+This contradiction shows the reductio and the theorem.
+\myqed
 \end{proof}
 
 \begin{theorem}[LSS uniqueness by length]
