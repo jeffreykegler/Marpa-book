@@ -4931,221 +4931,127 @@ This contradiction shows the reductio and the theorem.
 \end{proof}
 
 \begin{theorem}[LSS uniqueness by length]
-\todo{Redo "LSS uniqueness by length"}
 \label{th:lss-uniqueness-by-length}
 If two LSS's are of the same length and
 have the same bottom, then they are identical.
 \end{theorem}
 
 \begin{proof}
-The proof is by induction on the length of the
-LSS.  Our induction hypothesis is
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-10}
-\begin{gathered}
-\left(
-    \begin{gathered}
-    (\var{length} = \size{\Vlss{lss1}} = \size{\Vlss{lss2}}) \\
-    \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
-    \end{gathered}
-\right) \\
-\implies \Vlss{lss1} = \Vlss{lss2}.
-\end{gathered}
-\end{equation}
-
-Our basis is
-\Eref{eq:th-LSS-uniqueness-by-length-10} where $\var{length} = 1$.
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-20}
-    \begin{gathered}
-    \left(\bigsize{\Vlss{lss1}} = \bigsize{\Vlss{lss2}} = 1 \right) \\
-    \land \; \Veim{bottom} = \Velement{lss1}{0} = \Velement{lss2}{0} \\
-    \because \text{ Antecedant of \Eref{eq:th-LSS-uniqueness-by-length-10}
-        with $\var{length} = 1$, AF basis.}
-    \end{gathered}
+\label{eq:th-lss-uniqueness-by-length-10}
+\var{lss1} \in \type{LSS} \land \var{lss2} \in \type{LSS} \because \text{WLOG, AF theorem}.
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-22}
-\Vlss{lss1} = \tuple{\Veim{bottom}} \because \Eref{eq:th-LSS-uniqueness-by-length-20}.
+\label{eq:th-lss-uniqueness-by-length-12}
+\Vlastix{lss1} = \Vlastix{lss2} \because \text{AF theorem}.
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-24}
-\Vlss{lss2} = \tuple{\Veim{bottom}} \because \Eref{eq:th-LSS-uniqueness-by-length-20}.
+\label{eq:th-lss-uniqueness-by-length-14}
+\Velement{lss1}{0} = \Velement{lss2}{0} \because \text{AF theorem}.
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-26}
-\Vlss{lss1} = \Vlss{lss2}
-\because \Eref{eq:th-LSS-uniqueness-by-length-22},
-    \Eref{eq:th-LSS-uniqueness-by-length-24}.
-\end{equation}
-\Eref{eq:th-LSS-uniqueness-by-length-26} is the consequent of
-    \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = 1$,
-    and the deduction of
-    \Eref{eq:th-LSS-uniqueness-by-length-26} from
-    \Eref{eq:th-LSS-uniqueness-by-length-20} shows the basis
-    of the induction.
-
-For the step we assume
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-27}
-\begin{gathered}
-\left(
-    \begin{gathered}
-    (\var{n} = \size{\Vlss{lss1}} = \size{\Vlss{lss2}}) \\
-    \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
-    \end{gathered}
-\right) \\
-\implies \Vlss{lss1} = \Vlss{lss2} \\
-\myparbox{\cuz{} the induction hypothesis \Eref{eq:th-LSS-uniqueness-by-length-10} for
-    $\var{length} = \var{n}$.%
-}
-\end{gathered}
-\end{equation}
-to show
-\Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$.
-
-We proceed to show the step directly,
-assuming
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-28}
-\begin{gathered}
-    \begin{gathered}
-    (\size{\Vlss{lssB1}} = \size{\Vlss{lssB2}} = \var{n}+1) \\
-    \land \; \Velement{lssB1}{0} = \Velement{lssB2}{0} = \Veim{bottom}
-    \end{gathered} \\
-    \myparbox{%
-        \cuz{} antecedant of induction hypothesis
-            \Eref{eq:th-LSS-uniqueness-by-length-10}
-            where $\var{length} = \var{n}+1$%
+\label{eq:th-lss-uniqueness-by-length-16}
+   \begin{gathered}
+   \forall \; 0 \le \var{j} \le \Vlastix{lss1} :
+       \VVelement{lss1}{j} = \VVelement{lss2}{j} \\
+    \myparbox{\cuz{} \Thref{th:lss-containment} with $\var{offset}=0$,
+        \Eref{eq:th-lss-uniqueness-by-length-10},
+        \Eref{eq:th-lss-uniqueness-by-length-12},
+        \Eref{eq:th-lss-uniqueness-by-length-14}.%
     }
-\end{gathered}
-\end{equation}
-to show the consequent
-of \Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$.
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-30}
-\Vlss{lssA1} = \Velement{lssB1}{0\ldots\var{n}}
-\because
-\Thref{th:leo-source-subsequence-validity},
-\Eref{eq:th-LSS-uniqueness-by-length-28},
-\text{WLOG}.
+   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-32}
-\Vlss{lssA2} = \Velement{lssB2}{0\ldots\var{n}}
-\because
-\Thref{th:leo-source-subsequence-validity},
-\Eref{eq:th-LSS-uniqueness-by-length-28},
-\text{WLOG}.
+\label{eq:th-lss-uniqueness-by-length-18}
+\var{lss1} = \var{lss2} \because \Eref{eq:th-lss-uniqueness-by-length-12},
+    \Eref{eq:th-lss-uniqueness-by-length-16}. \quad \myqed
 \end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-34}
-\Vsize{lssA1} = \Vsize{lssA2} = \var{n} \because
-    \Eref{eq:th-LSS-uniqueness-by-length-30},
-    \Eref{eq:th-LSS-uniqueness-by-length-32}.
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-36}
-\Velement{lssA1}{0} = \Velement{lssB1}{0} = \Veim{bottom} \because
-    \Eref{eq:th-LSS-uniqueness-by-length-28},
-    \Eref{eq:th-LSS-uniqueness-by-length-30}.
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-38}
-\Velement{lssA2}{0} = \Velement{lssB2}{0} = \Veim{bottom} \because
-    \Eref{eq:th-LSS-uniqueness-by-length-28},
-    \Eref{eq:th-LSS-uniqueness-by-length-32}.
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-40}
-\Velement{lssA1}{0} = \Velement{lssA2}{0} \because
-    \Eref{eq:th-LSS-uniqueness-by-length-36},
-    \Eref{eq:th-LSS-uniqueness-by-length-38}.
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-42}
-\begin{gathered}
-\myparbox{
-$\var{lssA1} = \var{lssA2}$ \cuz{}
-    \Eref{eq:th-LSS-uniqueness-by-length-27},
-    \Eref{eq:th-LSS-uniqueness-by-length-34},
-    \Eref{eq:th-LSS-uniqueness-by-length-40}.%
+\end{proof}
+
+\begin{theorem}[LSS trichotomy]
+\label{th:lss-trichotomy}
+Let
+\begin{gather}
+\label{eq:th-lss-trichotomy-03a}
+\var{lss1} \in \type{LSS} \\
+\label{eq:th-lss-trichotomy-03b}
+\land \; \var{lss2} \in \type{LSS} \\
+\label{eq:th-lss-trichotomy-03c}
+\land \; \Velement{lss1}{0} = \Velement{lss2}{0}.
+\end{gather}
+Then one of the following is true:
+\begin{gather}
+\label{eq:th-lss-trichotomy-08a}
+\var{lss1} = \var{lss2}. \\
+\label{eq:th-lss-trichotomy-08b}
+\text{\var{lss1} is a proper prefix of \var{lss2}.} \\
+\label{eq:th-lss-trichotomy-08c}
+\text{\var{lss2} is a proper prefix of \var{lss1}.}
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+The proof is by cases,
+with three cases, one for each of
+$\Vlastix{lss1} = \Vlastix{lss2}$;
+$\Vlastix{lss1} < \Vlastix{lss2}$; and
+$\Vlastix{lss2} < \Vlastix{lss1}$.
+
+For the first case we assume that $\Vlastix{lss1} = \Vlastix{lss2}$.
+By assumption for the theorem \Eref{eq:th-lss-trichotomy-03c},
+\var{lss1} and \var{lss2} has the same bottom,
+so that
+\begin{equation*}
+\myparbox{$\var{lss1} = \var{lss2}$ \cuz{} \Thref{th:lss-uniqueness-by-length}.
+    This is \Eref{eq:th-lss-trichotomy-08a}.%
 }
-\end{gathered}
+\end{equation*}
+
+For the second case we assume that
+\begin{equation}
+\label{eq:th-lss-trichotomy-12}
+\Vlastix{lss1} < \Vlastix{lss2} \because \text{AF case.}
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-44}
-\begin{gathered}
-\var{lssB1} = \tuple{\Velement{lssA1}{0} \ldots
-        \VVelement{lssA1}{n}, \Veim{topB1}} \\
-        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-28},
-        \Eref{eq:th-LSS-uniqueness-by-length-30}, WLOG.}
-\end{gathered}
+\label{eq:th-lss-trichotomy-14}
+   \begin{gathered}
+   \forall \; 0 \le \var{j} \le \Vlastix{lss1} :
+       \VVelement{lss1}{j} = \VVelement{lss2}{j} \\
+    \myparbox{\cuz{} \Thref{th:lss-containment} with $\var{offset}=0$,
+        \Eref{eq:th-lss-trichotomy-03a},
+        \Eref{eq:th-lss-trichotomy-03b},
+        \Eref{eq:th-lss-trichotomy-03c},
+        \Eref{eq:th-lss-trichotomy-12}.%
+    }
+   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-46}
-\begin{gathered}
-\var{lssB2} = \tuple{\Velement{lssA2}{0} \ldots
-        \VVelement{lssA2}{n}, \Veim{topB2}} \\
-        \text{\cuz{} \Eref{eq:th-LSS-uniqueness-by-length-28},
-        \Eref{eq:th-LSS-uniqueness-by-length-32},
-        WLOG.}
-\end{gathered}
+\label{eq:th-lss-trichotomy-16}
+\myparbox{\var{lss1} is a proper prefix of \var{lss2}
+        \cuz{} \Eref{eq:th-lss-trichotomy-12},
+        \Eref{eq:th-lss-trichotomy-14}.
+        This is \Eref{eq:th-lss-trichotomy-08b}.%
+    }
 \end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-48}
-\begin{gathered}
-\var{lssB2} = \tuple{\Velement{lssA1}{0} \ldots
-        \VVelement{lssA1}{n}, \Veim{topB2}} \\
-        \text{\cuz{}
-        \Eref{eq:th-LSS-uniqueness-by-length-42},
-        \Eref{eq:th-LSS-uniqueness-by-length-46}.%
-        }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-50}
-\begin{gathered}
-\var{topB1} = \NextSource{\VVelement{lssA1}{n}} \\
-        \text{\cuz{}
-        \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-LSS-uniqueness-by-length-44}.%
-        }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-52}
-\begin{gathered}
-\var{topB2} = \NextSource{\VVelement{lssA1}{n}} \\
-        \text{\cuz{}
-        \Dfref{def:leo-source-sequence},
-        \Eref{eq:th-LSS-uniqueness-by-length-48}.%
-        }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-54}
-\var{topB1} = \var{topB2}
-        \because
-        \Eref{eq:th-LSS-uniqueness-by-length-50},
-        \Eref{eq:th-LSS-uniqueness-by-length-52}.
-\end{equation}
-\begin{equation}
-\label{eq:th-LSS-uniqueness-by-length-56}
-\var{lssB1} = \var{lssB2}
-        \because
-        \Eref{eq:th-LSS-uniqueness-by-length-44},
-        \Eref{eq:th-LSS-uniqueness-by-length-48},
-        \Eref{eq:th-LSS-uniqueness-by-length-54}.
-\end{equation}
-\Eref{eq:th-LSS-uniqueness-by-length-56} is the consequent
-of the induction hypothesis
-\Eref{eq:th-LSS-uniqueness-by-length-10} for $\var{length} = \var{n}+1$,
-which we sought to show beginning at
-\Eref{eq:th-LSS-uniqueness-by-length-28}.
-With the consequent we have the step of the induction,
-with the step of the induction we have the induction,
-and with the induction we have the theorem.
+
+For the third case, we assume for the case that
+$\Vlastix{lss2} < \Vlastix{lss1}$.
+If we proceed through
+\Eref{eq:th-lss-trichotomy-12}--\Eref{eq:th-lss-trichotomy-16},
+reversing \var{lss1} and \var{lss2}, we conclude for the
+case that
+\begin{equation*}
+\myparbox{\var{lss2} is a proper prefix of \var{lss1}.
+        This is \Eref{eq:th-lss-trichotomy-08c}.%
+    }
+\end{equation*}
+
+We have completed the cases and shown the relationship between
+\var{lss1} and \var{lss2} is described by one of
+\Eref{eq:th-lss-trichotomy-08a},
+\Eref{eq:th-lss-trichotomy-08b}, and
+\Eref{eq:th-lss-trichotomy-08c}.
+which is what we needed to show for the theorem.
 \myqed
 \end{proof}
 
