@@ -4520,9 +4520,9 @@ is an EIM sequence defined by recurrence
 \begin{equation}
 \label{eq:def-leo-source-sequence-30}
 \begin{gathered}
-    \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{seq}} : \\
-    \exists \; \Veim{next} : \var{next} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
-    \land \; \VVelement{seq}{n} = \var{next}.
+    \forall \; 0 < \var{n} \le \Vlastix{seq} : \exists \; \Veim{next} : \\
+    \var{next} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
+    \land \; \VVelement{seq}{n} = \var{next},
 \end{gathered}
 \end{equation}
 with the initial condition
@@ -4587,15 +4587,15 @@ Let \Vlss{lss} be a Leo source EIM sequence.
 For the forward direction,
 we assume the antecedant to show the consequent.
 \begin{equation}
-\label{eq:th-proper-prefix-lim-predecessor-10}
-\begin{gathered}
-    \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next} \\
-    \because \text{antecedent AF forward direction.}
-\end{gathered}
+\label{eq:th-proper-prefix-lim-predecessor-10-10}
+\var{lss} \in \type{LSS} \because \text{AF theorem.}
 \end{equation}
 \begin{equation}
-\label{eq:th-proper-prefix-lim-predecessor-12}
-\var{lss} \in \type{LSS} \because \text{AF proof.}
+\label{eq:th-proper-prefix-lim-predecessor-10-20}
+\begin{gathered}
+    \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next} \\
+    \because \text{antecedent, AF forward direction.}
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-proper-prefix-lim-predecessor-14}
@@ -4603,7 +4603,7 @@ we assume the antecedant to show the consequent.
     \forall \; 0 < \Vnat{i} \le \Vlastix{lss} : \\
     \VVelement{lss}{n} = \NextSource{\Velement{lss}{\var{n}\subtract 1}} \\
     \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-proper-prefix-lim-predecessor-12}.
+        \Eref{eq:th-proper-prefix-lim-predecessor-10-10}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4611,7 +4611,7 @@ we assume the antecedant to show the consequent.
     \begin{gathered}
         \Velement{lss}{0} = \Source{\ell} \land \; \Valid{\ell} \\
     \because \Dfref{def:leo-source-sequence},
-        \Eref{eq:th-proper-prefix-lim-predecessor-12}.
+        \Eref{eq:th-proper-prefix-lim-predecessor-10-10}.
     \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4621,12 +4621,23 @@ we assume the antecedant to show the consequent.
 \begin{equation}
 \label{eq:th-proper-prefix-lim-predecessor-20}
 \begin{gathered}
+    \forall \; 0 < \Vnat{i} \le \Vlastix{lss} : \\
+    \VVelement{longer}{i} = \NextSource{\Velement{longer}{\var{i}\subtract 1}} \\
+    \because
+        \Eref{eq:th-proper-prefix-lim-predecessor-10-20},
+        \Eref{eq:th-proper-prefix-lim-predecessor-14},
+        \Eref{eq:th-proper-prefix-lim-predecessor-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-proper-prefix-lim-predecessor-21}
+\begin{gathered}
     \forall \; 0 < \Vnat{i} \le \Vlastix{longer} : \\
     \VVelement{longer}{i} = \NextSource{\Velement{longer}{\var{i}\subtract 1}} \\
     \because
-        \Eref{eq:th-proper-prefix-lim-predecessor-10},
-        \Eref{eq:th-proper-prefix-lim-predecessor-14},
-        \Eref{eq:th-proper-prefix-lim-predecessor-18}.
+        \Eref{eq:th-proper-prefix-lim-predecessor-10-20},
+        \Eref{eq:th-proper-prefix-lim-predecessor-18},
+        \Eref{eq:th-proper-prefix-lim-predecessor-20}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4644,7 +4655,7 @@ we assume the antecedant to show the consequent.
 \var{longer} \in \type{LSS} \\
     \because \longDfref{Leo source sequence}{def:leo-source-sequence},
     \Eref{eq:th-proper-prefix-lim-predecessor-18},
-    \Eref{eq:th-proper-prefix-lim-predecessor-20},
+    \Eref{eq:th-proper-prefix-lim-predecessor-21},
     \Eref{eq:th-proper-prefix-lim-predecessor-22}.
 \end{gathered}
 \end{equation}
@@ -4655,7 +4666,7 @@ we assume the antecedant to show the consequent.
 \end{equation}
 \Eref{eq:th-proper-prefix-lim-predecessor-26} is the consequent of the forward
 direction, so that the derivation
-\Eref{eq:th-proper-prefix-lim-predecessor-10}--%
+\Eref{eq:th-proper-prefix-lim-predecessor-10-10}--%
 \Eref{eq:th-proper-prefix-lim-predecessor-26} shows the forward direction.
 
 For the reverse direction, we again assume the antecedant to show the
@@ -4690,7 +4701,6 @@ we have the theorem.
 \end{proof}
 
 \begin{theorem}[Leo source subsequence]
-\todo{Redo proof of Leo source subsequence}
 \label{th:leo-source-subsequence-validity}
 If
 \begin{gather}
@@ -4710,8 +4720,8 @@ then
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-12}
 \begin{gathered}
-    \forall \var{n} \in \set{\var{m} : 0 < \var{m} \le \Vlastix{long}} : \\
-    \exists \; \Veim{next} : \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
+    \forall \; 0 < \var{n} \le \Vlastix{long} : \exists \; \Veim{next} : \\
+    \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
     \land \; \VVelement{long}{n} = \var{next} \\
      \because \Eref{eq:def-leo-source-sequence-30}
             \text{ in } \Dfref{def:leo-source-sequence},
@@ -4731,8 +4741,8 @@ then
 \begin{equation}
 \label{eq:th-leo-source-subsequence-validity-18}
 \begin{gathered}
-    \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \\
-    \exists \; \Veim{next} : \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
+    \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \exists \; \Veim{next} : \\
+    \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
     \land \; \VVelement{long}{n} = \var{next} \\
      \because \Eref{eq:th-leo-source-subsequence-validity-03},
        \Eref{eq:th-leo-source-subsequence-validity-12}.
