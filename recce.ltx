@@ -5266,127 +5266,40 @@ and \Vlss{suf} an arbitrary suffix of \var{max}:
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-maximal-lss-suffixes-13}
+\label{eq:th-maximal-lss-suffixes-14}
 \begin{gathered}
 \Velement{suf}{\Vlastix{suf}} = \Velement{max}{\Vlastix{max}}
 \because \Eref{eq:th-maximal-lss-suffixes-12}.
 \end{gathered}
 \end{equation}
-
-From \Eref{eq:th-maximal-lss-suffixes-13}, we see that
+From \Eref{eq:th-maximal-lss-suffixes-14}, we see that
 \var{suf} and \var{max} have the same top EIM.
 
-\todo{Replace some of this using the 4-way equivalence?}
-The proof that the suffix is a maximal LSS
-is by reductio.
-We assume that a suffix of a maximal LSS is not maximal.
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-14}
-\text{\Vlss{suf} is not maximal \cuz{} AF reductio.}
-\end{equation}
+We now proceed to show that \var{suf} is maximal.
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-16}
 \begin{gathered}
-\Vlss{longer} = \tuple{
-    \begin{gathered}
-    \Velement{suf}{0} \ldots \Velement{suf}{\Vlastix{suf}}, \\
-    \Veim{extend1} \ldots  \Veim{extendN}
-    \end{gathered}
-    } \\
-\because \longDfref{maximal LSS}{def:maximal-lss}, \Eref{eq:th-maximal-lss-suffixes-14}.
+\nexists \; \Veim{next} : \NextSource{\Velement{max}{\Vlastix{max}}} = \var{next} \\
+   \because \Thref{th:lss-termination-equivalence},
+    \Eref{eq:th-maximal-lss-suffixes-10}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-18}
 \begin{gathered}
-    \forall \var{n} \in \set{\var{i} : 0 < \var{i} \le \Vlastix{max}} : \\
-    \NextSource{\Velement{max}{\var{n}\subtract 1}} \neq \Lambda \\
-    \land \; \VVelement{max}{n} = \NextSource{\Velement{max}{\var{n}\subtract 1}} \\
-    \land \; \left(
-        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{max}{n} \land
-            \Valid{\ell}
-    \right) \\
-    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-maximal-lss-suffixes-09}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-20}
-\begin{gathered}
-    \NextSource{\Velement{suf}{\Vlastix{suf}}} \neq \Lambda \\
-    \land \; \Veim{extend1} = \NextSource{\Velement{suf}{\Vlastix{suf}}} \\
-    \land \; \left(
-        \exists \; \mylim{\ell} : \Source{\ell} = \Veim{extend1} \land
-            \Valid{\ell}
-    \right) \\
-    \because \Dfref{def:leo-source-sequence},
+\nexists \; \Veim{next} : \NextSource{\Velement{suf}{\Vlastix{suf}}} = \var{next} \\
+   \because \Eref{eq:th-maximal-lss-suffixes-14}.
     \Eref{eq:th-maximal-lss-suffixes-16}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-maximal-lss-suffixes-21}
-\begin{gathered}
-    \NextSource{\Velement{max}{\Vlastix{max}}} \neq \Lambda \\
-    \land \; \Veim{extend1} = \NextSource{\Velement{max}{\Vlastix{max}}} \\
-    \land \; \left(
-        \exists \; \mylim{\ell} : \Source{\ell} = \Veim{extend1} \land
-            \Valid{\ell}
-    \right) \\
-    \because \Eref{eq:th-maximal-lss-suffixes-13},
-        \Eref{eq:th-maximal-lss-suffixes-20}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-22}
-\begin{gathered}
-    \exists \mylim{\ell} : \Velement{max}{0} = \Source{\ell} \land \; \Valid{\ell} \\
-    \because \longDfref{Leo source sequence}{def:leo-source-sequence},
-    \Eref{eq:th-maximal-lss-suffixes-09}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-24}
-\begin{gathered}
-\Vlss{longer2} = \tuple{
-    \Velement{max}{0} \ldots \Velement{max}{\Vlastix{suf}},
-    \Veim{extend1}
-    } \\
-    \myparbox{%
-        \cuz{} \longDfref{Leo source sequence}{def:leo-source-sequence},
-        \Eref{eq:th-maximal-lss-suffixes-18},
-        \Eref{eq:th-maximal-lss-suffixes-21},
-        \Eref{eq:th-maximal-lss-suffixes-22}.%
-    }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-26}
-\myparbox{%
-   \var{max} is a proper prefix of \var{longer2} \cuz{}
-    \Eref{eq:th-maximal-lss-suffixes-24}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-28}
-\text{\var{max} is not maximal \cuz{}
-    \longDfref{maximal LSS}{def:maximal-lss},
-    \Eref{eq:th-maximal-lss-suffixes-26}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-suffixes-30}
-\myparbox{\var{suf} is maximal \cuz{}
-    contradiction
-    \Eref{eq:th-maximal-lss-suffixes-10} vs.
-    \Eref{eq:th-maximal-lss-suffixes-28},
-    showing reductio from
-    \Eref{eq:th-maximal-lss-suffixes-14}.
-}
+\label{eq:th-maximal-lss-suffixes-20}
+\text{\Vlss{suf} is maximal \cuz{} \Thref{th:lss-termination-equivalence},
+    \Eref{eq:th-maximal-lss-suffixes-18}.}
 \end{equation}
 The theorem is
-\Eref{eq:th-maximal-lss-suffixes-13}
-and
-\Eref{eq:th-maximal-lss-suffixes-30}.
+\Eref{eq:th-maximal-lss-suffixes-14} and
+and \Eref{eq:th-maximal-lss-suffixes-20}.
 \myqed
 \end{proof}
 
