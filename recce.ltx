@@ -5165,63 +5165,52 @@ maximal LSS.
 Let \Veim{bottom} be an arbitrary Leo source EIM.
 We first show that \var{bottom} is the bottom of
 at least one maximal LSS.
+Let
+\begin{equation}
+\Tvarset{lss-set}{LSS} = \set{\var{lss} : \Veim{bottom} = \Velement{lss}{0}}
+\end{equation}
+
 Every Leo source EIM is the bottom of at least one LSS --
-the LSS of length 1 whose only source EIM is \Veim{bottom}.
-Because LSS's are finite, we know that
+the LSS of length 1 whose only source EIM is \Veim{bottom},
+so that
 \begin{equation}
 \label{th:maximal-lss-uniqueness-10}
-\myparbox{%
-    there is a longest LSS, call it \Vlss{max},
-    such that \Velement{max}{0} = \var{bottom}
-    \cuz \Thref{th:leo-source-sequence-finiteness}.%
+\size{\var{lss-set}} \ge 1.
+\end{equation}
+We first will show that \var{lss-set} contains at least one maximal LSS.
+Because LSS's are finite \Thref{th:leo-source-sequence-finiteness},
+we know that
+\begin{equation}
+\label{th:maximal-lss-uniqueness-11}
+\myparbox{among the LSS's in \var{lss-set},
+    there is a greatest LSS length, call it \var{len} \cuz 
+    \Eref{th:maximal-lss-uniqueness-10}.
 }
 \end{equation}
-We show that \var{max} is maximal via a reductio.
+Therefore
 \begin{equation}
 \label{th:maximal-lss-uniqueness-12}
-\myparbox{%
-    Let \Vlss{longer} be an LSS such that
-    $\Velement{longer}{0} = \var{bottom}$,
-    and let \var{max} be a proper prefix of \var{longer}
-    \cuz AF reductio, WLOG.
-}
+\exists \; \Vlss{longest} : \var{longest} \in \var{lss-set} \land \Vsize{longest} = \var{len}
 \end{equation}
+Let \var{longest1} be an LSS which satisfies the predicate of 
+\Eref{th:maximal-lss-uniqueness-12}.
+Then
 \begin{equation}
 \label{th:maximal-lss-uniqueness-14}
-\Vsize{longer} > \Vsize{max} \because \Eref{th:maximal-lss-uniqueness-12}.
+\forall \Vlss{lss} \in \var{lss-set} : \Vsize{lss} \le \Vsize{longest}
+\because \Eref{th:maximal-lss-uniqueness-11},
+    \Eref{th:maximal-lss-uniqueness-12}.
 \end{equation}
+By \Eref{th:maximal-lss-uniqueness-14} and
+the LSS Trichotomy Theorem \Thref{th:lss-trichotomy},
+we have
 \begin{equation}
 \label{th:maximal-lss-uniqueness-16}
-\myparbox{%
-    \var{max} is not the longest LSS with its bottom at \Veim{bottom}
-    \cuz{} \Eref{th:maximal-lss-uniqueness-10},
-    \Eref{th:maximal-lss-uniqueness-12},
-    \Eref{th:maximal-lss-uniqueness-14}.
-}
+\myparbox{\Vlss{longest} is not a proper prefix of any LSS in \var{lss-set}.}
 \end{equation}
-\Eref{th:maximal-lss-uniqueness-16}
-is contrary to
-\Eref{th:maximal-lss-uniqueness-10},
-which shows the reductio.
-From the reductio we see that
-\begin{equation}
-\label{th:maximal-lss-uniqueness-18}
-\myparbox{%
-    \var{max} is not the proper prefix of any other
-    LSS with its bottom at \var{bottom}.
-}
-\end{equation}
-\begin{equation}
-\label{th:maximal-lss-uniqueness-20}
-\text{\var{max} is maximal }
-\because \longDfref{maximal LSS}{def:maximal-lss},
-\Eref{th:maximal-lss-uniqueness-18}.
-\end{equation}
-From \Eref{th:maximal-lss-uniqueness-10}
-and \Eref{th:maximal-lss-uniqueness-20}
-we may conclude
-that \Veim{bottom} is the bottom of at least one
-maximal LSS.
+By \Thref{th:lss-termination-equivalence} and
+\Eref{th:maximal-lss-uniqueness-16}, we see that \Vlss{longest}
+is maximal.
 
 It remains to show that \Veim{bottom} is the bottom of
 at most one maximal LSS.
