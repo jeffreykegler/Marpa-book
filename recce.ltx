@@ -4389,10 +4389,11 @@ beginning at
 \myqed
 \end{proof}
 
-We will see that Leo source sequences,
-when we introduce them, grow backwards -- the bottom is in
-the last Earley set of the sequence,
-and the top is in the first one.
+When we introduce Leo source sequences,
+We will see that they grow backwards --
+the bottom is in
+the last ES of the sequence,
+and the top is in the first ES of the sequence.
 This reversal of direction can be confusing,
 but Leo sequences are in fact recorded "top first",
 and recreated from bottom to top,
@@ -4418,7 +4419,7 @@ The theorem follows from
 
 \begin{theorem}[LIM-predecessor next-source equivalence]
 \label{th:lim-predecessor-next-source-equivalence}
-Let \Veim{prev} be an arbitrary element of the range of an LSS.
+Let \Veim{prev} be an arbitrary value of an LSS.
 Then
 \begin{gather}
 \label{eq:th-lim-predecessor-next-source-equivalence-02}
@@ -5075,7 +5076,7 @@ The following statements are equivalent:
 \begin{gather}
 \label{eq:th-lss-termination-equivalence-02}
 \exists \; \mylim{\ell} :
-    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{\Velement{lss}{\Vlastix{lss}}}}. \\
+    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\Velement{lss}{\Vlastix{lss}}}. \\
 \label{eq:th-lss-termination-equivalence-03}
 \exists \; \Veim{next} : \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next}. \\
 \label{eq:th-lss-termination-equivalence-04}
@@ -5228,20 +5229,20 @@ Let \var{longest1} be an LSS which satisfies the predicate of
 Then
 \begin{equation}
 \label{th:maximal-lss-uniqueness-14}
-\forall \Vlss{lss} \in \var{lss-set} : \Vsize{lss} \le \Vsize{longest}
+\forall \Vlss{lss} \in \var{lss-set} : \Vsize{lss} \le \Vsize{longest1}
 \because \Eref{th:maximal-lss-uniqueness-11},
     \Eref{th:maximal-lss-uniqueness-12}.
 \end{equation}
 \begin{equation}
 \label{th:maximal-lss-uniqueness-26}
-\myparbox{\Vlss{longest} is not a proper prefix of any LSS in \var{lss-set}
+\myparbox{\Vlss{longest1} is not a proper prefix of any LSS in \var{lss-set}
    \cuz{} \Eref{th:maximal-lss-uniqueness-14},
     \longThref{LSS Trichotomy Theorem}{th:lss-trichotomy}.
 }
 \end{equation}
 \begin{equation}
 \label{th:maximal-lss-uniqueness-28}
-\Maximal{\Vlss{longest}} \because
+\Maximal{\Vlss{longest1}} \because
 \Thref{th:lss-termination-equivalence},
 \Eref{th:maximal-lss-uniqueness-26}.
 \end{equation}
@@ -5387,6 +5388,33 @@ antecedant of the induction hypothesis to show its consequent.
 \label{th:bottom-lim invariant-14}
 \begin{gathered}
     \Maximal{\Vlss{lss}} \because \Eref{th:bottom-lim invariant-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim invariant-15}
+    \Source{\mylim{\ell}} = \Veim{bottom} \because \Eref{th:bottom-lim invariant-12}.
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim invariant-16}
+\begin{gathered}
+    \var{bottom} = \Velement{lss}{\Vlastix{lss}} \because \Eref{th:bottom-lim invariant-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim invariant-18}
+\begin{gathered}
+    \nexists \; \mylim{\ell} :
+        \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\VVelement{lss}{bottom}}. \\
+    \Thref{th:lss-termination-equivalence}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim invariant-20}
+\begin{gathered}
+\DR{\ell} = \DR{\var{bottom}}
+\land \; \Origin{\ell} = \Origin{\var{bottom}} \\
+\because \longDfref{LIM validity}{def:lim-validity},
+    \Eref{th:bottom-lim invariant-15}, \Eref{th:bottom-lim invariant-18}.
 \end{gathered}
 \end{equation}
 \todo{prove bottom lim invariant}
