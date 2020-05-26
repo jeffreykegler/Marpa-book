@@ -167,6 +167,11 @@
 \newcommand{\Tref}[1]{(t\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
 
+\newcommand{\longThref}[2]{%
+  \ifmmode \text{``#1''\Thref{#2}}%
+  \else``#1''\Thref{#2}%
+  \fi%
+}
 \newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
   \else``#1''\Dfref{#2}%
@@ -320,6 +325,7 @@
 \newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
 \newcommand{\Loc}[1]{\ensuremath{\mymathop{Loc}(#1)}}
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
+\newcommand{\Maximal}[1]{\ensuremath{\mymathop{Maximal}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
 \newcommand{\NextSource}[1]{\ensuremath{\mymathop{Next-Source}(#1)}}
@@ -5058,6 +5064,8 @@ which is what we needed to show for the theorem.
 \label{def:maximal-lss}
 An LSS is \dfn{maximal} if it is not the proper prefix
 of another LSS.
+The boolean function \Maximal{\Vlss{lss}} is true
+if and only if \Vlss{lss} is maximal.
 \end{definition}
 
 \begin{theorem}[LSS termination equivalence]
@@ -5073,7 +5081,7 @@ The following statements are equivalent:
 \label{eq:th-lss-termination-equivalence-04}
 \text{\Vlss{lss} is a proper prefix of another LSS.} \\
 \label{eq:th-lss-termination-equivalence-05}
-\text{\var{lss} is not maximal.}
+\neg\Maximal{\var{lss}}.
 \end{gather}
 \end{theorem}
 
@@ -5095,60 +5103,87 @@ The theorem follows from these three pairwise equivalences.
 \label{th:maximal-lss-length}
 Maximal LSS's with the same bottom have
 the same length.
+That is,
+\begin{equation}
+\begin{gathered}
+\Maximal{\Vlss{lss1}} \land
+\Maximal{\Vlss{lss2}} \land
+\Velement{lss1}{0} = \Velement{lss2}{0} \\
+\implies
+\Vsize{lss1} = \Vsize{lss2}.
+\end{gathered}
+\end{equation}
 \end{theorem}
 
 \begin{proof}
 The proof is by reductio.
+We assume the antecedant of the theorem,
+and the negation of the consequent of the theorem,
+and show a contradiction.
 Let \Vlss{short} and \Vlss{long} be two
 maximal LSS's that have the same bottom EIM,
 but different lengths.
 \begin{equation}
 \label{eq:th-maximal-lss-length-10}
-\Velement{short}{0} = \Velement{long}{0} \because \text{AF reductio.}
+\Maximal{\var{short}}
+\because \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-length-12}
-\Vsize{short} \neq \Vsize{long}
-\because \text{AF reductio.}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-length-14}
-\Vsize{short} < \Vsize{long}
-\because \text{WLOG.}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-length-16}
-\Vbigsize{short} = \Vbigsize{\Velement{long}{0\ldots \Vlastix{short}}}
-\because \Eref{eq:th-maximal-lss-length-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-length-18}
-\begin{gathered}
-\Vlss{short} = \element{\Vlss{long}}{0\ldots \Vlastix{short}} \\
-\because \Thref{th:lss-uniqueness-by-length},
-    \Eref{eq:th-maximal-lss-length-10},
-    \Eref{eq:th-maximal-lss-length-16}.
-\end{gathered}
+\Maximal{\var{long}}
+\because \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-length-20}
-\myparbox{%
-\Vlss{short} is a proper prefix of \Vlss{long}
-    \cuz{} \Eref{eq:th-maximal-lss-length-14},
-    \Eref{eq:th-maximal-lss-length-18}.%
-}
+\Velement{short}{0} = \Velement{long}{0}
+\because \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-length-22}
 \begin{gathered}
-\text{\Vlss{short} is not a maximal LSS} \\
-\because \longDfref{maximal LSS}{def:maximal-lss},
-    \Eref{eq:th-maximal-lss-length-20}.
+\Vsize{short} \neq \Vsize{long} \\
+\because \text{negation of consequent of theorem, AF reductio.}
 \end{gathered}
 \end{equation}
-With \Eref{eq:th-maximal-lss-length-22} we have the reductio
-and the theorem.
-\myqed
+\begin{equation}
+\label{eq:th-maximal-lss-length-24}
+\Vsize{short} < \Vsize{long}
+\because
+\text{\Eref{eq:th-maximal-lss-length-22}, WLOG.}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-length-26}
+\Vbigsize{short} = \Vbigsize{\Velement{long}{0\ldots \Vlastix{short}}}
+\because \Eref{eq:th-maximal-lss-length-24}.
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-length-28}
+\begin{gathered}
+\Vlss{short} = \element{\Vlss{long}}{0\ldots \Vlastix{short}} \\
+\because \Thref{th:lss-uniqueness-by-length},
+    \Eref{eq:th-maximal-lss-length-20},
+    \Eref{eq:th-maximal-lss-length-26}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-length-30}
+\myparbox{%
+\Vlss{short} is a proper prefix of \Vlss{long}
+    \cuz{} \Eref{eq:th-maximal-lss-length-24},
+    \Eref{eq:th-maximal-lss-length-28}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-length-32}
+\begin{gathered}
+\neg\Maximal{\var{short}}
+\because \longDfref{maximal LSS}{def:maximal-lss},
+    \Eref{eq:th-maximal-lss-length-30}.
+\end{gathered}
+\end{equation}
+\Eref{eq:th-maximal-lss-length-32} contradicts
+\Eref{eq:th-maximal-lss-length-10}, which give us
+the reductio and the theorem. \myqed
 \end{proof}
 
 \begin{theorem}[Maximal LSS uniqueness]
@@ -5197,16 +5232,19 @@ Then
 \because \Eref{th:maximal-lss-uniqueness-11},
     \Eref{th:maximal-lss-uniqueness-12}.
 \end{equation}
-By \Eref{th:maximal-lss-uniqueness-14} and
-the LSS Trichotomy Theorem \Thref{th:lss-trichotomy},
-we have
 \begin{equation}
-\label{th:maximal-lss-uniqueness-16}
-\myparbox{\Vlss{longest} is not a proper prefix of any LSS in \var{lss-set}.}
+\label{th:maximal-lss-uniqueness-26}
+\myparbox{\Vlss{longest} is not a proper prefix of any LSS in \var{lss-set}
+   \cuz{} \Eref{th:maximal-lss-uniqueness-14},
+    \longThref{LSS Trichotomy Theorem}{th:lss-trichotomy}.
+}
 \end{equation}
-By \Thref{th:lss-termination-equivalence} and
-\Eref{th:maximal-lss-uniqueness-16}, we see that \Vlss{longest}
-is maximal.
+\begin{equation}
+\label{th:maximal-lss-uniqueness-28}
+\Maximal{\Vlss{longest}} \because
+\Thref{th:lss-termination-equivalence},
+\Eref{th:maximal-lss-uniqueness-26}.
+\end{equation}
 
 It remains to show that \Veim{bottom} is the bottom of
 at most one maximal LSS.
@@ -5231,35 +5269,47 @@ maximal LSS with the same top EIM.
 \end{theorem}
 
 \begin{proof}
-Let \Vlss{max} be an arbitrary maximal LSS,
-and \Vlss{suf} an arbitrary suffix of \var{max}:
+The proof is direct.
+The strategy is to assume an arbitrary maximal LSS,
+call it \Vlss{max},
+and an arbitrary suffix, call it \Veimseq{suf}.
+We show, first,
+that \Veimseq{suf} is an LSS;
+second, that \Vlss{max} and \var{suf} share the same top EIM; and
+third, that \var{suf} is maximal.
+
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-09}
 \var{max} \in \type{LSS} \cuz{} \text{AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-10}
-\text{\Vlss{max} is maximal \cuz{} AF proof.}
+\text{\Maximal{\Vlss{max}} \cuz{} AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-12}
 \begin{gathered}
-\Vlss{suf} = \Velement{max}{\var{i}\ldots \Vlastix{max}}
+\Veimseq{suf} = \Velement{max}{\var{i}\ldots \Vlastix{max}}
 \land 0 \le \var{i} \le \Vlastix{max} \\
-\because \text{AF proof, definition of ``suffix''.}
+\because \text{AF proof, definition of ``suffix'', WLOG.}
 \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-suffixes-13}
+\myparbox{$\var{suf} \in \type{LSS}$
+    \cuz{} \Thref{th:leo-source-subsequence-validity}.
+    This shows that \var{suf} is an LSS.}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-14}
 \begin{gathered}
-\Velement{suf}{\Vlastix{suf}} = \Velement{max}{\Vlastix{max}}
-\because \Eref{eq:th-maximal-lss-suffixes-12}.
+\myparbox{$\Velement{suf}{\Vlastix{suf}} = \Velement{max}{\Vlastix{max}}$
+    \cuz{} \Eref{eq:th-maximal-lss-suffixes-12}.
+    This shows that \var{suf} and \var{max} share the same top.%
+}
 \end{gathered}
 \end{equation}
-From \Eref{eq:th-maximal-lss-suffixes-14}, we see that
-\var{suf} and \var{max} have the same top EIM.
 
-We now proceed to show that \var{suf} is maximal.
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-16}
 \begin{gathered}
@@ -5272,18 +5322,21 @@ We now proceed to show that \var{suf} is maximal.
 \label{eq:th-maximal-lss-suffixes-18}
 \begin{gathered}
 \nexists \; \Veim{next} : \NextSource{\Velement{suf}{\Vlastix{suf}}} = \var{next} \\
-   \because \Eref{eq:th-maximal-lss-suffixes-14}.
+   \because \Eref{eq:th-maximal-lss-suffixes-14},
     \Eref{eq:th-maximal-lss-suffixes-16}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-suffixes-20}
-\text{\Vlss{suf} is maximal \cuz{} \Thref{th:lss-termination-equivalence},
-    \Eref{eq:th-maximal-lss-suffixes-18}.}
+\myparbox{\Maximal{\Vlss{suf}} \cuz \Thref{th:lss-termination-equivalence},
+    \Eref{eq:th-maximal-lss-suffixes-18}.
+    This shows that \var{lss} is maximal.%
+}
 \end{equation}
 The theorem is
+\Eref{eq:th-maximal-lss-suffixes-13},
 \Eref{eq:th-maximal-lss-suffixes-14} and
-and \Eref{eq:th-maximal-lss-suffixes-20}.
+\Eref{eq:th-maximal-lss-suffixes-20}.
 \myqed
 \end{proof}
 
@@ -5307,7 +5360,7 @@ We take as the induction hypothesis
 \begin{equation}
     \begin{gathered}
     \label{th:bottom-lim invariant-10}
-    \text{\Vlss{lss} is maximal} \land \Veim{bottom} = \Velement{lss}{0} \\
+    \Maximal{\Vlss{lss}} \land \Veim{bottom} = \Velement{lss}{0} \\
     \land \; \Veim{top} = \Velement{lss}{\Vlastix{lss}}
     \land \; \Vsize{lss} = \var{length}
     \\
