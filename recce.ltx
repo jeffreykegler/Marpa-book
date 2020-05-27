@@ -129,6 +129,10 @@
 \newcommand{\On}{\order{\var{n}}}
 \newcommand{\lastix}[1]{\ensuremath{\##1}}
 \newcommand{\Vlastix}[1]{\lastix{\var{#1}}}
+\newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
+\newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
+\newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
+\newcommand{\VlastElement}[1]{\Velement{#1}{\#\var{#1}}}
 \newcommand{\dispEnd}{
   \ifmmode\bigcirc
   \else$\bigcirc$
@@ -245,9 +249,6 @@
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
 \newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{\seq{\var{#2}}}}}
-\newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
-\newcommand{\Velement}[2]{\element{\var{#1}}{#2}}
-\newcommand{\VVelement}[2]{\Velement{#1}{\var{#2}}}
 
 \newcommand{\eim}[1]{\ensuremath{#1_\type{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
@@ -5161,7 +5162,7 @@ but different lengths.
 \label{eq:th-maximal-lss-length-28}
 \begin{gathered}
 \Vlss{short} = \element{\Vlss{long}}{0\ldots \Vlastix{short}} \\
-\because \Thref{th:lss-uniqueness-by-length},
+\because \longThref{LSS uniqueness by length}{th:lss-uniqueness-by-length},
     \Eref{eq:th-maximal-lss-length-20},
     \Eref{eq:th-maximal-lss-length-26}.
 \end{gathered}
@@ -5344,14 +5345,30 @@ The theorem is
 \subsection{Counting Leo items}
 
 \begin{theorem}[Bottom LIM invariant]
-\label{th:bottom-lim invariant}
+\label{th:bottom-lim-invariant}
+If \var{lss} is a maximal LSS,
+then the dotted rule and origin of any valid LIM of the bottom EIM
+of \Vlss{lss}
+are same as the dotted rule and origin of the top EIM of \var{lss}.
+That is, let
+\begin{gather}
+\label{th:bottom-lim-invariant-02}
+\var{lss} \in \type{LSS} \\
+\label{th:bottom-lim-invariant-04}
+\land \; \Maximal{\var{lss}}.
+\end{gather}
+Then
 \begin{equation}
+\label{th:bottom-lim-invariant-08}
 \begin{gathered}
-\Maximal{\Vlss{lss}} \land \Source{\mylim{\ell}} = \Veim{bottom} \\
-    \land \; \var{bottom} = \Velement{lss}{0}
-    \land \Veim{top} = \Velement{lss}{\Vlastix{lss}} \\
-\implies \\
-\DR{\var{top}} = \DR{\ell} \land \Origin{\var{top}} = \Origin{\ell}.
+\Valid{\mylim{\ell}} \land \Source{\ell} = \Velement{lss}{0} \\
+\implies
+    \left(
+    \begin{gathered}
+    \DR{\VlastElement{lss}} = \DR{\ell} \\
+    \land \; \Origin{\VlastElement{lss}} = \Origin{\ell}.
+    \end{gathered}
+    \right)
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -5360,61 +5377,75 @@ The theorem is
 The proof is by induction on the length of the LSS.
 We take as the induction hypothesis
 \begin{equation}
-\label{th:bottom-lim invariant-10}
+\label{th:bottom-lim-invariant-10}
     \begin{gathered}
-\Maximal{\Vlss{lss}} \land \Source{\mylim{\ell}} = \Veim{bottom} \\
-    \land \; \var{bottom} = \Velement{lss}{0}
-        \land \Veim{top} = \Velement{lss}{\Vlastix{lss}} \land \Vsize{lss} = \var{length}
+        \Valid{\mylim{\ell}} \land
+        \Source{\ell} = \Velement{lss}{0}
+        \land \Vsize{lss} = \var{length}
     \\
     \implies
-    \DR{\var{top}} = \DR{\ell} \land \Origin{\var{top}} = \Origin{\ell}.
+    \left(
+    \begin{gathered}
+    \DR{\VlastElement{lss}} = \DR{\ell} \\
+    \land \; \Origin{\VlastElement{lss}} = \Origin{\ell}.
+    \end{gathered}
+    \right)
     \end{gathered}
 \end{equation}
 
-For the basis, we take an LSS length of 1, assuming the
+For the basis, we use an LSS length of 1, assuming the
 antecedant of the induction hypothesis to show its consequent.
 \begin{equation}
-\label{th:bottom-lim invariant-12}
+\label{th:bottom-lim-invariant-12}
 \begin{gathered}
-    \Maximal{\Vlss{lss}} \land \Source{\mylim{\ell}} = \Veim{bottom} \\
-    \land \; \Veim{bottom} = \Velement{lss}{0} =
-     \Veim{top} = \Velement{lss}{\Vlastix{lss}} \\
+        \Valid{\mylim{\ell}} \land
+    \Source{\ell} = \Velement{lss}{0} =
+     \VlastElement{lss} \\
     \because \text{antecedant of induction hypothesis
-        \Eref{th:bottom-lim invariant-10} for $\var{length}=1$.%
+        \Eref{th:bottom-lim-invariant-10} for $\var{length}=1$.%
     }
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{th:bottom-lim invariant-14}
+\label{th:bottom-lim-invariant-14}
 \begin{gathered}
-    \Maximal{\Vlss{lss}} \because \Eref{th:bottom-lim invariant-12}.
+    \Valid{\mylim{\ell}}
+        \because \Eref{th:bottom-lim-invariant-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{th:bottom-lim invariant-15}
-    \Source{\mylim{\ell}} = \Veim{bottom} \because \Eref{th:bottom-lim invariant-12}.
-\end{equation}
-\begin{equation}
-\label{th:bottom-lim invariant-16}
+\label{th:bottom-lim-invariant-16}
 \begin{gathered}
-    \var{bottom} = \Velement{lss}{\Vlastix{lss}} \because \Eref{th:bottom-lim invariant-12}.
+    \Source{\mylim{\ell}} = \VlastElement{lss}
+        \because \Eref{th:bottom-lim-invariant-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{th:bottom-lim invariant-18}
+\label{th:bottom-lim-invariant-18}
 \begin{gathered}
-    \nexists \; \mylim{\ell} :
-        \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\VVelement{lss}{bottom}}. \\
-    \Thref{th:lss-termination-equivalence}
+    \nexists \; \mylim{\ell1} :
+        \Valid{\ell1} \land \myfn{LIM-Predecessor-2}{\ell1,\VlastElement{lss}} \\
+    \because \Eref{th:bottom-lim-invariant-04},
+    \Thref{th:lss-termination-equivalence}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{th:bottom-lim invariant-20}
+\label{th:bottom-lim-invariant-20}
 \begin{gathered}
-\DR{\ell} = \DR{\var{bottom}}
-\land \; \Origin{\ell} = \Origin{\var{bottom}} \\
+\DR{\ell} = \DR{\Source{\ell}}
+\land \; \Origin{\ell} = \Origin{\Source{\ell}} \\
 \because \longDfref{LIM validity}{def:lim-validity},
-    \Eref{th:bottom-lim invariant-15}, \Eref{th:bottom-lim invariant-18}.
+    \Eref{th:bottom-lim-invariant-14},
+    \Eref{th:bottom-lim-invariant-16}, \Eref{th:bottom-lim-invariant-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-22}
+\begin{gathered}
+\DR{\ell} = \DR{\VlastElement{lss}}
+\land \; \Origin{\ell} = \Origin{\VlastElement{lss}} \\
+\because \longDfref{LIM validity}{def:lim-validity},
+    \Eref{th:bottom-lim-invariant-16}, \Eref{th:bottom-lim-invariant-20}.
 \end{gathered}
 \end{equation}
 \todo{prove bottom lim invariant}
