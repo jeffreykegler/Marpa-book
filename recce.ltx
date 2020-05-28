@@ -5391,28 +5391,25 @@ We take as the induction hypothesis
     \end{gathered}
 \end{equation}
 
-For the basis, we use an LSS length of 1, assuming the
+For the basis, we use an LSS length of 1.
+We start a new variable scope for the basis deduction,
+in which we will assume the
 antecedant of the \myfn{Hyp}{1} to show its consequent.
 \begin{equation}
 \label{th:bottom-lim-invariant-12}
-\begin{gathered}
-        \Maximal{\Vlss{lssB}}
-    \because \text{WLOG, antecedant of \myfn{Hyp}{1}.}
-\end{gathered}
+\myparbox{\Maximal{\Vlss{lssB}} \cuz{}
+    antecedant of \myfn{Hyp}{1}, arbitrary choice of \var{lssB}.%
+}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-14}
-\begin{gathered}
-    \Valid{\var{limB}}
-        \because \text{WLOG, antecedant of \myfn{Hyp}{1}.}
-\end{gathered}
+\myparbox{\Valid{\var{limB}} \cuz{} antecedant of \myfn{Hyp}{1},
+   arbitrary choice of \var{limB}.%
+}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-16}
-\begin{gathered}
-    \Source{\var{limB}} = \VlastElement{lssB} \\
-        \because \text{WLOG, antecedant of \myfn{Hyp}{1}.}
-\end{gathered}
+\Source{\var{limB}} = \VlastElement{lssB} \because \text{antecedant of \myfn{Hyp}{1}.}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-18}
@@ -5440,10 +5437,11 @@ antecedant of the \myfn{Hyp}{1} to show its consequent.
 \land \; \Origin{\var{limB}} = \Origin{\VlastElement{lssB}} \\
 \myparbox{\cuz{}
     \Eref{th:bottom-lim-invariant-16}, \Eref{th:bottom-lim-invariant-20}.
-    This is the consequent of \myfn{Hyp}{1}.%
 }
 \end{gathered}
 \end{equation}
+\Eref{th:bottom-lim-invariant-22} is the consequent of \myfn{Hyp}{1},
+and ends the variable scope for the basis deduction.
 \begin{equation}
 \label{th:bottom-lim-invariant-24}
     \myparbox{\myfn{Hyp}{1} \cuz{} deduction from
@@ -5453,7 +5451,8 @@ antecedant of the \myfn{Hyp}{1} to show its consequent.
     }
 \end{equation}
 
-For the step of the induction we assume
+For the step of the induction we start a new variable scope.
+In it we assume
 \begin{equation}
 \label{th:bottom-lim-invariant-30}
     \myfn{Hyp}{\var{n}} \because \text{AF step.}
@@ -5467,23 +5466,30 @@ Because in the basis $\var{n}=1$, we may assume that
 \text{\cuz{} \Eref{th:bottom-lim-invariant-24}, AF step.}
 \end{equation}
 \begin{equation}
+\label{th:bottom-lim-invariant-33}
+\var{lssS} \in \type{LSS}
+    \because \text{antecedant of \myfn{Hyp}{\var{n}+1}.}
+\end{equation}
+\begin{equation}
 \label{th:bottom-lim-invariant-34}
 \Maximal{\var{lssS}}
     \because \text{antecedant of \myfn{Hyp}{\var{n}+1}.}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-36}
-\bigsize{\Vlss{lssS}} = \var{n} + 1
+\bigsize{\var{lssS}} = \var{n} + 1
     \because \text{antecedant of \myfn{Hyp}{\var{n}+1}.}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-40}
 \begin{gathered}
-\var{lssS} = \left[
+\Vlss{lssS} = \left[
     \Veim{bottom}, \Velement{suf}{0} \ldots \VVelement{suf}{n}
     \right] \\
     \myparbox{\cuz{} WLOG,
-        \Eref{th:bottom-lim-invariant-32}, \Eref{th:bottom-lim-invariant-36}.}
+        \Eref{th:bottom-lim-invariant-32}, \Eref{th:bottom-lim-invariant-36},
+        arbitrary choice of \var{bottom} and \var{suf}.%
+    }
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5494,7 +5500,7 @@ Because in the basis $\var{n}=1$, we may assume that
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-44}
-\myparbox{\Veimseq{suf} is a suffix of \Vlss{lssS} \cuz{} 
+\myparbox{\Veimseq{suf} is a suffix of \var{lssS} \cuz{} 
     \Eref{th:bottom-lim-invariant-40}.}
 \end{equation}
 \begin{equation}
@@ -5502,6 +5508,7 @@ Because in the basis $\var{n}=1$, we may assume that
 \begin{gathered}
 \Veimseq{suf} \in \type{LSS} \land \Maximal{\var{suf}} \\
     \myparbox{\cuz{} \longThref{Maximal LSS suffixes}{th:maximal-lss-suffixes},
+        \Eref{th:bottom-lim-invariant-33},
         \Eref{th:bottom-lim-invariant-34},
         \Eref{th:bottom-lim-invariant-44}.
     }
@@ -5512,6 +5519,24 @@ Because in the basis $\var{n}=1$, we may assume that
 \begin{gathered}
 \Vsize{suf} = \var{n} \because \Eref{th:bottom-lim-invariant-40}.
 \end{gathered}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-50}
+\myparbox{$\Valid{\Vlim{limS1}} \land \Source{\var{limS1}} = \Velement{lss}{1}$
+    \cuz{} \Eref{th:bottom-lim-invariant-32},
+        \Eref{th:bottom-lim-invariant-33},
+        \Eref{th:bottom-lim-invariant-36},
+        \longThref{Leo source existence}{th:leo-source-existence},
+        arbitrary choice of \var{limS1}.%
+}
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-52}
+\myparbox{$\Valid{\var{limS1}} \land \Source{\var{limS1}} = \Velement{suf}{0}$
+    \cuz{} \Eref{th:bottom-lim-invariant-32},
+        \Eref{th:bottom-lim-invariant-40},
+        \Eref{th:bottom-lim-invariant-50}.%
+}
 \end{equation}
 
 \todo{prove bottom lim invariant}
