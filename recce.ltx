@@ -3640,12 +3640,6 @@ Leo items ``stand in'' for an EIM source.
 \end{gathered}
 \end{equation*}
 We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}.
-We will also use the alternative notation
-\[
-\Source{\mylim{\ell}} \defined \Veim{source} :
-\myfn{Source2}{\var{source},\ell}
-\]
-once we prove that \Source{} is, in fact, a function.
 \dispEnd
 \end{definition}
 
@@ -3810,7 +3804,6 @@ That is,
     \implies \var{x} = \var{y}.
 \end{gathered}
 \end{equation}
-Also, the function \Source{} exists.
 \end{theorem}
 
 \begin{proof}
@@ -3862,8 +3855,30 @@ to show the consequent of the theorem.
 \end{equation}
 \Eref{eq:th-leo-source-uniqueness-10}--\Eref{eq:th-leo-source-uniqueness-28}
 shows \Eref{eq:th-leo-source-uniqueness-02}.
-From \Eref{eq:th-leo-source-uniqueness-02},
-it follows immediately that the \Source{} function exists.
+\myqed
+\end{proof}
+
+\begin{theorem}[Source function]
+\label{th:source-function}
+The function
+\[
+\Source{\mylim{\ell}} \defined \Veim{source} :
+\myfn{Source2}{\var{source},\ell}
+\]
+exists.
+\end{theorem}
+
+\begin{proof}
+It is clear that
+\[
+\var{Source} = \set{ \tuple{ \var{lim}, \var{source} } \in \type{LIM} \times \type{EIM} :
+    \myfn{Source2}{\var{source},\var{lim}}
+}
+\]
+is a relation.
+From \longThref{Leo source uniqueness}{th:leo-source-uniqueness}
+it follows that every argument of \var{Source} has a unique value
+and therefore that \myfn{Source}{} is a function.
 \myqed
 \end{proof}
 
@@ -4274,8 +4289,9 @@ if and only if \Vlim{x} is valid.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Next source function]
-\label{def:next-source-fn}
+\begin{theorem}[Next source function existence]
+\label{th:next-source-fn}
+The function
 \[
 \begin{gathered}
 \NextSource{\Veim{prev}} \defined \\
@@ -4287,21 +4303,18 @@ if and only if \Vlim{x} is valid.
     \end{gathered} \right)
 \end{gathered}
 \]
-\end{definition}
-
-\begin{theorem}[Next source function existence]
-\label{th:next-source-function-existence}
-The \NextSource{} function exists.
+exists.
 \end{theorem}
 
 \begin{proof}
+The relation
 \begin{equation}
-\label{eq:th-next-source-function-existence-10}
+\label{eq:th-next-source-fn-10}
 \begin{gathered}
 \var{NextSource} = \\
 \set{
     \begin{gathered}
-    \tuple{ \Veim{prev}, \Veim{next} } : \\
+    \tuple{ \var{prev}, \var{next} } \in \type{EIM} \times \type{EIM} : \\
     \left(
     \begin{gathered}
     \exists \; \mylim{\ell} : \var{next} = \Source{\ell} \\
@@ -4310,83 +4323,85 @@ The \NextSource{} function exists.
     \end{gathered}
     \right)
     \end{gathered}
-} \\
-   \because \longDfref{Next source function}{def:next-source-fn}.
+}
+\\ \because \longThref{Next source function}{th:next-source-fn}.
 \end{gathered}
 \end{equation}
-In \Eref{eq:th-next-source-function-existence-10}, \var{Next-Source} is
-clearly a relation, but it remains to show that is a function.
+clearly exists.
+It remains to show that \var{NextSource} is a function.
 To do that, we must show that there is a unique value for each argument.
-To do this we assume the existence of two elements of \var{Next-Source} with
+
+We proceed by direct proof,
+assuming the existence of two elements of \var{Next-Source} with
 the same argument, to show that they must have the same value.
 \begin{equation}
-\label{eq:th-next-source-function-existence-12}
+\label{eq:th-next-source-fn-12}
 \tuple{ \Veim{prev}, \Veim{next1} } \in \var{Next-Source} \because \text{AF proof}.
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-14}
+\label{eq:th-next-source-fn-14}
 \tuple{ \Veim{prev}, \Veim{next2} } \in \var{Next-Source} \because \text{AF proof}.
 \end{equation}
 We seek to show that $\var{next1} = \var{next2}$.
 \begin{equation}
-\label{eq:th-next-source-function-existence-16}
+\label{eq:th-next-source-fn-16}
     \begin{gathered}
     \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
     \land \; \Valid{\ell1}
     \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
-    \because \Eref{eq:th-next-source-function-existence-12}.
+    \because \Eref{eq:th-next-source-fn-12}.
     \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-18}
+\label{eq:th-next-source-fn-18}
     \begin{gathered}
     \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
     \land \; \Valid{\ell2}
     \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
-    \because \Eref{eq:th-next-source-function-existence-14}.
+    \because \Eref{eq:th-next-source-fn-14}.
     \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-20}
+\label{eq:th-next-source-fn-20}
     \begin{gathered}
     \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
     \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
-    \because \Eref{eq:th-next-source-function-existence-16}.
+    \because \Eref{eq:th-next-source-fn-16}.
     \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-22}
+\label{eq:th-next-source-fn-22}
     \begin{gathered}
     \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
     \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
-    \because \Eref{eq:th-next-source-function-existence-18}.
+    \because \Eref{eq:th-next-source-fn-18}.
     \end{gathered}
 \end{equation}
 \begin{equation}
 \begin{gathered}
-\label{eq:th-next-source-function-existence-24}
+\label{eq:th-next-source-fn-24}
     \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
     \because
         \longDfref{Next source}{def:next-source-eim},
-        \Eref{eq:th-next-source-function-existence-20}.
+        \Eref{eq:th-next-source-fn-20}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-26}
+\label{eq:th-next-source-fn-26}
     \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \because
         \Dfref{def:next-source-eim},
-        \Eref{eq:th-next-source-function-existence-22}.
+        \Eref{eq:th-next-source-fn-22}.
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-function-existence-28}
+\label{eq:th-next-source-fn-28}
 \Veim{next1} = \Veim{next2} \because
         \Thref{th:leo-source-predecessor-uniqueness},
-        \Eref{eq:th-next-source-function-existence-24},
-        \Eref{eq:th-next-source-function-existence-26}.
+        \Eref{eq:th-next-source-fn-24},
+        \Eref{eq:th-next-source-fn-26}.
 \end{equation}
-\Eref{eq:th-next-source-function-existence-28} is what we sought to show
+\Eref{eq:th-next-source-fn-28} is what we sought to show
 beginning at
-\Eref{eq:th-next-source-function-existence-12}, and completes the proof.
+\Eref{eq:th-next-source-fn-12}, and completes the proof.
 \myqed
 \end{proof}
 
@@ -4415,7 +4430,7 @@ the method.
 The theorem follows from
 \Thref{th:source-lim-connection},
 \Thref{th:lim-predecessor-not-after-eim}, and
-\longDfref{Next source}{def:next-source-fn}.
+\longThref{Next source}{th:next-source-fn}.
 \end{proof}
 
 \begin{theorem}[LIM-predecessor next-source equivalence]
@@ -4433,7 +4448,7 @@ Then
 
 \begin{proof}
 The forward direction of the theorem follows immediately from
-the definition of \NextSource{} \Dfref{def:next-source-fn}.
+the definition of \NextSource{} \Thref{th:next-source-fn}.
 We show the reverse direction directly, assuming its
 antecedant to show its consequent.
 \begin{equation}
@@ -4486,7 +4501,7 @@ antecedant to show its consequent.
 \begin{gathered}
     \exists \; \Veim{next} : \NextSource{\var{prev}} = \var{next} \\
     \myparbox{%
-        \cuz{} \longDfref{Next source}{def:next-source-fn},
+        \cuz{} \longThref{Next source}{th:next-source-fn},
         \Eref{eq:th-lim-predecessor-next-source-equivalence-16},
         and name change from \var{pred-source} to \var{next}.%
     }
@@ -4559,7 +4574,7 @@ For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
 the theorem follows from
 \Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
 and from the definition
-of \longDfref{Next source function}{def:next-source-fn}.
+of \longThref{Next source function}{th:next-source-fn}.
 \myqed
 \end{proof}
 
@@ -4908,7 +4923,7 @@ Proceeding to consider \var{bad1},
     \myparbox{\cuz{}
         \longDfref{Next source relation}{def:next-source-eim},
         \Thref{th:leo-source-predecessor-uniqueness},
-        \longDfref{Next source function}{def:next-source-fn},
+        \longThref{Next source function}{th:next-source-fn},
         \Eref{eq:th-lss-containment-14},
         \Eref{eq:th-lss-containment-20},
         \Eref{eq:th-lss-containment-22}.%
