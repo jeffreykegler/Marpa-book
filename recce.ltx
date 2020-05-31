@@ -5500,7 +5500,7 @@ Because in the basis $\var{n}=1$, we may assume that
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-44}
-\myparbox{\Veimseq{suf} is a suffix of \var{lssS} \cuz{} 
+\myparbox{\Veimseq{suf} is a suffix of \var{lssS} \cuz{}
     \Eref{th:bottom-lim-invariant-40}.}
 \end{equation}
 \begin{equation}
@@ -5521,46 +5521,83 @@ Because in the basis $\var{n}=1$, we may assume that
 \end{gathered}
 \end{equation}
 
-\Velement{suf}{0} has only one LIM, but we have yet to
+In what follows, we will find it useful to study
+the set of LIM's at \Velement{suf}{0}.  Because is also
+at \Velement{lss}{1}, we call this set \var{preds1}.
+\begin{equation}
+\label{th:bottom-lim-invariant-50}
+\Vlimset{preds1} = \set{ \ell \in \type{LIM} :
+    \Valid{\ell} \land \Source{\ell} = \Velement{suf}{0}
+}
+\end{equation}
+
+\var{preds1} has only one LIM, but we have yet to
 prove this.
-To characterize the properties of the LIM's of \Velement{suf}{0},
-we now open a brief inner variable scope.
+We are able to show the \var{preds1} has at least one LIM.
 \begin{equation}
 \label{th:bottom-lim-invariant-52}
-\myparbox{$\Valid{\Vlss{limSuf0}} \land \Source{\var{limSuf0}} = \Velement{suf}{0}$
-    \cuz{} \Eref{th:bottom-lim-invariant-32},
-        \Eref{th:bottom-lim-invariant-40},
-        \longThref{Leo source existence}{th:leo-source-existence},
-        arbitrary choice of \var{limSuf0}.%
+\myparbox{$\exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \Velement{suf}{0}$
+    \cuz{} \longThref{Leo source existence}{th:leo-source-existence},
+        \Eref{th:bottom-lim-invariant-32},
+        \Eref{th:bottom-lim-invariant-46},
+        \Eref{th:bottom-lim-invariant-48}.
 }
 \end{equation}
 \begin{equation}
+\label{th:bottom-lim-invariant-53}
+\Vsize{preds1} \ge 1 \because
+    \Eref{th:bottom-lim-invariant-50},
+    \Eref{th:bottom-lim-invariant-52}.
+\end{equation}
+
+\begin{equation}
 \label{th:bottom-lim-invariant-54}
-\DR{\var{limSuf0}} = \DR{\VlastElement{suf}} \\
-\land \; \Origin{\var{limSuf0}} = \Origin{\VlastElement{suf}} \\
-\myparbox{
+\begin{gathered}
+   \forall \mylim{\ell} \in \var{preds} : \\
+   \DR{\ell} = \DR{\VlastElement{suf}}
+\\ \land \; \Origin{\ell} = \Origin{\VlastElement{suf}}
+\\ \myparbox{
    \cuz{}
    \myfn{Hyp}{\var{n}} \Eref{th:bottom-lim-invariant-30},
    \Eref{th:bottom-lim-invariant-46},
    \Eref{th:bottom-lim-invariant-48},
    \Eref{th:bottom-lim-invariant-52}.%
 }
+\end{gathered}
 \end{equation}
-With \Eref{th:bottom-lim-invariant-54}, we close the inner scope
-we began at \Eref{th:bottom-lim-invariant-52}.
 \begin{equation}
-\label{th:bottom-lim-invariant-54}
+\label{th:bottom-lim-invariant-58}
+\Velement{lss}{1} = \Velement{suf}{0} \because \Eref{th:bottom-lim-invariant-40}.
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-60}
 \begin{gathered}
-    \forall \; \Vlim{limSuf0}
-    \Valid{\Vlss{limSuf0}} \land \Source{\var{limSuf0}} = \Velement{suf}{0}
-\\
-\implies
-    \left{
-    \begin{gathered}
-    \DR{\var{limSuf0}} = \DR{\VlastElement{suf}} \\
-    \land \; \Origin{\var{limSuf0}} = \Origin{\VlastElement{suf}} \\
-    \end{gathered}
-    \right)
+\var{preds1} = \set{ \ell \in \type{LIM} :
+    \Valid{\ell} \land \Source{\ell} = \Velement{lss}{1}
+}
+\\ \because \Eref{th:bottom-lim-invariant-50},
+        \Eref{th:bottom-lim-invariant-58}.
+\end{gathered}
+\end{equation}
+\todo{Broken after here}
+
+
+\begin{equation}
+\label{th:bottom-lim-invariant-99}
+\begin{gathered}
+\begin{gathered}
+   \DR{\Source{\Velement{lss}{0}}} = \Vdr{dr}
+\\ \land \; \Origin{\Source{\Velement{lss}{0}}} = \Vnat{orig}
+\end{gathered}
+\\ \implies
+\exists \; \Vlim{pred} \in
+ \left\lbrace
+   \begin{gathered}
+        \mylim{\ell} : \Valid{\ell}
+        \\ \land \; \myfn{LIM-Predecessor-2}{\ell, \Velement{lss}{0}}
+   \end{gathered}
+    \right\rbrace :
+\\ \DR{\var{pred}} = \var{dr} \land \Origin{\var{pred}} = \var{orig}
 \end{gathered}
 \end{equation}
 
