@@ -4389,8 +4389,8 @@ if and only if
 \begin{equation}
 \label{eq:LIM-valid-26}
 \begin{gathered}
-\DR{\var{x}} = \DR{\Source{\Vlim{x}}} \\
-\land \; \Origin{\var{x}} = \Origin{\Source{\Vlim{x}}}.
+\DR{\var{x}} = \DR{\Source{\var{x}}} \\
+\land \; \Origin{\var{x}} = \Origin{\Source{\var{x}}}.
 \end{gathered}
 \end{equation}
 %
@@ -5541,18 +5541,21 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof is by induction on the length of the LSS.
+The proof is by induction on the length of the LSS, where
+the basis is 0 and we treat length 1 as a special case.
 We take as the induction hypothesis
 \begin{equation}
 \label{th:bottom-lim-invariant-10}
     \begin{gathered}
         \myfn{Hyp}{\var{n}} \defined \forall \; \ell \in \type{LIM} :
             \forall \; \var{lss} \in \type{LSS} :
-    \\
+    \\ \left(
+    \begin{gathered}
         \Maximal{\var{lss}} \land \Valid{\ell}
-    \\
-        \land \; \Source{\ell} = \Velement{lss}{0}
+        \\ \land \; \Source{\ell} = \Velement{lss}{0}
         \land \Vsize{lss} = \var{n}
+    \end{gathered}
+    \right)
     \\
     \implies
     \left(
@@ -5564,10 +5567,19 @@ We take as the induction hypothesis
     \end{gathered}
 \end{equation}
 
-For the basis, we use an LSS length of 1.
-We start a new variable scope for the basis deduction,
-in which we will assume the
-antecedant of the \myfn{Hyp}{1} to show its consequent.
+\textbf{Basis}:
+We have \myfn{Hyp}{0} vacuously, since every
+LSS must have a length of at least 1
+\longDfref{Leo source sequence}{def:leo-source-sequence}.
+
+\textbf{Step, first case}:
+For the induction step, we treat the step from 0 to 1
+as a special case.
+We now start a new variable scope for the basis deduction,
+in which we will assume \myfn{Hyp}{0} and
+the antecedant of the \myfn{Hyp}{1} to show the
+consequent of \myfn{Hyp}{1}.
+Note that the assumption \myfn{Hyp}{0} will not actually be used.
 \begin{equation}
 \label{th:bottom-lim-invariant-12}
 \myparbox{\Maximal{\Vlss{lssB}} \cuz{}
@@ -5581,8 +5593,17 @@ antecedant of the \myfn{Hyp}{1} to show its consequent.
 }
 \end{equation}
 \begin{equation}
+\label{th:bottom-lim-invariant-15-10}
+\Vsize{lssB} = 1 \because \text{antecedant of \myfn{Hyp}{1}}.
+\end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-15-20}
+\Vlastix{lssB} = 0 \because \Eref{th:bottom-lim-invariant-15-10}.
+\end{equation}
+\begin{equation}
 \label{th:bottom-lim-invariant-16}
-\Source{\var{limB}} = \VlastElement{lssB} \because \text{antecedant of \myfn{Hyp}{1}.}
+\Source{\var{limB}} = \VlastElement{lssB}
+    \because \text{antecedant of \myfn{Hyp}{1}, \Eref{th:bottom-lim-invariant-15-20}.}
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-18}
@@ -5614,7 +5635,9 @@ antecedant of the \myfn{Hyp}{1} to show its consequent.
 \end{gathered}
 \end{equation}
 \Eref{th:bottom-lim-invariant-22} is the consequent of \myfn{Hyp}{1},
-and ends the variable scope for the basis deduction.
+and
+with \Eref{th:bottom-lim-invariant-22}, we
+end the variable scope for the basis deduction.
 \begin{equation}
 \label{th:bottom-lim-invariant-24}
     \myparbox{\myfn{Hyp}{1} \cuz{} deduction from
@@ -5624,20 +5647,23 @@ and ends the variable scope for the basis deduction.
     }
 \end{equation}
 
-For the step of the induction we start a new variable scope.
-In it we assume
+\textbf{Step, second case}:
+For the second case step of the induction we start a new variable scope.
+In it we take as given
 \begin{equation}
 \label{th:bottom-lim-invariant-30}
-    \myfn{Hyp}{\var{n}} \because \text{AF step.}
+    \myfn{Hyp}{\var{n}} \because \text{AF step,}
 \end{equation}
-and the antecedant of the \myfn{Hyp}{\var{n}+1}
-to show the consequent of \myfn{Hyp}{\var{n}+1}.
-Because in the basis $\var{n}=1$, we may assume that
 \begin{equation}
-\label{th:bottom-lim-invariant-32}
-\var{n}+1 \ge 2
-\text{\cuz{} \Eref{th:bottom-lim-invariant-24}, AF step.}
+\label{th:bottom-lim-invariant-31-10}
+    \var{n} \ge 1 \because \text{AF case of the step, and}
 \end{equation}
+\begin{equation}
+\label{th:bottom-lim-invariant-31-20}
+\text{the antecedant of the \myfn{Hyp}{\var{n}+1} \cuz{} AF step},
+\end{equation}
+to show the consequent of \myfn{Hyp}{\var{n}+1}.
+
 \begin{equation}
 \label{th:bottom-lim-invariant-33}
 \var{lssS} \in \type{LSS}
@@ -5660,7 +5686,7 @@ Because in the basis $\var{n}=1$, we may assume that
     \Veim{bottom}, \Velement{suf}{0} \ldots \VVelement{suf}{\Vdecr{n}}
     \right] \\
     \myparbox{\cuz{} WLOG,
-        \Eref{th:bottom-lim-invariant-32}, \Eref{th:bottom-lim-invariant-36},
+        \Eref{th:bottom-lim-invariant-31-10}, \Eref{th:bottom-lim-invariant-36},
         arbitrary choice of \var{bottom} and \var{suf}.%
     }
 \end{gathered}
@@ -5711,7 +5737,7 @@ We are able to show the \var{preds1} has at least one LIM.
 \label{th:bottom-lim-invariant-52}
 \myparbox{$\exists \mylim{\ell} : \Valid{\ell} \land \Source{\ell} = \Velement{suf}{0}$
     \cuz{} \longThref{Leo source existence}{th:leo-source-existence},
-        \Eref{th:bottom-lim-invariant-32},
+        \Eref{th:bottom-lim-invariant-31-10},
         \Eref{th:bottom-lim-invariant-46},
         \Eref{th:bottom-lim-invariant-48}.
 }
@@ -5774,7 +5800,7 @@ We are able to show the \var{preds1} has at least one LIM.
 \begin{gathered}
 \NextSource{\Velement{lss}{0}} = \Velement{lss}{1} \\
     \because \longDfref{Leo source sequence}{def:leo-source-sequence}, \\
-        \Eref{th:bottom-lim-invariant-32},
+        \Eref{th:bottom-lim-invariant-31-10},
         \Eref{th:bottom-lim-invariant-33},
         \Eref{th:bottom-lim-invariant-36}.
 \end{gathered}
