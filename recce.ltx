@@ -3500,17 +3500,13 @@ show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
 
-\todo{Reference to Leo chain -- cataphoric?}
+\todo{ES 0 Leo discussion to later?}
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
 $\es{(0)}$ memoization
 would have to be implemented as a special case,
-and omission of a Leo memoization at one end of a Leo
-chain unions at one EIM into the Earley tables.
-\todo{Check claim about Leo omissions}
-If the difference is measurable,
-$\es{(0)}$ memoization will probably be found to
-be counter-productive.
+while omission of $\es{(0)}$ memoization
+results in at most one extra EIM per ES.
 
 \subsection{Leo items}
 
@@ -3530,13 +3526,13 @@ where
 \[
 \type{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] }.
 \]
-Let \Vlim{x} be a LIM.
-To express the notion that \Vlim{x}
-is at \Ves{j}, we may write
+To express the notion that
+$\Vlim{x} = \tuple{ \Vdr{x}, \Vsym{x}, \Vorig{x}}$
+is at \Ves{j}, we may write any of
 \begin{gather*}
     \Vlim{x} @ \Ves{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ]_\type{LIM} @ \Vloc{j}, \\
-    [ \Vdr{top}, \Vsym{transition}, \Vorig{top} ] @ \var{j} \text{, etc.}
+    [ \Vdr{x}, \Vsym{x}, \Vorig{x} ]_\type{LIM} @ \Vloc{j}, \\
+    [ \Vdr{x}, \Vsym{x}, \Vorig{x} ] @ \var{j} \text{, etc.}
 \end{gather*}
 We say that
 \Vsym{transition} is the \dfn{transition symbol} of \Vlim{x}@\Vloc{j};
@@ -3559,8 +3555,8 @@ or \dfn{transition},
 of \var{pim} is
 \begin{equation*}
 \left\lbrace \begin{array}{ll}
-\Transition{\Vlim{pim}} & \text{ if \var{pim} is a LIM, and} \\
-\Postdot{\Veim{pim}} & \text{ if \var{pim} is an EIM.}
+\Transition{\var{pim}} & \text{ if \var{pim} is a LIM, and} \\
+\Postdot{\var{pim}} & \text{ if \var{pim} is an EIM.}
 \end{array} \right.
 \end{equation*}
 In either case, the transition symbol
@@ -3752,16 +3748,13 @@ The proof strategy is direct.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-24}
-\begin{gathered}
-        \forall \; \Veim{z} :
-          \left( \begin{gathered}
-	    \Current{\Veim{z}} \in \ES{\ell} \\
-            \land \; \Postdot{\var{x}} = \Postdot{\var{z}} \\
-            \implies \var{x} = \var{z}
-          \end{gathered} \right) \\
+    \begin{gathered}
+        \forall \; \Veim{z} \in \ES{\ell} : \\
+            \Postdot{\var{x}} = \Postdot{\var{z}} 
+            \implies \var{x} = \var{z} \\
           \because \longDfref{Leo unique}{def:leo-unique},
           \Eref{eq:th-leo-source-postdot-uniqueness-22}.
-\end{gathered}
+    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-25}
@@ -5542,7 +5535,8 @@ That is,
 
 \begin{proof}
 The proof is by induction on the length of the LSS, where
-the basis is 0 and we treat length 1 as a special case.
+the basis is 0,
+and where we treat the step from length 0 to length 1 as a special case.
 We take as the induction hypothesis
 \begin{equation}
 \label{th:bottom-lim-invariant-10}
@@ -5568,9 +5562,11 @@ We take as the induction hypothesis
 \end{equation}
 
 \textbf{Basis}:
-We have \myfn{Hyp}{0} vacuously, since every
-LSS must have a length of at least 1
-\longDfref{Leo source sequence}{def:leo-source-sequence}.
+We have \myfn{Hyp}{0} vacuously since,
+by the definition of a Leo source sequence
+\Dfref{def:leo-source-sequence},
+every
+LSS must have a length of at least 1.
 
 \textbf{Step, first case}:
 For the induction step, we treat the step from 0 to 1
@@ -5879,6 +5875,19 @@ The proof is by induction on the length of the LSS.
 \myqed
 \end{proof}
 
+\begin{theorem}[LIM's per ES]
+\label{th:lims-per-es}
+Every ES has at most
+\size{\Vocab{\var{g}}} LIM's.
+\end{theorem}
+
+\begin{proof}
+\todo{LIM's per ES proof}
+\myqed
+\end{proof}
+
+\subsection{LIM predecessor}
+
 \begin{definition}[LIM predecessor function]
 \todo{State why we know LIM predecessor is a function}
 \label{def:lim-predecessor-fn}
@@ -5890,17 +5899,6 @@ The proof is by induction on the length of the LSS.
 \end{gathered}
 \]
 \end{definition}
-
-\begin{theorem}[LIM's per ES]
-\label{th:lims-per-es}
-Every ES has at most
-\size{\Vocab{\var{g}}} LIM's.
-\end{theorem}
-
-\begin{proof}
-\todo{LIM's per ES proof}
-\myqed
-\end{proof}
 
 \section{Ancestry}
 \label{sec:ancestry}
