@@ -3845,10 +3845,14 @@ Every LIM has exactly one EIM source.
 That is,
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-02}
-\begin{gathered}
-    \myfn{Source2}{\var{x},\ell} \land \myfn{Source2}{\var{y},\ell}
+    \myfn{Source2}{\Veim{x},\mylim{\ell}} \land \myfn{Source2}{\Veim{y},\ell}
     \implies \var{x} = \var{y}.
-\end{gathered}
+\end{equation}
+Also,
+\begin{equation}
+\label{eq:th-leo-source-uniqueness-04}
+    \myfn{LIM-Of-2}{\mylim{\ell},\Veim{x}} \land \myfn{LIM-Of-2}{\ell,\Veim{y}}
+    \implies \var{x} = \var{y}.
 \end{equation}
 \end{theorem}
 
@@ -3856,17 +3860,21 @@ That is,
 The proof strategy
 for \Eref{eq:th-leo-source-uniqueness-02}
 is direct:
-we assume the antecedant of the theorem
-to show the consequent of the theorem.
+we assume the antecedant
+to show the consequent.
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-10}
 \myfn{Source2}{\Veim{x}, \mylim{\ell}}
-    \because \text{antecedant of theorem, AF proof.}
+    \because \text{antecedant of
+        \Eref{eq:th-leo-source-uniqueness-02},
+         AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-12}
 \myfn{Source2}{\Veim{y}, \mylim{\ell}}
-    \because \text{antecedant of theorem, AF proof.}
+    \because \text{antecedant of
+        \Eref{eq:th-leo-source-uniqueness-02},
+         AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-18}
@@ -3901,6 +3909,9 @@ to show the consequent of the theorem.
 \end{equation}
 \Eref{eq:th-leo-source-uniqueness-10}--\Eref{eq:th-leo-source-uniqueness-28}
 shows \Eref{eq:th-leo-source-uniqueness-02}.
+\Eref{eq:th-leo-source-uniqueness-04} follows from
+\longDfref{LIM of EIM}{def:lim-of-eim} and
+\Eref{eq:th-leo-source-uniqueness-02}.
 \myqed
 \end{proof}
 
@@ -3928,16 +3939,23 @@ and therefore that \myfn{Source}{} is a function.
 \myqed
 \end{proof}
 
-\begin{theorem}[matched EIM source uniqueness]
+Similarly to \myfn{Source2}{},
+we can define a \myfn{LIM} function based on \myfn{LIM-Of-2}.
+But we will postpone this because
+we are not yet in a position to prove that the function \myfn{LIM}{}
+actually exists or, in other words, that the relation underlying
+\myfn{LIM-Of-2} is a function.
+
+\begin{theorem}[Matched Leo source uniqueness]
 \label{th:matched-EIM-source-uniqueness}
 \begin{gather}
-\label{eq:th-matched-EIM-source-uniqueness-02}
+\label{eq:th-matched-leo-source-uniqueness-02}
 \Matches{\Veim{left1},\Veim{right}} \\
-\label{eq:th-matched-EIM-source-uniqueness-04}
+\label{eq:th-matched-leo-source-uniqueness-04}
 \land \; \Matches{\Veim{left2},\Veim{right}} \\
-\label{eq:th-matched-EIM-source-uniqueness-06}
+\label{eq:th-matched-leo-source-uniqueness-06}
 \land \; \Source{\mylim{\ell}} = \var{left1} \\
-\label{eq:th-matched-EIM-source-uniqueness-08}
+\label{eq:th-matched-leo-source-uniqueness-08}
 \implies \var{left1} = \var{left2}.
 \end{gather}
 \end{theorem}
@@ -3945,39 +3963,39 @@ and therefore that \myfn{Source}{} is a function.
 \begin{proof}
 The proof strategy is direct.
 \begin{equation}
-\label{eq:th-matched-EIM-source-uniqueness-10}
+\label{eq:th-matched-leo-source-uniqueness-10}
 \begin{gathered}
 \Postdot{\var{left1}} = \Symbol{\var{right}} \\
 \land \; \Current{\var{left1}} = \Origin{\var{right}}.
 \\ \because \Eref{eq:def-matches-eim-eim}
 \text{ of }\Dfref{eq:def-matches-eim-eim},
-\Eref{eq:th-matched-EIM-source-uniqueness-02}.
+\Eref{eq:th-matched-leo-source-uniqueness-02}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-matched-EIM-source-uniqueness-12}
+\label{eq:th-matched-leo-source-uniqueness-12}
 \begin{gathered}
 \Postdot{\var{left2}} = \Symbol{\var{right}} \\
 \land \; \Current{\var{left2}} = \Origin{\var{right}}.
 \\ \because \Eref{eq:def-matches-eim-eim}
 \text{ of }\Dfref{eq:def-matches-eim-eim},
-\Eref{eq:th-matched-EIM-source-uniqueness-04}.
+\Eref{eq:th-matched-leo-source-uniqueness-04}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-matched-EIM-source-uniqueness-14}
+\label{eq:th-matched-leo-source-uniqueness-14}
 \begin{gathered}
 \Postdot{\var{left1}} = \Postdot{\var{left2}}
 \\ \land \; \Current{\var{left1}} = \Origin{\var{left2}}
-\\ \because \Eref{eq:th-matched-EIM-source-uniqueness-10},
-\Eref{eq:th-matched-EIM-source-uniqueness-12}.
+\\ \because \Eref{eq:th-matched-leo-source-uniqueness-10},
+\Eref{eq:th-matched-leo-source-uniqueness-12}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-matched-EIM-source-uniqueness-16}
+\label{eq:th-matched-leo-source-uniqueness-16}
 \var{left1} = \var{left2} \because \Thref{th:leo-source-uniqueness},
-    \Eref{eq:th-matched-EIM-source-uniqueness-06},
-    \Eref{eq:th-matched-EIM-source-uniqueness-14}.
+    \Eref{eq:th-matched-leo-source-uniqueness-06},
+    \Eref{eq:th-matched-leo-source-uniqueness-14}.
     \quad \myqed
 \end{equation}
 \end{proof}
