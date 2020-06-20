@@ -4063,192 +4063,6 @@ $\size{\Vocab{\var{g}}}$.
 
 \subsection{LIM predecessors}
 
-\begin{definition}[LIM predecessor]
-\label{def:lim-predecessor}
-\begin{equation*}
-  \begin{gathered}
-      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined \\
-          \exists \; \Veim{pred-source} : \\
-      \Matches{ \Veim{pred-source},\Veim{succ}} \\
-          \land \; \myfn{Source2}{\var{pred-source},\Vlim{pred}}.
-  \end{gathered}
-\end{equation*}
-We say that \Vlim{pred} is the \dfn{LIM predecessor}
-of \Veim{succ} if and only if
-\myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
-\dispEnd{}
-\end{definition}
-
-\begin{theorem}[LIM predecessor connection]
-\label{th:lim-predecessor-connection}
-\[
-\begin{gathered}
-    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \implies \\
-    \Origin{\var{prev}} = \Current{\ell} \\
-    \land \; \LHS{\var{prev}} = \Transition{\ell}.
-\end{gathered}
-\]
-\end{theorem}
-
-\begin{proof}
-The proof strategy is direct, assuming the antecedant of
-the theorem to show the consequent.
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-10}
-    \begin{gathered}
-    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
-    \because \text{antecedant of theorem, AF proof.}
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-12}
-    \begin{gathered}
-    \Matches{\Veim{lim-source},\Veim{prev}} \\
-    \because \longDfref{LIM Predecessor}{def:lim-predecessor},
-    \Eref{eq:th-lim-predecessor-connection-10}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-14}
-    \myfn{Source2}{\var{lim-source},\ell}
-    \because \Dfref{def:lim-predecessor},
-    \Eref{eq:th-lim-predecessor-connection-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-16}
-    \begin{gathered}
-        \Current{\var{lim-source}} = \Origin{\var{prev}} \\
-            \because \Eref{eq:def-matches-eim-eim}\text{ in }
-                \longDfref{Matching}{def:matching-1},
-            \Eref{eq:th-lim-predecessor-connection-12}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-18}
-    \begin{gathered}
-        \Postdot{\var{lim-source}} = \LHS{\var{prev}} \\
-        \because \Eref{eq:def-matches-eim-eim}
-        \text{ in }\Dfref{def:matching-1},
-        \Eref{eq:th-lim-predecessor-connection-12}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-20}
-    \Current{\var{lim-source}} = \Current{\ell} \\
-    \because \Thref{th:leo-source-connection},
-    \Eref{eq:th-lim-predecessor-connection-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-22}
-    \begin{gathered}
-        \Postdot{\var{lim-source}} = \Transition{\ell} \\
-        \because \Thref{th:leo-source-connection},
-        \Eref{eq:th-lim-predecessor-connection-14}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-24}
-    \Origin{\var{prev}} = \Current{\ell} \\
-    \because \Eref{eq:th-lim-predecessor-connection-16},
-    \Eref{eq:th-lim-predecessor-connection-20}.
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-connection-26}
-    \LHS{\var{prev}} = \Transition{\ell} \\
-    \because \Eref{eq:th-lim-predecessor-connection-18},
-    \Eref{eq:th-lim-predecessor-connection-22}.
-\end{equation}
-The consequent is
-\Eref{eq:th-lim-predecessor-connection-24} and
-    \Eref{eq:th-lim-predecessor-connection-26}.
-\myqed
-\end{proof}
-
-\begin{theorem}[LIM-predecessor--source symmetry]
-\label{th:lim-predecessor-source-symmetry}
-\begin{gather}
-    \label{eq:th-lim-predecessor-source-symmetry-02}
-    \myfn{LIM-Predecessor-2}{\mylim{\ell1},\Veim{succ}}
-    \\ \label{eq:th-lim-predecessor-source-symmetry-04}
-    \land \; \Source{\ell1} = \Source{\mylim{\ell2}}
-    \\ \nonumber
-    \implies \myfn{LIM-Predecessor-2}{\mylim{\ell2},\Veim{succ}}.
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-The proof is direct, assuming the antecedants
-to show the consequence.
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-10}
-\begin{gathered}
-    \exists \; \Veim{source1} : \Matches{ \var{source1},\var{succ}}
-    \\ \land \; \Source{\ell1} = \var{source1}
-    \\ \because \longDfref{LIM Predecessor}{def:lim-predecessor},
-    \Eref{eq:th-lim-predecessor-source-symmetry-02}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-12}
-\begin{gathered}
-    \Matches{ \Veim{source1},\var{succ}}
-    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-10},
-        existential instantiation.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-14}
-\begin{gathered}
-    \Source{\ell1} = \var{source1}
-    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-10},
-        existential instantiation.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-16}
-\begin{gathered}
-    \Source{\ell2} = \var{source1}
-    \\ \because \Eref{eq:th-lim-predecessor-source-symmetry-04},
-        \Eref{eq:th-lim-predecessor-source-symmetry-14}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-18}
-\begin{gathered}
-    \exists \; \Veim{source3} : \Matches{ \var{source3},\var{succ}}
-    \\ \land \; \Source{\ell2} = \var{source3}
-    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-12},
-        \Eref{eq:th-lim-predecessor-source-symmetry-16},
-        existential generalization.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-source-symmetry-20}
-\begin{gathered}
-    \myfn{LIM-Predecessor-2}{\mylim{\ell2},\Veim{succ}}
-    \\ \because \Dfref{def:lim-predecessor},
-    \Eref{eq:th-lim-predecessor-source-symmetry-18}.
-    \quad \myqed
-\end{gathered}
-\end{equation}
-\end{proof}
-
-\begin{theorem}[LIM predecessor not after EIM]
-\label{th:lim-predecessor-not-after-eim}
-\[
-\begin{gathered}
-    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
-    \implies \Current{\ell} \le \Current{\var{prev}}.
-\end{gathered}
-\]
-\end{theorem}
-
-\begin{proof}
-This theorem follows from
-\Thref{th:eim-origin-not-after-current} and
-\Thref{th:lim-predecessor-connection}.
-\end{proof}
-
 \begin{definition}[Next source]
 \label{def:next-source}
 \[
@@ -5974,6 +5788,192 @@ Every ES has at most
 \end{gathered}
 \]
 \end{definition}
+
+\begin{definition}[LIM predecessor]
+\label{def:lim-predecessor}
+\begin{equation*}
+  \begin{gathered}
+      \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined \\
+          \exists \; \Veim{pred-source} : \\
+      \Matches{ \Veim{pred-source},\Veim{succ}} \\
+          \land \; \myfn{Source2}{\var{pred-source},\Vlim{pred}}.
+  \end{gathered}
+\end{equation*}
+We say that \Vlim{pred} is the \dfn{LIM predecessor}
+of \Veim{succ} if and only if
+\myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}}.
+\dispEnd{}
+\end{definition}
+
+\begin{theorem}[LIM predecessor connection]
+\label{th:lim-predecessor-connection}
+\[
+\begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \implies \\
+    \Origin{\var{prev}} = \Current{\ell} \\
+    \land \; \LHS{\var{prev}} = \Transition{\ell}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+The proof strategy is direct, assuming the antecedant of
+the theorem to show the consequent.
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-10}
+    \begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
+    \because \text{antecedant of theorem, AF proof.}
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-12}
+    \begin{gathered}
+    \Matches{\Veim{lim-source},\Veim{prev}} \\
+    \because \longDfref{LIM Predecessor}{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-connection-10}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-14}
+    \myfn{Source2}{\var{lim-source},\ell}
+    \because \Dfref{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-connection-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-16}
+    \begin{gathered}
+        \Current{\var{lim-source}} = \Origin{\var{prev}} \\
+            \because \Eref{eq:def-matches-eim-eim}\text{ in }
+                \longDfref{Matching}{def:matching-1},
+            \Eref{eq:th-lim-predecessor-connection-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-18}
+    \begin{gathered}
+        \Postdot{\var{lim-source}} = \LHS{\var{prev}} \\
+        \because \Eref{eq:def-matches-eim-eim}
+        \text{ in }\Dfref{def:matching-1},
+        \Eref{eq:th-lim-predecessor-connection-12}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-20}
+    \Current{\var{lim-source}} = \Current{\ell} \\
+    \because \Thref{th:leo-source-connection},
+    \Eref{eq:th-lim-predecessor-connection-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-22}
+    \begin{gathered}
+        \Postdot{\var{lim-source}} = \Transition{\ell} \\
+        \because \Thref{th:leo-source-connection},
+        \Eref{eq:th-lim-predecessor-connection-14}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-24}
+    \Origin{\var{prev}} = \Current{\ell} \\
+    \because \Eref{eq:th-lim-predecessor-connection-16},
+    \Eref{eq:th-lim-predecessor-connection-20}.
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-connection-26}
+    \LHS{\var{prev}} = \Transition{\ell} \\
+    \because \Eref{eq:th-lim-predecessor-connection-18},
+    \Eref{eq:th-lim-predecessor-connection-22}.
+\end{equation}
+The consequent is
+\Eref{eq:th-lim-predecessor-connection-24} and
+    \Eref{eq:th-lim-predecessor-connection-26}.
+\myqed
+\end{proof}
+
+\begin{theorem}[LIM-predecessor--source symmetry]
+\label{th:lim-predecessor-source-symmetry}
+\begin{gather}
+    \label{eq:th-lim-predecessor-source-symmetry-02}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell1},\Veim{succ}}
+    \\ \label{eq:th-lim-predecessor-source-symmetry-04}
+    \land \; \Source{\ell1} = \Source{\mylim{\ell2}}
+    \\ \nonumber
+    \implies \myfn{LIM-Predecessor-2}{\mylim{\ell2},\Veim{succ}}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+The proof is direct, assuming the antecedants
+to show the consequence.
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-10}
+\begin{gathered}
+    \exists \; \Veim{source1} : \Matches{ \var{source1},\var{succ}}
+    \\ \land \; \Source{\ell1} = \var{source1}
+    \\ \because \longDfref{LIM Predecessor}{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-source-symmetry-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-12}
+\begin{gathered}
+    \Matches{ \Veim{source1},\var{succ}}
+    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-10},
+        existential instantiation.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-14}
+\begin{gathered}
+    \Source{\ell1} = \var{source1}
+    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-10},
+        existential instantiation.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-16}
+\begin{gathered}
+    \Source{\ell2} = \var{source1}
+    \\ \because \Eref{eq:th-lim-predecessor-source-symmetry-04},
+        \Eref{eq:th-lim-predecessor-source-symmetry-14}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-18}
+\begin{gathered}
+    \exists \; \Veim{source3} : \Matches{ \var{source3},\var{succ}}
+    \\ \land \; \Source{\ell2} = \var{source3}
+    \\ \because \text{\Eref{eq:th-lim-predecessor-source-symmetry-12},
+        \Eref{eq:th-lim-predecessor-source-symmetry-16},
+        existential generalization.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lim-predecessor-source-symmetry-20}
+\begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell2},\Veim{succ}}
+    \\ \because \Dfref{def:lim-predecessor},
+    \Eref{eq:th-lim-predecessor-source-symmetry-18}.
+    \quad \myqed
+\end{gathered}
+\end{equation}
+\end{proof}
+
+\begin{theorem}[LIM predecessor not after EIM]
+\label{th:lim-predecessor-not-after-eim}
+\[
+\begin{gathered}
+    \myfn{LIM-Predecessor-2}{\mylim{\ell},\Veim{prev}} \\
+    \implies \Current{\ell} \le \Current{\var{prev}}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+\Thref{th:eim-origin-not-after-current} and
+\Thref{th:lim-predecessor-connection}.
+\end{proof}
 
 \section{Ancestry}
 \label{sec:ancestry}
