@@ -3940,14 +3940,19 @@ and therefore that \myfn{Source}{} is a function.
 \end{proof}
 
 Similarly to \myfn{Source2}{},
-we can define a \myfn{LIM} function based on \myfn{LIM-Of-2}.
-But we will postpone this because
-we are not yet in a position to prove that the function \myfn{LIM}{}
-actually exists or, in other words, that the relation underlying
-\myfn{LIM-Of-2} is a function.
+we will eventually define a $\var{LIM-Of}:\type{EIM}\to\type{LIM}$
+function based on \myfn{LIM-Of-2}{}:
+\[
+\var{LIM-Of} = \set{ \tuple{\var{x}, \ell} \in \type{EIM}\times\type{LIM} : \
+    \myfn{LIM-Of-2}{\ell,\var{x}}.
+}
+\]
+We postpone this definition because
+we are not yet in a position to prove that the \var{LIM-Of} relation
+would, in fact, be a function.
 
 \begin{theorem}[Matched Leo source uniqueness]
-\label{th:matched-EIM-source-uniqueness}
+\label{th:matched-leo-source-uniqueness}
 \begin{gather}
 \label{eq:th-matched-leo-source-uniqueness-02}
 \Matches{\Veim{left1},\Veim{right}} \\
@@ -3998,6 +4003,24 @@ The proof strategy is direct.
     \Eref{eq:th-matched-leo-source-uniqueness-14}.
     \quad \myqed
 \end{equation}
+\end{proof}
+
+\begin{theorem}[Matched LIM sources uniqueness]
+\label{th:matched-LIM-sources-uniqueness}
+\begin{gather*}
+\Matches{\Veim{left1},\Veim{right}} \\
+\land \; \Matches{\Veim{left2},\Veim{right}} \\
+\land \; \myfn{LIM-Of-2}{\mylim{\ell},\var{left1}} \\
+\implies \var{left1} = \var{left2}.
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+This theorem follows from 
+\longDfref{LIM of EIM}{def:lim-of-eim},
+\longThref{Source function}{th:source-function} and
+\longThref{Matched Leo source uniqueness}{th:matched-leo-source-uniqueness}.
+\myqed
 \end{proof}
 
 \begin{theorem}[Leo source EIM count]
