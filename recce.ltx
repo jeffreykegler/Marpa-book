@@ -4061,15 +4061,16 @@ $\size{\Vocab{\var{g}}}$.
 \myqed
 \end{proof}
 
-\subsection{LIM predecessors}
+\subsection{Next Leo source}
 
 \begin{definition}[Next source]
 \label{def:next-source}
+\todo{Redo "Next source"}
 \[
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
 \defined \;
-\exists \; \ell : \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \land \Veim{next} = \Source{\ell}.
+\Matches{\var{next},\var{prev}} \land \exists \; \ell : \myfn{LIM-Of-2}{\ell,\var{next}}.
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
@@ -4079,6 +4080,7 @@ or \dfn{next source}, of \Veim{prev}.
 
 \begin{theorem}[Leo next source uniqueness]
 \label{th:leo-source-predecessor-uniqueness}
+\todo{Redo "Leo next source uniqueness" theorem}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-04}
 \begin{gathered}
@@ -4109,123 +4111,37 @@ consequent.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-14}
-\myfn{LIM-Predecessor-2}{\ell1,\var{prev}}
-\because \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-15}
-\Veim{next1} = \Source{\ell1}
-\because \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
+\begin{gathered}
+    \Matches{\Veim{next1},\Veim{prev}}
+    \because \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-16}
-\myfn{LIM-Predecessor-2}{\ell2,\var{prev}}
-\because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-17}
-\Veim{next2} = \Source{\ell1}
-\because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
-\end{equation}
-Note that we will eventually discover that $\ell1 = \ell2$.
-But we have yet to prove this.
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-34}
-\LHS{\var{prev}} = \Transition{\ell1}
-    \because \Thref{th:leo-source-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-36}
-\Postdot{\var{next1}} = \Transition{\ell1}
-    \because \Thref{th:lim-predecessor-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-15}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-38}
-\Postdot{\var{next1}} = \LHS{\var{prev}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-34},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-36}.
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-40}
-\LHS{\var{prev}} = \Transition{\ell2}
-    \because \Thref{th:leo-source-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-16}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-42}
-\Postdot{\var{next2}} = \Transition{\ell2}
-    \because \Thref{th:lim-predecessor-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-17}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-44}
-\Postdot{\var{next2}} = \LHS{\var{prev}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-40},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-42}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-46}
-\Postdot{\var{next1}} = \Postdot{\var{next2}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-38},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-44}.
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-54}
-\Origin{\var{prev}} = \Current{\ell1}
-    \because \Thref{th:leo-source-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-56}
-\Current{\var{next1}} = \Current{\ell1}
-    \because \Thref{th:lim-predecessor-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-15}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-58}
-\Current{\var{next1}} = \Origin{\var{prev}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-54},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-56}.
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-60}
-\Origin{\var{prev}} = \Current{\ell2}
-    \because \Thref{th:leo-source-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-16}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-62}
-\Current{\var{next2}} = \Current{\ell2}
-    \because \Thref{th:lim-predecessor-connection},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-17}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-64}
-\Current{\var{next2}} = \Origin{\var{prev}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-60},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-62}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-66}
-\Current{\var{next1}} = \Current{\var{next2}} \because
-    \Eref{eq:th-leo-source-predecessor-uniqueness-58},
-    \Eref{eq:th-leo-source-predecessor-uniqueness-64}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-predecessor-uniqueness-80}
 \begin{gathered}
-    \var{y} = \var{x}
-    \because
-        \Thref{th:leo-source-postdot-uniqueness},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-15},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-46},
-        \Eref{eq:th-leo-source-predecessor-uniqueness-66}.
+    \Matches{\Veim{next2},\Veim{prev}}
+    \because \Eref{eq:th-leo-source-predecessor-uniqueness-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-18}
+\begin{gathered}
+    \myfn{LIM-OF-2}{\mylim{\ell},\var{next1}}
+    \because \text{existential instantiation},
+    \Eref{eq:th-leo-source-predecessor-uniqueness-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-source-predecessor-uniqueness-20}
+\begin{gathered}
+\myparbox{%
+    $\var{next1} = \var{next1}$ \cuz{}
+\longThref{Matched LIM sources uniqueness}{th:matched-LIM-sources-uniqueness},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-14},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-16},
+        \Eref{eq:th-leo-source-predecessor-uniqueness-18}.
         \quad \myqed
+}
 \end{gathered}
 \end{equation}
 \end{proof}
@@ -4234,6 +4150,7 @@ But we have yet to prove this.
 
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
+\todo{Redo LIM validity def}
 \Vlim{x} is \dfn{valid}
 if and only if
 \begin{equation}
@@ -4315,6 +4232,7 @@ if and only if \Vlim{x} is valid.
 
 \begin{theorem}[Next source function]
 \label{th:next-source-fn}
+\todo{Redo "Next source function" theorem}
 The function
 \[
 \begin{gathered}
@@ -4442,6 +4360,7 @@ the method.
 
 \begin{theorem}[Next source EIM not after previous]
 \label{th:next-source-not-after-previous}
+\todo{Redo "Next source EIM not after previous" theorem}
 \[
 \begin{gathered}
     \NextSource{\Veim{prev}} = \Veim{next} \\
@@ -4459,6 +4378,7 @@ The theorem follows from
 
 \begin{theorem}[LIM-predecessor--next-source value equivalence]
 \label{th:lim-predecessor-next-source-value-equivalence}
+\todo{Redo "LIM-predecessor--next-source value equivalence" theorem}
 \begin{gather}
 \label{eq:th-lim-predecessor-next-source-value-equivalence-02}
 \NextSource{\Veim{prev}} = \Veim{next} \land \Source{\mylim{\ell}} = \var{next} \\
@@ -4493,6 +4413,7 @@ to show the consequent
 
 \begin{theorem}[LIM-predecessor--next-source existential equivalence]
 \label{th:lim-predecessor-next-source-existential-equivalence}
+\todo{Redo "LIM-predecessor--next-source existential equivalence" theorem}
 Let \Veim{prev} be an arbitrary value of an LSS.
 Then
 \begin{gather}
@@ -5790,7 +5711,7 @@ Every ES has at most
 \end{definition}
 
 \begin{definition}[LIM predecessor]
-\label{def:lim-predecessor}
+\label{def:lim-predecessor-Q}
 \begin{equation*}
   \begin{gathered}
       \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined \\
@@ -5830,14 +5751,14 @@ the theorem to show the consequent.
 \label{eq:th-lim-predecessor-connection-12}
     \begin{gathered}
     \Matches{\Veim{lim-source},\Veim{prev}} \\
-    \because \longDfref{LIM Predecessor}{def:lim-predecessor},
+    \because \longDfref{LIM Predecessor}{def:lim-predecessor-Q},
     \Eref{eq:th-lim-predecessor-connection-10}.
     \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-predecessor-connection-14}
     \myfn{Source2}{\var{lim-source},\ell}
-    \because \Dfref{def:lim-predecessor},
+    \because \Dfref{def:lim-predecessor-Q},
     \Eref{eq:th-lim-predecessor-connection-10}.
 \end{equation}
 \begin{equation}
@@ -5910,7 +5831,7 @@ to show the consequence.
 \begin{gathered}
     \exists \; \Veim{source1} : \Matches{ \var{source1},\var{succ}}
     \\ \land \; \Source{\ell1} = \var{source1}
-    \\ \because \longDfref{LIM Predecessor}{def:lim-predecessor},
+    \\ \because \longDfref{LIM Predecessor}{def:lim-predecessor-Q},
     \Eref{eq:th-lim-predecessor-source-symmetry-02}.
 \end{gathered}
 \end{equation}
@@ -5952,7 +5873,7 @@ to show the consequence.
 \label{eq:th-lim-predecessor-source-symmetry-20}
 \begin{gathered}
     \myfn{LIM-Predecessor-2}{\mylim{\ell2},\Veim{succ}}
-    \\ \because \Dfref{def:lim-predecessor},
+    \\ \because \Dfref{def:lim-predecessor-Q},
     \Eref{eq:th-lim-predecessor-source-symmetry-18}.
     \quad \myqed
 \end{gathered}
