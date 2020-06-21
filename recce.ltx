@@ -4193,17 +4193,11 @@ if and only if \Vlim{x} is valid.
 
 \begin{theorem}[Next source function]
 \label{th:next-source-fn}
-\todo{Redo "Next source function" theorem}
 The function
 \[
 \begin{gathered}
 \NextSource{\Veim{prev}} \defined \\
-    \Veim{next} :
-    \left( \begin{gathered}
-    \exists \; \mylim{\ell} : \var{next} = \Source{\ell} \\
-    \land \; \Valid{\ell}
-    \land \; \myfn{LIM-Predecessor-2}{\ell,\var{prev}}.
-    \end{gathered} \right)
+    \Veim{next} : \myfn{Next-Source-2}{\var{next},\var{prev}}
 \end{gathered}
 \]
 exists.
@@ -4218,20 +4212,14 @@ The relation
 \set{
     \begin{gathered}
     \tuple{ \var{prev}, \var{next} } \in \type{EIM} \times \type{EIM} : \\
-    \left(
-    \begin{gathered}
-    \exists \; \mylim{\ell} : \var{next} = \Source{\ell} \\
-    \land \; \Valid{\ell}
-    \land \; \myfn{LIM-Predecessor-2}{\ell,\var{prev}}
-    \end{gathered}
-    \right)
+        \myfn{Next-Source-2}{\var{next},\var{prev}}
     \end{gathered}
 }
 \\ \because \longThref{Next source function}{th:next-source-fn}.
 \end{gathered}
 \end{equation}
 clearly exists.
-It remains to show that \var{NextSource} is a function.
+It remains to show that \var{NextSource} relation is a function.
 To do that, we must show that there is a unique value for each argument.
 
 We proceed by direct proof,
@@ -4245,62 +4233,25 @@ the same argument, to show that they must have the same value.
 \label{eq:th-next-source-fn-14}
 \tuple{ \Veim{prev}, \Veim{next2} } \in \var{Next-Source} \because \text{AF proof}.
 \end{equation}
-We seek to show that $\var{next1} = \var{next2}$.
 \begin{equation}
 \label{eq:th-next-source-fn-16}
-    \begin{gathered}
-    \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
-    \land \; \Valid{\ell1}
-    \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
+    \myfn{Next-source-2}{\var{next1},\var{prev}}
     \because \Eref{eq:th-next-source-fn-12}.
-    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-next-source-fn-18}
-    \begin{gathered}
-    \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
-    \land \; \Valid{\ell2}
-    \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
+    \myfn{Next-source-2}{\var{next2},\var{prev}}
     \because \Eref{eq:th-next-source-fn-14}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-next-source-fn-20}
-    \begin{gathered}
-    \exists \; \mylim{\ell1} : \var{next1} = \Source{\ell1} \\
-    \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}} \\
-    \because \Eref{eq:th-next-source-fn-16}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-next-source-fn-22}
-    \begin{gathered}
-    \exists \; \mylim{\ell2} : \var{next2} = \Source{\ell2} \\
-    \land \; \myfn{LIM-Predecessor-2}{\ell2,\var{prev}} \\
-    \because \Eref{eq:th-next-source-fn-18}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\begin{gathered}
-\label{eq:th-next-source-fn-24}
-    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
-    \because
-        \longDfref{Next source}{def:next-source},
-        \Eref{eq:th-next-source-fn-20}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-next-source-fn-26}
-    \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \because
-        \Dfref{def:next-source},
-        \Eref{eq:th-next-source-fn-22}.
 \end{equation}
 \begin{equation}
 \label{eq:th-next-source-fn-28}
-\Veim{next1} = \Veim{next2} \because
-        \Thref{th:leo-source-predecessor-uniqueness},
-        \Eref{eq:th-next-source-fn-24},
-        \Eref{eq:th-next-source-fn-26}.
+\begin{gathered}
+    \Veim{next1} = \Veim{next2} \\
+    \because
+    \longThref{Leo next source uniqueness}{th:leo-source-predecessor-uniqueness},
+    \Eref{eq:th-next-source-fn-16},
+    \Eref{eq:th-next-source-fn-18}.
+\end{gathered}
 \end{equation}
 \Eref{eq:th-next-source-fn-28} is what we sought to show
 beginning at
@@ -4308,6 +4259,7 @@ beginning at
 \myqed
 \end{proof}
 
+\todo{Move this to special section on Leo directions}
 When we introduce Leo source sequences,
 We will see that they grow backwards --
 the bottom is in
