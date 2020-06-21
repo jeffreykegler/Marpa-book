@@ -4016,7 +4016,7 @@ The proof strategy is direct.
 \end{theorem}
 
 \begin{proof}
-This theorem follows from 
+This theorem follows from
 \longDfref{LIM of EIM}{def:lim-of-eim},
 \longThref{Source function}{th:source-function} and
 \longThref{Matched Leo source uniqueness}{th:matched-leo-source-uniqueness}.
@@ -4151,78 +4151,42 @@ consequent.
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
 \todo{Redo LIM validity def}
-\Vlim{x} is \dfn{valid}
+\mylim{\ell} is \dfn{valid}
 if and only if
+\Eref{eq:LIM-valid-20},
+\Eref{eq:LIM-valid-22}, and
+\Eref{eq:LIM-valid-24} are true.
 \begin{equation}
 \label{eq:LIM-valid-20}
-\text{\Vlim{x} is ``consistent'' with a valid EIM source.}
+\Valid{\Source{\ell}}.
 \end{equation}
-Within this definition,
-the term ``consistent'' is specially defined,
-and overloaded.
-The function \Valid{\mylim{\ell}} is true
-if and only if Leo item $\ell$ is \dfn{valid}.
-
-Leo item validity will be defined recursively.
-Let, without loss of generality,
+%
 \begin{equation}
-\label{eq:LIM-valid-10}
-\Vlim{x} = \tuple{\Vdr{\Veim{top}}, \Vsym{transition}, \Vorig{\Veim{top}}}@\Ves{j}
-\end{equation}
-be a LIM.
-Let
-\[
-\begin{gathered}
-\myfn{preds}{\Veim{source}} \defined \\
- \left\lbrace
-   \begin{gathered}
-        \Vlim{pred} :
-        \Valid{\var{pred}} \land
-            \myfn{LIM-Predecessor-2}{\var{pred}, \var{source}}
-   \end{gathered}
-    \right\rbrace .
-\end{gathered}
-\]
-
-We say that the arbitrary LIM,
-\Vlim{x}, is ``consistent'' with an arbitrary source, \Veim{source},
-if and only if we have all of the following:
-\begin{gather}
 \label{eq:LIM-valid-22}
-\Valid{\Veim{source}}, \\
-\label{eq:LIM-valid-23}
-\myfn{Source2}{\var{source} , \Vlim{x},} \text{ and} \\
-\label{eq:LIM-valid-25}
-\myparbox{\Vlim{x} is ``consistent'' with \myfn{preds}{\var{source}}.
-}
-\end{gather}
-%
-\Vlim{x} is ``consistent'' with
-\myfn{preds}{\var{source}}
-an empty set of LIM predecessors,
-\[
-\myfn{preds}{\Source{\Vlim{x}}} = \emptyset,
-\]
-if and only if
-\begin{equation}
-\label{eq:LIM-valid-26}
 \begin{gathered}
-\DR{\var{x}} = \DR{\Source{\var{x}}} \\
-\land \; \Origin{\var{x}} = \Origin{\Source{\var{x}}}.
+\left(
+    \neg \exists \; \Veim{next} : \myfn{Next-Source-2}{\var{next},\Source{\ell}}
+\right) \\
+\implies
+\left( \begin{gathered}
+\DR{\ell} = \DR{\Source{\ell}} \\
+\land \; \Origin{\ell} = \Origin{\Source{\ell}}
+\end{gathered} \right).
 \end{gathered}
 \end{equation}
 %
-\Vlim{x} is ``consistent'' with a non-empty set of LIM predecessors,
-\[
-\myfn{preds}{\Source{\Vlim{x}}} \neq \emptyset,
-\]
-if and only if
 \begin{equation}
-\label{eq:LIM-valid-30}
+\label{eq:LIM-valid-24}
 \begin{gathered}
-\exists \; \Vlim{pred} \in \myfn{preds}{\Source{\Vlim{x}}} : \\
-\DR{\var{x}} = \DR{\Vlim{pred}} \\
-\land \; \Origin{\var{x}} = \Origin{\Vlim{pred}}.
+\left(
+    \exists \; \Veim{next} : \myfn{Next-Source-2}{\var{next},\Source{\ell}}
+\right) \\
+\implies
+\left( \begin{gathered}
+\exists \mylim{\ell2} : \myfn{LIM-Of-2}{\ell2, \var{next}} \\
+\land \DR{\ell} = \DR{\ell2}
+\land \; \Origin{\ell} = \Origin{\ell2}
+\end{gathered} \right).
 \end{gathered}
 \end{equation}
 The boolean function \Valid{\Vlim{x}} is true
