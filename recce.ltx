@@ -3416,7 +3416,7 @@ The theorem follows from
 
 \subsection{Joop Leo's discovery}
 
-In this 1968 Ph.D. thesis~\cite[p. 60]{Earley1968},
+In his 1968 Ph.D. thesis~\cite[p. 60]{Earley1968},
 Jay Earley conjectured
 that \Earley\! could be
 modified to be \On{} for
@@ -3434,9 +3434,9 @@ showed that Earley had been correct.
 Leo modified the algorithm of Earley to be linear,
 not just for all DCFG's,
 but for a superset, the LR-regular grammars.
-Leo did his work while unaware of Earley's earlier conjecture ---
-he discovered it in the course of writing up his
-discovery.
+Leo did his work while unaware of the earlier conjecture ---
+Leo first encountered Earley's conjecture in the course of writing up his
+own discovery.
 
 The problem both investigators noticed was that,
 while \Earley{} is \On{}
@@ -3500,13 +3500,75 @@ show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
 
-\todo{ES 0 Leo discussion to later?}
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
 $\es{(0)}$ memoization
 would have to be implemented as a special case,
 while omission of $\es{(0)}$ memoization
 results in at most one extra EIM per ES.
+
+\subsection{Leo directionality}
+
+Leo's memoization method is simple from one point of view ---
+it involves a sequence of memos, called Leo items.
+The Leo items are matched to certain EIM's in a straightforward way.
+
+Nonetheless, investigators have found the Leo method
+challenging to the intuition.
+We believe this is because
+the intuitive order of the sequence of EIM's and
+the intuitive order of the matching sequence of Leo items
+run in opposite directions.
+An investigator trying to understand
+the building of the matched sequences must think
+in both directions at once.
+
+In the hopes of preparing the reader for the details
+of the Leo method,
+this section will give a high-level overview,
+emphasizing directionality.
+
+We root our idea of direction in the Earley sets.
+We say that we are proceeding ``left-to-right'' if we
+are proceeding in non-decreasing Earley set order.
+We say that we are proceeding ``right-to-left'' if we
+are proceeding in non-increasing Earley set order.
+
+The intuitive direction of the EIM's to be memoized is,
+of course, the same as that of the Earley sets -- left-to-right.
+The intuitive direction of the Leo items, however, is the one
+in which the right recursion must be unfolded.
+The conceptual order of the right recursion,
+and the order in which a memoized right recursion must be rebuilt
+is, naturally enough, from the bottom-up.
+
+The trickiness occurs because as the Earley sets are built,
+left-to-right, each new Leo item is the bottom of a new potential
+right recursion.
+Therefore the natural bottom-up order of Leo items
+is right-to-left in terms of the Earley sets.
+
+In implementation, this reversal works out fine --
+EIM's and their Leo memos are both created left-to-right.
+But the investigator studying the Leo method, who is trying to
+keep in mind both the order of creation and the intuitive, evaluation-time,
+order of the Leo items, may at times feel dizzy.
+
+When, in subsequent discussion, we introduce Leo sequences,
+they will be conceptually right-to-left, so that the ``next'' item
+in a Leo sequence is the same or an earlier ES than the ``previous''
+item.  In other words, previous-to-next in Leo sequence terms
+is right-to-left in Earley set terms.
+
+On the other hand when,
+for the purpose of recovering the ancestry of parse items,
+we introduce the terms
+``predecessor'' and ``successor'',
+the ``successor'' of a ``predecessor'' will always be in the same ES as,
+or a later ES than, the predecessor of the successor.
+In other words,
+predecessor-to-successor in ancestry terms
+is left-to-right in Earley set terms.
 
 \subsection{Leo items}
 
@@ -4258,18 +4320,6 @@ beginning at
 \Eref{eq:th-next-source-fn-12}, and completes the proof.
 \myqed
 \end{proof}
-
-\todo{Move this to special section on Leo directions}
-When we introduce Leo source sequences,
-We will see that they grow backwards --
-the bottom is in
-the last ES of the sequence,
-and the top is in the first ES of the sequence.
-This reversal of direction can be confusing,
-but Leo sequences are in fact recorded ``top first",
-and recreated from bottom to top,
-so that this ``back-and-forth'' is a natural part of
-the method.
 
 \begin{theorem}[Next source EIM Direction]
 \label{th:next-source-direction}
