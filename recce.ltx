@@ -3016,10 +3016,10 @@ The match of an EIM with a location,
 \end{equation*}
 \end{definition}
 
-\begin{theorem}[Order of matching EIM's]
-\label{th:order-of-matching-eims}
+\begin{theorem}[Matching EIM's direction]
+\label{th:matching-eims-direction}
 \begin{equation}
-\label{eq:th-order-of-matching-eims-03}
+\label{eq:th-matching-eims-direction-03}
 \begin{gathered}
 \Matches{\Veim{left},\Veim{right}} \\
 \implies \Current{\var{left}} \le \Current{\var{right}}.
@@ -3028,15 +3028,15 @@ The match of an EIM with a location,
 \end{theorem}
 
 \begin{proof}
-By \Eref{eq:th-order-of-matching-eims-03} and
+By \Eref{eq:th-matching-eims-direction-03} and
 \Eref{eq:def-matches-eim-eim} in the definitions of
 ``matching'' \Dfref{def:matching-1}, we have
 \begin{equation}
-\label{eq:th-order-of-matching-eims-10}
+\label{eq:th-matching-eims-direction-10}
 \Current{\var{left}} = \Origin{\var{right}}.
 \end{equation}
 The theorem follows from
-\Eref{eq:th-order-of-matching-eims-10}
+\Eref{eq:th-matching-eims-direction-10}
 and \Thref{th:eim-origin-not-after-current}.
 \end{proof}
 
@@ -4271,143 +4271,44 @@ and recreated from bottom to top,
 so that this ``back-and-forth'' is a natural part of
 the method.
 
-\begin{theorem}[Next source EIM not after previous]
-\label{th:next-source-not-after-previous}
-\todo{Redo "Next source EIM not after previous" theorem}
-\[
+\begin{theorem}[Next source EIM Direction]
+\label{th:next-source-direction}
+\begin{equation}
+\label{eq:th-next-source-direction-02}
 \begin{gathered}
     \NextSource{\Veim{prev}} = \Veim{next} \\
     \implies \Current{\var{next}} \le \Current{\var{prev}}.
 \end{gathered}
-\]
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Thref{th:leo-source-connection},
-\Thref{th:lim-predecessor-not-after-eim}, and
-\longThref{Next source}{th:next-source-fn}.
-\end{proof}
-
-\begin{theorem}[LIM-predecessor--next-source value equivalence]
-\label{th:lim-predecessor-next-source-value-equivalence}
-\todo{Redo "LIM-predecessor--next-source value equivalence" theorem}
-\begin{gather}
-\label{eq:th-lim-predecessor-next-source-value-equivalence-02}
-\NextSource{\Veim{prev}} = \Veim{next} \land \Source{\mylim{\ell}} = \var{next} \\
-\nonumber \iff \\
-\label{eq:th-lim-predecessor-next-source-value-equivalence-03}
- \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}}.
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-We prove the forward direction directly, assuming the antecedant
-\Eref{eq:th-lim-predecessor-next-source-value-equivalence-02}
-to show the consequent
-\Eref{eq:th-lim-predecessor-next-source-value-equivalence-03}.
-\begin{equation}
-\label{eq:th-lim-predecessor-next-source-value-equivalence-10}
-\begin{gathered}
-    \exists \; \mylim{\ell1} :
-    \left( \begin{gathered}
-    \var{next} = \Source{\ell1} \\
-    \land \; \Valid{\ell1}
-    \land \; \myfn{LIM-Predecessor-2}{\ell1,\var{prev}}
-    \end{gathered} \right)
-    \\ \land \; \Source{\mylim{\ell}} = \var{next}
-    \\ \because
-        \longThref{Next source function}{th:next-source-fn},
-        \Eref{eq:th-lim-predecessor-next-source-value-equivalence-02}.
-\end{gathered}
 \end{equation}
-\todo{Prove LIM-predecessor--next-source value equivalence}
-\end{proof}
-
-\begin{theorem}[LIM-predecessor--next-source existential equivalence]
-\label{th:lim-predecessor-next-source-existential-equivalence}
-\todo{Redo "LIM-predecessor--next-source existential equivalence" theorem}
-Let \Veim{prev} be an arbitrary value of an LSS.
-Then
-\begin{gather}
-\label{eq:th-lim-predecessor-next-source-equivalence-02}
-\exists \; \Veim{next} : \NextSource{\Veim{prev}} = \var{next} \\
-\nonumber \iff \\
-\label{eq:th-lim-predecessor-next-source-equivalence-03}
-\exists \; \mylim{\ell} : \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}}.
-\end{gather}
 \end{theorem}
 
 \begin{proof}
-\todo{Redo proof}
-The forward direction of the theorem follows immediately from
-the definition of \NextSource{} \Thref{th:next-source-fn}.
-We show the reverse direction directly, assuming its
-antecedant to show its consequent.
+The proof is direct, assuming the antecedant of the theorem
+to show its consequent.
 \begin{equation}
-\label{eq:th-lim-predecessor-next-source-equivalence-10}
-\begin{gathered}
-\Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
-\myparbox{\Eref{eq:th-lim-predecessor-next-source-equivalence-03},
-    antecedant of reverse direction,
-    AF reverse direction.%
+\label{eq:th-next-source-direction-10}
+\myparbox{%
+    \myfn{Next-source-2}{\var{next},\var{prev}} \cuz
+    antecedant of \Eref{eq:th-next-source-direction-02},
+    AF proof.%
 }
-\end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-lim-predecessor-next-source-equivalence-12}
-\begin{gathered}
-\Valid{\ell} \\
-      \land \; \exists \; \Veim{pred-source} :
-          \left(
-          \begin{gathered}
-          \Matches{ \var{pred-source},\Veim{prev}} \\
-          \land \; \myfn{Source2}{\var{pred-source},\ell}
-          \end{gathered}
-          \right) \\
-            \because \longDfref{LIM predecessor}{def:lim-predecessor},
-            \Eref{eq:th-lim-predecessor-next-source-equivalence-10}.
-\end{gathered}
+\label{eq:th-next-source-direction-12}
+\Matches{\var{next},\var{prev}}
+    \because \longDfref{Next source}{def:next-source},
+    \Eref{eq:th-next-source-direction-10}.
 \end{equation}
 \begin{equation}
-\label{eq:th-lim-predecessor-next-source-equivalence-14}
-\begin{gathered}
-    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
-    \land \; \exists \; \Veim{pred-source} : \myfn{Source2}{\var{pred-source},\ell} \\
-    \because \Eref{eq:th-lim-predecessor-next-source-equivalence-10},
-    \Eref{eq:th-lim-predecessor-next-source-equivalence-12}.
-\end{gathered}
+\label{eq:th-next-source-direction-14}
+\myparbox{$\Current{\var{next}} \le \Current{\var{prev}}$
+    \cuz{}
+    \longThref{Matching EIM's direction}{th:matching-eims-direction},
+    \Eref{eq:th-next-source-direction-12}.
+    This is the consequent of
+    \Eref{eq:th-next-source-direction-02}.  \myqed%
+}
 \end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-next-source-equivalence-16}
-\begin{gathered}
-    \exists \; \Veim{pred-source} : \\
-    \exists \; \mylim{\ell} : \Valid{\ell} \\
-    \land \myfn{LIM-Predecessor-2}{\ell,\var{prev}} \\
-    \land \; \var{pred-source} = \Source{\ell} \\
-    \because \longDfref{Leo source}{def:leo-source},
-    \Eref{eq:th-lim-predecessor-next-source-equivalence-14}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lim-predecessor-next-source-equivalence-18}
-\begin{gathered}
-    \exists \; \Veim{next} : \NextSource{\var{prev}} = \var{next} \\
-    \myparbox{%
-        \cuz{} \longThref{Next source}{th:next-source-fn},
-        \Eref{eq:th-lim-predecessor-next-source-equivalence-16},
-        and name change from \var{pred-source} to \var{next}.%
-    }
-\end{gathered}
-\end{equation}
-\Eref{eq:th-lim-predecessor-next-source-equivalence-18} is the consequent
-of the reverse direction, so that
-the deduction from
-\Eref{eq:th-lim-predecessor-next-source-equivalence-10} to
-\Eref{eq:th-lim-predecessor-next-source-equivalence-18} shows
-the reverse direction.
-With the reverse direction, we have the theorem.
-\myqed
 \end{proof}
 
 \subsection{Leo source sequence}
@@ -4677,7 +4578,7 @@ From
 \Thref{th:leo-source-eim-count}, we know that there are
 at most \size{\Vocab{\var{g}}} Leo source EIM's
 in any ES.
-From \Thref{th:next-source-not-after-previous}
+From \Thref{th:next-source-direction}
 and \Dfref{def:leo-source-sequence},
 we know that every EIM in \var{seq} is in an Earley set
 not after \Current{\Velement{seq}{0}}.
@@ -4983,9 +4884,6 @@ if and only if \Vlss{lss} is maximal.
 Let \var{lss} be a Leo source sequence.
 The following statements are equivalent:
 \begin{gather}
-\label{eq:th-lss-termination-equivalence-02}
-\exists \; \mylim{\ell} :
-    \Valid{\ell} \land \myfn{LIM-Predecessor-2}{\ell,\Velement{lss}{\Vlastix{lss}}}. \\
 \label{eq:th-lss-termination-equivalence-03}
 \exists \; \Veim{next} : \NextSource{\Velement{lss}{\Vlastix{lss}}} = \var{next}. \\
 \label{eq:th-lss-termination-equivalence-04}
@@ -4998,15 +4896,12 @@ The following statements are equivalent:
 \begin{proof}
 We have
 the equivalence of
-\Eref{eq:th-lss-termination-equivalence-02} and \Eref{eq:th-lss-termination-equivalence-03} by
-\Thref{th:lim-predecessor-next-source-existential-equivalence};
-the equivalence of
 \Eref{eq:th-lss-termination-equivalence-03} and \Eref{eq:th-lss-termination-equivalence-04} by
 \Thref{th:proper-prefix-lim-predecessor}; and
 the equivalence of
 \Eref{eq:th-lss-termination-equivalence-04} and \Eref{eq:th-lss-termination-equivalence-05}
 by \longDfref{Maximal LSS}{def:maximal-lss}.
-The theorem follows from these three pairwise equivalences.
+The theorem follows from these two pairwise equivalences.
 \end{proof}
 
 \begin{theorem}[Maximal LSS length]
