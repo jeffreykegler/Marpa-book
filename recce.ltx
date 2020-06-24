@@ -4060,10 +4060,12 @@ The proof strategy is direct.
 \end{equation}
 \begin{equation}
 \label{eq:th-matched-leo-source-uniqueness-16}
-\var{left1} = \var{left2} \because \Thref{th:leo-source-uniqueness},
+\myparbox{$\var{left1} = \var{left2}$ \linebreak \cuz{}
+        \longThref{Leo source postdot uniqueness}{th:leo-source-postdot-uniqueness},
+        \longThref{Source function}{th:source-function},
     \Eref{eq:th-matched-leo-source-uniqueness-06},
-    \Eref{eq:th-matched-leo-source-uniqueness-14}.
-    \quad \myqed
+    \Eref{eq:th-matched-leo-source-uniqueness-14}.  \myqed%
+}
 \end{equation}
 \end{proof}
 
@@ -4087,10 +4089,10 @@ This theorem follows from
 
 \begin{theorem}[Leo source EIM count]
 \label{th:leo-source-eim-count}
-There are at most \size{\Vocab{\var{g}}} Leo source
+There are at most \size{\Vocab{\Vint{g}}} Leo source
 EIM's in any valid ES.
 That is, if \Vesseq{table} is a valid Earley table for the
-context parse, then
+\var{g}, then
 \[
 \begin{gathered}
 \forall \Ves{j} \in \var{table} : \\
@@ -4130,8 +4132,9 @@ $\size{\Vocab{\var{g}}}$.
 \[
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
-\defined \;
-\Matches{\var{next},\var{prev}} \land \exists \; \ell : \myfn{LIM-Of-2}{\ell,\var{next}}.
+\defined \; \Matches{\var{next},\var{prev}} \\
+\land \; (\exists \; \ell1 : \myfn{LIM-Of-2}{\ell1,\var{prev}}) \\
+\land \; (\exists \; \ell2 : \myfn{LIM-Of-2}{\ell2,\var{next}}).
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
@@ -4203,6 +4206,46 @@ consequent.
         \quad \myqed
 }
 \end{gathered}
+\end{equation}
+\end{proof}
+
+\begin{theorem}[Next source relation direction]
+\label{th:next-source-relation-direction}
+\begin{equation}
+\label{eq:th-next-source-relation-direction-02}
+\begin{gathered}
+    \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
+    \implies \Current{\var{next}} \le \Current{\var{prev}}.
+\end{gathered}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The proof is direct, assuming the antecedant of the theorem
+to show its consequent.
+\begin{equation}
+\label{eq:th-next-source-relation-direction-10}
+\myparbox{%
+    \myfn{Next-source-2}{\var{next},\var{prev}} \cuz
+    antecedant of \Eref{eq:th-next-source-relation-direction-02},
+    AF proof.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-direction-12}
+\Matches{\var{next},\var{prev}}
+    \because \longDfref{Next source}{def:next-source},
+    \Eref{eq:th-next-source-relation-direction-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-direction-14}
+\myparbox{$\Current{\var{next}} \le \Current{\var{prev}}$
+    \cuz{}
+    \longThref{Matching EIM's direction}{th:matching-eims-direction},
+    \Eref{eq:th-next-source-relation-direction-12}.
+    This is the consequent of
+    \Eref{eq:th-next-source-relation-direction-02}.  \myqed%
+}
 \end{equation}
 \end{proof}
 
@@ -4333,32 +4376,7 @@ beginning at
 \end{theorem}
 
 \begin{proof}
-The proof is direct, assuming the antecedant of the theorem
-to show its consequent.
-\begin{equation}
-\label{eq:th-next-source-direction-10}
-\myparbox{%
-    \myfn{Next-source-2}{\var{next},\var{prev}} \cuz
-    antecedant of \Eref{eq:th-next-source-direction-02},
-    AF proof.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-next-source-direction-12}
-\Matches{\var{next},\var{prev}}
-    \because \longDfref{Next source}{def:next-source},
-    \Eref{eq:th-next-source-direction-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-next-source-direction-14}
-\myparbox{$\Current{\var{next}} \le \Current{\var{prev}}$
-    \cuz{}
-    \longThref{Matching EIM's direction}{th:matching-eims-direction},
-    \Eref{eq:th-next-source-direction-12}.
-    This is the consequent of
-    \Eref{eq:th-next-source-direction-02}.  \myqed%
-}
-\end{equation}
+\todo{Redo proof}
 \end{proof}
 
 \subsection{Leo source sequence}
