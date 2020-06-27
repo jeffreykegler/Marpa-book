@@ -912,6 +912,20 @@ a \dfn{function} is never an algorithm ---
 it always refers to the set theoretic notion.
 Algorithms are also referred to as \dfn{procedures}.
 
+We consider it clearer to
+avoid representing relations in the form
+\begin{equation}
+\label{eq:relation-example}
+\var{x} \var{R} \var{y},
+\end{equation}
+where \var{R} is a binary relation between \var{x} and \var{y}.
+Instead we prefer to deal with relations in the form of the equivalent
+set,
+or via the boolean function they induce.
+For example we might discuss
+\Eref{eq:relation-example} via the boolean binary function
+\myfn{R}{\var{x}, \var{y}}.
+
 \Earley{} will refer to the Earley's original
 recognizer\cite{Earley1970}
 with zero characters of lookahead.
@@ -3688,11 +3702,11 @@ $\Veim{uniq} \in \LeoEligible{\Ves{j}}$.
 \end{definition}
 
 \begin{definition}[Leo source]
-\label{def:leo-source}
+\label{def:leo-source-relation}
 Leo items ``stand in'' for an EIM source.
 \begin{equation*}
 \begin{gathered}
-    \myfn{Source2}{\Veim{source},\mylim{\ell}} \defined \\
+    \myfn{Source-Rel}{\Veim{source},\mylim{\ell}} \defined \\
    \var{source} \in \LeoEligible{\ES{\Current{\ell}}} \\
    \land \; \Transition{\ell} = \Postdot{\var{source}}.
 \end{gathered}
@@ -3705,8 +3719,8 @@ We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}.
 \label{def:lim-of-eim}
 \begin{equation*}
 \begin{gathered}
-    \myfn{LIM-Of-2}{\mylim{\ell},\Veim{source}} \defined
-    \myfn{Source2}{\Veim{source},\mylim{\ell}}
+    \myfn{LIM-Of-Rel}{\mylim{\ell},\Veim{source}} \defined
+    \myfn{Source-Rel}{\Veim{source},\mylim{\ell}}
 \end{gathered}
 \end{equation*}
 We say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{source}.
@@ -3717,7 +3731,7 @@ We say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{source}.
 \label{th:leo-source-connection}
 \[
 \begin{gathered}
-    \myfn{Source2}{\Veim{source},\mylim{\ell}} \implies \\
+    \myfn{Source-Rel}{\Veim{source},\mylim{\ell}} \implies \\
     \Current{\var{source}} = \Current{\ell} \\
     \land \; \Postdot{\var{source}} = \Transition{\ell}.
 \end{gathered}
@@ -3729,21 +3743,21 @@ The proof strategy is direct, assuming the antecedant of
 the theorem to show the consequent.
 \begin{equation}
 \label{eq:th-source-lim-connection-10}
-\myfn{Source2}{\Veim{source},\mylim{\ell}} \because
+\myfn{Source-Rel}{\Veim{source},\mylim{\ell}} \because
     \text{antecedant of theorem, AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-source-lim-connection-12}
    \begin{gathered}
    \var{source} \in \LeoEligible{\ES{\Current{\ell}}} \\
-   \because \longDfref{Leo source}{def:leo-source},
+   \because \longDfref{Leo source}{def:leo-source-relation},
    \Eref{eq:th-source-lim-connection-10}.
    \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-source-lim-connection-14}
    \Transition{\ell} = \Postdot{\var{source}}
-   \because \Dfref{def:leo-source},
+   \because \Dfref{def:leo-source-relation},
    \Eref{eq:th-source-lim-connection-10}.
 \end{equation}
 \begin{equation}
@@ -3769,7 +3783,7 @@ The consequent of the theorem is
 \label{th:lim-of-eim-connection}
 \[
 \begin{gathered}
-    \myfn{LIM-Of-2}{\mylim{\ell},\Veim{source}} \implies \\
+    \myfn{LIM-Of-Rel}{\mylim{\ell},\Veim{source}} \implies \\
     \Current{\var{source}} = \Current{\ell} \\
     \land \; \Postdot{\var{source}} = \Transition{\ell}.
 \end{gathered}
@@ -3805,7 +3819,7 @@ with that postdot symbol.
 That is, if
 \begin{gather}
   \label{eq:th-leo-source-postdot-uniqueness-02}
-    \myfn{Source2}{\Veim{x},\mylim{\ell}} \\
+    \myfn{Source-Rel}{\Veim{x},\mylim{\ell}} \\
   \label{eq:th-leo-source-postdot-uniqueness-04}
     \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-source-postdot-uniqueness-06}
@@ -3823,7 +3837,7 @@ The proof strategy is direct.
 \begin{equation}
 \label{eq:th-leo-source-postdot-uniqueness-14}
 \Veim{x} \in \LeoEligible{\ES{\ell}}
-\because \longDfref{Leo source}{def:leo-source},
+\because \longDfref{Leo source}{def:leo-source-relation},
     \Eref{eq:th-leo-source-postdot-uniqueness-02}.
 \end{equation}
 \begin{equation}
@@ -3886,7 +3900,7 @@ with that postdot symbol.
 That is,
 \[
 \left( \begin{gathered}
-    \myfn{LIM-Of-2}{\mylim{\ell},\Veim{x}} \\
+    \myfn{LIM-Of-Rel}{\mylim{\ell},\Veim{x}} \\
     \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
     \land \; \Postdot{\var{x}} = \Postdot{\var{y}}
 \end{gathered} \right)
@@ -3907,13 +3921,13 @@ Every LIM has exactly one EIM source.
 That is,
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-02}
-    \myfn{Source2}{\Veim{x},\mylim{\ell}} \land \myfn{Source2}{\Veim{y},\ell}
+    \myfn{Source-Rel}{\Veim{x},\mylim{\ell}} \land \myfn{Source-Rel}{\Veim{y},\ell}
     \implies \var{x} = \var{y}.
 \end{equation}
 Also,
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-04}
-    \myfn{LIM-Of-2}{\mylim{\ell},\Veim{x}} \land \myfn{LIM-Of-2}{\ell,\Veim{y}}
+    \myfn{LIM-Of-Rel}{\mylim{\ell},\Veim{x}} \land \myfn{LIM-Of-Rel}{\ell,\Veim{y}}
     \implies \var{x} = \var{y}.
 \end{equation}
 \end{theorem}
@@ -3926,14 +3940,14 @@ we assume the antecedant
 to show the consequent.
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-10}
-\myfn{Source2}{\Veim{x}, \mylim{\ell}}
+\myfn{Source-Rel}{\Veim{x}, \mylim{\ell}}
     \because \text{antecedant of
         \Eref{eq:th-leo-source-uniqueness-02},
          AF proof.}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-uniqueness-12}
-\myfn{Source2}{\Veim{y}, \mylim{\ell}}
+\myfn{Source-Rel}{\Veim{y}, \mylim{\ell}}
     \because \text{antecedant of
         \Eref{eq:th-leo-source-uniqueness-02},
          AF proof.}
@@ -3983,13 +3997,13 @@ The function
 \begin{equation}
 \label{eq:th-source-function-02}
 \Source{\mylim{\ell}} \defined \Veim{source} :
-\myfn{Source2}{\var{source},\ell}
+\myfn{Source-Rel}{\var{source},\ell}
 \end{equation}
 exists.  Also,
 \begin{equation}
 \label{eq:th-source-function-04}
 \Source{\mylim{\ell}} = \Veim{source} \implies
-    \myfn{LIM-Of-2}{\ell,\var{source}}.
+    \myfn{LIM-Of-Rel}{\ell,\var{source}}.
 \end{equation}
 \end{theorem}
 
@@ -3998,7 +4012,7 @@ To show \Eref{eq:th-source-function-02},
 we first note that
 \[
 \var{Source} = \set{ \tuple{ \var{lim}, \var{source} } \in \type{LIM} \times \type{EIM} :
-    \myfn{Source2}{\var{source},\var{lim}}
+    \myfn{Source-Rel}{\var{source},\var{lim}}
 }
 \]
 is a relation.
@@ -4011,12 +4025,12 @@ and \Eref{eq:th-source-function-02}.
 \myqed
 \end{proof}
 
-Similarly to \myfn{Source2}{},
+Similarly to \myfn{Source-Rel}{},
 we will eventually define a $\var{LIM-Of}:\type{EIM}\to\type{LIM}$
-function based on \myfn{LIM-Of-2}{}:
+function based on \myfn{LIM-Of-Rel}{}:
 \[
 \var{LIM-Of} = \set{ \tuple{\var{x}, \ell} \in \type{EIM}\times\type{LIM} : \
-    \myfn{LIM-Of-2}{\ell,\var{x}}.
+    \myfn{LIM-Of-Rel}{\ell,\var{x}}.
 }
 \]
 We postpone this definition because
@@ -4084,7 +4098,7 @@ The proof strategy is direct.
 \begin{gather*}
 \Matches{\Veim{left1},\Veim{right}} \\
 \land \; \Matches{\Veim{left2},\Veim{right}} \\
-\land \; \myfn{LIM-Of-2}{\mylim{\ell},\var{left1}} \\
+\land \; \myfn{LIM-Of-Rel}{\mylim{\ell},\var{left1}} \\
 \implies \var{left1} = \var{left2}.
 \end{gather*}
 \end{theorem}
@@ -4143,8 +4157,8 @@ $\size{\Vocab{\var{g}}}$.
 \begin{gathered}
 \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
 \defined \; \Matches{\var{next},\var{prev}} \\
-\land \; (\exists \; \ell1 : \myfn{LIM-Of-2}{\ell1,\var{prev}}) \\
-\land \; (\exists \; \ell2 : \myfn{LIM-Of-2}{\ell2,\var{next}}).
+\land \; (\exists \; \ell1 : \myfn{LIM-Of-Rel}{\ell1,\var{prev}}) \\
+\land \; (\exists \; \ell2 : \myfn{LIM-Of-Rel}{\ell2,\var{next}}).
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{Leo next source},
@@ -4264,7 +4278,7 @@ to show its consequent.
 If
 \begin{gather}
 \label{eq:th-next-source-relation-rule-03a}
-\Current{\Veim{eim1}} = \Current{\Veim{eim2}} = \Current{\Veim{eim3}} \\
+\Current{\Veim{eim1}} = \Current{\Veim{eim3}} \\
 \label{eq:th-next-source-relation-rule-03b}
 \land \; \myfn{Next-source-2}{\var{eim1},\var{eim2}} \\
 \label{eq:th-next-source-relation-rule-03c}
@@ -4310,18 +4324,53 @@ then
     \Eref{eq:th-next-source-relation-rule-14}.
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-relation-rule-16}
+\label{eq:th-next-source-relation-rule-18}
 \Vsym{rhs} = \Symbol{\var{eim1}} \because
     \Eref{eq:th-next-source-relation-rule-10},
     \Eref{eq:th-next-source-relation-rule-14}.
 \end{equation}
 \begin{equation}
-\label{eq:th-next-source-relation-rule-18}
+\label{eq:th-next-source-relation-rule-20}
 \myparbox{$\exists \; \ell : \Source{\ell} = \var{eim1}$ \cuz{}
     \longThref{Source function}{th:source-function},
     \longDfref{Next source}{def:next-source},
     \Eref{eq:th-next-source-relation-rule-03b}.%
 }
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-rule-22}
+\Source{\ell1} = \var{eim1} \because
+    \Eref{eq:th-next-source-relation-rule-20},
+    \text{existential instantiation}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-rule-24}
+    \begin{gathered}
+    \var{eim1} \in \LeoEligible{\ES{\ell1}} \\
+        \because \Thref{th:source-function},
+        \longDfref{Leo source relation}{def:leo-source-relation},
+        \Eref{eq:th-next-source-relation-rule-22}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-rule-26}
+    \begin{gathered}
+    \var{eim1} \in \LeoUnique{\ES{\ell1}} \\
+        \because \Eref{eq:th-next-source-relation-rule-24},
+        \longDfref{Leo Eligible}{def:leo-eligible}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-rule-28}
+\Penult{\var{eim1}} \neq \Lambda
+    \because \longDfref{Leo unique}{def:leo-unique},
+    \Eref{eq:th-next-source-relation-rule-26}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-source-relation-rule-30}
+    \Vstr{after} = \epsilon \because
+        \Eref{eq:th-next-source-relation-rule-14},
+        \Eref{eq:th-next-source-relation-rule-28}.
 \end{equation}
 \todo{Prove "Next source relation rule"}
 \end{proof}
@@ -4362,7 +4411,7 @@ if and only if
 \right) \\
 \implies
 \left( \begin{gathered}
-\exists \mylim{\ell2} : \myfn{LIM-Of-2}{\ell2, \var{next}} \\
+\exists \mylim{\ell2} : \myfn{LIM-Of-Rel}{\ell2, \var{next}} \\
 \land \DR{\ell} = \DR{\ell2}
 \land \; \Origin{\ell} = \Origin{\ell2}
 \end{gathered} \right).
@@ -5670,7 +5719,7 @@ Every ES has at most
       \myfn{LIM-Predecessor-2}{\Vlim{pred},\Veim{succ}} \defined \\
           \exists \; \Veim{pred-source} : \\
       \Matches{ \Veim{pred-source},\Veim{succ}} \\
-          \land \; \myfn{Source2}{\var{pred-source},\Vlim{pred}}.
+          \land \; \myfn{Source-Rel}{\var{pred-source},\Vlim{pred}}.
   \end{gathered}
 \end{equation*}
 We say that \Vlim{pred} is the \dfn{LIM predecessor}
@@ -5710,7 +5759,7 @@ the theorem to show the consequent.
 \end{equation}
 \begin{equation}
 \label{eq:th-lim-predecessor-connection-14}
-    \myfn{Source2}{\var{lim-source},\ell}
+    \myfn{Source-Rel}{\var{lim-source},\ell}
     \because \Dfref{def:lim-predecessor-Q},
     \Eref{eq:th-lim-predecessor-connection-10}.
 \end{equation}
