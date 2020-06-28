@@ -254,6 +254,7 @@
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\lss}[1]{\ensuremath{#1_\type{LSS}}}
+\newcommand{\nss}[1]{\ensuremath{#1_\type{NSS}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
 \newcommand{\term}[1]{\ensuremath{\lfloor{#1}\rfloor}}
 \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
@@ -275,6 +276,7 @@
 \newcommand{\Vlp}[1]{\Tvar{#1}{LP}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
+\newcommand{\Vnss}[1]{\nss{\var{#1}}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
 \newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
 \newcommand{\Vpimset}[1]{\Tvarset{#1}{PIM}}
@@ -4155,7 +4157,7 @@ $\size{\Vocab{\var{g}}}$.
 \label{def:next-source}
 \[
 \begin{gathered}
-\myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
+\myfn{Next-Source-Rel}{\Veim{next},\Veim{prev}} \\
 \defined \; \Matches{\var{next},\var{prev}} \\
 \land \; (\exists \; \ell1 : \myfn{LIM-Of-Rel}{\ell1,\var{prev}}) \\
 \land \; (\exists \; \ell2 : \myfn{LIM-Of-Rel}{\ell2,\var{next}}).
@@ -4171,8 +4173,8 @@ or \dfn{next source}, of \Veim{prev}.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-04}
 \begin{gathered}
-    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
-    \land \; \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \\
+    \myfn{Next-Source-Rel}{\Veim{next1},\Veim{prev}} \\
+    \land \; \myfn{Next-Source-Rel}{\Veim{next2},\Veim{prev}} \\
     \implies \var{next1} = \var{next2}.
 \end{gathered}
 \end{equation}
@@ -4185,14 +4187,14 @@ consequent.
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-10}
 \begin{gathered}
-    \myfn{Next-Source-2}{\Veim{next1},\Veim{prev}} \\
+    \myfn{Next-Source-Rel}{\Veim{next1},\Veim{prev}} \\
     \because \text{antecedant of theorem, AF proof.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-source-predecessor-uniqueness-12}
 \begin{gathered}
-    \myfn{Next-Source-2}{\Veim{next2},\Veim{prev}} \\
+    \myfn{Next-Source-Rel}{\Veim{next2},\Veim{prev}} \\
     \because \text{antecedant of theorem, AF proof.}
 \end{gathered}
 \end{equation}
@@ -4238,7 +4240,7 @@ consequent.
 \begin{equation}
 \label{eq:th-next-source-relation-direction-02}
 \begin{gathered}
-    \myfn{Next-Source-2}{\Veim{next},\Veim{prev}} \\
+    \myfn{Next-Source-Rel}{\Veim{next},\Veim{prev}} \\
     \implies \Current{\var{next}} \le \Current{\var{prev}}.
 \end{gathered}
 \end{equation}
@@ -4296,6 +4298,12 @@ then
 \end{theorem}
 
 \begin{proof}
+In this proof, note that it is possible
+that $\Veim{eim1} = \Veim{eim2}$,
+that $\Veim{eim2} = \Veim{eim3}$,
+or both.
+The proof is direct, assuming the antecedant to
+show the consequent.
 \begin{equation}
 \label{eq:th-next-source-relation-rule-10}
 \Matches{\var{eim1},\var{eim2}} \cuz{}
@@ -4422,6 +4430,22 @@ The theorem is
 \myqed
 \end{proof}
 
+\begin{definition}[Next source sequence]
+\label{def:next-source-sequence}
+A \dfn{next source sequence} (type \type{NSS}) is a sequence
+of EIM's, each of which is the ``next source'' of the previous one.
+That is,
+\[
+\type{NSS} \defined \set{
+\Veimseq{seq} :
+    \left( \begin{gathered}
+    \forall \; 0 \le \var{i} < \Vlastix{seq} : \\
+    \myfn{Next-Source-Rel}{\Velement{seq}{\var{i}+1},\VVelement{seq}{i}}
+    \end{gathered} \right)
+}. \quad \dispEnd
+\]
+\end{definition}
+
 \subsection{Leo item validity}
 
 \begin{definition}[LIM validity]
@@ -4440,7 +4464,7 @@ if and only if
 \label{eq:LIM-valid-22}
 \begin{gathered}
 \left(
-    \neg \exists \; \Veim{next} : \myfn{Next-Source-2}{\var{next},\Source{\ell}}
+    \neg \exists \; \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\Source{\ell}}
 \right) \\
 \implies
 \left( \begin{gathered}
@@ -4454,7 +4478,7 @@ if and only if
 \label{eq:LIM-valid-24}
 \begin{gathered}
 \left(
-    \exists \; \Veim{next} : \myfn{Next-Source-2}{\var{next},\Source{\ell}}
+    \exists \; \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\Source{\ell}}
 \right) \\
 \implies
 \left( \begin{gathered}
@@ -4475,7 +4499,7 @@ The function
 \[
 \begin{gathered}
 \NextSource{\Veim{prev}} \defined \\
-    \Veim{next} : \myfn{Next-Source-2}{\var{next},\var{prev}}
+    \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\var{prev}}
 \end{gathered}
 \]
 exists.
@@ -4490,7 +4514,7 @@ The relation
 \set{
     \begin{gathered}
     \tuple{ \var{prev}, \var{next} } \in \type{EIM} \times \type{EIM} : \\
-        \myfn{Next-Source-2}{\var{next},\var{prev}}
+        \myfn{Next-Source-Rel}{\var{next},\var{prev}}
     \end{gathered}
 }
 \\ \because \longThref{Next source function}{th:next-source-fn}.
