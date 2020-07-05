@@ -3698,9 +3698,9 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \end{equation*}
 and
 \begin{equation*}
-\label{eq:def-leo-eligible}
+\label{eq:def-is-leo-eligible}
 \myfn{Is-Leo-Eligible}{\Veim{x}} \defined \\
-\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}
+\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}.
 \end{equation*}
 We say that
 an EIM \Veim{eligible}
@@ -3709,6 +3709,198 @@ if and only if
 \myfn{Is-Leo-Eligible}{\var{eligible}}.
 \dispEnd{}
 \end{definition}
+
+\begin{theorem}[Leo eligible location]
+\label{th:leo-eligible-location}
+\[
+\myfn{Is-Leo-Eligible}{\Veim{x}} \iff
+\Veim{x} \in \LeoEligible{\Current{\var{x}}}.
+\]
+\end{theorem}
+
+\begin{proof}
+For the forward direction we assume the antecedant to
+show the consequent.
+\begin{equation}
+\label{eq:th-leo-eligible-location-10}
+\myparbox{%
+    $\myfn{Is-Leo-Eligible}{\Veim{x}}$ \cuz{}
+    antecedant of forward direction, AF direction.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-12}
+\myparbox{%
+   $\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}$
+   \cuz{}
+       \longDfref{\var{Is-Leo-Eligible}}{def:leo-eligible},
+       \Eref{eq:th-leo-eligible-location-10}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-14}
+\myparbox{$\Veim{x} \in \LeoEligible{\Ves{j}}$
+   \cuz{} \Eref{eq:th-leo-eligible-location-12},
+   existential instantiation, arbitrary \var{j}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-16}
+\myparbox{$\Veim{x} \in \Ves{j}$
+       \longDfref{$\LeoEligible{}$}{def:leo-eligible},
+        \Eref{eq:th-leo-eligible-location-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-18}
+    \Vloc{j} = \Current{\Veim{x}} \because
+    \Eref{eq:th-leo-eligible-location-16}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-20}
+\Veim{x} \in \LeoEligible{\Current{\var{x}}} \because
+    \Eref{eq:th-leo-eligible-location-14},
+    \Eref{eq:th-leo-eligible-location-18}.
+\end{equation}
+\Eref{eq:th-leo-eligible-location-20} is the consequent of
+the forward direction, so that the deduction
+\todo{Prove Leo eligible location}
+\Eref{eq:th-leo-eligible-location-10}--%
+\Eref{eq:th-leo-eligible-location-20} shows
+the forward direction.
+
+For the reverse direction, again we assume its antecedant
+to show its consequent.
+\begin{equation}
+\label{eq:th-leo-eligible-location-30}
+\myparbox{%
+    $\Veim{x} \in \LeoEligible{\Current{\var{x}}}$,
+    antecedant of reverse direction, AF direction.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-32}
+\myparbox{%
+    $\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}$
+    \Eref{eq:th-leo-eligible-location-30},
+    existential generalization.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-34}
+\myparbox{%
+   \myfn{Is-Leo-Eligible}{\Veim{x}}
+   \cuz{}
+       \longDfref{\var{Is-Leo-Eligible}}{def:leo-eligible},
+       \Eref{eq:th-leo-eligible-location-32}.%
+}
+\end{equation}
+\Eref{eq:th-leo-eligible-location-34} is the consequent of
+the reverse direction, so that the deduction
+\todo{Prove Leo eligible location}
+\Eref{eq:th-leo-eligible-location-30}--%
+\Eref{eq:th-leo-eligible-location-34} shows
+the reverse direction.
+\myqed
+\end{proof}
+
+\begin{definition}[Next eligible EIM]
+\label{def:next-eligible-eim}
+\[
+\begin{gathered}
+\myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
+\defined \; \Matches{\var{next},\var{prev}} \\
+\land \; \myfn{Is-Leo-Eligible}{\var{next}} \land \myfn{Is-Leo-Eligible}{\var{prev}}.
+\end{gathered}
+\]
+We say that \Veim{next} is the \dfn{next Leo eligible EIM},
+or \dfn{next eligible EIM}, of \Veim{prev}.
+\dispEnd
+\end{definition}
+
+\begin{theorem}[Leo eligible postdot uniqueness]
+\label{th:leo-eligible-postdot-uniqueness}
+If \Veim{x} is a Leo eligible EIM,
+then it is the only EIM at that location
+with that postdot symbol.
+That is, if
+\begin{gather}
+  \label{eq:th-leo-eligible-postdot-uniqueness-02}
+    \myfn{Is-Leo-Eligible}{\Veim{x}} \\
+  \label{eq:th-leo-eligible-postdot-uniqueness-04}
+    \land \; \Current{\var{x}} = \Current{\Veim{y}} \\
+  \label{eq:th-leo-eligible-postdot-uniqueness-06}
+    \land \; \Postdot{\var{x}} = \Postdot{\var{y}}
+\end{gather}
+then
+\begin{gather}
+  \label{eq:th-leo-eligible-postdot-uniqueness-08}
+  \var{x} = \var{y}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Redo proof}
+The proof strategy is direct.
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-14}
+\Veim{x} \in \LeoEligible{\ES{\ell}}
+\because \longDfref{Leo source}{def:leo-source-relation},
+    \Eref{eq:th-leo-eligible-postdot-uniqueness-02}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-16}
+\Current{\var{x}} = \Current{\ell} \because
+    \Thref{th:leo-source-connection},
+    \Eref{eq:th-leo-eligible-postdot-uniqueness-02}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-22}
+\Veim{x} \in \LeoUnique{\ES{\ell}}
+\because \Eref{eq:th-leo-eligible-postdot-uniqueness-14},
+    \Dfref{def:leo-eligible}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-24}
+    \begin{gathered}
+        \forall \; \Veim{z} \in \ES{\ell} : \\
+            \Postdot{\var{x}} = \Postdot{\var{z}}
+            \implies \var{x} = \var{z} \\
+          \because \longDfref{Leo unique}{def:leo-unique},
+          \Eref{eq:th-leo-eligible-postdot-uniqueness-22}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-25}
+\var{y} \in \ES{\ell} \because
+  \Eref{eq:th-leo-eligible-postdot-uniqueness-04}, \Eref{eq:th-leo-eligible-postdot-uniqueness-16}.
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-26}
+\begin{gathered}
+    \Postdot{\var{x}} = \Postdot{\var{y}}
+    \implies
+    \var{x} = \var{y} \\
+    \myparbox{%
+        \cuz{} \Eref{eq:th-leo-eligible-postdot-uniqueness-25} and
+        instantiating \Veim{z} of
+        \Eref{eq:th-leo-eligible-postdot-uniqueness-24} as \Veim{y}.%
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-28}
+\begin{gathered}
+    \var{x} = \var{y}
+    \because
+        \Eref{eq:th-leo-eligible-postdot-uniqueness-06},
+        \Eref{eq:th-leo-eligible-postdot-uniqueness-26}.
+        \quad \myqed
+\end{gathered}
+\end{equation}
+\end{proof}
+
+\todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
 \begin{definition}[Leo source]
 \label{def:leo-source-relation}
