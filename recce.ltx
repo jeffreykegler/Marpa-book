@@ -3480,16 +3480,13 @@ was treated as a potential right-recursion.
 
 \Marpa{} applies the Leo memoizations in more restricted circumstances.
 For \Marpa{} to consider a dotted rule
-\begin{equation*}
-\Vdr{candidate} = [\Vrule{candidate}, \var{i}]
-\end{equation*}
-for Leo memoization,
+\Vdr{candidate} for Leo memoization,
 not only must \Vdr{candidate} be a penult
-but \Vrule{candidate} must be right-recursive.
+but \Rule{\var{candidate}} must be right-recursive.
 
 By restricting Leo memoization to right-recursive rules,
 \Marpa{} incurs the cost of Leo memoization only in cases
-where Leo sequences could be infinitely
+where Leo sequences could be arbitrarily
 long.
 This more careful targeting of the memoization is for efficiency reasons.
 If all penults are memoized,
@@ -3528,17 +3525,18 @@ results in at most one extra EIM per ES.
 Leo's memoization method is simple from one point of view ---
 it involves a sequence of memos, called Leo items.
 The Leo items are matched to certain EIM's in a straightforward way.
+An EIM matched to an Leo item is called a ``source EIM''.
 
-Nonetheless, investigators have found the Leo method
+Nonetheless, many have found the Leo method
 challenging to the intuition.
-We believe this is because
-the intuitive order of the sequence of EIM's and
-the intuitive order of the matching sequence of Leo items
-run in opposite directions.
-An investigator trying to understand
-the building of the matched sequences must think
+One reason may be that
+the intuitive order of the sequence of EIM's runs
+in direction opposite to the direction of
+the intuitive order of the matching sequence of Leo items.
+To understand
+the building of the sequences of matched source EIM's
+and Leo items, one must think
 in both directions at once.
-
 In the hopes of preparing the reader for the details
 of the Leo method,
 this section will give a high-level overview,
@@ -3550,8 +3548,8 @@ are proceeding in non-decreasing Earley set order.
 We say that we are proceeding ``right-to-left'' if we
 are proceeding in non-increasing Earley set order.
 
-The intuitive direction of the EIM's to be memoized is,
-of course, the same as that of the Earley sets -- left-to-right.
+The intuitive direction of the source EIM's is
+the same as that of the Earley sets -- left-to-right.
 The intuitive direction of the Leo items, however, is the one
 in which the right recursion must be unfolded.
 The conceptual order of the right recursion,
@@ -3566,23 +3564,26 @@ is right-to-left in terms of the Earley sets.
 
 In implementation, this reversal works out fine --
 EIM's and their Leo memos are both created left-to-right.
-But the investigator studying the Leo method, who is trying to
-keep in mind both the order of creation and the intuitive, evaluation-time,
-order of the Leo items, may at times feel dizzy.
+But an investigator studying the Leo method needs to think both right-to-left
+and left-to-right.
+Because, while the order of creation of left-to-right,
+the intuitive, evaluation-time,
+order of the Leo items is right-to-left.
 
 When, in subsequent discussion, we introduce Leo sequences,
-they will be conceptually right-to-left, so that the ``next'' item
-in a Leo sequence is the same or an earlier ES than the ``previous''
+the ``next'' item in a Leo sequence will
+be in the same ES as, or in an earlier ES than, its ``previous''
 item.  In other words, previous-to-next in Leo sequence terms
 is right-to-left in Earley set terms.
 
-On the other hand when,
-for the purpose of recovering the ancestry of parse items,
+Finally, when
+for the purpose of recovering the ancestry of Leo and
+Earley items,
 we introduce the terms
 ``predecessor'' and ``successor'',
 the ``successor'' of a ``predecessor'' will always be in the same ES as,
 or a later ES than, the predecessor of the successor.
-In other words,
+This means that
 predecessor-to-successor in ancestry terms
 is left-to-right in Earley set terms.
 
@@ -3614,7 +3615,7 @@ is at \Ves{j}, we may write any of
 \end{gather*}
 We say that
 \Vsym{transition} is the \dfn{transition symbol} of \Vlim{x}@\Vloc{j};
-and
+and that
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
@@ -4241,13 +4242,15 @@ The function
 \[
 \begin{gathered}
 \NextSource{\Veim{prev}} \defined \\
-    \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\var{prev}}
+    \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\var{prev}} \\
+        \land \; \Valid{\var{prev}} \land \Valid{\var{next}}
 \end{gathered}
 \]
 exists.
 \end{theorem}
 
 \begin{proof}
+\todo{Redo proof}
 The relation
 \begin{equation}
 \label{eq:th-next-source-fn-10}
@@ -4256,10 +4259,10 @@ The relation
 \set{
     \begin{gathered}
     \tuple{ \var{prev}, \var{next} } \in \type{EIM} \times \type{EIM} : \\
-        \myfn{Next-Source-Rel}{\var{next},\var{prev}}
+        \myfn{Next-Source-Rel}{\var{next},\var{prev}} \\
+        \land \; \Valid{\var{prev}} \land \Valid{\var{next}}
     \end{gathered}
 }
-\\ \because \longThref{Next source function}{th:next-source-fn}.
 \end{gathered}
 \end{equation}
 clearly exists.
