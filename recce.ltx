@@ -3921,8 +3921,47 @@ $\size{\Vocab{\var{g}}}$.
 \]
 We say that \Veim{next} is the \dfn{next Leo eligible EIM},
 or \dfn{next eligible EIM}, of \Veim{prev}.
+We say that \Veim{prev} is the \dfn{previous Leo eligible EIM},
+or \dfn{previous eligible EIM}, of \Veim{next}.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[Next eligible connection]
+\label{th:next-eligible-connection}
+\begin{gather*}
+\myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
+\implies
+    \left( \begin{gathered}
+    \Postdot{\var{next}} = \Symbol{\var{prev}} \\
+    \land \; \Current{\var{next}} = \Origin{\var{prev}}
+    \end{gathered} \right).
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\longDfref{Next eligible EIM}{def:next-eligible-eim}
+and \longDfref{Matching EIM's}{def:matching-1}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Next eligible direction]
+\label{th:next-eligible-direction}
+The location of eligible EIM's in previous-to-next order
+is non-increasing.  That is,
+\begin{gather*}
+    \myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
+    \implies \Current{\var{next}} \le \Current{\var{prev}}.
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+The theorem follows from
+\longThref{Next eligible connection}{th:next-eligible-connection}
+and
+\longThref{EIM origin not after current}{th:eim-origin-not-after-current}.
+\myqed
+\end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
