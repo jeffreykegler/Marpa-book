@@ -4030,6 +4030,166 @@ We assume the antecedants of the theorem to show the consequent.
 \end{equation}
 \end{proof}
 
+\begin{theorem}[Next Leo eligible rule]
+\label{th:next-eligible-rule}
+If
+\begin{gather}
+\label{eq:th-next-eligible-rule-03a}
+\Current{\Veim{middle}} = \Current{\Veim{next}} \\
+\label{eq:th-next-eligible-rule-03b}
+\land \; \myfn{Next-Eligible}{\var{middle},\var{prev}} \\
+\label{eq:th-next-eligible-rule-03c}
+\land \; \myfn{Next-Eligible}{\var{next},\var{middle}}
+\end{gather}
+then
+\begin{gather}
+\label{eq:th-next-eligible-rule-06a}
+\tuple{\Vsym{lhs} \de \Vsym{rhs}} \in \Rules{\Vint{g}} \\
+\label{eq:th-next-eligible-rule-06b}
+\land \; \Symbol{\var{middle}} = \Vsym{lhs} \\
+\label{eq:th-next-eligible-rule-06c}
+\land \; \Symbol{\var{prev}} = \Vsym{rhs}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Fix this}
+In this proof, note that it is possible
+that $\Veim{middle} = \Veim{prev}$,
+that $\Veim{prev} = \Veim{next}$,
+or both.
+The proof is direct, assuming the antecedant to
+show the consequent.
+\begin{equation}
+\label{eq:th-next-eligible-rule-10}
+\begin{gathered}
+\Matches{\var{middle},\var{prev}}
+\\ \because \longDfref{Next Leo eligible}{def:next-eligible-eim},
+    \Eref{eq:th-next-eligible-rule-03b}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-12}
+\Postdot{\var{middle}} \neq \Lambda \because
+    \Eref{eq:th-next-eligible-rule-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-14}
+\begin{gathered}
+\DR{\var{middle}} =
+    \tuple{\Vsym{lhs} \de \Vstr{before} \mydot \Vsym{rhs} \Vstr{after}}
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-next-eligible-rule-12}, for arbitrary
+    \Vsym{lhs}, \Vstr{before}, \Vsym{rhs}, \Vstr{after}.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-16}
+\Vsym{lhs} = \Symbol{\var{middle}} \because
+    \Eref{eq:th-next-eligible-rule-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-17}
+\begin{gathered}
+\Postdot{\var{middle}} = \Symbol{\var{prev}}
+    \\ \myparbox{%
+        \Eref{eq:th-next-eligible-rule-10},
+        \Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1}.%
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-18}
+\begin{gathered}
+\Vsym{rhs} = \Symbol{\var{prev}}
+    \\ \because \Eref{eq:th-next-eligible-rule-14},
+    \Eref{eq:th-next-eligible-rule-17}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-20}
+\myparbox{\myfn{Is-Leo-Eligible}{\var{middle}}
+    \cuz{}
+    \longDfref{Next leo eligible}{def:next-eligible-eim},
+    \Eref{eq:th-next-eligible-rule-03b}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-24}
+    \var{middle} \in \LeoEligible{\Current{\var{middle}}} \\
+            \because \Eref{eq:th-next-eligible-rule-20}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-26}
+    \begin{gathered}
+    \var{eim1} \in \LeoUnique{\Current{\var{middle}}} \\
+        \because \Eref{eq:th-next-eligible-rule-24},
+        \longDfref{Leo Eligible}{def:leo-eligible}.
+    \end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-28}
+\Penult{\var{eim1}} \neq \Lambda
+    \because \longDfref{Leo unique}{def:leo-unique},
+    \Eref{eq:th-next-eligible-rule-26}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-30}
+    \Vstr{after} = \epsilon \because
+        \Eref{eq:th-next-eligible-rule-14},
+        \Eref{eq:th-next-eligible-rule-28}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-32}
+\Matches{\var{next},\var{middle}} \cuz{}
+    \because \longDfref{Next Leo eligible}{def:next-eligible-eim},
+    \Eref{eq:th-next-eligible-rule-03c}.
+\end{equation}
+\begin{equation}
+\begin{gathered}
+\label{eq:th-next-eligible-rule-34}
+    \Current{\var{next}} = \Origin{\var{middle}}
+    \\ \because
+    \text{\Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1}},
+    \Eref{eq:th-next-eligible-rule-32}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-36}
+    \Current{\var{middle}} = \Origin{\var{middle}} \because
+    \Eref{eq:th-next-eligible-rule-03a},
+    \Eref{eq:th-next-eligible-rule-34}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-38}
+    \Vstr{before} = \epsilon \because
+        \Eref{eq:th-next-eligible-rule-14},
+        \Eref{eq:th-next-eligible-rule-36}.
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-40}
+\begin{gathered}
+\DR{\var{middle}} =
+    \tuple{\Vsym{lhs} \de \mydot \Vsym{rhs}}
+    \\ \because
+    \Eref{eq:th-next-eligible-rule-14},
+    \Eref{eq:th-next-eligible-rule-30},
+    \Eref{eq:th-next-eligible-rule-38}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-next-eligible-rule-42}
+    \tuple{\Vsym{lhs} \de \Vsym{rhs}} \in \Rules{\Vint{g}}
+    \because \Eref{eq:th-next-eligible-rule-40}.
+\end{equation}
+The theorem is
+    \Eref{eq:th-next-eligible-rule-16},
+    \Eref{eq:th-next-eligible-rule-18}, and
+    \Eref{eq:th-next-eligible-rule-42}.
+\myqed
+\end{proof}
+
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
 \begin{definition}[Leo source]
