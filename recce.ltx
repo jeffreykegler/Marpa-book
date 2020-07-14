@@ -2769,7 +2769,7 @@ Let
 \begin{equation}
 \label{eq:EIM-valid-10}
 \Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j}
+   \right], \Vorig{i}, \Vcurr{j} \right]
 \end{equation}
 be an arbitrary EIM.
 \Veim{x} is \dfn{valid}
@@ -2808,7 +2808,9 @@ is valid.
 \begin{theorem}[EIM origin not after current]
 \label{th:eim-origin-not-after-current}
 If \Veim{x} is a valid EIM,
-then its origin is at or before its current location.
+then $\Origin{\var{x}} + \size{\RHS{\var{x}}} = \Current{\var{x}}$.
+Also,
+the origin of \Veim{x} is at or before its current location.
 \end{theorem}
 
 \begin{proof}
@@ -2817,14 +2819,14 @@ then its origin is at or before its current location.
 \begin{gathered}
 \text{Let \Veim{x} be a valid EIM, where} \\
 \Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j} \\
+   \right], \Vorig{i}, \Vcurr{j} \right] \\
    \because \text{ WLOG, \Eref{eq:EIM-valid-10} in \Dfref{def:eim-validity}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-eim-origin-not-after-current-12}
 \begin{gathered}
-\Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
+\Vorig{i} + \bigsize{\Vstr{rhs1}} = \Vloc{j} \\
    \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
     \Eref{eq:th-eim-origin-not-after-current-10}.
 \end{gathered}
@@ -2846,6 +2848,10 @@ then its origin is at or before its current location.
     \Eref{eq:th-eim-origin-not-after-current-14}.
     \quad \myqed
 \end{equation}
+The theorem is
+\Eref{eq:th-eim-origin-not-after-current-14}
+and
+\Eref{eq:th-eim-origin-not-after-current-16}.
 \end{proof}
 
 \begin{definition}[Earley set]
@@ -3567,7 +3573,7 @@ the intuitive, evaluation-time,
 order of the Leo items is right-to-left.
 
 When, in subsequent discussion, we introduce next eligible sequences (NES's)
-the ``next'' item in an NES 
+the ``next'' item in an NES
 be in the same ES as, or in an earlier ES than, its ``previous''
 item.  In other words, previous-to-next in NES terms
 is right-to-left in Earley set terms.
