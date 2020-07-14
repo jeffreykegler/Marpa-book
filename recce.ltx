@@ -2761,6 +2761,93 @@ Parse items are of type \type{PIM}.
 Leo items (type \type{LIM})
 will be defined in \Sref{sec:leo}.
 
+
+\todo{Revisit productivity, accessiblity.  Require in INT?}
+\begin{definition}[EIM validity]
+\label{def:eim-validity}
+Let
+\begin{equation}
+\label{eq:EIM-valid-10}
+\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+   \right], \Vorig{i} \right] @ \Ves{j}
+\end{equation}
+be an arbitrary EIM.
+\Veim{x} is \dfn{valid}
+if and only if
+\begin{gather}
+\label{eq:EIM-valid-20}
+\var{i} \le \var{j} \le \Vlastix{prefix}, \\
+\label{eq:EIM-valid-22a}
+\left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}},
+\\
+\label{eq:EIM-valid-22b}
+\Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
+\label{eq:EIM-valid-22c}
+\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
+\label{eq:EIM-valid-22d}
+\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)].
+\end{gather}
+\Veim{x}
+is \dfn{useful}
+if and only if
+\begin{equation*}
+\label{eq:EIM-valid-30}
+\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
+\end{equation*}
+The boolean function \Valid{\Veim{x}} is true if and only if \Veim{x}
+is valid.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Symbol of an EIM]
+\begin{equation*}
+\Symbol{\Veim{eim}} \defined \LHS{\var{eim}}. \quad \dispEnd
+\end{equation*}
+\end{definition}
+
+\begin{theorem}[EIM origin not after current]
+\label{th:eim-origin-not-after-current}
+If \Veim{x} is a valid EIM,
+then its origin is at or before its current location.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-10}
+\begin{gathered}
+\text{Let \Veim{x} be a valid EIM, where} \\
+\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+   \right], \Vorig{i} \right] @ \Ves{j} \\
+   \because \text{ WLOG, \Eref{eq:EIM-valid-10} in \Dfref{def:eim-validity}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-12}
+\begin{gathered}
+\Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
+   \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
+    \Eref{eq:th-eim-origin-not-after-current-10}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-14}
+\begin{gathered}
+\Origin{\var{x}} + \bigsize{\Vstr{rhs1}} = \Current{\var{x}} \\
+\because
+\longEref{Origin}{eq:def-origin},
+\longDfref{EIM validity}{def:eim-validity},
+\Eref{eq:th-eim-origin-not-after-current-10},
+\Eref{eq:th-eim-origin-not-after-current-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-eim-origin-not-after-current-16}
+\Origin{\var{x}} \le \Current{\var{x}} \because
+    \Eref{eq:th-eim-origin-not-after-current-14}.
+    \quad \myqed
+\end{equation}
+\end{proof}
+
 \begin{definition}[Earley set]
 \label{def:earley-set}
 Within \Marpa{},
@@ -2896,93 +2983,6 @@ for some \Vstr{rhs},
 \Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
 \left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
 \end{gather*}
-
-\todo{Revisit productivity, accessiblity.  Require in INT?}
-\begin{definition}[EIM validity]
-\label{def:eim-validity}
-Let
-\begin{equation}
-\label{eq:EIM-valid-10}
-\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j}
-\end{equation}
-be an arbitrary EIM.
-\Veim{x} is \dfn{valid}
-if and only if
-\begin{gather}
-\label{eq:EIM-valid-20}
-\var{i} \le \var{j} \le \Vlastix{prefix}, \\
-\label{eq:EIM-valid-22a}
-\left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}},
-\\
-\label{eq:EIM-valid-22b}
-\Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
-\label{eq:EIM-valid-22c}
-\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
-\label{eq:EIM-valid-22d}
-\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)].
-\end{gather}
-\Veim{x}
-is \dfn{useful}
-if and only if
-\begin{equation*}
-\label{eq:EIM-valid-30}
-\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
-\end{equation*}
-The boolean function \Valid{\Veim{x}} is true if and only if \Veim{x}
-is valid.
-\dispEnd
-\end{definition}
-
-\begin{definition}[Symbol of an EIM]
-\begin{equation*}
-\Symbol{\Veim{eim}} \defined \LHS{\var{eim}}. \quad \dispEnd
-\end{equation*}
-\end{definition}
-
-\begin{theorem}[EIM origin not after current]
-\label{th:eim-origin-not-after-current}
-If \Veim{x} is a valid EIM,
-then its origin is at or before its current location.
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-eim-origin-not-after-current-10}
-\begin{gathered}
-\text{Let \Veim{x} be a valid EIM, where} \\
-\Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j} \\
-   \because \text{ WLOG, \Eref{eq:EIM-valid-10} in \Dfref{def:eim-validity}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-eim-origin-not-after-current-12}
-\begin{gathered}
-\Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
-   \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
-    \Eref{eq:th-eim-origin-not-after-current-10}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-eim-origin-not-after-current-14}
-\begin{gathered}
-\Origin{\var{x}} + \bigsize{\Vstr{rhs1}} = \Current{\var{x}} \\
-\because
-\longEref{Origin}{eq:def-origin},
-\longDfref{EIM validity}{def:eim-validity},
-\Eref{eq:th-eim-origin-not-after-current-10},
-\Eref{eq:th-eim-origin-not-after-current-12}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-eim-origin-not-after-current-16}
-\Origin{\var{x}} \le \Current{\var{x}} \because
-    \Eref{eq:th-eim-origin-not-after-current-14}.
-    \quad \myqed
-\end{equation}
-\end{proof}
-
 \begin{definition}[Matching]
 \label{def:matching-1}
 We say that an \var{l} of some type \dfn{matches}
