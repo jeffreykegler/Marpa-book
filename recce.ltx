@@ -277,6 +277,7 @@
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vnss}[1]{\nss{\var{#1}}}
+\newcommand{\Vcurr}[1]{\Tvar{#1}{CURR}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
 \newcommand{\Vpim}[1]{\Tvar{#1}{PIM}}
 \newcommand{\Vpimset}[1]{\Tvarset{#1}{PIM}}
@@ -2681,35 +2682,47 @@ it is not confirmed.
 \label{def:medial}
 A rule which is both an incompletion and a confirmation
 is called a \dfn{medial rule}, or \dfn{medial}.
+\dispEnd
 \end{definition}
 
 \begin{definition}[EIM]
 \label{def:eim}
-A Earley item (type \type{EIM}) is a duple
+A Earley item (type \type{EIM}) is a triple
 \begin{equation}
 \label{eq:d-eim}
-    [\Vdr{dotted}, \Vorig{x}]
+    [\Vdr{dotted}, \Vorig{i}, \Vcurr{j}]
 \end{equation}
 of dotted rule and origin.
+\dispEnd
 \end{definition}
 
 The origin is the location where recognition of the rule
 started.
 In the Earley parsing literature,
 the origin is often called the ``parent''.
-For convenience, the type \type{ORIG} will be a synonym
-for \type{LOC}, indicating that the variable designates
-the origin element of an Earley item; and
+For convenience, the types \type{ORIG} and \type{CURR} will be synonyms
+for \type{LOC}, so that
+\[
+\type{LOC} = \type{ORIG} = \type{CURR}
+\]
+The type \type{ORIG} will
+indicate that the variable designates
+an origin element of an Earley item; and
+the type \type{CURR} will
+indicate that the variable designates
+a current location element of an Earley item.
 where
 \[
-\Veim{x} = [\Vdr{x}, \Vorig{x}]
+\Veim{x} = [\Vdr{x}, \Vorig{x}, \Vcurr{x}]
 \]
 is an arbitrary EIM,
 \begin{gather}
 \label{eq:def-dr}
-\DR{\Veim{x}} \defined \Vdr{x}, \text{ and} \\
+\DR{\Veim{x}} \defined \Vdr{x}, \\
 \label{eq:def-origin}
-\Origin{\Veim{x}} \defined \Vorig{x}.
+\Origin{\Veim{x}} \defined \Vorig{x}, \text{ and} \\
+\label{eq:def-curr}
+\Current{\Veim{x}} \defined \Vcurr{x}.
 \end{gather}
 
 When a dotted rule concept is applied to an EIM,
@@ -2724,8 +2737,8 @@ of the dotted rule of the EIM.
 
 For example, let
 \begin{equation*}
-\Veim{x} = [\Vdr{x}, \Vorig{x}] =
-\left[[\Vrule{x}, \var{pos}], \Vorig{x} \right].
+\Veim{x} = [\Vdr{x}, \Vorig{x}, \Vcurr{x}] =
+\left[[\Vrule{x}, \var{pos}], \Vorig{x} , \Vcurr{x} \right].
 \end{equation*}
 Then
 \begin{equation*}
@@ -2748,41 +2761,11 @@ Parse items are of type \type{PIM}.
 Leo items (type \type{LIM})
 will be defined in \Sref{sec:leo}.
 
-As a convenient way to state the current
-location of a PIM,
-we will often put an `$@$' operator between
-the PIM and its location.
-For example, to say that an arbitrary EIM,
-$\Veim{x} = [ \Vdr{dotted}, \Vorig{i}]$
-is at location \Vloc{j}, we may write any of
-\begin{gather*}
-    \Veim{x} @ \Vloc{j}, \qquad \var{x} @ \var{j}, \\
-    \text{$[ \Vdr{dotted}, \Vorig{i}] @ \var{j}$, etc.}
-\end{gather*}
-with the type-less variations used in contexts where type is
-understood.
-Similarly, for the
-PIM \Vpim{p} at \Ves{j}, we may write
-\[
-    \var{p} @ \var{j}, \text{ etc.}
-\]
-
-\begin{definition}[PIM location]
-\label{def:pim-current}
-Also,
-for arbitrary
-$\Veim{eim}@\Vloc{eLoc}$ and
-$\Vpim{pim}@\Vloc{pLoc}$,
-\begin{gather*}
-\text{$\Current{\var{x}} \defined \var{eLoc}$, and}\\
-\Current{\var{pim}} \defined \var{pLoc}.
-\end{gather*}
-\end{definition}
-
 \begin{definition}[Earley set]
 \label{def:earley-set}
 Within \Marpa{},
-an Earley set is defined as a set of \dfn{parse items}.
+an Earley set is defined as a set of \dfn{parse items},
+allo of which have the same current location.
 Earley sets are of type \type{ES}.
 \end{definition}
 We will say that an Earley item is \dfn{unioned into}
@@ -2856,28 +2839,29 @@ For going back and forth between integer location,\footnote{%
 \ES{\Vloc{j}} \text{ is \Ves{j}, the Earley set at location \Vloc{j}; and} \\
 \ES{\Vpim{p}} \text{ is \Ves{j}, the Earley set at location \Current{\var{p}}.}
 \end{gather*}
-Whether we are speaking in theoretical or algorithmc terms,
-it is always the case that
-\[
-   \Vpim{p}@\Vloc{j} \iff \Current{\Vpim{p}} = \Vloc{j}.
-\]
 But note that there can be an important difference between saying
 \begin{equation}
 \label{eq:loc-conceptual}
-   \Vpim{p}@\Vloc{j}
+   \Current{\Vpim{p}} = \Vloc{j},
+\end{equation}
+or its equivalent in tuple form,
+\begin{equation}
+\label{eq:loc-conceptual-tuple}
+   \Vpim{p} = \tuple{\Vdr{x},\Vorig{x},\Vcurr{j}}_\type{EIM}
 \end{equation}
 and saying
 \begin{equation}
 \label{eq:loc-implementation}
-   \var{p} \in \Ves{j}.
+   \Vpim{p} \in \Ves{j}.
 \end{equation}
 on the other.
-The notation \Eref{eq:loc-conceptual}
-states a conceptual relationship
-between the PIM and its location.
-The notation \Eref{eq:loc-implementation} states that the PIM
-is actually in the Earley set corresponding to the PIM's conceptual
-location.
+The notations \Eref{eq:loc-conceptual}
+and \Eref{eq:loc-conceptual-tuple}
+state a relationship
+between the PIM and the location \Vloc{j}.
+The notation \Eref{eq:loc-implementation} states a relationship between
+the PIM
+and the Earley set corresponding to location \Vloc{j}.
 
 When we are speaking in theoretical terms,
 this distinction is a pedantry.
@@ -2885,17 +2869,23 @@ But when speaking of Earley algorithms,
 the Earley tables start out empty, so that
 initially
 \[
-   \forall \Veim{x}@\Vloc{j} :  \var{x} \notin \ES{\var{j}}
+   \forall \Veim{x} :  \var{x} \notin \ES{\var{j}}
 \]
 and the point of our proofs of correctness will be to show that,
 after the algorithm is finished,
-\[
-   \Veim{x}@\Vloc{j} \iff \var{x} \in \ES{\var{j}},
-\]
-so that in algorithmic terms the distinction
-between $\Veim{x}@\Vloc{j}$ and
-$\var{x} \in \ES{\var{j}}$
-is essential.
+for a set of EIM's called ``visible'',
+\begin{gather*}
+\text{\Veim{x} is visible and } \Current{\var{x}} = \Vloc{j}
+\end{gather*}
+if and only if
+\begin{equation}
+\label{eq:loc-vs-es-3}
+   \var{x} \in \ES{\var{j}}.
+\end{equation}
+In algorithmic terms, therefore, the distinction
+between \Eref{eq:loc-conceptual} and
+\Eref{eq:loc-conceptual-tuple} on one hand,
+and \Eref{eq:loc-implementation} on the other hand, is essential.
 
 Recall that
 there was a unique accept symbol,
