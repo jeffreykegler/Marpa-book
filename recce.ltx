@@ -375,6 +375,15 @@
   \vspace{1ex} % add a fixed vertical space
   }%
 }
+% A "My paragraph-based equation"
+\newcommand{\mypareq}[2]{%
+   \begin{equation}%
+   \label{#1}
+   \begin{gathered}%
+   \myparbox{#2}%
+   \end{gathered}%
+   \end{equation}%
+}
 \newcommand{\rawparcomment}[2][\mathparwidth]{%
   \myparbox[#1]{#2}%
 }
@@ -4123,43 +4132,33 @@ show the consequent.
 \label{eq:th-next-eligible-rule-16}
 \Vsym{lhs} = \Symbol{\var{middle}} \because \Eref{eq:th-next-eligible-rule-14}.
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-rule-17}
-\begin{gathered}
-\myparbox{$\Postdot{\var{middle}} = \Symbol{\var{prev}}$ \linebreak
+%
+\mypareq{eq:th-next-eligible-rule-17}{%
+    $\Postdot{\var{middle}} = \Symbol{\var{prev}}$ \linebreak
     \cuz{} \Eref{eq:th-next-eligible-rule-10},
     \Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1}.%
 }
-\end{gathered}
-\end{equation}
 \begin{equation}
 \label{eq:th-next-eligible-rule-18}
-\begin{gathered}
 \Vsym{rhs} = \Symbol{\var{prev}} \because \Eref{eq:th-next-eligible-rule-14},
     \Eref{eq:th-next-eligible-rule-17}.
-\end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-rule-20}
-\myparbox{\myfn{Is-Leo-Eligible}{\var{middle}}
+\mypareq{eq:th-next-eligible-rule-20}{%
+    \myfn{Is-Leo-Eligible}{\var{middle}} \linebreak
     \cuz{}
     \longDfref{Next leo eligible}{def:next-eligible-eim},
     \Eref{eq:th-next-eligible-rule-03b}.%
 }
-\end{equation}
 \begin{equation}
 \label{eq:th-next-eligible-rule-24}
     \var{middle} \in \LeoEligible{\Current{\var{middle}}} \\
             \because \Eref{eq:th-next-eligible-rule-20}.
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-rule-26}
-    \begin{gathered}
-    \var{eim1} \in \LeoUnique{\Current{\var{middle}}} \\
-        \because \Eref{eq:th-next-eligible-rule-24},
-        \longDfref{Leo Eligible}{def:leo-eligible}.
-    \end{gathered}
-\end{equation}
+\mypareq{eq:th-next-eligible-rule-26}{%
+    $\var{eim1} \in \LeoUnique{\Current{\var{middle}}}$ \linebreak
+        \cuz{} \Eref{eq:th-next-eligible-rule-24},
+        \longDfref{Leo Eligible}{def:leo-eligible}.%
+}
 \begin{equation}
 \label{eq:th-next-eligible-rule-28}
 \Penult{\var{eim1}} \neq \Lambda
@@ -4172,23 +4171,16 @@ show the consequent.
         \Eref{eq:th-next-eligible-rule-14},
         \Eref{eq:th-next-eligible-rule-28}.
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-rule-32}
-\begin{gathered}
-    \Matches{\var{next},\var{middle}}
-    \\ \because \longDfref{Next Leo eligible}{def:next-eligible-eim},
-    \Eref{eq:th-next-eligible-rule-03c}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\begin{gathered}
-\label{eq:th-next-eligible-rule-34}
-    \Current{\var{next}} = \Origin{\var{middle}}
-    \\ \because
-    \text{\Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1}},
-    \Eref{eq:th-next-eligible-rule-32}.
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-next-eligible-rule-32}{%
+    \Matches{\var{next},\var{middle}} \linebreak
+    \cuz{} \longDfref{Next Leo eligible}{def:next-eligible-eim},
+    \Eref{eq:th-next-eligible-rule-03c}.%
+}
+\mypareq{eq:th-next-eligible-rule-34}{%
+    $\Current{\var{next}} = \Origin{\var{middle}}$ \linebreak
+    \cuz{} \Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1},
+    \Eref{eq:th-next-eligible-rule-32}.%
+}
 \begin{equation}
 \label{eq:th-next-eligible-rule-36}
     \Current{\var{middle}} = \Origin{\var{middle}} \because
@@ -4201,17 +4193,13 @@ show the consequent.
         \Eref{eq:th-next-eligible-rule-14},
         \Eref{eq:th-next-eligible-rule-36}.
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-rule-40}
-\begin{gathered}
-\DR{\var{middle}} =
-    \tuple{\Vsym{lhs} \de \mydot \Vsym{rhs}}
-    \\ \because
+\mypareq{eq:th-next-eligible-rule-40}{%
+    $\DR{\var{middle}} = \tuple{\Vsym{lhs} \de \mydot \Vsym{rhs}}$
+    \linebreak \cuz{}
     \Eref{eq:th-next-eligible-rule-14},
     \Eref{eq:th-next-eligible-rule-30},
-    \Eref{eq:th-next-eligible-rule-38}.
-\end{gathered}
-\end{equation}
+    \Eref{eq:th-next-eligible-rule-38}.%
+}
 \begin{equation}
 \label{eq:th-next-eligible-rule-42}
     \tuple{\Vsym{lhs} \de \Vsym{rhs}} \in \Rules{\Vint{g}}
@@ -4226,8 +4214,21 @@ The theorem is
 
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
-\todo{Add Next eligible sequence definition}
-\dispEnd
+A \dfn{next eligible sequence} (type \type{NES}) is
+a sequence of EIM's such that every non-initial EIM
+in the sequence is the next eligible EIM of the
+previous EIM in the sequence.  That is,
+\[
+\type{NES} = \set{
+   \begin{gathered}
+   \Veimseq{nes} :
+   \forall \; 0 < \Vnat{i} \le \Vlastix{nes} :
+   \\ \Velement{nes}{\var{i}+1} =
+       \myfn{Next-Eligible}{\VVelement{nes}{i}}.
+   \end{gathered}
+   }
+    \quad \dispEnd
+\]
 \end{definition}
 
 \begin{theorem}[NES subsequence]
