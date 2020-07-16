@@ -173,17 +173,17 @@
 
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
-  \else``#1''\Thref{#2}%
+  \else``#1'' \Thref{#2}%
   \fi%
 }
 \newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
-  \else``#1''\Dfref{#2}%
+  \else``#1'' \Dfref{#2}%
   \fi%
 }
 \newcommand{\longEref}[2]{
   \ifmmode \text{``#1''\Eref{#2}}%
-  \else``#1''\Eref{#2}%
+  \else``#1'' \Eref{#2}%
   \fi%
 }
 
@@ -3649,8 +3649,8 @@ or \dfn{location},
 of \var{pim} is
 \begin{equation*}
 \left\lbrace \begin{array}{ll}
-\Current{\var{pim}} & \text{ if \var{pim} is a LIM, and} \\
-\Current{\var{pim}} & \text{ if \var{pim} is an EIM.}
+\Current{\Vlim{pim}} & \text{ if \var{pim} is a LIM, and} \\
+\Current{\Veim{pim}} & \text{ if \var{pim} is an EIM.}
 \end{array} \right.
 \end{equation*}
 In either case, the current location
@@ -3664,16 +3664,16 @@ may be written
 \begin{equation}
 \label{eq:def-leo-unique}
 \begin{gathered}
-\LeoUnique{\Ves{j}} \defined \\
+\LeoUnique{\Vloc{j}} \defined \\
   \left\lbrace
     \begin{gathered}
     \Veim{x} \in \set{
         \begin{gathered}
-        \var{x} \in \Ves{j} : \\
+        \var{x} \in \ES{\var{j}} : \\
         \Penult{\var{x}} \neq \Lambda
         \end{gathered} } :
     \\
-        \forall \; \Veim{y} \in \Ves{j} : \\
+        \forall \; \Veim{y} \in \ES{\var{j}} : \\
           \left(
             \Postdot{\var{x}} = \Postdot{\var{y}}
             \implies
@@ -3702,11 +3702,11 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \label{def:leo-eligible}
 \begin{equation*}
 \label{eq:def-leo-eligible}
-\LeoEligible{\Ves{i}} \defined \\
+\LeoEligible{\Vloc{i}} \defined \\
 \left\lbrace \;\;
 \begin{gathered}
-\Veim{eligible} \in \Ves{i} : \\
-\Veim{eligible} \in \LeoUnique{\Ves{i}} \\
+\Veim{eligible} \in \ES{\var{i}} : \\
+\Veim{eligible} \in \LeoUnique{\var{i}} \\
 \land \; \RightRecursive{\Veim{eligible}}
 \end{gathered}
 \;\; \right\rbrace
@@ -3715,11 +3715,11 @@ and
 \begin{equation*}
 \label{eq:def-is-leo-eligible}
 \myfn{Is-Leo-Eligible}{\Veim{x}} \defined \\
-\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}.
+\exists \; \Vloc{i} : \Veim{x} \in \LeoEligible{\var{i}}.
 \end{equation*}
 We say that
 an EIM \Veim{eligible}
-is \dfn{Leo eligible} in \Ves{j}
+is \dfn{Leo eligible}
 if and only if
 \myfn{Is-Leo-Eligible}{\var{eligible}}.
 \dispEnd{}
@@ -3746,7 +3746,8 @@ show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-12}
 \myparbox{%
-   $\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}$
+   $\exists \Vloc{i} : \Veim{x} \in \LeoEligible{\var{i}}$
+   \linebreak
    \cuz{}
        \longDfref{\var{Is-Leo-Eligible}}{def:leo-eligible},
        \Eref{eq:th-leo-eligible-location-10}.%
@@ -3754,14 +3755,14 @@ show the consequent.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-eligible-location-14}
-\myparbox{$\Veim{x} \in \LeoEligible{\Ves{j}}$
+\myparbox{$\Veim{x} \in \LeoEligible{\Vloc{j}}$
    \cuz{} \Eref{eq:th-leo-eligible-location-12},
-   existential instantiation, arbitrary \var{j}.%
+   existential instantiation, arbitrary \Vloc{j}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-eligible-location-16}
-\myparbox{$\Veim{x} \in \Ves{j}$
+\myparbox{$\Veim{x} \in \ES{\var{j}}$ \cuz{}
        \longDfref{$\LeoEligible{}$}{def:leo-eligible},
         \Eref{eq:th-leo-eligible-location-14}.%
 }
@@ -3783,19 +3784,21 @@ the forward direction, so that the deduction
 \Eref{eq:th-leo-eligible-location-20} shows
 the forward direction.
 
-For the reverse direction, again we assume its antecedant
-to show its consequent.
+For the reverse direction, again we assume the antecedant
+to show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-30}
 \myparbox{%
-    $\Veim{x} \in \LeoEligible{\Current{\var{x}}}$,
+    $\Veim{x} \in \LeoEligible{\Current{\var{x}}}$
+    \linebreak \cuz{}
     antecedant of reverse direction, AF direction.%
 }
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-eligible-location-32}
 \myparbox{%
-    $\exists \Ves{i} : \Veim{x} \in \LeoEligible{\Ves{i}}$
+    $\exists \Vloc{i} : \Veim{x} \in \LeoEligible{\var{i}}$
+    \linebreak \cuz{}
     \Eref{eq:th-leo-eligible-location-30},
     existential generalization.%
 }
@@ -3804,7 +3807,7 @@ to show its consequent.
 \label{eq:th-leo-eligible-location-34}
 \myparbox{%
    \myfn{Is-Leo-Eligible}{\Veim{x}}
-   \cuz{}
+   \linebreak \cuz{}
        \longDfref{\var{Is-Leo-Eligible}}{def:leo-eligible},
        \Eref{eq:th-leo-eligible-location-32}.%
 }
@@ -3856,24 +3859,39 @@ The proof strategy is direct.
 \end{equation}
 \begin{equation}
 \label{eq:th-leo-eligible-postdot-uniqueness-24}
-    \begin{gathered}
-        \forall \; \Veim{z} \in \Current{\var{x}} : \\
-            \Postdot{\var{x}} = \Postdot{\var{z}}
-            \implies \var{x} = \var{z} \\
-          \because \longDfref{Leo unique}{def:leo-unique},
-          \Eref{eq:th-leo-eligible-postdot-uniqueness-22}.
-    \end{gathered}
+\begin{gathered}
+    \myparbox{%
+        $\forall \; \Veim{z} \in \ES{\Current{\var{x}}} :$ \linebreak
+        $\Postdot{\var{x}} = \Postdot{\var{z}} \implies \var{x} = \var{z}$ \linebreak
+        \cuz \longDfref{Leo unique}{def:leo-unique},
+          \Eref{eq:th-leo-eligible-postdot-uniqueness-22}.%
+    }
+\end{gathered}
 \end{equation}
+%
+\begin{equation}
+\label{eq:th-leo-eligible-postdot-uniqueness-25}
+\begin{gathered}
+    \myparbox{%
+        $\forall \; \Veim{z} \in \ES{\Current{\var{y}}} :$ \linebreak
+        $\Postdot{\var{x}} = \Postdot{\var{z}} \implies \var{x} = \var{z}$ \linebreak
+        \cuz
+            \Eref{eq:th-leo-eligible-postdot-uniqueness-04},
+            \Eref{eq:th-leo-eligible-postdot-uniqueness-24}.
+    }
+\end{gathered}
+\end{equation}
+%
 \begin{equation}
 \label{eq:th-leo-eligible-postdot-uniqueness-26}
 \begin{gathered}
-    \Postdot{\var{x}} = \Postdot{\var{y}}
-    \implies
-    \var{x} = \var{y} \\
     \myparbox{%
-        \cuz{} \Eref{eq:th-leo-eligible-postdot-uniqueness-04} and
-        instantiating \Veim{z} of
-        \Eref{eq:th-leo-eligible-postdot-uniqueness-24} as \Veim{y}.%
+        $\Postdot{\var{x}} = \Postdot{\var{y}}
+        \implies
+        \var{x} = \var{y}$ \linebreak
+        \cuz{} \Eref{eq:th-leo-eligible-postdot-uniqueness-25},
+        instantiating \Veim{z}
+        as \Veim{y}.%
     }
 \end{gathered}
 \end{equation}
