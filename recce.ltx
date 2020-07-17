@@ -254,6 +254,8 @@
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\lss}[1]{\ensuremath{#1_\type{LSS}}}
+\newcommand{\nes}[1]{\ensuremath{#1_\type{NES}}}
+% Delete NSS?
 \newcommand{\nss}[1]{\ensuremath{#1_\type{NSS}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
 \newcommand{\term}[1]{\ensuremath{\lfloor{#1}\rfloor}}
@@ -276,6 +278,8 @@
 \newcommand{\Vlp}[1]{\Tvar{#1}{LP}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
+\newcommand{\Vnes}[1]{\nes{\var{#1}}}
+% Delete Vnss?
 \newcommand{\Vnss}[1]{\nss{\var{#1}}}
 \newcommand{\Vcurr}[1]{\Tvar{#1}{CURR}}
 \newcommand{\Vorig}[1]{\Tvar{#1}{ORIG}}
@@ -4233,7 +4237,6 @@ previous EIM in the sequence.  That is,
 
 \begin{theorem}[NES subsequence]
 \label{th:nes-subsequence}
-\todo{Add NES subsequence theorem}
 Every subsequence of an NES is an NES.
 That is,
 \begin{gather}
@@ -4251,7 +4254,27 @@ That is,
 \end{theorem}
 
 \begin{proof}
-\todo{Add NES subsequence theorem proof}
+\mypareq{eq:th-nes-subsequence-10}{%
+   \Vnes{seq} is an EIM sequence \linebreak
+   \cuz \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-subsequence-02}.%
+}
+\mypareq{eq:th-nes-subsequence-12}{%
+   \Vnes{subseq} is an EIM sequence \linebreak
+   \cuz \Eref{eq:th-nes-subsequence-06},
+    \Eref{eq:th-nes-subsequence-10}.%
+}
+\begin{equation}
+\label{eq:th-nes-subsequence-14}
+\begin{gathered}
+   \forall \; 0 < \Vnat{i} \le \Vlastix{seq} :
+   \\ \Velement{seq}{\var{i}+1} =
+       \myfn{Next-Eligible}{\VVelement{seq}{i}}
+   \\ \because \Dfref{def:next-eligible-sequence},
+    \Eref{eq:th-nes-subsequence-02}.
+\end{gathered}
+\end{equation}
+\todo{Finish NES subsequence theorem proof}
 \myqed
 \end{proof}
 
