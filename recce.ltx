@@ -4324,32 +4324,59 @@ That is,
 \implies
 \\ \label{eq:th-nes-direction-06}
 \Current{\VVelement{nes}{i}} \ge
-\Current{\VVelement{nes}{j}}
+\Current{\VVelement{nes}{j}}.
 \end{gather}
 \end{theorem}
 
 \begin{proof}
 The proof is
-by induction on $\var{j}-\var{i}$.
+by induction on $\Vnat{delta} = \var{j}-\var{i}$.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-direction-10}
 \begin{gathered}
-\Vnat{n} = \var{j} \subtract \var{i} \\
-\land \; 0 \le \Vnat{i} \le \Vnat{j} \le \Vlastix{\var{nes}} \\
-\implies
-\Current{\VVelement{nes}{i}} \ge
-\Current{\VVelement{nes}{j}}
+\forall \; 0 \le \Vnat{j} \le \Vlastix{\var{nes}} :
+\forall \; 0 \le \Vnat{i} \le \Vnat{j} :
+\\ \Vnat{delta} = \var{j} \subtract \var{i} 
+    \implies
+    \Current{\VVelement{nes}{i}} \ge
+    \Current{\VVelement{nes}{j}}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-12}
+\begin{gathered}
+\forall \; 0 \le \Vnat{j} \le \Vlastix{\var{nes}} :
+   \forall \; \Vnat{i} :
+\\ \var{j} = \var{i} 
+    \implies
+    \Current{\VVelement{nes}{i}} \ge
+    \Current{\VVelement{nes}{j}}
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-nes-direction-10} \text{ with } \var{delta} = 0.
+    This is the basis of the induction.%
+}
 \end{gathered}
 \end{equation}
 
-\mypareq{eq:th-nes-direction-12}{%
-$0 \le \Vnat{i} = \Vnat{j} \le \Vlastix{\var{nes}}$ \linebreak
-$\implies \Current{\VVelement{nes}{i}} = \Current{\VVelement{nes}{j}}$
-   \linebreak
-\cuz{} \Eref{eq:th-nes-direction-10} with \var{n} = 0.
-This is the basis of the induction.
+For the step we assume the induction hypothesis with
+$\var{delta} = \Vnat{n}$ to show 
+the induction hypothesis for $\var{delta} = \var{n}+1$.
+\begin{equation}
+\label{eq:th-nes-direction-14}
+\begin{gathered}
+\forall \; 0 \le \Vnat{j} \le \Vlastix{\var{nes}} :
+\forall \; \Vnat{i} :
+\\ \Vnat{n} = \var{j} \subtract \var{i} 
+    \implies
+    \Current{\VVelement{nes}{i}} \ge
+    \Current{\VVelement{nes}{j}}
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-nes-direction-10} \text{ with } \var{delta} = \var{n},
+    AF step.%
 }
+\end{gathered}
+\end{equation}
 
 \todo{Finish NES direction theorem proof}
 \myqed
