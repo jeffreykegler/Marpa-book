@@ -4099,7 +4099,6 @@ then
 \end{theorem}
 
 \begin{proof}
-\todo{Fix this}
 In this proof, note that it is possible
 that $\Veim{middle} = \Veim{prev}$,
 that $\Veim{prev} = \Veim{next}$,
@@ -4127,6 +4126,7 @@ show the consequent.
 \DR{\var{middle}} =
     $\tuple{\Vsym{lhs} \de \Vstr{before} \mydot \Vsym{rhs} \Vstr{after}}$
     \linebreak \cuz{}
+    \Eref{eq:th-next-eligible-rule-10},
     \Eref{eq:th-next-eligible-rule-12}, for arbitrary
     \Vsym{lhs}, \Vstr{before}, \Vsym{rhs}, \Vstr{after}.%
 }
@@ -4159,13 +4159,13 @@ show the consequent.
             \because \Eref{eq:th-next-eligible-rule-20}.
 \end{equation}
 \mypareq{eq:th-next-eligible-rule-26}{%
-    $\var{eim1} \in \LeoUnique{\Current{\var{middle}}}$ \linebreak
+    $\var{middle} \in \LeoUnique{\Current{\var{middle}}}$ \linebreak
         \cuz{} \Eref{eq:th-next-eligible-rule-24},
         \longDfref{Leo Eligible}{def:leo-eligible}.%
 }
 \begin{equation}
 \label{eq:th-next-eligible-rule-28}
-\Penult{\var{eim1}} \neq \Lambda
+\Penult{\var{middle}} \neq \Lambda
     \because \longDfref{Leo unique}{def:leo-unique},
     \Eref{eq:th-next-eligible-rule-26}.
 \end{equation}
@@ -4226,7 +4226,7 @@ previous EIM in the sequence.  That is,
 \type{NES} = \set{
    \begin{gathered}
    \Veimseq{nes} :
-   \forall \; 0 < \Vnat{i} \le \Vlastix{nes} :
+   \forall \; \Vnat{i} < \Vlastix{nes} :
    \\ \Velement{nes}{\var{i}+1} =
        \myfn{Next-Eligible}{\VVelement{nes}{i}}.
    \end{gathered}
@@ -4243,7 +4243,7 @@ That is,
 \label{eq:th-nes-subsequence-02}
 \var{seq} \in \type{NES}
 \\ \label{eq:th-nes-subsequence-04}
-\land \; 0 \le \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
+\land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-nes-subsequence-06}
 \land \; \var{subseq} = \tuple{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \\ \nonumber
@@ -4269,7 +4269,7 @@ the theorem to show the consequent.
 \begin{equation}
 \label{eq:th-nes-subsequence-14}
 \begin{gathered}
-   \forall \; 0 < \Vnat{i} \le \Vlastix{seq} :
+   \forall \; \Vnat{i} < \Vlastix{seq} :
    \\ \Velement{seq}{\var{i}+1} =
        \myfn{Next-Eligible}{\VVelement{seq}{i}}
    \\ \because \Dfref{def:next-eligible-sequence},
@@ -4279,7 +4279,7 @@ the theorem to show the consequent.
 \begin{equation}
 \label{eq:th-nes-subsequence-16}
 \begin{gathered}
-   \forall \; \var{a} < \Vnat{i} \le \var{b} :
+   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \var{a} \le \var{ii} < \var{b} }
    \\ \Velement{seq}{\var{i}+1} =
        \myfn{Next-Eligible}{\VVelement{seq}{i}}
    \\
@@ -4290,7 +4290,7 @@ the theorem to show the consequent.
 \begin{equation}
 \label{eq:th-nes-subsequence-18}
 \begin{gathered}
-   \forall \; \var{0} < \Vnat{i} \le \Vlastix{subseq} :
+   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : 0 \le \var{ii} < \Vlastix{subseq} } :
    \\ \Velement{subseq}{\var{i}+1} =
        \myfn{Next-Eligible}{\VVelement{subseq}{i}}
    \\
@@ -4299,11 +4299,21 @@ the theorem to show the consequent.
 \end{gathered}
 \end{equation}
 \begin{equation}
+\label{eq:th-nes-subsequence-19}
+\begin{gathered}
+   \forall \; \Vnat{i} < \Vlastix{subseq} :
+   \\ \Velement{subseq}{\var{i}+1} =
+       \myfn{Next-Eligible}{\VVelement{subseq}{i}}
+   \\
+    \because \Eref{eq:th-nes-subsequence-18}.
+\end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:th-nes-subsequence-20}
 \var{subseq} \in \type{NES}
    \because \longDfref{NES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-subsequence-12},
-    \Eref{eq:th-nes-subsequence-18}.
+    \Eref{eq:th-nes-subsequence-19}.
 \end{equation}
 \Eref{eq:th-nes-subsequence-20} is the consequent
 of the theorem
@@ -4319,7 +4329,7 @@ That is,
 \label{eq:th-nes-direction-02}
 \var{nes} \in \type{NES}
 \\ \label{eq:th-nes-direction-04}
-\land 0 \le \Vnat{i} \le \Vnat{j} \le \Vlastix{\var{nes}}
+\land \; \Vnat{i} \le \Vnat{j} \le \Vlastix{\var{nes}}
 \\ \nonumber
 \implies
 \\ \label{eq:th-nes-direction-06}
@@ -4337,7 +4347,7 @@ The induction hypothesis is
 \begin{gathered}
 \forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
 \forall \; \Vnat{i} \le \Vnat{j} :
-\\ \Vnat{delta} = \var{j} \subtract \var{i} 
+\\ \Vnat{delta} = \var{j} \subtract \var{i}
     \implies
     \Current{\VVelement{nes}{i}} \ge
     \Current{\VVelement{nes}{j}}.
@@ -4348,7 +4358,7 @@ The induction hypothesis is
 \begin{gathered}
 \forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
    \forall \; \Vnat{i} \le \var{j} :
-\\ \var{j} = \var{i} 
+\\ \var{j} = \var{i}
     \implies
     \Current{\VVelement{nes}{i}} \ge
     \Current{\VVelement{nes}{j}}
@@ -4360,14 +4370,14 @@ The induction hypothesis is
 \end{equation}
 
 For the step we assume the induction hypothesis with
-$\var{delta} = \Vnat{n}$ to show 
+$\var{delta} = \Vnat{n}$ to show
 the induction hypothesis for $\var{delta} = \var{n}+1$.
 \begin{equation}
 \label{eq:th-nes-direction-14}
 \begin{gathered}
 \forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
 \forall \; \Vnat{i} \le \var{j} :
-\\ \Vnat{n} = \var{j} \subtract \var{i} 
+\\ \Vnat{n} = \var{j} \subtract \var{i}
     \implies
     \Current{\VVelement{nes}{i}} \ge
     \Current{\VVelement{nes}{j}}
