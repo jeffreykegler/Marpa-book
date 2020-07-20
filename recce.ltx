@@ -4322,202 +4322,39 @@ of the theorem
 \end{proof}
 
 \begin{theorem}[NES direction]
-\label{th:nes-direction}
-Current location in an NES is non-increasing.
-That is,
+\label{th:nes-adjacent-direction}
+\todo{NES direction theorem}
+If \Veim{prev} and \Veim{next}
+are two adjacent elements of an NES,
+then the current location of \var{next}
+is less than or equal to the current location of \var{prev}.
+That is, if
 \begin{gather}
-\label{eq:th-nes-direction-02}
+\label{eq:th-nes-adjacent-direction-02}
 \var{nes} \in \type{NES}
-\\ \label{eq:th-nes-direction-04}
-\land \; \Vnat{i} \le \Vnat{j} \le \Vlastix{\var{nes}}
-\\ \nonumber
-\implies
-\\ \label{eq:th-nes-direction-06}
+\\ \label{eq:th-nes-adjacent-direction-04}
+\land \; 0 \le \Vnat{i} \le (\Vlastix{nes}\subtract 1)
+\end{gather}
+then
+\begin{gather}
+\label{eq:th-nes-adjacent-direction-06}
 \Current{\VVelement{nes}{i}} \ge
-\Current{\VVelement{nes}{j}}.
+\Current{\Velement{nes}{\var{i}+1}}.
 \end{gather}
 \end{theorem}
 
 \begin{proof}
-The proof is
-by induction on $\Vnat{indx} = \Vlastix{nes}$.
-The induction hypothesis is
-\begin{equation}
-\label{eq:th-nes-direction-10}
-\begin{gathered}
-\forall \var{nes} \in \type{NES} : \forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
-\forall \; \Vnat{i} \le \var{j} :
-\\ \Vlastix{nes} \le \Vnat{indx}
-    \implies
-    \Current{\VVelement{nes}{i}} \ge
-    \Current{\VVelement{nes}{j}}.
-\end{gathered}
-\end{equation}
+\todo{prove NES adjacent direction theorem}
+\myqed
+\end{proof}
 
-For the basis, we take the induction hypothesis
-with $\var{indx} = 0$:
-\mypareq{eq:th-nes-direction-11-10}{%
-    $\var{nesB} \in \type{NES}$ \cuz{} antecedant
-    of \Eref{eq:th-nes-direction-10}
-    with $\var{indx} = 0$,
-    arbitrary \Vnes{nesB},
-    AF basis.%
-}
-\mypareq{eq:th-nes-direction-11-15}{%
-    $\Vlastix{nesB} = 0$ \cuz{} antecedant
-    of \Eref{eq:th-nes-direction-10}
-    with $\var{indx} = 0$,
-    AF basis.%
-}
-\mypareq{eq:th-nes-direction-11-20}{%
-    $\var{jB} = 0$ \cuz{} antecedant
-    of \Eref{eq:th-nes-direction-10}
-    with $\var{indx} = 0$,
-    instantiating \var{j} as \var{jB} WLOG,
-    AF basis.%
-}
-\mypareq{eq:th-nes-direction-11-25}{%
-    $\var{iB} = 0$ \cuz{} antecedant
-    of \Eref{eq:th-nes-direction-10}
-    with $\var{indx} = 0$,
-    instantiating \var{i} as \var{iB} WLOG,
-    AF basis.%
-}
-\mypareq{eq:th-nes-direction-11-30}{%
-    $\Current{\VVelement{nes}{iB}}=\Current{\VVelement{nes}{jB}}$
-    \cuz{} \Eref{eq:th-nes-direction-11-10},
-        \Eref{eq:th-nes-direction-11-20},
-        \Eref{eq:th-nes-direction-11-25}.%
-}
-\begin{equation}
-\label{eq:th-nes-direction-11-35}
-\begin{gathered}
-\forall \var{nes} \in \type{NES} :
-\forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
-   \forall \; \Vnat{i} \le \var{j} :
-\\ \var{indx} = \Vlastix{nes} = 0
-    \implies
-    \Current{\VVelement{nes}{i}} \ge
-    \Current{\VVelement{nes}{j}}
-\\ \myparbox{\cuz{} deduction from
-    \Eref{eq:th-nes-direction-11-10}--%
-    \Eref{eq:th-nes-direction-11-30},
-    universal generalization of \var{iB}, \var{jB}, \var{nesB}.
-    This is
-    \Eref{eq:th-nes-direction-10} with \var{indx} = 0.
-    and the basis of the induction.%
-}
-\end{gathered}
-\end{equation}
+\begin{theorem}[NES direction]
+\label{th:nes-direction}
+\todo{NES direction theorem}
+\end{theorem}
 
-For the step we
-assume the induction hypothesis with
-$\var{indx} = \Vnat{n}$,
-and the antecedants of the induction hypothesis with
-$\var{indx} = \Vnat{n}+1$,
-to show the consequent of
-the induction hypothesis for $\var{indx} = \var{n}+1$.
-\begin{equation}
-\label{eq:th-nes-direction-14}
-\begin{gathered}
-\forall \var{nes} \in \type{NES} : \forall \; \Vnat{j} \le \Vlastix{\var{nes}} :
-\forall \; \Vnat{i} \le \var{j} :
-\\ \Vlastix{nes} \le \var{n}
-    \implies
-    \Current{\VVelement{nes}{i}} \ge
-    \Current{\VVelement{nes}{j}}.
-\\ \myparbox{\cuz{}
-    \Eref{eq:th-nes-direction-10} \text{ with } \var{delta} = \var{n},
-    AF step.%
-}
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-nes-direction-15}{%
-    \var{nesStep} in \type{NES} \cuz
-    \Eref{eq:th-nes-direction-10} with $\var{delta} = \var{n}+1$,
-    universal instantiation with arbitrary \var{nesStep},
-    AF step.%
-}
-\begin{equation}
-\label{eq:th-nes-direction-16}
-\begin{gathered}
-\Vnat{jStep} \le \Vlastix{\var{nes}}
-\\ \myparbox{\cuz{}
-    \Eref{eq:th-nes-direction-10} with $\var{delta} = \var{n}+1$,
-    universal instantiation with arbitrary \var{jStep},
-    AF step.%
-}
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-nes-direction-18}{%
-    $\Vnat{iStep} \le \var{jStep}$ \linebreak
-    \cuz{}
-    \Eref{eq:th-nes-direction-10} with $\var{delta} = \var{n}+1$,
-    universal instantiation with arbitrary \var{iStep},
-    AF step.%
-}
-\mypareq{eq:th-nes-direction-20}{%
-    $\var{n}+1 = \Vlastix{nesStep}$ \linebreak
-    \Eref{eq:th-nes-direction-10} with $\var{delta} = \var{n}+1$,
-    AF step.%
-}
-\mypareq{eq:th-nes-direction-22}{%
-    $\Vnes{suffix} = \Velement{nesStep}{\var{1}\ldots\Vlastix{nesStep}}$ \linebreak
-    \cuz{} \longThref{NES subsequence}{th:nes-subsequence}.%
-}
-\mypareq{eq:th-nes-direction-24}{%
-    $\Vlastix{suffix} = \Vlastix{nesStep}\subtract 1$ \cuz{}
-        \Eref{eq:th-nes-direction-24}.%
-}
-\mypareq{eq:th-nes-direction-26}{%
-    $\Vlastix{suffix} = \var{n}$ \cuz{}
-        \Eref{eq:th-nes-direction-20},
-        \Eref{eq:th-nes-direction-24}.%
-}
-\begin{equation}
-\label{eq:th-nes-direction-28}
-\begin{gathered}
-\forall \; \Vnat{j} \le \Vlastix{\var{suffix}} :
-\forall \; \Vnat{i} \le \var{j} :
-\\ \implies
-    \Current{\VVelement{suffix}{i}} \ge
-    \Current{\VVelement{suffix}{j}}.
-\\ \myparbox{\cuz{}
-    \Eref{eq:th-nes-direction-14},
-    \Eref{eq:th-nes-direction-26},
-    instantiating \var{nes} with \var{suffix}.
-}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-30}
-\begin{gathered}
-\forall \; \Vnat{j} \le \Vlastix{\var{suffix}} :
-\\ \implies
-    \Current{\Velement{suffix}{0}} \ge
-    \Current{\VVelement{suffix}{j}}.
-\\ \myparbox{\cuz{}
-    \Eref{eq:th-nes-direction-28}.%
-}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-28}
-\begin{gathered}
-\forall \; \Vnat{j} \le \Vlastix{\var{nesStep}} :
-\forall \; 1 < \Vnat{i} \le \var{j} :
-\\ \implies
-    \Current{\VVelement{nes}{i}} \ge
-    \Current{\VVelement{nes}{j}}.
-\\ \myparbox{\cuz{}
-    \Eref{eq:th-nes-direction-14},
-    \Eref{eq:th-nes-direction-22}.%
-}
-\end{gathered}
-\end{equation}
-
-
-\todo{Finish NES direction theorem proof}
+\begin{proof}
+\todo{prove NES direction theorem}
 \myqed
 \end{proof}
 
