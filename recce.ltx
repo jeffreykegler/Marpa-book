@@ -234,6 +234,8 @@
 \newcommand{\seq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{{\left[ #1 \right]} }
+\newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
+\newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
@@ -1117,21 +1119,20 @@ Terminal symbol \Dfref{def:terminal-string} & \Vterm{terminal} \\[.8ex]
 \label{tab:op-notation}.
 \end{table}
 
-Where \var{set} is a set,
+Where \var{set} is a finite set,
 \Vsize{set} is the size of the set.
 Where \var{seq} is a sequence,
-the first element of \var{seq} is \Velement{seq}{0},
+the first element of \var{seq} is \Velement{seq}{0}.
+Where \var{seq} is a finite sequence,
 and the last element is \Velement{seq}{\Vlastix{seq}}.
 Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtract 1$.
-\begin{equation*}
-\VVelement{seq}{i} =
-\begin{cases}
-\text{the \var{i}'th element of \var{seq},
-if $0 \le \var{i} \le \Vlastix{seq}$,} \\
-\text{$\Lambda$, if $\var{i} < 0$,} \\
-\text{$\Lambda$, if $\var{i} > \Vlastix{seq}$.}
-\end{cases}
-\end{equation*}
+
+We write \Dom{\var{fn}} for the domain of a function \var{fn},
+and \Ran{\var{fn}} for the range of \var{fn}.
+A sequence is a function whose domain is a set of 0-based consecutive non-negative
+integers so that, where \var{seq} is a sequence,
+\Dom{\var{seq}} is the set of valid indexes of \var{seq}
+and \Ran{\var{seq}} is the set of valid elements of \var{seq}.
 
 We will write
 $\var{s}[\var{a} \ldots \var{z}]$
@@ -1143,7 +1144,7 @@ for the subsequence
     \var{s}[\var{z}].
 \]
 We require of the subsequence indices that
-$0 \le \var{a} \le \var{z} \le \Vlastix{seq}$,
+$\var{z} \in \Dom{seq}$,
 except in one special case.
 If
 $\var{z} < \var{a}$ then
@@ -1155,16 +1156,16 @@ is the empty sequence, which we may write as $\epsilon$:
 \]
 
 Where $0 \le \var{j} \le \Vlastix{j}$,
-the sequence \Velement{seq}{0\ldots \var{j}} is a \dfn{prefix}
-of \var{seq},
-and the sequence \Velement{seq}{\var{j}\ldots \Vlastix{seq}} is a \dfn{suffix}
-of \var{seq}.
-When $0 \le \var{j} < \Vlastix{seq}$, then
-the sequence \Velement{seq}{0\ldots \var{j}} is a \dfn{proper prefix}
-of \var{seq}.
-When $0 < \var{j} \le \Vlastix{seq}$, then
-the sequence \Velement{seq}{\var{j}\ldots \Vlastix{seq}} is a \dfn{proper suffix}
-of \var{seq}.
+the sequence \Velement{fseq}{0\ldots \var{j}} is a \dfn{prefix}
+of the finite sequence \var{fseq},
+and the sequence \Velement{fseq}{\var{j}\ldots \Vlastix{fseq}} is a \dfn{suffix}
+of \var{fseq}.
+When $0 \le \var{j} < \Vlastix{fseq}$, then
+the sequence \Velement{fseq}{0\ldots \var{j}} is a \dfn{proper prefix}
+of \var{fseq}.
+When $0 < \var{j} \le \Vlastix{fseq}$, then
+the sequence \Velement{fseq}{\var{j}\ldots \Vlastix{fseq}} is a \dfn{proper suffix}
+of \var{fseq}.
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -4337,8 +4338,8 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-nes-adjacent-direction-06}
-\Current{\VVelement{nes}{i}} \ge
-\Current{\Velement{nes}{\var{i}+1}}.
+\Current{\Velement{nes}{\var{i}+1}} \le
+\Current{\VVelement{nes}{i}}.
 \end{gather}
 \end{lemma}
 
@@ -4349,6 +4350,28 @@ The lemma follows from
 \myqed
 \end{proof}
 
+\begin{theorem}[NES direction]
+The current location of
+every element of a NES is before or at
+the current location of every previous element of the NES.
+That is,
+\label{th:nes-direction}
+\[
+\begin{gathered}
+\forall \var{nes} \in \type{NES} :
+\forall \var{i} \in \Dom{\var{nes}} :
+\forall \Vnat{j} \le \var{i} :
+\\ \Current{\VVelement{nes}{i}} \le 
+\Current{\VVelement{nes}{j}}.
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{proof}
+\myqed
+\end{proof}
+`
 \begin{theorem}[NES current location run]
 \label{th:nes-current-location-run}
 If two elements of an NES are at the same
