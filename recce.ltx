@@ -4358,9 +4358,9 @@ That is,
 \label{th:nes-direction}
 \[
 \begin{gathered}
-\forall \var{nes} \in \type{NES} :
-\forall \var{i} \in \Dom{\var{nes}} :
-\forall \Vnat{j} \le \var{i} :
+\forall \; \var{nes} \in \type{NES} :
+\forall \; \var{i} \in \Dom{\var{nes}} :
+\forall \; \Vnat{j} \le \var{i} :
 \\ \Current{\VVelement{nes}{i}} \le 
 \Current{\VVelement{nes}{j}}.
 \end{gathered}
@@ -4369,9 +4369,65 @@ That is,
 
 \begin{proof}
 \todo{proof}
+The proof is by induction on the index \var{i}.
+The induction hypothesis is
+\begin{equation}
+\label{eq:th-nes-direction-10}
+\begin{gathered}
+\forall \; \var{nes} \in \type{NES} :
+\forall \; \var{i} \in \Dom{\var{nes}} :
+\forall \; \Vnat{j} \le \var{i} :
+\\ \var{i} \le \Vnat{indx} \implies \Current{\VVelement{nes}{i}} \le 
+\Current{\VVelement{nes}{j}}.
+\end{gathered}
+\end{equation}
+The basis is 
+\mypareq{eq:th-nes-direction-12}{%
+    \Eref{eq:th-nes-direction-10} with $\var{indx} = 0$ \cuz{}
+        $\var{indx} = 0$ implies that
+        $\var{i} = \var{j} = 0$, which implies that
+        \Current{\VVelement{nes}{i}} = \Current{\VVelement{nes}{j}}.
+}
+
+For the step, we assume the induction hypothesis
+for $\var{indx} = \var{n}$ to show
+the induction hypothesis
+for $\var{indx} = \var{n}+1$.
+\mypareq{eq:th-nes-direction-14}{
+    $\var{nesP} \in \var{nes}$ \cuz{} AF step, arbitrary \Vnes{nesP}.%
+}
+\begin{equation}
+\label{eq:th-nes-direction-16}
+\begin{gathered}
+\forall \; \var{i} \in \Dom{\var{nesP}} :
+\forall \; \Vnat{j} \le \var{i} :
+\\ \var{i} \le \Vnat{n} \implies \Current{\VVelement{nesP}{i}} \le 
+\Current{\VVelement{nesP}{j}}.
+\\ \myparbox{%
+\cuz{} \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}$,
+    AF step.%
+}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-nes-direction-18}{
+    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
+    \cuz{}
+    \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
+}
+\begin{equation}
+\label{eq:th-nes-direction-20}
+\begin{gathered}
+\forall \; \Vnat{j} \le \var{n} :
+\Current{\VVelement{nesP}{n}} \le 
+\Current{\VVelement{nesP}{j}}.
+\\ \myparbox{%
+\cuz{} \Eref{eq:th-nes-direction-16} instantiating \var{i} as \var{n}.%
+}
+\end{gathered}
+\end{equation}
 \myqed
 \end{proof}
-`
+
 \begin{theorem}[NES current location run]
 \label{th:nes-current-location-run}
 If two elements of an NES are at the same
