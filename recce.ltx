@@ -4368,7 +4368,6 @@ That is,
 \end{theorem}
 
 \begin{proof}
-\todo{proof}
 The proof is by induction on the index \var{i}.
 The induction hypothesis is
 \begin{equation}
@@ -4408,9 +4407,10 @@ So we may restrict ourselves to the opposite case.
 \begin{equation}
 \label{eq:th-nes-direction-16}
 \begin{gathered}
+\forall \; \var{i} \le \var{n} :
 \forall \; \Vnat{j} \le \var{i} :
-\\ \var{i} \le \Vnat{n} \implies \Current{\VVelement{nesP}{i}} \le
-\Current{\VVelement{nesP}{j}}.
+\\ \Current{\VVelement{nesP}{i}} \le
+\Current{\VVelement{nesP}{j}}
 \\ \myparbox{%
 \cuz{} \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}$,
     AF step.%
@@ -4427,7 +4427,7 @@ So we may restrict ourselves to the opposite case.
 \begin{gathered}
 \forall \; \Vnat{j} \le \var{n} :
 \Current{\VVelement{nesP}{n}} \le
-\Current{\VVelement{nesP}{j}}.
+\Current{\VVelement{nesP}{j}}
 \\ \myparbox{%
 \cuz{} \Eref{eq:th-nes-direction-16} instantiating \var{i} as \var{n}.%
 }
@@ -4437,13 +4437,49 @@ So we may restrict ourselves to the opposite case.
 \label{eq:th-nes-direction-22}
 \begin{gathered}
 \forall \; \Vnat{j} \le \var{n} :
-\Current{\Velement{nesP}{\var{n}+1} \le
-\Current{\VVelement{nesP}{j}}.
+\Current{\Velement{nesP}{\var{n}+1}} \le
+\Current{\VVelement{nesP}{j}}
 \\ \myparbox{%
 \cuz{} \Eref{eq:th-nes-direction-18}, \Eref{eq:th-nes-direction-20}.
 }
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-nes-direction-24}{%
+    $\Current{\Velement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{\var{n}+1}}$
+    \cuz{} trivially.%
+}
+\begin{equation}
+\label{eq:th-nes-direction-26}
+\begin{gathered}
+\forall \; \var{i} = \var{n}+1 :
+\forall \; \Vnat{j} \le \var{i} :
+\\ \Current{\VVelement{nesP}{i}} \le
+\Current{\VVelement{nesP}{j}}
+\\ \myparbox{%
+    \cuz{} \Eref{eq:th-nes-direction-22}, \Eref{eq:th-nes-direction-24}.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-28}
+\begin{gathered}
+\forall \; \var{i} \le \var{n}+1 :
+\forall \; \Vnat{j} \le \var{i} :
+\\ \Current{\VVelement{nesP}{i}} \le
+\Current{\VVelement{nesP}{j}}
+\\ \myparbox{%
+    \cuz{} \Eref{eq:th-nes-direction-16},
+    \Eref{eq:th-nes-direction-26}.%
+}
+\end{gathered}
+\end{equation}
+
+The basis of the induction was
+\Eref{eq:th-nes-direction-12}.
+\Eref{eq:th-nes-direction-28}
+is the induction hypothesis
+for $\var{indx} = \var{n}+1$, which shows the step
+and the theorem.
 \myqed
 \end{proof}
 
@@ -4461,7 +4497,7 @@ That is, if
 \\ \label{eq:th-current-location-run-06}
 \land \; 0 \le \Vnat{end} \le \Vlastix{nes}
 \\ \label{eq:th-current-location-run-07}
-\land \Vloc{loc} = \Current{\VVelement{start}} = \Current{\VVelement{end}}
+\land \; \Vloc{loc} = \Current{\VVelement{nes}{start}} = \Current{\VVelement{nes}{end}}
 \end{gather}
 then
 \begin{equation}
