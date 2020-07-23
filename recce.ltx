@@ -4586,7 +4586,7 @@ then
 \begin{proof}
 \todo{proof}
 The proof is by induction on the index
-$\var{index} = \Vsize{nes} \subtract 1$.
+$\Vnat{indx} = \Vsize{nes} \subtract 1$.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-unit-derivation-10}
@@ -4603,6 +4603,57 @@ The induction hypothesis is
     \Symbol{\Velement{ines}{0}}.
 \end{gathered}
 \end{equation}
+
+We take the induction hypothesis with \var{indx} = 0
+as the basis, assuming the antecendants to show
+the consequent.
+\mypareq{eq:th-nes-unit-derivation-12}{%
+    $\Vnes{nesB} = \tuple{\Veim{next}, \Veim{middle}, \Veim{prev}}$
+    \cuz{}
+    antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$,
+    arbitrary \var{nesB}, \var{next}, \var{middle}, \var{prev}.%
+}
+\mypareq{eq:th-nes-unit-derivation-14}{%
+    \Current{\var{next}} = \Current{\var{prev}}
+    \cuz{} antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$.
+}
+\mypareq{eq:th-nes-unit-derivation-16}{%
+    \Current{\var{next}} =
+    \Current{\var{middle}} =
+    \Current{\var{prev}} = \Vloc{loc}
+    \cuz{} \Eref{eq:th-nes-unit-derivation-14},
+    \longThref{NES current location run}{th:nes-current-location-run},
+    arbitrary \var{loc}.%
+}
+\mypareq{eq:th-nes-unit-derivation-18}{%
+    \myfn{Next-Eligible}{\var{next},\var{middle}}
+    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-unit-derivation-12}.%
+}
+\mypareq{eq:th-nes-unit-derivation-20}{%
+    \myfn{Next-Eligible}{\var{middle},\var{prev}}
+    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-unit-derivation-12}.%
+}
+\mypareq{eq:th-nes-unit-derivation-22}{%
+    $\Symbol{\var{middle}} \de \Symbol{\var{prev}}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-16},
+        \Eref{eq:th-nes-unit-derivation-18},
+        \Eref{eq:th-nes-unit-derivation-20},
+        \longThref{NES rule}{th:next-eligible-rule}.%
+}
+\mypareq{eq:th-nes-unit-derivation-24}{%
+    $\Symbol{\Velement{nesB}{\Vlastix{nesB}\subtract 1}} \deplus
+        \Symbol{\Velement{nesB}{0}}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-16},
+        \Eref{eq:th-nes-unit-derivation-18},
+        \Eref{eq:th-nes-unit-derivation-20},
+        \longThref{NES rule}{th:next-eligible-rule}.
+        This is the consequent of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$.
+}
+From \Eref{eq:th-nes-unit-derivation-12}--\Eref{eq:th-nes-unit-derivation-24},
+we have the basis of the induction.
+
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
