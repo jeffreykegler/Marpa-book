@@ -118,8 +118,8 @@
 \newcommand{\sep}{\,\mid\,}
 \newcommand{\mydot}{\raisebox{.05em}{$\,\bullet\,$}}
 \newcommand{\cat}{\,.\,}
-\newcommand{\size}[1]{\ensuremath{|{#1}|}}
-\newcommand{\bigsize}[1]{\ensuremath{\left| {#1} \right|}}
+\newcommand{\fixedsize}[1]{\ensuremath{|{#1}|}}
+\newcommand{\size}[1]{\ensuremath{\left| {#1} \right|}}
 \newcommand{\enRange}[2]{\ensuremath{#1\text{--}#2}}
 \newcommand{\enRefs}[2]{\enRange{\ref{#1}}{\ref{#2}}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
@@ -298,7 +298,6 @@
 \newcommand{\Vtoken}[1]{\Tvar{#1}{TOKEN}}
 \newcommand{\Vves}[1]{\ves{\var{#1}}}
 \newcommand{\Vsize}[1]{\ensuremath{\size{\var{#1}}}}
-\newcommand{\Vbigsize}[1]{\ensuremath{\bigsize{\var{#1}}}}
 \newcommand{\nat}[1]{\ensuremath{#1_\type{\naturals}}}
 \newcommand{\Vnat}[1]{\nat{\var{#1}}}
 
@@ -2842,7 +2841,7 @@ the origin of \Veim{x} is at or before its current location.
 \begin{equation}
 \label{eq:th-eim-origin-not-after-current-12}
 \begin{gathered}
-\Vorig{i} + \bigsize{\Vstr{rhs1}} = \Vloc{j} \\
+\Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
    \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
     \Eref{eq:th-eim-origin-not-after-current-10}.
 \end{gathered}
@@ -2850,7 +2849,7 @@ the origin of \Veim{x} is at or before its current location.
 \begin{equation}
 \label{eq:th-eim-origin-not-after-current-14}
 \begin{gathered}
-\Origin{\var{x}} + \bigsize{\Vstr{rhs1}} = \Current{\var{x}} \\
+\Origin{\var{x}} + \size{\Vstr{rhs1}} = \Current{\var{x}} \\
 \because
 \longEref{Origin}{eq:def-origin},
 \longThref{EIM direction}{th:eim-direction},
@@ -3932,13 +3931,13 @@ That is, if \Vesseq{table} is a valid Earley table for the
 \[
 \begin{gathered}
 \forall \; 0 \le \Ves{j} \le \Vlastix{table} : \\
-\bigsize{
+\size{
    \set{
             \Veim{x} \in \ES{\var{j}} :
     \myfn{Is-Leo-Eligible}{\var{x}}
    }
 }
-\le \bigsize{\Vocab{\var{g}}}.
+\le \size{\Vocab{\var{g}}}.
 \end{gathered}
 \]
 \end{theorem}
@@ -4801,17 +4800,46 @@ Every NES is finite.
 That is,
 \begin{equation}
 \label{eq:th-nes-finitude-02}
-\forall \var{nes} \in \type{NES} : \var{nes} \in \naturals.
+\forall \; \var{nes} \in \type{NES} : \var{nes} \in \naturals.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
-Let \var{nes} be an arbitrary NES.
-We restate the theorem as a stronger claim:
+Let \var{nes} be an arbitrary NES, and let
+\mypareq{eq:th-nes-finitude-10}{%
+    $\Vnat{max} = \size{\Vocab{\Vint{g}}}+2.$
+}
+
+We restate the theorem as a stronger claim,
 \begin{equation}
-\label{eq:th-nes-finitude-10}
-\Vsize{nes} \le \size{\Vocab{\Vint{g}}} \times (\Current{\Velement{nes}{0}}).
+\label{eq:th-nes-finitude-11}
+\Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}},
 \end{equation}
+and we note that
+\begin{equation}
+\label{eq:th-nes-finitude-12}
+\begin{gathered}
+\forall \; \Vloc{i} \le \Current{\Velement{nes}{0}} :
+\\ \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
+\le \var{max}
+\\ \implies \Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}}.
+\\ \because \Eref{eq:th-nes-finitude-11}.
+\end{gathered}
+\end{equation}
+
+The rest of the proof proceeds by reductio.
+\mypareq{eq:th-nes-finitude-14}{%
+    $\Vsize{nes} > \var{max} \times \Current{\Velement{nes}{0}}$
+    \cuz{} negation of \Eref{eq:th-nes-finitude-10}, AF reductio.%
+}
+\mypareq{eq:th-nes-finitude-16}{%
+    $\exists \; \Vloc{i} \le \Current{\Velement{nes}{0}} : \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
+        > \var{max}$
+        \cuz{}
+        contrapositive of \Eref{eq:th-nes-finitude-12},
+        \Eref{eq:th-nes-finitude-14}.
+}
+
 \todo{finish proving th:nes-finitude}
 \end{proof}
 
@@ -5236,7 +5264,7 @@ That is, if \Vesseq{table} is a valid Earley table for the
 \[
 \begin{gathered}
 \forall \Ves{j} \in \var{table} : \\
-\bigsize{
+\size{
    \set{
        \begin{gathered}
             \Veim{src} \in \Ves{j} : \\
@@ -5244,7 +5272,7 @@ That is, if \Vesseq{table} is a valid Earley table for the
        \end{gathered}
    }
 }
-\le \bigsize{\Vocab{\var{g}}}.
+\le \size{\Vocab{\var{g}}}.
 \end{gathered}
 \]
 \end{theorem}
@@ -5957,7 +5985,7 @@ then
 Let \Vlss{seq} be a valid Leo source EIM sequence
 of \Veim{bottom}. Then
 \[
-\bigsize{\var{seq}} \le
+\size{\var{seq}} \le
     \left(\Current{\Velement{seq}{0}}+1 \right)
     \times \size{\Vocab{\Vint{g}}}.
 \]
@@ -5975,7 +6003,7 @@ we know that every EIM in \var{seq} is in an Earley set
 not after \Current{\Velement{seq}{0}}.
 Therefore \Vlss{seq} has EIM's in at most
 \[
-\bigsize{\set{0\ldots\var{\Current{\Velement{seq}{0}}}}} = \Current{\Velement{seq}{0}}+1
+\size{\set{0\ldots\var{\Current{\Velement{seq}{0}}}}} = \Current{\Velement{seq}{0}}+1
 \]
 ES's.
 Therefore, there are at most
@@ -6349,7 +6377,7 @@ but different lengths.
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-length-26}
-\Vbigsize{short} = \Vbigsize{\Velement{long}{0\ldots \Vlastix{short}}}
+\Vsize{short} = \Vsize{\Velement{long}{0\ldots \Vlastix{short}}}
 \because \Eref{eq:th-maximal-lss-length-24}.
 \end{equation}
 \begin{equation}
@@ -6701,7 +6729,7 @@ to show the consequent of \myfn{Hyp}{\var{n}+1}.
 \end{equation}
 \begin{equation}
 \label{th:bottom-lim-invariant-36}
-\bigsize{\var{lssS}} = \var{n} + 1
+\size{\var{lssS}} = \var{n} + 1
     \because \text{antecedant of \myfn{Hyp}{\var{n}+1}.}
 \end{equation}
 \begin{equation}
@@ -8068,7 +8096,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predict-es-invocations-26}
 \begin{gathered}
-  \bigsize{\set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}} = \Oc
+  \size{\set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}} = \Oc
   \\
   \because \text{ \Rules{\var{g}} is a constant depending on \Vint{g}.}
 \end{gathered}
@@ -8082,7 +8110,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
       = \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
           / \Veim{x}
       \times
-      \bigsize{\set{\Vrule{r} : \Postdot{\var{x}}}}
+      \size{\set{\Vrule{r} : \Postdot{\var{x}}}}
     \\
       \because \Obref{def:loop-invocation}.
   \end{gathered}
