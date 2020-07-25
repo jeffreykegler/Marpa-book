@@ -302,7 +302,7 @@
 \newcommand{\nat}[1]{\ensuremath{#1_\type{\naturals}}}
 \newcommand{\Vnat}[1]{\nat{\var{#1}}}
 
-\newcommand{\naturals}{\ensuremath{\mathbb{N}}}
+\newcommand{\naturals}{\ensuremath{\omega}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
 \newcommand{\Earley}{\algo{Earley}}
 \newcommand{\Leo}{\algo{Leo}}
@@ -313,7 +313,8 @@
 \newcommand\mycallname[1]{\textproc{#1}}
 \newcommand\call[2]{\mycallname{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
 
-\newcommand{\myfn}[2]{\ensuremath{\mymathop{#1}(#2)}}
+\newcommand{\myfnname}[1]{\ensuremath{\mymathop{#1}}}
+\newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
@@ -4591,7 +4592,8 @@ The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-unit-derivation-10}
 \begin{gathered}
-    \forall \var{nes} \in \set{
+    \myfn{INDH}{\Vnat{indx}} \defined
+    \\ \forall \var{nes} \in \set{
         \begin{gathered}
         \Vnes{ines} :
         \\ \Vsize{ines} = \var{indx} + 3
@@ -4604,18 +4606,18 @@ The induction hypothesis is
 \end{gathered}
 \end{equation}
 
-We take the induction hypothesis with $\var{indx} = 0$
-as the basis, assuming the antecendants to show
+We take \myfn{INDH}{0} as the basis,
+assuming the antecendants to show
 the consequent.
 \mypareq{eq:th-nes-unit-derivation-12}{%
     $\Vnes{nesB} = \tuple{\Veim{next}, \Veim{middle}, \Veim{prev}}$
     \cuz{}
-    antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$,
+    antecedant of \myfn{INDH}{0},
     arbitrary \var{nesB}, \var{next}, \var{middle}, \var{prev}.%
 }
 \mypareq{eq:th-nes-unit-derivation-14}{%
     \Current{\var{next}} = \Current{\var{prev}}
-    \cuz{} antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$.
+    \cuz{} antecedant of \myfn{INDH}{0}.
 }
 \mypareq{eq:th-nes-unit-derivation-16}{%
     \Current{\var{next}} =
@@ -4649,7 +4651,7 @@ the consequent.
         \Eref{eq:th-nes-unit-derivation-18},
         \Eref{eq:th-nes-unit-derivation-20},
         \longThref{NES rule}{th:next-eligible-rule}.
-        This is the consequent of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = 0$.
+        This is the consequent of \myfn{INDH}{0}.
 }
 \begin{equation}
 \label{eq:th-nes-unit-derivation-26}
@@ -4665,18 +4667,19 @@ the consequent.
     \Symbol{\Velement{ines}{0}}.
     \\ \myparbox{%
     \cuz \Eref{eq:th-nes-unit-derivation-12}\text{--}\Eref{eq:th-nes-unit-derivation-24}.
-        This is \Eref{eq:th-nes-unit-derivation-10} with \var{indx} = 0,
-        the basis of the induction.%
+        This is \myfn{INDH}{0}, the basis of the induction.%
     }
 \end{gathered}
 \end{equation}
 
+Recall the definition of \myfnname{INDH}{} at
+\Eref{eq:th-nes-unit-derivation-10}.
 For the step we assume
-the induction hypothesis with $\var{indx} = \var{n}$,
+\myfn{INDH}{\var{n}},
 and the antecedants of
-the induction hypothesis with $\var{indx} = \var{n}+1$,
+\myfn{INDH}{\var{n}+1},
 to show the consequent of
-the induction hypothesis with $\var{indx} = \var{n}+1$.
+\myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-nes-unit-derivation-30}
 \begin{gathered}
@@ -4689,17 +4692,19 @@ the induction hypothesis with $\var{indx} = \var{n}+1$.
     } :
     \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtract 1}} \deplus
     \Symbol{\Velement{ines}{0}}
-    \\ \because \Eref{eq:th-nes-unit-derivation-10}\text{ with }\var{indx} = \var{n}.
+    \\ \myparbox{\cuz{} \myfn{INDH}{\var{n}}, AF step.
+        This is \myfn{INDH}{\var{n}}.%
+    }
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-unit-derivation-32}{%
     $\Vsize{\Vnes{nesP}} = \var{n} +  1 + 3$
-    \cuz{} antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = \var{n}+1$,
+    \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
     AF step, arbitrary \var{nesP}.%
 }
 \mypareq{eq:th-nes-unit-derivation-34}{%
     $\Current{\Velement{nesP}{0}} = \Current{\Velement{nesP}{\Vlastix{nesP}}} = \Vloc{loc}$
-    \cuz{} antecedant of \Eref{eq:th-nes-unit-derivation-10} with $\var{indx} = \var{n}+1$,
+    \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
     AF step, arbitrary \var{loc}.%
 }
 \mypareq{eq:th-nes-unit-derivation-36}{%
@@ -4709,11 +4714,79 @@ the induction hypothesis with $\var{indx} = \var{n}+1$.
     \Eref{eq:th-nes-unit-derivation-34}.%
 }
 \mypareq{eq:th-nes-unit-derivation-38}{%
-    $\Vnes{pre} = \tuple{\Velement{nesp}{0} \ldots \Velement{nesP}{\var{n}+2}}$
+    $\Vnes{pre} = \tuple{\Velement{nesP}{0} \ldots \Velement{nesP}{\var{n}+2}}$
     \cuz \longThref{NES subsequence}{th:nes-subsequence},
     \Eref{eq:th-nes-unit-derivation-32}.%
 }
+\mypareq{eq:th-nes-unit-derivation-40}{%
+    $\Velement{nesP}{0} = \Velement{nesP}{\var{n}+2}$
+    \cuz \longThref{NES subsequence}{th:nes-subsequence},
+    \Eref{eq:th-nes-unit-derivation-36}.%
+}
+\mypareq{eq:th-nes-unit-derivation-42}{%
+    $\Velement{pre}{0} = \Velement{pre}{\var{n}+2}$
+    \cuz \longThref{NES subsequence}{th:nes-subsequence},
+    \Eref{eq:th-nes-unit-derivation-36}.%
+}
+\mypareq{eq:th-nes-unit-derivation-44}{%
+    $\Vsize{pre} = \var{n} + 3$
+    \cuz \Thref{th:nes-subsequence},
+    \Eref{eq:th-nes-unit-derivation-38}.%
+}
+\mypareq{eq:th-nes-unit-derivation-46}{%
+    $\Symbol{\Velement{pre}{\Vlastix{pre}\subtract 1}} \deplus
+    \Symbol{\Velement{pre}{0}}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-30},
+    \Eref{eq:th-nes-unit-derivation-42},
+    \Eref{eq:th-nes-unit-derivation-44}.%
+}
+\mypareq{eq:th-nes-unit-derivation-48}{%
+    $\Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 2}} \deplus
+    \Symbol{\Velement{nesP}{0}}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-38},
+    \Eref{eq:th-nes-unit-derivation-46}.%
+}
+\mypareq{eq:th-nes-unit-derivation-50}{%
+    \myfn{Next-Eligible}{
+        \Velement{nesP}{\Vlastix{nesP}},
+        \Velement{nesP}{\Vlastix{nesP}\subtract 1}}
+    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-unit-derivation-32}.%
+}
+\mypareq{eq:th-nes-unit-derivation-52}{%
+    \myfn{Next-Eligible}{
+        \Velement{nesP}{\Vlastix{nesP}\subtract 1},
+        \Velement{nesP}{\Vlastix{nesP}\subtract 2}}
+    \cuz{} \Dfref{def:next-eligible-sequence},
+    \Eref{eq:th-nes-unit-derivation-32}.%
+}
+\mypareq{eq:th-nes-unit-derivation-54}{%
+    $\Current{\Vlastix{nesP}\subtract 1} = \Current{\Vlastix{nesP}\subtract 2}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-36}.%
+}
+\mypareq{eq:th-nes-unit-derivation-56}{%
+    $\Symbol{\Vlastix{nesP}\subtract 1} \de \Symbol{\Vlastix{nesP}\subtract 2}$
+    \cuz{} \longThref{NES rule}{th:next-eligible-rule},
+    \Eref{eq:th-nes-unit-derivation-50},
+    \Eref{eq:th-nes-unit-derivation-52},
+    \Eref{eq:th-nes-unit-derivation-54}.%
+}
+\mypareq{eq:th-nes-unit-derivation-58}{%
+    $\Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 1}} \deplus
+    \Symbol{\Velement{nesP}{0}}$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-48},
+    \Eref{eq:th-nes-unit-derivation-56}.
+    This is the consequent of \myfn{INDH}{\var{n}+1}
+    \Eref{eq:th-nes-unit-derivation-10}.%
+}
 
+With \Eref{eq:th-nes-unit-derivation-26}
+we have the basis of the induction
+and we have
+its step in the derivation
+\Eref{eq:th-nes-unit-derivation-30}--\Eref{eq:th-nes-unit-derivation-58}.
+With the induction, we have the theorem.
+\myqed
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
