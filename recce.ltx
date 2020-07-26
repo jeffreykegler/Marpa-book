@@ -1119,9 +1119,10 @@ Terminal symbol \Dfref{def:terminal-string} & \Vterm{terminal} \\[.8ex]
 \label{tab:op-notation}.
 \end{table}
 
+In this paper, we will only need to discuss countable cardinalities.
+In particular, every set whose cardinality we investigate will either
+be finite or countably infinite.
 \Vsize{set} is the cardinality of the set \var{set}.
-In this paper, we will only be discussing finite
-and countably infinite set cardinalities.
 The notation $\Vsize{set} \in \naturals$
 indicates that \var{set} is finite.
 The notation $\Vsize{set} = \naturals$
@@ -4819,9 +4820,11 @@ and we note that
 \begin{equation}
 \label{eq:th-nes-finitude-12}
 \begin{gathered}
-\forall \; \Vloc{i} \le \Current{\Velement{nes}{0}} :
-\\ \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
-\le \var{max}
+\left( \begin{gathered}
+    \forall \; \Vloc{i} \le \Current{\Velement{nes}{0}} :
+    \\ \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
+    \le \var{max}
+\end{gathered} \right)
 \\ \implies \Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}}.
 \\ \because \Eref{eq:th-nes-finitude-11}.
 \end{gathered}
@@ -4843,6 +4846,50 @@ The rest of the proof proceeds by reductio.
     $\size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}} > \var{max}$
     \cuz{} \Eref{eq:th-nes-finitude-16}, existential instantiation of \var{i}.
 }
+Since \var{nes} is countable, we can count out to the elements whose current location
+is \Vloc{i} in succession, so that there is first \var{z} such that
+\begin{equation}
+\label{eq:th-nes-finitude-20}
+\begin{gathered}
+   \Current{\Velement{nes}{z}} = \var{i}
+   \\ \land \size{\set{\Vnat{ix} \le \var{z} : \Current{\Velement{nes}{ix}} = \var{i}}}
+       = \var{max}+1.
+   \\ \because \Eref{eq:th-nes-finitude-18}.
+\end{gathered}
+\end{equation}
+Let \Vnes{nes1} be the prefix of \var{nes} such that
+\begin{equation}
+\label{eq:th-nes-finitude-22}
+\Vnes{nes1} = \Velement{nes}{0\ldots \var{z}}
+    \because \longThref{NES subsequence}{th:nes-subsequence},
+        \Eref{eq:th-nes-finitude-20}.
+\end{equation}
+Since \var{nes1} is a sequence, there clearly is a first element of \var{nes1}
+whose current location is \Vloc{i}, call it \Vnat{a}:
+\begin{gather}
+\label{eq:th-nes-finitude-24}
+   \Current{\VVelement{nes1}{a}} = \var{i}
+\\ \label{eq:th-nes-finitude-26}
+   \forall \; \var{ii} < \var{a} : \Current{\VVelement{nes1}{ii}} \neq \var{i}.
+\end{gather}
+We let \var{run} be a new NES
+\begin{equation}
+\label{eq:th-nes-finitude-28}
+\Vnes{run} = \Velement{nes1}{\var{a}\ldots \var{z}}
+    \because \Thref{th:nes-subsequence},
+        \Eref{eq:th-nes-finitude-20}.
+\end{equation}
+We can show that
+\begin{equation}
+\label{eq:th-nes-finitude-30}
+   \forall \; \var{ii} \in \Dom{\var{nes1}} : \Current{\VVelement{nes1}{ii}} = \var{i}
+   \implies \var{a} \le \var{ii} \le \var{z}
+\end{equation}
+From
+\Eref{eq:th-nes-finitude-28} and
+\Eref{eq:th-nes-finitude-30} we see that
+\Vnes{run} contains all the elements of \var{nes1} with current location \var{i}
+so that
 
 \todo{finish proving th:nes-finitude}
 \end{proof}
