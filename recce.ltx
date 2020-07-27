@@ -4885,10 +4885,11 @@ We let \var{run} be a new NES.
     \because \Thref{th:nes-subsequence},
         \Eref{eq:th-nes-finitude-20}.
 \end{equation}
-\Vnes{run} takes its name from its property of begin
+\Vnes{run} is called because it is
 a run of EIM's with the same current location.
-We have not proved this property, we need to,
-and we do so next.
+We have named it after this property, but have yet to
+actually prove that \var{run} has it.
+We do so next.
 \begin{equation}
 \label{eq:th-nes-finitude-28-10}
    \Current{\VVelement{nes1}{a}} = \var{i} = \Current{\VVelement{nes1}{z}}
@@ -4903,7 +4904,13 @@ and we do so next.
     \Eref{eq:th-nes-finitude-28-10}.
 \end{gathered}
 \end{equation}
-\todo{Finish showing run property}
+\begin{equation}
+\label{eq:th-nes-finitude-28-30}
+\begin{gathered}
+    \forall \; \Vnat{ix} \in \Dom{\var{run}} : \Current{\VVelement{run}{ix}} = \Vloc{i}
+    \\ \because \Eref{eq:th-nes-finitude-28}, \Eref{eq:th-nes-finitude-28-20}.
+\end{gathered}
+\end{equation}
 We next characterize the cardinality of \var{run}
 \begin{equation}
 \label{eq:th-nes-finitude-30}
@@ -4922,15 +4929,20 @@ We next characterize the cardinality of \var{run}
     \Eref{eq:th-nes-finitude-30}.
 \end{equation}
 \begin{equation}
-\label{eq:th-nes-finitude-34}
-   \Vsize{run} \ge 
-     \size{\Vocab{\Vint{g}}}+2
-\\ \because \Eref{eq:th-nes-finitude-04},
+\label{eq:th-nes-finitude-33}
+   \Vsize{run} = \var{max}+1
+   \because \Eref{eq:th-nes-finitude-28-30},
     \Eref{eq:th-nes-finitude-32}.
 \end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-34}
+   \Vsize{run} =
+     \size{\Vocab{\Vint{g}}}+2
+\\ \because \Eref{eq:th-nes-finitude-04},
+    \Eref{eq:th-nes-finitude-33}.
+\end{equation}
 
-For the moment, and for reasons that will soon be clear,
-let's look at a prefix of \var{run}.
+We now look at a prefix of \var{run}.
 \begin{equation}
 \label{eq:th-nes-finitude-36}
 \Veimseq{prerun} = \Velement{run}{0\ldots \size{\Vocab{\Vint{g}}}}
@@ -4975,6 +4987,45 @@ Let
 In \Eref{eq:th-nes-finitude-40},
 we know that \Velement{run}{\var{zz}+1} exists because of
 \Eref{eq:th-nes-finitude-34}.
+\begin{equation}
+\label{eq:th-nes-finitude-42}
+    \Symbol{\VVelement{run}{aa}} = \Symbol{\VVelement{run}{zz}}
+    \because \Eref{eq:th-nes-finitude-37},
+        \Eref{eq:th-nes-finitude-38}.
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-44}
+\begin{gathered}
+    \Symbol{\Velement{cycle}{0}} = \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}}
+    \\ \because \Eref{eq:th-nes-finitude-37}, \Eref{eq:th-nes-finitude-38}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-46}
+    \var{aa} \neq \var{zz} \because \Eref{eq:th-nes-finitude-38}.
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-48}
+    \Vsize{cycle} \ge 3 \because \Eref{eq:th-nes-finitude-40}, \Eref{eq:th-nes-finitude-46}.
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-52}
+\begin{gathered}
+        \forall \; \Vnat{ix} \in \Dom{\var{cycle}} : \Current{\VVelement{run}{cycle}} = \Vloc{i}
+        \\ \because \Eref{eq:th-nes-finitude-28-30}, \Eref{eq:th-nes-finitude-40}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-finitude-54}
+\begin{gathered}
+    \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}} \deplus
+    \Symbol{\Velement{cycle}{0}}
+    \\ \because \longThref{NES unit derivation}{th:nes-unit-derivation},
+        \Eref{eq:th-nes-finitude-40},
+        \Eref{eq:th-nes-finitude-48},
+        \Eref{eq:th-nes-finitude-52}.
+\end{gathered}
+\end{equation}
 
 \todo{finish proving th:nes-finitude}
 \end{proof}
