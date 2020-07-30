@@ -4874,13 +4874,31 @@ Let \Vnes{nes1} be the prefix of \var{nes} such that
         \Eref{eq:th-nes-finitude-20}.
 \end{equation}
 \begin{equation}
+\label{eq:th-nes-finitude-22-50}
+    \forall \; \Vnat{ix} \le \var{z} : \VVelement{nes1}{ix} = \VVelement{nes}{ix}
+    \because \Eref{eq:th-nes-finitude-22}.
+\end{equation}
+\begin{equation}
 \label{eq:th-nes-finitude-23}
 \begin{gathered}
    \Vsize{nes1} \ge \var{max}+1
        \because \Eref{eq:th-nes-finitude-20}, \Eref{eq:th-nes-finitude-22}.
 \end{gathered}
 \end{equation}
-Since \var{nes1} is a sequence, there clearly is a first element of \var{nes1}
+\begin{equation}
+\label{eq:th-nes-finitude-23b}
+\begin{gathered}
+    \size{\set{\Vnat{ix} \in \Dom{\var{nes1}} : \Current{\VVelement{nes1}{ix}} = \var{i}}}
+       = \var{max}+1
+    \\ \because \Eref{eq:th-nes-finitude-20},
+            \Eref{eq:th-nes-finitude-22},
+            \Eref{eq:th-nes-finitude-22-50}.
+\end{gathered}
+\end{equation}
+Since \var{nes1} is a sequence
+and contains at least one element whose current location is \Vloc{i}
+\Eref{eq:th-nes-finitude-23b},
+there clearly is a first element of \var{nes1}
 whose current location is \Vloc{i}, call it \Vnat{a}:
 \begin{gather}
 \label{eq:th-nes-finitude-24a}
@@ -4896,7 +4914,7 @@ We let \var{run} be a new NES.
 \label{eq:th-nes-finitude-28}
 \Vnes{run} = \Velement{nes1}{\var{a}\ldots \var{z}}
     \because \Thref{th:nes-subsequence},
-        \Eref{eq:th-nes-finitude-20},
+        \Eref{eq:th-nes-finitude-22},
         \Eref{eq:th-nes-finitude-24a}.
 \end{equation}
 \Vnes{run} is so called because it is
@@ -4908,7 +4926,8 @@ that \var{run} actually has this property.
 \label{eq:th-nes-finitude-28-10}
 \begin{gathered}
    \Current{\VVelement{nes1}{a}} = \var{i} = \Current{\VVelement{nes1}{z}}
-       \\ \because \Eref{eq:th-nes-finitude-20}, \Eref{eq:th-nes-finitude-24b}.
+       \\ \because \Eref{eq:th-nes-finitude-20}, \Eref{eq:th-nes-finitude-22-50},
+       \Eref{eq:th-nes-finitude-24b}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -4939,18 +4958,11 @@ We next characterize the cardinality of \var{run}
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-nes-finitude-32}
-\begin{gathered}
-    \size{\set{\Vnat{ix} \in \Dom{\var{nes1}} : \Current{\VVelement{nes1}{ix}} = \var{i}}}
-       = \var{max}+1
-    \\ \because \Eref{eq:th-nes-finitude-20},
-            \Eref{eq:th-nes-finitude-22}.
-\end{gathered}
-\end{equation}
-\begin{equation}
 \label{eq:th-nes-finitude-33}
    \Vsize{run} = \var{max}+1
-   \because \Eref{eq:th-nes-finitude-20},
+   \because
+    \Eref{eq:th-nes-finitude-23b}
+    \Eref{eq:th-nes-finitude-28},
    \Eref{eq:th-nes-finitude-28-30},
     \Eref{eq:th-nes-finitude-30}.
 \end{equation}
@@ -4977,7 +4989,8 @@ and since there are only
 \Vocab{\Vint{g}} symbols in \Vint{g},
 and since
 \var{prerun} contains
-$\Vocab{\Vint{g}}+1$ EIM's,
+$\Vocab{\Vint{g}}+1$ EIM's
+\Eref{eq:th-nes-finitude-36},
 at least one symbol must be used twice as the symbol of an
 EIM in \var{prerun}.
 Let this symbol be \Vsym{cycle-lhs},
@@ -5059,22 +5072,25 @@ In \Eref{eq:th-nes-finitude-54}, recall that we know that
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-finitude-58}{\Vint{g} does not contain a cycle
-    \cuz{} \longDfref{Marpa internal grammar}{def:internal-grammar}.%
+    \cuz{} \longDfref{Marpa internal grammar}{def:internal-grammar}.
+    This contradicts \Eref{eq:th-nes-finitude-56} and concludes
+    the reductio
+        beginning at \Eref{eq:th-nes-finitude-58}.%
 }
 \Eref{eq:th-nes-finitude-56} contradicts
-\Eref{eq:th-nes-finitude-58} and from this we may conclude the reductio.
 \begin{equation}
 \label{eq:th-nes-finitude-60}
 \begin{gathered}
     \Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1)
-    \\ \because \text{reductio of \Eref{eq:th-nes-finitude-14} at
-        \Eref{eq:th-nes-finitude-14}--\Eref{eq:th-nes-finitude-58}.}
+    \\ \myparbox{\cuz{} negation of \Eref{eq:th-nes-finitude-14}
+        by reductio \Eref{eq:th-nes-finitude-14}--\Eref{eq:th-nes-finitude-58}.%
+    }
 \end{gathered}
 \end{equation}
 
 \Eref{eq:th-nes-finitude-60}
 is \Eref{eq:th-nes-finitude-02} of the theorem.
-We may conclude \Eref{eq:th-nes-finitude-06} directly
+We conclude \Eref{eq:th-nes-finitude-06} directly
 from \Eref{eq:th-nes-finitude-02},
 which completes the proof.
 \myqed
