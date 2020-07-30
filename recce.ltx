@@ -4812,7 +4812,7 @@ Let \var{nes} be an arbitrary NES.
 Then
 \begin{gather}
 \label{eq:th-nes-finitude-02}
-\Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}},
+\Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1),
 \\ \label{eq:th-nes-finitude-04}
     \text{where } \Vnat{max} = \size{\Vocab{\Vint{g}}}+1.
 \end{gather}
@@ -4835,12 +4835,12 @@ We first note that
     \\ \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
     \le \var{max}
 \end{gathered} \right)
-\\ \implies \Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}}.
+\\ \implies \Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1).
 \\ \because \Eref{eq:th-nes-finitude-02}, \Eref{eq:th-nes-finitude-04}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-finitude-14}{%
-    $\Vsize{nes} > \var{max} \times \Current{\Velement{nes}{0}}$
+    $\Vsize{nes} > \var{max} \times (\Current{\Velement{nes}{0}}+1)$
     \cuz{} negation of \Eref{eq:th-nes-finitude-02}, AF reductio.%
 }
 \mypareq{eq:th-nes-finitude-16}{%
@@ -4883,7 +4883,9 @@ Let \Vnes{nes1} be the prefix of \var{nes} such that
 Since \var{nes1} is a sequence, there clearly is a first element of \var{nes1}
 whose current location is \Vloc{i}, call it \Vnat{a}:
 \begin{gather}
-\label{eq:th-nes-finitude-24}
+\label{eq:th-nes-finitude-24a}
+   \Vnat{a} \le \Vlastix{nes1}
+\\ \label{eq:th-nes-finitude-24b}
    \Current{\VVelement{nes1}{a}} = \var{i}
 \\ \label{eq:th-nes-finitude-26}
    \forall \; \var{ii} < \var{a} : \Current{\VVelement{nes1}{ii}} \neq \var{i}.
@@ -4894,17 +4896,20 @@ We let \var{run} be a new NES.
 \label{eq:th-nes-finitude-28}
 \Vnes{run} = \Velement{nes1}{\var{a}\ldots \var{z}}
     \because \Thref{th:nes-subsequence},
-        \Eref{eq:th-nes-finitude-20}.
+        \Eref{eq:th-nes-finitude-20},
+        \Eref{eq:th-nes-finitude-24a}.
 \end{equation}
-\Vnes{run} is called because it is
-a run of EIM's with the same current location.
-We have named it after this property, but have yet to
-actually prove that \var{run} has it.
-We do so next.
+\Vnes{run} is so called because it is
+a run of EIM's with the property that
+they share the same current location.
+We next prove
+that \var{run} actually has this property.
 \begin{equation}
 \label{eq:th-nes-finitude-28-10}
+\begin{gathered}
    \Current{\VVelement{nes1}{a}} = \var{i} = \Current{\VVelement{nes1}{z}}
-       \because \Eref{eq:th-nes-finitude-20}, \Eref{eq:th-nes-finitude-24}.
+       \\ \because \Eref{eq:th-nes-finitude-20}, \Eref{eq:th-nes-finitude-24b}.
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finitude-28-20}
@@ -4929,21 +4934,25 @@ We next characterize the cardinality of \var{run}
    \forall \; \var{ii} \in \Dom{\var{nes1}} :
    \\ \Current{\VVelement{nes1}{ii}} = \var{i}
    \implies \var{a} \le \var{ii} \le \var{z}
-   \\ \because \Eref{eq:th-nes-finitude-20},
+   \\ \because \Eref{eq:th-nes-finitude-22},
     \Eref{eq:th-nes-finitude-26}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finitude-32}
-   \Vsize{run} \ge \var{max}+1
-   \because \Eref{eq:th-nes-finitude-20},
-    \Eref{eq:th-nes-finitude-30}.
+\begin{gathered}
+    \size{\set{\Vnat{ix} \in \Dom{\var{nes1}} : \Current{\VVelement{nes1}{ix}} = \var{i}}}
+       = \var{max}+1
+    \\ \because \Eref{eq:th-nes-finitude-20},
+            \Eref{eq:th-nes-finitude-22}.
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finitude-33}
    \Vsize{run} = \var{max}+1
-   \because \Eref{eq:th-nes-finitude-28-30},
-    \Eref{eq:th-nes-finitude-32}.
+   \because \Eref{eq:th-nes-finitude-20},
+   \Eref{eq:th-nes-finitude-28-30},
+    \Eref{eq:th-nes-finitude-30}.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finitude-34}
@@ -4956,7 +4965,7 @@ We next characterize the cardinality of \var{run}
 We now look at a prefix of \var{run}.
 \begin{equation}
 \label{eq:th-nes-finitude-36}
-\Veimseq{prerun} = \Velement{run}{0\ldots \size{\Vocab{\Vint{g}}}}
+\Veimseq{prerun} = \var{run}\left[ 0\ldots \size{\Vocab{\Vint{g}}} \right].
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finitude-37}
@@ -4997,7 +5006,7 @@ Let
 \end{equation}
 In \Eref{eq:th-nes-finitude-40},
 we know that \Velement{run}{\var{zz}+1} exists because of
-\Eref{eq:th-nes-finitude-34}.
+\Eref{eq:th-nes-finitude-34} and \Eref{eq:th-nes-finitude-36}.
 \begin{equation}
 \label{eq:th-nes-finitude-42}
     \Symbol{\VVelement{run}{aa}} = \Symbol{\VVelement{run}{zz}}
@@ -5008,7 +5017,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \label{eq:th-nes-finitude-44}
 \begin{gathered}
     \Symbol{\Velement{cycle}{0}} = \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}}
-    \\ \because \Eref{eq:th-nes-finitude-37}, \Eref{eq:th-nes-finitude-38}.
+    \\ \because \Eref{eq:th-nes-finitude-40}, \Eref{eq:th-nes-finitude-42}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5031,12 +5040,14 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{gathered}
     \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}} \deplus
     \Symbol{\Velement{cycle}{0}}
-    \\ \because \longThref{NES unit derivation}{th:nes-unit-derivation},
-        \Eref{eq:th-nes-finitude-40},
+    \\ \myparbox{\longThref{NES unit derivation}{th:nes-unit-derivation},
         \Eref{eq:th-nes-finitude-48},
-        \Eref{eq:th-nes-finitude-52}.
+        \Eref{eq:th-nes-finitude-52}.%
+    }
 \end{gathered}
 \end{equation}
+In \Eref{eq:th-nes-finitude-54}, recall that we know that
+        $\var{cycle} \in \type{NES}$ by \Eref{eq:th-nes-finitude-40}.
 \begin{equation}
 \label{eq:th-nes-finitude-56}
 \begin{gathered}
@@ -5055,7 +5066,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{equation}
 \label{eq:th-nes-finitude-60}
 \begin{gathered}
-    \Vsize{nes} \le \var{max} \times \Current{\Velement{nes}{0}}
+    \Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1)
     \\ \because \text{reductio of \Eref{eq:th-nes-finitude-14} at
         \Eref{eq:th-nes-finitude-14}--\Eref{eq:th-nes-finitude-58}.}
 \end{gathered}
@@ -5064,7 +5075,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \Eref{eq:th-nes-finitude-60}
 is \Eref{eq:th-nes-finitude-02} of the theorem.
 We may conclude \Eref{eq:th-nes-finitude-06} directly
-from \Eref{eq:th-nes-finitude-02}
+from \Eref{eq:th-nes-finitude-02},
 which completes the proof.
 \myqed
 \end{proof}
