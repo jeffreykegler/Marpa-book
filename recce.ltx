@@ -5288,36 +5288,55 @@ We will prove that there is at most one LIM
 in the set \myfn{lim}{\var{src}}, but for now we
 cannot assume that.
 
+\begin{definition}[Leo source EIM]
+\label{def:leo-source-eim}
+Informally, a \dfn{Leo source EIM}, or \dfn{Leo source},
+is an EIM which is memoized by an Leo item.
+That is, \Veim{src} is a Leo source EIM
+if and only if
+\[
+    \size{\myfn{lims}{\var{src}}} > 0.
+\]
+If $\mylim{\ell} \in \myfn{lims}{\var{src}}$,
+we say that the EIM \Veim{src} is the \dfn{source} of $\ell$,
+and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Leo source sequence {[}LSS{]}]
+\label{def:leo-source-sequence}
+A \dfn{Leo source EIM sequence},
+or \dfn{Leo source sequence} is an NES,
+every element of which is a Leo source EIM.
+That is,
+\begin{equation}
+\label{eq:def-leo-source-sequence-10}
+\type{LSS} = \set{
+\begin{gathered}
+    \var{nes} \in \type{NES} :
+    \\ \forall \; \Vnat{i} \in \Dom{\var{nes}} : 
+        \size{\myfn{lims}{\VVelement{nes}{i}}} > 0
+\end{gathered}
+}.
+\end{equation}
+If \var{lss} is an LSS,
+We say that \Velement{lss}{0} is the \dfn{bottom} of \var{lss},
+and that \Velement{lss}{\Vlastix{lss}} is the \dfn{top} of \var{lss}.
+\dispEnd
+\end{definition}
+
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
 \begin{definition}[LIM validity -- obsolete]
 \label{def:lim-validity}
 \end{definition}[Leo source]
 
-\begin{definition}[Leo source]
+\begin{definition}[Leo source relation -- obsolete]
 \label{def:leo-source-relation}
-Leo items ``stand in'' for an EIM source.
-\begin{equation*}
-\begin{gathered}
-    \myfn{Source-Rel}{\Veim{source},\mylim{\ell}} \defined \\
-   \var{source} \in \LeoEligible{\ES{\Current{\ell}}} \\
-   \land \; \Transition{\ell} = \Postdot{\var{source}}.
-\end{gathered}
-\end{equation*}
-We say that the EIM \Veim{src} is the \dfn{source} of \mylim{\ell}.
-\dispEnd
 \end{definition}
 
-\begin{definition}[LIM of EIM]
+\begin{definition}[LIM of EIM -- obsolete]
 \label{def:lim-of-eim}
-\begin{equation*}
-\begin{gathered}
-    \myfn{LIM-Of-Rel}{\mylim{\ell},\Veim{source}} \defined
-    \myfn{Source-Rel}{\Veim{source},\mylim{\ell}}
-\end{gathered}
-\end{equation*}
-We say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{source}.
-\dispEnd
 \end{definition}
 
 \begin{theorem}[Leo source connection]
@@ -6136,64 +6155,9 @@ then
 
 \subsection{Leo source sequence}
 
-\begin{definition}[Leo source sequence {[}LSS{]}]
-\label{def:leo-source-sequence}
-A \dfn{Leo source EIM sequence},
-or \dfn{Leo source sequence},
-is an EIM sequence defined by recurrence
-\begin{equation}
-\label{eq:def-leo-source-sequence-30}
-\begin{gathered}
-    \forall \; 0 < \var{n} \le \Vlastix{seq} : \exists \; \Veim{next} : \\
-    \var{next} = \NextSource{\Velement{seq}{\var{n}\subtract 1}} \\
-    \land \; \VVelement{seq}{n} = \var{next},
-\end{gathered}
-\end{equation}
-with the initial condition
-\begin{equation}
-\label{eq:def-leo-source-sequence-40}
-    \exists \mylim{\ell} :
-    \left(
-    \begin{gathered}
-        \Veim{bottom} = \Source{\ell} \\
-        \land \; \Velement{seq}{0} = \Veim{bottom} \\
-        \land \; \Valid{\ell}.
-    \end{gathered}
-    \right)
-\end{equation}
-We say that \Veim{bottom} is the \dfn{bottom} of \var{seq}.
-The type \type{LSS} is the set of Leo source EIM sequences.
-\dispEnd
-\end{definition}
-
-\begin{theorem}[Leo source existence]
+\begin{theorem}[Leo source existence -- obsolete]
 \label{th:leo-source-existence}
-Every EIM of an LSS is the source
-of at least one valid LIM.
-That is,
-\[
-\begin{gathered}
-\forall \; 0 < \Vnat{j} \le \Vlastix{\Vlss{lss}} :
-    \Valid{\mylim{\ell}} \land \Source{\ell} = \VVelement{lss}{j}.
-\end{gathered}
-\]
 \end{theorem}
-
-\begin{proof}
-The theorem follows almost immediately from the
-definition of Leo source sequence
-\Dfref{def:leo-source-sequence}.
-Let \Veimseq{seq} be
-an arbitary LSS.
-For \Velement{seq}{0}, the theorem follows from
-\Eref{eq:def-leo-source-sequence-40} in \Dfref{def:leo-source-sequence}.
-For the elements \Velement{seq}{1\ldots \Vlastix{seq}},
-the theorem follows from
-\Eref{eq:def-leo-source-sequence-30} in \Dfref{def:leo-source-sequence}
-and from the definition
-of \longThref{Next source function}{th:next-source-fn}.
-\myqed
-\end{proof}
 
 \begin{theorem}[Proper prefix LIM predecessor]
 Let \Vlss{lss} be a Leo source EIM sequence.
@@ -6324,65 +6288,9 @@ With both directions of the equivalence shown,
 we have the theorem.
 \end{proof}
 
-\begin{theorem}[Leo source subsequence]
+\begin{theorem}[Leo source subsequence -- obsolete]
 \label{th:leo-source-subsequence-validity}
-If
-\begin{gather}
-\label{eq:th-leo-source-subsequence-validity-02}
-\var{long} \in \type{LSS} \\
-\label{eq:th-leo-source-subsequence-validity-03}
-\land \; 0 \le \var{i} \le \var{j} \le \Vlastix{\Vlss{long}}
-\end{gather}
-then
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-04}
-\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS}.
-\end{equation}
 \end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-12}
-\begin{gathered}
-    \forall \; 0 < \var{n} \le \Vlastix{long} : \exists \; \Veim{next} : \\
-    \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
-    \land \; \VVelement{long}{n} = \var{next} \\
-     \because \Eref{eq:def-leo-source-sequence-30}
-            \text{ in } \Dfref{def:leo-source-sequence},
-     \Eref{eq:th-leo-source-subsequence-validity-02}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-16}
-\begin{gathered}
-        \exists \; \mylim{\ell} : \Source{\ell} = \VVelement{long}{i} \land
-            \Valid{\ell} \\
-     \because \Thref{th:leo-source-existence},
-     \Eref{eq:th-leo-source-subsequence-validity-02},
-     \Eref{eq:th-leo-source-subsequence-validity-03}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-18}
-\begin{gathered}
-    \forall \var{n} \in \set{\var{m} : \var{i} < \var{m} \le \var{j}} : \exists \; \Veim{next} : \\
-    \NextSource{\Velement{long}{\var{n}\subtract 1}} = \var{next} \\
-    \land \; \VVelement{long}{n} = \var{next} \\
-     \because \Eref{eq:th-leo-source-subsequence-validity-03},
-       \Eref{eq:th-leo-source-subsequence-validity-12}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-source-subsequence-validity-22}
-\begin{gathered}
-\Velement{long}{\var{i}\ldots\var{j}} \in \type{LSS} \\
-    \because \Dfref{def:leo-source-sequence},
-    \Eref{eq:th-leo-source-subsequence-validity-16},
-    \Eref{eq:th-leo-source-subsequence-validity-18}.
-        \quad \myqed
-\end{gathered}
-\end{equation}
-\end{proof}
 
 \begin{theorem}[LSS finiteness]
 \label{th:leo-source-sequence-finiteness}
