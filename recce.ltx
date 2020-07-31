@@ -5395,6 +5395,42 @@ the theorem.
 \myqed
 \end{proof}
 
+\begin{theorem}[LSS trichotomy]
+\label{th:lss-trichotomy}
+If two LSS's of the same length have the same initial element,
+then there are there mutually exclusive possibilites:
+\begin{itemize}
+\item they are identical;
+\item the first LSS is a proper prefix of the second;
+\item the second LSS is a proper prefix of the first.
+\end{itemize}
+That is, if
+\begin{gather}
+\label{eq:th-lss-trichotomy-02}
+\var{lss1} \in \type{LSS}
+\\ \label{eq:th-lss-trichotomy-04}
+\; \land \; \var{lss2} \in \type{LSS}
+\\ \label{eq:th-lss-trichotomy-06}
+\land \; \Velement{lss1}{0} = \Velement{lss2}{0}
+\end{gather}
+then
+\begin{gather}
+\var{lss1} = \var{lss2}
+\\
+\lor \; \left(
+    \Vsize{lss1} < \Vsize{lss2} \land \var{lss1} = \Velement{lss2}{0\ldots \Vlastix{lss1}}
+    \right)
+\\
+\lor \; \left(
+    \Vsize{lss2} < \Vsize{lss1} \land \var{lss2} = \Velement{lss1}{0\ldots \Vlastix{lss2}}
+    \right).
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\todo{Finish proving this}
+\end{proof}
+
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
 \begin{definition}[LIM validity -- obsolete]
@@ -6577,97 +6613,6 @@ have the same bottom, then they are identical.
 \var{lss1} = \var{lss2} \because \Eref{eq:th-lss-uniqueness-by-length-12},
     \Eref{eq:th-lss-uniqueness-by-length-16}. \quad \myqed
 \end{equation}
-\end{proof}
-
-\begin{theorem}[LSS trichotomy]
-\label{th:lss-trichotomy}
-Let
-\begin{gather}
-\label{eq:th-lss-trichotomy-03a}
-\var{lss1} \in \type{LSS} \\
-\label{eq:th-lss-trichotomy-03b}
-\land \; \var{lss2} \in \type{LSS} \\
-\label{eq:th-lss-trichotomy-03c}
-\land \; \Velement{lss1}{0} = \Velement{lss2}{0}.
-\end{gather}
-Then one of the following is true:
-\begin{gather}
-\label{eq:th-lss-trichotomy-08a}
-\var{lss1} = \var{lss2}. \\
-\label{eq:th-lss-trichotomy-08b}
-\text{\var{lss1} is a proper prefix of \var{lss2}.} \\
-\label{eq:th-lss-trichotomy-08c}
-\text{\var{lss2} is a proper prefix of \var{lss1}.}
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-The proof is by cases.
-For the first case we assume that $\Vlastix{lss1} = \Vlastix{lss2}$.
-By assumption for the theorem \Eref{eq:th-lss-trichotomy-03c},
-\var{lss1} and \var{lss2} have the same bottom,
-so that
-\begin{equation}
-\myparbox{$\var{lss1} = \var{lss2}$ \cuz{} \Thref{th:lss-uniqueness-by-length}.
-    This is \Eref{eq:th-lss-trichotomy-08a}.%
-}
-\end{equation}
-
-It remains to show the cases where $\Vlastix{lss1} \neq \Vlastix{lss2}$.
-For the second case we assume that
-\begin{equation}
-\label{eq:th-lss-trichotomy-12}
-\Vlastix{lss1} < \Vlastix{lss2} \because \text{AF second case.}
-\end{equation}
-\begin{equation}
-\label{eq:th-lss-trichotomy-14}
-   \begin{gathered}
-   \forall \; 0 \le \var{j} \le \Vlastix{lss1} :
-       \VVelement{lss1}{j} = \VVelement{lss2}{j} \\
-    \myparbox{\cuz{} \Thref{th:lss-containment} with $\var{offset}=0$,
-        \Eref{eq:th-lss-trichotomy-03a},
-        \Eref{eq:th-lss-trichotomy-03b},
-        \Eref{eq:th-lss-trichotomy-03c},
-        \Eref{eq:th-lss-trichotomy-12}.%
-    }
-   \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-lss-trichotomy-16}
-\myparbox{\var{lss1} is a proper prefix of \var{lss2}
-        \cuz{} \Eref{eq:th-lss-trichotomy-12},
-        \Eref{eq:th-lss-trichotomy-14}.
-        This is \Eref{eq:th-lss-trichotomy-08b}.%
-    }
-\end{equation}
-
-It remains to consider
-\begin{equation}
-\label{eq:th-lss-trichotomy-18}
-\Vlastix{lss2} < \Vlastix{lss1} \because \text{AF third case.}
-\end{equation}
-We note that \Eref{eq:th-lss-trichotomy-18}
-is \Eref{eq:th-lss-trichotomy-12} with
-\var{lss1} and \var{lss2} reversed,
-and that the choice made in
-\Eref{eq:th-lss-trichotomy-12} was arbitrary.
-If we follow the same line of reasoning as in
-\Eref{eq:th-lss-trichotomy-12}--\Eref{eq:th-lss-trichotomy-16},
-reversing \var{lss1} and \var{lss2}, we conclude that,
-in our third case, that
-\begin{equation}
-\myparbox{\var{lss2} is a proper prefix of \var{lss1}.
-        This is \Eref{eq:th-lss-trichotomy-08c}.%
-    }
-\end{equation}
-
-We have completed the cases and shown the relationship between
-\var{lss1} and \var{lss2} is described by one of
-\Eref{eq:th-lss-trichotomy-08a},
-\Eref{eq:th-lss-trichotomy-08b}, and
-\Eref{eq:th-lss-trichotomy-08c},
-which is what we needed to show for the theorem.
-\myqed
 \end{proof}
 
 \subsection{Maximal Leo source sequences}
