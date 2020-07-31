@@ -5242,53 +5242,46 @@ and has a symmetrical proof.
 \myqed
 \end{proof}
 
-\todo{Rewrite LIM validity}
-\begin{definition}[LIM validity]
-\label{def:lim-validity}
-\mylim{\ell} is \dfn{valid}
-if and only if
-\Eref{eq:LIM-valid-20},
-\Eref{eq:LIM-valid-22}, and
-\Eref{eq:LIM-valid-24} are true.
+\begin{definition}[LIMs of an EIM]
+\label{def:lims-of-eim}
+The LIMs of an EIM are defined recursively.
+
+Let \Veim{src} be an arbitrary EIM.
+Then the set of LIM's of \var{src},
+\myfn{lims}{\var{src}}, is defined as
+\begin{itemize}
+\item the empty set, $\set{}$, if \var{src} is not valid.
+\item
+    $\set{\tuple{ \DR{\var{src}}, \Postdot{\var{src}}, \Origin{\var{src}}, \Current{\var{src}}}}$,
+    \linebreak
+    if $\size{\myfn{next-lims}{\var{src}}} = 0$.
+\item
+    $\set{\tuple{ \DR{\ell}, \Postdot{\var{src}}, \Origin{\ell}, \Current{\var{src}}}}$,
+    \linebreak
+        where $\ell \in \myfn{next-lims}{\var{src}}$, otherwise.
+\end{itemize}
+where
 \begin{equation}
-\label{eq:LIM-valid-20}
-\Valid{\Source{\ell}}.
-\end{equation}
-%
-\begin{equation}
-\label{eq:LIM-valid-22}
+\nonumber
 \begin{gathered}
-\left(
-    \neg \exists \; \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\Source{\ell}}
-\right) \\
-\implies
-\left( \begin{gathered}
-\DR{\ell} = \DR{\Source{\ell}} \\
-\land \; \Origin{\ell} = \Origin{\Source{\ell}}
-\end{gathered} \right).
+\myfn{next-lims}{\var{src}} \defined
+\\ \set{ \ell \in \type{LIM} :
+    \myfn{Next-Eligible}{\Veim{next},\Veim{src}}
+    \land \; \ell \in \myfn{lims}{\var{next}}
+}.  \quad \dispEnd
 \end{gathered}
 \end{equation}
-%
-\begin{equation}
-\label{eq:LIM-valid-24}
-\begin{gathered}
-\left(
-    \exists \; \Veim{next} : \myfn{Next-Source-Rel}{\var{next},\Source{\ell}}
-\right) \\
-\implies
-\left( \begin{gathered}
-\exists \mylim{\ell2} : \myfn{LIM-Of-Rel}{\ell2, \var{next}} \\
-\land \DR{\ell} = \DR{\ell2}
-\land \; \Origin{\ell} = \Origin{\ell2}
-\end{gathered} \right).
-\end{gathered}
-\end{equation}
-The boolean function \Valid{\Vlim{x}} is true
-if and only if \Vlim{x} is valid.
-\dispEnd
 \end{definition}
 
+We will prove that there is at most one LIM
+in the set \myfn{lim}{src}, but for now we
+cannot assume that.
+
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
+
+\begin{definition}[LIM validity -- obsolete]
+\label{def:lim-validity}
+\end{definition}[Leo source]
 
 \begin{definition}[Leo source]
 \label{def:leo-source-relation}
