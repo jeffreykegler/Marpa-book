@@ -5395,6 +5395,63 @@ the theorem.
 \myqed
 \end{proof}
 
+\begin{theorem}[LSS subsequence]
+\label{th:lss-subsequence}
+Every subsequence of an LSS is an LSS.
+That is,
+\begin{gather}
+\label{eq:th-lss-subsequence-02}
+\var{seq} \in \type{LSS}
+\\ \label{eq:th-lss-subsequence-04}
+\land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
+\\ \label{eq:th-lss-subsequence-06}
+\land \; \var{subseq} = \tuple{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
+\\ \nonumber
+\implies
+\\ \label{eq:th-lss-subsequence-08}
+\var{subseq} \in \type{LSS}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-lss-subsequence-10}{%
+   $\var{seq} \in \type{NES}$
+        \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+        \Eref{eq:th-lss-subsequence-02}.%
+}
+\mypareq{eq:th-lss-subsequence-12}{%
+   $\var{subseq} \in \type{NES}$
+        \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+        \Eref{eq:th-lss-subsequence-04},
+        \Eref{eq:th-lss-subsequence-06},
+        \Eref{eq:th-lss-subsequence-10}.%
+}
+\begin{equation}
+\label{eq:th-lss-subsequence-20}
+\begin{gathered}
+\forall \; \Vnat{i} \in \Dom{\var{seq}} : 
+        \size{\myfn{lims}{\VVelement{seq}{i}}} > 0
+    \because \Dfref{def:next-eligible-sequence},
+        \Eref{eq:th-lss-subsequence-02}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-lss-subsequence-22}
+\begin{gathered}
+    \forall \; \Vnat{i} \in \Dom{\var{subseq}} : 
+        \size{\myfn{lims}{\VVelement{subseq}{i}}} > 0
+    \\ \because \Eref{eq:th-lss-subsequence-06},
+        \Eref{eq:th-lss-subsequence-20}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-lss-subsequence-24}{%
+   $\var{subseq} \in \type{LSS}$
+        \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+        \Eref{eq:th-lss-subsequence-10}
+        \Eref{eq:th-lss-subsequence-22}. \quad \myqed
+}
+\end{proof}
+
 \begin{theorem}[LSS trichotomy]
 \label{th:lss-trichotomy}
 If two LSS's of the same length have the same initial element,
@@ -5415,6 +5472,7 @@ That is, if
 \end{gather}
 then
 \begin{gather}
+\\ \label{eq:th-lss-trichotomy-08-10}
 \var{lss1} = \var{lss2}
 \\
 \lor \; \left(
@@ -5428,6 +5486,26 @@ then
 \end{theorem}
 
 \begin{proof}
+We assume, for a reduction, that there are two LSS's,
+\var{lss1} and \var{lss2}, which do not fit any case of the LSS trichotomy.
+If $\Vsize{lss1} = \Vsize{lss2}$, by
+\longThref{LSS uniqueness}{th:lss-uniqueness} and
+\Eref{eq:th-lss-trichotomy-06},
+we have 
+$\var{lss1} = \var{lss2}$, which is the first case
+of the trichotomy, and which therefore shows the reductio for
+$\Vsize{lss1} = \Vsize{lss2}$.
+Therefore, for rest of the reductio, we
+assume that $\Vsize{lss1} \neq \Vsize{lss2}$.
+
+Without loss of generality, we can assume that
+\mypareq{eq:th-lss-trichotomy-20}{%
+    \Vsize{lss1} < \Vsize{lss2} \cuz{} AF case, WLOG.
+}
+\mypareq{eq:th-lss-trichotomy-22}{%
+    $\Vlss{preLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
+    \cuz{} TODO
+}
 \todo{Finish proving this}
 \end{proof}
 
