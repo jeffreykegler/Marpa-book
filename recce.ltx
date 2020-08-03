@@ -277,6 +277,7 @@
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\mylim{\var{#1}}}
 \newcommand{\Vlss}[1]{\lss{\var{#1}}}
+\newcommand{\Vlssset}[1]{\Tvarset{#1}{LSS}}
 \newcommand{\Vlp}[1]{\Tvar{#1}{LP}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
@@ -5543,60 +5544,50 @@ to \Eref{eq:th-lss-trichotomy-18}--\Eref{eq:th-lss-trichotomy-32}.
 
 \begin{theorem}[Maximal LSS uniqueness]
 \label{th:maximal-lss-uniqueness}
-If two maximal LSS's have the same bottom EIM,
-they are identical.  That is, if
-\begin{gather}
-\label{eq:th-maximal-lss-uniqueness-02}
-\Vlss{lss1} \in \type{LSS} \land \Vlss{lss2} \in \type{LSS}
-\\ \label{eq:th-maximal-lss-uniqueness-04}
-\text{\Vlss{lss1} and \Vlss{lss2} are maximal}
-\\ \label{eq:th-maximal-lss-uniqueness-06}
-\land \; \Velement{lss1}{0} = \Velement{lss2}{0}
-\end{gather}
-then
-\mypareq{eq:th-maximal-lss-uniqueness-08}{%
-    \var{lss1} = \var{lss2}.
-}
-\end{theorem}
-
-\begin{proof}
-We proceed by assuming the antecedants of the theorem,
-to show its consequent.
-\mypareq{eq:th-maximal-lss-uniqueness-10}{%
-    $\var{lss1} \neq \var{lss2}$ \cuz
-    consequent \Eref{eq:th-maximal-lss-uniqueness-08} of theorem,
-    AF reductio.%
-}
-\mypareq{eq:th-maximal-lss-uniqueness-14}{%
-    \var{lss1} is a proper prefix of \var{lss2}, or vice versa
-    \cuz \longThref{LSS trichotomy}{th:lss-trichotomy},
-        \Eref{eq:th-maximal-lss-uniqueness-10}.%
-}
-\mypareq{eq:th-maximal-lss-uniqueness-16}{%
-    Either \var{lss1} or \var{lss2} is not maximal,
-    \cuz \longDfref{Maximal LSS}{def:maximal-lss},
-        \Eref{eq:th-maximal-lss-uniqueness-16}.%
-}
-\Eref{eq:th-maximal-lss-uniqueness-16}
-contradicts \Eref{eq:th-maximal-lss-uniqueness-04},
-which shows the reductio
-beginning at \Eref{eq:th-maximal-lss-uniqueness-10},
-and the theorem.
-\myqed
-\end{proof}
-
-\begin{theorem}[Unique maximal LSS existence]
-\label{th:unique-maximal-lss-existence}
-Every Leo source EIM is the bottom of a exactly one maximal LSS.
-\end{theorem}
-
-\begin{proof}
 Let \Veim{eim} be a Leo source EIM.
-\Veim{eim} is the bottom of the LSS of length 1,
-the one that contains only \var{eim},
-so that the set of LSS's with \var{eim} as the bottom
-is non-empty.
-\todo{Prove th:unique-maximal-lss-existence}
+Let \var{lssSet} be a set of LSS's
+which have \Veim{eim} as their bottom EIM.
+Then exactly one element, call it \Vlss{max},
+of \var{lssSet} is a maximal
+LSS, and all the other elements of \var{lssSet}
+are proper prefixes of \var{max}.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-10}
+\Vlssset{lssSet} = \set{
+   \Vlss{lss} : \Velement{lss}{0} = \var{eim}
+}
+   \because \text{AF theorem}.
+\end{equation}
+\var{lssSet} is never empty, because
+\var{eim} is the bottom of an LSS
+of length 1.
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-12}
+    \tuple{ \Veim{eim}} \in \Vlssset{lssSet}
+       \because \Eref{eq:th-maximal-lss-uniqueness-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-14}
+    \Vsize{lssSet} \ge 1
+       \because \Eref{eq:th-maximal-lss-uniqueness-12}.
+\end{equation}
+We note that, for any length,
+\var{lssset} contains at most one LSS of that length.
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-16}
+\begin{gathered}
+\forall \; \Vlss{lss1} \in \var{lssset} :
+\forall \; \Vlss{lss2} \in \var{lssset} :
+\\ \Vsize{lss1} = \Vsize{lss2} \implies
+\var{lss1} = \var{lss2}
+\\ \because \longThref{LSS uniqueness}{th:lss-uniqueness},
+    \Eref{eq:th-maximal-lss-uniqueness-10}.
+\end{gathered}
+\end{equation}
+\todo{Prove Maximal LSS uniqueness}
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
