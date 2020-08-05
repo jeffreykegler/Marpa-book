@@ -3534,7 +3534,8 @@ so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
 % TODO Add ref instead of "Later"
 Later in this paper
-we will
+we will prove this,
+and we will also
 show that this change also leaves
 the complexity results of
 Leo\cite{Leo1991} intact.
@@ -3556,17 +3557,17 @@ An EIM matched to an Leo item is called a ``source EIM''.
 Nonetheless, many have found the Leo method
 challenging to the intuition.
 One reason may be that
-the intuitive order of the sequence of EIM's runs
+the natural order of the sequence of EIM's runs
 in a direction opposite to the direction of
 the intuitive order of the Leo items.
 To understand
 the building of the sequences of matched source EIM's
 and Leo items, one must think
 in both directions at once.
-In the hopes of preparing the reader for the details
-of the Leo method,
-this section will give a high-level overview,
-emphasizing directionality.
+In the hopes of orienting the reader prior to our journey
+into the details of the Leo method,
+this section will give a high-level overview
+of Leo directionality.
 
 We root our idea of direction in the Earley sets.
 We say that we are proceeding ``left-to-right'' if we
@@ -3574,30 +3575,27 @@ are proceeding in non-decreasing Earley set order.
 We say that we are proceeding ``right-to-left'' if we
 are proceeding in non-increasing Earley set order.
 
-The intuitive direction of the source EIM's is
-the same as that of the Earley sets -- left-to-right.
+The natural direction of the source EIM's is
+the same as that of the Earley sets --- left-to-right.
 The intuitive direction of the Leo items, however, is the one
 in which the right recursion must be unfolded.
 The conceptual order of the right recursion,
 and the order in which a memoized right recursion must be rebuilt
-is, naturally enough, from the bottom-up.
+is from the bottom-up.
 
 The trickiness occurs because as the Earley sets are built,
-left-to-right, each new Leo item is the bottom of a new potential
+left-to-right, each new Leo item becomes the bottom of a new potential
 right recursion.
-Therefore the natural bottom-up order of Leo items
+Therefore the intuitive, bottom-up order of Leo items
 is right-to-left in terms of the Earley sets.
 
 In implementation, this reversal works out fine --
 EIM's and their Leo memos are both created left-to-right.
 But an investigator studying the Leo method needs to think both right-to-left
 and left-to-right.
-Because, while the order of creation of left-to-right,
-the intuitive, evaluation-time,
-order of the Leo items is right-to-left.
 
-When, in subsequent discussion, we introduce next eligible sequences (NES's)
-the ``next'' item in an NES
+In subsequent discussion we will introduce ``next eligible sequences'' (NES's).
+The ``next'' item in an NES
 will be in the same ES as, or in an earlier ES than, its ``previous''
 item.  In other words, previous-to-next in NES terms
 is right-to-left in Earley set terms.
@@ -3685,13 +3683,12 @@ may be written
         \end{gathered} } :
     \\
         \forall \; \Veim{y} \in \ES{\var{j}} : \\
-          \left(
             \Postdot{\var{x}} = \Postdot{\var{y}}
             \implies
             \var{x} = \var{y}
-          \right). \\
+    \\
     \end{gathered}
-  \right\rbrace
+  \right\rbrace .
 \end{gathered}
 \end{equation}
 Note in
