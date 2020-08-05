@@ -4235,7 +4235,7 @@ The theorem is
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
 A \dfn{next eligible sequence} (type \type{NES}) is
-a sequence of EIM's such that every non-initial EIM
+a non-empty sequence of EIM's such that every non-initial EIM
 in the sequence is the next eligible EIM of the
 previous EIM in the sequence.  That is,
 \[
@@ -4387,33 +4387,36 @@ The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-direction-10}
 \begin{gathered}
-\myfn{INDH}{\Vnat{indx}} \defined
-\\ \forall \; \var{nes} \in \type{NES} :
-\forall \; \Vnat{hi} \in \set{ \Vnat{i} : \var{i} \le \var{indx} \land \var{i} \in \Dom{\var{nes}}} :
-\\ \forall \; \Vnat{lo} \le \var{hi} : \Current{\VVelement{nes}{hi}} \le \Current{\VVelement{nes}{lo}}.
+\myfn{INDH}{\Vnat{hi}} \defined
+    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{hi} :
+\\ \var{hi} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{hi}} \le \Current{\VVelement{nes}{lo}}.
 \end{gathered}
 \end{equation}
 
-We first show the basis of the induction.
+We first show the induction hypothesis with an index of 0,
+as the basis of the induction.
 \mypareq{eq:th-nes-direction-12}{%
-    $\var{nesB} \in \type{NES} \land \var{indx} = 0$ \cuz{} AF basis,
+    $\var{nesB} \in \type{NES}$ \cuz{} AF basis,
     arbitrary \var{nesB}.%
 }
+\mypareq{eq:th-nes-direction-13}{%
+    $\Vsize{nesB} \ge 1$
+        \longDfref{NES}{def:next-eligible-sequence}.
+}
 \mypareq{eq:th-nes-direction-14}{%
-    $\var{hiB} \in \set{0}$ \cuz{} 
+    $\var{hiB} = 0$ \cuz{} AF basis,
         \Eref{eq:th-nes-direction-10},
-        \Eref{eq:th-nes-direction-12},
         arbitrary \var{hiB}.%
 }
 \mypareq{eq:th-nes-direction-16}{%
     $\var{loB} = 0$ \cuz{} 
         \Eref{eq:th-nes-direction-10},
-        \Eref{eq:th-nes-direction-14}.%
+        \Eref{eq:th-nes-direction-14},%
         arbitrary \var{loB}.%
 }
 \mypareq{eq:th-nes-direction-18}{%
 $\Current{\VVelement{nesB}{0}} = \Current{\VVelement{nesB}{0}}$
-     \cuz{} trivial.%
+     \cuz{} \Eref{eq:th-nes-direction-13}.%
 }
 \mypareq{eq:th-nes-direction-20}{%
 \myfn{INDH}{0} \cuz{} 
@@ -4448,107 +4451,80 @@ the step.
     \Eref{eq:th-nes-direction-24}.%
 \end{gathered}
 \end{equation}
-% for $\var{indx} = \var{n}$ to show
-% the induction hypothesis
-% for $\var{indx} = \var{n}+1$.
-% \mypareq{eq:th-nes-direction-14}{
-%     $\var{nesP} \in \var{nes}$ \cuz{} AF step, arbitrary \Vnes{nesP}.%
-% }
-% for $\var{indx} = \var{n}+1$ trivially.
-% So we may restrict ourselves to the opposite case.
-% \begin{equation}
-% \label{eq:th-nes-direction-16}
-% \begin{gathered}
-% \forall \; \Vnat{i} \le \var{n} :
-% \forall \; \Vnat{j} \le \var{i} :
-% \\ \Current{\VVelement{nesP}{i}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \myparbox{%
-% \cuz{} \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}$,
-%     AF step.%
-% }
-% \end{gathered}
-% \end{equation}
-% \mypareq{eq:th-nes-direction-18}{
-%     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
-%     \cuz{}
-%     \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
-% }
-% \begin{equation}
-% \label{eq:th-nes-direction-20}
-% \begin{gathered}
-% \forall \; \Vnat{j} \le \var{n} :
-% \Current{\VVelement{nesP}{n}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \myparbox{%
-% \cuz{} \Eref{eq:th-nes-direction-16} instantiating \var{i} as \var{n}.%
-% }
-% \end{gathered}
-% \end{equation}
-% \begin{equation}
-% \label{eq:th-nes-direction-22}
-% \begin{gathered}
-% \forall \; \Vnat{j} \le \var{n} :
-% \Current{\Velement{nesP}{\var{n}+1}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \myparbox{%
-% \cuz{} \Eref{eq:th-nes-direction-18}, \Eref{eq:th-nes-direction-20}.
-% }
-% \end{gathered}
-% \end{equation}
-% \begin{equation}
-% \label{eq:th-nes-direction-23}
-% \begin{gathered}
-% \forall \; \Vnat{i} = \var{n}+1 :
-% \forall \; \Vnat{j} < \var{i} :
-% \\ \Current{\VVelement{nesP}{i}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \because \Eref{eq:th-nes-direction-22}.
-% \end{gathered}
-% \end{equation}
-% \begin{equation}
-% \label{eq:th-nes-direction-24}
-% \begin{gathered}
-% \forall \; \Vnat{i} = \var{n}+1 :
-% \forall \; \Vnat{j} = \var{i} :
-% \\ \Current{\VVelement{nesP}{i}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \because \text{trivially}.
-% \end{gathered}
-% \end{equation}
-% %
-% \begin{equation}
-% \label{eq:th-nes-direction-26}
-% \begin{gathered}
-% \forall \; \Vnat{i} = \var{n}+1 :
-% \forall \; \Vnat{j} \le \var{i} :
-% \\ \Current{\VVelement{nesP}{i}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \myparbox{%
-%     \cuz{} \Eref{eq:th-nes-direction-23}, \Eref{eq:th-nes-direction-24}.%
-% }
-% \end{gathered}
-% \end{equation}
-% \begin{equation}
-% \label{eq:th-nes-direction-28}
-% \begin{gathered}
-% \forall \; \Vnat{i} \le \var{n}+1 :
-% \forall \; \Vnat{j} \le \var{i} :
-% \\ \Current{\VVelement{nesP}{i}} \le
-% \Current{\VVelement{nesP}{j}}
-% \\ \myparbox{%
-%     \cuz{} \Eref{eq:th-nes-direction-16},
-%     \Eref{eq:th-nes-direction-26}.%
-% }
-% \end{gathered}
-% \end{equation}
-% 
-% The basis of the induction was
-% \Eref{eq:th-nes-direction-12}.
-% \Eref{eq:th-nes-direction-28}
-% is the induction hypothesis
-% for $\var{indx} = \var{n}+1$, which shows the step
-% and the theorem.
+%
+\mypareq{eq:th-nes-direction-28}{
+    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
+    \cuz{}
+    \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
+}
+\begin{equation}
+\label{eq:th-nes-direction-30}
+\begin{gathered}
+\forall \; \Vnat{lo} \le \var{n} :
+\Current{\VVelement{nesP}{n}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \myparbox{%
+\cuz{} \Eref{eq:th-nes-direction-26} instantiating \var{hi} as \var{n}.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-32}
+\begin{gathered}
+\forall \; \Vnat{lo} \le \var{n} :
+\Current{\Velement{nesP}{\var{n}+1}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \myparbox{%
+\cuz{} \Eref{eq:th-nes-direction-28}, \Eref{eq:th-nes-direction-30}.
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-33}
+\begin{gathered}
+\forall \; \Vnat{hi} = \var{n}+1 :
+\forall \; \Vnat{lo} < \var{hi} :
+\\ \Current{\VVelement{nesP}{hi}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \because \Eref{eq:th-nes-direction-32}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-34}
+\begin{gathered}
+\forall \; \Vnat{hi} = \var{n}+1 :
+\forall \; \Vnat{lo} = \var{hi} :
+\\ \Current{\VVelement{nesP}{hi}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \because \text{trivially}.
+\end{gathered}
+\end{equation}
+%
+\begin{equation}
+\label{eq:th-nes-direction-36}
+\begin{gathered}
+\forall \; \Vnat{hi} = \var{n}+1 :
+\forall \; \Vnat{lo} \le \var{hi} :
+\\ \Current{\VVelement{nesP}{hi}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \myparbox{%
+    \cuz{} \Eref{eq:th-nes-direction-33}, \Eref{eq:th-nes-direction-34}.%
+}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-direction-38}
+\begin{gathered}
+\forall \; \Vnat{hi} \le \var{n}+1 :
+\forall \; \Vnat{lo} \le \var{hi} :
+\\ \Current{\VVelement{nesP}{hi}} \le
+\Current{\VVelement{nesP}{lo}}
+\\ \myparbox{%
+    \cuz{} \Eref{eq:th-nes-direction-26},
+    \Eref{eq:th-nes-direction-36}.%
+}
+\end{gathered}
+\end{equation}
 \myqed
 \end{proof}
 
