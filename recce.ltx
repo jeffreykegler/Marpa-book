@@ -2531,34 +2531,28 @@ so that
 \end{equation}
 \end{proof}
 
-\begin{definition}[Internal grammar context parse]
-\label{def:context-parse-int}
-From this point on,
-and unless stated otherwise,
-the context parse of
-every new scope will be
-the partial parse $[\Vint{g}, \Vstr{w}]$,
-the context input will be \Vstr{w},
-and the context grammar will be \Vint{g}.
-A new top-level scope begins immediately after
-this definition.
-\dispEnd
-\end{definition}
-
 \section{Earley tables}
 \label{sec:earley-table}
 
 The definitions of this section
-assume that \Vint{g} is a \Marpa{} internal grammar.
-Definitions of \Earley{} for more general CFG's
-can be found in many places,
-including
-\cite[pp. 320-321]{AU1972},
-\cite{AH2002},
-\cite{Earley1968},
-\cite{Earley1970},
-\cite{GJ2008}, and
-\cite{Leo1991}.
+assume
+the partial parse $[\Vint{g}, \Vstr{w}]$.
+The reader should note
+that \Vint{g} is a \Marpa{} internal grammar,
+and our definition of \Earley{} is restricted
+accordingly.%
+\footnote{%
+    Readers who want
+    definitions of \Earley{} for more general CFG's
+    can find them in many places,
+    including
+    \cite[pp. 320-321]{AU1972},
+    \cite{AH2002},
+    \cite{Earley1968},
+    \cite{Earley1970},
+    \cite{GJ2008}, and
+    \cite{Leo1991}.%
+}
 
 Let $\Vrule{r} \in \Rules{\Vint{g}}$
 be a rule.
@@ -3446,6 +3440,22 @@ The theorem follows from
 \Eref{eq:lem-reduction-by-token-04}.
 \myqed
 \end{proof}
+
+\begin{definition}[Internal grammar context parse]
+\label{def:context-parse-int}
+From this point on,
+and unless stated otherwise,
+the context parse of
+every new scope will be
+the partial parse $[\Vint{g}, \Vstr{w}]$,
+the context input will be \Vstr{w},
+and the context grammar will be \Vint{g}.
+Each new context will contain a valid
+Earley table, \var{table}.
+A new top-level scope begins immediately after
+this definition.
+\dispEnd
+\end{definition}
 
 \section{The Leo algorithm}
 \label{sec:leo}
