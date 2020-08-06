@@ -4437,8 +4437,9 @@ The induction hypothesis is
 
 We first show the induction hypothesis with an index of 0,
 as the basis of the induction.
-We instantiate the universal qualifiers with arbitrary
-values, to show the implication.
+We proceed by instantiating the universal qualifiers with arbitrary
+values, then show the consequent of the implication
+in \Eref{eq:th-nes-direction-10}.
 \mypareq{eq:th-nes-direction-12}{%
     $\var{indx} = 0$ \cuz{} AF basis,
         \Eref{eq:th-nes-direction-10}.
@@ -4472,115 +4473,133 @@ values, to show the implication.
 \mypareq{eq:th-nes-direction-19}{%
     $\Current{\VVelement{nesB}{indx}} \le \Current{\VVelement{nesB}{loB}}$
     \cuz{} \Eref{eq:th-nes-direction-18}.
-    This is the consequent of the implication in \myfn{INDH}{0}.%
+    This is the consequent of the implication in \myfn{INDH}{0},
+    which therefore shows \myfn{INDH}{0}.%
 }
 \mypareq{eq:th-nes-direction-20}{%
-\myfn{INDH}{0} \cuz{} 
+    \myfn{INDH}{0} \cuz{} 
     derivation from
     \Eref{eq:th-nes-direction-12}--\Eref{eq:th-nes-direction-19}.
     This is the basis of the induction.%
 }
 
 For the step, we assume
-\myfn{INDH}{\var{n}}
-to show \myfn{INDH}{\var{n}+1}.
-\mypareq{eq:th-nes-direction-22}{%
-    $\var{nesP} \in \type{NES}$ \cuz{} AF step,
-    arbitrary \var{nesP}.%
-}
-In the case where $\var{n} + 1 \notin \Dom{\var{nesP}}$,
-we have \myfn{INDH}{\var{n}+1},
-and the step of the induction, vacuously.
-We therefore need only show the remaining subcase of
-the step.
-\mypareq{eq:th-nes-direction-24}{%
-    $\forall \; \Vnat{hi} : \var{hi} \le \var{n}+1 \implies \var{hi} \in \Dom{\var{nesP}}$
-    \cuz{} AF subcase of step.%
-}
-\begin{equation}
-\label{eq:th-nes-direction-26}
-\begin{gathered}
-\\ \forall \; \var{nes} \in \type{NES} :
-\forall \; \Vnat{hi} \le \var{n} :
-\\ \forall \; \Vnat{lo} \le \var{hi} : \Current{\VVelement{nes}{hi}} \le \Current{\VVelement{nes}{lo}}.
-\\ \because \myfn{INDH}{\var{n}} \text{ AF step},
-    \Eref{eq:th-nes-direction-24}.%
-\end{gathered}
-\end{equation}
-%
-\mypareq{eq:th-nes-direction-28}{
-    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
-    \cuz{}
-    \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
-}
+\myfn{INDH}{\var{n}} to show \myfn{INDH}{\var{n}+1}.
+Initially, we proceed by
+instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}
+with arbitrary values,
 \begin{equation}
 \label{eq:th-nes-direction-30}
 \begin{gathered}
-\forall \; \Vnat{lo} \le \var{n} :
-\Current{\VVelement{nesP}{n}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \myparbox{%
-\cuz{} \Eref{eq:th-nes-direction-26} instantiating \var{hi} as \var{n}.%
+    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{n} :
+\\ \var{n} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{n}} \le \Current{\VVelement{nes}{lo}}.
+\\ \because \myfn{INDH}{\var{n}} \text{ AF step}.%
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-nes-direction-32}{%
+    $\var{nesP} \in \type{NES}$ \cuz{}
+        \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
+        universal instantiation, arbitrary \var{nesP}.%
 }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-32}
-\begin{gathered}
-\forall \; \Vnat{lo} \le \var{n} :
-\Current{\Velement{nesP}{\var{n}+1}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \myparbox{%
-\cuz{} \Eref{eq:th-nes-direction-28}, \Eref{eq:th-nes-direction-30}.
+\mypareq{eq:th-nes-direction-34}{%
+    $\var{loB} \le \var{n}+1$,
+        \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
+        universal instantiation, arbitrary \var{loB}.%
 }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-33}
-\begin{gathered}
-\forall \; \Vnat{hi} = \var{n}+1 :
-\forall \; \Vnat{lo} < \var{hi} :
-\\ \Current{\VVelement{nesP}{hi}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \because \Eref{eq:th-nes-direction-32}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-34}
-\begin{gathered}
-\forall \; \Vnat{hi} = \var{n}+1 :
-\forall \; \Vnat{lo} = \var{hi} :
-\\ \Current{\VVelement{nesP}{hi}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \because \text{trivially}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-nes-direction-36}
-\begin{gathered}
-\forall \; \Vnat{hi} = \var{n}+1 :
-\forall \; \Vnat{lo} \le \var{hi} :
-\\ \Current{\VVelement{nesP}{hi}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \myparbox{%
-    \cuz{} \Eref{eq:th-nes-direction-33}, \Eref{eq:th-nes-direction-34}.%
+Continuing the step of the induction, we divide it into two
+subcases, according to whether the antecedant of implication in
+\Eref{eq:th-nes-direction-10} is true or false.
+\mypareq{eq:th-nes-direction-36}{%
+    $\exists \; \Vnat{i} : \var{i} \le \var{n}+1 \land \var{i} \notin \Dom{\var{nesP}}$
+    \cuz{} negation of antecedant of implication in \myfn{INDH}{\var{n}+1}, AF subcase.
 }
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-38}
-\begin{gathered}
-\forall \; \Vnat{hi} \le \var{n}+1 :
-\forall \; \Vnat{lo} \le \var{hi} :
-\\ \Current{\VVelement{nesP}{hi}} \le
-\Current{\VVelement{nesP}{lo}}
-\\ \myparbox{%
-    \cuz{} \Eref{eq:th-nes-direction-26},
-    \Eref{eq:th-nes-direction-36}.%
+\mypareq{eq:th-nes-direction-38}{%
+    $\var{n}+1 \notin \Dom{\var{nesP}}$
+    \cuz{} \Eref{eq:th-nes-direction-36}.%
 }
-\end{gathered}
-\end{equation}
+% \label{eq:th-nes-direction-26}
+% \begin{gathered}
+% \\ \forall \; \var{nes} \in \type{NES} :
+% \forall \; \Vnat{hi} \le \var{n} :
+% \\ \forall \; \Vnat{lo} \le \var{hi} : \Current{\VVelement{nes}{hi}} \le \Current{\VVelement{nes}{lo}}.
+% \\ \because \myfn{INDH}{\var{n}} \text{ AF step},
+%     \Eref{eq:th-nes-direction-24}.%
+% \end{gathered}
+% \end{equation}
+% %
+% \mypareq{eq:th-nes-direction-28}{
+%     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
+%     \cuz{}
+%     \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
+% }
+% \begin{equation}
+% \label{eq:th-nes-direction-30}
+% \begin{gathered}
+% \forall \; \Vnat{lo} \le \var{n} :
+% \Current{\VVelement{nesP}{n}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \myparbox{%
+% \cuz{} \Eref{eq:th-nes-direction-26} instantiating \var{hi} as \var{n}.%
+% }
+% \end{gathered}
+% \end{equation}
+% \begin{equation}
+% \label{eq:th-nes-direction-32}
+% \begin{gathered}
+% \forall \; \Vnat{lo} \le \var{n} :
+% \Current{\Velement{nesP}{\var{n}+1}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \myparbox{%
+% \cuz{} \Eref{eq:th-nes-direction-28}, \Eref{eq:th-nes-direction-30}.
+% }
+% \end{gathered}
+% \end{equation}
+% \begin{equation}
+% \label{eq:th-nes-direction-33}
+% \begin{gathered}
+% \forall \; \Vnat{hi} = \var{n}+1 :
+% \forall \; \Vnat{lo} < \var{hi} :
+% \\ \Current{\VVelement{nesP}{hi}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \because \Eref{eq:th-nes-direction-32}.
+% \end{gathered}
+% \end{equation}
+% \begin{equation}
+% \label{eq:th-nes-direction-34}
+% \begin{gathered}
+% \forall \; \Vnat{hi} = \var{n}+1 :
+% \forall \; \Vnat{lo} = \var{hi} :
+% \\ \Current{\VVelement{nesP}{hi}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \because \text{trivially}.
+% \end{gathered}
+% \end{equation}
+% %
+% \begin{equation}
+% \label{eq:th-nes-direction-36}
+% \begin{gathered}
+% \forall \; \Vnat{hi} = \var{n}+1 :
+% \forall \; \Vnat{lo} \le \var{hi} :
+% \\ \Current{\VVelement{nesP}{hi}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \myparbox{%
+%     \cuz{} \Eref{eq:th-nes-direction-33}, \Eref{eq:th-nes-direction-34}.%
+% }
+% \end{gathered}
+% \end{equation}
+% \begin{equation}
+% \label{eq:th-nes-direction-38}
+% \begin{gathered}
+% \forall \; \Vnat{hi} \le \var{n}+1 :
+% \forall \; \Vnat{lo} \le \var{hi} :
+% \\ \Current{\VVelement{nesP}{hi}} \le
+% \Current{\VVelement{nesP}{lo}}
+% \\ \myparbox{%
+%     \cuz{} \Eref{eq:th-nes-direction-26},
+%     \Eref{eq:th-nes-direction-36}.%
+% }
+% \end{gathered}
+% \end{equation}
 \myqed
 \end{proof}
 
