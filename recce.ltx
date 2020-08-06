@@ -875,7 +875,7 @@ $\myfn{ran}{\var{f}}$ is the range of \var{f}.
     We will not do this.
     $\naturals = \aleph_0$ and,
     since we do need to investigate other transfinite cardinals,
-    it would not be helpful to use two different notations for the
+    it will not be helpful to use two different notations for the
     same set.%
 }
 
@@ -884,7 +884,8 @@ always with respect to a specific set,
 which is specified explicitly
 or through the quantified variable's type,
 as described below.
-Where the set is obviously \naturals{}
+Where the set is obviously \naturals{},
+and the expression has a single variable,
 the specification may be abbreviated so that, for example,
 \[
 \forall \; \var{j} \in \set{ \var{i} \in \naturals : 0 \le \var{i} \le 42 } :
@@ -894,6 +895,47 @@ would be written as
 \[
 \forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
 \]
+
+As a way of avoiding tedious special cases,
+logical implication makes an opportunistic use
+of ternary logic.
+An logical implication
+with a \var{false} antecedant
+is allowed to have an ill-defined consequent,
+and the value of such an implication is \var{true}.
+(Typical ``ill-defined'' expressions are
+sequence values with out-of-bounds indexes.)
+Other uses of ill-defined expressions
+are banned,
+except when explained in the text.
+\begin{table}[tb]
+\centering
+\caption{Logical implication convention}
+\begin{tabular}{|c|c|c|}
+\hline
+%\rule{0pt}{3ex}%
+\multicolumn{3}{|c|}{$\var{a} \implies \var{b}$} \\
+\hline
+\multicolumn{1}{|c|}{Value of \var{a}} &
+    \multicolumn{1}{|c|}{Value of \var{b}} &
+    \multicolumn{1}{|c|}{Value of} \\
+\multicolumn{1}{|c|}{} &
+    \multicolumn{1}{|c|}{} &
+    \multicolumn{1}{|c|}{implication} \\
+\hline
+\var{true} & \var{true} & \var{true} \\
+\var{true} & \var{false} & \var{false} \\
+\var{true} & Ill-defined & Ill-defined \\
+\var{false} & \var{true} & \var{true} \\
+\var{false} & \var{false} & \var{true} \\
+\var{false} & Ill-defined & \var{true} \\
+Ill-defined & \var{true} & Ill-defined \\
+Ill-defined & \var{false} & Ill-defined \\
+Ill-defined & Ill-defined & Ill-defined \\
+\hline
+\end{tabular}
+\label{tab:ternary-implication}.
+\end{table}
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -4388,40 +4430,54 @@ The induction hypothesis is
 \label{eq:th-nes-direction-10}
 \begin{gathered}
 \myfn{INDH}{\Vnat{hi}} \defined
-    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{hi} :
-\\ \var{hi} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{hi}} \le \Current{\VVelement{nes}{lo}}.
+    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{indx} :
+\\ \var{indx} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{indx}} \le \Current{\VVelement{nes}{lo}}.
 \end{gathered}
 \end{equation}
 
 We first show the induction hypothesis with an index of 0,
 as the basis of the induction.
+We instantiate the universal qualifiers with arbitrary
+values, to show the implication.
 \mypareq{eq:th-nes-direction-12}{%
-    $\var{nesB} \in \type{NES}$ \cuz{} AF basis,
-    arbitrary \var{nesB}.%
-}
-\mypareq{eq:th-nes-direction-13}{%
-    $\Vsize{nesB} \ge 1$
-        \longDfref{NES}{def:next-eligible-sequence}.
+    $\var{indx} = 0$ \cuz{} AF basis,
+        \Eref{eq:th-nes-direction-10}.
 }
 \mypareq{eq:th-nes-direction-14}{%
-    $\var{hiB} = 0$ \cuz{} AF basis,
+    $\var{nesB} \in \type{NES}$ \cuz{}
         \Eref{eq:th-nes-direction-10},
-        arbitrary \var{hiB}.%
+        universal instantiation, arbitrary \var{nesB}.%
+}
+\mypareq{eq:th-nes-direction-15}{%
+    $\Vsize{nesB} \ge 1$
+        \longDfref{NES}{def:next-eligible-sequence}.%
 }
 \mypareq{eq:th-nes-direction-16}{%
+    $\var{indx} \in \Dom{\var{nesB}}$ \cuz{}
+        \Eref{eq:th-nes-direction-12},
+        \Eref{eq:th-nes-direction-15}.%
+}
+\mypareq{eq:th-nes-direction-17}{%
     $\var{loB} = 0$ \cuz{} 
         \Eref{eq:th-nes-direction-10},
-        \Eref{eq:th-nes-direction-14},%
-        arbitrary \var{loB}.%
+        universal instantiation, arbitrary \var{loB}.%
+        \Eref{eq:th-nes-direction-12}.%
 }
 \mypareq{eq:th-nes-direction-18}{%
-$\Current{\VVelement{nesB}{0}} = \Current{\VVelement{nesB}{0}}$
-     \cuz{} \Eref{eq:th-nes-direction-13}.%
+    $\Current{\VVelement{nesB}{indx}} = \Current{\VVelement{nesB}{loB}}$
+     \cuz{} \Eref{eq:th-nes-direction-12},
+     \Eref{eq:th-nes-direction-16},
+     \Eref{eq:th-nes-direction-17}.%
+}
+\mypareq{eq:th-nes-direction-19}{%
+    $\Current{\VVelement{nesB}{indx}} \le \Current{\VVelement{nesB}{loB}}$
+    \cuz{} \Eref{eq:th-nes-direction-18}.
+    This is the consequent of the implication in \myfn{INDH}{0}.%
 }
 \mypareq{eq:th-nes-direction-20}{%
 \myfn{INDH}{0} \cuz{} 
     derivation from
-    \Eref{eq:th-nes-direction-12}--\Eref{eq:th-nes-direction-18}.
+    \Eref{eq:th-nes-direction-12}--\Eref{eq:th-nes-direction-19}.
     This is the basis of the induction.%
 }
 
