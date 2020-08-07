@@ -4424,21 +4424,28 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof is by induction.
+The proof is by induction
+on the second, in NES sequence order,
+of the two elements to be compared.
+We will find that every NES is finite,
+but we have yet to prove this,
+so we allow the NES to be either finite
+or countably infinite.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-direction-10}
 \begin{gathered}
 \myfn{INDH}{\Vnat{hi}} \defined
-    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{indx} :
-\\ \var{indx} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{indx}} \le \Current{\VVelement{nes}{lo}}.
+\\ \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{indx} :
+    \var{indx} \in \Dom{\var{nes}}
+\\  \implies \Current{\VVelement{nes}{indx}} \le \Current{\VVelement{nes}{lo}}.
 \end{gathered}
 \end{equation}
 
 We first show the induction hypothesis with an index of 0,
 as the basis of the induction.
 We proceed by instantiating the universal qualifiers with arbitrary
-values, then show the consequent of the implication
+values, to show the consequent of the implication
 in \Eref{eq:th-nes-direction-10}.
 \mypareq{eq:th-nes-direction-12}{%
     $\var{indx} = 0$ \cuz{} AF basis,
@@ -4461,7 +4468,7 @@ in \Eref{eq:th-nes-direction-10}.
 \mypareq{eq:th-nes-direction-17}{%
     $\var{loB} = 0$ \cuz{}
         \Eref{eq:th-nes-direction-10},
-        universal instantiation, arbitrary \var{loB}.%
+        universal instantiation, arbitrary \var{loB},
         \Eref{eq:th-nes-direction-12}.%
 }
 \mypareq{eq:th-nes-direction-18}{%
@@ -4485,9 +4492,6 @@ in \Eref{eq:th-nes-direction-10}.
 
 For the step, we assume
 \myfn{INDH}{\var{n}} to show \myfn{INDH}{\var{n}+1}.
-Initially, we proceed by
-instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}
-with arbitrary values.
 \begin{equation}
 \label{eq:th-nes-direction-30}
 \begin{gathered}
@@ -4496,6 +4500,12 @@ with arbitrary values.
 \\ \because \myfn{INDH}{\var{n}} \text{ AF step}.%
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-nes-direction-31}{%
+   $\var{indx} = \var{n}+1$ \cuz AF step.
+}
+Initially, we proceed by
+instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}
+with arbitrary values.
 \mypareq{eq:th-nes-direction-32}{%
     $\var{nesP} \in \type{NES}$ \cuz{}
         \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
@@ -4507,31 +4517,38 @@ with arbitrary values.
         universal instantiation, arbitrary \var{loB}.%
 }
 Continuing the step of the induction, we divide it into two
-subcases, according to whether the antecedant of implication in
+subcases, according to whether the antecedant of the implication in
 \Eref{eq:th-nes-direction-10} is true or false.
 \mypareq{eq:th-nes-direction-38}{%
-    $\var{n}+1 \notin \Dom{\var{nesP}}$
+    $\var{indx} \notin \Dom{\var{nesP}}$
     \cuz{} AF subcase.%
 }
 The equation \Eref{eq:th-nes-direction-38}
 is the negation of the antecedant of
         \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
-        which shows \myfn{INDH}{\var{n}+1} for the subcase.%
+        which shows \myfn{INDH}{\var{n}+1} for the subcase:
 \mypareq{eq:th-nes-direction-40}{%
-    $\var{n}+1 \notin \Dom{\var{nesP}} \implies \myfn{INDH}{\var{n}+1}$
+    $\var{indx} \notin \Dom{\var{nesP}} \implies \myfn{INDH}{\var{n}+1}$
     \cuz{} \Eref{eq:th-nes-direction-10},
+        \Eref{eq:th-nes-direction-31},
         \Eref{eq:th-nes-direction-38}.
     This is the first subcase of the induction step.%
 }
 The second and final subcase of the step is the contrary of the first subcase.
 \mypareq{eq:th-nes-direction-42}{%
-    $\var{n}+1 \in \Dom{\var{nesP}}$
+    $\var{indx} \in \Dom{\var{nesP}}$
     \cuz{} AF subcase.%
+}
+\mypareq{eq:th-nes-direction-43}{%
+    $\var{n}+1 \in \Dom{\var{nesP}}$
+    \cuz{} \Eref{eq:th-nes-direction-31},
+        \Eref{eq:th-nes-direction-42}.%
 }
 \mypareq{eq:th-nes-direction-44}{
     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
     \cuz{}
-    \longThref{NES adjacent direction}{lm:nes-adjacent-direction}.%
+    \longThref{NES adjacent direction}{lm:nes-adjacent-direction},
+        \Eref{eq:th-nes-direction-32}.%
 }
 \begin{equation}
 \label{eq:th-nes-direction-46}
