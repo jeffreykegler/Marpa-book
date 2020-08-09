@@ -5092,8 +5092,7 @@ EIM in \var{prerun}.
 Let this symbol be \Vsym{cycle-lhs},
 and let the first and second EIM's with \Vsym{cycle-lhs} as their symbol be
 \VVelement{prerun}{aa} and
-\VVelement{prerun}{zz}, respectively.
-Then
+\VVelement{prerun}{zz}, respectively:
 \begin{equation}
 \label{eq:th-nes-finiteness-38}
 \begin{gathered}
@@ -5110,6 +5109,7 @@ Let
 \Vnes{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
     \\ \because \longThref{NES subsequence}{th:nes-subsequence},
         \Eref{eq:th-nes-finiteness-28},
+        \Eref{eq:th-nes-finiteness-37},
         \Eref{eq:th-nes-finiteness-38}.%
 \end{gathered}
 \end{equation}
@@ -5170,8 +5170,7 @@ In \Eref{eq:th-nes-finiteness-54}, recall that we know that
 \mypareq{eq:th-nes-finiteness-58}{\Vint{g} does not contain a cycle
     \cuz{} \longDfref{Marpa internal grammar}{def:internal-grammar}.
     This contradicts \Eref{eq:th-nes-finiteness-56} and concludes
-    the reductio
-        beginning at \Eref{eq:th-nes-finiteness-58}.%
+    the reductio beginning at \Eref{eq:th-nes-finiteness-14}.%
 }
 \begin{equation}
 \label{eq:th-nes-finiteness-60}
@@ -5193,7 +5192,7 @@ which completes the proof.
 
 \begin{theorem}[NES uniqueness]
 \label{th:nes-uniqueness}
-If two NES's of the same length have the same initial element,
+If two NES's of the same length have the same bottom element,
 then they are identical.
 \end{theorem}
 
@@ -5201,12 +5200,9 @@ then they are identical.
 Let \var{nes1} and \var{nes2} be two NES's of the same
 length.
 We assume for a reductio that they differ.
-Since all NES's are of finite length
-\longThref{NES finiteness}{th:nes-finiteness},
-if \var{nes1} and \var{nes2} differ, they must differ
+If \var{nes1} and \var{nes2} differ, they must differ
 in one of the elements.
-Since they are finite sequences,
-there will be a first index at which the elements differ,
+Therefore, there will be a first index at which the elements differ,
 call it \Vnat{first}.
 \begin{equation}
 \label{eq:th-nes-uniqueness-10}
@@ -5219,7 +5215,7 @@ call it \Vnat{first}.
         \because \text{AF reductio}.
 \end{equation}
 Since, by assumption for the theorem,
-\var{nes1} and \var{nes2} share the same initial
+\var{nes1} and \var{nes2} share the same bottom
 element, we know that
 \begin{equation}
 \label{eq:th-nes-uniqueness-20}
@@ -5257,12 +5253,12 @@ and the theorem.
 
 \begin{theorem}[NES trichotomy]
 \label{th:nes-trichotomy}
-If two NES's of the same length have the same initial element,
-then there are there mutually exclusive possibilites:
+If two NES's of the same length have the same bottom element,
+then there are three mutually exclusive possibilites:
 \begin{itemize}
-\item they are identical;
-\item the first NES is a proper prefix of the second;
-\item the second NES is a proper prefix of the first.
+\item They are identical.
+\item The first NES is a proper prefix of the second.
+\item The second NES is a proper prefix of the first.
 \end{itemize}
 That is, if
 \begin{gather}
@@ -5304,7 +5300,8 @@ For the case where
 we have
 \mypareq{eq:th-nes-trichotomy-20}{%
     \Vnes{subNes2} = \Velement{nes2}{0\ldots \Vlastix{nes1}}
-    \linebreak \cuz{} \longThref{NES subsequence}{th:nes-subsequence}.%
+    \linebreak \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+        \Eref{eq:th-nes-trichotomy-18}.%
 }
 \begin{equation}
 \label{eq:th-nes-trichotomy-22}
@@ -5332,8 +5329,8 @@ we have
     the proper prefix of a sequence.%
 }
 
-The last of the three cases
-$\Vsize{nes2} < \Vsize{nes1}$ is the exact reverse of the previous case,
+The last of the three cases,
+$\Vsize{nes2} < \Vsize{nes1}$, is the exact reverse of the previous case,
 and has a symmetrical proof.
 \myqed
 \end{proof}
@@ -5343,7 +5340,7 @@ and has a symmetrical proof.
 The LIMs of an EIM are defined recursively.
 
 Let \Veim{src} be an arbitrary EIM.
-Then the set of LIM's of \var{src},
+Then the set of LIM's of \var{src} is
 \begin{equation}
 \nonumber
 \begin{gathered}
@@ -5364,7 +5361,7 @@ Then the set of LIM's of \var{src},
             \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
         \end{gathered} \right)
     \end{gathered}
-\right\rbrace
+\right\rbrace,
 \end{gathered}
 \end{equation}
 where
@@ -5388,7 +5385,7 @@ cannot assume that.
 \label{def:leo-source-eim}
 Informally, a \dfn{Leo source EIM}, or \dfn{Leo source},
 is an EIM which is memoized by an Leo item.
-That is, \Veim{src} is a Leo source EIM
+More formally, \Veim{src} is a Leo source EIM
 if and only if
 \[
     \size{\myfn{lims}{\var{src}}} > 0.
@@ -5434,10 +5431,8 @@ are equal.
 \begin{proof}
 Let \var{lss} be an LSS and \var{nes} be its underlying NES.
 \var{lss} and \var{nes} are defined to be the same sequence
-of EIM's: $\var{lss} = \var{nes}$.
-Two sequences differ if and only if one of their elements differs,
-and \var{lss} and \var{nes} clearly will not
-differ in any of their elements.
+of EIM's, so that $\Vnes{lss} = \Vnes{nes}$.
+The theorem follows directly.
 \myqed
 \end{proof}
 
