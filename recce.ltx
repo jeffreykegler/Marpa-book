@@ -4283,7 +4283,7 @@ previous EIM in the sequence.  That is,
    }
 \]
 If \var{nes} is an NES,
-We say that \Velement{nes}{0} is the \dfn{bottom} of \var{nes},
+We say that \Velement{nes}{0} is the \dfn{base} of \var{nes},
 and that \Velement{nes}{\Vlastix{nes}} is the \dfn{top} of \var{nes}.
 \dispEnd
 \end{definition}
@@ -5185,7 +5185,7 @@ which completes the proof.
 
 \begin{theorem}[NES uniqueness]
 \label{th:nes-uniqueness}
-If two NES's of the same length have the same bottom element,
+If two NES's of the same length have the same base element,
 then they are identical.
 \end{theorem}
 
@@ -5208,7 +5208,7 @@ call it \Vnat{first}.
         \because \text{AF reductio}.
 \end{equation}
 Since, by assumption for the theorem,
-\var{nes1} and \var{nes2} share the same bottom
+\var{nes1} and \var{nes2} share the same base
 element, we know that
 \begin{equation}
 \label{eq:th-nes-uniqueness-20}
@@ -5246,7 +5246,7 @@ and the theorem.
 
 \begin{theorem}[NES trichotomy]
 \label{th:nes-trichotomy}
-If two NES's of the same length have the same bottom element,
+If two NES's of the same length have the same base element,
 then there are three mutually exclusive possibilites:
 \begin{itemize}
 \item They are identical.
@@ -5411,7 +5411,7 @@ That is,
 \begin{definition}[Maximal LSS]
 \label{def:maximal-lss}
 A \dfn{maximal LSS} is an LSS which is not the proper prefix
-of another LSS with the same bottom element.
+of another LSS with the same base element.
 We use the notation \Maximal{\Vlss{lss}}
 to say that \var{lss} is maximal.
 \dispEnd
@@ -5433,7 +5433,7 @@ The theorem follows directly.
 
 \begin{theorem}[LSS uniqueness]
 \label{th:lss-uniqueness}
-If two LSS's of the same length have the same bottom element,
+If two LSS's of the same length have the same base element,
 then they are identical.
 \end{theorem}
 
@@ -5538,7 +5538,7 @@ then
 
 \begin{theorem}[LSS trichotomy]
 \label{th:lss-trichotomy}
-If two LSS's of the same length have the same bottom element,
+If two LSS's of the same length have the same base element,
 then there are three mutually exclusive possibilites:
 \begin{itemize}
 \item They are identical.
@@ -5637,49 +5637,51 @@ the reductio and the theorem.
 \begin{theorem}[Maximal LSS uniqueness]
 \label{th:maximal-lss-uniqueness}
 Let \Veim{eim} be a Leo source EIM.
-Let \var{lssSet} be a set of LSS's
-which have \Veim{eim} as their bottom EIM.
+Let \var{based} be a set of LSS's
+which have \Veim{eim} as their base EIM.
 Then exactly one element, call it \Vlss{max},
-of \var{lssSet} is a maximal
-LSS, and all the other elements of \var{lssSet}
+of \var{based} is a maximal
+LSS, and all the other elements of \var{based}
 are proper prefixes of \var{max}.
 \end{theorem}
 
 \begin{proof}
+We consider \var{based}, the set of all LSS's
+with \var{eim} as their base:
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-10}
-\Vlssset{lssSet} = \set{
+\Vlssset{based} = \set{
    \Vlss{lss} : \Velement{lss}{0} = \var{eim}
 }
    \because \text{AF theorem}.
 \end{equation}
-\var{lssSet} is never empty, because
-\var{eim} is the bottom of an LSS
+\var{based} is never empty, because
+\var{eim} is the base of an LSS
 of length~1:
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-12}
-    \tuple{ \Veim{eim}} \in \Vlssset{lssSet}
+    \tuple{ \Veim{eim}} \in \Vlssset{based}
        \because \Eref{eq:th-maximal-lss-uniqueness-10}.
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-14}
-    \Vsize{lssSet} \ge 1
+    \Vsize{based} \ge 1
        \because \Eref{eq:th-maximal-lss-uniqueness-12}.
 \end{equation}
 We note that, for any length,
-\var{lssset} contains at most one LSS of that length.
+\var{based} contains at most one LSS of that length.
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-16}
 \begin{gathered}
-\forall \; \Vlss{lss1} \in \var{lssset} :
-\forall \; \Vlss{lss2} \in \var{lssset} :
+\forall \; \Vlss{lss1} \in \var{based} :
+\forall \; \Vlss{lss2} \in \var{based} :
 \\ \Vsize{lss1} = \Vsize{lss2} \implies
 \var{lss1} = \var{lss2}
 \\ \because \longThref{LSS uniqueness}{th:lss-uniqueness},
     \Eref{eq:th-maximal-lss-uniqueness-10}.
 \end{gathered}
 \end{equation}
-Among the NES's with \var{eim} as their bottom,
+Among the NES's with \var{eim} as their base,
 there is a maximum length.
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-18}
@@ -5691,7 +5693,7 @@ there is a maximum length.
 \end{gathered}
 \end{equation}
 Therefore, there is a maximum possible LSS length for
-LSS's with \var{eim} as their bottom.
+LSS's with \var{eim} as their base.
 \mypareq{eq:th-maximal-lss-uniqueness-20}{%
     The length of an LSS is the same as that of its underlying NES
     \cuz{} \longDfref{LSS}{def:leo-source-sequence}.
@@ -5707,7 +5709,7 @@ LSS's with \var{eim} as their bottom.
         \Eref{eq:th-maximal-lss-uniqueness-20}.
 \end{gathered}
 \end{equation}
-Recall that \var{lssSet} is the set of LSS's with \var{eim} as their bottom,
+Recall that \var{lssSet} is the set of LSS's with \var{eim} as their base,
 and that $\Vsize{lssSet} \ge 1$.
 Since, there is a maximum possible LSS length for LSS's
 in \var{lssSet},
