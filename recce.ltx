@@ -4494,7 +4494,7 @@ For the step, we assume
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-direction-31}{%
-   $\var{indx} = \var{n}+1$ \cuz AF step.
+   $\var{indx} = \var{n}+1$ \cuz{} AF step.
 }
 Initially, we proceed by
 instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}
@@ -5454,7 +5454,7 @@ We proceed by reductio.
     $\Velement{lss1}{0} = \Velement{lss2}{0}$ \cuz{} AF theorem.%
 }
 \mypareq{eq:th-lss-uniqueness-24}{%
-    $\var{lss1} \neq \var{lss2}$ \cuz AF reductio.%
+    $\var{lss1} \neq \var{lss2}$ \cuz{} AF reductio.%
 }
 \mypareq{eq:th-lss-uniqueness-26}{%
     $\Vsize{nes1} = \Vsize{nes2}$ \cuz{}
@@ -5730,13 +5730,77 @@ and at least one LSS is of that size:
     \Eref{eq:th-maximal-lss-uniqueness-24}.%
 \end{gathered}
 \end{equation}
-Recall that \var{based} is the set of LSS's with \var{eim} as their base,
-and that $\Vsize{based} \ge 1$.
-Since, there is a maximum possible LSS length for LSS's
-in \var{based},
-there is an LSS of maximum length in \var{based}.
-(Note that the maximum actual length of an element in \var{based}
-is not necessarily the maximum possible length.)
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-28}
+\begin{gathered}
+    \Vlss{max} \in \var{based} \land
+\forall \; \Vlss{lss} \in \var{based} :
+    \Vsize{\var{max}} \ge \Vsize{lss}
+\\ \because \Eref{eq:th-maximal-lss-uniqueness-26},
+   \text{existential instantiation of \var{max}}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-maximal-lss-uniqueness-29-30}{%
+    $\Vlss{max} \in \var{based}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-28}.
+}
+\mypareq{eq:th-maximal-lss-uniqueness-29-40}{%
+    $\forall \; \Vlss{lss} \in \var{based} : \Vsize{\var{max}} \ge \Vsize{lss}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-28}.
+}
+\mypareq{eq:th-maximal-lss-uniqueness-29-50}{%
+    $\Velement{max}{0} = \var{eim}$
+        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10},
+            \Eref{eq:th-maximal-lss-uniqueness-29-30}.
+}
+We now consider, for a reductio,
+the possibility that \Vlss{max} is the proper
+prefix of another LSS.
+\mypareq{eq:th-maximal-lss-uniqueness-30}{%
+   There is an LSS, call it \Vlss{maxier},
+   such that \Vlss{max} is the proper prefix
+   of \var{maxier} \cuz{} AF reductio.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-32}{%
+    $\var{maxier} \in \type{LSS}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30}.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-34}{%
+    $\Vsize{maxier} > \Vsize{max}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
+    definition of ``proper prefix''.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-36}{%
+    $\Velement{maxier}{0} = \Velement{max}{0}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
+    definition of ``proper prefix''.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-40}{%
+    $\var{maxier} \in \Vlssset{based}$
+        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10},
+        \Eref{eq:th-maximal-lss-uniqueness-36},
+        \Eref{eq:th-maximal-lss-uniqueness-29-50}.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-42}{%
+    $\var{maxier} \notin \Vlssset{based}$
+        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-29-40},
+        \Eref{eq:th-maximal-lss-uniqueness-34}.%
+}
+The equation \Eref{eq:th-maximal-lss-uniqueness-40}
+directly contradicts \Eref{eq:th-maximal-lss-uniqueness-42}
+and gives us the reductio:
+\mypareq{eq:th-maximal-lss-uniqueness-44}{%
+   There is no \Vlss{maxier}
+   such that \Vlss{max} is the proper prefix
+   of \var{maxier} \cuz{} reductio
+    \Eref{eq:th-maximal-lss-uniqueness-30}--%
+    \Eref{eq:th-maximal-lss-uniqueness-42}.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-46}{%
+   \Maximal{\Vlss{max}} \cuz{}
+    \longDfref{Maximal LSS}{def:maximal-lss},
+    \Eref{eq:th-maximal-lss-uniqueness-44}.%
+}
 \todo{Prove Maximal LSS uniqueness}
 \end{proof}
 
