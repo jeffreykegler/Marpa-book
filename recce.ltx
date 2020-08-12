@@ -5667,23 +5667,26 @@ the reductio and the theorem.
 \begin{theorem}[Maximal LSS uniqueness]
 \label{th:maximal-lss-uniqueness}
 Let \Veim{eim} be a Leo source EIM.
-Let \var{based} be a set of LSS's
-which have \Veim{eim} as their base EIM.
-Then exactly one element, call it \Vlss{max},
-of \var{based} is a maximal
-LSS, and all the other elements of \var{based}
-are proper prefixes of \var{max}.
+Exactly one maximal LSS, call it \Vlss{max},
+has \var{eim} as its base.
+Every other LSS with \var{eim}
+as its base is a proper prefix of \var{max}.
 \end{theorem}
 
 \begin{proof}
 We consider \var{based}, the set of all LSS's
 with \var{eim} as their base:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-10}
+\label{eq:th-maximal-lss-uniqueness-10-10}
 \Vlssset{based} = \set{
    \Vlss{lss} : \Velement{lss}{0} = \var{eim}
 }
    \because \text{AF theorem}.
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-10-20}
+\forall \; \Vlss{lss} : \var{lss} \in \var{based} \iff \Velement{lss}{0} = \var{eim}
+   \because \Eref{eq:th-maximal-lss-uniqueness-10-10}.
 \end{equation}
 \var{based} is never empty, because
 \var{eim} is the base of an LSS
@@ -5691,7 +5694,8 @@ of length~1:
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-12}
     \tuple{ \Veim{eim}} \in \Vlssset{based}
-       \because \Eref{eq:th-maximal-lss-uniqueness-10}.
+       \because \longDfref{LSS}{def:leo-source-sequence},
+       \Eref{eq:th-maximal-lss-uniqueness-10-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-14}
@@ -5708,7 +5712,7 @@ For any length,
 \\ \Vsize{lss1} = \Vsize{lss2} \implies
 \var{lss1} = \var{lss2}
 \\ \because \longThref{LSS uniqueness}{th:lss-uniqueness},
-    \Eref{eq:th-maximal-lss-uniqueness-10}.
+    \Eref{eq:th-maximal-lss-uniqueness-10-20}.
 \end{gathered}
 \end{equation}
 Among the NES's with \var{eim} as their base,
@@ -5734,7 +5738,8 @@ LSS's with \var{eim} as their base.
 \label{eq:th-maximal-lss-uniqueness-22}
 \begin{gathered}
 \forall \; \Vnes{lss} \in \var{based} : \Vsize{lss} \le \var{possible}
-    \\ \because \Eref{eq:th-maximal-lss-uniqueness-18},
+    \\ \because \Eref{eq:th-maximal-lss-uniqueness-10-20},
+    \Eref{eq:th-maximal-lss-uniqueness-18},
         \Eref{eq:th-maximal-lss-uniqueness-20}.
 \end{gathered}
 \end{equation}
@@ -5780,34 +5785,38 @@ and at least one LSS is of that size:
 }
 \mypareq{eq:th-maximal-lss-uniqueness-29-50}{%
     $\Velement{max}{0} = \var{eim}$
-        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10},
+        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10-20},
             \Eref{eq:th-maximal-lss-uniqueness-29-30}.
 }
 We now consider, for a reductio,
 the possibility that \Vlss{max} is the proper
 prefix of another LSS.
 \mypareq{eq:th-maximal-lss-uniqueness-30}{%
-   There is an LSS, call it \Vlss{maxier},
-   such that \Vlss{max} is the proper prefix
-   of \var{maxier} \cuz{} AF reductio.%
+   $\exists \; \Vlss{maxier} : \PrPfx{\var{max}, \var{maxier}}$
+   \cuz{} AF reductio.%
 }
 \mypareq{eq:th-maximal-lss-uniqueness-32}{%
-    $\var{maxier} \in \type{LSS}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30}.%
+    $\var{maxier} \in \type{LSS} \land \PrPfx{\var{max}, \var{maxier}}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
+    existental instantiation.%
+}
+\mypareq{eq:th-maximal-lss-uniqueness-33}{%
+    $\PrPfx{\var{max}, \var{maxier}}$
+    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-32}.
 }
 \mypareq{eq:th-maximal-lss-uniqueness-34}{%
     $\Vsize{maxier} > \Vsize{max}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
-    definition of ``proper prefix''.%
+    \cuz{} \longDfref{Proper prefix}{def:prefix}
+    \Eref{eq:th-maximal-lss-uniqueness-30}.%
 }
 \mypareq{eq:th-maximal-lss-uniqueness-36}{%
     $\Velement{maxier}{0} = \Velement{max}{0}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
-    definition of ``proper prefix''.%
+    \cuz{} \longDfref{Proper prefix}{def:prefix}
+    \Eref{eq:th-maximal-lss-uniqueness-30}.%
 }
 \mypareq{eq:th-maximal-lss-uniqueness-40}{%
     $\var{maxier} \in \Vlssset{based}$
-        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10},
+        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10-20},
         \Eref{eq:th-maximal-lss-uniqueness-36},
         \Eref{eq:th-maximal-lss-uniqueness-29-50}.%
 }
@@ -5816,13 +5825,12 @@ prefix of another LSS.
         \cuz{} \Eref{eq:th-maximal-lss-uniqueness-29-40},
         \Eref{eq:th-maximal-lss-uniqueness-34}.%
 }
-The equation \Eref{eq:th-maximal-lss-uniqueness-40}
-directly contradicts \Eref{eq:th-maximal-lss-uniqueness-42}
+The equation \Eref{eq:th-maximal-lss-uniqueness-42}
+directly contradicts \Eref{eq:th-maximal-lss-uniqueness-40}
 and gives us the reductio:
 \mypareq{eq:th-maximal-lss-uniqueness-44}{%
-   There is no \Vlss{maxier}
-   such that \Vlss{max} is the proper prefix
-   of \var{maxier} \cuz{} reductio
+   $\nexists \; \Vlss{maxier} : \PrPfx{\var{max}, \var{maxier}}$
+   \cuz{} reductio
     \Eref{eq:th-maximal-lss-uniqueness-30}--%
     \Eref{eq:th-maximal-lss-uniqueness-42}.%
 }
@@ -5831,6 +5839,21 @@ and gives us the reductio:
     \longDfref{Maximal LSS}{def:maximal-lss},
     \Eref{eq:th-maximal-lss-uniqueness-44}.%
 }
+We can restate the ``LSS trichotomy'' in the following form:
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-48}
+\begin{gathered}
+\forall \; \Vlss{lss1} : \forall \; \Vlss{lss2} :
+\\ \left(
+        \Velement{lss1}{0} = \Velement{lss2}{0} \land \var{lss1} \neq \var{lss2}
+    \right)
+\\ \implies \left(
+        \PrPfx{\var{lss1}, \var{lss2}} \lor \PrPfx{\var{lss2}, \var{lss1}}
+    \right)
+\\ \because \Thref{th:lss-trichotomy}.
+\end{gathered}
+\end{equation}
+
 \todo{Prove Maximal LSS uniqueness}
 \end{proof}
 
