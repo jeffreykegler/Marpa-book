@@ -313,11 +313,13 @@
 \newcommand\mycallname[1]{\textproc{#1}}
 \newcommand\call[2]{\mycallname{#1}\ifthenelse{\equal{#2}{}}{}{(#2)}}%
 
-\newcommand{\myfnname}[1]{\ensuremath{\mymathop{#1}}}
-\newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
 \newcommand{\Cg}{\var{g}}
 \newcommand{\Cw}{\var{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\var{#1}]}}}
+
+\newcommand{\myfnname}[1]{\ensuremath{\mymathop{#1}}}
+\newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
+
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
 \newcommand{\Current}[1]{\ensuremath{\mymathop{Current}(#1)}}
@@ -344,11 +346,14 @@
 \newcommand{\Origin}[1]{\ensuremath{\mymathop{Origin}(#1)}}
 \newcommand{\Passes}[1]{\ensuremath{\mymathop{Passes}(#1)}}
 \newcommand{\Penult}[1]{\ensuremath{\mymathop{Penult}(#1)}}
-\newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}(#1)}}
+\newcommand{\Pfx}[1]{\ensuremath{\mymathop{Pfx}(#1)}}
 \newcommand{\Postdot}[1]{\ensuremath{\mymathop{Postdot}(#1)}}
 \newcommand{\Predecessor}[1]{\ensuremath{\mymathop{Predecessor}(#1)}}
 \newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
+\newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}(#1)}}
 \newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{Previous-Link}(#1)}}
+\newcommand{\PrPfx}[1]{\ensuremath{\mymathop{PrPfx}(#1)}}
+\newcommand{\PrSfx}[1]{\ensuremath{\mymathop{PrSfx}(#1)}}
 \newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
 \newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
 \newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}(#1)}}
@@ -358,15 +363,17 @@
 \newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Seen}[1]{\ensuremath{\mymathop{Seen}(#1)}}
+\newcommand{\Sfx}[1]{\ensuremath{\mymathop{Sfx}(#1)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Space}[1]{\ensuremath{\mymathop{Space}(#1)}}
-\newcommand{\Time}[1]{\ensuremath{\mymathop{Time}(#1)}}
 \newcommand{\Symbol}[1]{\ensuremath{\mymathop{Symbol}(#1)}}
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
+\newcommand{\Time}[1]{\ensuremath{\mymathop{Time}(#1)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}(#1)}}
 \newcommand{\Transitions}[2]{\ensuremath{\mymathop{Transitions}(#1,#2)}}
 \newcommand{\Valid}[1]{\ensuremath{\mymathop{Valid}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
+
 \newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
 % I use parboxes in equations.  This sets a useful width for them.
@@ -1211,17 +1218,40 @@ is the empty sequence, which we may write as $\epsilon$:
 \var{z} < \var{a} \implies \var{s}[\var{a} \ldots \var{z}] = \epsilon.
 \]
 
-Where $0 \le \var{j} \le \Vlastix{j}$,
-the sequence \Velement{fseq}{0\ldots \var{j}} is a \dfn{prefix}
-of the finite sequence \var{fseq},
-and the sequence \Velement{fseq}{\var{j}\ldots \Vlastix{fseq}} is a \dfn{suffix}
-of \var{fseq}.
-When $0 \le \var{j} < \Vlastix{fseq}$, then
-the sequence \Velement{fseq}{0\ldots \var{j}} is a \dfn{proper prefix}
-of \var{fseq}.
-When $0 < \var{j} \le \Vlastix{fseq}$, then
-the sequence \Velement{fseq}{\var{j}\ldots \Vlastix{fseq}} is a \dfn{proper suffix}
-of \var{fseq}.
+\begin{definition}[Prefix]
+\label{def:prefix}
+Let \var{x} and \var{y} be sequences.
+\begin{gather*}
+\Pfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{0\ldots \var{j}}.
+\\
+\PrPfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} < \Vlastix{y}
+\land \var{x} = \Velement{y}{0\ldots \var{j}}.
+\end{gather*}
+We say
+that \var{x} is a \dfn{prefix} of \var{y} if \Pfx{\var{x}, \var{y}};
+and that \var{x} is a \dfn{proper prefix} of \var{y} if \PrPfx{\var{x}, \var{y}}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Suffix]
+\label{def:suffix}
+\begin{gather*}
+\Sfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
+\\
+\PrSfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : 0 < \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
+\end{gather*}
+We say
+that \var{x} is a \dfn{suffix} of \var{y} if \Sfx{\var{x}, \var{y}};
+and that \var{x} is a \dfn{proper suffix} of \var{y} if \PrSfx{\var{x}, \var{y}}.
+\dispEnd
+\end{definition}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
