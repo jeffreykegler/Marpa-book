@@ -5438,6 +5438,48 @@ That is,
 \dispEnd
 \end{definition}
 
+\begin{theorem}[Source EIM containment]
+\label{th:source-eim-containment}
+Every source EIM is the base element of at least one LSS.
+\end{theorem}
+
+\begin{proof}
+The proof is by construction of an example.
+Let \Veim{eim} be an arbitrary source EIM so that,
+\begin{equation}
+\label{eq:th-source-eim-containment-10}
+\size{\myfn{lims}{\var{eim}}} > 0
+\because \longDfref{Leo source EIM}{def:leo-source-eim}.
+\end{equation}
+Our example of an LSS containing \var{eim} as its base element is
+\mypareq{eq:th-source-eim-containment-12}{%
+   $\var{example} = \tuple{\var{eim}}$ \cuz{} AF construction.
+}
+\mypareq{eq:th-source-eim-containment-14}{%
+   $\Vsize{example} = 1$ \cuz \Eref{eq:th-source-eim-containment-14}.
+}
+\begin{equation}
+\label{eq:th-source-eim-containment-16}
+\begin{gathered}
+       \forall \; \Vnat{i} < \Vlastix{example} :
+   \\ \myfn{Next-Eligible}{\Velement{example}{\var{i}+1}, \VVelement{example}{i}}.
+   \\ \because \text{vacuously}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-source-eim-containment-18}{%
+   $\var{example} \in \type{NES}$ \cuz{}
+        \longDfref{NES}{def:next-eligible-sequence},
+       \Eref{eq:th-source-eim-containment-14},
+       \Eref{eq:th-source-eim-containment-16}.%
+}
+\mypareq{eq:th-source-eim-containment-20}{%
+   $\var{example} \in \type{LSS}$ \cuz{}
+       \longDfref{LSS}{def:leo-source-sequence},
+       \Eref{eq:th-source-eim-containment-10},
+       \Eref{eq:th-source-eim-containment-18}.  \quad \myqed
+}
+\end{proof}
+
 \begin{definition}[Maximal LSS]
 \label{def:maximal-lss}
 A \dfn{maximal LSS} is an LSS which is not the proper prefix
@@ -5693,7 +5735,7 @@ with \var{eim} as their base:
 of length~1:
 \begin{equation}
 \label{eq:th-maximal-lss-uniqueness-12}
-    \tuple{ \Veim{eim}} \in \Vlssset{based}
+    \tuple{ \Veim{eim}}_\type{LSS} \in \Vlssset{based}
        \because \longDfref{LSS}{def:leo-source-sequence},
        \Eref{eq:th-maximal-lss-uniqueness-10-20}.
 \end{equation}
@@ -5841,7 +5883,8 @@ is the base of at least one maximal EIM:
     \longDfref{Maximal LSS}{def:maximal-lss},
     \Eref{eq:th-maximal-lss-uniqueness-44}.%
 }
-We have yet to show that \Vlss{max} is unique.
+
+Note that we have yet to show that the maximal EIM is unique.
 Proceeding,
 we restate the ``LSS trichotomy'' in the following form:
 \begin{equation}
@@ -5864,6 +5907,19 @@ Instantiating \var{lss2} as \var{max}, we have
         \PrPfx{\var{lss1}, \var{max}} \lor \PrPfx{\var{max}, \var{lss1}}
 \\ \because \Eref{eq:th-maximal-lss-uniqueness-48},
     \text{existential instantiation}.
+\end{gathered}
+\end{equation}
+We can now show another of the claims of the theorem:
+that, among EIM's with the same base, every EIM that is not
+equal to the maximal EIM is a proper prefix of the maximal EIM.
+\begin{equation}
+\label{eq:th-maximal-lss-uniqueness-52}
+\begin{gathered}
+\forall \; \Vlss{lss1} :
+\\ \Velement{lss1}{0} = \Velement{max}{0} \land \var{lss1} \neq \var{max}
+    \implies \PrPfx{\var{lss1}, \var{max}}
+\\ \because \Eref{eq:th-maximal-lss-uniqueness-46},
+    \Eref{eq:th-maximal-lss-uniqueness-50}.
 \end{gathered}
 \end{equation}
 
