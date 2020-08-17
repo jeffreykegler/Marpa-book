@@ -5409,7 +5409,7 @@ cannot assume that.
 \[
     \myfn{Is-Source}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
 \]
-We say that \var{src} is 
+We say that \var{src} is
 a \dfn{Leo source EIM}, or a \dfn{source EIM},
 if \myfn{Is-Source}{\Veim{src}}.
 If $\mylim{\ell} \in \myfn{lims}{\var{src}}$,
@@ -5480,7 +5480,7 @@ Our example of an LSS containing \var{eim} as its base element is
        \Eref{eq:th-source-eim-containment-10},
        \Eref{eq:th-source-eim-containment-18}.
 }
-The theorem is 
+The theorem is
 \Eref{eq:th-source-eim-containment-13} and
 \Eref{eq:th-source-eim-containment-13}.
 \myqed
@@ -5712,86 +5712,116 @@ the reductio and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[Maximal LSS uniqueness]
-\label{th:maximal-lss-uniqueness}
-Every Leo source EIM is the base of exactly one
-maximal LSS,
-and every non-maximal LSS with that base is a prefix
-of that maximal LSS.
-That is, if
-\mypareq{eq:th-maximal-lss-uniqueness-02}{
-    $\myfn{Is-source}{\var{eim}}$
+\begin{theorem}[Maximal LSS non-duplication]
+\label{th:maximal-lss-non-duplication}
+An EIM is the base of at most one maximal LSS.
+\end{theorem}
+
+\begin{proof}
+Call the base EIM, \Veim{base}.
+If there is not a maximal LSS with base \Veim{base}, we
+have the theorem trivially.
+(This will be the case if \var{base} was not a source EIM.)
+
+For the rest of this theorem, then,
+we may assume the existence of these
+two arbitrary, but not necessarily distinct, maximal LSS's:
+\mypareq{eq:th-maximal-lss-non-duplication-10}{%
+    $\Velement{max1}{0} = \Veim{base}$ \cuz{} AF proof,
+       arbitrary \var{max1}.
 }
-then we have all of the following:
-\mypareq{eq:th-maximal-lss-uniqueness-04}{
-    $\exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
+\mypareq{eq:th-maximal-lss-non-duplication-12}{%
+    $\Velement{max2}{0} = \Veim{base}$ \cuz{} AF proof,
+       arbitrary \var{max2}.
 }
-\begin{equation}
-\label{eq:th-maximal-lss-uniqueness-06}
-\begin{gathered}
-    \forall \Vlss{lss1} : \forall \Vlss{lss2} :
-    \\ \Velement{lss1}{0} = \Velement{lss2}{0} = \var{eim} \land
-        \Maximal{\var{lss1}}
-    \\ \implies \var{lss1} = \var{lss2}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-uniqueness-08}
-\begin{gathered}
-    \forall \Vlss{lss1} : \exists \; \Vlss{max} :
-    \\ \Velement{lss1}{0} = \Velement{max}{0} = \var{eim} \land
-        \neg \Maximal{\var{lss1}}
-    \\ \implies \Maximal{\var{max}} \land \PrPfx{\var{lss1}, \var{max}}.
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-maximal-lss-non-duplication-14}{%
+    \Maximal{\var{max1}} \cuz{} AF proof.
+}
+\mypareq{eq:th-maximal-lss-non-duplication-16}{%
+    \Maximal{\var{max2}} \cuz{} AF proof.
+}
+
+We now proceed by reductio.
+\mypareq{eq:th-maximal-lss-non-duplication-18}{%
+    $\var{max1} \neq \var{max2}$ \cuz{} AF reductio.
+}
+\mypareq{eq:th-maximal-lss-non-duplication-20}{%
+    $\PrPfx{\var{max1},\var{max2}}
+    \land \PrPfx{\var{max2},\var{max1}}$
+    \cuz{} \longThref{LSS trichotomy}{th:lss-trichotomy},
+    \Eref{eq:th-maximal-lss-non-duplication-10},
+    \Eref{eq:th-maximal-lss-non-duplication-12}, and
+    \Eref{eq:th-maximal-lss-non-duplication-18}.
+}
+\mypareq{eq:th-maximal-lss-non-duplication-22}{%
+    $\neg \Maximal{\var{max1}} \land \neg \Maximal{\var{max2}}$
+    \cuz{} \longDfref{Maximal LSS}{def:maximal-lss}.
+}
+Equation \Eref{eq:th-maximal-lss-non-duplication-22}
+contradicts equations
+\Eref{eq:th-maximal-lss-non-duplication-14} and
+\Eref{eq:th-maximal-lss-non-duplication-16},
+which shows the reductio \Eref{eq:th-maximal-lss-non-duplication-18}--%
+    \Eref{eq:th-maximal-lss-non-duplication-22}
+\myqed
+\end{proof}
+
+\begin{theorem}[Maximal LSS existence]
+\label{th:maximal-lss-existence}
+Every Leo source EIM is the base of at least one
+maximal LSS.  That is,
+\mypareq{eq:th-maximal-lss-existence-02}{
+    $\myfn{Is-source}{\var{eim}} \implies
+    \exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
+}
 \end{theorem}
 
 \begin{proof}
 The proof strategy is direct.
 We assume the antecedant of the theorem to show its
-consequents.
+consequent.
 Consider \var{based}, the set of all LSS's
 with \var{eim} as their base:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-10-10}
+\label{eq:th-maximal-lss-existence-10-10}
 \Vlssset{based} = \set{
    \Vlss{lss} : \Velement{lss}{0} = \var{eim}
 }
    \because \text{AF theorem}.
 \end{equation}
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-10-20}
+\label{eq:th-maximal-lss-existence-10-20}
 \forall \; \Vlss{lss} : \var{lss} \in \var{based} \iff \Velement{lss}{0} = \var{eim}
-   \because \Eref{eq:th-maximal-lss-uniqueness-10-10}.
+   \because \Eref{eq:th-maximal-lss-existence-10-10}.
 \end{equation}
 \var{based} is never empty, because
 any Leo source EIM is the base of an LSS
 of length~1:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-14}
+\label{eq:th-maximal-lss-existence-14}
     \Vsize{based} \ge 1
        \because
         \longThref{Leo source containment}{th:source-eim-containment},
-            \Eref{eq:th-maximal-lss-uniqueness-02}.
+            \Eref{eq:th-maximal-lss-existence-02}.
 \end{equation}
 For any length,
 \var{based} contains at most one LSS of that length:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-16}
+\label{eq:th-maximal-lss-existence-16}
 \begin{gathered}
 \forall \; \Vlss{lss1} \in \var{based} :
 \forall \; \Vlss{lss2} \in \var{based} :
 \\ \Vsize{lss1} = \Vsize{lss2} \implies
 \var{lss1} = \var{lss2}
 \\ \because \longThref{LSS uniqueness}{th:lss-uniqueness},
-    \Eref{eq:th-maximal-lss-uniqueness-10-20}.
+    \Eref{eq:th-maximal-lss-existence-10-20}.
 \end{gathered}
 \end{equation}
 Among the NES's with \var{eim} as their base,
 there is a maximum length,
 call it \Vnat{possible}:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-18}
+\label{eq:th-maximal-lss-existence-18}
 \begin{gathered}
 \forall \; \Vnes{nes} : \Velement{nes}{0} = \var{eim}
     \\ \implies
@@ -5802,123 +5832,176 @@ call it \Vnat{possible}:
 \end{equation}
 Therefore, there is a maximum possible LSS length for
 LSS's with \var{eim} as their base.
-\mypareq{eq:th-maximal-lss-uniqueness-20}{%
+\mypareq{eq:th-maximal-lss-existence-20}{%
     The length of an LSS is the same as that of its underlying NES
     \cuz{} \longDfref{LSS}{def:leo-source-sequence}.
 }
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-22}
+\label{eq:th-maximal-lss-existence-22}
 \begin{gathered}
 \forall \; \Vnes{lss} \in \var{based} : \Vsize{lss} \le \var{possible}
-    \\ \because \Eref{eq:th-maximal-lss-uniqueness-10-20},
-    \Eref{eq:th-maximal-lss-uniqueness-18},
-        \Eref{eq:th-maximal-lss-uniqueness-20}.
+    \\ \because \Eref{eq:th-maximal-lss-existence-10-20},
+    \Eref{eq:th-maximal-lss-existence-18},
+        \Eref{eq:th-maximal-lss-existence-20}.
 \end{gathered}
 \end{equation}
 Since there is a maximum LSS size for the elements of \var{based},
 and since, for each LSS size, there is at most one LSS in \var{based},
 we know that \var{based} is a finite set:
-\mypareq{eq:th-maximal-lss-uniqueness-24}{%
+\mypareq{eq:th-maximal-lss-existence-24}{%
     $\Vsize{based} \in \naturals$
-    \cuz{} 
-        \Eref{eq:th-maximal-lss-uniqueness-16},
-        \Eref{eq:th-maximal-lss-uniqueness-22}.
+    \cuz{}
+        \Eref{eq:th-maximal-lss-existence-16},
+        \Eref{eq:th-maximal-lss-existence-22}.
 }
 Since \var{based} is finite and contains at least one element,
 there is a maximum size of LSS's actually in \var{based},
 and at least one LSS is of that size:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-26}
+\label{eq:th-maximal-lss-existence-26}
 \begin{gathered}
 \exists \; \Vlss{max} \in \var{based} :
 \forall \; \Vlss{lss} \in \var{based} :
     \Vsize{max} \ge \Vsize{lss}
-\\ \because \Eref{eq:th-maximal-lss-uniqueness-14},
-    \Eref{eq:th-maximal-lss-uniqueness-24}.%
+\\ \because \Eref{eq:th-maximal-lss-existence-14},
+    \Eref{eq:th-maximal-lss-existence-24}.%
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-28}
+\label{eq:th-maximal-lss-existence-28}
 \begin{gathered}
     \Vlss{max} \in \var{based} \land
 \forall \; \Vlss{lss} \in \var{based} :
     \Vsize{\var{max}} \ge \Vsize{lss}
-\\ \because \Eref{eq:th-maximal-lss-uniqueness-26},
+\\ \because \Eref{eq:th-maximal-lss-existence-26},
    \text{existential instantiation of \var{max}}.
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-maximal-lss-uniqueness-29-30}{%
+\mypareq{eq:th-maximal-lss-existence-29-30}{%
     $\Vlss{max} \in \var{based}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-28}.
+    \cuz{} \Eref{eq:th-maximal-lss-existence-28}.
 }
-\mypareq{eq:th-maximal-lss-uniqueness-29-40}{%
+\mypareq{eq:th-maximal-lss-existence-29-40}{%
     $\forall \; \Vlss{lss} \in \var{based} : \Vsize{\var{max}} \ge \Vsize{lss}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-28}.
+    \cuz{} \Eref{eq:th-maximal-lss-existence-28}.
 }
-\mypareq{eq:th-maximal-lss-uniqueness-29-50}{%
+\mypareq{eq:th-maximal-lss-existence-29-50}{%
     $\Velement{max}{0} = \var{eim}$
-        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10-20},
-            \Eref{eq:th-maximal-lss-uniqueness-29-30}.
+        \cuz{} \Eref{eq:th-maximal-lss-existence-10-20},
+            \Eref{eq:th-maximal-lss-existence-29-30}.
 }
 We now consider, for a reductio,
 the possibility that \Vlss{max} is the proper
 prefix of another LSS.
-\mypareq{eq:th-maximal-lss-uniqueness-30}{%
+\mypareq{eq:th-maximal-lss-existence-30}{%
    $\exists \; \Vlss{maxier} : \PrPfx{\var{max}, \var{maxier}}$
    \cuz{} AF reductio.%
 }
-\mypareq{eq:th-maximal-lss-uniqueness-32}{%
+\mypareq{eq:th-maximal-lss-existence-32}{%
     $\var{maxier} \in \type{LSS} \land \PrPfx{\var{max}, \var{maxier}}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-30},
+    \cuz{} \Eref{eq:th-maximal-lss-existence-30},
     existental instantiation.%
 }
-\mypareq{eq:th-maximal-lss-uniqueness-33}{%
+\mypareq{eq:th-maximal-lss-existence-33}{%
     $\PrPfx{\var{max}, \var{maxier}}$
-    \cuz{} \Eref{eq:th-maximal-lss-uniqueness-32}.
+    \cuz{} \Eref{eq:th-maximal-lss-existence-32}.
 }
-\mypareq{eq:th-maximal-lss-uniqueness-34}{%
+\mypareq{eq:th-maximal-lss-existence-34}{%
     $\Vsize{maxier} > \Vsize{max}$
     \cuz{} \longDfref{Proper prefix}{def:prefix}
-    \Eref{eq:th-maximal-lss-uniqueness-30}.%
+    \Eref{eq:th-maximal-lss-existence-30}.%
 }
-\mypareq{eq:th-maximal-lss-uniqueness-36}{%
+\mypareq{eq:th-maximal-lss-existence-36}{%
     $\Velement{maxier}{0} = \Velement{max}{0}$
     \cuz{} \longDfref{Proper prefix}{def:prefix}
-    \Eref{eq:th-maximal-lss-uniqueness-30}.%
+    \Eref{eq:th-maximal-lss-existence-30}.%
 }
-\mypareq{eq:th-maximal-lss-uniqueness-40}{%
+\mypareq{eq:th-maximal-lss-existence-40}{%
     $\var{maxier} \in \Vlssset{based}$
-        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-10-20},
-        \Eref{eq:th-maximal-lss-uniqueness-36},
-        \Eref{eq:th-maximal-lss-uniqueness-29-50}.%
+        \cuz{} \Eref{eq:th-maximal-lss-existence-10-20},
+        \Eref{eq:th-maximal-lss-existence-36},
+        \Eref{eq:th-maximal-lss-existence-29-50}.%
 }
-\mypareq{eq:th-maximal-lss-uniqueness-42}{%
+\mypareq{eq:th-maximal-lss-existence-42}{%
     $\var{maxier} \notin \Vlssset{based}$
-        \cuz{} \Eref{eq:th-maximal-lss-uniqueness-29-40},
-        \Eref{eq:th-maximal-lss-uniqueness-34}.%
+        \cuz{} \Eref{eq:th-maximal-lss-existence-29-40},
+        \Eref{eq:th-maximal-lss-existence-34}.%
 }
-The equation \Eref{eq:th-maximal-lss-uniqueness-42}
-directly contradicts \Eref{eq:th-maximal-lss-uniqueness-40}
+The equation \Eref{eq:th-maximal-lss-existence-42}
+directly contradicts \Eref{eq:th-maximal-lss-existence-40}
 and gives us the reductio:
-\mypareq{eq:th-maximal-lss-uniqueness-44}{%
+\mypareq{eq:th-maximal-lss-existence-44}{%
    $\nexists \; \Vlss{maxier} : \PrPfx{\var{max}, \var{maxier}}$
    \cuz{} reductio
-    \Eref{eq:th-maximal-lss-uniqueness-30}--%
-    \Eref{eq:th-maximal-lss-uniqueness-42}.%
+    \Eref{eq:th-maximal-lss-existence-30}--%
+    \Eref{eq:th-maximal-lss-existence-42}.%
 }
 We are now in a position to state that the Leo source \var{eim}
 is the base of at least one maximal EIM:
-\mypareq{eq:th-maximal-lss-uniqueness-46}{%
+\mypareq{eq:th-maximal-lss-existence-46}{%
    \Maximal{\Vlss{max}} \cuz{}
     \longDfref{Maximal LSS}{def:maximal-lss},
-    \Eref{eq:th-maximal-lss-uniqueness-44}.%
+    \Eref{eq:th-maximal-lss-existence-44}.%
+}
+\end{proof}
+
+\begin{theorem}[Maximal LSS uniqueness]
+\label{th:maximal-lss-uniqueness}
+For every Leo source EIM, there is exactly one maximal LSS.
+\end{theorem}
+
+\begin{proof}
+This theorem follows the the LSS Non-duplication Theorem
+\Thref{th:maximal-lss-non-duplication},
+and the LSS Existence Theorem \Thref{th:maximal-lss-existence}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Maximal LSS dichotomy]
+\label{th:maximal-lss-dichotomy}
+Every LSS based on an EIM is either 
+a maximal LSS, or a proper prefix of a maximal LSS.
+That is,
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-02}
+\begin{gathered}
+\forall \; \Vlss{lss} : \exists \; \Vlss{max}
+\\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
+\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}}.
+\end{gathered}
+\end{equation}
+\todo{Finish stating this theorem}
+\end{theorem}
+
+\begin{proof}
+We can instantiate \Vlss{lss}
+in \Eref{eq:th-maximal-lss-dichotomy-02}
+with an arbitrary value of the same name,
+and introduce a new variable for its base.
+\mypareq{eq:th-maximal-lss-dichotomy-10}{%
+    $\Veim{eim} = \Velement{lss}{0}$,
+    \cuz{} \Eref{eq:th-maximal-lss-dichotomy-02},
+    new \var{eim} for convenience.%
+}
+Every element of \var{lss} must be a Leo source item:
+\mypareq{eq:th-maximal-lss-dichotomy-12}{%
+    \myfn{Is-source}{\var{eim}} \cuz{}
+        \longDfref{LSS}{def:leo-source-sequence},
+        \Eref{eq:th-maximal-lss-dichotomy-10}.%
+}
+\mypareq{eq:th-maximal-lss-dichotomy-14}{%
+    $\exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
+        \cuz{} \longThref{Maximal LSS existence}{th:maximal-lss-existence},
+        \Eref{eq:th-maximal-lss-dichotomy-12}.%
+}
+\mypareq{eq:th-maximal-lss-dichotomy-16}{%
+    $\Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$ \cuz{}
+        \Eref{eq:th-maximal-lss-dichotomy-16}, existential instantiation.
 }
 
-Note that we have yet to show that the maximal EIM is unique.
-Proceeding,
-we restate the ``LSS trichotomy'' in the following form:
+We can restate the ``LSS trichotomy'' in the following form:
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-48}
+\label{eq:th-maximal-lss-dichotomy-18}
 \begin{gathered}
 \forall \; \Vlss{lss1} : \forall \; \Vlss{lss2} :
 \\ \Velement{lss1}{0} = \Velement{lss2}{0} \land \var{lss1} \neq \var{lss2}
@@ -5927,31 +6010,17 @@ we restate the ``LSS trichotomy'' in the following form:
 \\ \because \Thref{th:lss-trichotomy}.
 \end{gathered}
 \end{equation}
-Instantiating \var{lss2} as \var{max}, we have
+If we instantiate \Vlss{lss1} as \var{lss}
+and \Vlss{lss2} as \var{max}, we have
 \begin{equation}
-\label{eq:th-maximal-lss-uniqueness-50}
+\label{eq:th-maximal-lss-dichotomy-20}
 \begin{gathered}
-\forall \; \Vlss{lss1} :
-\\ \Velement{lss1}{0} = \Velement{max}{0} \land \var{lss1} \neq \var{max}
-\\ \implies
-        \PrPfx{\var{lss1}, \var{max}} \lor \PrPfx{\var{max}, \var{lss1}}
-\\ \because \Eref{eq:th-maximal-lss-uniqueness-48},
-    \text{existential instantiation}.
+\\ \Velement{lss}{0} = \Velement{max}{0} \land \var{lss} \neq \var{max}
+\\ \implies \PrPfx{\var{lss}, \var{max}} \lor \PrPfx{\var{max}, \var{lss}}
+\\ \because \Thref{th:lss-trichotomy}.
 \end{gathered}
 \end{equation}
-We can now show another of the claims of the theorem:
-that, among EIM's with the same base, every EIM that is not
-equal to the maximal EIM is a proper prefix of the maximal EIM.
-\begin{equation}
-\label{eq:th-maximal-lss-uniqueness-52}
-\begin{gathered}
-\forall \; \Vlss{lss1} :
-\\ \Velement{lss1}{0} = \Velement{max}{0} \land \var{lss1} \neq \var{max}
-    \implies \PrPfx{\var{lss1}, \var{max}}
-\\ \because \Eref{eq:th-maximal-lss-uniqueness-46},
-    \Eref{eq:th-maximal-lss-uniqueness-50}.
-\end{gathered}
-\end{equation}
+\todo{Finish this}
 
 \todo{Prove Maximal LSS uniqueness}
 \end{proof}
