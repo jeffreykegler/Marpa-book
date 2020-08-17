@@ -5967,17 +5967,18 @@ That is,
 \begin{gathered}
 \forall \; \Vlss{lss} : \exists \; \Vlss{max}
 \\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
-\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}}.
+\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
 \end{gathered}
 \end{equation}
 \todo{Finish stating this theorem}
 \end{theorem}
 
 \begin{proof}
-We can instantiate \Vlss{lss}
+The proof strategy is direct, instantiating the universal quanitifier
+to show its predicate.
+We instantiate \Vlss{lss}
 in \Eref{eq:th-maximal-lss-dichotomy-02}
-with an arbitrary value of the same name,
-and introduce a new variable for its base.
+with an arbitrary value of the same name.
 \mypareq{eq:th-maximal-lss-dichotomy-10}{%
     $\Veim{eim} = \Velement{lss}{0}$,
     \cuz{} \Eref{eq:th-maximal-lss-dichotomy-02},
@@ -5998,6 +5999,14 @@ Every element of \var{lss} must be a Leo source item:
     $\Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$ \cuz{}
         \Eref{eq:th-maximal-lss-dichotomy-16}, existential instantiation.
 }
+\mypareq{eq:th-maximal-lss-dichotomy-17-20}{%
+    $\Velement{max}{0} = \Velement{lss}{0}$ \cuz{}
+        \Eref{eq:th-maximal-lss-dichotomy-10},
+        \Eref{eq:th-maximal-lss-dichotomy-16}.
+}
+\mypareq{eq:th-maximal-lss-dichotomy-17-40}{%
+    \Maximal{\var{max}} \cuz{} \Eref{eq:th-maximal-lss-dichotomy-16}.
+}
 
 We can restate the ``LSS trichotomy'' in the following form:
 \begin{equation}
@@ -6015,14 +6024,66 @@ and \Vlss{lss2} as \var{max}, we have
 \begin{equation}
 \label{eq:th-maximal-lss-dichotomy-20}
 \begin{gathered}
-\\ \Velement{lss}{0} = \Velement{max}{0} \land \var{lss} \neq \var{max}
+\Velement{lss}{0} = \Velement{max}{0} \land \var{lss} \neq \var{max}
 \\ \implies \PrPfx{\var{lss}, \var{max}} \lor \PrPfx{\var{max}, \var{lss}}
 \\ \because \Thref{th:lss-trichotomy}.
 \end{gathered}
 \end{equation}
-\todo{Finish this}
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-24}
+\begin{gathered}
+\var{lss} \neq \var{max} \implies \PrPfx{\var{lss}, \var{max}} \lor \PrPfx{\var{max}, \var{lss}}
+\\ \because \Eref{eq:th-maximal-lss-dichotomy-17-20}.
+\end{gathered}
+\end{equation}
+We know that a maximal LSS cannot be a proper prefix of any other LSS:
+\mypareq{eq:th-maximal-lss-dichotomy-26}{%
+    $\neg \PrPfx{\var{max}, \var{lss}}$ \cuz{}
+        \longDfref{Maximal LSS}{def:maximal-lss},
+        \Eref{eq:th-maximal-lss-dichotomy-17-40}.
+}
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-28}
+\begin{gathered}
+    \var{lss} \neq \var{max} \implies \PrPfx{\var{lss}, \var{max}}
+        \because \Eref{eq:th-maximal-lss-dichotomy-24},
+            \Eref{eq:th-maximal-lss-dichotomy-26}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-30}
+\begin{gathered}
+    \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}}
+        \because \Eref{eq:th-maximal-lss-dichotomy-26},
+            \Eref{eq:th-maximal-lss-dichotomy-28}.
+\end{gathered}
+\end{equation}
 
-\todo{Prove Maximal LSS uniqueness}
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-32}
+\begin{gathered}
+\Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
+\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
+\\ \because \Eref{eq:th-maximal-lss-dichotomy-17-20},
+    \Eref{eq:th-maximal-lss-dichotomy-17-40},
+    \Eref{eq:th-maximal-lss-dichotomy-30}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-dichotomy-34}
+\begin{gathered}
+\forall \; \Vlss{lss} : \exists \; \Vlss{max}
+\\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
+\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-maximal-lss-dichotomy-32},
+    universal generalization of arbitrary \Vlss{lss},
+    existential generalization of \Vlss{max}.%
+    }
+\end{gathered}
+\end{equation}
+Equation \Eref{eq:th-maximal-lss-dichotomy-34} is the theorem.
+\myqed
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
