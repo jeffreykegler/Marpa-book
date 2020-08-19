@@ -4400,6 +4400,100 @@ of the theorem
 \myqed
 \end{proof}
 
+\begin{theorem}[NES extension]
+\label{th:nes-extension}
+Let \var{nes} be an NES,
+and let \var{next} be an EIM.
+Then
+\mypareq{eq:th-nes-extension-02}{%
+   $\tuple{\Velement{\var{nes}}{0}\ldots
+       \Velement{nes}{\Vlastix{nes}}, \var{next}} \in \type{NES}$
+}
+if and only if
+\mypareq{eq:th-nes-extension-07}{%
+        $\myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}$.
+}
+\end{theorem}
+
+\begin{proof}
+We prove the reverse direction first,
+by assuming the antecedant to show the consequent.
+\mypareq{eq:th-nes-extension-10}{%
+        $\myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}$
+        \cuz antecedant \Eref{eq:th-nes-extension-07} AF reverse
+        direction.
+}
+\mypareq{eq:th-nes-extension-12}{%
+    $\var{nes} \in \type{NES}$ \cuz AF theorem.
+}
+\begin{equation}
+\label{eq:th-nes-extension-14}
+\begin{gathered}
+       \forall \; \Vnat{i} < \Vlastix{nes} :
+   \\ \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
+   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+        \Eref{eq:th-nes-extension-12}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-extension-16}
+\begin{gathered}
+   \var{extended} = \left [
+       \Velement{\var{nes}}{0}\ldots
+       \Velement{nes}{\Vlastix{nes}}, \var{next}
+   \right ]
+   \\ \because \text{new \Vnes{extended} for convenience.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-extension-18}
+\begin{gathered}
+       \forall \; \Vnat{i} < \Vlastix{extended}\subtract 1 :
+   \\ \myfn{Next-Eligible}{\Velement{extended}{\var{i}+1}, \VVelement{extended}{i}}
+   \\ \because \Eref{eq:th-nes-extension-14},
+        \Eref{eq:th-nes-extension-16}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-extension-20}
+\begin{gathered}
+   \myfnname{Next-Eligible}\left(
+      \begin{gathered}
+       \Velement{extended}{\Vlastix{extended}},
+       \\ \Velement{extended}{\Vlastix{extended}\subtract 1}
+      \end{gathered}
+   \right)
+   \\ \because \Eref{eq:th-nes-extension-10},
+        \Eref{eq:th-nes-extension-16}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-extension-22}
+\begin{gathered}
+       \forall \; \Vnat{i} < \Vlastix{extended} :
+   \\ \myfn{Next-Eligible}{\Velement{extended}{\var{i}+1}, \VVelement{extended}{i}}
+   \\ \because \Eref{eq:th-nes-extension-18},
+        \Eref{eq:th-nes-extension-20}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-nes-extension-24}{%
+    $\var{extended} \in \type{NES}$ \cuz{}
+       \longDfref{NES}{def:next-eligible-sequence},
+        \Eref{eq:th-nes-extension-22}.
+}
+
+The equation \Eref{eq:th-nes-extension-24}
+is the consequent \Eref{eq:th-nes-extension-02}
+of the
+reverse direction, and shows the reverse direction.
+We can show the forward direction immediately,
+because its consequent \Eref{eq:th-nes-extension-07}
+follows directly from its antecedant \Eref{eq:th-nes-extension-02},
+and the definition of NES \Dfref{def:next-eligible-sequence}.
+With both directions, we have the theorem.
+\myqed
+\end{proof}
+
 \begin{lemma}[NES adjacent direction]
 \label{lm:nes-adjacent-direction}
 If \Veim{prev} and \Veim{next}
@@ -5632,6 +5726,31 @@ if and only if
 \end{theorem}
 
 \begin{proof}
+We prove the reverse direction first, by assuming
+the antecedant to show the consequent.
+\mypareq{eq:th-lss-extension-10}{%
+        $\myfn{Is-source}{\var{next}}$
+        \cuz{} antecedant \Eref{eq:th-lss-extension-07} of 
+        reverse direction.
+}
+\mypareq{eq:th-lss-extension-12}{%
+        $\myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
+        \cuz{} antecedant \Eref{eq:th-lss-extension-07} of 
+        reverse direction.
+}
+\mypareq{eq:th-lss-extension-14}{%
+    $\var{lss} \in \type{LSS}$ \cuz AF theorem.
+}
+\mypareq{eq:th-lss-extension-16}{%
+    $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-Source}{\VVelement{lss}{i}}$
+        \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+        \Eref{eq:th-lss-extension-14}.
+}
+\mypareq{eq:th-lss-extension-18}{%
+   $\var{extended} = \tuple{\Velement{\var{lss}}{0}\ldots
+       \Velement{lss}{\Vlastix{lss}}, \var{next}}$,
+       new \var{extended} for convenience.
+}
 \todo{Prove LSS extension}
 \myqed
 \end{proof}
