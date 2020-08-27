@@ -5842,15 +5842,15 @@ With both directions, we have the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[Maximal LSS extension]
-\label{th:maximal-lss-extension}
+\begin{theorem}[Maximal LSS termination]
+\label{th:maximal-lss-termination}
 Let \var{lss} be an \type{LSS}.
 Then
-\mypareq{eq:th-maximal-lss-extension-02}{%
+\mypareq{eq:th-maximal-lss-termination-02}{%
    \Maximal{\var{lss}}
 }
 if and only if
-\mypareq{eq:th-maximal-lss-extension-07}{%
+\mypareq{eq:th-maximal-lss-termination-07}{%
         $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
@@ -5860,7 +5860,7 @@ if and only if
 \begin{proof}
 We prove the mutual implication directly.
 \begin{equation}
-\label{eq:th-maximal-lss-extension-10}
+\label{eq:th-maximal-lss-termination-10}
 \begin{gathered}
    \Maximal{\var{lss}} \iff
    \\
@@ -5870,7 +5870,7 @@ We prove the mutual implication directly.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-maximal-lss-extension-12}
+\label{eq:th-maximal-lss-termination-12}
 \begin{gathered}
    \nexists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}
@@ -5883,8 +5883,8 @@ We prove the mutual implication directly.
 \end{gathered}
 \end{equation}
 The theorem follows immediately from
-\Eref{eq:th-maximal-lss-extension-10}
-and \Eref{eq:th-maximal-lss-extension-12}.
+\Eref{eq:th-maximal-lss-termination-10}
+and \Eref{eq:th-maximal-lss-termination-12}.
 \myqed
 \end{proof}
 
@@ -6390,12 +6390,105 @@ then
 \mypareq{eq:th-maximal-lss-top-07}{%
    $\forall \; \Vlss{lss} :
        \Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}
-       \implies \Maximal{\var{max}}.$
+       \implies \Maximal{\var{lss}}.$
 }
 \end{theorem}
 
 \begin{proof}
-\todo{Prove Maximal LSS top}
+The proof is direct assuming the antecedant
+\Eref{eq:th-maximal-lss-top-02}
+to show the consequent
+\Eref{eq:th-maximal-lss-top-07}.
+\mypareq{eq:th-maximal-lss-top-10}{%
+    $\nexists \; \Veim{next} :
+        \myfn{Is-source}{\var{next}}
+        \land
+        \myfn{Next-Eligible}{\var{next},\Velement{max}{\Vlastix{max}}}$
+        \linebreak \cuz{}
+        antecedant \Eref{eq:th-maximal-lss-top-02}
+        of theorem AF proof.
+}
+To show the consequent \Eref{eq:th-maximal-lss-top-07},
+we first instantiating the universal generalization,
+the assume the antecedant of its predicate to show
+its consequent.
+\mypareq{eq:th-maximal-lss-top-12}{%
+    $\var{lss} \in \type{LSS}$ \cuz{} universal instantiation of
+    \Eref{eq:th-maximal-lss-top-07}, new free \Vlss{lss}.
+}
+\mypareq{eq:th-maximal-lss-top-14}{%
+   $\Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}$
+   \cuz{} antecedant of predicate in 
+    \Eref{eq:th-maximal-lss-top-07}, AF derivation.
+}
+\mypareq{eq:th-maximal-lss-top-16}{%
+    $\nexists \; \Veim{next} :
+        \myfn{Is-source}{\var{next}}
+        \land
+        \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
+        \linebreak \cuz{}
+        \Eref{eq:th-maximal-lss-top-10},
+        \Eref{eq:th-maximal-lss-top-14}.
+}
+\mypareq{eq:th-maximal-lss-top-18}{%
+    \Maximal{\var{lss}}
+    \cuz{} \longThref{Maximal LSS termination}{th:maximal-lss-termination},
+    \Eref{eq:th-maximal-lss-top-16}.
+}
+\mypareq{eq:th-maximal-lss-top-20}{%
+   $\Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}
+       \implies \Maximal{\var{lss}}$
+       \cuz{} derivation \Eref{eq:th-maximal-lss-top-16}--%
+           \Eref{eq:th-maximal-lss-top-18}.
+}
+\mypareq{eq:th-maximal-lss-top-22}{%
+   $\forall \; \var{lss} : \Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}
+       \implies \Maximal{\var{lss}}$
+       \linebreak \cuz{} \Eref{eq:th-maximal-lss-top-20}, universal instantiation.
+}
+Equation \Eref{eq:th-maximal-lss-top-22} is the consequent of theorem,
+and with it, we have the theorem.
+\myqed
+\end{proof}
+
+\begin{theorem}[Maximal LSS LIM invariant]
+\label{th:eq-maximal-lss-lim-invariant}
+The dotted rule and origin of
+every LIM of an maximal LSS is the same
+as the
+dotted rule and the origin of the top EIM
+of that maximal LSS.
+That is,
+\begin{equation}
+\label{eq:th-eq-maximal-lss-lim-invariant-02}
+\begin{gathered}
+\forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} } :
+\\ \forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\end{gathered}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The proof is by induction on the last index of the LSS,
+so that the induction hypothesis is
+\begin{equation}
+\label{eq:th-eq-maximal-lss-lim-invariant-10}
+\begin{gathered}
+\myfn{INDH}{\Vnat{ix}} \defined
+\\ \forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} \land \Vlastix{lss} = \var{indx} } :
+\\ \forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\end{gathered}
+\end{equation}
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
