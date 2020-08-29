@@ -5872,8 +5872,8 @@ We prove the mutual implication directly.
 \begin{equation}
 \label{eq:th-maximal-lss-termination-12}
 \begin{gathered}
-   \nexists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
-       \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}
+   \left( \nexists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
+       \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS} \right)
         \\ \iff \nexists \; \Veim{next} :
         \\ \myfn{Is-source}{\var{next}}
         \land
@@ -6009,12 +6009,9 @@ two arbitrary, but not necessarily distinct, maximal LSS's:
        arbitrary \var{max2}.
 }
 \mypareq{eq:th-maximal-lss-non-duplication-14}{%
-    \Maximal{\var{max1}} \cuz{} AF proof.
+    $\Maximal{\var{max1}} \land \Maximal{\var{max2}}$
+    \cuz{} AF proof.
 }
-\mypareq{eq:th-maximal-lss-non-duplication-16}{%
-    \Maximal{\var{max2}} \cuz{} AF proof.
-}
-
 We now proceed by reductio.
 \mypareq{eq:th-maximal-lss-non-duplication-18}{%
     $\var{max1} \neq \var{max2}$ \cuz{} AF reductio.
@@ -6030,13 +6027,15 @@ We now proceed by reductio.
 \mypareq{eq:th-maximal-lss-non-duplication-22}{%
     $\neg \Maximal{\var{max1}} \lor \neg \Maximal{\var{max2}}$
     \cuz{} \longDfref{Maximal LSS}{def:maximal-lss}.
+    This contradicts \Eref{eq:th-maximal-lss-non-duplication-14}.
 }
-Equation \Eref{eq:th-maximal-lss-non-duplication-22}
-contradicts equations
-\Eref{eq:th-maximal-lss-non-duplication-14} and
-\Eref{eq:th-maximal-lss-non-duplication-16},
-which shows the reductio \Eref{eq:th-maximal-lss-non-duplication-18}--%
-    \Eref{eq:th-maximal-lss-non-duplication-22}
+\mypareq{eq:th-maximal-lss-non-duplication-24}{%
+    $\var{max1} = \var{max2}$ \cuz{} reductio
+    \Eref{eq:th-maximal-lss-non-duplication-18}--%
+    \Eref{eq:th-maximal-lss-non-duplication-22}.
+}
+Since the choice of \var{max1} and \var{max2} was arbitrary,
+\Eref{eq:th-maximal-lss-non-duplication-24} shows the theorem.
 \myqed
 \end{proof}
 
@@ -6370,7 +6369,7 @@ We know that a maximal LSS cannot be a proper prefix of any other LSS:
 \\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
 \\ \myparbox{\cuz{}
     \Eref{eq:th-maximal-lss-dichotomy-32},
-    universal generalization of arbitrary \Vlss{lss},
+    universal generalization of \Vlss{lss},
     existential generalization of \Vlss{max}.%
     }
 \end{gathered}
@@ -6405,12 +6404,13 @@ to show the consequent
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{max}{\Vlastix{max}}}$
         \linebreak \cuz{}
+        \longThref{Maximal LSS termination}{th:maximal-lss-termination},
         antecedant \Eref{eq:th-maximal-lss-top-02}
-        of theorem AF proof.
+        of theorem.
 }
 To show the consequent \Eref{eq:th-maximal-lss-top-07},
-we first instantiating the universal generalization,
-the assume the antecedant of its predicate to show
+we first instantiate the universal generalization,
+then we assume the antecedant of its predicate to show
 its consequent.
 \mypareq{eq:th-maximal-lss-top-12}{%
     $\var{lss} \in \type{LSS}$ \cuz{} universal instantiation of
@@ -6474,12 +6474,25 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof is by induction on the last index of the LSS,
-so that the induction hypothesis is
+As a prelminary, we will find useful to restate the Maximal LSS
+Termination Theorem:
 \begin{equation}
 \label{eq:th-eq-maximal-lss-lim-invariant-10}
 \begin{gathered}
-\myfn{INDH}{\Vnat{ix}} \defined
+    \forall \; \Vlss{lss} : \Maximal{\var{lss}} \iff
+    \\ \left( \begin{gathered}
+        \forall \; \Veim{next} : \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
+        \\ \implies \neg \myfn{Is-source}{\var{next}}
+        \end{gathered} \right)
+    \\ \because \Thref{th:maximal-lss-termination}.
+\end{gathered}
+\end{equation}
+The proof is by induction on the last index of the LSS,
+so that the induction hypothesis is
+\begin{equation}
+\label{eq:th-eq-maximal-lss-lim-invariant-12}
+\begin{gathered}
+\myfn{INDH}{\Vnat{indx}} \defined
 \\ \forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} \land \Vlastix{lss} = \var{indx} } :
 \\ \forall \; \mylim{\ell} \in
 \set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
