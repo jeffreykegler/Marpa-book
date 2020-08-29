@@ -5502,11 +5502,11 @@ cannot assume that.
 \begin{definition}[Leo source EIM]
 \label{def:leo-source-eim}
 \[
-    \myfn{Is-Source}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
+    \myfn{Is-source}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
 \]
 We say that \var{src} is
 a \dfn{Leo source EIM}, or a \dfn{source EIM},
-if \myfn{Is-Source}{\Veim{src}}.
+if \myfn{Is-source}{\Veim{src}}.
 If $\mylim{\ell} \in \myfn{lims}{\var{src}}$,
 we say that the EIM \Veim{src} is the \dfn{source} of $\ell$,
 and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
@@ -5524,7 +5524,7 @@ That is,
 \type{LSS} = \set{
 \begin{gathered}
     \var{nes} \in \type{NES} :
-    \\ \forall \; \Vnat{i} \in \Dom{\var{nes}} : \myfn{Is-Source}{\VVelement{nes}{i}}
+    \\ \forall \; \Vnat{i} \in \Dom{\var{nes}} : \myfn{Is-source}{\VVelement{nes}{i}}
 \end{gathered}
 }.
 \quad \dispEnd
@@ -5746,7 +5746,7 @@ the antecedant to show the consequent.
     $\var{lss} \in \type{LSS}$ \cuz{} AF theorem.
 }
 \mypareq{eq:th-lss-extension-16}{%
-    $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-Source}{\VVelement{lss}{i}}$
+    $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-source}{\VVelement{lss}{i}}$
         \cuz{} \longDfref{LSS}{def:leo-source-sequence},
         \Eref{eq:th-lss-extension-14}.
 }
@@ -5762,7 +5762,7 @@ the antecedant to show the consequent.
         \Eref{eq:th-lss-extension-18}.
 }
 \mypareq{eq:th-lss-extension-22}{%
-    $\forall \; \Vnat{i} \in \Dom{\var{extended}} : \myfn{Is-Source}{\VVelement{extended}{i}}$
+    $\forall \; \Vnat{i} \in \Dom{\var{extended}} : \myfn{Is-source}{\VVelement{extended}{i}}$
     \cuz{} \Eref{eq:th-lss-extension-10},
     \Eref{eq:th-lss-extension-16},
     \Eref{eq:th-lss-extension-18}.
@@ -6418,7 +6418,7 @@ its consequent.
 }
 \mypareq{eq:th-maximal-lss-top-14}{%
    $\Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}$
-   \cuz{} antecedant of predicate in 
+   \cuz{} antecedant of predicate in
     \Eref{eq:th-maximal-lss-top-07}, AF derivation.
 }
 \mypareq{eq:th-maximal-lss-top-16}{%
@@ -6451,6 +6451,76 @@ and with it, we have the theorem.
 \myqed
 \end{proof}
 
+\begin{theorem}[Maximal LSS LIMs termination]
+\label{th:maximal-lss-lims-termination}
+\mypareq{eq:th-maximal-lss-lims-termination-02}{%
+    $\Maximal{\Vlss{max}} \iff \size{ \myfn{next-lims}{\var{max}} } = 0$.
+}
+\end{theorem}
+
+\begin{proof}
+The mutual implication is proved directly, starting with the left
+term.
+\mypareq{eq:th-maximal-lss-lims-termination-10}{%
+    $\Maximal{\Vlss{max}}$
+    \cuz{} left term of \Eref{eq:th-maximal-lss-lims-termination-02},
+    AF proof.
+}
+\mypareq{eq:th-maximal-lss-lims-termination-12}{%
+        $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
+        \land
+        \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
+    \linebreak \cuz{}
+    equivalence with
+    \Eref{eq:th-maximal-lss-lims-termination-10},
+    using \longThref{Maximal LSS termination}{th:maximal-lss-termination}.
+}
+\mypareq{eq:th-maximal-lss-lims-termination-14}{%
+        $\nexists \; \Veim{next} :
+    \linebreak \size{\myfn{lims}{\var{next}}} \neq 0
+        \land
+        \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
+    \linebreak \cuz{}
+    equivalence with
+    \Eref{eq:th-maximal-lss-lims-termination-12},
+    using \longDfref{Leo source EIM}{def:leo-source-eim}.
+}
+\mypareq{eq:th-maximal-lss-lims-termination-16}{%
+        $\forall \; \Veim{next} :
+    \linebreak \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
+        \implies \size{\myfn{lims}{\var{next}}} = 0$
+    \linebreak \cuz{}
+        equivalence with
+        \Eref{eq:th-maximal-lss-lims-termination-14}.
+}
+\begin{equation}
+\label{eq:th-maximal-lss-lims-termination-80}
+\begin{gathered}
+\size{ \set{
+    \begin{gathered}
+       \ell \in \type{LIM} :
+        \\ \myfn{Next-Eligible}{\Veim{next},\Veim{src}}
+        \land \; \ell \in \myfn{lims}{\var{next}}
+    \end{gathered}
+    } } = 0
+    \\ \because \text{
+        equivalence with
+        \Eref{eq:th-maximal-lss-lims-termination-16}}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-maximal-lss-lims-termination-82}{%
+    $\size{ \myfn{next-lims}{\var{max}} } = 0$
+    \cuz{} equivalence with
+    \Eref{eq:th-maximal-lss-lims-termination-80},
+    using \longDfref{LIMs of an EIM}{def:lims-of-eim}.
+}
+The theorem
+\Eref{eq:th-maximal-lss-lims-termination-02}
+follows from the chain of equivalences
+\Eref{eq:th-maximal-lss-lims-termination-10}--\Eref{eq:th-maximal-lss-lims-termination-82}.
+\myqed
+\end{proof}
+
 \begin{theorem}[Maximal LSS LIM invariant]
 \label{th:eq-maximal-lss-lim-invariant}
 The dotted rule and origin of
@@ -6460,7 +6530,7 @@ dotted rule and the origin of the top EIM
 of that maximal LSS.
 That is,
 \begin{equation}
-\label{eq:th-eq-maximal-lss-lim-invariant-02}
+\label{eq:th-maximal-lss-lim-invariant-02}
 \begin{gathered}
 \forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} } :
 \\ \forall \; \mylim{\ell} \in
@@ -6474,23 +6544,11 @@ That is,
 \end{theorem}
 
 \begin{proof}
-As a prelminary, we will find useful to restate the Maximal LSS
-Termination Theorem:
-\begin{equation}
-\label{eq:th-eq-maximal-lss-lim-invariant-10}
-\begin{gathered}
-    \forall \; \Vlss{lss} : \Maximal{\var{lss}} \iff
-    \\ \left( \begin{gathered}
-        \forall \; \Veim{next} : \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
-        \\ \implies \neg \myfn{Is-source}{\var{next}}
-        \end{gathered} \right)
-    \\ \because \Thref{th:maximal-lss-termination}.
-\end{gathered}
-\end{equation}
+\todo{Finish Maximal LSS LIM invariant proof}
 The proof is by induction on the last index of the LSS,
 so that the induction hypothesis is
 \begin{equation}
-\label{eq:th-eq-maximal-lss-lim-invariant-12}
+\label{eq:th-maximal-lss-lim-invariant-12}
 \begin{gathered}
 \myfn{INDH}{\Vnat{indx}} \defined
 \\ \forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} \land \Vlastix{lss} = \var{indx} } :
