@@ -6454,13 +6454,12 @@ and with it, we have the theorem.
 \begin{theorem}[Maximal LSS LIMs termination]
 \label{th:maximal-lss-lims-termination}
 \mypareq{eq:th-maximal-lss-lims-termination-02}{%
-    $\Maximal{\Vlss{max}} \iff \size{ \myfn{next-lims}{\var{max}} } = 0$.
+    $\Maximal{\Vlss{max}} \iff \size{ \myfn{next-lims}{\Vlastix{max}} } = 0$.
 }
 \end{theorem}
 
 \begin{proof}
-The mutual implication is proved directly, starting with the left
-term.
+The proof is by mutual implication.
 \mypareq{eq:th-maximal-lss-lims-termination-10}{%
     $\Maximal{\Vlss{max}}$
     \cuz{} left term of \Eref{eq:th-maximal-lss-lims-termination-02},
@@ -6509,7 +6508,7 @@ term.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-maximal-lss-lims-termination-82}{%
-    $\size{ \myfn{next-lims}{\var{max}} } = 0$
+    $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
     \cuz{} equivalence with
     \Eref{eq:th-maximal-lss-lims-termination-80},
     using \longDfref{LIMs of an EIM}{def:lims-of-eim}.
@@ -6560,6 +6559,78 @@ so that the induction hypothesis is
 \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
 \end{gathered}
 \end{equation}
+
+For the basis, we seek to show that \myfn{INDH}{0}.
+\mypareq{eq:th-maximal-lss-lim-invariant-14}{%
+    $\Maximal{\Vlss{max}} \land \Vlastix{max} = 0$
+    \cuz{} AF basis, new free \Vlss{max}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-16}{%
+    $\Vlastix{max} = 0$
+    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-14}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-18}{%
+    $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
+    \cuz{} \longThref{Maximal LSS LIMs termination}{th:maximal-lss-lims-termination},
+    \Eref{eq:th-maximal-lss-lim-invariant-14}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-20}{%
+    $\Dom{\var{max}} = \set{0}$
+    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-16}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-22}{%
+     $\exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \mylim{\ell} \in \myfn{lims}{\VVelement{max}{i}}$
+    \cuz{} new free \mylim{\ell}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-24}{%
+    $\mylim{\ell} \in \myfn{lims}{\VVelement{max}{0}}$
+    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-20},
+        \Eref{eq:th-maximal-lss-lim-invariant-22}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-26}{%
+    $\size{ \myfn{next-lims}{0} } = 0$
+    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-16},
+        \Eref{eq:th-maximal-lss-lim-invariant-18}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-28}{%
+    $\DR{\ell} = \DR{\Velement{max}{0}}
+    \land \Origin{\ell} = \Origin{\Velement{max}{0}}$
+    \cuz{} \longDfref{LIMs of an EIM}{def:lims-of-eim},
+        \Eref{eq:th-maximal-lss-lim-invariant-24}.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-30}{%
+    $\DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+    \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}$
+    \linebreak \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-16},
+        \Eref{eq:th-maximal-lss-lim-invariant-28}.
+}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-32}
+\begin{gathered}
+\forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-maximal-lss-lim-invariant-22},
+    \Eref{eq:th-maximal-lss-lim-invariant-30},
+    universal generalization of \mylim{\ell}.
+    }
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-maximal-lss-lim-invariant-34}{%
+    \myfn{INDH}{0} \cuz{}
+    \Eref{eq:th-maximal-lss-lim-invariant-12},
+    \Eref{eq:th-maximal-lss-lim-invariant-14},
+    \Eref{eq:th-maximal-lss-lim-invariant-32},
+    universal generalization of \Vlss{max}.
+    This is the basis.
+}
+
+\myqed
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
