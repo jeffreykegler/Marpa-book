@@ -6523,7 +6523,7 @@ follows from the chain of equivalences
 \begin{theorem}[Maximal LSS LIM invariant]
 \label{th:eq-maximal-lss-lim-invariant}
 The dotted rule and origin of
-every LIM of an maximal LSS is the same
+every LIM of a maximal LSS is the same
 as the
 dotted rule and the origin of the top EIM
 of that maximal LSS.
@@ -6543,7 +6543,6 @@ That is,
 \end{theorem}
 
 \begin{proof}
-\todo{Finish Maximal LSS LIM invariant proof}
 The proof is by induction on the last index of the LSS,
 so that the induction hypothesis is
 \begin{equation}
@@ -6560,15 +6559,18 @@ so that the induction hypothesis is
 \end{gathered}
 \end{equation}
 
-For the basis, we seek to show that \myfn{INDH}{0}.
+For the basis, we assume the predicate
+of the range of quantification for \Vlss{max},
+to show \myfn{INDH}{0}.
 \mypareq{eq:th-maximal-lss-lim-invariant-14}{%
-    $\Maximal{\Vlss{max}} \land \Vlastix{max} = 0$
+    $\Maximal{\Vlss{max}} = 0$
     \cuz{} AF basis, new free \Vlss{max}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-16}{%
     $\Vlastix{max} = 0$
-    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-14}.
+    \cuz{} AF basis.
 }
+Proceeding with the proof of the basis,
 \mypareq{eq:th-maximal-lss-lim-invariant-18}{%
     $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
     \cuz{} \longThref{Maximal LSS LIMs termination}{th:maximal-lss-lims-termination},
@@ -6621,16 +6623,30 @@ For the basis, we seek to show that \myfn{INDH}{0}.
     }
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-maximal-lss-lim-invariant-34}{%
-    \myfn{INDH}{0} \cuz{}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-34}
+\begin{gathered}
+\forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} \land \Vlastix{lss} = 0 } :
+\\ \forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \myparbox{\cuz{}
     \Eref{eq:th-maximal-lss-lim-invariant-12},
     \Eref{eq:th-maximal-lss-lim-invariant-14},
+    \Eref{eq:th-maximal-lss-lim-invariant-16},
     \Eref{eq:th-maximal-lss-lim-invariant-32},
     universal generalization of \Vlss{max}.
-    This is the basis.
+    This is \myfn{INDH}{0}, the basis of the induction.
 }
+\end{gathered}
+\end{equation}
 
 For the step we assume \myfn{INDH}{\var{n}} 
+and the predicate of the range of quantification
+of \Vlss{max},
 to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-maximal-lss-lim-invariant-40}
@@ -6646,18 +6662,17 @@ to show \myfn{INDH}{\var{n}+1}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-maximal-lss-lim-invariant-42}{%
-    $\var{max} \in \type{LSS} \land
-        \Maximal{\var{max}} \land \Vlastix{max} = \var{n}+1$
-    \cuz{} AF step, new free \Vlss{max}.
+    $\var{max} \in \type{LSS}$
+    \cuz{} new free \Vlss{max}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-43}{%
-    $\var{max} \in \type{LSS}$
-    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-42}.
+    \Maximal{\var{max}} \cuz{} AF step.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-44}{%
     $\Vlastix{max} = \var{n}+1$
-    \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-42}.
+    \cuz{} AF step.
 }
+Proceeding with the proof of the step,
 \mypareq{eq:th-maximal-lss-lim-invariant-46}{%
     $1 \in \Dom{\var{max}}$
     \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-44}.
@@ -6665,9 +6680,13 @@ to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-maximal-lss-lim-invariant-48}{%
     $\Vlss{suffix} = \Velement{max}{1\ldots \Vlastix{max}}$
     \cuz{} \longThref{LSS subsequence}{th:lss-subsequence},
-        \Eref{eq:th-maximal-lss-lim-invariant-43},
+        \Eref{eq:th-maximal-lss-lim-invariant-42},
         \Eref{eq:th-maximal-lss-lim-invariant-46},
         new \Vlss{suffix} for convenience.
+}
+\mypareq{eq:th-maximal-lss-lim-invariant-49}{%
+    $\var{suffix} \in \type{LSS}$ \cuz{}
+        \Eref{eq:th-maximal-lss-lim-invariant-48}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-50}{%
     $\Velement{suffix}{\Vlastix{suffix}} = \Velement{max}{\Vlastix{max}}$
@@ -6677,7 +6696,7 @@ to show \myfn{INDH}{\var{n}+1}.
     $\Maximal{\var{suffix}}$
     \cuz{} \longThref{Maximal LSS top}{th:maximal-lss-top},
         \Eref{eq:th-maximal-lss-lim-invariant-43},
-        \Eref{eq:th-maximal-lss-lim-invariant-48},
+        \Eref{eq:th-maximal-lss-lim-invariant-49},
         \Eref{eq:th-maximal-lss-lim-invariant-50}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-54}{%
@@ -6731,7 +6750,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-maximal-lss-lim-invariant-62}{%
    \myfn{Is-source}{\Velement{max}{1}}
    \cuz{} \longDfref{LSS}{def:leo-source-sequence},
-        \Eref{eq:th-maximal-lss-lim-invariant-43},
+        \Eref{eq:th-maximal-lss-lim-invariant-42},
         \Eref{eq:th-maximal-lss-lim-invariant-46}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-64}{%
@@ -6742,11 +6761,11 @@ to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-maximal-lss-lim-invariant-66}{%
     $\var{max} \in \type{NES}$
     \cuz{} \longDfref{LSS}{def:leo-source-sequence},
-        \Eref{eq:th-maximal-lss-lim-invariant-43}.
+        \Eref{eq:th-maximal-lss-lim-invariant-42}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-68}{%
     $\myfn{Next-Eligible}{\Velement{max}{1},\Velement{max}{0}}$
-        \cuz{} \longDfref{Next eligible sequence}{def:next-eligible-sequence}
+        \cuz{} \longDfref{Next eligible sequence}{def:next-eligible-sequence},
             \Eref{eq:th-maximal-lss-lim-invariant-46},
             \Eref{eq:th-maximal-lss-lim-invariant-66}.
 }
@@ -6759,27 +6778,17 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-maximal-lss-lim-invariant-72}
 \begin{gathered}
-\forall \; \mylim{\ell} \in \myfn{lims}{\VVelement{max}{1}} :
-\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
-    \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-\\ \because
-    \Eref{eq:th-maximal-lss-lim-invariant-60}.
+    \myfn{lims}{\Velement{max}{0}} =
+    \\ \left\lbrace \begin{gathered}
+        \tuple{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
+        \\ \Valid{\Velement{max}{0}}
+        \\ \land \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}}
+        \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
+    \end{gathered} \right\rbrace
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-maximal-lss-lim-invariant-74}
-\begin{gathered}
-\forall \; \mylim{\ell} \in \myfn{next-lims}{\VVelement{max}{0}} :
-\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
-    \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-\\ \because \longDfref{LIMs of an EIM}{def:lims-of-eim},
-    \Eref{eq:th-maximal-lss-lim-invariant-68},
-    \Eref{eq:th-maximal-lss-lim-invariant-70},
-    \Eref{eq:th-maximal-lss-lim-invariant-72}.
-\end{gathered}
-\end{equation}
-
 \myqed
+\todo{Finish Maximal LSS LIM invariant proof}
 \end{proof}
 
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
