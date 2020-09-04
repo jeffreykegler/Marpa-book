@@ -875,8 +875,8 @@ A function that is both one-to-one and
 onto is a bijection.
 $\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
 $\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
-$\myfn{dom}{\var{f}}$ is the domain of \var{f}.
-$\myfn{ran}{\var{f}}$ is the range of \var{f}.
+$\Dom{\var{f}}$ is the domain of \var{f}.
+$\Ran{\var{f}}$ is the range of \var{f}.
 \naturals{} is the set of non-negative integers.\footnote{
     When $\naturals$ is used as a cardinal,
     it is often written as $\aleph_0$.
@@ -886,6 +886,7 @@ $\myfn{ran}{\var{f}}$ is the range of \var{f}.
     it will not be helpful to use two different notations for the
     same set.%
 }
+The abbreviation ``iff'' is used for ``if and only if''.
 
 Logical quantification is
 always with respect to a specific set,
@@ -1478,7 +1479,7 @@ We consider
 \label{eq:rewrite-step}
 \Vstr{prefix}\Vsym{lhs}\Vstr{suffix} \derives \Vstr{prefix}\Vstr{rhs}\Vstr{suffix}
 \end{equation}
-a valid rewrite step of \Vcfg{g} if and only if
+a valid rewrite step of \Vcfg{g} iff
 \begin{gather*}
 \Vstr{prefix} \in \Vocab{\Vcfg{g}}, \\
 \Vstr{suffix} \in \Vocab{\Vcfg{g}}, \quad \text{and} \\
@@ -1486,8 +1487,8 @@ a valid rewrite step of \Vcfg{g} if and only if
 \end{gather*}
 The valid rewrite step of
 \Eref{eq:rewrite-step}
-is a \dfn{right rewrite step} if
-and only if \Vsym{lhs} is the rightmost non-terminal.
+is a \dfn{right rewrite step} iff
+\Vsym{lhs} is the rightmost non-terminal.
 
 A sequence of iterated rewrite steps of \Vcfg{g}, such that
 \begin{equation}
@@ -1497,7 +1498,7 @@ A sequence of iterated rewrite steps of \Vcfg{g}, such that
 is called a \dfn{derivation} of \Vcfg{g},
 and a rewrite step that is part of a derivation is called
 a \dfn{derivation step}.
-A derivation is a \dfn{right derviation} if and only if
+A derivation is a \dfn{right derviation} iff
 all of its rewrite steps are right rewrite steps.
 
 % TODO: Do I need the definition of \dfn{derivation sequence}.
@@ -1615,7 +1616,7 @@ is a full parse.
 A partial parse,
 $[\Vcfg{g}, \Vterm{prefix}]$
 is \dfn{consistent} with a full parse $[\Vcfg{g}, \Vterm{w}]$
-if and only if
+iff
 \[
 \exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
 \]
@@ -1642,15 +1643,15 @@ this definition.
 \dispEnd
 \end{definition}
 
-We say that symbol \Vsym{x} is \dfn{nullable} if and only if
+We say that symbol \Vsym{x} is \dfn{nullable} iff
 $\Vsym{x} \destar \epsilon$.
-\Vsym{x} is \dfn{nulling} if and only if it always derives the null
+\Vsym{x} is \dfn{nulling} iff it always derives the null
 string, that is, for all \Vstr{y}
 \begin{equation*}
 \Vsym{x} \destar \Vstr{y} \implies \Vstr{y} \destar \epsilon.
 \end{equation*}
-\Vsym{x} is \dfn{non-nullable} if and only if it is not nullable.
-\Vsym{x} is a \dfn{proper nullable} if and only if it is nullable,
+\Vsym{x} is \dfn{non-nullable} iff it is not nullable.
+\Vsym{x} is a \dfn{proper nullable} iff it is nullable,
 but not nulling.
 
 Locations in the input will be of type \type{LOC}.
@@ -1783,9 +1784,9 @@ More formally,
 \end{align}
 
 We say that an LR($\pi$) grammar is LR-regular (LRR)
-if and only if $\pi$ is a finite regular partition.
+iff $\pi$ is a finite regular partition.
 We say that an LR($\pi$) grammar is LR($\var{k}$)
-if and only if
+iff
 \begin{equation}
 \pi =
 \begin{gathered}
@@ -1883,7 +1884,7 @@ simply ``cycles''.
 Cycles are recursions but most recursions
 are not cycles.
 In a recursion, a symbol \Vsym{recurse} derives itself as part of a string.
-That is, \Vsym{recurse} is recursive if and only if
+That is, \Vsym{recurse} is recursive iff
 \begin{equation*}
  \Vsym{recurse} \deplus \Vstr{pre} \cat \Vsym{recurse} \cat \Vstr{post}.
 \end{equation*}
@@ -1945,8 +1946,8 @@ by marking the unproductive symbol as a ``unicorn''.
 
 A \dfn{productive symbol}
 is one which derives a terminal string.
-That is, \Vsym{prod} is productive if
-and only if, for some \Vterm{phrase},
+That is, \Vsym{prod} is productive if,
+for some \Vterm{phrase},
 \begin{equation*}
 \Vterm{phrase} \in \Term{\var{g}}^\ast
 \;  \land \;
@@ -2016,7 +2017,7 @@ in that sense, all \Marpa{} symbols are productive.
 
 An \dfn{inaccessible symbol} is one which can never be derived from
 the accept symbol.
-That is, \Vsym{noacc} is inaccessible in \Vext{g} if and only if
+That is, \Vsym{noacc} is inaccessible in \Vext{g} iff
 \begin{equation*}
 \neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{\var{g}} \destar \Vstr{pre} \Vsym{noacc} \Vstr{post}.
 \end{equation*}
@@ -2463,7 +2464,7 @@ in \var{Btree} and \var{Etree}:
 \right\rbrace
 \end{equation*}
 
-A rewrite is \dfn{semantics-safe}, if and only if
+A rewrite is \dfn{semantics-safe}, iff
 \var{Instance-matches}
 is a one-to-one correspondence
 (bijection). \dispEnd{}
@@ -2514,7 +2515,7 @@ Let \Vstr{sf} be a sentential form of \var{g} non-trivially derived from
 \Vsym{rr} \derives \Vstr{rhs} \destar \Vstr{sf}.
 \end{equation}
 The derivation of \Eref{eq:rr}
-is \dfn{right-recursive} if and only if
+is \dfn{right-recursive} iff
 \begin{equation}
 \Rightmost{\Vstr{sf}} = \Vsym{rr}.
 \end{equation}
@@ -2757,7 +2758,7 @@ A \dfn{confirmed dotted rule},
 or \dfn{confirmation},
 is a dotted rule
 with a dot position greater than zero.
-A dotted rule is \dfn{unconfirmed} if and only if
+A dotted rule is \dfn{unconfirmed} iff
 it is not confirmed.
 \dispEnd{}
 \end{definition}
@@ -2856,7 +2857,7 @@ Let
 \end{equation}
 be an arbitrary EIM.
 \Veim{x} is \dfn{valid}
-if and only if
+iff
 \begin{gather}
 \label{eq:EIM-valid-20}
 \var{i} \le \var{j} \le \Vlastix{prefix}, \\
@@ -2872,12 +2873,12 @@ if and only if
 \end{gather}
 \Veim{x}
 is \dfn{useful}
-if and only if
+iff
 \begin{equation*}
 \label{eq:EIM-valid-30}
 \Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
 \end{equation*}
-The boolean function \Valid{\Veim{x}} is true if and only if \Veim{x}
+The boolean function \Valid{\Veim{x}} is true iff \Veim{x}
 is valid.
 \dispEnd
 \end{definition}
@@ -2955,9 +2956,9 @@ and ``adding'' a duplicate to a set leaves the set unchanged.
 
 \begin{definition}[Earley set validity]
 \label{def:es-validity}
-An Earley set is \dfn{valid} if and only if all of its
+An Earley set is \dfn{valid} iff all of its
 PIM's are valid.
-The boolean function \Valid{\Ves{x}} is true if and only if
+The boolean function \Valid{\Ves{x}} is true iff
 \Ves{x} is valid.
 \dispEnd
 \end{definition}
@@ -2983,10 +2984,10 @@ in \Ves{work}.
 
 \begin{definition}[Earley table validity]
 \label{def:earley-table-validity}
-An Earley table is \dfn{valid} if and only if all of its
+An Earley table is \dfn{valid} iff all of its
 Earley sets are valid.
-The boolean function \Valid{\Ves{x}} is true if and only if
-\Ves{x} is valid.
+The boolean function \Valid{\Vesseq{table}} is true iff
+\Vesseq{table} is valid.
 \dispEnd
 \end{definition}
 
@@ -3054,7 +3055,7 @@ for a set of EIM's called ``visible'',
 \begin{gather*}
 \text{\Veim{x} is visible and } \Current{\var{x}} = \Vloc{j}
 \end{gather*}
-if and only if
+iff
 \begin{equation}
 \label{eq:loc-vs-es-3}
    \var{x} \in \ES{\var{j}}.
@@ -3067,7 +3068,7 @@ and \Eref{eq:loc-implementation} on the other hand, is essential.
 Recall that
 there was a unique accept symbol,
 \Accept{\Vint{g}}, in \Vint{g}.
-The input \Cw{} is accepted if and only if,
+The input \Cw{} is accepted iff,
 for some \Vstr{rhs},
 \begin{gather*}
 \Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
@@ -3783,7 +3784,7 @@ including those EIM's which are not penults.
 We say that
 an EIM \Veim{uniq}
 is \dfn{Leo unique} in \Ves{j}
-if and only if
+iff
 $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \dispEnd{}
 \end{definition}
@@ -3810,7 +3811,7 @@ and
 We say that
 an EIM \Veim{eligible}
 is \dfn{Leo eligible}
-if and only if
+iff
 \myfn{Is-Leo-Eligible}{\var{eligible}}.
 \dispEnd{}
 \end{definition}
@@ -4301,17 +4302,19 @@ The theorem is
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
 A \dfn{next eligible sequence} (type \type{NES}) is
-a non-empty sequence of EIM's such that every non-initial EIM
-in the sequence is the next eligible EIM of the
+a non-empty sequence of valid EIM's such that every EIM
+except the top EIM
+is the next eligible EIM of the
 previous EIM in the sequence.  That is,
 \[
 \type{NES} = \set{
    \begin{gathered}
-       \Veimseq{nes} :
-       \forall \; \Vnat{i} < \Vlastix{nes} :
-   \\ \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}.
+       \Veimseq{nes} : \forall \Vnat{i} \in \Dom{\var{nes}} : \Valid{\VVelement{nes}{i}}
+       \\ \land \; \left(
+           \var{i} < \Vlastix{nes} \implies \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
+       \right)
    \end{gathered}
-   }
+   }.
 \]
 If \var{nes} is an NES,
 We say that \Velement{nes}{0} is the \dfn{base} of \var{nes},
@@ -4410,7 +4413,7 @@ Then
    $\tuple{\Velement{\var{nes}}{0}\ldots
        \Velement{nes}{\Vlastix{nes}}, \var{next}} \in \type{NES}$
 }
-if and only if
+iff
 \mypareq{eq:th-nes-extension-07}{%
         $\myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}$.
 }
@@ -5592,7 +5595,7 @@ to say that \var{lss} is maximal.
 
 \begin{theorem}[NES--LSS equivalence]
 \label{th:nes-lss-equivalence}
-Two LSS's are equal if and only if their underlying NES's
+Two LSS's are equal iff their underlying NES's
 are equal.
 \end{theorem}
 
@@ -5718,7 +5721,7 @@ Then
    $\tuple{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}$
 }
-if and only if
+iff
 \mypareq{eq:th-lss-extension-07}{%
         $\myfn{Is-source}{\var{next}}
         \land
@@ -5788,7 +5791,7 @@ Then
    $\exists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}$
 }
-if and only if
+iff
 \mypareq{eq:th-lss-generalized-extension-07}{%
         $\exists \; \Veim{next} : \myfn{Is-source}{\var{next}}
         \land
@@ -5849,7 +5852,7 @@ Then
 \mypareq{eq:th-maximal-lss-termination-02}{%
    \Maximal{\var{lss}}
 }
-if and only if
+iff
 \mypareq{eq:th-maximal-lss-termination-07}{%
         $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
         \land
@@ -6644,9 +6647,7 @@ Proceeding with the proof of the basis,
 \end{gathered}
 \end{equation}
 
-For the step we assume \myfn{INDH}{\var{n}} 
-and the predicate of the range of quantification
-of \Vlss{max},
+For the step we assume \myfn{INDH}{\var{n}}
 to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-maximal-lss-lim-invariant-40}
@@ -6661,18 +6662,20 @@ to show \myfn{INDH}{\var{n}+1}.
 \\ \because \myfn{INDH}{\var{n}}, \text{AF step}.
 \end{gathered}
 \end{equation}
+We now assume the predicate of the range of quantification
+of \Vlss{max} in \myfn{INDH}{\var{n}+1},
+for a derivation.
 \mypareq{eq:th-maximal-lss-lim-invariant-42}{%
     $\var{max} \in \type{LSS}$
-    \cuz{} new free \Vlss{max}.
+    \cuz{} AF derivation, new free \Vlss{max}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-43}{%
-    \Maximal{\var{max}} \cuz{} AF step.
+    \Maximal{\var{max}} \cuz{} AF derivation.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-44}{%
     $\Vlastix{max} = \var{n}+1$
-    \cuz{} AF step.
+    \cuz{} AF derivation.
 }
-Proceeding with the proof of the step,
 \mypareq{eq:th-maximal-lss-lim-invariant-46}{%
     $1 \in \Dom{\var{max}}$
     \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-44}.
@@ -6737,7 +6740,7 @@ Proceeding with the proof of the step,
 \label{eq:th-maximal-lss-lim-invariant-60}
 \begin{gathered}
 \forall \; \mylim{\ell} \in
-\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{1\ldots \Vlastix{max}} :
+\set{ \ell1 : \exists \; \Vnat{i} \in \set{1\ldots \Vlastix{max}} :
     \ell1 \in \myfn{lims}{\VVelement{max}{i}}
 } :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
@@ -6781,12 +6784,100 @@ Proceeding with the proof of the step,
     \myfn{lims}{\Velement{max}{0}} =
     \\ \left\lbrace \begin{gathered}
         \tuple{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
-        \\ \Valid{\Velement{max}{0}}
-        \\ \land \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}}
+        \\ \Valid{\Velement{max}{0}} \land \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}}
         \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
     \end{gathered} \right\rbrace
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-maximal-lss-lim-invariant-74}{%
+    $\Valid{\Velement{max}{0}}$
+    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+        \Eref{eq:th-maximal-lss-lim-invariant-66}.
+}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-75}
+\begin{gathered}
+\forall \; \mylim{\ell} \in \myfn{lims}{\Velement{max}{1}} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \because \Eref{eq:th-maximal-lss-lim-invariant-60}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-76}
+\begin{gathered}
+\forall \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \because \longDfref{LIMs of an EIM}{def:lims-of-eim},
+    \Eref{eq:th-maximal-lss-lim-invariant-68},
+    \Eref{eq:th-maximal-lss-lim-invariant-75}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-78}
+\begin{gathered}
+    \myfn{lims}{\Velement{max}{0}} =
+    \\ \left\lbrace \begin{gathered}
+        \tuple{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
+        \\ \var{dr} = \DR{\Velement{max}{\Vlastix{max}}} \land \var{orig} = \Origin{\Velement{max}{\Vlastix{max}}}
+    \end{gathered} \right\rbrace
+    \\ \because \Eref{eq:th-maximal-lss-lim-invariant-72},
+        \Eref{eq:th-maximal-lss-lim-invariant-74},
+        \Eref{eq:th-maximal-lss-lim-invariant-76}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-80}
+\begin{gathered}
+\forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \set{0\ldots \Vlastix{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \because
+    \Eref{eq:th-maximal-lss-lim-invariant-60},
+    \Eref{eq:th-maximal-lss-lim-invariant-78}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-84}
+\begin{gathered}
+(\var{max} \in \type{LSS} \land \Maximal{\var{max}} \land \Vlastix{max} = \var{n}+1)
+\\ \implies \forall \; \mylim{\ell} \in
+    \set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+        \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+    } :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+    \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \myparbox{\cuz{}
+    derivation \Eref{eq:th-maximal-lss-lim-invariant-42}--
+    \Eref{eq:th-maximal-lss-lim-invariant-80}.
+    }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-maximal-lss-lim-invariant-86}
+\begin{gathered}
+\forall \; \var{max} \in \set{ \Vlss{lss} : \Maximal{\var{lss}} \land \Vlastix{lss} = \var{n}+1 } :
+\\ \forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \myparbox{\cuz{}
+    \Eref{eq:th-maximal-lss-lim-invariant-84},
+    universal generalization of free \Vlss{max}.
+    }
+\end{gathered}
+\end{equation}
+\Eref{eq:th-maximal-lss-lim-invariant-86} is \myfn{INDH}{\var{n}+1}, which is what we
+sought to show for the step of the induction.
+With \Eref{eq:th-maximal-lss-lim-invariant-86}
+and the basis \Eref{eq:th-maximal-lss-lim-invariant-34},
+we have the induction and the theorem.
 \myqed
 \todo{Finish Maximal LSS LIM invariant proof}
 \end{proof}
@@ -10394,27 +10485,27 @@ Every PIM is the result of exactly \Marpa{} operation,
 as follows:
 \begin{itemize}
 \item $\Current{\Vpim{rez}} = 0$
-if and only if \Vpim{rez} is the result of the
+iff \Vpim{rez} is the result of the
 \Marpa{} \var{Initializer} operation.
 \item \Vpim{rez} is an EIM,
 $\Predot{\Veim{rez}} = \Lambda$, and
 $\Current{\var{rez}} > 0$,
-if and only if
+iff
 \var{rez} is the result of a
 \Marpa{} \var{Predictor} operation.
 \item \Vpim{rez} is an EIM,
 $\Predot{\Veim{rez}} \in \Term{\var{g}}$, and
 $\Current{\var{rez}} > 0$,
-if and only if
+iff
 \var{rez} is the result of a
 \Marpa{} \var{Scanner} operation.
 \item \Vpim{rez} is an EIM,
 $\Predot{\Veim{rez}} \in \NT{\var{g}}$, and
 $\Current{\var{rez}} > 0$
-if and only if \var{rez} is the result of a
+iff \var{rez} is the result of a
 \Marpa{} \var{Reducer} operation.
 \item \Vpim{rez} is a LIM
-if and only if
+iff
 \var{rez} is the result of a
 \Marpa{} \var{Memoizer} operation.
 \end{itemize}
