@@ -877,15 +877,7 @@ $\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
 $\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
 $\Dom{\var{f}}$ is the domain of \var{f}.
 $\Ran{\var{f}}$ is the range of \var{f}.
-\naturals{} is the set of non-negative integers.\footnote{
-    When $\naturals$ is used as a cardinal,
-    it is often written as $\aleph_0$.
-    We will not do this.
-    $\naturals = \aleph_0$ and,
-    since we do need to investigate other transfinite cardinals,
-    it will not be helpful to use two different notations for the
-    same set.%
-}
+\naturals{} is the set of non-negative integers.
 The abbreviation ``iff'' is used for ``if and only if''.
 
 Logical quantification is
@@ -1133,7 +1125,7 @@ Type subscripts are often omitted when the type
 is clear from the context.
 Symbols and strings
 have an alternate type notation,
-which uses brackets.
+which uses angle brackets.
 Type names are often used in the text
 as a convenient way to refer to
 their type.
@@ -1184,7 +1176,15 @@ In this paper, we will only need to describe countable cardinalities.
 The notation $\Vsize{set} \in \naturals$
 indicates that \var{set} is finite.
 The notation $\Vsize{set} = \naturals$
-indicates that \var{set} is countably infinite.
+indicates that \var{set} is countably infinite.%
+\footnote{
+    In this case, $\naturals$ is used as a cardinal,
+    and many texts would indicate this by writing it $\aleph_0$.
+    But, since $\naturals = \aleph_0$ and
+    we will not mention any other transfinite cardinals,
+    we see no need to have two different notations
+    for the same set.%
+}
 
 Where \var{seq} is a sequence,
 the first element of \var{seq} is \Velement{seq}{0}.
@@ -1209,7 +1209,7 @@ for the subsequence
     \var{s}[\var{z}].
 \]
 We require of the subsequence indices that
-$\var{z} \in \Dom{seq}$,
+$\var{z} \in \Dom{\var{seq}}$,
 except in one special case.
 If
 $\var{z} < \var{a}$ then
@@ -4302,14 +4302,16 @@ The theorem is
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
 A \dfn{next eligible sequence} (type \type{NES}) is
-a non-empty sequence of valid EIM's such that every EIM
+a non-empty sequence of valid, Leo eligible EIM's
+such that every EIM
 except the top EIM
 is the next eligible EIM of the
 previous EIM in the sequence.  That is,
 \[
 \type{NES} = \set{
    \begin{gathered}
-       \Veimseq{nes} : \forall \Vnat{i} \in \Dom{\var{nes}} : \Valid{\VVelement{nes}{i}}
+       \Veimseq{nes} : \forall \Vnat{i} \in \Dom{\var{nes}} :
+       \\ \Valid{\VVelement{nes}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{nes}{i}}
        \\ \land \; \left(
            \var{i} < \Vlastix{nes} \implies \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
        \right)
@@ -4341,6 +4343,7 @@ That is,
 \end{theorem}
 
 \begin{proof}
+\todo{Change proof for Valid and Is-Leo-Eligible}
 The proof is direct, assuming the antecedants of
 the theorem to show the consequent.
 \mypareq{eq:th-nes-subsequence-10}{%
@@ -4407,7 +4410,7 @@ of the theorem
 \begin{theorem}[NES extension]
 \label{th:nes-extension}
 Let \var{nes} be an NES,
-and let \var{next} be an EIM.
+and let \var{next} be a valid, Leo eligible EIM.
 Then
 \mypareq{eq:th-nes-extension-02}{%
    $\tuple{\Velement{\var{nes}}{0}\ldots
@@ -4420,6 +4423,7 @@ iff
 \end{theorem}
 
 \begin{proof}
+\todo{Change proof for Valid and Is-Leo-Eligible}
 We prove the reverse direction first,
 by assuming the antecedant to show the consequent.
 \mypareq{eq:th-nes-extension-10}{%
