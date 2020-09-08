@@ -3600,13 +3600,17 @@ long.
 This more careful targeting of the memoization is for efficiency reasons.
 If all penults are memoized,
 many memoizations will be performed where
-the longest potential Leo sequence is short,
-and the payoff is therefore limited.
+the maximum length of a Leo sequence is less than a constant,
+usually a small one.
+For these limited-length sequences,
+the payoff of Leo memoization is also limited.
+In practice, the payoff usually does not justify
+even the modest overhead of Leo memoization.
 
 A future extension might be to identify
 non-right-recursive rules
 which generate Leo sequences long enough to
-justify inclusion in the Leo memoizations.
+repay inclusion in the Leo memoizations.
 Such cases would be unusual,
 but may occur often enough to be worth
 providing for.
@@ -3699,12 +3703,16 @@ an Earley item or a Leo item.
 A Leo item is of type \type{LIM},
 where
 \[
-\type{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top}, \Vcurr{j} ] }
+\type{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top}, \Vcurr{j} ] }.
 \]
-for arbitrary \Vdr{top}, \Vsym{transition}, \Vorig{top} and \Vcurr{j}.
-We say that
-\Vsym{transition} is the \dfn{transition symbol} of \Vlim{x};
-and that
+If
+\[
+\Vlim{x}
+\tuple{ \Vdr{top}, \Vsym{transition}, \Vorig{top}, \Vcurr{j} }
+\]
+is an arbitrary LIM,
+we say that
+\Vsym{transition} is the \dfn{transition symbol} of \Vlim{x},
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
@@ -3741,12 +3749,12 @@ or \dfn{location},
 of \var{pim} is
 \begin{equation*}
 \left\lbrace \begin{array}{ll}
-\Current{\Vlim{pim}} & \text{ if \var{pim} is a LIM, and} \\
-\Current{\Veim{pim}} & \text{ if \var{pim} is an EIM.}
+\Current{\var{pim}} & \text{ if \var{pim} is a LIM, and} \\
+\Current{\var{pim}} & \text{ if \var{pim} is an EIM.}
 \end{array} \right.
 \end{equation*}
 In either case, the current location
-of \var{pim}
+of \Vpim{pim}
 may be written
 \Current{\var{pim}}. \dispEnd
 \end{definition}
@@ -3761,7 +3769,7 @@ may be written
     \begin{gathered}
     \Veim{x} \in \set{
         \begin{gathered}
-        \var{x} \in \ES{\var{j}} : \\
+        \var{x} \in \ES{\var{j}} :
         \Penult{\var{x}} \neq \Lambda
         \end{gathered} } :
     \\
@@ -3796,9 +3804,8 @@ $\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
 \LeoEligible{\Vloc{i}} \defined \\
 \left\lbrace \;\;
 \begin{gathered}
-\Veim{eligible} \in \ES{\var{i}} : \\
-\Veim{eligible} \in \LeoUnique{\var{i}} \\
-\land \; \RightRecursive{\Veim{eligible}}
+\Veim{eligible} \in \LeoUnique{\var{i}} :
+\\ \RightRecursive{\Veim{eligible}}
 \end{gathered}
 \;\; \right\rbrace
 \end{equation*}
