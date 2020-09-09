@@ -97,6 +97,9 @@
 \setlength\abovedisplayshortskip{3pt}
 \setlength\belowdisplayshortskip{3pt}
 
+\newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
+\newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
+
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
 
@@ -122,7 +125,6 @@
 \newcommand{\size}[1]{\ensuremath{\left| {#1} \right|}}
 \newcommand{\enRange}[2]{\ensuremath{#1\text{--}#2}}
 \newcommand{\enRefs}[2]{\enRange{\ref{#1}}{\ref{#2}}}
-\newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\overlap}{\mathrlap{\raisebox{.5ex}{$\vee$}}\cap}
 \newcommand{\plusplus}{\mathord{++}}
 \newcommand{\Oc}{\order{1}}
@@ -877,6 +879,7 @@ $\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
 $\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
 $\Dom{\var{f}}$ is the domain of \var{f}.
 $\Ran{\var{f}}$ is the range of \var{f}.
+$\powerset{\var{A}}$ is the powerset of the set \var{A}.
 \naturals{} is the set of non-negative integers.
 The abbreviation ``iff'' is used for ``if and only if''.
 
@@ -1142,7 +1145,7 @@ seem to outweigh the disadvantages.
 Types are defined explicitly, when they are introduced.
 In addition, for every type \var{T},
 \begin{itemize}
-\item the powerset of \var{T} is a type; and
+\item \powerset{\var{T}} is a type; and
 \item the sequence whose range is \var{T} and
 whose index set is
 $\naturals$ is a type.
@@ -1734,19 +1737,19 @@ for some $\Vterm{lookahead} \in \Term{\var{g}}^\ast$,
 
 Let $\Vtermset{phrases} = \Term{\var{g}}^\ast$.
 In this paper, a \dfn{partition}, call it $\pi$,
-is a subset of the powerset of \var{phrases},
+is a subset of \powerset{\var{phrases}},
 where all of the elements of $\pi$ are non-empty and disjoint,
 and where the elements of $\pi$ ``cover'' \var{phrases} in the sense that
 their union is equal to \var{phrases}.
 That is,
 \begin{gather}
-\pi \subseteq \mathcal{P}(\var{phrases}), \\
-(\forall \var{x} \in \pi) \; : \; \var{x} \neq \emptyset, \\
-\var{phrases} = \bigcup_{\Vtermset{X}\in\pi} \Vtermset{X},
+\pi \subseteq \powerset{\var{phrases}}, \\
+\forall \; \var{x} \in \pi : \var{x} \neq \emptyset, \\
+\var{phrases} = \set{\var{phr2} \in \Vtermset{X} : \var{X} \in \pi }
 \end{gather}
 and
 \begin{gather}
-(\forall \Vtermset{x}, \Vtermset{y} \in \pi) \; : \; \var{x} \cap \var{y} = \emptyset \lor \var{x} = \var{y}
+\forall \; \Vtermset{x} \in \pi : \forall \; \Vtermset{y} \in \pi : \var{x} \cap \var{y} = \emptyset \lor \var{x} = \var{y}
 \end{gather}
 Note that in this paper $\pi$ will usually, but not necessarily,
 be of finite cardinality.
