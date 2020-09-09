@@ -2943,10 +2943,11 @@ and
 
 \begin{definition}[Earley set]
 \label{def:earley-set}
-Within \Marpa{},
-an Earley set is defined as a set of \dfn{parse items},
-allo of which have the same current location.
-Earley sets are of type \type{ES}.
+An Earley set is as a set of \dfn{parse items}.
+Earley sets are of type \type{ES}, so that
+\[
+\type{ES} = \powerset{\type{PIM}}.
+\]
 \end{definition}
 We will say that an Earley item is \dfn{unioned into}
 an Earley set,
@@ -2959,10 +2960,17 @@ and ``adding'' a duplicate to a set leaves the set unchanged.
 
 \begin{definition}[Earley set validity]
 \label{def:es-validity}
-An Earley set is \dfn{valid} iff all of its
-PIM's are valid.
-The boolean function \Valid{\Ves{x}} is true iff
-\Ves{x} is valid.
+\begin{equation}
+\label{eq:def-es-validity}
+\begin{gathered}
+\Valid{\Ves{x}} \defined
+\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} land \Current{\var{pim}} = \Current{\var{x}}.
+\end{gathered}
+\end{equation}
+If \Valid{\Ves{x}}, we say that \var{x}
+is \dfn{valid}.
+\todo{cataphoric -- point this out}
+\todo{define Current() for ES?}
 \dispEnd
 \end{definition}
 
