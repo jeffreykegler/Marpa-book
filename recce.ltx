@@ -2964,7 +2964,7 @@ and ``adding'' a duplicate to a set leaves the set unchanged.
 \label{eq:def-es-validity}
 \begin{gathered}
 \Valid{\Ves{x}} \defined
-\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} land \Current{\var{pim}} = \Current{\var{x}}.
+\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} \land \Current{\var{pim}} = \Current{\var{x}}.
 \end{gathered}
 \end{equation}
 If \Valid{\Ves{x}}, we say that \var{x}
@@ -3028,53 +3028,6 @@ For going back and forth between integer location,\footnote{%
 \ES{\Vloc{j}} \text{ is \Ves{j}, the Earley set at location \Vloc{j}; and} \\
 \ES{\Vpim{p}} \text{ is \Ves{j}, the Earley set at location \Current{\var{p}}.}
 \end{gather*}
-But note that there can be an important difference between saying
-\begin{equation}
-\label{eq:loc-conceptual}
-   \Current{\Vpim{p}} = \Vloc{j},
-\end{equation}
-or its equivalent in tuple form,
-\begin{equation}
-\label{eq:loc-conceptual-tuple}
-   \Vpim{p} = \tuple{\Vdr{x},\Vorig{x},\Vcurr{j}}_\type{EIM}
-\end{equation}
-and saying
-\begin{equation}
-\label{eq:loc-implementation}
-   \Vpim{p} \in \Ves{j}.
-\end{equation}
-on the other.
-The notations \Eref{eq:loc-conceptual}
-and \Eref{eq:loc-conceptual-tuple}
-state a relationship
-between the PIM and the location \Vloc{j}.
-The notation \Eref{eq:loc-implementation} states a relationship between
-the PIM
-and the Earley set corresponding to location \Vloc{j}.
-
-When we are speaking in theoretical terms,
-this distinction is a pedantry.
-But when speaking of Earley algorithms,
-the Earley tables start out empty, so that
-initially
-\[
-   \forall \Veim{x} :  \var{x} \notin \ES{\var{j}}
-\]
-and the point of our proofs of correctness will be to show that,
-after the algorithm is finished,
-for a set of EIM's called ``visible'',
-\begin{gather*}
-\text{\Veim{x} is visible and } \Current{\var{x}} = \Vloc{j}
-\end{gather*}
-iff
-\begin{equation}
-\label{eq:loc-vs-es-3}
-   \var{x} \in \ES{\var{j}}.
-\end{equation}
-In algorithmic terms, therefore, the distinction
-between \Eref{eq:loc-conceptual} and
-\Eref{eq:loc-conceptual-tuple} on one hand,
-and \Eref{eq:loc-implementation} on the other hand, is essential.
 
 Recall that
 there was a unique accept symbol,
