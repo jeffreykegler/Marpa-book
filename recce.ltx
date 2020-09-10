@@ -567,7 +567,8 @@ symbols.
 Section \Sref{sec:rewrite} describes the way in which \Marpa{}
 rewrites its external grammars into internal grammars.
 Section \Sref{sec:INTs} defines \Marpa{}'s internal grammars.
-Section \Sref{sec:earley-table} introduces Earley parsing.
+Sections \Sref{sec:earley-item} and
+\Sref{sec:earley-table} introduce Earley parsing.
 Section \Sref{sec:leo} describes Joop Leo's modification
 of Earley's algorithm.
 Section \Sref{sec:ancestry} describes the tracking
@@ -2601,8 +2602,8 @@ so that
 \end{equation}
 \end{proof}
 
-\section{Earley tables}
-\label{sec:earley-table}
+\section{Earley items}
+\label{sec:earley-item}
 
 The definitions of this section
 assume
@@ -2941,103 +2942,6 @@ and
 \Eref{eq:th-eim-origin-not-after-current-16}.
 \end{proof}
 
-\begin{definition}[Earley set]
-\label{def:earley-set}
-An Earley set is as a set of \dfn{parse items}.
-Earley sets are of type \type{ES}, so that
-\[
-\type{ES} = \powerset{\type{PIM}}.
-\]
-\end{definition}
-We will say that an Earley item is \dfn{unioned into}
-an Earley set,
-or \dfn{unioned},
-rather than say that the Earley item is ``added'' to an Earley set,
-or ``added''.
-This is because
-Earley sets are sets in the mathematical sense,
-and ``adding'' a duplicate to a set leaves the set unchanged.
-
-\begin{definition}[Earley set validity]
-\label{def:es-validity}
-\begin{equation}
-\label{eq:def-es-validity}
-\begin{gathered}
-\Valid{\Ves{x}} \defined
-\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} \land \Current{\var{pim}} = \Current{\var{x}}.
-\end{gathered}
-\end{equation}
-If \Valid{\Ves{x}}, we say that \var{x}
-is \dfn{valid}.
-\todo{cataphoric -- point this out}
-\todo{define Current() for ES?}
-\dispEnd
-\end{definition}
-
-An Earley parser builds a table of Earley sets,
-which is called
-a \dfn{parse table},
-or an \dfn{Earley table}.
-An Earley table
-is a sequence of Earley sets.
-If \Vesseq{table} is an Earley table, then
-\begin{equation*}
-\size{\Vesseq{table}} = \size{\Vstr{w}},
-\end{equation*}
-where \Vstr{w} is the input of the parse.
-and \Vesseq{table} is the parse table.
-Earley set 0 is the initial Earley set.
-Earley set $\Vloc{i}+1$ describes the state of
-the parse after processing the input at location \Vloc{i}.
-If \Ves{work} is an Earley set,
-$\size{\Ves{work}}$ is the number of Earley items
-in \Ves{work}.
-
-\begin{definition}[Earley table validity]
-\label{def:earley-table-validity}
-An Earley table is \dfn{valid} iff all of its
-Earley sets are valid.
-The boolean function \Valid{\Vesseq{table}} is true iff
-\Vesseq{table} is valid.
-\dispEnd
-\end{definition}
-
-Earley sets are often named by their location,
-so that \Ves{i} means the Earley set at \Vloc{i}.
-Where \Vloc{i} is an integer location,
-the notation \Ves{i} represents an Earley set, so that
-if \Vesseq{table}
-is the parse table,
-\begin{equation*}
-\Ves{i} = \Vesseq{table}[\Vloc{i}].
-\end{equation*}
-
-Unless otherwise stated, use of
-type \type{ES} will bind its variable in the scope of the current partial parse,
-so that, where \Vstr{input} is the input of the current partial parse,
-\[
-  \myparbox{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$.}
-\]
-For going back and forth between integer location,\footnote{%
-  For a discussion of this from the implementation
-  point of view, see \Sref{sec:es-indexing}.%
-}
-\begin{gather*}
-\Loc{\Vpim{pim}} \text{ is the current location of \var{pim};} \\
-\Loc{\Ves{es}} \text{ is the current location of \var{es};} \\
-\ES{\Vloc{j}} \text{ is \Ves{j}, the Earley set at location \Vloc{j}; and} \\
-\ES{\Vpim{p}} \text{ is \Ves{j}, the Earley set at location \Current{\var{p}}.}
-\end{gather*}
-
-Recall that
-there was a unique accept symbol,
-\Accept{\Vint{g}}, in \Vint{g}.
-The input \Cw{} is accepted iff,
-for some \Vstr{rhs},
-\begin{gather*}
-\Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
-\left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
-\end{gather*}
 \begin{definition}[Matching]
 \label{def:matching-1}
 We say that an \var{l} of some type \dfn{matches}
@@ -3099,150 +3003,6 @@ By \Eref{eq:th-matching-eims-direction-03} and
 The theorem follows from
 \Eref{eq:th-matching-eims-direction-10}
 and \Thref{th:eim-direction}.
-\end{proof}
-
-\begin{theorem}[ES predictions \Oc{}]
-\label{th:es-prediction-count}
-The count of valid predictions in an Earley set is \Oc{}.
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-es-prediction-count-08}
-\myparbox{\Veim{pred} is a valid prediction $\because$ \text{AF theorem}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-10}
-\begin{gathered}
-\Veim{pred} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j} \\
-   \because \Eref{eq:th-es-prediction-count-08},
-   \text{WLOG},
-   \longDfref{EIM validity}{def:eim-validity}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-12}
-\Vstr{rhs1} = \epsilon \because
-\longDfref{prediction}{def:prediction}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-14}
-\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
-\because
-\Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:prediction}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-16}
-\var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
-\because
-\Eref{eq:th-es-prediction-count-12},
-\Eref{eq:th-es-prediction-count-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-17}
-\var{j} \le \var{i}
-\because \Eref{eq:th-es-prediction-count-16}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-18}
-\var{i} \le \var{j} \because \longDfref{EIM validity}{def:eim-validity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-20}
-\var{i} = \var{j} \because
-  \Eref{eq:th-es-prediction-count-17},
-  \Eref{eq:th-es-prediction-count-18}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-22}
-\Origin{\Veim{pred}} = \Current{\Veim{pred}}
-  \because \Eref{eq:th-es-prediction-count-10},
-  \Eref{eq:th-es-prediction-count-20}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-24}
-  \begin{gathered}
-    \DotPos{\Veim{pred}} = 0 \\
-    \because \Eref{eq:th-es-prediction-count-08},
-      \longDfref{prediction}{def:prediction}.
-  \end{gathered}
-\end{equation}
-Let \var{count} be the maximum number of predictions possible in \Ves{j}.
-\begin{equation}
-\label{eq:th-es-prediction-count-26}
-\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
-  rules, the number of possible dot positions,
-  and the number of possible origins.
-  $\because$
-  \longDfref{EIM}{def:eim}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-28}
-\var{count} = \size{\Rules{\var{g}} \times \set{0} \times \set{\var{j}}}
-\because \Eref{eq:th-es-prediction-count-22},
-  \Eref{eq:th-es-prediction-count-24},
-  \Eref{eq:th-es-prediction-count-26}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-30}
-\var{count} = \size{\Rules{\var{g}}}
-\because \Eref{eq:th-es-prediction-count-28}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-32}
-\myparbox{\size{\Rules{\var{g}}} is a constant which depends on \Vcfg{g}.
-  $\because$
-  \longDfref{CFG}{def:context-free-grammar}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-34}
-\var{count} = \Oc{}
-\because \Eref{eq:th-es-prediction-count-30},
-\Eref{eq:th-es-prediction-count-32}.
-\end{equation}
-\end{proof}
-
-\begin{theorem}[ES EIM count]
-\label{th:es-eim-count}
-The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
-\end{theorem}
-
-\begin{proof}
-Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
-\begin{equation}
-\label{eq:th-es-eim-count-10}
-\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
-  dotted rules and the number of possible origins.
-  $\because$
-  \longDfref{EIM}{def:eim}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-12}
-\var{count} = \size{\DottedRules{\Vcfg{g}} \times \set{\var{i} : 0 \le \var{i} \le \var{j}}}
-\because \Eref{eq:th-es-eim-count-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-14}
-\myparbox{\size{\DottedRules{\var{g}}} is a constant which depends on \Vcfg{g}.
-  $\because$
-  \longDfref{CFG}{def:context-free-grammar}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-16}
-\var{count} = \Oc{} \times \order{\var{j}}
-\because \Eref{eq:th-es-eim-count-12}, \Eref{eq:th-es-eim-count-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-18}
-\var{count} = \order{\var{j}}
-\because \Eref{eq:th-es-eim-count-16}. \quad \myqed
-\end{equation}
 \end{proof}
 
 \begin{lemma}[Reduction lemma]
@@ -3470,6 +3230,255 @@ The theorem follows from
 \Eref{eq:lem-reduction-by-token-02}, and
 \Eref{eq:lem-reduction-by-token-04}.
 \myqed
+\end{proof}
+
+\section{Earley tables}
+\label{sec:earley-table}
+
+The definitions of this section
+assume
+the partial parse $[\Vint{g}, \Vstr{w}]$.
+
+\begin{definition}[Earley set]
+\label{def:earley-set}
+An Earley set is as a set of \dfn{parse items}.
+Earley sets are of type \type{ES}, so that
+\[
+\type{ES} = \powerset{\type{PIM}}.
+\]
+\end{definition}
+We will say that an Earley item is \dfn{unioned into}
+an Earley set,
+or \dfn{unioned},
+rather than say that the Earley item is ``added'' to an Earley set,
+or ``added''.
+This is because
+Earley sets are sets in the mathematical sense,
+and ``adding'' a duplicate to a set leaves the set unchanged.
+
+\begin{definition}[Earley set validity]
+\label{def:es-validity}
+\begin{equation}
+\label{eq:def-es-validity}
+\begin{gathered}
+\Valid{\Ves{x}} \defined
+\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} \land \Current{\var{pim}} = \Current{\var{x}}.
+\end{gathered}
+\end{equation}
+If \Valid{\Ves{x}}, we say that \var{x}
+is \dfn{valid}.
+\todo{cataphoric -- point this out}
+\todo{define Current() for ES?}
+\dispEnd
+\end{definition}
+
+An Earley parser builds a table of Earley sets,
+which is called
+a \dfn{parse table},
+or an \dfn{Earley table}.
+An Earley table
+is a sequence of Earley sets.
+If \Vesseq{table} is an Earley table, then
+\begin{equation*}
+\size{\Vesseq{table}} = \size{\Vstr{w}},
+\end{equation*}
+where \Vstr{w} is the input of the parse.
+and \Vesseq{table} is the parse table.
+Earley set 0 is the initial Earley set.
+Earley set $\Vloc{i}+1$ describes the state of
+the parse after processing the input at location \Vloc{i}.
+If \Ves{work} is an Earley set,
+$\size{\Ves{work}}$ is the number of Earley items
+in \Ves{work}.
+
+\begin{definition}[Earley table validity]
+\label{def:earley-table-validity}
+An Earley table is \dfn{valid} iff all of its
+Earley sets are valid.
+The boolean function \Valid{\Vesseq{table}} is true iff
+\Vesseq{table} is valid.
+\dispEnd
+\end{definition}
+
+Earley sets are often named by their location,
+so that \Ves{i} means the Earley set at \Vloc{i}.
+Where \Vloc{i} is an integer location,
+the notation \Ves{i} represents an Earley set, so that
+if \Vesseq{table}
+is the parse table,
+\begin{equation*}
+\Ves{i} = \Vesseq{table}[\Vloc{i}].
+\end{equation*}
+
+Unless otherwise stated, use of
+type \type{ES} will bind its variable in the scope of the current partial parse,
+so that, where \Vstr{input} is the input of the current partial parse,
+\[
+  \myparbox{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$.}
+\]
+For going back and forth between integer location,\footnote{%
+  For a discussion of this from the implementation
+  point of view, see \Sref{sec:es-indexing}.%
+}
+\begin{gather*}
+\Loc{\Vpim{pim}} \text{ is the current location of \var{pim};} \\
+\Loc{\Ves{es}} \text{ is the current location of \var{es};} \\
+\ES{\Vloc{j}} \text{ is \Ves{j}, the Earley set at location \Vloc{j}; and} \\
+\ES{\Vpim{p}} \text{ is \Ves{j}, the Earley set at location \Current{\var{p}}.}
+\end{gather*}
+
+Recall that
+there was a unique accept symbol,
+\Accept{\Vint{g}}, in \Vint{g}.
+The input \Cw{} is accepted iff,
+for some \Vstr{rhs},
+\begin{gather*}
+\Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
+\left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
+\end{gather*}
+
+\begin{theorem}[ES predictions \Oc{}]
+\label{th:es-prediction-count}
+The count of valid predictions in an Earley set is \Oc{}.
+\end{theorem}
+
+\begin{proof}
+\begin{equation}
+\label{eq:th-es-prediction-count-08}
+\myparbox{\Veim{pred} is a valid prediction $\because$ \text{AF theorem}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-10}
+\begin{gathered}
+\Veim{pred} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
+   \right], \Vorig{i} \right] @ \Ves{j} \\
+   \because \Eref{eq:th-es-prediction-count-08},
+   \text{WLOG},
+   \longDfref{EIM validity}{def:eim-validity}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-12}
+\Vstr{rhs1} = \epsilon \because
+\longDfref{prediction}{def:prediction}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-14}
+\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
+\because
+\Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:prediction}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-16}
+\var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
+\because
+\Eref{eq:th-es-prediction-count-12},
+\Eref{eq:th-es-prediction-count-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-17}
+\var{j} \le \var{i}
+\because \Eref{eq:th-es-prediction-count-16}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-18}
+\var{i} \le \var{j} \because \longDfref{EIM validity}{def:eim-validity}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-20}
+\var{i} = \var{j} \because
+  \Eref{eq:th-es-prediction-count-17},
+  \Eref{eq:th-es-prediction-count-18}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-22}
+\Origin{\Veim{pred}} = \Current{\Veim{pred}}
+  \because \Eref{eq:th-es-prediction-count-10},
+  \Eref{eq:th-es-prediction-count-20}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-24}
+  \begin{gathered}
+    \DotPos{\Veim{pred}} = 0 \\
+    \because \Eref{eq:th-es-prediction-count-08},
+      \longDfref{prediction}{def:prediction}.
+  \end{gathered}
+\end{equation}
+Let \var{count} be the maximum number of predictions possible in \Ves{j}.
+\begin{equation}
+\label{eq:th-es-prediction-count-26}
+\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
+  rules, the number of possible dot positions,
+  and the number of possible origins.
+  $\because$
+  \longDfref{EIM}{def:eim}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-28}
+\var{count} = \size{\Rules{\var{g}} \times \set{0} \times \set{\var{j}}}
+\because \Eref{eq:th-es-prediction-count-22},
+  \Eref{eq:th-es-prediction-count-24},
+  \Eref{eq:th-es-prediction-count-26}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-30}
+\var{count} = \size{\Rules{\var{g}}}
+\because \Eref{eq:th-es-prediction-count-28}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-32}
+\myparbox{\size{\Rules{\var{g}}} is a constant which depends on \Vcfg{g}.
+  $\because$
+  \longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-prediction-count-34}
+\var{count} = \Oc{}
+\because \Eref{eq:th-es-prediction-count-30},
+\Eref{eq:th-es-prediction-count-32}.
+\end{equation}
+\end{proof}
+
+\begin{theorem}[ES EIM count]
+\label{th:es-eim-count}
+The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
+\end{theorem}
+
+\begin{proof}
+Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
+\begin{equation}
+\label{eq:th-es-eim-count-10}
+\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
+  dotted rules and the number of possible origins.
+  $\because$
+  \longDfref{EIM}{def:eim}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-12}
+\var{count} = \size{\DottedRules{\Vcfg{g}} \times \set{\var{i} : 0 \le \var{i} \le \var{j}}}
+\because \Eref{eq:th-es-eim-count-10}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-14}
+\myparbox{\size{\DottedRules{\var{g}}} is a constant which depends on \Vcfg{g}.
+  $\because$
+  \longDfref{CFG}{def:context-free-grammar}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-16}
+\var{count} = \Oc{} \times \order{\var{j}}
+\because \Eref{eq:th-es-eim-count-12}, \Eref{eq:th-es-eim-count-14}.
+\end{equation}
+\begin{equation}
+\label{eq:th-es-eim-count-18}
+\var{count} = \order{\var{j}}
+\because \Eref{eq:th-es-eim-count-16}. \quad \myqed
+\end{equation}
 \end{proof}
 
 \begin{definition}[Internal grammar context parse]
