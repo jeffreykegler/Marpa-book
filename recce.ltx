@@ -1060,41 +1060,35 @@ We believe
 that the reader will find this system intuitive
 to the degree that the reader is able to ignore it.
 
-Variables in this paper are bound to a ``scope''.
-Our concept of scope is almost exactly the same as
-that implicitly in use
-in most mathematical texts.
-In this paper, scope is part
-The idea of ``scope'' plays a role in the contextual
-bindings, so we will state it explicitly.
-
-Every definition is a scope.
-The defiens is visible only within a definition's
-scope, but the defiendum is visible outside it.
-
-Every theorem or lemma is a scope, and
-the associated proof is also within that scope.
-Only the theorem or lemma itself is visible outside
-that scope.
-An observation is a scope, with only the observation
-itself begin visible outside the scope.
-
-A top-level scope begins at a specific point in the
-main text of the paper and,
-unless stated otherwise,
-continues to the end of the paper.
-The entire paper is a top-level scope.
-Other top-level scopes will be introduced
-explicitly.
-
+Variables in this paper,
+as in most of the parsing literature,
+have a ``scope''.
+Usually scope conventions are left implicit,
+but we will find it helpful to make some of our
+conventions explicit.
 When a new variable is introduced,
 unless otherwise stated,
 it is bound to,
 and visible only within,
-the most recent scope.
-Also, the opening of a scope can
-implicitly introduce new ``context variables''.
-The specifics of context variables will be described later.
+the most recently opened scope.
+
+Every definition is a scope,
+called a \dfn{definition scope}.
+The defiens is visible only within a definition's
+scope, but the defiendum is visible outside it.
+
+Every theorem or lemma is a scope,
+called a \dfn{theorem scope}.
+The proof associated with a theorem
+is within the scope of the theorem.
+Only the theorem or lemma itself is visible outside
+that scope.
+An observation is a scope, with only the observation
+itself being visible outside the scope.
+
+The entire paper is the \dfn{global scope}.
+Other scopes will be introduced
+explicitly.
 
 For the purposes of this paper,
 we use a simple and opportunistic type system.
@@ -1410,6 +1404,7 @@ $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
 \end{definition}
 
 \begin{definition}[Context grammar]
+\todo{Change this?}
 From this point on, every newly
 created scope has a \dfn{context grammar}.
 Until redefined,
@@ -1445,13 +1440,16 @@ for the ``floor'' operation: for example,
 \Vterm{terminal}.
 \end{definition}
 
-We now introduce the first of the ``binding assumptions'' ---
-assumptions that are by default implicitly made,
-when a new variable
-is introduced.
-We will use these ``binding assumptions'' to eliminate
-the tedious and repetitive ``setup'' of each new scope
-that has been used in the parsing literature.
+Traditionally in the parsing literature,
+introducing a new scope
+frequently requires a tedious and repetitive setup.
+We will avoid these in favor of \dfn{binding assumptions}.
+The binding assumptions are a set of assumptions
+that are implicitly made,
+unless stated otherwise,
+whenever a new variable is introduced.
+The following definition
+introduces the first of our binding assumptions.
 
 \begin{definition}[SYM, STR and RULE binding assumptions]
 \label{def:sym-str-rule-binding}
@@ -1625,25 +1623,22 @@ iff
 \exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
 \]
 A \dfn{partial parse} is often called, simply, a \dfn{parse}.
-Note that, by the this definition,
+Note that, by this definition,
 a full parse is a special case of a partial parse.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Context parse]
-\label{def:context-parse-cfg}
-From this point on, every newly
-created scope has a \dfn{context parse},
-and a \dfn{context input}.
-Until redefined,
-and unless stated otherwise,
-the context parse of
-every new scope will be
-the partial parse $[\Vcfg{g}, \Vstr{w}]$,
-the context input will be \Vstr{w},
-and the context grammar will be \Vcfg{g}.
-A new top-level scope begins immediately after
-this definition.
+\begin{definition}[Context parse scopes]
+\label{def:context-parse-scope}
+From this point on, the global scope
+and every new
+definition or theorem scope
+will be a \dfn{context parse scope}.
+Unless otherwise stated,
+the \dfn{context parse} of these scopes
+will be the partial parse $[\Vcfg{g}, \Vstr{w}]$,
+the \dfn{context input} will be \Vstr{w},
+and the \dfn{context grammar} will be \Vcfg{g}.
 \dispEnd
 \end{definition}
 
@@ -1666,14 +1661,12 @@ When we state our complexity results later,
 they will often be in terms of $\var{n}$,
 where $\var{n} = \Vsize{w}$.
 
-Where the choice of partial parse,
-$\left[\Vcfg{g}, \Vterm{input}\right]$
-is clear in context,
-and unless otherwise specified,
+Unless \Vstr{w}, the context input, is otherwise specified,
 use of the type \type{LOC} will bind
-its variable, so that
+its variable,
+so that
 \begin{equation*}
-\myparbox{\Vloc{j} will imply that $0 \le \var{j} \le \size{\Vterm{input}}$.} \\
+\myparbox{\Vloc{j} will imply that $0 \le \var{j} \le \size{\Vterm{w}}$.} \\
 \end{equation*}
 
 \begin{definition}[Token]
