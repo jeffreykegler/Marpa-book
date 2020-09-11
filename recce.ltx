@@ -256,6 +256,7 @@
 
 \newcommand{\eim}[1]{\ensuremath{#1_\type{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
+\newcommand{\et}[1]{\ensuremath{#1_\type{ET}}}
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\lss}[1]{\ensuremath{#1_\type{LSS}}}
 \newcommand{\nes}[1]{\ensuremath{#1_\type{NES}}}
@@ -275,6 +276,7 @@
 \newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
 \newcommand{\Vesseq}[1]{\Tvarseq{#1}{ES}}
+\newcommand{\Vet}[1]{\es{\var{#1}}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\mylim{\var{#1}}}
@@ -1404,15 +1406,14 @@ $\LHS{\var{r}}$ and $\RHS{\var{r}}$, respectively.
 \end{definition}
 
 \begin{definition}[Context grammar]
-\todo{Change this?}
-From this point on, every newly
-created scope has a \dfn{context grammar}.
-Until redefined,
-and unless stated otherwise,
-the context grammar of
-every new scope will be \Vcfg{g}.
-A new top-level scope begins immediately after
-this definition.
+Definitions, theorems
+and other statements in this document will imply
+the existence of a grammar.
+If not stated otherwise,
+all statements are in context of the \dfn{context grammar}.
+A context grammar is always in scope.
+The global-scope context grammar, until redefined,
+is \Vcfg{g}.
 \dispEnd
 \end{definition}
 
@@ -1636,9 +1637,21 @@ definition or theorem scope
 will be a \dfn{context parse scope}.
 Unless otherwise stated,
 the \dfn{context parse} of these scopes
-will be the partial parse $[\Vcfg{g}, \Vstr{w}]$,
+will be a partial parse $[\Vcfg{g}, \Vstr{w}]$.
 the \dfn{context input} will be \Vstr{w},
 and the \dfn{context grammar} will be \Vcfg{g}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context input]
+From this point on, unless otherwise stated,
+the \dfn{context input} is the input of the context parse.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context grammar redefined]
+From this point on, unless otherwise stated,
+the \dfn{context grammar} is the grammar of the context parse.
 \dispEnd
 \end{definition}
 
@@ -3232,12 +3245,12 @@ The definitions of this section
 assume
 the partial parse $[\Vint{g}, \Vstr{w}]$.
 
-\begin{definition}[Earley set]
+\begin{definition}[Earley set {[}ES{]}]
 \label{def:earley-set}
 An Earley set is as a set of \dfn{parse items}.
 Earley sets are of type \type{ES}, so that
 \[
-\type{ES} = \powerset{\type{PIM}}.
+\type{ES} = \powerset{\type{PIM}}. \quad \dispEnd
 \]
 \end{definition}
 We will say that an Earley item is \dfn{unioned into}
@@ -3249,49 +3262,68 @@ This is because
 Earley sets are sets in the mathematical sense,
 and ``adding'' a duplicate to a set leaves the set unchanged.
 
-\begin{definition}[Earley set validity]
+\begin{definition}[ES validity]
 \label{def:es-validity}
 \begin{equation}
 \label{eq:def-es-validity}
 \begin{gathered}
 \Valid{\Ves{x}} \defined
-\\ \forall \Vpim{pim} \in \var{x} : \Valid{\var{pim}} \land \Current{\var{pim}} = \Current{\var{x}}.
+    \forall \; \Vpim{pim} \in \var{x} : \Valid{\var{pim}}.
 \end{gathered}
 \end{equation}
 If \Valid{\Ves{x}}, we say that \var{x}
 is \dfn{valid}.
-\todo{cataphoric -- point this out}
-\todo{define Current() for ES?}
 \dispEnd
 \end{definition}
 
-An Earley parser builds a table of Earley sets,
-which is called
-a \dfn{parse table},
-or an \dfn{Earley table}.
-An Earley table
+Note that in \Dfref{def:es-validity}, we have yet to
+define \Valid{\Vpim{lim}}, where \var{lim} is a LIM.
+We will do so later \Dfref{def:lim-validity}.
+
+\begin{definition}[Earley table {[}ET{]}]
+\label{def:et}
+An Earley table, type \type{ET},
 is a sequence of Earley sets.
-If \Vesseq{table} is an Earley table, then
-\begin{equation*}
-\size{\Vesseq{table}} = \size{\Vstr{w}},
-\end{equation*}
-where \Vstr{w} is the input of the parse.
-and \Vesseq{table} is the parse table.
+That is,
+\[
+    \type{ET} = \set{
+        \tuple{ \var{index}, \var{value} } :
+        \var{index} \in \naturals \land \var{value} \in \type{ES}.
+    } \quad \dispEnd
+\]
+\end{definition}
+
+\begin{definition}[Earley table validity]
+\label{def:et-validity}
+An Earley table is \dfn{valid} iff
+\begin{itemize}
+\item the sequence contains an Earley set for every symbol in the context input
+    plus an initial Earley set,
+\item all of these Earley sets are valid, and
+\item the current location of every EIM in each of the Earley sets
+   is the same as the index of that Earley set in the Earley table.
+\end{itemize}
+That is, where \var{tab} is an Earley table,
+\begin{equation}
+\label{eq:def-et-validity-10}
+\begin{gathered}
+\Valid{\Vet{tab}} \defined \Vlastix{tab} = \size{\Vstr{w}}
+    \\ \land \; \forall \; \Vnat{ix} \in \Dom{\var{et}} :
+    \\ \Valid{\VVelement{tab}{i}} \land \Current{\VVelement{tab}{i}} = \var{ix}.
+        \quad \dispEnd
+\end{gathered}
+\end{equation}
+\end{definition}
+
+Note that, by definition \Dfref{def:et-validity},
+an Earley table may be vacuously valid.
+That is, an Earley table all of whose Earley sets are empty is valid,
+as long as it is of the correct length.
+
+An Earley parser works by building an Earley table.
 Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
-If \Ves{work} is an Earley set,
-$\size{\Ves{work}}$ is the number of Earley items
-in \Ves{work}.
-
-\begin{definition}[Earley table validity]
-\label{def:earley-table-validity}
-An Earley table is \dfn{valid} iff all of its
-Earley sets are valid.
-The boolean function \Valid{\Vesseq{table}} is true iff
-\Vesseq{table} is valid.
-\dispEnd
-\end{definition}
 
 Earley sets are often named by their location,
 so that \Ves{i} means the Earley set at \Vloc{i}.
@@ -3309,15 +3341,9 @@ so that, where \Vstr{input} is the input of the current partial parse,
 \[
   \myparbox{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$.}
 \]
-For going back and forth between integer location,\footnote{%
-  For a discussion of this from the implementation
-  point of view, see \Sref{sec:es-indexing}.%
-}
 \begin{gather*}
-\Loc{\Vpim{pim}} \text{ is the current location of \var{pim};} \\
+\Current{\Vpim{pim}} \text{ is the current location of \var{pim};} \\
 \Loc{\Ves{es}} \text{ is the current location of \var{es};} \\
-\ES{\Vloc{j}} \text{ is \Ves{j}, the Earley set at location \Vloc{j}; and} \\
-\ES{\Vpim{p}} \text{ is \Ves{j}, the Earley set at location \Current{\var{p}}.}
 \end{gather*}
 
 Recall that
@@ -3474,25 +3500,32 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 \end{equation}
 \end{proof}
 
-\begin{definition}[Internal grammar context parse]
+\begin{definition}[Context parse redefined]
 \label{def:context-parse-int}
+Recall that the global scope
+and every new
+definition or theorem scope
+are context parse scopes.
 From this point on,
-and unless stated otherwise,
-the default parse of
-every new parse scope will be
-the partial parse $[\Vint{g}, \Vstr{w}]$,
-so that
-the context input will be \Vstr{w},
-and the context grammar will be \Vint{g}.
-Each new context will contain a valid
-Earley table, \var{table}.
-Unless otherwise stated, every ES is an element
-of \var{table}, and therefore valid.
-Similarly, and unless otherwise stated,
-every PIM is an element of some ES in \var{table},
-and therefore valid.
-A new top-level scope begins immediately after
-this definition.
+and unless otherwise stated,
+the \dfn{context parse} of these scopes
+will be a partial parse $[\Vint{g}, \Vstr{w}]$.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context Earley table and sets]
+\label{def:context-earley-table}
+From this point on,
+unless stated otherwise,
+every context parse scope contains
+its own Earley table,
+\var{table},
+and \var{table} is valid for the context parse.
+Unless otherwise stated, every ES mentioned is an element
+of \var{table}, so that if that ES is \Ves{mention} then
+\[
+    \exists \; \Vloc{i} \in \Dom{table}: \VVelement{table}{i} = \var{mention}.
+\]
 \dispEnd
 \end{definition}
 
@@ -5433,10 +5466,9 @@ and has a symmetrical proof.
 \myqed
 \end{proof}
 
-\begin{definition}[LIMs of an EIM]
-\label{def:lims-of-eim}
-The LIMs of an EIM are defined recursively.
-
+\begin{definition}[LIM validity]
+\label{def:lim-validity}
+The valid LIMs of an EIM are defined recursively.
 Let \Veim{src} be an arbitrary EIM.
 Then the set of LIM's of \var{src} is
 \begin{equation}
@@ -5470,9 +5502,22 @@ where
 \\ \set{ \ell \in \type{LIM} :
     \myfn{Next-Eligible}{\Veim{next},\Veim{src}}
     \land \; \ell \in \myfn{lims}{\var{next}}
-}.  \quad \dispEnd
+}.
 \end{gathered}
 \end{equation}
+\mylim{\ell} is \dfn{valid} iff
+it is a valid LIM of an EIM.
+More formally,
+we overload \myfnname{Valid},
+and we say that \mylim{\ell} is valid if \Valid{\ell} where
+\begin{equation}
+\nonumber
+\begin{gathered}
+    \Valid{\mylim{\ell}} \defined \exists \; \Veim{src} : \Valid{\var{src}} \land \ell \in \myfn{lims}{\var{src}}.
+    \quad \dispEnd
+\end{gathered}
+\end{equation}
+
 \end{definition}
 
 We will prove that there is at most one LIM
@@ -6491,7 +6536,7 @@ The proof is by mutual implication.
     $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
     \cuz{} equivalence with
     \Eref{eq:th-maximal-lss-lims-termination-80},
-    using \longDfref{LIMs of an EIM}{def:lims-of-eim}.
+    using \longDfref{LIMs of an EIM}{def:lim-validity}.
 }
 The theorem
 \Eref{eq:th-maximal-lss-lims-termination-02}
@@ -6578,7 +6623,7 @@ Proceeding with the proof of the basis,
 \mypareq{eq:th-maximal-lss-lim-invariant-28}{%
     $\DR{\ell} = \DR{\Velement{max}{0}}
     \land \Origin{\ell} = \Origin{\Velement{max}{0}}$
-    \cuz{} \longDfref{LIMs of an EIM}{def:lims-of-eim},
+    \cuz{} \longDfref{LIMs of an EIM}{def:lim-validity},
         \Eref{eq:th-maximal-lss-lim-invariant-24}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-30}{%
@@ -6751,7 +6796,7 @@ for a derivation.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-70}{%
     $\size{\myfn{next-lims}{\Velement{max}{0}}} > 0$
-    \cuz{} \longDfref{LIMs of an EIM}{def:lims-of-eim},
+    \cuz{} \longDfref{LIMs of an EIM}{def:lim-validity},
         \Eref{eq:th-maximal-lss-lim-invariant-64},
         \Eref{eq:th-maximal-lss-lim-invariant-68}.
 }
@@ -6786,7 +6831,7 @@ for a derivation.
 \forall \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}} :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
 \\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-\\ \because \longDfref{LIMs of an EIM}{def:lims-of-eim},
+\\ \because \longDfref{LIMs of an EIM}{def:lim-validity},
     \Eref{eq:th-maximal-lss-lim-invariant-68},
     \Eref{eq:th-maximal-lss-lim-invariant-75}.
 \end{gathered}
@@ -7415,7 +7460,7 @@ Creation time for a new link in one of the
 \begin{observation}[\var{Transitions} set size]
 \label{obs:transitions-set-size}
 \[
-\size{\Transitions{\Vsym{t}}{\Ves{j}}} = \order{\Loc\Ves{j}}
+\size{\Transitions{\Vsym{t}}{\Ves{j}}} = \order{\Vloc{j}}
 \because \Thref{th:es-size}, \Obref{obs:transition-array}.
 \]
 \end{observation}
