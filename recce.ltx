@@ -97,6 +97,14 @@
 \setlength\abovedisplayshortskip{3pt}
 \setlength\belowdisplayshortskip{3pt}
 
+\newcommand{\fnset}[2]{\ensuremath{{#1}^{\textstyle#2}}}
+\newcommand{\finseq}[1]{\ensuremath{
+    \set{ \var{f} : \exists \; \var{X} \in \naturals : \var{f} \in \fnset{\var{#1}}{\var{X}} }
+}}
+\newcommand{\infseq}[1]{\ensuremath{
+    \set{ \var{f} : \exists \; \var{X} \in (\naturals \cup \set{\naturals}) :
+        \var{f} \in \fnset{\var{#1}}{\var{X}} }
+}}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 
@@ -902,6 +910,11 @@ would be written as
 \[
 \forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
 \]
+
+We write \fnset{Y}{X} for the set of functions from \var{X} to \var{Y}.
+In our naive set theory, a sequence of \var{Y}'s is identical to a function from
+integers to \var{Y}, so that \infseq{Y} is the set of sequences of \var{Y}'s,
+and \finseq{Y} is the set of finite sequences of \var{Y}'s.
 
 As a way of avoiding tedious special cases,
 logical implication makes an opportunistic use
@@ -3283,13 +3296,10 @@ We will do so later \Dfref{def:lim-validity}.
 \begin{definition}[Earley table {[}ET{]}]
 \label{def:et}
 An Earley table, type \type{ET},
-is a sequence of Earley sets.
+is a finite sequence of Earley sets.
 That is,
 \[
-    \type{ET} = \set{
-        \tuple{ \var{index}, \var{value} } :
-        \var{index} \in \naturals \land \var{value} \in \type{ES}.
-    } \quad \dispEnd
+    \type{ET} = \finseq{\type{ES}}. \quad \dispEnd
 \]
 \end{definition}
 
