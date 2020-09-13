@@ -3376,15 +3376,19 @@ Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
 
+\begin{definition}[ES by location]
+\label{def:es-by-location}
+Let \Vet{cxt} be the context table.
 It is often convenient to refer to an Earley set
 by its location instead of a name.
 In such cases we could abuse our
 notation slightly by writing
-$\es{(\Vloc{j})}$ instead of $\Vet{cxt}[\Vloc{j}]$,
-where \Vet{cxt} is the context table.
+$\es{(\Vloc{j})}$ instead of $\Vet{cxt}[\Vloc{j}]$.
 In fact, when our intent is clear,
 we will carry the abuse a bit further,
 and abbreviate $\es{(\Vloc{j})}$ to \Ves{j}.
+\dispEnd
+\end{definition}
 
 \begin{definition}[Input acceptance]
 \label{def:input-acceptance}
@@ -3414,11 +3418,13 @@ The count of valid predictions in an Earley set is \Oc{}.
 \begin{equation}
 \label{eq:th-es-prediction-count-10}
 \begin{gathered}
-\Veim{pred} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
-   \right], \Vorig{i} \right] @ \Ves{j} \\
-   \because \Eref{eq:th-es-prediction-count-08},
-   \text{WLOG},
-   \longDfref{EIM validity}{def:eim-validity}.
+\Veim{pred} = \tuple{
+        \tuple{ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2} },
+        \Vorig{i}, \Vloc{j} }
+   \\ \myparbox{\cuz{}
+       \Eref{eq:th-es-prediction-count-08},
+       WLOG, \longDfref{EIM validity}{def:eim-validity}.
+   }
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3428,9 +3434,13 @@ The count of valid predictions in an Earley set is \Oc{}.
 \end{equation}
 \begin{equation}
 \label{eq:th-es-prediction-count-14}
+\begin{gathered}
 \Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
-\because
-\Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:prediction}.
+\\ \myparbox{\cuz{}
+    \Eref{eq:EIM-valid-22d}  in \Dfref{def:prediction},
+    new \Vstr{prefix} for convenience.
+}
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-es-prediction-count-16}
