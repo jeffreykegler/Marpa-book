@@ -3303,6 +3303,21 @@ That is,
 \]
 \end{definition}
 
+\begin{definition}[ES Current location]
+\label{def:es-current}
+Let \var{es} be an ES and let \var{table}
+be an ET.
+Then
+\[
+    \Current{\var{es}} \defined \Vnat{i} : \VVelement{table}{i} = \var{es}.
+\]
+Where the value of \Vet{table} is not specified,
+it is understood to be \Vet{S}.
+We say that \Current{\Ves{es}} is the
+\dfn{current location} of \var{es}.
+\dispEnd
+\end{definition}
+
 \begin{definition}[Earley table validity]
 \label{def:et-validity}
 An Earley table is \dfn{valid} iff
@@ -3529,14 +3544,19 @@ From this point on,
 unless stated otherwise,
 every context parse scope contains
 its own Earley table,
-\var{table},
-and \var{table} is valid for the context parse.
+\Vet{S}\footnote{%
+   The use of \var{S} for the Earley table goes back to Earley~\cite{Earley1968}.
+   The items in an Earley set at location \Vloc{j} can be seen
+   as encoding the state of the parse at \var{j},
+   and the ``S'' stands for ``state set''.
+}.
+\Vet{S} is valid for the context parse.
 Unless otherwise stated, every ES mentioned is an element
 of \var{table}, so that if that ES is \Ves{mention} then
 \[
-    \exists \; \Vloc{i} \in \Dom{table}: \VVelement{table}{i} = \var{mention}.
+    \exists \; \Vloc{i} \in \Dom{\var{table}}: \VVelement{table}{i} = \var{mention}.
+        \quad \dispEnd
 \]
-\dispEnd
 \end{definition}
 
 \section{The Leo algorithm}
@@ -7251,7 +7271,7 @@ Their precise meaning will defined in the context in which they are used.
 \begin{gather}
 \label{eq:def-loc-of_pim}
 \myparbox{%
-  $\Time{\Loc{\Vpim{pim}}} = \Oc{} \because$
+  $\Time{\Current{\Vpim{pim}}} = \Oc{} \because$
   Marpa::R2\cite{Marpa-R2} stores the integer location
   of each PIM in its data structure.%
 } \\
