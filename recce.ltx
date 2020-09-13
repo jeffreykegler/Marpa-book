@@ -3312,10 +3312,10 @@ or \dfn{context table},
    The use of \var{S} for the Earley table goes back to Earley~\cite{Earley1968}.
    The items in an Earley set at location \Vloc{j} can be seen
    as encoding the state of the parse at \var{j},
-   and the ``S'' stands for ``state set''.
+   so that ``S'' stands for ``state set''.
+    \dispEnd
 }.
 \end{itemize}
-\dispEnd
 \end{definition}
 
 \begin{definition}[ES binding assumption]
@@ -3324,7 +3324,7 @@ The binding assumption for an ES, call it \Ves{es},
 is that,
 where \Vet{cxt} is the context table,
 \[
-    \exists \; \Vloc{i} \in \Dom{\var{cxttab}}: \VVelement{cxttab}{i} = \var{es}.
+    \exists \; \Vloc{i} \in \Dom{\Vet{cxt}}: \VVelement{cxt}{i} = \var{es}.
         \quad \dispEnd
 \]
 \end{definition}
@@ -3376,16 +3376,15 @@ Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
 
-Earley sets are often named by their location,
-so that \Ves{i} means the Earley set at \Vloc{i}.
-Where \Vloc{i} is an integer location,
-the notation \Ves{i} represents an Earley set, so that
-if \Vesseq{table}
-is the parse table,
-\begin{equation*}
-\Ves{i} = \Vesseq{table}[\Vloc{i}].
-\end{equation*}
-If \var{table} is not specified, it is the context table.
+It is often convenient to refer to an Earley set
+by its location instead of a name.
+In such cases we could abuse our
+notation slightly by writing
+$\es{(\Vloc{j})}$ instead of $\Vet{cxt}[\Vloc{j}]$,
+where \Vet{cxt} is the context table.
+In fact, when our intent is clear,
+we will carry the abuse a bit further,
+and abbreviate $\es{(\Vloc{j})}$ to \Ves{j}.
 
 \begin{definition}[Input acceptance]
 \label{def:input-acceptance}
@@ -3395,8 +3394,8 @@ there was a unique accept symbol,
 The Earley table \var{table}
 \dfn{accepts} the input \Vterm{inp} iff
 \begin{gather*}
-\tuple{\Vdr{accept}, 0} \in \Velement{table}{\Vsize{\Vterm{inp}}}.
-\land \Rule{\Vdr{accept}} = Accept{\Vint{g}}.
+\tuple{\Vdr{accept}, 0} \in \Vet{table}\left[ \Vsize{\Vterm{inp}} \right]
+\\ \land \; \LHS{\Vdr{accept}} = \Accept{\Vint{g}}.
     \quad \dispEnd
 \end{gather*}
 \end{definition}
