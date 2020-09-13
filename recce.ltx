@@ -339,7 +339,6 @@
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
 \newcommand{\ES}[1]{\ensuremath{\mymathop{ES}(#1)}}
-\newcommand{\Etable}[1]{\ensuremath{\mymathop{table}[#1)]}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\Invocs}[1]{\ensuremath{\mymathop{Invocs}(#1)}}
@@ -348,7 +347,6 @@
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
 \newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
-\newcommand{\Loc}[1]{\ensuremath{\mymathop{Loc}(#1)}}
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
 \newcommand{\Maximal}[1]{\ensuremath{\mymathop{Maximal}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
@@ -385,8 +383,6 @@
 \newcommand{\Transitions}[2]{\ensuremath{\mymathop{Transitions}(#1,#2)}}
 \newcommand{\Valid}[1]{\ensuremath{\mymathop{Valid}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
-
-\newcommand{\Vtable}[1]{\Etable{\var{#1}}}
 
 % I use parboxes in equations.  This sets a useful width for them.
 \newlength{\mathparwidth}
@@ -3303,6 +3299,36 @@ That is,
 \]
 \end{definition}
 
+\begin{definition}[Context Earley table and sets]
+\label{def:context-earley-table}
+From this point on,
+and unless stated otherwise,
+\begin{itemize}
+\item every context parse scope contains its own \dfn{context Earley table},
+or \dfn{context table},
+\item the context table is valid for the context parse,
+\item the context table is \Vet{S}%
+\footnote{%
+   The use of \var{S} for the Earley table goes back to Earley~\cite{Earley1968}.
+   The items in an Earley set at location \Vloc{j} can be seen
+   as encoding the state of the parse at \var{j},
+   and the ``S'' stands for ``state set''.
+}.
+\end{itemize}
+\dispEnd
+\end{definition}
+
+\begin{definition}[ES binding assumption]
+\label{def:es-binding}
+The binding assumption for an ES, call it \Ves{es},
+is that,
+where \Vet{cxt} is the context table,
+\[
+    \exists \; \Vloc{i} \in \Dom{\var{cxttab}}: \VVelement{cxttab}{i} = \var{es}.
+        \quad \dispEnd
+\]
+\end{definition}
+
 \begin{definition}[ES Current location]
 \label{def:es-current}
 Let \var{es} be an ES and let \var{table}
@@ -3359,27 +3385,21 @@ is the parse table,
 \begin{equation*}
 \Ves{i} = \Vesseq{table}[\Vloc{i}].
 \end{equation*}
+If \var{table} is not specified, it is the context table.
 
-Unless otherwise stated, use of
-type \type{ES} will bind its variable in the scope of the current partial parse,
-so that, where \Vstr{input} is the input of the current partial parse,
-\[
-  \myparbox{\Ves{es} will imply that $\Ves{es} = \es{(\Vloc{j})} \land 0 \le \var{j} \le \size{\Vterm{input}}$.}
-\]
-\begin{gather*}
-\Current{\Vpim{pim}} \text{ is the current location of \var{pim};} \\
-\Loc{\Ves{es}} \text{ is the current location of \var{es};} \\
-\end{gather*}
-
+\begin{definition}[Input acceptance]
+\label{def:input-acceptance}
 Recall that
 there was a unique accept symbol,
 \Accept{\Vint{g}}, in \Vint{g}.
-The input \Cw{} is accepted iff,
-for some \Vstr{rhs},
+The Earley table \var{table}
+\dfn{accepts} the input \Vterm{inp} iff
 \begin{gather*}
-\Vdr{accept} = [\Accept{\Vint{g}} \de \Vstr{rhs} \mydot] \quad \text{and} \\
-\left[\Vdr{accept}, 0\right] \in \Etable{\Vsize{\Cw}}.
+\tuple{\Vdr{accept}, 0} \in \Velement{table}{\Vsize{\Vterm{inp}}}.
+\land \Rule{\Vdr{accept}} = Accept{\Vint{g}}.
+    \quad \dispEnd
 \end{gather*}
+\end{definition}
 
 \begin{theorem}[ES predictions \Oc{}]
 \label{th:es-prediction-count}
@@ -3536,27 +3556,6 @@ and unless otherwise stated,
 the \dfn{context parse} of these scopes
 will be a partial parse $[\Vint{g}, \Vstr{w}]$.
 \dispEnd
-\end{definition}
-
-\begin{definition}[Context Earley table and sets]
-\label{def:context-earley-table}
-From this point on,
-unless stated otherwise,
-every context parse scope contains
-its own Earley table,
-\Vet{S}\footnote{%
-   The use of \var{S} for the Earley table goes back to Earley~\cite{Earley1968}.
-   The items in an Earley set at location \Vloc{j} can be seen
-   as encoding the state of the parse at \var{j},
-   and the ``S'' stands for ``state set''.
-}.
-\Vet{S} is valid for the context parse.
-Unless otherwise stated, every ES mentioned is an element
-of \var{table}, so that if that ES is \Ves{mention} then
-\[
-    \exists \; \Vloc{i} \in \Dom{\var{table}}: \VVelement{table}{i} = \var{mention}.
-        \quad \dispEnd
-\]
 \end{definition}
 
 \section{The Leo algorithm}
@@ -7277,7 +7276,7 @@ Their precise meaning will defined in the context in which they are used.
 } \\
 \label{eq:def-loc-of_es}
 \myparbox{%
-  $\Time{\Loc{\Ves{es}}} = \Oc{}, \because$
+  $\Time{\Current{\Ves{es}}} = \Oc{}, \because$
   Marpa::R2 stores the integer location
   of each Earley set in its data structure.%
 } \\
@@ -7874,16 +7873,16 @@ Space for \var{Predict1} is
     is running.
     }
 \For{$\Veim{x} \in \Ves{es}$}
-       \Comment \tightMath{\var{x}=\order{\Loc{\var{es}}}}
+       \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
 \label{line:marpa-predict-es-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
   \label{line:marpa-predict-es-14}
-  \Statex \Comment \tightMath{\var{x}=\order{\Loc{\var{es}}}}
-    \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Loc{\var{es}} } @ \Loc{\var{es}}$
+  \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
+    \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} } @ \Current{\var{es}}$
       \label{line:marpa-predict-es-16}
-       \Statex \Comment \tightMath{\var{x}=\order{\Loc{\var{es}}}}
+       \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State \Call{Predict1}{\var{pred}}
-       \Comment \tightMath{\text{Ind};\var{x}=\order{\Loc{\var{es}}}}
+       \Comment \tightMath{\text{Ind};\var{x}=\order{\Current{\var{es}}}}
     \label{line:marpa-predict-es-18}
   \EndFor
 \EndFor
