@@ -284,7 +284,7 @@
 \newcommand{\ves}[1]{\ensuremath{#1_\type{VES}}}
 \newcommand{\Ves}[1]{\es{\var{#1}}}
 \newcommand{\Vesseq}[1]{\Tvarseq{#1}{ES}}
-\newcommand{\Vet}[1]{\es{\var{#1}}}
+\newcommand{\Vet}[1]{\et{\var{#1}}}
 \newcommand{\Vext}[1]{\Tvar{#1}{EXT}}
 \newcommand{\Vint}[1]{\Tvar{#1}{INT}}
 \newcommand{\Vlim}[1]{\mylim{\var{#1}}}
@@ -3256,8 +3256,10 @@ the partial parse $[\Vint{g}, \Vstr{w}]$.
 
 \begin{definition}[Earley set {[}ES{]}]
 \label{def:earley-set}
-An Earley set is as a set of \dfn{parse items}.
-Earley sets are of type \type{ES}, so that
+An Earley set
+(type \type{ES})
+is as a set of \dfn{parse items}.
+That is,
 \[
 \type{ES} = \powerset{\type{PIM}}. \quad \dispEnd
 \]
@@ -3274,7 +3276,6 @@ and ``adding'' a duplicate to a set leaves the set unchanged.
 \begin{definition}[ES validity]
 \label{def:es-validity}
 \begin{equation}
-\label{eq:def-es-validity}
 \begin{gathered}
 \Valid{\Ves{x}} \defined
     \forall \; \Vpim{pim} \in \var{x} : \Valid{\var{pim}}.
@@ -3299,6 +3300,31 @@ That is,
 \]
 \end{definition}
 
+\begin{definition}[Earley table validity]
+\label{def:et-validity}
+An Earley table is \dfn{valid} iff
+\begin{itemize}
+\item the sequence contains an Earley set for every symbol in the context input
+    plus an initial Earley set,
+\item all of these Earley sets are valid, and
+\item the current location of every EIM in each of the Earley sets
+   is the same as the index of that Earley set in the Earley table.
+\end{itemize}
+That is, where \var{tab} is an Earley table,
+\begin{equation}
+\label{eq:def-et-validity-10}
+\begin{gathered}
+\Valid{\Vet{tab}} \defined \Vlastix{tab} = \size{\Vstr{w}}
+    \\ \land \; \forall \; \Vnat{ix} \in \Dom{\var{et}} :
+    \\ \left( \begin{gathered}
+            \Valid{\VVelement{tab}{ix}}
+            \\ \land \; \forall \; \Veim{eim} \in
+            \VVelement{tab}{ix} : \Current{\var{eim}} = \var{ix}
+        \end{gathered} \right).
+\end{gathered}
+\end{equation}
+\end{definition}
+
 \begin{definition}[Context Earley table and sets]
 \label{def:context-earley-table}
 From this point on,
@@ -3307,14 +3333,14 @@ and unless stated otherwise,
 \item every context parse scope contains its own \dfn{context Earley table},
 or \dfn{context table},
 \item the context table is valid for the context parse,
-\item the context table is \Vet{S}%
+\item the context table is \Vet{S}.%
 \footnote{%
    The use of \var{S} for the Earley table goes back to Earley~\cite{Earley1968}.
    The items in an Earley set at location \Vloc{j} can be seen
    as encoding the state of the parse at \var{j},
    so that ``S'' stands for ``state set''.
-    \dispEnd
-}.
+}
+\dispEnd
 \end{itemize}
 \end{definition}
 
@@ -3338,32 +3364,10 @@ Then
     \Current{\var{es}} \defined \Vnat{i} : \VVelement{table}{i} = \var{es}.
 \]
 Where the value of \Vet{table} is not specified,
-it is understood to be \Vet{S}.
+it is understood to be the context table.
 We say that \Current{\Ves{es}} is the
 \dfn{current location} of \var{es}.
 \dispEnd
-\end{definition}
-
-\begin{definition}[Earley table validity]
-\label{def:et-validity}
-An Earley table is \dfn{valid} iff
-\begin{itemize}
-\item the sequence contains an Earley set for every symbol in the context input
-    plus an initial Earley set,
-\item all of these Earley sets are valid, and
-\item the current location of every EIM in each of the Earley sets
-   is the same as the index of that Earley set in the Earley table.
-\end{itemize}
-That is, where \var{tab} is an Earley table,
-\begin{equation}
-\label{eq:def-et-validity-10}
-\begin{gathered}
-\Valid{\Vet{tab}} \defined \Vlastix{tab} = \size{\Vstr{w}}
-    \\ \land \; \forall \; \Vnat{ix} \in \Dom{\var{et}} :
-    \\ \Valid{\VVelement{tab}{i}} \land \Current{\VVelement{tab}{i}} = \var{ix}.
-        \quad \dispEnd
-\end{gathered}
-\end{equation}
 \end{definition}
 
 Note that, by definition \Dfref{def:et-validity},
@@ -3404,36 +3408,60 @@ The Earley table \var{table}
 \end{gather*}
 \end{definition}
 
-\begin{theorem}[ES predictions \Oc{}]
-\label{th:es-prediction-count}
-The count of valid predictions in an Earley set is \Oc{}.
+\begin{theorem}[Predictions locations]
+\label{th:predictions-locations}
+Let \Veim{pred} be a prediction in Earley set \Ves{es}.
+Then $\Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\var{es}}$.
 \end{theorem}
 
 \begin{proof}
+\mypareq{eq:th-predictions-location-10-10}{%
+    \Valid{\Ves{j}} \cuz{}
+    \longDfref{Context table}{def:context-earley-table},
+    \longDfref{ES binding assumption}{def:es-binding}.
+}
 \begin{equation}
-\label{eq:th-es-prediction-count-08}
-\myparbox{\Veim{pred} is a valid prediction $\because$ \text{AF theorem}.%
+\label{eq:th-predictions-location-10-70}
+\myparbox{\Veim{pred} is a prediction
+    in \Ves{es}
+    \cuz{} \text{AF theorem}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-10}
+\label{eq:th-predictions-location-10-80}
+\Valid{\Veim{pred}}
+    \because \longDfref{ES validity}{def:es-validity},
+    \Eref{eq:th-predictions-location-10-10},
+    \Eref{eq:th-predictions-location-10-70}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predictions-location-10-90}
 \begin{gathered}
 \Veim{pred} = \tuple{
         \tuple{ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2} },
         \Vorig{i}, \Vloc{j} }
    \\ \myparbox{\cuz{}
-       \Eref{eq:th-es-prediction-count-08},
-       WLOG, \longDfref{EIM validity}{def:eim-validity}.
+       \longDfref{EIM validity}{def:eim-validity},
+       \Eref{eq:th-predictions-location-10-80},
+       new arbitrary \Vsym{lhs}, \Vstr{rhs1}, \Vstr{rhs2}, \Vorig{i},
+       \Vloc{j}.
    }
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-12}
+\label{eq:th-predictions-location-11}
+    \Vloc{j} = \Current{\Ves{es}}
+    \because \longDfref{ES validity}{def:es-validity},
+        \Eref{eq:th-predictions-location-10-70},
+        \Eref{eq:th-predictions-location-10-90}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predictions-location-12}
 \Vstr{rhs1} = \epsilon \because
 \longDfref{prediction}{def:prediction}.
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-14}
+\label{eq:th-predictions-location-14}
 \begin{gathered}
 \Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
 \\ \myparbox{\cuz{}
@@ -3443,38 +3471,64 @@ The count of valid predictions in an Earley set is \Oc{}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-16}
+\label{eq:th-predictions-location-16}
 \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
 \because
-\Eref{eq:th-es-prediction-count-12},
-\Eref{eq:th-es-prediction-count-14}.
+\Eref{eq:th-predictions-location-12},
+\Eref{eq:th-predictions-location-14}.
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-17}
+\label{eq:th-predictions-location-17}
 \var{j} \le \var{i}
-\because \Eref{eq:th-es-prediction-count-16}.
+\because \Eref{eq:th-predictions-location-16}.
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-18}
+\label{eq:th-predictions-location-18}
 \var{i} \le \var{j} \because \longDfref{EIM validity}{def:eim-validity}.
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-20}
+\label{eq:th-predictions-location-20}
 \var{i} = \var{j} \because
-  \Eref{eq:th-es-prediction-count-17},
-  \Eref{eq:th-es-prediction-count-18}.
+  \Eref{eq:th-predictions-location-17},
+  \Eref{eq:th-predictions-location-18}.
 \end{equation}
 \begin{equation}
-\label{eq:th-es-prediction-count-22}
+\label{eq:th-predictions-location-22}
 \Origin{\Veim{pred}} = \Current{\Veim{pred}}
-  \because \Eref{eq:th-es-prediction-count-10},
-  \Eref{eq:th-es-prediction-count-20}
+  \because \Eref{eq:th-predictions-location-10-90},
+  \Eref{eq:th-predictions-location-20}.
+\end{equation}
+\begin{equation}
+\label{eq:th-predictions-location-24}
+\begin{gathered}
+\Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\Ves{es}}
+  \\ \because \Eref{eq:th-predictions-location-11},
+      \Eref{eq:th-predictions-location-22}.
+  \quad \myqed
+\end{gathered}
+\end{equation}
+\end{proof}
+
+\begin{theorem}[ES predictions count]
+\label{th:es-prediction-count}
+The count of valid predictions in an Earley set is \Oc{}.
+\end{theorem}
+
+\begin{proof}
+Let \var{preds} be the set of the predictions in an
+arbitrary Earley set, call it \Ves{j}.
+\begin{equation}
+\label{eq:th-es-prediction-count-22}
+\begin{gathered}
+\forall \; \Veim{pred} \in \var{preds} : \Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Vloc{j}
+  \\ \because \longThref{Prediction locations}{th:predictions-locations}.
+\end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-es-prediction-count-24}
   \begin{gathered}
-    \DotPos{\Veim{pred}} = 0 \\
-    \because \Eref{eq:th-es-prediction-count-08},
+    \forall \; \Veim{pred} \in \var{preds} : \DotPos{\Veim{pred}} = 0
+    \\ \because
       \longDfref{prediction}{def:prediction}.
   \end{gathered}
 \end{equation}
@@ -3482,9 +3536,10 @@ Let \var{count} be the maximum number of predictions possible in \Ves{j}.
 \begin{equation}
 \label{eq:th-es-prediction-count-26}
 \myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
-  rules, the number of possible dot positions,
-  and the number of possible origins.
-  $\because$
+  rules possible in \var{preds},
+  the number of dot positions possible in \var{preds},
+  and the number of origins possible in \var{preds}
+  \cuz{}
   \longDfref{EIM}{def:eim}.
 }
 \end{equation}
