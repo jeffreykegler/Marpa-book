@@ -2795,7 +2795,7 @@ A Earley item (type \type{EIM}) is a triple
 \label{eq:d-eim}
     [\Vdr{dotted}, \Vorig{i}, \Vcurr{j}]
 \end{equation}
-of dotted rule and origin.
+of dotted rule, origin and current location.
 \dispEnd
 \end{definition}
 
@@ -3325,6 +3325,11 @@ That is, where \var{tab} is an Earley table,
 \end{equation}
 \end{definition}
 
+Note that, by definition \Dfref{def:et-validity},
+an Earley table may be vacuously valid.
+That is, an Earley table all of whose Earley sets are empty is valid,
+as long as it is of the correct length.
+
 \begin{definition}[Context Earley table and sets]
 \label{def:context-earley-table}
 From this point on,
@@ -3370,11 +3375,6 @@ We say that \Current{\Ves{es}} is the
 \dispEnd
 \end{definition}
 
-Note that, by definition \Dfref{def:et-validity},
-an Earley table may be vacuously valid.
-That is, an Earley table all of whose Earley sets are empty is valid,
-as long as it is of the correct length.
-
 An Earley parser works by building an Earley table.
 Earley set 0 is the initial Earley set.
 Earley set $\Vloc{i}+1$ describes the state of
@@ -3408,17 +3408,35 @@ The Earley table \var{table}
 \end{gather*}
 \end{definition}
 
-\begin{theorem}[Predictions locations]
+In the proofs of the next two theorems,
+we include explicit derivation steps stating the context
+and binding assumptions,
+and we derive basic facts from these steps.
+After that, we will usually introduce facts directly
+when they are obvious
+from the context and binding assumptions.
+
+\begin{theorem}[Prediction locations]
 \label{th:predictions-locations}
 Let \Veim{pred} be a prediction in Earley set \Ves{es}.
 Then $\Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\var{es}}$.
 \end{theorem}
 
 \begin{proof}
+\mypareq{eq:th-predictions-location-10-05}{%
+    \Valid{\Vet{S}} \cuz{}
+    \longDfref{Context Earley table and sets}{def:context-earley-table}.
+}
 \mypareq{eq:th-predictions-location-10-10}{%
-    \Valid{\Ves{j}} \cuz{}
+    $\Ves{es} \in \var{S}$ \cuz{}
     \longDfref{Context table}{def:context-earley-table},
     \longDfref{ES binding assumption}{def:es-binding}.
+}
+\mypareq{eq:th-predictions-location-10-15}{%
+    \Valid{\Ves{es}} \cuz{}
+    \longDfref{ET validity}{def:et-validity},
+    \Eref{eq:th-predictions-location-10-05},
+    \Eref{eq:th-predictions-location-10-10}.
 }
 \begin{equation}
 \label{eq:th-predictions-location-10-70}
@@ -3431,7 +3449,7 @@ Then $\Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\var{es}}$.
 \label{eq:th-predictions-location-10-80}
 \Valid{\Veim{pred}}
     \because \longDfref{ES validity}{def:es-validity},
-    \Eref{eq:th-predictions-location-10-10},
+    \Eref{eq:th-predictions-location-10-15},
     \Eref{eq:th-predictions-location-10-70}.
 \end{equation}
 \begin{equation}
@@ -3441,20 +3459,19 @@ Then $\Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\var{es}}$.
         \tuple{ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2} },
         \Vorig{i}, \Vloc{j} }
    \\ \myparbox{\cuz{}
-       \longDfref{EIM validity}{def:eim-validity},
+       \longDfref{EIM}{def:eim}
        \Eref{eq:th-predictions-location-10-80},
        new arbitrary \Vsym{lhs}, \Vstr{rhs1}, \Vstr{rhs2}, \Vorig{i},
        \Vloc{j}.
    }
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-predictions-location-11}
-    \Vloc{j} = \Current{\Ves{es}}
-    \because \longDfref{ES validity}{def:es-validity},
+\mypareq{eq:th-predictions-location-11}{%
+    $\Vloc{j} = \Current{\Ves{es}}$ \linebreak
+    \cuz{} \longDfref{ES validity}{def:es-validity},
         \Eref{eq:th-predictions-location-10-70},
         \Eref{eq:th-predictions-location-10-90}.
-\end{equation}
+}
 \begin{equation}
 \label{eq:th-predictions-location-12}
 \Vstr{rhs1} = \epsilon \because
