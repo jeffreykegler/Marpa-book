@@ -6,6 +6,7 @@
 \usepackage[obeyDraft]{todonotes}
 \ifdraft{
     \usepackage{datetime2}
+    \usepackage{draftwatermark}
 }{}
 
 % Fix conflict between todonotes and amsart packages
@@ -429,13 +430,17 @@
 \begin{document}
 
 
-\ifdraft{%
-    \title{Marpa \DTMnow}
-    \author{Kegler \DTMnow}
-}{%
-    \title{Marpa, a practical general parser: the recognizer}
-    \author{Jeffrey Kegler}
-}
+\title{Marpa, a practical general parser: the recognizer}
+\author{Jeffrey Kegler}
+\ifdraft{
+    % legacy options -- update?
+    \SetWatermarkLightness{0.5}
+    \SetWatermarkText{draft \DTMnow}
+    \SetWatermarkAngle{0}
+    \SetWatermarkScale{.5}
+    \SetWatermarkHorCenter{1.5in}
+    \SetWatermarkVerCenter{.5in}
+}{}
 \thanks{\ifdraft{%
     DRAFT as of \DTMnow%
 }{%
