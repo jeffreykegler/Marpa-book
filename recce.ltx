@@ -1,7 +1,7 @@
 % Copyright 2013 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
-\documentclass[draft,12pt]{amsart}
+\documentclass[draft,12pt]{amsbook}
 \usepackage{ifdraft}
 \usepackage[obeyDraft]{todonotes}
 \ifdraft{
@@ -477,12 +477,12 @@ to the parser's expectations.
 \maketitle
 
 \ifdraft{
-\section{Draft Status}
+\chapter{Draft Status}
 
 THIS DOCUMENT IS A DRAFT.
 }{}
 
-\section{Introduction}
+\chapter{Introduction}
 
 The \Marpa{} project was intended to create
 a practical and highly available tool
@@ -610,10 +610,10 @@ Readers may find it helpful to read
 \cite{Timeline}
 before this paper.
 
-\section{Features}
+\chapter{Features}
 \label{sec:features}
 
-\subsection{General context-free parsing}
+\section{General context-free parsing}
 The \Marpa{} algorithm is capable of parsing all
 context-free grammars.
 As implemented,
@@ -630,7 +630,7 @@ Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
 and therefore never worse than $\order{\var{n}^3}$.
 
-\subsection{Linear time for practical grammars}
+\section{Linear time for practical grammars}
 Currently, the grammars suitable for practical
 use are thought to be a subset
 of the deterministic context-free grammars (DCFG's).
@@ -643,7 +643,7 @@ a superset of the the DCFG's.
 also parses many ambiguous grammars in linear
 time.
 
-\subsection{Left-eidetic}
+\section{Left-eidetic}
 The original \Earley{} algorithm kept full information
 about the parse ---
 including partial and fully
@@ -659,7 +659,7 @@ This information is
 in useful form,
 and can be accessed efficiently during the parse.
 
-\subsection{Recoverable from read errors}
+\section{Recoverable from read errors}
 When
 \Marpa{} reads a token which it cannot accept,
 the error is fully recoverable.
@@ -671,7 +671,7 @@ a token that is accepted by the parser,
 parsing will continue
 as if the unsuccessful read attempts had never been made.
 
-\subsection{Ambiguous tokens}
+\section{Ambiguous tokens}
 \Marpa{} allows ambiguous tokens.
 These are often useful in natural language processing
 where, for example,
@@ -681,10 +681,10 @@ recovery from rejected tokens so that,
 for example, an application could react to the
 rejection of a token by reading two others.
 
-\section{Using the features}
+\chapter{Using the features}
 \label{sec:using-features}
 
-\subsection{Error reporting}
+\section{Error reporting}
 An obvious application of left-eideticism is error
 reporting.
 \Marpa{}'s abilities in this respect are
@@ -697,7 +697,7 @@ can detect an ambiguity and report
 specifically where it occurred
 and what the alternatives were.
 
-\subsection{Event driven parsing}
+\section{Event driven parsing}
 As implemented,
 Marpa::R2\cite{Marpa-R2}
 allows the user to define ``events''.
@@ -710,7 +710,7 @@ A mid-rule event can be defined by adding a nulling symbol
 at the desired point in the rule,
 and defining an event which triggers when the symbol is nulled.
 
-\subsection{Ruby slippers parsing}
+\section{Ruby slippers parsing}
 Left-eideticism, efficient error recovery,
 and the event mechanism can be combined to allow
 the application to change the input in response to
@@ -762,7 +762,7 @@ and accepts all input files,
 in the worst case
 treating them as highly defective HTML.
 
-\subsection{Ambiguity as a language design technique}
+\section{Ambiguity as a language design technique}
 In current practice, ambiguity is avoided in language design.
 This is very different from the practice in the languages humans choose
 when communicating with each other.
@@ -800,7 +800,7 @@ and what the ambiguity is.
 Marpa::R2's own parser description language, the SLIF,
 uses ambiguity in this way.
 
-\subsection{Auto-generated languages}
+\section{Auto-generated languages}
 \cite[pp. 6-7]{Culik1973} points out that the ability
 to efficiently parse LRR languages
 opens the way to
@@ -811,7 +811,7 @@ In particular,
 can parse any LRR language will be
 able to parse a language generated using syntax macros.
 
-\subsection{Second order languages}
+\section{Second order languages}
 In the literature, the term ``second order language''
 is usually used to describe languages with features
 which are useful for second-order programming.
@@ -868,7 +868,7 @@ to get exactly the language that the precedenced rule specifies.
 The user of the yacc equivalent must hope their
 syntax falls within the limits of LALR.
 
-\section{Preliminaries}
+\chapter{Preliminaries}
 \label{sec:preliminaries}
 
 The conventions of the parsing literature were formed
@@ -1222,24 +1222,50 @@ Multi-character variable names will be common.
 When the angle bracket notation is used,
 concatenation of strings and symbols may be implicit.
 Otherwise, operations are never implicit
-\Tref{tab:op-notation}.
-\begin{table}[tb]
-\centering
-\caption{Selected operator notations}
-\begin{tabular}{ll}
-\hline
-\rule{0pt}{3ex}%
-Multiplication &  $\var{a} \times \var{b}$ \\
-Cartesian product &  $\var{set1} \times \var{set2}$ \\
-Concatenation & $\var{a} \cat \var{b}$ \\
-Concatenation & $\Vstr{a} \Vsym{b}$ \\
-Subtraction & $\var{symbol-count} \subtract \var{terminal-count}$ \\
-Floor & $\var{floor}(\var{a})$ \\
-Terminal symbol \Dfref{def:terminal-string} & \Vterm{terminal} \\[.8ex]
-\hline
+
+Since multiplication is never implicit,
+we overload the Cartesian product operator
+so that it represents multiplication when its
+operands are integers:
+$\var{n} \times 6$.
+Concatenation may also be made explicit:
+$\var{a} \cat \var{b}$.
+We find it helpful to allow hyphenated variable names,
+and therefore we distinguish subtraction typographically:
+\[
+\var{symbol-count} \subtract \var{terminal-count}.
+\]
+Floor brackets are a very intuitive way to indicate terminal
+symbols:
+\Vterm{terminal}.
+We therefore represent the floor of a number
+as a function:
+$\myfn{floor}{\var{a}}$.
+
+\begin{table}[t]
+\caption{Operator Precedence from tightest to loosest}
+\label{tab:op-precedence}
+\begin{tabular}{p{1.5in}p{3in}}
+{$\cat$} & Concatenation ($a\cat b$) \\
+{$\in$} {$notin$} & Set inclusion \\
+{$\times$} & Multiplication\\
+{$+$} {$\subtract$} & Addition, Subtraction \\
+{$=$ $\neq$} & Equality \\
+{$\land$} & Logical and \\
+{$\lor$} & Logical or \\
+{$\neg$} & Logical negation \\
+{$\implies$} & Implication \\
+{$\iff$} & Logical equivalence \\
+{$\exists$ $\forall$} & Quantifiers \\
+{$\defined$} & Definition \\
 \end{tabular}
-\label{tab:op-notation}.
 \end{table}
+
+Arity, associativity and precedence follow tradition,
+but precedence presents a difficulty: varying traditions
+need to be merged.
+We state our choice of precedence conventions
+in Table \Tref{tab:op-precedence}.
 
 In this paper, we will only need to describe countable cardinalities.
 \Vsize{set} is the cardinality of the set \var{set}.
@@ -1430,7 +1456,7 @@ which may be abbreviated ``DFPP''.
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 
-\section{Context-free grammars}
+\chapter{Context-free grammars}
 \label{sec:CFGs}
 
 \begin{definition}[Context-free grammar]
@@ -1806,7 +1832,7 @@ we will write
 The usefulness of these notations will be clearer later, when
 we introduce parse items.
 
-\section{LR Grammars}
+\chapter{LR Grammars}
 \label{sec:lr-grammars}
 
 \begin{definition}[Handle]
@@ -1958,10 +1984,10 @@ we have
 Directly from \Dfref{def:LR}. \myqed
 \end{proof}
 
-\section{External grammars}
+\chapter{External grammars}
 \label{sec:EXTs}
 
-\subsection{Cycles}
+\section{Cycles}
 
 An \dfn{external grammar} (type \type{EXT}) is a cycle-free CFG.
 A CFG is \dfn{cycle-free} if it contains no cycles.
@@ -2027,10 +2053,10 @@ a cycle of cycle depth 1 begins and ends with the
 cycle string, but does not derive the cycle string
 in any of its intermediate steps.
 
-\section{Useless symbols}
+\chapter{Useless symbols}
 \label{sec:useless-symbols}
 
-\subsection{Unproductive symbols}
+\section{Unproductive symbols}
 The current implementation of
 \Marpa{} supports unproductive
 symbols.
@@ -2108,7 +2134,7 @@ since a ``unicorn'' can always be feed to the parser
 by a custom lexer and,
 in that sense, all \Marpa{} symbols are productive.
 
-\subsection{Inaccessible symbols}
+\section{Inaccessible symbols}
 
 An \dfn{inaccessible symbol} is one which can never be derived from
 the accept symbol.
@@ -2154,10 +2180,10 @@ each section of optional boilerplate,
 in which case the warning need only be silenced for those
 topmost symbols.
 
-\section{Rewriting the grammar}
+\chapter{Rewriting the grammar}
 \label{sec:rewrite}
 
-\subsection{The Aycock-Horspool parser}
+\section{The Aycock-Horspool parser}
 
 A parser that claims to be practical must accept
 grammars with nullable and nulling symbols
@@ -2259,7 +2285,7 @@ We will state \Marpa{}'s definition
 of semantics-safe more precisely
 in section \Sref{semantics-safe}.
 
-\subsection{Augmenting the grammar}
+\section{Augmenting the grammar}
 \label{sec:augmentation}
 
 Let \Vint{g} be a \Marpa{} internal grammar
@@ -2295,7 +2321,7 @@ is not applied to the accept rule.
 Instead, the accept rule is
 dealt with as a special case.
 
-\subsection{Eliminating proper nullables}
+\section{Eliminating proper nullables}
 \label{sec:eliminating-proper_nullables}
 
 Recall that a proper nullable
@@ -2342,7 +2368,7 @@ so that, in these cases,
 going exponential on $\ell$ has a cost
 which it is worth some trouble to avoid.
 
-\subsection{Removing nulling symbols}
+\section{Removing nulling symbols}
 \label{sec:removing-nulling-symbols}
 
 After the rewrite of
@@ -2378,7 +2404,7 @@ is to have the implementation treat rules as distinct
 even if they differ only in their recorded nulling symbols.
 This is what the \Marpa{} implementation does.
 
-\subsection{Trivial grammars and null parses}
+\section{Trivial grammars and null parses}
 \label{sec:trivial-grammars}
 
 Null parses are parses of zero length inputs.
@@ -2394,10 +2420,10 @@ zero length inputs.
 No \Marpa{} internal grammar can be a trivial grammar.
 Trivial grammars are handled as a special case.
 
-\subsection{Semantics-safe rewriting}
+\section{Semantics-safe rewriting}
 \label{semantics-safe}
 
-This subsection describes the restrictions
+This section describes the restrictions
 that rewrites must follow in order to be semantics-safe.
 Consider an input \Cw{} and
 an external grammar, \Vext{g}.
@@ -2565,7 +2591,7 @@ is a one-to-one correspondence
 (bijection). \dispEnd{}
 \end{definition}
 
-\section{\Marpa{} internal grammars}
+\chapter{\Marpa{} internal grammars}
 \label{sec:INTs}
 
 \begin{definition}{Marpa internal grammar}
@@ -2693,7 +2719,7 @@ so that
 \end{equation}
 \end{proof}
 
-\section{Earley items}
+\chapter{Earley items}
 \label{sec:earley-item}
 
 \begin{definition}[Context parse redefined]
@@ -3334,7 +3360,7 @@ The theorem follows from
 \myqed
 \end{proof}
 
-\section{Earley tables}
+\chapter{Earley tables}
 \label{sec:earley-table}
 
 The definitions of this section
@@ -3717,10 +3743,10 @@ Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
 \end{equation}
 \end{proof}
 
-\section{The Leo algorithm}
+\chapter{The Leo algorithm}
 \label{sec:leo}
 
-\subsection{Joop Leo's discovery}
+\section{Joop Leo's discovery}
 
 In his 1968 Ph.D. thesis~\cite[p. 60]{Earley1968},
 Jay Earley conjectured
@@ -3765,7 +3791,7 @@ memoize penults.
 Leo restricted the memoization to situations where
 the penult is unambiguous.
 
-\subsection{\Marpa{} and right recursion}
+\section{\Marpa{} and right recursion}
 
 Every right recursion involves a penult,
 so that Leo's method also memoizes right recursions.
@@ -3821,7 +3847,7 @@ would have to be implemented as a special case,
 while omission of $\es{(0)}$ memoization
 results in at most one extra EIM per ES.
 
-\subsection{Leo directionality}
+\section{Leo directionality}
 
 Leo's memoization method is simple from one point of view ---
 it involves a sequence of memos, called Leo items.
@@ -3874,7 +3900,7 @@ will be in the same ES as, or in an earlier ES than, its ``previous''
 item.  In other words, previous-to-next in NES terms
 is right-to-left in Earley set terms.
 
-\subsection{Leo items}
+\section{Leo items}
 
 \begin{definition}[Leo items]
 \label{def:LIMs}
@@ -7110,7 +7136,7 @@ we overload \var{Matches} as follows:
 
 \todo{Define source function}
 
-\subsection{Counting Leo items}
+\section{Counting Leo items}
 
 \begin{theorem}[LIM uniqueness by source]
 \label{th:lim-uniqueness-by-source}
@@ -7134,7 +7160,7 @@ Every ES has at most
 \myqed
 \end{proof}
 
-\subsection{LIM predecessor}
+\section{LIM predecessor}
 
 \begin{definition}[LIM predecessor function]
 \todo{Define LIM predecessor function}
@@ -7158,7 +7184,7 @@ This theorem follows from
 [ TODO lim predecessor connection].
 \end{proof}
 
-\section{Ancestry}
+\chapter{Ancestry}
 \label{sec:ancestry}
 
 \Marpa{}, like other variants of \Earley{}, performs
@@ -7248,7 +7274,7 @@ or as
 \LinkPairs{\Vlim{lim}},
 for the PIM subtypes.
 
-\section{Complexity preliminaries}
+\chapter{Complexity preliminaries}
 \label{sec:complexity-preliminaries}
 \todo{Rewrite ``Complexity preliminaries'' section.}
 
@@ -7423,7 +7449,7 @@ or an algorithm:
 The calls ``module a unit'' are for counting invocations and passes at a level finer than the total count for the pseudocode procedure.
 Their precise meaning will defined in the context in which they are used.
 
-\subsection{Earley set indexing}
+\section{Earley set indexing}
 \label{sec:es-indexing}
 
 \begin{gather}
@@ -7482,7 +7508,7 @@ the array of Earley sets will be static,
 and the overhead of using a dynamic array will be
 minimal.
 
-\subsection{Global space}
+\section{Global space}
 \label{sec:global-space}
 
 We will use several data structures which are global.
@@ -7653,7 +7679,7 @@ Creation time for a new link in one of the
 \]
 \end{observation}
 
-\subsection{Counting invocations}
+\section{Counting invocations}
 
 We first define our conventions for counting line
 invocations,
@@ -7756,7 +7782,7 @@ Line \ref{line:toy-50}
 is invoked once per pass of the inner loop, or 6 times.
 \end{itemize}
 
-\subsection{Complexity tables}
+\section{Complexity tables}
 \label{sec:complexity-tables}
 
 Let \var{inv} be the number of invocations,
@@ -7783,7 +7809,7 @@ Later rows in the total give the total amount of resource accounted for in
 that table,
 and the per-table justifications.
 
-\subsection{Accounts}
+\section{Accounts}
 \label{sec:accounts}
 
 In the low-level complexity analysis,
@@ -7840,10 +7866,10 @@ the housekeeping time of the callee is unchanged.
 \myqed
 \end{proof}
 
-\section{The \Marpa{} algorithm}
+\chapter{The \Marpa{} algorithm}
 \label{sec:marpa}
 
-\subsection{Initializer op}
+\section{Initializer op}
 \label{sec:initializer}
 
 \begin{algorithm}[tb]
@@ -9028,7 +9054,7 @@ of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
 
-\subsection{Predictor op}
+\section{Predictor op}
 \label{sec:predictor-op}
 
 The \Marpa{} Predictor op is equivalent to the
@@ -9082,7 +9108,7 @@ operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
 
-\subsection{Scanner op}
+\section{Scanner op}
 \label{def:scanner}
 
 \begin{algorithm}[tb]
@@ -9612,7 +9638,7 @@ operation of \Earley{}.
 \dispEnd
 \end{observation}
 
-\subsection{Reducer op}
+\section{Reducer op}
 \label{def:reducer}
 
 \todo{Define caller-charged, EIM-charged, link-charged}
@@ -10557,7 +10583,7 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
-\subsection{Memoizer op}
+\section{Memoizer op}
 \label{def:memoizer}
 
 \FloatBarrier
@@ -10641,7 +10667,7 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
-\subsection{Top level of \Marpa{}}
+\section{Top level of \Marpa{}}
 
 \todo{Rewrite \Marpa{} top level section}
 
@@ -10684,7 +10710,7 @@ and
 \dispEnd
 \end{observation}
 
-\subsection{Summary}
+\section{Summary}
 
 \todo{Rewrite operations summary}
 
@@ -10778,7 +10804,7 @@ This observation follows from
 
 \todo{complexity observations}
 
-\section{Ambiguity}
+\chapter{Ambiguity}
 \label{sec:ambiguity}
 
 \todo{Discuss the sources of this approach.}
@@ -11558,7 +11584,7 @@ an ambiguous EIM.
 This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}. \myqed
 \end{proof}
 
-\section{Per-set lists}
+\chapter{Per-set lists}
 \label{sec:per-set-lists}
 
 In the general case,
@@ -11682,7 +11708,7 @@ The simpler approach, which omits the boolean,
 is the one that
 the \Marpa{} implementation sometimes uses.
 
-\section{\Marpa{} is correct}
+\chapter{\Marpa{} is correct}
 \label{sec:correctness}
 
 In this paper,
@@ -13340,7 +13366,7 @@ or \On{}.
 \myqed
 \end{proof}
 
-\section{Reversing Leo memoization}
+\chapter{Reversing Leo memoization}
 \label{sec:reverse-leo}
 
 \todo{Finish writing this section}
@@ -13381,7 +13407,7 @@ in an unambiguous parse is \On{}.
 \myqed
 \end{proof}
 
-\section{LRR complexity}
+\chapter{LRR complexity}
 \label{sec:lrr-complexity}
 
 The following theorem will prove useful.
@@ -13452,7 +13478,7 @@ Confirmed EIMs are only unioned by the Scanner and the Completer.
 
 \end{proof}
 
-\subsection{Complexity of each Earley item}
+\section{Complexity of each Earley item}
 
 % TODO: Is this theorem used?
 \begin{theorem}[Right recursion bound]
@@ -13503,7 +13529,7 @@ unless at least one step of that derivation uses a right recursive rule.
 \myqed
 \end{proof}
 
-\subsection{The complexity results}
+\section{The complexity results}
 
 \begin{lemma}
 \label{lem:handle-unique}
@@ -14470,7 +14496,7 @@ For every LRR grammar,
 \myqed
 \end{proof}
 
-\section{General complexity}
+\chapter{General complexity}
 \label{sec:complexity}
 
 \begin{theorem}[\Marpa{} unambiguous time and space is quadratic]
@@ -14555,7 +14581,7 @@ including the space for tracking links.
 \myqed
 \end{proof}
 
-\section{The \Marpa{} Input Model}
+\chapter{The \Marpa{} Input Model}
 \label{sec:input}
 
 In this paper,
@@ -14685,7 +14711,7 @@ of \Marpa{}'s generalized input model.
 And with them,
 the complexity results for \Marpa{} stand.
 
-\section{Acknowledgments}
+\chapter{Acknowledgments}
 \label{sec:Acknowledgments}
 
 Ruslan Shvedov
