@@ -1719,18 +1719,18 @@ of sentential forms:
 \label{def:parse}
 A \dfn{full parse} is a duple \tuple{ \Vcfg{g}, \Vterm{w} } such that
 $\Vterm{w} \in \myL{\var{g}}$.
-A \dfn{partial parse} is a duple \tuple{ \Vcfg{g}, \Vterm{prefix} } such that,
+A \dfn{partial parse} is a duple \tuple{ \Vcfg{g}, \Vterm{inp} } such that,
 for some \Vterm{lookahead},
 \[
-\tuple{ \Vcfg{g}, \Vterm{prefix}\Vterm{lookahead} }
+\tuple{ \Vcfg{g}, \Vterm{inp}\Vterm{lookahead} }
 \]
 is a full parse.
 A partial parse,
-\tuple{ \Vcfg{g}, \Vterm{prefix} }
+\tuple{ \Vcfg{g}, \Vterm{inp} }
 is \dfn{consistent} with a full parse \tuple{ \Vcfg{g}, \Vterm{w} }
 iff
 \[
-\exists \; \Vterm{lookahead} : \Vterm{prefix}\Vterm{lookahead} = \Vterm{w}.
+\exists \; \Vterm{lookahead} : \Vterm{inp}\Vterm{lookahead} = \Vterm{w}.
 \]
 A \dfn{partial parse} is often called, simply, a \dfn{parse}.
 Note that, by this definition,
@@ -2990,23 +2990,23 @@ be an arbitrary EIM.
 iff
 \begin{gather}
 \label{eq:EIM-valid-20}
-\var{i} \le \var{j} \le \Vlastix{prefix}, \\
+\var{i} \le \var{j} \le \Vlastix{inp}, \\
 \label{eq:EIM-valid-22a}
 \left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}},
 \\
 \label{eq:EIM-valid-22b}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
 \label{eq:EIM-valid-22c}
-\Vstr{before} \destar \var{prefix}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
+\Vstr{before} \destar \var{inp}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
 \label{eq:EIM-valid-22d}
-\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)].
+\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtract 1)].
 \end{gather}
 \Veim{x}
 is \dfn{useful}
 iff
 \begin{equation*}
 \label{eq:EIM-valid-30}
-\Vstr{rhs2}\Vstr{after} \destar \var{prefix}[\var{j}  \ldots  \Vlastix{prefix}].
+\Vstr{rhs2}\Vstr{after} \destar \var{inp}[\var{j}  \ldots  \Vlastix{inp}].
 \end{equation*}
 The boolean function \Valid{\Veim{x}} is true iff \Veim{x}
 is valid.
@@ -3148,7 +3148,7 @@ let
 and let
 \begin{equation}
 \label{eq:lem-reduction-lemma-04}
-\Vsym{postdot} \destar \boldRangeDecr{prefix}{\Vloc{j}}{\Vloc{k}}.
+\Vsym{postdot} \destar \boldRangeDecr{inp}{\Vloc{j}}{\Vloc{k}}.
 \end{equation}
 Then
 \begin{equation}
@@ -3205,7 +3205,7 @@ Then
 \begin{equation}
 \label{eq:lem-reduction-lemma-18}
 \begin{gathered}
-  \Vstr{before} \destar \boldRangeDecr{prefix}{0}{\var{i}} \\
+  \Vstr{before} \destar \boldRangeDecr{inp}{0}{\var{i}} \\
   \because \Eref{eq:EIM-valid-22c} \text{ in }
     \Dfref{def:eim-validity},
     \Eref{eq:lem-reduction-lemma-02}.
@@ -3214,7 +3214,7 @@ Then
 \begin{equation}
 \label{eq:lem-reduction-lemma-20}
 \begin{gathered}
-  \Vstr{pt1} \destar \boldRangeDecr{prefix}{\var{i}}{\var{j}} \\
+  \Vstr{pt1} \destar \boldRangeDecr{inp}{\var{i}}{\var{j}} \\
   \because \Eref{eq:EIM-valid-22d} \text{ in }
     \Dfref{def:eim-validity},
     \Eref{eq:lem-reduction-lemma-02}.
@@ -3223,7 +3223,7 @@ Then
 \begin{equation}
 \label{eq:lem-reduction-lemma-22}
 \begin{gathered}
-  \Vstr{pt1}\Vsym{postdot} \destar \boldRangeDecr{prefix}{\var{i}}{\var{k}} \\
+  \Vstr{pt1}\Vsym{postdot} \destar \boldRangeDecr{inp}{\var{i}}{\var{k}} \\
   \because
     \Eref{eq:lem-reduction-lemma-04},
     \Eref{eq:lem-reduction-lemma-20}.
@@ -3303,7 +3303,7 @@ Then
 \begin{equation}
 \label{eq:lem-reduction-by-completion-28}
 \begin{gathered}
-\Vsym{postdot} \destar \boldRangeDecr{prefix}{\Vloc{j}}{\Vloc{k}} \\
+\Vsym{postdot} \destar \boldRangeDecr{inp}{\Vloc{j}}{\Vloc{k}} \\
    \because
         \Eref{eq:lem-reduction-by-completion-04},
         \Eref{eq:lem-reduction-by-completion-26}
@@ -3334,7 +3334,7 @@ Let
 and let
 \begin{gather}
 \label{eq:lem-reduction-by-token-04}
-\Vsym{postdot} = \boldElement{prefix}{\var{j}}
+\Vsym{postdot} = \boldElement{inp}{\var{j}}
 \end{gather}
 Then
 \begin{equation}
@@ -3596,17 +3596,17 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \begin{equation}
 \label{eq:th-predictions-location-14}
 \begin{gathered}
-\Vstr{rhs1} \destar \var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)]
+\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtract 1)]
 \\ \myparbox{\cuz{}
     \Eref{eq:EIM-valid-22d} in \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-predictions-location-10-90},
-    new \Vstr{prefix} for convenience.
+    new \Vstr{inp} for convenience.
 }
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-predictions-location-16}
-\var{prefix}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
+\var{inp}[\var{i}  \ldots  (\var{j}\subtract 1)] = \epsilon
 \because
 \Eref{eq:th-predictions-location-12},
 \Eref{eq:th-predictions-location-14}.
@@ -9117,7 +9117,7 @@ operation of \Earley{}\cite{Earley1970}.
 \label{alg:scanner-op}
 \begin{algorithmic}[1]
 \Procedure{Scanner}{\Ves{j}}
-\Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{prefix}{\var{j}\subtract 1}, \var{val}}$.
+\Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{inp}{\var{j}\subtract 1}, \var{val}}$.
   See \Dfref{def:token}.
 }
 \State $\var{matches} = \Transitions{\Symbol{\var{token}}}{\var{j}\subtract 1}$
