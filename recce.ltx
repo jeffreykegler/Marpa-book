@@ -244,7 +244,9 @@
 \newcommand{\decr}[1]{#1\subtract1}
 \newcommand{\Vdecr}[1]{\var{#1}\subtract1}
 \newcommand{\seq}[1]{{\left[ #1 \right]} }
-\newcommand{\set}[1]{\ensuremath{{\left\lbrace #1 \right\rbrace}} }
+\newcommand{\set}[1]{%
+    \ensuremath{{\left\lbrace #1 \right\rbrace}}%
+}
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]} }
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
@@ -3649,16 +3651,17 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \begin{theorem}[ES subset count]
 \label{th:es-subset-count}
 Let \Veimset{eims} be a subset of \Ves{es}:
-$\var{eims} \in \Ves{es}$.
+$\var{eims} \subseteq \Ves{es}$.
 Let \var{origs} be the set of origins of
 the elements of \var{eims}:
 \[
-    \var{origs} = { \Vloc{orig} :
-        \exists \; \Veim{eim} \in \var{eims} : \var{orig} = \Origin{\var{eim}} }.
+    \var{origs} = \set{ \Vloc{orig} :
+        \exists \; \Veim{eim} \in \var{eims} : \var{orig} = \Origin{\var{eim}}
+    }.
 \]
 Then
 \[
-    \size{\Veimset{eims}} = \order{\size{\Veimset{origs}}}.
+    \size{\Veimset{eims}} = \bigorder{\size{\Veimset{origs}}}.
 \]
 \end{theorem}
 
@@ -3676,28 +3679,29 @@ is the product of
 \item the number of possible origin locations for EIMS in \Veimset{eims}.
 \end{itemize}
 This means that
-\[
-    \size{\Veimset{eims}} = \bigorder{
+\begin{equation*}
+\begin{aligned}
+    \size{\Veimset{eims}} & = \bigorder{
         \begin{gathered}
         \size{\DottedRules{\Vcfg{g}}}
-        \\ \times \size{\Veimset{origs}}
+            \times \size{\Veimset{origs}}
         \\ \times \size{\set{\Current{\Ves{es}}}}
         \end{gathered}
     }
-\]
-$\size{\DottedRules{\Vint{g}}}$ is a constant,
-call that it \var{c1},
-which depends on the grammar, \Vint{g},
+    \\ & = \size{\DottedRules{\Vcfg{g}}} \times \size{\set{\Current{\Ves{es}}}}
+    \\ & \quad\quad \times \bigorder{\size{\Veimset{origs}}}
+\end{aligned}
+\end{equation*}
+$\size{\DottedRules{\Vint{g}}}$ is a constant
+that depends on the grammar,
 and \set{\Current{\Ves{es}}} is obviously a singleton,
 so that
 \begin{equation}
 \begin{aligned}
-    \size{\Veimset{eims}} & = \bigorder{
-        \var{c1} \times
-        \size{\Veimset{origs}} \times
-        1
-    } \\
-    & = \bigorder{\size{\Veimset{origs}}}.
+    \size{\Veimset{eims}} & =
+        \Oc \times 1 \times
+        \bigorder{\size{\Veimset{origs}}}
+    \\ & = \bigorder{\size{\Veimset{origs}}}.
         \quad \myqed
 \end{aligned}
 \end{equation}
