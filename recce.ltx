@@ -3477,8 +3477,8 @@ where \Vet{cxt} is the context table,
 
 \begin{definition}[ES Current location]
 \label{def:es-current}
-Let \var{es} be an ES and let \var{table}
-be an ET.
+Let \var{es} be a valid ES and let \var{table}
+be a valid ET.
 Then
 \[
     \Current{\var{es}} \defined \Vnat{i} : \VVelement{table}{i} = \var{es}.
@@ -3489,6 +3489,24 @@ We say that \Current{\Ves{es}} is the
 \dfn{current location} of \var{es}.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[ES--EIM current location]
+\label{def:ES-EIM-current}
+Let \Ves{es} be a valid Earley set.  Then
+\[
+    \forall \; \Veim{eim} \in \Current{\var{es}} : \Current{\Veim{eim}} = \Current{\var{es}}.
+\]
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the definition of Earley table validity
+\Dfref{def:et-validity},
+the context Earley table assumption \Dfref{def:context-earley-table},
+the ES binding assumption \Dfref{def:es-binding},
+and the definition of ``ES Current location''
+\Dfref{def:es-current}.
+\end{proof}
 
 An Earley parser works by building an Earley table.
 Earley set 0 is the initial Earley set.
