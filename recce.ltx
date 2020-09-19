@@ -3705,7 +3705,6 @@ so that
         \quad \myqed
 \end{aligned}
 \end{equation}
-\todo{Finish proof}
 \end{proof}
 
 \begin{theorem}[ES predictions count]
@@ -3714,59 +3713,42 @@ The count of valid predictions in an Earley set is \Oc{}.
 \end{theorem}
 
 \begin{proof}
-Let \var{preds} be the set of the predictions in an
-arbitrary Earley set, call it \Ves{j}.
+Let \Ves{es} be an arbitrary Earley set.
+From the context and the binding assumptions,
+we know that \Ves{es} is valid and therefore all EIM's in \var{es} are valid.
+
+Let \var{origs} be the set of origins
+of valid predictions in an arbitrary Earley set \Ves{es}, so that
 \begin{equation}
-\label{eq:th-es-prediction-count-22}
-\begin{gathered}
-\forall \; \Veim{pred} \in \var{preds} : \Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Vloc{j}
-  \\ \because \longThref{Prediction locations}{th:predictions-locations}.
-\end{gathered}
+\label{eq:th-es-prediction-count-10}
+\var{origs} = \set{
+    \begin{gathered}
+    \Vloc{orig} : \exists \; \Veim{eim} \in \Ves{es} :
+    \\ \DotPos{\var{eim}} = 0 \land \var{orig} = \Origin{\var{eim}}
+    \end{gathered}
+    }.
 \end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-24}
-  \begin{gathered}
-    \forall \; \Veim{pred} \in \var{preds} : \DotPos{\Veim{pred}} = 0
-    \\ \because
-      \longDfref{prediction}{def:prediction}.
-  \end{gathered}
-\end{equation}
-Let \var{count} be the maximum number of predictions possible in \Ves{j}.
-\begin{equation}
-\label{eq:th-es-prediction-count-26}
-\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
-  rules possible in \var{preds},
-  the number of dot positions possible in \var{preds},
-  and the number of origins possible in \var{preds}
-  \cuz{}
-  \longDfref{EIM}{def:eim}.
+\mypareq{eq:th-es-prediction-count-12}{%
+    $\Veim{eim} \in \Ves{es} \land \DotPos{\var{eim}} = 0 \implies \Current{\var{es}} = \Origin{\var{eim}}$
+    \cuz{} \longThref{Prediction locations}{th:predictions-locations}.
 }
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-28}
-\var{count} = \size{\Rules{\var{g}} \times \set{0} \times \set{\var{j}}}
-\because \Eref{eq:th-es-prediction-count-22},
-  \Eref{eq:th-es-prediction-count-24},
-  \Eref{eq:th-es-prediction-count-26}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-30}
-\var{count} = \size{\Rules{\var{g}}}
-\because \Eref{eq:th-es-prediction-count-28}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-32}
-\myparbox{\size{\Rules{\var{g}}} is a constant which depends on \Vcfg{g}.
-  $\because$
-  \longDfref{CFG}{def:context-free-grammar}.%
+The theorem follows trivially if $\Vsize{origs} = 0$,
+so that for the rest of this
+proof we assume that $\Vsize{origs} \ge 1$.
+\mypareq{eq:th-es-prediction-count-20}{%
+$\var{origs} = \set{ \Current{\var{es}} }$
+\cuz{} \Eref{eq:th-es-prediction-count-10},
+    \Eref{eq:th-es-prediction-count-12}.
 }
-\end{equation}
-\begin{equation}
-\label{eq:th-es-prediction-count-34}
-\var{count} = \Oc{}
-\because \Eref{eq:th-es-prediction-count-30},
-\Eref{eq:th-es-prediction-count-32}.
-\end{equation}
+\mypareq{eq:th-es-prediction-count-22}{%
+    $\Vsize{origs} = 1 = \Oc{}$
+        \cuz{} \Eref{eq:th-es-prediction-count-20}.
+}
+This theorem follows immediately
+from \Eref{eq:th-es-prediction-count-22}
+and
+the ``ES subset count'' theorem \Thref{th:es-subset-count}.
+\myqed
 \end{proof}
 
 \begin{theorem}[ES EIM count]
@@ -3775,37 +3757,46 @@ The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
 \end{theorem}
 
 \begin{proof}
-Let \var{count} be the maximum number of EIM's possible in \Ves{j}.
+From the context and the binding assumptions,
+we know that
+\VVelement{S}{j} is the Earley set at \Vloc{j},
+that \VVelement{S}{j} is valid
+and therefore that all EIM's in \VVelement{S}{j} are valid.
+
+Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelement{S}{j}, so that
 \begin{equation}
 \label{eq:th-es-eim-count-10}
-\myparbox{\var{count} is less than or equal to the size of Cartesian product of the number of
-  dotted rules and the number of possible origins.
-  $\because$
-  \longDfref{EIM}{def:eim}.
+\var{origs} = \set{
+    \begin{gathered}
+    \Vloc{orig} : \exists \; \Veim{eim} \in \VVelement{S}{j} : \var{orig} = \Origin{\var{eim}}
+    \end{gathered}
+    }.
+\end{equation}
+\mypareq{eq:th-es-eim-count-12}{%
+    $\Origin{\var{eim}} \le \Current{\Veim{eim}}$
+    \cuz{} \Eref{eq:EIM-valid-20} in \longDfref{EIM validity}{def:eim-validity},
+        TODO.
 }
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-12}
-\var{count} = \size{\DottedRules{\Vcfg{g}} \times \set{\var{i} : 0 \le \var{i} \le \var{j}}}
-\because \Eref{eq:th-es-eim-count-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-14}
-\myparbox{\size{\DottedRules{\var{g}}} is a constant which depends on \Vcfg{g}.
-  $\because$
-  \longDfref{CFG}{def:context-free-grammar}.%
+\todo{More hints in previous eq}
+\todo{More needed here}
+The theorem follows trivially if $\Vsize{origs} = 0$,
+so that for the rest of this
+proof we assume that $\Vsize{origs} \ge 1$.
+\mypareq{eq:th-es-eim-count-20}{%
+$\var{origs} = \set{ 0 \ldots \var{j} }$
+\cuz{} \Eref{eq:th-es-eim-count-10},
+    \Eref{eq:th-es-eim-count-12}.
 }
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-16}
-\var{count} = \Oc{} \times \order{\var{j}}
-\because \Eref{eq:th-es-eim-count-12}, \Eref{eq:th-es-eim-count-14}.
-\end{equation}
-\begin{equation}
-\label{eq:th-es-eim-count-18}
-\var{count} = \order{\var{j}}
-\because \Eref{eq:th-es-eim-count-16}. \quad \myqed
-\end{equation}
+\mypareq{eq:th-es-eim-count-22}{%
+    $\Vsize{origs} = \var{j}+1 = \order{\var{j}}$
+        \cuz{} \Eref{eq:th-es-eim-count-20}.
+}
+This theorem follows immediately
+from \Eref{eq:th-es-eim-count-22}
+and
+the ``ES subset count'' theorem \Thref{th:es-subset-count}.
+\myqed
+\todo{Prove this}
 \end{proof}
 
 \chapter{The Leo algorithm}
