@@ -109,6 +109,7 @@
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
+\newcommand{\riota}{\mathop{\scalebox{1.4}{\rotatebox[origin=c]{180}{$\iota$}}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -373,8 +374,6 @@
 \newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
 \newcommand{\Rightmost}[1]{\ensuremath{\mymathop{Rightmost}(#1)}}
 \newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}(#1)}}
-\newcommand{\Rtable}[1]{\ensuremath{\mymathop{table}[#1]}}
-\newcommand{\Rtablesize}[1]{\ensuremath{| \mymathop{table}[#1] |}}
 \newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Seen}[1]{\ensuremath{\mymathop{Seen}(#1)}}
@@ -1245,21 +1244,40 @@ as a function:
 $\myfn{floor}{\var{a}}$.
 
 \begin{table}[t]
-\caption{Operator Precedence from tightest to loosest}
+\caption{Operator precedence cheatsheet}
 \label{tab:op-precedence}
-\begin{tabular}{p{1.5in}p{3in}}
+\begin{tabular}{|p{1.5in}|p{3in}|}
+\hline
 {$\cat$} & Concatenation ($a\cat b$) \\
-{$\in$} {$notin$} & Set inclusion \\
+{$\in$} {$\notin$}
+    {$\subset$} {$\subseteq$}
+    {$\supset$} {$\supseteq$}
+    & Set inclusion, set containment \\
 {$\times$} & Multiplication\\
-{$+$} {$\subtract$} & Addition, Subtraction \\
-{$=$ $\neq$} & Equality \\
+{$+$} {$\subtract$} & Addition, subtraction \\
+{$=$} {$\neq$}
+   {$\le$} {$<$}
+   {$\ge$} {$>$}
+   & Equality, comparison \\
+{$\neg$} & Logical negation \\
 {$\land$} & Logical and \\
 {$\lor$} & Logical or \\
-{$\neg$} & Logical negation \\
 {$\implies$} & Implication \\
 {$\iff$} & Logical equivalence \\
-{$\exists$ $\forall$} & Quantifiers \\
+{$:$}    & ``such that'' \\
+{$\riota$ $\exists$ $\forall$} & Quantifiers \\
 {$\defined$} & Definition \\
+   & \\
+\hline
+\multicolumn{2}{|l|}{
+    \myparbox[4.5in]{%
+        The precedence cheatsheet is for formulas
+        and is given from tightest to loosest,
+        so that the loosest precedence is last.
+        Brackets override as usual.
+    }
+} \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -3475,24 +3493,48 @@ where \Vet{cxt} is the context table,
 \]
 \end{definition}
 
-\begin{definition}[ES Current location]
+\begin{definition}[ES current location]
 \label{def:es-current}
 Let \var{es} be a valid ES and let \var{table}
 be a valid ET.
 Then
-\[
-    \Current{\var{es}} \defined \Vnat{i} : \VVelement{table}{i} = \var{es}.
-\]
+\begin{equation}
+\label{eq:def-es-current-10}
+    \Current{\var{es}} \defined \riota \; \Vnat{i} : \VVelement{table}{i} = \var{es}.
+\end{equation}
 Where the value of \Vet{table} is not specified,
 it is understood to be the context table.
+The validity of \var{table} quarantees the uniqueness of \var{i} in
+\Eref{eq:def-es-current-10}, so that \Current{\var{es}} exists for
+any valid \Ves{es}.
 We say that \Current{\Ves{es}} is the
 \dfn{current location} of \var{es}.
 \dispEnd
 \end{definition}
 
+\begin{theorem}[ET--EIM current location]
+\label{def:et-eim-current}
+Let \VVelement{tab}{j} be a valid Earley set
+in a valid table.  Then
+\[
+    \begin{gathered}
+    \forall \; \Veim{eim} \in \Current{\VVelement{tab}{j}} :
+    \\ \Current{\Veim{eim}} = \Current{\VVelement{tab}{j}} = \var{j}.
+    \end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the definition of Earley table validity
+\Dfref{def:et-validity}
+and the definition of ES current location
+\Thref{def:es-current}.
+\end{proof}
+
 \begin{theorem}[ES--EIM current location]
-\label{def:ES-EIM-current}
-Let \Ves{es} be a valid Earley set.  Then
+\label{def:es-eim-current}
+Let \Ves{es} be an Earley set.  Then
 \[
     \forall \; \Veim{eim} \in \Current{\var{es}} : \Current{\Veim{eim}} = \Current{\var{es}}.
 \]
@@ -3500,12 +3542,9 @@ Let \Ves{es} be a valid Earley set.  Then
 
 \begin{proof}
 This theorem follows from
-the definition of Earley table validity
-\Dfref{def:et-validity},
-the context Earley table assumption \Dfref{def:context-earley-table},
 the ES binding assumption \Dfref{def:es-binding},
-and the definition of ``ES Current location''
-\Dfref{def:es-current}.
+and the ``ET--EIM current location'' theorem
+\Thref{def:et-eim-current}.
 \myqed
 \end{proof}
 
@@ -3797,7 +3836,7 @@ Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelem
 }
 \mypareq{eq:th-es-eim-count-14}{%
     $\var{eim} \in \VVelement{S}{j} \implies \Origin{\var{eim}} \le \Current{\VVelement{S}{j}}$
-    \cuz{} \longDfref{ES--EIM current location}{def:ES-EIM-current},
+    \cuz{} \longDfref{ES--EIM current location}{def:es-eim-current},
         \Eref{eq:th-es-eim-count-12}.
 }
 \mypareq{eq:th-es-eim-count-16}{%
@@ -4067,11 +4106,11 @@ may be written
     \begin{gathered}
     \Veim{x} \in \set{
         \begin{gathered}
-        \var{x} \in \ES{\var{j}} :
+        \var{x} \in \VVelement{S}{j} :
         \Penult{\var{x}} \neq \Lambda
         \end{gathered} } :
     \\
-        \forall \; \Veim{y} \in \ES{\var{j}} : \\
+        \forall \; \Veim{y} \in \VVelement{S}{j} : \\
             \Postdot{\var{x}} = \Postdot{\var{y}}
             \implies
             \var{x} = \var{y}
@@ -4157,10 +4196,17 @@ show the consequent.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-leo-eligible-location-16}
-\myparbox{$\Veim{x} \in \ES{\var{j}}$ \cuz{}
-       \longDfref{$\LeoEligible{}$}{def:leo-eligible},
+\label{eq:th-leo-eligible-location-15}
+\myparbox{$\Veim{x} \in \LeoUnique{\var{j}}$ \cuz{}
+       \longDfref{Leo Eligible}{def:leo-eligible},
         \Eref{eq:th-leo-eligible-location-14}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-location-16}
+\myparbox{$\Veim{x} \in \VVelement{S}{j}$ \cuz{}
+       \longDfref{Leo Unique}{def:leo-unique},
+        \Eref{eq:th-leo-eligible-location-15}.%
 }
 \end{equation}
 \begin{equation}
