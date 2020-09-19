@@ -3506,6 +3506,7 @@ the context Earley table assumption \Dfref{def:context-earley-table},
 the ES binding assumption \Dfref{def:es-binding},
 and the definition of ``ES Current location''
 \Dfref{def:es-current}.
+\myqed
 \end{proof}
 
 An Earley parser works by building an Earley table.
@@ -3792,29 +3793,39 @@ Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelem
 \end{equation}
 \mypareq{eq:th-es-eim-count-12}{%
     $\Origin{\var{eim}} \le \Current{\Veim{eim}}$
-    \cuz{} \Eref{eq:EIM-valid-20} in \longDfref{EIM validity}{def:eim-validity},
-        TODO.
+    \cuz{} \Eref{eq:EIM-valid-20} in \longDfref{EIM validity}{def:eim-validity}.
 }
-\todo{More hints in previous eq}
-\todo{More needed here}
+\mypareq{eq:th-es-eim-count-14}{%
+    $\var{eim} \in \VVelement{S}{j} \implies \Origin{\var{eim}} \le \Current{\VVelement{S}{j}}$
+    \cuz{} \longDfref{ES--EIM current location}{def:ES-EIM-current},
+        \Eref{eq:th-es-eim-count-12}.
+}
+\mypareq{eq:th-es-eim-count-16}{%
+    $\var{eim} \in \VVelement{S}{j} \implies \Origin{\var{eim}} \le \var{j}$
+        \cuz{} \longDfref{ES Current location}{def:es-current}
+        \Eref{eq:th-es-eim-count-14}.
+}
 The theorem follows trivially if $\Vsize{origs} = 0$,
 so that for the rest of this
 proof we assume that $\Vsize{origs} \ge 1$.
 \mypareq{eq:th-es-eim-count-20}{%
-$\var{origs} = \set{ 0 \ldots \var{j} }$
+$\var{origs} \subseteq \set{ 0 \ldots \var{j} }$
 \cuz{} \Eref{eq:th-es-eim-count-10},
-    \Eref{eq:th-es-eim-count-12}.
+    \Eref{eq:th-es-eim-count-16}.
 }
 \mypareq{eq:th-es-eim-count-22}{%
-    $\Vsize{origs} = \var{j}+1 = \order{\var{j}}$
+    $\Vsize{origs} \le \var{j}+1$
         \cuz{} \Eref{eq:th-es-eim-count-20}.
 }
+\mypareq{eq:th-es-eim-count-24}{%
+    $\Vsize{origs} = \order{\var{j}}$.
+        \cuz{} \Eref{eq:th-es-eim-count-22}.
+}
 This theorem follows immediately
-from \Eref{eq:th-es-eim-count-22}
+from \Eref{eq:th-es-eim-count-24}
 and
 the ``ES subset count'' theorem \Thref{th:es-subset-count}.
 \myqed
-\todo{Prove this}
 \end{proof}
 
 \chapter{The Leo algorithm}
