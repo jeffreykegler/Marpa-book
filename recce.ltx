@@ -510,62 +510,12 @@ the approach is practical.
 The Marpa::R2 implementation is widely available
 and has seen considerable use.
 
-In this paper,
-internal references will be of the form
-({\it Xn:p}),
-where {\it X} is the reference type,
-{\it n} is the number of the referent,
-and
-{\it p} is a page reference.
-Reference types are
-``a'' (algorithm),
-``e'' (equation),
-``S'' (section)
-``L'' (a location within a section,
-where {\it n} is the section number),
-``t'' (table),
-``Df'' (definition),
-``Lm'' (lemma),
-``Ob'' (observation), and
-``Th'' (theorem).
-In this paper,
-following the convention in much
-the literature of mathematical typography,
-any displayed mathematical statement is
-called an ``equation'',
-regardless of whether it is
-an equation in the dictionary sense.
-
-For example
-\Eref{eq:restriction1} refers to equation
-\ref{eq:restriction1} on page \pageref{eq:restriction1};
-\Sref{sec:features} refers to
-section \ref{sec:features}
-on page \pageref{sec:features};
-and
-\Lref{loc-brick-depth} refers
-to page \pageref{loc-brick-depth}
-inside section \ref{loc-brick-depth}.
-Where the page reference would be to the current page,
-it is omitted.
-
-Definitions occur throughout.
-Verbal defienda are in boldface.
-For emphasis,
-or for convenient reference,
-definitions may be
-in numbered sections.
-The end of a definitions section is indicated with a circle (\dispEnd).
-Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
-For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
-the same thing.
-Shorter synonyms are intended to be used for brevity,
-and only in cases where they are not expected to cause confusion.
-
 % TODO Revise once chapters are settled
 \Sref{sec:features}
-describes the important features of \Marpa{}
-and
+describes the important features of \Marpa{}.
+(The reference \Sref{sec:features} is to
+section \ref{sec:features}
+on page \pageref{sec:features}.)
 \Sref{sec:using-features}
 goes into detail about their application.
 
@@ -940,6 +890,58 @@ useful history.
 And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which can pose a challenge to the eyesight.
+
+In this paper,
+internal references will be of the form
+({\it Xn:p}),
+where {\it X} is the reference type,
+{\it n} is the number of the referent,
+and
+{\it p} is a page reference.
+Reference types are
+``a'' (algorithm),
+``e'' (equation),
+``S'' (section)
+``L'' (a location within a section,
+where {\it n} is the section number),
+``t'' (table),
+``Df'' (definition),
+``Lm'' (lemma),
+``Ob'' (observation), and
+``Th'' (theorem).
+In this paper,
+following the convention in much
+the literature of mathematical typography,
+any displayed mathematical statement is
+called an ``equation'',
+regardless of whether it is
+an equation in the dictionary sense.
+
+For example
+\Eref{eq:restriction1} refers to equation
+\ref{eq:restriction1} on page \pageref{eq:restriction1};
+\Sref{sec:features} refers to
+section \ref{sec:features}
+on page \pageref{sec:features};
+and
+\Lref{loc-brick-depth} refers
+to page \pageref{loc-brick-depth}
+inside section \ref{loc-brick-depth}.
+Where the page reference would be to the current page,
+it is omitted.
+
+Definitions occur throughout.
+Verbal defienda are in boldface.
+For emphasis,
+or for convenient reference,
+definitions may be
+in numbered sections.
+The end of a definitions section is indicated with a circle (\dispEnd).
+Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
+For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
+the same thing.
+Shorter synonyms are intended to be used for brevity,
+and only in cases where they are not expected to cause confusion.
 
 The basis of our formal presentation is
 a naive set theory,
@@ -4220,12 +4222,11 @@ show the consequent.
         \Eref{eq:th-leo-eligible-location-15}.%
 }
 \end{equation}
-\begin{equation}
-\label{eq:th-leo-eligible-location-18}
-    \Vloc{j} = \Current{\Veim{x}} \because
-    \longDfref{ES validity}{def:es-validity},
-    \Eref{eq:th-leo-eligible-location-16}.
-\end{equation}
+\mypareq{eq:th-leo-eligible-location-18}{
+    $\Vloc{j} = \Current{\Veim{x}}$
+    \cuz{} \longDfref{ET--EIM current location}{def:et-eim-current},
+        \Eref{eq:th-leo-eligible-location-16}.
+}
 \begin{equation}
 \label{eq:th-leo-eligible-location-20}
 \Veim{x} \in \LeoEligible{\Current{\var{x}}} \because
@@ -4465,14 +4466,14 @@ and
 \end{theorem}
 
 \begin{proof}
-We assume the antecedants of the theorem to show the consequent.
+We assume the hypothesis of the theorem to show the conclusion.
 \begin{equation}
 \label{eq:th-next-eligible-uniqueness-10}
 \begin{gathered}
     \Postdot{\var{next1}} = \Symbol{\var{prev}} \\
     \land \; \Current{\var{next1}} = \Origin{\var{prev}}
     \\ \because
-    \Thref{th:next-eligible-connection},
+    \longThref{Next eligible connection}{th:next-eligible-connection},
     \Eref{eq:th-next-eligible-uniqueness-02}.
 \end{gathered}
 \end{equation}
@@ -4496,26 +4497,20 @@ We assume the antecedants of the theorem to show the consequent.
     \Eref{eq:th-next-eligible-uniqueness-12}.
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-uniqueness-16}
-    \begin{gathered}
-    \myfn{Is-Leo-Eligible}{\var{next1}}
-        \\ \because
+\mypareq{eq:th-next-eligible-uniqueness-16}{%
+    $\myfn{Is-Leo-Eligible}{\var{next1}}$ \linebreak
+        \cuz{}
         \longDfref{Next eligible EIM}{def:next-eligible-eim},
         \Eref{eq:th-next-eligible-uniqueness-02}.
-    \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-next-eligible-uniqueness-18}
-\begin{gathered}
-\var{next1} = \var{next2}
-\\ \myparbox{\cuz{}
+}
+\mypareq{eq:th-next-eligible-uniqueness-18}{%
+    $\var{next1} = \var{next2}$ \linebreak
+    \cuz{}
     \longThref{Leo eligible postdot uniqueness}{th:leo-eligible-postdot-uniqueness},
     \Eref{eq:th-next-eligible-uniqueness-14},
     \Eref{eq:th-next-eligible-uniqueness-16}.
-    This is the consequent of the theorem. \myqed%
-} \end{gathered}
-\end{equation}
+    This is the conclusion of the theorem. \myqed
+}
 \end{proof}
 
 \begin{theorem}[Next Leo eligible rule]
@@ -4541,12 +4536,12 @@ then
 \end{theorem}
 
 \begin{proof}
-In this proof, note that it is possible
-that $\Veim{middle} = \Veim{prev}$,
+In this proof, note that we must consider
+the possibility that $\Veim{middle} = \Veim{prev}$,
 that $\Veim{prev} = \Veim{next}$,
 or both.
-The proof is direct, assuming the antecedant to
-show the consequent.
+The proof is direct, assuming the hypothesis to
+show the conclusion.
 \begin{equation}
 \label{eq:th-next-eligible-rule-10}
 \begin{gathered}
@@ -4591,17 +4586,17 @@ show the consequent.
     \myfn{Is-Leo-Eligible}{\var{middle}} \linebreak
     \cuz{}
     \longDfref{Next leo eligible}{def:next-eligible-eim},
-    \Eref{eq:th-next-eligible-rule-03b}.%
+    \Eref{eq:th-next-eligible-rule-03b}.
 }
 \mypareq{eq:th-next-eligible-rule-24}{%
     $\var{middle} \in \LeoEligible{\Current{\var{middle}}}$ \linebreak
         \cuz{} \longThref{Leo eligible location}{th:leo-eligible-location},
-            \Eref{eq:th-next-eligible-rule-20}.%
+            \Eref{eq:th-next-eligible-rule-20}.
 }
 \mypareq{eq:th-next-eligible-rule-26}{%
     $\var{middle} \in \LeoUnique{\Current{\var{middle}}}$ \linebreak
-        \cuz{} \Eref{eq:th-next-eligible-rule-24},
-        \longDfref{Leo Eligible}{def:leo-eligible}.%
+        \cuz{} \longDfref{Leo Eligible}{def:leo-eligible},
+        \Eref{eq:th-next-eligible-rule-24}.
 }
 \begin{equation}
 \label{eq:th-next-eligible-rule-28}
@@ -4610,7 +4605,8 @@ show the consequent.
     \Eref{eq:th-next-eligible-rule-26}.
 \end{equation}
 \mypareq{eq:th-next-eligible-rule-29}{\Vint{g} has no nullable symbols
-    \cuz{} \longDfref{Marpa internal grammar}{def:internal-grammar}.%
+    \cuz{} context grammar,
+    \longDfref{Marpa internal grammar}{def:internal-grammar}.
 }
 \begin{equation}
 \label{eq:th-next-eligible-rule-30}
@@ -4622,12 +4618,12 @@ show the consequent.
 \mypareq{eq:th-next-eligible-rule-32}{%
     \Matches{\var{next},\var{middle}} \linebreak
     \cuz{} \longDfref{Next Leo eligible}{def:next-eligible-eim},
-    \Eref{eq:th-next-eligible-rule-03c}.%
+    \Eref{eq:th-next-eligible-rule-03c}.
 }
 \mypareq{eq:th-next-eligible-rule-34}{%
     $\Current{\var{next}} = \Origin{\var{middle}}$ \linebreak
     \cuz{} \Eref{eq:def-matches-eim-eim} in \longDfref{Matching}{def:matching-1},
-    \Eref{eq:th-next-eligible-rule-32}.%
+    \Eref{eq:th-next-eligible-rule-32}.
 }
 \begin{equation}
 \label{eq:th-next-eligible-rule-36}
@@ -4706,8 +4702,8 @@ That is,
 
 \begin{proof}
 \todo{Change proof for Valid and Is-Leo-Eligible}
-The proof is direct, assuming the antecedants of
-the theorem to show the consequent.
+The proof is direct, assuming the hypothesis of
+the theorem to show the conclusion.
 \mypareq{eq:th-nes-subsequence-10}{%
    \Vnes{seq} is an EIM sequence \linebreak
    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
@@ -4763,7 +4759,7 @@ the theorem to show the consequent.
     \Eref{eq:th-nes-subsequence-12},
     \Eref{eq:th-nes-subsequence-19}.
 \end{equation}
-\Eref{eq:th-nes-subsequence-20} is the consequent
+\Eref{eq:th-nes-subsequence-20} is the conclusion
 of the theorem
 \Eref{eq:th-nes-subsequence-08}.
 \myqed
