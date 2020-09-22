@@ -3410,14 +3410,18 @@ That is,
 \type{ES} = \powerset{\type{PIM}}. \quad \dispEnd
 \]
 \end{definition}
-We will say that an Earley item is \dfn{unioned into}
+Note that, since an Earley set is a set
+in the mathematical sense,
+we do not say that PIMs are ``added'' to
 an Earley set,
-or \dfn{unioned},
-rather than say that the Earley item is ``added'' to an Earley set,
-or ``added''.
-This is because
-Earley sets are sets in the mathematical sense,
-and ``adding'' a duplicate to a set leaves the set unchanged.
+but that they are ``adjoined'' to it.
+The result of adjoining a PIM \var{p} to the Earley set \var{es}
+is $\Ves{es} \cup \set{\Vpim{p}}$, so that if \var{p} is already
+an element of \var{es},
+\var{es} is unchanged:
+\[
+    \Vpim{p} \in \Ves{es} \implies \var{es} \cup \set{\var{p}} = \var{es}.
+\]
 
 \begin{definition}[ES validity]
 \label{def:es-validity}
@@ -7334,7 +7338,7 @@ PIM's already exist in the Earley sets before
 it becomes applicable.
 If an operation requires that \Vpim{anc}
 exist in the Earley sets
-before unioning \Vpim{desc} into an Earley set \Ves{j},
+before adjoining \Vpim{desc} into an Earley set \Ves{j},
 then \Vpim{anc} is said to be the \dfn{direct ancestor}
 of \Vpim{desc},
 and \Vpim{desc} is said to be the \dfn{direct descendant}
@@ -7373,8 +7377,8 @@ and are essential for efficient evaluation.
 As we will see below,
 some PIM's do not track link pairs.
 For those PIM's which do track link pairs,
-there is at exactly one link pair for every attempt to union that
-PIM into its Earley set.
+there is at exactly one link pair for adjunction of a
+PIM into an Earley set.
 
 A link pair
 is a duple of predecessor and cause:
@@ -10707,7 +10711,7 @@ If
 \label{eq:earley-completer-summary-3}
 \myparbox{$\Postdot{\var{pred}} = \LHS{\var{cause}}$,}
 \end{equation}
-then we union
+then we adjoin
 \begin{equation}
 \label{eq:earley-completer-summary-4}
 \myparbox{%
@@ -11764,7 +11768,7 @@ a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-While \Marpa{} is unioning EIM's into \Ves{j},
+While \Marpa{} is adjoining EIM's into \Ves{j},
 the PSL for \Ves{i}
 keeps track of the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
@@ -11796,7 +11800,7 @@ and wants to check whether Earley item,
 \Veim{x} = [ \Vdr{x}, \Vorig{x} ],
 \end{equation*}
 is new,
-or if \Veim{x} needs to be unioned into the Earley sets.
+or if \Veim{x} needs to be adjoined into the Earley sets.
 
 Let
 \begin{equation*}
@@ -11821,10 +11825,10 @@ is already present in \Ves{j},
 and \var{false} otherwise.
 
 \begin{algorithm}[tb]
-\caption{Union EIM}
-\label{alg:union-eim}
+\caption{Adjoin EIM}
+\label{alg:adjoin-eim}
 \begin{algorithmic}[1]
-\Procedure{Add-EIM-If-New}{$[\Vdr{x},\Vorig{x}]@\Ves{j}$}
+\Procedure{Adjoin-EIM}{$[\Vdr{x},\Vorig{x}]@\Ves{j}$}
 \If{$\PSL{\Ves{j}}{\ID{\Vdr{x}}} = [\Vloc{j}, \var{true}]$}
 \State return \Comment Do nothing if \Veim{x} exists
 \EndIf
@@ -11834,10 +11838,10 @@ and \var{false} otherwise.
 \end{algorithmic}
 \end{algorithm}
 
-\Aref{alg:union-eim} contains pseudo-code
+\Aref{alg:adjoin-eim} contains pseudo-code
 showing the use of PSL's.
 The reader may notice that
-\Aref{alg:union-eim} could be simplified,
+\Aref{alg:adjoin-eim} could be simplified,
 because the data to be kept for EIM's is a single boolean.
 Further, this boolean is never set to \var{false}, so that
 if a PSL entry exists, its boolean may be assumed to be \var{true}.
@@ -13595,11 +13599,11 @@ then \var{g} is ambiguous.
 For the theorem, we assume without loss of generality that
 \begin{gather}
 \label{eq:ambiguous-links-pair-10a}
-\Veim{unioned} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
+\Veim{adjoined} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
 \label{eq:ambiguous-links-pair-10b}
-\text{$\Veim{unioned} @ \Ves{j}$ is valid, and} \\
+\text{$\Veim{adjoined} @ \Ves{j}$ is valid, and} \\
 \label{eq:ambiguous-links-pair-10d}
-\LinkPairs{\Veim{unioned}} \ge 1.
+\LinkPairs{\Veim{adjoined}} \ge 1.
 \end{gather}
 
 The proof proceeds by eliminating subcases within a reductio.
@@ -13609,7 +13613,7 @@ We assume for the reductio that
 \text{\var{g} is not ambiguous.}
 \end{equation}
 
-Confirmed EIMs are only unioned by the Scanner and the Completer.
+Confirmed EIMs are only adjoined by the Scanner and the Completer.
 
 \todo{Does this duplicate the proof in the ambiguity section?}
 \myqed
@@ -14432,7 +14436,7 @@ From
 \Eref{eq:incompletion-bound-1},
 \Eref{eq:incompletion-bound-2}, and
 \Eref{eq:incompletion-bound-15},
-we see that every derivation which unions an incompletion
+we see that every derivation which adjoins an incompletion
 into \Ves{j} for the cell of $\pi$ containing \Vterm{input3} is
 of the form
 \begin{align}
