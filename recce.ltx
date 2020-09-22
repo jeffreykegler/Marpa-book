@@ -4721,51 +4721,67 @@ the theorem to show the conclusion.
 \begin{equation}
 \label{eq:th-nes-subsequence-14}
 \begin{gathered}
-   \forall \; \Vnat{i} < \Vlastix{seq} :
-   \\   \myfn{Next-Eligible}{ \Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
-   \\ \because \Dfref{def:next-eligible-sequence},
+   \forall \Vnat{i} \in \Dom{\var{seq}} :
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \land \; \left(
+       \var{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
+   \right)
+   \\ \because \longDfref{NES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-subsequence-02}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-subsequence-16}
 \begin{gathered}
-   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \var{a} \le \var{ii} < \var{b} }
-   \\   \myfn{Next-Eligible}{ \Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
-   \\
-    \because \Eref{eq:th-nes-subsequence-04},
+   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \var{a} \le \var{ii} \le \var{b} }
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \land \; \left(
+       \var{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
+   \right)
+    \\ \because \Eref{eq:th-nes-subsequence-04},
     \Eref{eq:th-nes-subsequence-14}.
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-nes-subsequence-18}
-\begin{gathered}
-   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : 0 \le \var{ii} < \Vlastix{subseq} } :
-   \\   \myfn{Next-Eligible}{ \Velement{subseq}{\var{i}+1}, \VVelement{subseq}{i}}
-   \\
-    \because \Eref{eq:th-nes-subsequence-06},
-    \Eref{eq:th-nes-subsequence-16}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-subsequence-19}
-\begin{gathered}
-   \forall \; \Vnat{i} < \Vlastix{subseq} :
-   \\   \myfn{Next-Eligible}{ \Velement{subseq}{\var{i}+1}, \VVelement{subseq}{i}}
-   \\
-    \because \Eref{eq:th-nes-subsequence-18}.
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-nes-subsequence-18}{%
+    $\forall \; \var{i} : \var{i} < \var{b} \implies \var{i} < \Vlastix{seq}$
+        \cuz{} \Eref{eq:th-nes-subsequence-04}.
+}
 \begin{equation}
 \label{eq:th-nes-subsequence-20}
-\var{subseq} \in \type{NES}
-   \because \longDfref{NES}{def:next-eligible-sequence},
-    \Eref{eq:th-nes-subsequence-12},
-    \Eref{eq:th-nes-subsequence-19}.
+\begin{gathered}
+   \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \var{a} \le \var{ii} \le \var{b} }
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \land \; \left(
+       \var{i} < \var{b} \implies \myfn{Next-Eligible}{\Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
+   \right)
+    \\ \because \Eref{eq:th-nes-subsequence-16},
+    \Eref{eq:th-nes-subsequence-18}.
+\end{gathered}
 \end{equation}
-\Eref{eq:th-nes-subsequence-20} is the conclusion
-of the theorem
-\Eref{eq:th-nes-subsequence-08}.
+\begin{equation}
+\label{eq:th-nes-subsequence-30}
+\begin{gathered}
+   \forall \; \Vnat{i} \in \Dom{\var{subseq}} :
+   \\ \Valid{\VVelement{subseq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{subseq}{i}}
+   \\ \land \; \left(
+       \begin{gathered}
+       \var{i} < \Vlastix{subseq} \implies
+       \\ \myfn{Next-Eligible}{\Velement{subseq}{\var{i}+1}, \VVelement{subseq}{i}}
+       \end{gathered}
+   \right)
+    \\ \because \Eref{eq:th-nes-subsequence-06},
+        \Eref{eq:th-nes-subsequence-20}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-subsequence-40}
+\var{subseq} \in \type{NES}
+  \because \longDfref{NES}{def:next-eligible-sequence},
+   \Eref{eq:th-nes-subsequence-12},
+   \Eref{eq:th-nes-subsequence-30}.
+\end{equation}
+\Eref{eq:th-nes-subsequence-40} is the conclusion
+of this theorem.
 \myqed
 \end{proof}
 
