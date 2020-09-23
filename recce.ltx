@@ -436,7 +436,7 @@
 \title{The Marpa Book}
 \author{Jeffrey Kegler}
 \ifdraft{
-    % legacy options -- update?
+    % legacy draftwatermark options -- update?
     \SetWatermarkLightness{0.1}
     \SetWatermarkText{draft \DTMnow}
     \SetWatermarkAngle{0}
@@ -1260,17 +1260,18 @@ $\myfn{floor}{\var{a}}$.
 \hline
 {$\times$} & Multiplication \\
 {$+$} {$\subtract$} & Addition, subtraction \\
-{$=$} {$\neq$}
    {$\le$} {$<$}
    {$\ge$} {$>$}
    & Equality, comparison \\
 {$\cat$} & Concatenation ($a\cat b$) \\
-{$\in$} {$\notin$}
-    {$\subset$} {$\subseteq$}
+{$\cup$ $\cap$ $\subtract$} & Set union, intersection, difference \\
+{$\times$} & Cartesian product (for sets) \\
+{$\subset$} {$\subseteq$}
     {$\supset$} {$\supseteq$}
     & Set inclusion, set containment \\
-{$\cup$ $\cap$} & Set union, intersection \\
-{$\times$} & Cartesian product (for sets) \\
+{$\in$} {$\notin$}
+    & Set inclusion \\
+{$=$} {$\neq$} & Equality, inequality \\
 {$\neg$} & Logical negation \\
 {$\land$} & Logical and \\
 {$\lor$} & Logical or \\
@@ -4705,7 +4706,6 @@ That is,
 \end{theorem}
 
 \begin{proof}
-\todo{Change proof for Valid and Is-Leo-Eligible}
 The proof is direct, assuming the hypothesis of
 the theorem to show the conclusion.
 \mypareq{eq:th-nes-subsequence-10}{%
@@ -4787,95 +4787,133 @@ of this theorem.
 
 \begin{theorem}[NES extension]
 \label{th:nes-extension}
-Let \var{nes} be an NES,
-and let \var{next} be a valid, Leo eligible EIM.
+Let \var{nes} be an EIM sequence,
+and let \var{next} be an EIM.
 Then
 \mypareq{eq:th-nes-extension-02}{%
    $\tuple{\Velement{\var{nes}}{0}\ldots
        \Velement{nes}{\Vlastix{nes}}, \var{next}} \in \type{NES}$
 }
 iff
-\mypareq{eq:th-nes-extension-07}{%
-        $\myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}$.
-}
+\begin{gather}
+\label{eq:th-nes-extension-04}
+    \var{nes} \in \type{NES}
+\\ \label{eq:th-nes-extension-05}
+    \land \; \Valid{\var{next}}
+\\ \label{eq:th-nes-extension-06}
+    \land \; \myfn{Is-Leo-Eligible}{\var{next}}
+\\ \label{eq:th-nes-extension-07}
+    \land \; \myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}.
+\end{gather}
 \end{theorem}
 
 \begin{proof}
-\todo{Change proof for Valid and Is-Leo-Eligible}
-We prove the reverse direction first,
-by assuming the antecedant to show the consequent.
-\mypareq{eq:th-nes-extension-10}{%
-        $\myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}$
-        \cuz{} antecedant \Eref{eq:th-nes-extension-07} AF reverse
-        direction.
+For the forward direction,
+we assume
+\Eref{eq:th-nes-extension-02}
+to show
+\Eref{eq:th-nes-extension-04}--\Eref{eq:th-nes-extension-07}.
+\Eref{eq:th-nes-extension-04} follows via
+the ``NES subsequence'' theorem
+\Thref{th:nes-subsequence}.
+\Eref{eq:th-nes-extension-05}--\Eref{eq:th-nes-extension-07}
+follow immediately from the definition of NES \Dfref{def:next-eligible-sequence}.
+
+It remains to show the reverse direction.
+For this we assume \Eref{eq:th-nes-extension-04}--\Eref{eq:th-nes-extension-07}
+to show
+\Eref{eq:th-nes-extension-02}.
+\begin{equation}
+\label{eq:th-nes-extension-10}
+\begin{gathered}
+   \forall \Vnat{i} \in \Dom{\var{nes}} :
+   \\ \Valid{\VVelement{nes}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{nes}{i}}
+   \\ \land \; \left(
+       \var{i} < \Vlastix{nes} \implies \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
+   \right)
+   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-extension-04}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-nes-extension-12}
+\begin{gathered}
+   \var{ext} = \left [
+       \Velement{\var{nes}}{0}\ldots
+       \Velement{nes}{\Vlastix{nes}}, \var{next}
+   \right ]
+   \\ \because \text{new \Vnes{ext} for convenience.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-nes-extension-13-10}{%
+   \var{nes} is an EIM sequence
+       \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+        \Eref{eq:th-nes-extension-04}.
 }
-\mypareq{eq:th-nes-extension-12}{%
-    $\var{nes} \in \type{NES}$ \cuz{} AF theorem.
+\mypareq{eq:th-nes-extension-13-20}{%
+   \var{next} is an EIM
+       \cuz{} AF theorem.
+}
+\mypareq{eq:th-nes-extension-13-30}{%
+   \var{ext} is an EIM sequence
+   \cuz{} \Eref{eq:th-nes-extension-13-10},
+        \Eref{eq:th-nes-extension-13-20}.
 }
 \begin{equation}
 \label{eq:th-nes-extension-14}
 \begin{gathered}
-       \forall \; \Vnat{i} < \Vlastix{nes} :
-   \\ \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
-   \\ \because \longDfref{NES}{def:next-eligible-sequence},
-        \Eref{eq:th-nes-extension-12}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-extension-16}
-\begin{gathered}
-   \var{extended} = \left [
-       \Velement{\var{nes}}{0}\ldots
-       \Velement{nes}{\Vlastix{nes}}, \var{next}
-   \right ]
-   \\ \because \text{new \Vnes{extended} for convenience.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-extension-18}
-\begin{gathered}
-       \forall \; \Vnat{i} < \Vlastix{extended}\subtract 1 :
-   \\ \myfn{Next-Eligible}{\Velement{extended}{\var{i}+1}, \VVelement{extended}{i}}
-   \\ \because \Eref{eq:th-nes-extension-14},
-        \Eref{eq:th-nes-extension-16}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-nes-extension-20}
-\begin{gathered}
-   \myfnname{Next-Eligible}\left(
-      \begin{gathered}
-       \Velement{extended}{\Vlastix{extended}},
-       \\ \Velement{extended}{\Vlastix{extended}\subtract 1}
-      \end{gathered}
+   \forall \Vnat{i} \in (\Dom{\var{ext}} \subtract \set{\Vlastix{ext}}) :
+   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
+   \\ \land \; \left(
+       \var{i} < \Vlastix{ext}\subtract 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
    \right)
-   \\ \because \Eref{eq:th-nes-extension-10},
-        \Eref{eq:th-nes-extension-16}.
+   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-extension-04}.
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-nes-extension-16}{%
+   $\Velement{ext}{\Vlastix{ext}} = \var{next}$ \cuz{}
+        \Eref{eq:th-nes-extension-14}.
+}
+\mypareq{eq:th-nes-extension-18}{%
+    $\Valid{\Velement{ext}{\Vlastix{ext}}}$
+    \cuz{} \Eref{eq:th-nes-extension-05},
+        \Eref{eq:th-nes-extension-16}.
+}
+\mypareq{eq:th-nes-extension-20}{%
+    $\myfn{Is-Leo-Eligible}{\Velement{ext}{\Vlastix{ext}}}$
+    \cuz{} \Eref{eq:th-nes-extension-06}.
+        \Eref{eq:th-nes-extension-16}.
+}
 \begin{equation}
 \label{eq:th-nes-extension-22}
 \begin{gathered}
-       \forall \; \Vnat{i} < \Vlastix{extended} :
-   \\ \myfn{Next-Eligible}{\Velement{extended}{\var{i}+1}, \VVelement{extended}{i}}
-   \\ \because \Eref{eq:th-nes-extension-18},
-        \Eref{eq:th-nes-extension-20}.
+   \forall \Vnat{i} \in \Dom{\var{ext}} :
+   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
+   \\ \land \; \left(
+       \var{i} < (\Vlastix{ext}\subtract 1) \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
+   \right)
+   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-extension-14},
+    \Eref{eq:th-nes-extension-18},
+    \Eref{eq:th-nes-extension-20}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-extension-24}{%
-    $\var{extended} \in \type{NES}$ \cuz{}
-       \longDfref{NES}{def:next-eligible-sequence},
-        \Eref{eq:th-nes-extension-22}.
+    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{nes}{\Vlastix{nes}}}$
+    \cuz{} \Eref{eq:th-nes-extension-07}, \Eref{eq:th-nes-extension-16}.
 }
+\mypareq{eq:th-nes-extension-26}{%
+    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{ext}{\Vlastix{ext}\subtract 1}}$
+    \cuz{} \Eref{eq:th-nes-extension-12}, \Eref{eq:th-nes-extension-24}.
+}
+\todo{Finish proof for Valid and Is-Leo-Eligible}
 
-The equation \Eref{eq:th-nes-extension-24}
-is the consequent \Eref{eq:th-nes-extension-02}
-of the
-reverse direction, and shows the reverse direction.
-We can show the forward direction immediately,
-because its consequent \Eref{eq:th-nes-extension-07}
-follows directly from its antecedant \Eref{eq:th-nes-extension-02},
-and the definition of NES \Dfref{def:next-eligible-sequence}.
+
+% The equation \Eref{eq:th-nes-extension-24}
+% is the consequent \Eref{eq:th-nes-extension-02}
+% of the
+% reverse direction, and shows the reverse direction.
 With both directions, we have the theorem.
 \myqed
 \end{proof}
