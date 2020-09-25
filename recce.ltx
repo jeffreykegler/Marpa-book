@@ -5055,115 +5055,89 @@ For the step, we assume
    $\var{indx} = \var{n}+1$ \cuz{} AF step.
 }
 Initially, we proceed by
-instantiating the outer universal qualifier of \myfn{INDH}{\var{n}+1}.
+instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-nes-direction-32}{%
     $\var{nesP} \in \type{NES}$ \cuz{}
         \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
-        universal instantiation, new free \var{nesP}.%
+        universal instantiation, new free \var{loP}.%
 }
-Continuing the step of the induction, we divide it into two
-subcases, according to whether the antecedant of the implication in
-\Eref{eq:th-nes-direction-10} is true or false.
-For the first subcase, we assume the antecedant to be false:
+\mypareq{eq:th-nes-direction-34}{%
+    $\Vnat{loP} \le \var{n}$ \cuz{}
+        new free \var{nesP}, AF derviation.
+}
+\mypareq{eq:th-nes-direction-36}{%
+    $\var{n}+1 \in \Dom{\var{nesP}}$ \cuz{} AF derivation.
+}
 \mypareq{eq:th-nes-direction-38}{%
-    $\var{indx} \notin \Dom{\var{nesP}}$
-    \cuz{} AF subcase.%
+    $\var{n} \in \Dom{\var{nesP}}$ \cuz{} \var{nesP} is a sequence,
+        \Eref{eq:th-nes-direction-36}.
 }
-The equation \Eref{eq:th-nes-direction-38}
-immediately gives us \myfn{INDH}{\var{n}+1}:
 \mypareq{eq:th-nes-direction-40}{%
-    $\var{indx} \notin \Dom{\var{nesP}} \implies \myfn{INDH}{\var{n}+1}$
-    \linebreak \cuz{} \Eref{eq:th-nes-direction-10},
-        \Eref{eq:th-nes-direction-31},
+    $\Current{\VVelement{nesP}{n}} \le \Current{\VVelement{nesP}{loP}}$
+    \cuz{} \Eref{eq:th-nes-direction-30},
+        \Eref{eq:th-nes-direction-32},
+        \Eref{eq:th-nes-direction-34},
         \Eref{eq:th-nes-direction-38}.
-    This is the first subcase of the induction step.%
 }
-The second and final subcase of the step is the contrary of the first subcase.
 \mypareq{eq:th-nes-direction-42}{%
-    $\var{indx} \in \Dom{\var{nesP}}$
-    \cuz{} AF subcase.%
-}
-\mypareq{eq:th-nes-direction-43}{%
-    $\var{n}+1 \in \Dom{\var{nesP}}$
-    \cuz{} \Eref{eq:th-nes-direction-31},
-        \Eref{eq:th-nes-direction-42}.%
-}
-\mypareq{eq:th-nes-direction-44}{
     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
     \cuz{}
     \longThref{NES adjacent direction}{lm:nes-adjacent-direction},
-        \Eref{eq:th-nes-direction-32}, \Eref{eq:th-nes-direction-43}.
+        \Eref{eq:th-nes-direction-32}, \Eref{eq:th-nes-direction-36}.
 }
-%
-\begin{equation}
-\label{eq:th-nes-direction-45-30}
-\begin{gathered}
-    \forall \; \Vnat{lo} \le \var{n} : \var{n} \in \Dom{\var{nesP}}
-    \\ \implies \Current{\VVelement{nesP}{n}} \le \Current{\VVelement{nesP}{lo}}.
-    \\ \because \myfn{INDH}{\var{n}} \text{ AF step}, \Eref{eq:th-nes-direction-32}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-nes-direction-45-60}
-\begin{gathered}
-    \forall \; \Vnat{lo} \le \var{n} : \var{n} \in \Dom{\var{nesP}} 
-    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}.
-    \\ \because \Eref{eq:th-nes-direction-44}, \Eref{eq:th-nes-direction-45-30}.
-\end{gathered}
-\end{equation}
-%
-\mypareq{eq:th-nes-direction-48}{%
-    $\var{n}+1 \in \Dom{\var{nesP}} \implies \var{n} \in \Dom{\var{nesP}}$
-    \cuz{} \var{nesP} is a sequence.%
+\mypareq{eq:th-nes-direction-44}{%
+    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{loP}}$
+    \cuz{}
+        \Eref{eq:th-nes-direction-40}, \Eref{eq:th-nes-direction-42}.
 }
 \begin{equation}
-\label{eq:th-nes-direction-50}
+\label{eq:th-nes-direction-46}
 \begin{gathered}
-    \forall \; \Vnat{lo} \le \var{n} :
-\\ \var{n}+1 \in \Dom{\var{nesP}}
-\\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}.
-\\ \because \Eref{eq:th-nes-direction-45-60}, \Eref{eq:th-nes-direction-48}.
+    \var{n}+1 \in \Dom{\var{nesP}}
+    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{loP}}
+    \\ \because \text{derivation
+        \Eref{eq:th-nes-direction-36}--\Eref{eq:th-nes-direction-44}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-nes-direction-52}{%
+\begin{equation}
+\label{eq:th-nes-direction-48}
+\begin{gathered}
+    \forall \; \var{lo} \le \var{n} : \var{n}+1 \in \Dom{\var{nesP}}
+    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}
+    \\ \myparbox{derivation
+        \Eref{eq:th-nes-direction-34}--\Eref{eq:th-nes-direction-46},
+        universal generalization of arbitrary \var{loP} as \var{lo}.
+    }
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-nes-direction-50}{%
     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{\var{n}+1}}$
-    \cuz{} trivially.
+    \cuz{} obvious.
 }
+\begin{equation}
+\label{eq:th-nes-direction-52}
+\begin{gathered}
+    \forall \; \var{lo} = \var{n} + 1: \var{n}+1 \in \Dom{\var{nesP}}
+    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}
+    \\ \because \Eref{eq:th-nes-direction-32},
+        \Eref{eq:th-nes-direction-36}, \Eref{eq:th-nes-direction-50}.
+\end{gathered}
+\end{equation}
 \begin{equation}
 \label{eq:th-nes-direction-54}
 \begin{gathered}
-    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{n} :
-\\ \var{n}+1 \in \Dom{\var{nes}}
-\\ \implies \Current{\VVelement{nes}{\var{n}+1}} \le \Current{\VVelement{nes}{lo}}.
-\\ \myparbox{\cuz{} universal generalization of \var{nesP},
-    \Eref{eq:th-nes-direction-50}.
-}
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-nes-direction-56}
-\begin{gathered}
-    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{n}+1 :
-\\ \var{n}+1 \in \Dom{\var{nes}}
-\\ \implies \Current{\VVelement{nes}{\var{n}+1}} \le \Current{\VVelement{nes}{lo}}.
-\\ \myparbox{\cuz{} \Eref{eq:th-nes-direction-52}, \Eref{eq:th-nes-direction-54}.
+    \forall \; \var{nes} \in \type{NES} : \forall \; \var{lo} \le \var{n} + 1: \var{n}+1 \in \Dom{\var{nes}}
+    \\ \implies \Current{\VVelement{nes}{\var{n}+1}} \le \Current{\VVelement{nes}{lo}}
+    \\ \myparbox{\cuz{} universal generalization of \var{nes} as \var{nes},
+        \Eref{eq:th-nes-direction-48}, \Eref{eq:th-nes-direction-52}.
         This is \myfn{INDH}{\var{n}+1}.
-}
+    }
 \end{gathered}
 \end{equation}
-%
-\mypareq{eq:th-nes-direction-58}{%
-    $\var{index} \in \Dom{\var{nesP}} \implies \myfn{INDH}{\var{n}+1}$
-    \linebreak \cuz{} derivation \Eref{eq:th-nes-direction-40}--\Eref{eq:th-nes-direction-56}.
-    This is the second subcase of the induction step.%
-}
-The two subcases
-\Eref{eq:th-nes-direction-40}
-and \Eref{eq:th-nes-direction-58}
-show the step of the induction.
-With the step of the induction and its basis
+Equations \Eref{eq:th-nes-direction-30}--\Eref{eq:th-nes-direction-54}
+derive \myfn{INDH}{\var{n}+1} from \myfn{INDH}{\var{n}},
+which shows the step of the induction.
+With the step and its basis
 \Eref{eq:th-nes-direction-20},
 we have the induction and theorem.
 \myqed
