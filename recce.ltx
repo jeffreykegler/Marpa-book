@@ -109,7 +109,7 @@
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
-\newcommand{\riota}{\mathop{\scalebox{1.4}{\rotatebox[origin=c]{180}{$\iota$}}}}
+\newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -1280,6 +1280,7 @@ $\myfn{floor}{\var{a}}$.
 {$:$}    & ``such that'' \\
 {$\riota$ $\exists$ $\forall$} & Quantifiers \\
 {$\defined$} & Definition \\[12pt]
+{$\because$} & ``because'' (hint separator) \\[12pt]
 \hline
 \multicolumn{2}{|l|}{
     \myparbox[4.5in]{%
@@ -5057,16 +5058,18 @@ For the step, we assume
 Initially, we proceed by
 instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-nes-direction-32}{%
-    $\var{nesP} \in \type{NES}$ \cuz{}
-        \Eref{eq:th-nes-direction-10} with $\var{indx} = \var{n}+1$,
-        universal instantiation, new free \var{loP}.%
+    $\var{nesP} \in \type{NES}$ \cuz{} new free \var{loP}.
 }
 \mypareq{eq:th-nes-direction-34}{%
-    $\Vnat{loP} \le \var{n}$ \cuz{}
-        new free \var{nesP}, AF derviation.
+    $\var{loP} \in \naturals$ \cuz{} new free \var{loP}.
 }
 \mypareq{eq:th-nes-direction-36}{%
-    $\var{n}+1 \in \Dom{\var{nesP}}$ \cuz{} AF derivation.
+    $\Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{nesP}}$
+    \cuz{} AF derivation.
+}
+\mypareq{eq:th-nes-direction-37}{%
+    $\Vnat{loP} \le \var{n}$
+        \cuz{} \Eref{eq:th-nes-direction-36}.
 }
 \mypareq{eq:th-nes-direction-38}{%
     $\var{n} \in \Dom{\var{nesP}}$ \cuz{} \var{nesP} is a sequence,
@@ -5074,9 +5077,10 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:th-nes-direction-40}{%
     $\Current{\VVelement{nesP}{n}} \le \Current{\VVelement{nesP}{loP}}$
-    \cuz{} \Eref{eq:th-nes-direction-30},
+    \linebreak \cuz{} \Eref{eq:th-nes-direction-30},
         \Eref{eq:th-nes-direction-32},
         \Eref{eq:th-nes-direction-34},
+        \Eref{eq:th-nes-direction-37},
         \Eref{eq:th-nes-direction-38}.
 }
 \mypareq{eq:th-nes-direction-42}{%
@@ -5093,34 +5097,22 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-nes-direction-46}
 \begin{gathered}
-    \var{n}+1 \in \Dom{\var{nesP}}
+    \Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{nesP}}
     \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{loP}}
     \\ \because \text{derivation
         \Eref{eq:th-nes-direction-36}--\Eref{eq:th-nes-direction-44}.}
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-nes-direction-48}
-\begin{gathered}
-    \forall \; \var{lo} \le \var{n} : \var{n}+1 \in \Dom{\var{nesP}}
-    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}
-    \\ \myparbox{derivation
-        \Eref{eq:th-nes-direction-34}--\Eref{eq:th-nes-direction-46},
-        universal generalization of arbitrary \var{loP} as \var{lo}.
-    }
-\end{gathered}
-\end{equation}
 \mypareq{eq:th-nes-direction-50}{%
     $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{\var{n}+1}}$
-    \cuz{} obvious.
+    \cuz{} reflexivity, \Eref{eq:th-nes-direction-32}.
 }
 \begin{equation}
 \label{eq:th-nes-direction-52}
 \begin{gathered}
-    \forall \; \var{lo} = \var{n} + 1: \var{n}+1 \in \Dom{\var{nesP}}
+    \Vnat{loP} = \var{n}+1 \land \var{n}+1 \in \Dom{\var{nesP}}
     \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}
-    \\ \because \Eref{eq:th-nes-direction-32},
-        \Eref{eq:th-nes-direction-36}, \Eref{eq:th-nes-direction-50}.
+    \\ \because \Eref{eq:th-nes-direction-50}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5128,8 +5120,10 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \begin{gathered}
     \forall \; \var{nes} \in \type{NES} : \forall \; \var{lo} \le \var{n} + 1: \var{n}+1 \in \Dom{\var{nes}}
     \\ \implies \Current{\VVelement{nes}{\var{n}+1}} \le \Current{\VVelement{nes}{lo}}
-    \\ \myparbox{\cuz{} universal generalization of \var{nes} as \var{nes},
-        \Eref{eq:th-nes-direction-48}, \Eref{eq:th-nes-direction-52}.
+    \\ \myparbox{\cuz{}
+        universal generalization of \var{loP} as \var{lo} and
+        of \var{nesP} as \var{nes},
+        \Eref{eq:th-nes-direction-46}, \Eref{eq:th-nes-direction-52}.
         This is \myfn{INDH}{\var{n}+1}.
     }
 \end{gathered}
