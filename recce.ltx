@@ -5244,17 +5244,18 @@ then
 \end{theorem}
 
 \begin{proof}
-The proof is by induction on the index
-\Vnat{indx}.
+The proof is by induction.
+The induction variable is the length of the NES,
+offset by 3.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-unit-derivation-10}
 \begin{gathered}
-    \myfn{INDH}{\Vnat{indx}} \defined
+    \myfn{INDH}{\Vnat{offX}} \defined
     \\ \forall \var{nes} \in \set{
         \begin{gathered}
         \Vnes{ines} :
-            \Vsize{ines} = \var{indx} + 3
+            \Vsize{ines} = \var{offX} + 3
         \\ \land \; \Current{\Velement{ines}{0}} =
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
@@ -5271,7 +5272,7 @@ the consequent.
     $\Vnes{nesB} = \tuple{\Veim{prev}, \Veim{middle}, \Veim{next}}$
     \cuz{}
     antecedant of \myfn{INDH}{0},
-    arbitrary \var{nesB}, \var{prev}, \var{middle}, \var{next}.%
+    new free \var{nesB}, \var{prev}, \var{middle}, \var{next}.%
 }
 \mypareq{eq:th-nes-unit-derivation-14}{%
     \Current{\var{prev}} = \Current{\var{next}}
@@ -5281,8 +5282,8 @@ the consequent.
     \Current{\var{prev}} =
     \Current{\var{middle}} =
     \Current{\var{next}}
-    \cuz{} \Eref{eq:th-nes-unit-derivation-14},
-    \longThref{NES current location run}{th:nes-current-location-run}.%
+    \cuz{} \longThref{NES current location run}{th:nes-current-location-run},
+        \Eref{eq:th-nes-unit-derivation-14}.
 }
 \mypareq{eq:th-nes-unit-derivation-18}{%
     \myfn{Next-Eligible}{\var{next},\var{middle}}
@@ -5322,14 +5323,13 @@ the consequent.
     \\ \Symbol{\Velement{ines}{1}} \deplus
     \Symbol{\Velement{ines}{0}}.
     \\ \myparbox{%
-    \cuz{} \Eref{eq:th-nes-unit-derivation-12}\text{--}\Eref{eq:th-nes-unit-derivation-24}.
-        This is \myfn{INDH}{0}, the basis of the induction.%
+    \cuz{} derivation
+        \Eref{eq:th-nes-unit-derivation-12}\text{--}\Eref{eq:th-nes-unit-derivation-24}.
+        This is \myfn{INDH}{0}, the basis of the induction.
     }
 \end{gathered}
 \end{equation}
 
-Recall the definition of \myfnname{INDH}{} at
-\Eref{eq:th-nes-unit-derivation-10}.
 For the step we assume
 \myfn{INDH}{\var{n}},
 and the antecedants of
@@ -5354,33 +5354,34 @@ to show the consequent of
 \end{equation}
 \mypareq{eq:th-nes-unit-derivation-32}{%
     $\Vsize{\Vnes{nesP}} = \var{n} +  1 + 3$
-    \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
-    AF step, arbitrary \var{nesP}.%
+    \linebreak \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
+    AF step; new free \var{nesP}.%
 }
 \mypareq{eq:th-nes-unit-derivation-34}{%
     $\Current{\Velement{nesP}{0}} = \Current{\Velement{nesP}{\Vlastix{nesP}}} = \Vloc{locP}$
-    \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
-    AF step, new \var{locP} for convenience.%
+    \linebreak \cuz{} antecedant of \myfn{INDH}{\var{n}+1},
+    AF step; new \var{locP} for convenience.%
 }
 \mypareq{eq:th-nes-unit-derivation-36}{%
-    $\forall \Vnat{i} < \Vlastix{nesP} : \Current{\VVelement{nesP}{i}} = \var{locP}$
-    \cuz{}
+    $\forall \; \Vnat{i} < \Vlastix{nesP} : \Current{\VVelement{nesP}{i}} = \var{locP}$
+    \linebreak \cuz{}
     \longThref{NES current location run}{th:nes-current-location-run},
     \Eref{eq:th-nes-unit-derivation-34}.%
 }
 \mypareq{eq:th-nes-unit-derivation-38}{%
     $\Vnes{pre} = \tuple{\Velement{nesP}{0} \ldots \Velement{nesP}{\var{n}+2}}$
-    \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
-    \Eref{eq:th-nes-unit-derivation-32}.%
+    \linebreak \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+    \Eref{eq:th-nes-unit-derivation-32};
+    new \Vnes{pre} for convenience.
 }
 \mypareq{eq:th-nes-unit-derivation-40}{%
-    $\Current{\Velement{nesP}{0}} = \Current{\Velement{nesP}{\var{n}+2}}$
-    \cuz{} \Eref{eq:th-nes-unit-derivation-36}, \Eref{eq:th-nes-unit-derivation-38}.%
+    $\forall \; \Vnat{i} \le \var{n}+2 : \VVelement{pre}{i} = \VVelement{nesP}{i}$
+    \cuz \Eref{eq:th-nes-unit-derivation-38}.
 }
 \mypareq{eq:th-nes-unit-derivation-42}{%
-    $\Current{\Velement{pre}{0}} = \Current{\Velement{pre}{\var{n}+2}}$
+    $\Current{\Velement{pre}{0}} = \Current{\Velement{pre}{\Vlastix{pre}}}$
     \cuz
-    \Eref{eq:th-nes-unit-derivation-38}, \Eref{eq:th-nes-unit-derivation-40}.%
+    \Eref{eq:th-nes-unit-derivation-36}, \Eref{eq:th-nes-unit-derivation-38}.%
 }
 \mypareq{eq:th-nes-unit-derivation-44}{%
     $\Vsize{pre} = \var{n} + 3$
@@ -5393,29 +5394,47 @@ to show the consequent of
     \Eref{eq:th-nes-unit-derivation-42},
     \Eref{eq:th-nes-unit-derivation-44}.%
 }
+\mypareq{eq:th-nes-unit-derivation-47-10}{%
+    $\Vlastix{pre}\subtract 1 = \Vsize{pre}\subtract 2
+        = \var{n}+1$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-44}.
+}
+\mypareq{eq:th-nes-unit-derivation-47-20}{%
+    $\var{n}+1
+    = \Vsize{nesP}\subtract 3 =
+    \Vlastix{nesP}\subtract 2$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-32}.
+}
+\mypareq{eq:th-nes-unit-derivation-47-30}{%
+    $\Vlastix{pre}\subtract 1 = \Vlastix{nesP}\subtract 2$
+    \cuz{} \Eref{eq:th-nes-unit-derivation-47-10},
+    \Eref{eq:th-nes-unit-derivation-47-20}.
+}
 \mypareq{eq:th-nes-unit-derivation-48}{%
     $\Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 2}} \deplus
     \Symbol{\Velement{nesP}{0}}$
-    \cuz{} \Eref{eq:th-nes-unit-derivation-38},
-    \Eref{eq:th-nes-unit-derivation-46}.%
+    \cuz{} \Eref{eq:th-nes-unit-derivation-40},
+    \Eref{eq:th-nes-unit-derivation-46},
+    \Eref{eq:th-nes-unit-derivation-47-30}.
 }
 \mypareq{eq:th-nes-unit-derivation-50}{%
     \myfn{Next-Eligible}{
         \Velement{nesP}{\Vlastix{nesP}},
         \Velement{nesP}{\Vlastix{nesP}\subtract 1}}
-    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
-    \Eref{eq:th-nes-unit-derivation-32}.%
+    \linebreak \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \Eref{eq:th-nes-unit-derivation-32}.
 }
 \mypareq{eq:th-nes-unit-derivation-52}{%
     \myfn{Next-Eligible}{
         \Velement{nesP}{\Vlastix{nesP}\subtract 1},
         \Velement{nesP}{\Vlastix{nesP}\subtract 2}}
-    \cuz{} \Dfref{def:next-eligible-sequence},
+    \linebreak \cuz{} \Dfref{def:next-eligible-sequence},
     \Eref{eq:th-nes-unit-derivation-32}.%
 }
 \mypareq{eq:th-nes-unit-derivation-54}{%
-    $\Current{\Vlastix{nesP}\subtract 1} = \Current{\Vlastix{nesP}\subtract 2}$
-    \cuz{} \Eref{eq:th-nes-unit-derivation-36}.%
+    $\Current{\Velement{nesP}{\Vlastix{nesP}\subtract 1}} = \Current{\Velement{nesP}{\Vlastix{nesP}\subtract 2}}$
+    \linebreak \cuz{} \Eref{eq:th-nes-unit-derivation-32},
+        \Eref{eq:th-nes-unit-derivation-36}.%
 }
 \mypareq{eq:th-nes-unit-derivation-56}{%
     $\tuple{\Symbol{\Vlastix{nesP}\subtract 1} \de \Symbol{\Vlastix{nesP}\subtract 2}}
@@ -5431,14 +5450,21 @@ to show the consequent of
     \cuz{} \Eref{eq:th-nes-unit-derivation-48},
     \Eref{eq:th-nes-unit-derivation-56}.
     This is the consequent of \myfn{INDH}{\var{n}+1}.
-    Recall \myfn{INDH}{} from \Eref{eq:th-nes-unit-derivation-10}.%
+}
+\mypareq{eq:th-nes-unit-derivation-60}{%
+    \myfn{INDH}{\var{n}+1} \cuz{} derivation
+        \Eref{eq:th-nes-unit-derivation-32}--\Eref{eq:th-nes-unit-derivation-58}.
+}
+\mypareq{eq:th-nes-unit-derivation-62}{%
+    $\myfn{INDH}{\var{n}} \implies \myfn{INDH}{\var{n}+1}$
+    \cuz{} derivation
+        \Eref{eq:th-nes-unit-derivation-30}--\Eref{eq:th-nes-unit-derivation-60}.
+        This is the step of the induction.
 }
 
-With \Eref{eq:th-nes-unit-derivation-26}
-we have the basis of the induction
-and we have
-its step in the derivation
-\Eref{eq:th-nes-unit-derivation-30}--\Eref{eq:th-nes-unit-derivation-58}.
+We have the basis of the induction
+\Eref{eq:th-nes-unit-derivation-26}
+and its step \Eref{eq:th-nes-unit-derivation-62}.
 With the induction, we have the theorem.
 \myqed
 \end{proof}
