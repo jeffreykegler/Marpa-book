@@ -1867,7 +1867,7 @@ we will write
 The usefulness of these notations will be clearer later, when
 we introduce parse items.
 
-\chapter{LR Grammars}
+\chapter{LR grammars}
 \label{sec:lr-grammars}
 
 \begin{definition}[Handle]
@@ -4037,10 +4037,10 @@ EIM's and their Leo memos are both created left-to-right.
 But an investigator studying the Leo method needs to think both right-to-left
 and left-to-right.
 
-In subsequent discussion we will introduce ``next eligible sequences'' (NES's).
-The ``next'' item in an NES
+In subsequent discussion we will introduce ``Leo eligible sequences'' (LES's).
+The ``next'' item in an LES
 will be in the same ES as, or in an earlier ES than, its ``previous''
-item.  In other words, previous-to-next in NES terms
+item.  In other words, previous-to-next in LES terms
 is right-to-left in Earley set terms.
 
 \chapter{Leo items}
@@ -4692,7 +4692,7 @@ and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \var{les}.
 \end{definition}
 
 \begin{theorem}[LES subsequence]
-\label{th:nes-subsequence}
+\label{th:les-subsequence}
 Every subsequence of an LES is an LES.
 That is,
 \begin{gather}
@@ -4790,7 +4790,7 @@ of this theorem.
 \end{proof}
 
 \begin{theorem}[LES extension]
-\label{th:nes-extension}
+\label{th:les-extension}
 Let \var{les} be an EIM sequence,
 and let \var{next} be an EIM.
 Then
@@ -4819,7 +4819,7 @@ to show
 \Eref{eq:th-les-extension-04}--\Eref{eq:th-les-extension-07}.
 \Eref{eq:th-les-extension-04} follows via
 the ``LES subsequence'' theorem
-\Thref{th:nes-subsequence}.
+\Thref{th:les-subsequence}.
 \Eref{eq:th-les-extension-05}--\Eref{eq:th-les-extension-07}
 follow immediately from the definition of LES \Dfref{def:next-eligible-sequence}.
 
@@ -4934,7 +4934,7 @@ With both directions, we have the theorem.
 \end{proof}
 
 \begin{lemma}[LES adjacent direction]
-\label{lm:nes-adjacent-direction}
+\label{lm:les-adjacent-direction}
 If \Veim{prev} and \Veim{next}
 are two adjacent elements of an LES,
 then the current location of \var{next}
@@ -4967,7 +4967,7 @@ The current location of
 every element of an LES is before or at
 the current location of every previous element of the LES.
 That is,
-\label{th:nes-direction}
+\label{th:les-direction}
 \[
 \begin{gathered}
 \forall \; \var{les} \in \type{LES} :
@@ -5089,7 +5089,7 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-les-direction-42}{%
     $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{n}}$
     \cuz{}
-    \longThref{LES adjacent direction}{lm:nes-adjacent-direction},
+    \longThref{LES adjacent direction}{lm:les-adjacent-direction},
         \Eref{eq:th-les-direction-32}, \Eref{eq:th-les-direction-36}.
 }
 \mypareq{eq:th-les-direction-44}{%
@@ -5141,7 +5141,7 @@ we have the induction and theorem.
 \end{proof}
 
 \begin{theorem}[LES current location run]
-\label{th:nes-current-location-run}
+\label{th:les-current-location-run}
 If two elements of an LES are at the same
 current location, they bound a run of LES elements
 at that current location.
@@ -5194,7 +5194,7 @@ The proof strategy is to assume the hypothesis to show a reductio.
 \mypareq{eq:th-current-location-run-16}{%
     $\Current{\VVelement{les}{end}} \le \Current{\VVelement{les}{bad}} \le \Current{\VVelement{les}{start}}$
     \linebreak
-    \cuz{} \longThref{LES direction}{th:nes-direction},
+    \cuz{} \longThref{LES direction}{th:les-direction},
     \Eref{eq:th-current-location-run-12}.%
 }
 \mypareq{eq:th-current-location-run-18}{%
@@ -5223,7 +5223,7 @@ reductio and the theorem.
 \end{proof}
 
 \begin{theorem}[LES unit derivation]
-\label{th:nes-unit-derivation}
+\label{th:les-unit-derivation}
 If an LES is of finite length at least 3,
 and begins and ends at the same current location,
 then there is a non-trivial unit derivation from
@@ -5292,7 +5292,7 @@ showing it directly.
     \Current{\var{prev}} =
     \Current{\var{middle}} =
     \Current{\var{next}}
-    \cuz{} \longThref{LES current location run}{th:nes-current-location-run},
+    \cuz{} \longThref{LES current location run}{th:les-current-location-run},
         \Eref{eq:th-les-unit-derivation-14}.
 }
 \mypareq{eq:th-les-unit-derivation-18}{%
@@ -5386,13 +5386,13 @@ to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-les-unit-derivation-36}{%
     $\forall \; \Vnat{i} < \Vlastix{lesP} : \Current{\VVelement{lesP}{i}} = \var{locP}$
     \linebreak \cuz{}
-    \longThref{LES current location run}{th:nes-current-location-run},
+    \longThref{LES current location run}{th:les-current-location-run},
     \Eref{eq:th-les-unit-derivation-32},
      new \var{locP} for convenience.
 }
 \mypareq{eq:th-les-unit-derivation-38}{%
     $\Vles{pre} = \tuple{\Velement{lesP}{0} \ldots \Velement{lesP}{\var{n}+2}}$
-    \linebreak \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
+    \linebreak \cuz{} \longThref{LES subsequence}{th:les-subsequence},
     \Eref{eq:th-les-unit-derivation-32};
     new \Vles{pre} for convenience.
 }
@@ -5530,7 +5530,7 @@ With the induction, we have the theorem.
 \end{proof}
 
 \begin{theorem}[LES finiteness]
-\label{th:nes-finiteness}
+\label{th:les-finiteness}
 Let \var{les} be an arbitrary LES.
 Then
 \begin{gather}
@@ -5609,7 +5609,7 @@ Let \Vles{les1} be the prefix of \var{les} such that
 \begin{equation}
 \label{eq:th-les-finiteness-22}
 \Vles{les1} = \Velement{les}{0\ldots \var{z}}
-    \because \longThref{LES subsequence}{th:nes-subsequence},
+    \because \longThref{LES subsequence}{th:les-subsequence},
         \Eref{eq:th-les-finiteness-20}.
 \end{equation}
 \begin{equation}
@@ -5654,7 +5654,7 @@ We let \var{run} be a new LES:
 \begin{equation}
 \label{eq:th-les-finiteness-28}
 \Vles{run} = \Velement{les1}{\var{a}\ldots \var{z}}
-    \because \Thref{th:nes-subsequence},
+    \because \Thref{th:les-subsequence},
         \Eref{eq:th-les-finiteness-22},
         \Eref{eq:th-les-finiteness-24a}.
 \end{equation}
@@ -5676,7 +5676,7 @@ We do so next.
 \begin{gathered}
     \forall \; \Vnat{ix} \in \set{ \Vnat{ix1} : \var{a} \le \var{ix1} \le \var{z}} :
     \\ \Current{\VVelement{les1}{ix}} = \Vloc{i}
-    \\ \because \longThref{LES current location run}{th:nes-current-location-run},
+    \\ \because \longThref{LES current location run}{th:les-current-location-run},
     \Eref{eq:th-les-finiteness-28-10}.
 \end{gathered}
 \end{equation}
@@ -5754,7 +5754,7 @@ Let
 \begin{gathered}
 \Vles{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
     \\ \myparbox{\cuz{}
-        \longThref{LES subsequence}{th:nes-subsequence},
+        \longThref{LES subsequence}{th:les-subsequence},
         \Eref{eq:th-les-finiteness-28},
         \Eref{eq:th-les-finiteness-37},
         \Eref{eq:th-les-finiteness-38}.
@@ -5798,7 +5798,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{gathered}
     \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}} \deplus
     \Symbol{\Velement{cycle}{0}}
-    \\ \myparbox{\longThref{LES unit derivation}{th:nes-unit-derivation},
+    \\ \myparbox{\longThref{LES unit derivation}{th:les-unit-derivation},
         \Eref{eq:th-les-finiteness-40},
         \Eref{eq:th-les-finiteness-48},
         \Eref{eq:th-les-finiteness-52}.
@@ -5840,7 +5840,7 @@ completing the proof.
 \end{proof}
 
 \begin{theorem}[LES uniqueness]
-\label{th:nes-uniqueness}
+\label{th:les-uniqueness}
 If two LES's of the same length have the same base element,
 then they are identical.
 \end{theorem}
@@ -5901,7 +5901,7 @@ and the theorem.
 \end{proof}
 
 \begin{theorem}[LES trichotomy]
-\label{th:nes-trichotomy}
+\label{th:les-trichotomy}
 If two LES's of the same length have the same base element,
 then there are three mutually exclusive possibilites:
 \begin{itemize}
@@ -5939,7 +5939,7 @@ $\Vsize{les1} < \Vsize{les2}$, and
 $\Vsize{les2} > \Vsize{les1}$.
 The case where
 $\Vsize{les2} = \Vsize{les1}$ is shown in
-\longThref{LES uniqueness}{th:nes-uniqueness}.
+\longThref{LES uniqueness}{th:les-uniqueness}.
 
 For the case where
 \begin{equation}
@@ -5949,7 +5949,7 @@ For the case where
 we have
 \mypareq{eq:th-les-trichotomy-20}{%
     \Vles{subNes2} = \Velement{les2}{0\ldots \Vlastix{les1}}
-    \linebreak \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
+    \linebreak \cuz{} \longThref{LES subsequence}{th:les-subsequence},
         \Eref{eq:th-les-trichotomy-18}.%
 }
 \begin{equation}
@@ -5966,7 +5966,7 @@ we have
 \mypareq{eq:th-les-trichotomy-27}{%
     \var{subNes2} = \var{les1} \linebreak
     \cuz{}
-        \longThref{LES uniqueness}{th:nes-uniqueness},
+        \longThref{LES uniqueness}{th:les-uniqueness},
         \Eref{eq:th-les-trichotomy-22},
         \Eref{eq:th-les-trichotomy-26}.%
 }
@@ -6056,7 +6056,7 @@ and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
 \dispEnd
 \end{definition}
 
-\chapter{Leo Source Sequences}
+\chapter{Leo source sequences}
 \label{sec:lss}
 
 \begin{definition}[Leo source sequence {[}LSS{]}]
@@ -6137,7 +6137,7 @@ to say that \var{lss} is maximal.
 \end{definition}
 
 \begin{theorem}[LES--LSS equivalence]
-\label{th:nes-lss-equivalence}
+\label{th:les-lss-equivalence}
 Two LSS's are equal iff their underlying LES's
 are equal.
 \end{theorem}
@@ -6184,7 +6184,7 @@ We proceed by reductio.
         \Eref{eq:th-lss-uniqueness-10}, \Eref{eq:th-lss-uniqueness-22}.%
 }
 \mypareq{eq:th-lss-uniqueness-30}{%
-     $\var{les1} = \var{les2}$ \cuz{} \longThref{LES uniqueness}{th:nes-uniqueness},
+     $\var{les1} = \var{les2}$ \cuz{} \longThref{LES uniqueness}{th:les-uniqueness},
         \Eref{eq:th-lss-uniqueness-26}, \Eref{eq:th-lss-uniqueness-28}.%
 }
 \mypareq{eq:th-lss-uniqueness-32}{%
@@ -6224,7 +6224,7 @@ then
 }
 \mypareq{eq:th-lss-subsequence-12}{%
    $\var{subseq} \in \type{LES}$
-        \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
+        \cuz{} \longThref{LES subsequence}{th:les-subsequence},
         \Eref{eq:th-lss-subsequence-04},
         \Eref{eq:th-lss-subsequence-06},
         \Eref{eq:th-lss-subsequence-10}.%
@@ -6303,7 +6303,7 @@ the antecedant to show the consequent.
 }
 \mypareq{eq:th-lss-extension-20}{%
    $\var{extended} \in \type{LES}$
-   \cuz{} \longThref{LES extension}{th:nes-extension},
+   \cuz{} \longThref{LES extension}{th:les-extension},
         \Eref{eq:th-lss-extension-12},
         \Eref{eq:th-lss-extension-18}.
 }
@@ -6649,7 +6649,7 @@ call it \Vnat{possible}:
 \forall \; \Vles{les} : \Velement{les}{0} = \var{eim}
     \implies \Vsize{les} \le \Vnat{possible}
      \\ \text{where } \var{possible} = \size{\Vocab{\Vint{g}}}+1 \times (\Current{\Velement{les}{0}}+1),
-    \\ \because \longThref{LES finiteness}{th:nes-finiteness},
+    \\ \because \longThref{LES finiteness}{th:les-finiteness},
 \end{gathered}
 \end{equation}
 Therefore, there is a maximum possible LSS length for
