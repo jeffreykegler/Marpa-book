@@ -273,7 +273,7 @@
 \newcommand{\et}[1]{\ensuremath{#1_\type{ET}}}
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\lss}[1]{\ensuremath{#1_\type{LSS}}}
-\newcommand{\nes}[1]{\ensuremath{#1_\type{NES}}}
+\newcommand{\les}[1]{\ensuremath{#1_\type{LES}}}
 % Delete NSS?
 \newcommand{\nss}[1]{\ensuremath{#1_\type{NSS}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
@@ -299,7 +299,7 @@
 \newcommand{\Vlp}[1]{\Tvar{#1}{LP}}
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
-\newcommand{\Vnes}[1]{\nes{\var{#1}}}
+\newcommand{\Vles}[1]{\les{\var{#1}}}
 % Delete Vnss?
 \newcommand{\Vnss}[1]{\nss{\var{#1}}}
 \newcommand{\Vcurr}[1]{\Tvar{#1}{CURR}}
@@ -4043,7 +4043,7 @@ will be in the same ES as, or in an earlier ES than, its ``previous''
 item.  In other words, previous-to-next in NES terms
 is right-to-left in Earley set terms.
 
-\section{Leo items}
+\chapter{Leo items}
 
 \begin{definition}[Leo items]
 \label{def:LIMs}
@@ -4663,38 +4663,41 @@ The theorem is
 \myqed
 \end{proof}
 
+\chapter{Leo eligible sequences}
+\label{ch:les}
+
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
-A \dfn{next eligible sequence} (type \type{NES}) is
+A \dfn{next eligible sequence} (type \type{LES}) is
 a non-empty sequence of valid, Leo eligible EIM's
 such that every EIM
 except the top EIM
 is the next eligible EIM of the
 previous EIM in the sequence.  That is,
 \[
-\type{NES} = \set{
+\type{LES} = \set{
    \begin{gathered}
-       \Veimseq{nes} : \forall \Vnat{i} \in \Dom{\var{nes}} :
-       \\ \Valid{\VVelement{nes}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{nes}{i}}
+       \Veimseq{les} : \forall \Vnat{i} \in \Dom{\var{les}} :
+       \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
        \\ \land \; \left(
-           \var{i} < \Vlastix{nes} \implies \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
+           \var{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\var{i}+1}, \VVelement{les}{i}}
        \right)
    \end{gathered}
    }.
 \]
-If \var{nes} is an NES,
-We say that \Velement{nes}{0} is the \dfn{base} of \var{nes},
-and that \Velement{nes}{\Vlastix{nes}} is the \dfn{top} of \var{nes}.
+If \var{les} is an LES,
+We say that \Velement{les}{0} is the \dfn{base} of \var{les},
+and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \var{les}.
 \dispEnd
 \end{definition}
 
-\begin{theorem}[NES subsequence]
+\begin{theorem}[LES subsequence]
 \label{th:nes-subsequence}
-Every subsequence of an NES is an NES.
+Every subsequence of an LES is an LES.
 That is,
 \begin{gather}
 \label{eq:th-nes-subsequence-02}
-\var{seq} \in \type{NES}
+\var{seq} \in \type{LES}
 \\ \label{eq:th-nes-subsequence-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-nes-subsequence-06}
@@ -4702,7 +4705,7 @@ That is,
 \\ \nonumber
 \implies
 \\ \label{eq:th-nes-subsequence-08}
-\var{subseq} \in \type{NES}.
+\var{subseq} \in \type{LES}.
 \end{gather}
 \end{theorem}
 
@@ -4710,12 +4713,12 @@ That is,
 The proof is direct, assuming the hypothesis of
 the theorem to show the conclusion.
 \mypareq{eq:th-nes-subsequence-10}{%
-   \Vnes{seq} is an EIM sequence \linebreak
-   \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+   \Vles{seq} is an EIM sequence \linebreak
+   \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-subsequence-02}.%
 }
 \mypareq{eq:th-nes-subsequence-12}{%
-   \Vnes{subseq} is an EIM sequence \linebreak
+   \Vles{subseq} is an EIM sequence \linebreak
    \cuz{} \Eref{eq:th-nes-subsequence-06},
     \Eref{eq:th-nes-subsequence-10}.%
 }
@@ -4727,7 +4730,7 @@ the theorem to show the conclusion.
    \\ \land \; \left(
        \var{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\var{i}+1}, \VVelement{seq}{i}}
    \right)
-   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+   \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-subsequence-02}.
 \end{gathered}
 \end{equation}
@@ -4776,8 +4779,8 @@ the theorem to show the conclusion.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-subsequence-40}
-\var{subseq} \in \type{NES}
-  \because \longDfref{NES}{def:next-eligible-sequence},
+\var{subseq} \in \type{LES}
+  \because \longDfref{LES}{def:next-eligible-sequence},
    \Eref{eq:th-nes-subsequence-12},
    \Eref{eq:th-nes-subsequence-30}.
 \end{equation}
@@ -4786,25 +4789,25 @@ of this theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES extension]
+\begin{theorem}[LES extension]
 \label{th:nes-extension}
-Let \var{nes} be an EIM sequence,
+Let \var{les} be an EIM sequence,
 and let \var{next} be an EIM.
 Then
 \mypareq{eq:th-nes-extension-02}{%
-   $\tuple{\Velement{\var{nes}}{0}\ldots
-       \Velement{nes}{\Vlastix{nes}}, \var{next}} \in \type{NES}$
+   $\tuple{\Velement{\var{les}}{0}\ldots
+       \Velement{les}{\Vlastix{les}}, \var{next}} \in \type{LES}$
 }
 iff
 \begin{gather}
 \label{eq:th-nes-extension-04}
-    \var{nes} \in \type{NES}
+    \var{les} \in \type{LES}
 \\ \label{eq:th-nes-extension-05}
     \land \; \Valid{\var{next}}
 \\ \label{eq:th-nes-extension-06}
     \land \; \myfn{Is-Leo-Eligible}{\var{next}}
 \\ \label{eq:th-nes-extension-07}
-    \land \; \myfn{Next-Eligible}{\var{next},\Velement{nes}{\Vlastix{nes}}}.
+    \land \; \myfn{Next-Eligible}{\var{next},\Velement{les}{\Vlastix{les}}}.
 \end{gather}
 \end{theorem}
 
@@ -4815,10 +4818,10 @@ we assume
 to show
 \Eref{eq:th-nes-extension-04}--\Eref{eq:th-nes-extension-07}.
 \Eref{eq:th-nes-extension-04} follows via
-the ``NES subsequence'' theorem
+the ``LES subsequence'' theorem
 \Thref{th:nes-subsequence}.
 \Eref{eq:th-nes-extension-05}--\Eref{eq:th-nes-extension-07}
-follow immediately from the definition of NES \Dfref{def:next-eligible-sequence}.
+follow immediately from the definition of LES \Dfref{def:next-eligible-sequence}.
 
 It remains to show the reverse direction.
 For this we assume \Eref{eq:th-nes-extension-04}--\Eref{eq:th-nes-extension-07}
@@ -4827,12 +4830,12 @@ to show
 \begin{equation}
 \label{eq:th-nes-extension-10}
 \begin{gathered}
-   \forall \Vnat{i} \in \Dom{\var{nes}} :
-   \\ \Valid{\VVelement{nes}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{nes}{i}}
+   \forall \Vnat{i} \in \Dom{\var{les}} :
+   \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
    \\ \land \; \left(
-       \var{i} < \Vlastix{nes} \implies \myfn{Next-Eligible}{\Velement{nes}{\var{i}+1}, \VVelement{nes}{i}}
+       \var{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\var{i}+1}, \VVelement{les}{i}}
    \right)
-   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+   \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-extension-04}.
 \end{gathered}
 \end{equation}
@@ -4840,15 +4843,15 @@ to show
 \label{eq:th-nes-extension-12}
 \begin{gathered}
    \var{ext} = \left [
-       \Velement{\var{nes}}{0}\ldots
-       \Velement{nes}{\Vlastix{nes}}, \var{next}
+       \Velement{\var{les}}{0}\ldots
+       \Velement{les}{\Vlastix{les}}, \var{next}
    \right ]
-   \\ \because \text{new \Vnes{ext} for convenience.}
+   \\ \because \text{new \Vles{ext} for convenience.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-extension-13-10}{%
-   \var{nes} is an EIM sequence
-       \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+   \var{les} is an EIM sequence
+       \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-nes-extension-04}.
 }
 \mypareq{eq:th-nes-extension-13-20}{%
@@ -4868,7 +4871,7 @@ to show
    \\ \land \; \left(
        \var{i} < \Vlastix{ext}\subtract 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
    \right)
-   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+   \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-extension-04}.
 \end{gathered}
 \end{equation}
@@ -4894,14 +4897,14 @@ to show
    \\ \land \; \left(
        \var{i} < \Vlastix{ext}\subtract 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
    \right)
-   \\ \because \longDfref{NES}{def:next-eligible-sequence},
+   \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-extension-14},
     \Eref{eq:th-nes-extension-18},
     \Eref{eq:th-nes-extension-20}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-extension-24}{%
-    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{nes}{\Vlastix{nes}}}$
+    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{les}{\Vlastix{les}}}$
     \cuz{} \Eref{eq:th-nes-extension-07}, \Eref{eq:th-nes-extension-16}.
 }
 \mypareq{eq:th-nes-extension-26}{%
@@ -4920,8 +4923,8 @@ to show
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-extension-30}{%
-    $\var{ext} \in \type{NES}$
-        \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    $\var{ext} \in \type{LES}$
+        \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-nes-extension-13-30}, \Eref{eq:th-nes-extension-28}.
 }
 The equation \Eref{eq:th-nes-extension-30} is the conclusion of the
@@ -4930,68 +4933,68 @@ With both directions, we have the theorem.
 \myqed
 \end{proof}
 
-\begin{lemma}[NES adjacent direction]
+\begin{lemma}[LES adjacent direction]
 \label{lm:nes-adjacent-direction}
 If \Veim{prev} and \Veim{next}
-are two adjacent elements of an NES,
+are two adjacent elements of an LES,
 then the current location of \var{next}
 is less than or equal to the current location of \var{prev}.
 That is, if
 \begin{gather}
 \label{eq:th-nes-adjacent-direction-02}
-\var{nes} \in \type{NES}
+\var{les} \in \type{LES}
 \\ \label{eq:th-nes-adjacent-direction-04}
-\land \; \Vnat{i} \le (\Vlastix{nes}\subtract 1)
+\land \; \Vnat{i} \le (\Vlastix{les}\subtract 1)
 \end{gather}
 then
 \begin{gather}
 \label{eq:th-nes-adjacent-direction-06}
-\Current{\Velement{nes}{\var{i}+1}} \le
-\Current{\VVelement{nes}{i}}.
+\Current{\Velement{les}{\var{i}+1}} \le
+\Current{\VVelement{les}{i}}.
 \end{gather}
 \end{lemma}
 
 \begin{proof}
 The lemma follows from
-   \longDfref{NES}{def:next-eligible-sequence},
+   \longDfref{LES}{def:next-eligible-sequence},
    and \longThref{next eligible EIM direction}{th:next-eligible-direction}.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES direction]
+\begin{theorem}[LES direction]
 \label{th-nes-direction}
 The current location of
-every element of an NES is before or at
-the current location of every previous element of the NES.
+every element of an LES is before or at
+the current location of every previous element of the LES.
 That is,
 \label{th:nes-direction}
 \[
 \begin{gathered}
-\forall \; \var{nes} \in \type{NES} :
-\forall \; \Vnat{hi} \in \Dom{\var{nes}} :
+\forall \; \var{les} \in \type{LES} :
+\forall \; \Vnat{hi} \in \Dom{\var{les}} :
 \forall \; \Vnat{lo} \le \var{hi} :
-\\ \Current{\VVelement{nes}{hi}} \le
-\Current{\VVelement{nes}{lo}}.
+\\ \Current{\VVelement{les}{hi}} \le
+\Current{\VVelement{les}{lo}}.
 \end{gathered}
 \]
 \end{theorem}
 
 \begin{proof}
 The proof is by induction
-on the last, in NES sequence order,
+on the last, in LES sequence order,
 of the two elements to be compared.
-We will find that every NES is finite,
+We will find that every LES is finite,
 but we have yet to prove this,
-so we allow the NES to be either finite
+so we allow the LES to be either finite
 or countably infinite.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-direction-10}
 \begin{gathered}
 \myfn{INDH}{\Vnat{indx}} \defined
-\\ \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{indx} :
-    \var{indx} \in \Dom{\var{nes}}
-\\  \implies \Current{\VVelement{nes}{indx}} \le \Current{\VVelement{nes}{lo}}.
+\\ \forall \; \var{les} \in \type{LES} : \forall \; \Vnat{lo} \le \var{indx} :
+    \var{indx} \in \Dom{\var{les}}
+\\  \implies \Current{\VVelement{les}{indx}} \le \Current{\VVelement{les}{lo}}.
 \end{gathered}
 \end{equation}
 
@@ -5005,16 +5008,16 @@ in \Eref{eq:th-nes-direction-10}.
         \Eref{eq:th-nes-direction-10}.
 }
 \mypareq{eq:th-nes-direction-14}{%
-    $\var{nesB} \in \type{NES}$ \cuz{}
+    $\var{lesB} \in \type{LES}$ \cuz{}
         \Eref{eq:th-nes-direction-10},
-        universal instantiation, new free \var{nesB}.%
+        universal instantiation, new free \var{lesB}.%
 }
 \mypareq{eq:th-nes-direction-15}{%
-    $\Vsize{nesB} \ge 1$
-        \cuz{} \longDfref{NES}{def:next-eligible-sequence}.%
+    $\Vsize{lesB} \ge 1$
+        \cuz{} \longDfref{LES}{def:next-eligible-sequence}.%
 }
 \mypareq{eq:th-nes-direction-16}{%
-    $\var{indx} \in \Dom{\var{nesB}}$ \cuz{}
+    $\var{indx} \in \Dom{\var{lesB}}$ \cuz{}
         \Eref{eq:th-nes-direction-12},
         \Eref{eq:th-nes-direction-15}.%
 }
@@ -5025,13 +5028,13 @@ in \Eref{eq:th-nes-direction-10}.
         \Eref{eq:th-nes-direction-12}.%
 }
 \mypareq{eq:th-nes-direction-18}{%
-    $\Current{\VVelement{nesB}{indx}} = \Current{\VVelement{nesB}{loB}}$
+    $\Current{\VVelement{lesB}{indx}} = \Current{\VVelement{lesB}{loB}}$
      \cuz{} \Eref{eq:th-nes-direction-12},
      \Eref{eq:th-nes-direction-16},
      \Eref{eq:th-nes-direction-17}.%
 }
 \mypareq{eq:th-nes-direction-19}{%
-    $\Current{\VVelement{nesB}{indx}} \le \Current{\VVelement{nesB}{loB}}$
+    $\Current{\VVelement{lesB}{indx}} \le \Current{\VVelement{lesB}{loB}}$
     \cuz{} \Eref{eq:th-nes-direction-18}.
     This is the consequent of the implication in \myfn{INDH}{0}.
 }
@@ -5047,8 +5050,8 @@ For the step, we assume
 \begin{equation}
 \label{eq:th-nes-direction-30}
 \begin{gathered}
-    \forall \; \var{nes} \in \type{NES} : \forall \; \Vnat{lo} \le \var{n} :
-\\ \var{n} \in \Dom{\var{nes}} \implies \Current{\VVelement{nes}{n}} \le \Current{\VVelement{nes}{lo}}.
+    \forall \; \var{les} \in \type{LES} : \forall \; \Vnat{lo} \le \var{n} :
+\\ \var{n} \in \Dom{\var{les}} \implies \Current{\VVelement{les}{n}} \le \Current{\VVelement{les}{lo}}.
 \\ \because \myfn{INDH}{\var{n}} \text{ AF step}.%
 \end{gathered}
 \end{equation}
@@ -5058,13 +5061,13 @@ For the step, we assume
 Initially, we proceed by
 instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-nes-direction-32}{%
-    $\var{nesP} \in \type{NES}$ \cuz{} new free \var{loP}.
+    $\var{lesP} \in \type{LES}$ \cuz{} new free \var{loP}.
 }
 \mypareq{eq:th-nes-direction-34}{%
     $\var{loP} \in \naturals$ \cuz{} new free \var{loP}.
 }
 \mypareq{eq:th-nes-direction-36}{%
-    $\Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{nesP}}$
+    $\Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{lesP}}$
     \cuz{} AF derivation.
 }
 \mypareq{eq:th-nes-direction-37}{%
@@ -5072,11 +5075,11 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
         \cuz{} \Eref{eq:th-nes-direction-36}.
 }
 \mypareq{eq:th-nes-direction-38}{%
-    $\var{n} \in \Dom{\var{nesP}}$ \cuz{} \var{nesP} is a sequence,
+    $\var{n} \in \Dom{\var{lesP}}$ \cuz{} \var{lesP} is a sequence,
         \Eref{eq:th-nes-direction-36}.
 }
 \mypareq{eq:th-nes-direction-40}{%
-    $\Current{\VVelement{nesP}{n}} \le \Current{\VVelement{nesP}{loP}}$
+    $\Current{\VVelement{lesP}{n}} \le \Current{\VVelement{lesP}{loP}}$
     \linebreak \cuz{} \Eref{eq:th-nes-direction-30},
         \Eref{eq:th-nes-direction-32},
         \Eref{eq:th-nes-direction-34},
@@ -5084,45 +5087,45 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
         \Eref{eq:th-nes-direction-38}.
 }
 \mypareq{eq:th-nes-direction-42}{%
-    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{n}}$
+    $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{n}}$
     \cuz{}
-    \longThref{NES adjacent direction}{lm:nes-adjacent-direction},
+    \longThref{LES adjacent direction}{lm:nes-adjacent-direction},
         \Eref{eq:th-nes-direction-32}, \Eref{eq:th-nes-direction-36}.
 }
 \mypareq{eq:th-nes-direction-44}{%
-    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{loP}}$
+    $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{loP}}$
     \cuz{}
         \Eref{eq:th-nes-direction-40}, \Eref{eq:th-nes-direction-42}.
 }
 \begin{equation}
 \label{eq:th-nes-direction-46}
 \begin{gathered}
-    \Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{nesP}}
-    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{loP}}
+    \Vnat{loP} \le \var{n} \land \var{n}+1 \in \Dom{\var{lesP}}
+    \\ \implies \Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{loP}}
     \\ \because \text{derivation
         \Eref{eq:th-nes-direction-36}--\Eref{eq:th-nes-direction-44}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-direction-50}{%
-    $\Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{\var{n}+1}}$
+    $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{\var{n}+1}}$
     \cuz{} reflexivity, \Eref{eq:th-nes-direction-32}.
 }
 \begin{equation}
 \label{eq:th-nes-direction-52}
 \begin{gathered}
-    \Vnat{loP} = \var{n}+1 \land \var{n}+1 \in \Dom{\var{nesP}}
-    \\ \implies \Current{\VVelement{nesP}{\var{n}+1}} \le \Current{\VVelement{nesP}{lo}}
+    \Vnat{loP} = \var{n}+1 \land \var{n}+1 \in \Dom{\var{lesP}}
+    \\ \implies \Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{lo}}
     \\ \because \Eref{eq:th-nes-direction-50}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-direction-54}
 \begin{gathered}
-    \forall \; \var{nes} \in \type{NES} : \forall \; \var{lo} \le \var{n} + 1: \var{n}+1 \in \Dom{\var{nes}}
-    \\ \implies \Current{\VVelement{nes}{\var{n}+1}} \le \Current{\VVelement{nes}{lo}}
+    \forall \; \var{les} \in \type{LES} : \forall \; \var{lo} \le \var{n} + 1: \var{n}+1 \in \Dom{\var{les}}
+    \\ \implies \Current{\VVelement{les}{\var{n}+1}} \le \Current{\VVelement{les}{lo}}
     \\ \myparbox{\cuz{}
         universal generalization of \var{loP} as \var{lo} and
-        of \var{nesP} as \var{nes},
+        of \var{lesP} as \var{les},
         \Eref{eq:th-nes-direction-46}, \Eref{eq:th-nes-direction-52}.
         This is \myfn{INDH}{\var{n}+1}.
     }
@@ -5137,40 +5140,40 @@ we have the induction and theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES current location run]
+\begin{theorem}[LES current location run]
 \label{th:nes-current-location-run}
-If two elements of an NES are at the same
-current location, they bound a run of NES elements
+If two elements of an LES are at the same
+current location, they bound a run of LES elements
 at that current location.
 That is, if
 \begin{gather}
 \label{eq:th-current-location-run-02}
-\Vnes{nes} \in \type{NES}
+\Vles{les} \in \type{LES}
 \\ \label{eq:th-current-location-run-04}
-\land \; 0 \le \Vnat{start} \le \Vnat{end} \le \Vlastix{nes}
+\land \; 0 \le \Vnat{start} \le \Vnat{end} \le \Vlastix{les}
 \\ \label{eq:th-current-location-run-07}
-\land \; \Vloc{loc} = \Current{\VVelement{nes}{start}} = \Current{\VVelement{nes}{end}}
+\land \; \Vloc{loc} = \Current{\VVelement{les}{start}} = \Current{\VVelement{les}{end}}
 \end{gather}
 then
 \begin{equation}
 \label{eq:th-current-location-run-08}
 \forall \var{i} \in \set{ \var{ii} : \var{start} \le \var{ii} \le \var{end}} :
-    \Current{\VVelement{nes}{i}} = \var{loc}.
+    \Current{\VVelement{les}{i}} = \var{loc}.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
 The proof strategy is to assume the hypothesis to show a reductio.
 \mypareq{eq:th-current-location-run-10-10}{%
-    $\Vsize{nes} \ge 1$
-        \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    $\Vsize{les} \ge 1$
+        \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-current-location-run-02}.
 }
 \begin{equation}
 \label{eq:th-current-location-run-10-20}
 \begin{gathered}
 \exists \; \Vnat{i} \in \set{ \Vnat{ii} : \var{start} \le \var{ii} \le \var{end}} :
-    \Current{\VVelement{nes}{i}} \neq \var{loc}
+    \Current{\VVelement{les}{i}} \neq \var{loc}
     \\ \myparbox{\cuz{} Contrary of
         \Eref{eq:th-current-location-run-08},
         \Eref{eq:th-current-location-run-10-10},
@@ -5182,31 +5185,31 @@ The proof strategy is to assume the hypothesis to show a reductio.
 \label{eq:th-current-location-run-12}
 \begin{gathered}
 \var{start} \le \var{bad} \le \var{end} \land
-    \Current{\VVelement{nes}{bad}} \neq \var{loc}
+    \Current{\VVelement{les}{bad}} \neq \var{loc}
     \\ \myparbox{\cuz{} \Eref{eq:th-current-location-run-10-20},
         instantiating \var{i} as \var{bad}.%
     }
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-current-location-run-16}{%
-    $\Current{\VVelement{nes}{end}} \le \Current{\VVelement{nes}{bad}} \le \Current{\VVelement{nes}{start}}$
+    $\Current{\VVelement{les}{end}} \le \Current{\VVelement{les}{bad}} \le \Current{\VVelement{les}{start}}$
     \linebreak
-    \cuz{} \longThref{NES direction}{th:nes-direction},
+    \cuz{} \longThref{LES direction}{th:nes-direction},
     \Eref{eq:th-current-location-run-12}.%
 }
 \mypareq{eq:th-current-location-run-18}{%
-    $\Current{\VVelement{nes}{bad}} \neq \var{loc}$
+    $\Current{\VVelement{les}{bad}} \neq \var{loc}$
     \cuz{} \Eref{eq:th-current-location-run-12}.%
 }
 \mypareq{eq:th-current-location-run-20}{%
-    $\Current{\VVelement{nes}{end}} \le \Current{\VVelement{nes}{bad}} < \Current{\VVelement{nes}{start}}$
+    $\Current{\VVelement{les}{end}} \le \Current{\VVelement{les}{bad}} < \Current{\VVelement{les}{start}}$
     \linebreak
     \cuz{} \Eref{eq:th-current-location-run-07},
     \Eref{eq:th-current-location-run-16},
     \Eref{eq:th-current-location-run-18}.%
 }
 \mypareq{eq:th-current-location-run-22}{%
-    $\Current{\VVelement{nes}{end}} < \Current{\VVelement{nes}{start}}$
+    $\Current{\VVelement{les}{end}} < \Current{\VVelement{les}{start}}$
     \cuz{} \Eref{eq:th-current-location-run-20}.%
 }
 \mypareq{eq:th-current-location-run-24}{%
@@ -5219,42 +5222,42 @@ reductio and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES unit derivation]
+\begin{theorem}[LES unit derivation]
 \label{th:nes-unit-derivation}
-If an NES is of finite length at least 3,
+If an LES is of finite length at least 3,
 and begins and ends at the same current location,
 then there is a non-trivial unit derivation from
 the symbol of its penultimate element to the
 symbol of its first element. That is, if
 \begin{gather}
     \label{eq:th-nes-unit-derivation-02}
-    \var{nes} \in \type{NES}
+    \var{les} \in \type{LES}
     \\ \label{eq:th-nes-unit-derivation-04}
-    \land \;\; 3 \le \Vsize{nes} \; \land \; \Vsize{nes} \in \naturals
+    \land \;\; 3 \le \Vsize{les} \; \land \; \Vsize{les} \in \naturals
     \\ \label{eq:th-nes-unit-derivation-06}
-    \land \; \Current{\Velement{nes}{0}} =
-    \Current{\Velement{nes}{\Vlastix{nes}}}
+    \land \; \Current{\Velement{les}{0}} =
+    \Current{\Velement{les}{\Vlastix{les}}}
 \end{gather}
 then
 \begin{equation}
     \label{eq:th-nes-unit-derivation-08}
-    \Symbol{\Velement{nes}{\Vlastix{nes}\subtract 1}} \deplus
-    \Symbol{\Velement{nes}{0}}.
+    \Symbol{\Velement{les}{\Vlastix{les}\subtract 1}} \deplus
+    \Symbol{\Velement{les}{0}}.
 \end{equation}
 \end{theorem}
 
 \begin{proof}
 The proof is by induction.
-The induction variable is the length of the NES,
+The induction variable is the length of the LES,
 offset by 3.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-nes-unit-derivation-10}
 \begin{gathered}
     \myfn{INDH}{\Vnat{offX}} \defined
-    \\ \forall \var{nes} \in \set{
+    \\ \forall \var{les} \in \set{
         \begin{gathered}
-        \Vnes{ines} :
+        \Vles{ines} :
             \Vsize{ines} = \var{offX} + 3
         \\ \land \; \Current{\Velement{ines}{0}} =
         \Current{\Velement{ines}{\Vlastix{ines}}}
@@ -5268,14 +5271,14 @@ The induction hypothesis is
 We take \myfn{INDH}{0} as the basis,
 showing it directly.
 \mypareq{eq:th-nes-unit-derivation-11}{%
-    $\size{\Vnes{nesB}} = 3 \land
-    \Current{\Velement{nesB}{\Vlastix{nesB}}}
-        = \Current{\Velement{nesB}{0}}$
+    $\size{\Vles{lesB}} = 3 \land
+    \Current{\Velement{lesB}{\Vlastix{lesB}}}
+        = \Current{\Velement{lesB}{0}}$
     AF derivation,
-    new \Vnes{nesB}.
+    new \Vles{lesB}.
 }
 \mypareq{eq:th-nes-unit-derivation-12}{%
-    $\Vnes{nesB} = \tuple{\Veim{prev}, \Veim{middle}, \Veim{next}}$
+    $\Vles{lesB} = \tuple{\Veim{prev}, \Veim{middle}, \Veim{next}}$
     \cuz{} \Eref{eq:th-nes-unit-derivation-11},
     new \Veim{prev}, \Veim{middle}, \Veim{next}
     for convenience.
@@ -5289,17 +5292,17 @@ showing it directly.
     \Current{\var{prev}} =
     \Current{\var{middle}} =
     \Current{\var{next}}
-    \cuz{} \longThref{NES current location run}{th:nes-current-location-run},
+    \cuz{} \longThref{LES current location run}{th:nes-current-location-run},
         \Eref{eq:th-nes-unit-derivation-14}.
 }
 \mypareq{eq:th-nes-unit-derivation-18}{%
     \myfn{Next-Eligible}{\var{next},\var{middle}}
-    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-unit-derivation-12}.
 }
 \mypareq{eq:th-nes-unit-derivation-20}{%
     \myfn{Next-Eligible}{\var{middle},\var{prev}}
-    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-unit-derivation-12}.
 }
 \mypareq{eq:th-nes-unit-derivation-22}{%
@@ -5308,22 +5311,22 @@ showing it directly.
     \linebreak \cuz{} \Eref{eq:th-nes-unit-derivation-16},
         \Eref{eq:th-nes-unit-derivation-18},
         \Eref{eq:th-nes-unit-derivation-20},
-        \longThref{NES rule}{th:next-eligible-rule}.
+        \longThref{LES rule}{th:next-eligible-rule}.
 }
 \mypareq{eq:th-nes-unit-derivation-24}{%
-    $\Symbol{\Velement{nesB}{\Vlastix{nesB}\subtract 1}} \deplus
-        \Symbol{\Velement{nesB}{0}}$
+    $\Symbol{\Velement{lesB}{\Vlastix{lesB}\subtract 1}} \deplus
+        \Symbol{\Velement{lesB}{0}}$
     \linebreak \cuz{} \Eref{eq:th-nes-unit-derivation-12},
         \Eref{eq:th-nes-unit-derivation-22}.
 }
 \begin{equation}
 \label{eq:th-nes-unit-derivation-25-10}
 \begin{gathered}
-    \size{\Vnes{nesB}} = 3 \land
-    \Current{\Velement{nesB}{\Vlastix{nesB}}}
-        = \Current{\Velement{nesB}{0}}
-    \\ \implies \Symbol{\Velement{nesB}{\Vlastix{nesB}\subtract 1}} \deplus
-        \Symbol{\Velement{nesB}{0}}
+    \size{\Vles{lesB}} = 3 \land
+    \Current{\Velement{lesB}{\Vlastix{lesB}}}
+        = \Current{\Velement{lesB}{0}}
+    \\ \implies \Symbol{\Velement{lesB}{\Vlastix{lesB}\subtract 1}} \deplus
+        \Symbol{\Velement{lesB}{0}}
     \\ \myparbox{\cuz{}
         derivation \Eref{eq:th-nes-unit-derivation-11}--%
         \Eref{eq:th-nes-unit-derivation-24}.
@@ -5333,9 +5336,9 @@ showing it directly.
 \begin{equation}
 \label{eq:th-nes-unit-derivation-26}
 \begin{gathered}
-    \forall \; \var{nes} \in \set{
+    \forall \; \var{les} \in \set{
         \begin{gathered}
-        \Vnes{ines} : \Vsize{ines} = 3
+        \Vles{ines} : \Vsize{ines} = 3
         \\ \land \; \Current{\Velement{ines}{0}} =
         \Current{\Velement{ines}{2}}
         \end{gathered}
@@ -5343,7 +5346,7 @@ showing it directly.
     \\ \Symbol{\Velement{ines}{1}} \deplus
     \Symbol{\Velement{ines}{0}}.
     \\ \myparbox{%
-    \cuz{} universal generalization of arbitrary \var{nesB},
+    \cuz{} universal generalization of arbitrary \var{lesB},
         \Eref{eq:th-nes-unit-derivation-25-10}.
         This is \myfn{INDH}{0}, the basis of the induction.
     }
@@ -5356,9 +5359,9 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-nes-unit-derivation-30}
 \begin{gathered}
-    \forall \var{nes} \in \set{
+    \forall \var{les} \in \set{
         \begin{gathered}
-        \Vnes{ines} : \Vsize{ines} = \var{n} + 3
+        \Vles{ines} : \Vsize{ines} = \var{n} + 3
         \\ \land \; \Current{\Velement{ines}{0}} =
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
@@ -5372,33 +5375,33 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-nes-unit-derivation-32}
 \begin{gathered}
-    \Vsize{\Vnes{nesP}} = \var{n} + 3 + 1
-    \\ \land \; \Current{\Velement{nesP}{\Vlastix{nesP}}} =
-        \Current{\Velement{nesP}{0}}
+    \Vsize{\Vles{lesP}} = \var{n} + 3 + 1
+    \\ \land \; \Current{\Velement{lesP}{\Vlastix{lesP}}} =
+        \Current{\Velement{lesP}{0}}
     \\ \myparbox{\cuz{}
-        AF derivation; new \var{nesP}.
+        AF derivation; new \var{lesP}.
     }
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-unit-derivation-36}{%
-    $\forall \; \Vnat{i} < \Vlastix{nesP} : \Current{\VVelement{nesP}{i}} = \var{locP}$
+    $\forall \; \Vnat{i} < \Vlastix{lesP} : \Current{\VVelement{lesP}{i}} = \var{locP}$
     \linebreak \cuz{}
-    \longThref{NES current location run}{th:nes-current-location-run},
+    \longThref{LES current location run}{th:nes-current-location-run},
     \Eref{eq:th-nes-unit-derivation-32},
      new \var{locP} for convenience.
 }
 \mypareq{eq:th-nes-unit-derivation-38}{%
-    $\Vnes{pre} = \tuple{\Velement{nesP}{0} \ldots \Velement{nesP}{\var{n}+2}}$
-    \linebreak \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+    $\Vles{pre} = \tuple{\Velement{lesP}{0} \ldots \Velement{lesP}{\var{n}+2}}$
+    \linebreak \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
     \Eref{eq:th-nes-unit-derivation-32};
-    new \Vnes{pre} for convenience.
+    new \Vles{pre} for convenience.
 }
 \mypareq{eq:th-nes-unit-derivation-39}{%
     $\Vsize{pre} = \var{n} + 3$
     \cuz{} \Eref{eq:th-nes-unit-derivation-38}.%
 }
 \mypareq{eq:th-nes-unit-derivation-40}{%
-    $\forall \; \Vnat{i} \le \var{n}+2 : \VVelement{pre}{i} = \VVelement{nesP}{i}$
+    $\forall \; \Vnat{i} \le \var{n}+2 : \VVelement{pre}{i} = \VVelement{lesP}{i}$
     \cuz \Eref{eq:th-nes-unit-derivation-38}.
 }
 \mypareq{eq:th-nes-unit-derivation-42}{%
@@ -5421,38 +5424,38 @@ to show \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:th-nes-unit-derivation-47-20}{%
     $\var{n}+1
-    = \Vsize{nesP}\subtract 3 =
-    \Vlastix{nesP}\subtract 2$
+    = \Vsize{lesP}\subtract 3 =
+    \Vlastix{lesP}\subtract 2$
     \cuz{} \Eref{eq:th-nes-unit-derivation-32}.
 }
 \mypareq{eq:th-nes-unit-derivation-47-30}{%
-    $\Vlastix{pre}\subtract 1 = \Vlastix{nesP}\subtract 2$
+    $\Vlastix{pre}\subtract 1 = \Vlastix{lesP}\subtract 2$
     \cuz{} \Eref{eq:th-nes-unit-derivation-47-10},
     \Eref{eq:th-nes-unit-derivation-47-20}.
 }
 \mypareq{eq:th-nes-unit-derivation-48}{%
-    $\Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 2}} \deplus
-    \Symbol{\Velement{nesP}{0}}$
+    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtract 2}} \deplus
+    \Symbol{\Velement{lesP}{0}}$
     \cuz{} \Eref{eq:th-nes-unit-derivation-40},
     \Eref{eq:th-nes-unit-derivation-46},
     \Eref{eq:th-nes-unit-derivation-47-30}.
 }
 \mypareq{eq:th-nes-unit-derivation-50}{%
     \myfn{Next-Eligible}{
-        \Velement{nesP}{\Vlastix{nesP}},
-        \Velement{nesP}{\Vlastix{nesP}\subtract 1}}
-    \linebreak \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+        \Velement{lesP}{\Vlastix{lesP}},
+        \Velement{lesP}{\Vlastix{lesP}\subtract 1}}
+    \linebreak \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-nes-unit-derivation-32}.
 }
 \mypareq{eq:th-nes-unit-derivation-52}{%
     \myfn{Next-Eligible}{
-        \Velement{nesP}{\Vlastix{nesP}\subtract 1},
-        \Velement{nesP}{\Vlastix{nesP}\subtract 2}}
+        \Velement{lesP}{\Vlastix{lesP}\subtract 1},
+        \Velement{lesP}{\Vlastix{lesP}\subtract 2}}
     \linebreak \cuz{} \Dfref{def:next-eligible-sequence},
     \Eref{eq:th-nes-unit-derivation-32}.
 }
 \mypareq{eq:th-nes-unit-derivation-54}{%
-    $\Current{\Velement{nesP}{\Vlastix{nesP}\subtract 1}} = \Current{\Velement{nesP}{\Vlastix{nesP}\subtract 2}}$
+    $\Current{\Velement{lesP}{\Vlastix{lesP}\subtract 1}} = \Current{\Velement{lesP}{\Vlastix{lesP}\subtract 2}}$
     \linebreak \cuz{} \Eref{eq:th-nes-unit-derivation-32},
         \Eref{eq:th-nes-unit-derivation-36}.
 }
@@ -5461,31 +5464,31 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{gathered}
     \tuple{
     \begin{gathered}
-    \Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 1}}
-    \\ \de \Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 2}}
+    \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtract 1}}
+    \\ \de \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtract 2}}
     \end{gathered}
     }
      \in \Rules{\Vint{g}}
-    \\ \because \longThref{NES rule}{th:next-eligible-rule},
+    \\ \because \longThref{LES rule}{th:next-eligible-rule},
     \Eref{eq:th-nes-unit-derivation-50},
     \Eref{eq:th-nes-unit-derivation-52},
     \Eref{eq:th-nes-unit-derivation-54}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-nes-unit-derivation-58}{%
-    $\Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 1}} \deplus
-    \Symbol{\Velement{nesP}{0}}$
+    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtract 1}} \deplus
+    \Symbol{\Velement{lesP}{0}}$
     \cuz{} \Eref{eq:th-nes-unit-derivation-48},
     \Eref{eq:th-nes-unit-derivation-56}.
 }
 \begin{equation}
 \label{eq:th-nes-unit-derivation-59-10}
 \begin{gathered}
-    \Vsize{\Vnes{nesP}} = \var{n} + 3 + 1
-    \\ \land \; \Current{\Velement{nesP}{\Vlastix{nesP}}} =
-        \Current{\Velement{nesP}{0}}
-    \\ \implies \Symbol{\Velement{nesP}{\Vlastix{nesP}\subtract 1}} \deplus
-        \Symbol{\Velement{nesP}{0}}
+    \Vsize{\Vles{lesP}} = \var{n} + 3 + 1
+    \\ \land \; \Current{\Velement{lesP}{\Vlastix{lesP}}} =
+        \Current{\Velement{lesP}{0}}
+    \\ \implies \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtract 1}} \deplus
+        \Symbol{\Velement{lesP}{0}}
     \\ \myparbox{\cuz{}
         derivation \Eref{eq:th-nes-unit-derivation-32}--%
         \Eref{eq:th-nes-unit-derivation-58}.
@@ -5496,9 +5499,9 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-nes-unit-derivation-60}
 \begin{gathered}
-    \forall \var{nes} \in \set{
+    \forall \var{les} \in \set{
         \begin{gathered}
-        \Vnes{ines} : \Vsize{ines} = \var{n} + 3 + 1
+        \Vles{ines} : \Vsize{ines} = \var{n} + 3 + 1
         \\ \land \; \Current{\Velement{ines}{0}} =
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
@@ -5506,7 +5509,7 @@ to show \myfn{INDH}{\var{n}+1}.
     \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtract 1}} \deplus
     \Symbol{\Velement{ines}{0}}
     \\ \myparbox{\cuz{}
-        universal generalization of arbitrary \Vnes{nesP},
+        universal generalization of arbitrary \Vles{lesP},
         \Eref{eq:th-nes-unit-derivation-59-10}.
         This is \myfn{INDH}{\var{n} + 1}.
     }
@@ -5526,20 +5529,20 @@ With the induction, we have the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES finiteness]
+\begin{theorem}[LES finiteness]
 \label{th:nes-finiteness}
-Let \var{nes} be an arbitrary NES.
+Let \var{les} be an arbitrary LES.
 Then
 \begin{gather}
 \label{eq:th-nes-finiteness-02}
-\Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1),
+\Vsize{les} \le \var{max} \times (\Current{\Velement{les}{0}}+1),
 \\ \label{eq:th-nes-finiteness-04}
     \text{where } \Vnat{max} = \size{\Vocab{\Vint{g}}}+1.
 \end{gather}
-Also, every NES is finite:
+Also, every LES is finite:
 \begin{equation}
 \label{eq:th-nes-finiteness-06}
-\forall \; \var{nes} \in \type{NES} : \var{nes} \in \naturals.
+\forall \; \var{les} \in \type{LES} : \var{les} \in \naturals.
 \end{equation}
 \end{theorem}
 
@@ -5550,112 +5553,112 @@ Before embarking on the reductio proper,
 we note two facts.
 First,
 \mypareq{eq:th-nes-finiteness-10}{%
-    $\size{\Vnes{nes}} \ge 1$
-        \cuz{} \longDfref{NES}{def:next-eligible-sequence}.
+    $\size{\Vles{les}} \ge 1$
+        \cuz{} \longDfref{LES}{def:next-eligible-sequence}.
 }
 Equation \Eref{eq:th-nes-finiteness-10} will allow us to assume
-that the element \Velement{nes}{0} exists.
+that the element \Velement{les}{0} exists.
 Second,
 \begin{equation}
 \label{eq:th-nes-finiteness-12}
 \begin{gathered}
 \left( \begin{gathered}
-    \forall \; \Vloc{i} \le \Current{\Velement{nes}{0}} :
-    \\ \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
+    \forall \; \Vloc{i} \le \Current{\Velement{les}{0}} :
+    \\ \size{\set{\Veim{eim} \in \var{les}: \Current{\var{eim}} = \var{i}}}
     \le \var{max}
 \end{gathered} \right)
-\\ \implies \Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1).
+\\ \implies \Vsize{les} \le \var{max} \times (\Current{\Velement{les}{0}}+1).
 \\ \because \Eref{eq:th-nes-finiteness-02}, \Eref{eq:th-nes-finiteness-04}.
 \end{gathered}
 \end{equation}
 We now begin the reductio itself.
 \mypareq{eq:th-nes-finiteness-14}{%
-    $\Vsize{nes} > \var{max} \times (\Current{\Velement{nes}{0}}+1)$
+    $\Vsize{les} > \var{max} \times (\Current{\Velement{les}{0}}+1)$
     \cuz{} negation of \Eref{eq:th-nes-finiteness-02}, AF reductio.%
 }
 \mypareq{eq:th-nes-finiteness-16}{%
-    $\exists \; \Vloc{i} \le \Current{\Velement{nes}{0}} : \size{\set{\Veim{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}}
+    $\exists \; \Vloc{i} \le \Current{\Velement{les}{0}} : \size{\set{\Veim{eim} \in \var{les}: \Current{\var{eim}} = \var{i}}}
         > \var{max}$
         \cuz{}
         contrapositive of \Eref{eq:th-nes-finiteness-12},
         \Eref{eq:th-nes-finiteness-14}.
 }
 \mypareq{eq:th-nes-finiteness-18}{%
-    $\size{\set{\var{eim} \in \var{nes}: \Current{\var{eim}} = \var{i}}} > \var{max}$
+    $\size{\set{\var{eim} \in \var{les}: \Current{\var{eim}} = \var{i}}} > \var{max}$
     \cuz{} \Eref{eq:th-nes-finiteness-16}, existential instantiation of \var{i}.
 }
 
-The sequence \var{nes} is countable,
+The sequence \var{les} is countable,
 and from \Eref{eq:th-nes-finiteness-18} we know that there are at
 least $\var{max}+1$ elements
-of \var{nes} whose current location is \var{i}.
-Therefore we can count out in \var{nes} until we hit the
+of \var{les} whose current location is \var{i}.
+Therefore we can count out in \var{les} until we hit the
 $\var{max}+1$'th element whose current location is \Vloc{i}.
-Call this element \VVelement{nes}{z}, so that
+Call this element \VVelement{les}{z}, so that
 \begin{equation}
 \label{eq:th-nes-finiteness-20}
 \begin{gathered}
-   \Current{\VVelement{nes}{z}} = \var{i}
-   \\ \land \; \size{\set{\Vnat{ix} : \var{ix} \le \var{z} \land \Current{\VVelement{nes}{ix}} = \var{i}}}
+   \Current{\VVelement{les}{z}} = \var{i}
+   \\ \land \; \size{\set{\Vnat{ix} : \var{ix} \le \var{z} \land \Current{\VVelement{les}{ix}} = \var{i}}}
        = \var{max}+1.
    \\ \myparbox{\cuz{} \Eref{eq:th-nes-finiteness-18}, new \var{z}.}
 \end{gathered}
 \end{equation}
 
-Let \Vnes{nes1} be the prefix of \var{nes} such that
+Let \Vles{les1} be the prefix of \var{les} such that
 \begin{equation}
 \label{eq:th-nes-finiteness-22}
-\Vnes{nes1} = \Velement{nes}{0\ldots \var{z}}
-    \because \longThref{NES subsequence}{th:nes-subsequence},
+\Vles{les1} = \Velement{les}{0\ldots \var{z}}
+    \because \longThref{LES subsequence}{th:nes-subsequence},
         \Eref{eq:th-nes-finiteness-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finiteness-22-50}
-    \forall \; \Vnat{ix} \le \var{z} : \VVelement{nes1}{ix} = \VVelement{nes}{ix}
+    \forall \; \Vnat{ix} \le \var{z} : \VVelement{les1}{ix} = \VVelement{les}{ix}
     \because \Eref{eq:th-nes-finiteness-22}.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finiteness-23}
 \begin{gathered}
-   \Vsize{nes1} \ge \var{max}+1
+   \Vsize{les1} \ge \var{max}+1
        \because \Eref{eq:th-nes-finiteness-20}, \Eref{eq:th-nes-finiteness-22}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finiteness-23b}
 \begin{gathered}
-    \size{\set{\Vnat{ix} \in \Dom{\var{nes1}} : \Current{\VVelement{nes1}{ix}} = \var{i}}}
+    \size{\set{\Vnat{ix} \in \Dom{\var{les1}} : \Current{\VVelement{les1}{ix}} = \var{i}}}
        = \var{max}+1
     \\ \because \Eref{eq:th-nes-finiteness-20},
             \Eref{eq:th-nes-finiteness-22},
             \Eref{eq:th-nes-finiteness-22-50}.
 \end{gathered}
 \end{equation}
-Since \var{nes1} is a sequence
+Since \var{les1} is a sequence
 and contains at least one element whose current location is \Vloc{i}
 \Eref{eq:th-nes-finiteness-23b},
-there clearly is a first element of \var{nes1}
+there clearly is a first element of \var{les1}
 whose current location is \Vloc{i}.
-Call that first element \VVelement{nes1}{a},
+Call that first element \VVelement{les1}{a},
 so that
 \begin{gather}
 \label{eq:th-nes-finiteness-24a}
-   \Vnat{a} \le \Vlastix{nes1}
+   \Vnat{a} \le \Vlastix{les1}
 \\ \label{eq:th-nes-finiteness-24b}
-   \Current{\VVelement{nes1}{a}} = \var{i}
+   \Current{\VVelement{les1}{a}} = \var{i}
 \\ \label{eq:th-nes-finiteness-26}
-   \forall \; \var{ii} < \var{a} : \Current{\VVelement{nes1}{ii}} \neq \var{i}.
+   \forall \; \var{ii} < \var{a} : \Current{\VVelement{les1}{ii}} \neq \var{i}.
 \end{gather}
 
-We let \var{run} be a new NES:
+We let \var{run} be a new LES:
 \begin{equation}
 \label{eq:th-nes-finiteness-28}
-\Vnes{run} = \Velement{nes1}{\var{a}\ldots \var{z}}
+\Vles{run} = \Velement{les1}{\var{a}\ldots \var{z}}
     \because \Thref{th:nes-subsequence},
         \Eref{eq:th-nes-finiteness-22},
         \Eref{eq:th-nes-finiteness-24a}.
 \end{equation}
-\Vnes{run} is so called because it is
+\Vles{run} is so called because it is
 a run of EIM's with the property that
 they share the same current location,
 though we have yet to prove this.
@@ -5663,7 +5666,7 @@ We do so next.
 \begin{equation}
 \label{eq:th-nes-finiteness-28-10}
 \begin{gathered}
-   \Current{\VVelement{nes1}{a}} = \var{i} = \Current{\VVelement{nes1}{z}}
+   \Current{\VVelement{les1}{a}} = \var{i} = \Current{\VVelement{les1}{z}}
        \\ \because \Eref{eq:th-nes-finiteness-20}, \Eref{eq:th-nes-finiteness-22-50},
        \Eref{eq:th-nes-finiteness-24b}.
 \end{gathered}
@@ -5672,8 +5675,8 @@ We do so next.
 \label{eq:th-nes-finiteness-28-20}
 \begin{gathered}
     \forall \; \Vnat{ix} \in \set{ \Vnat{ix1} : \var{a} \le \var{ix1} \le \var{z}} :
-    \\ \Current{\VVelement{nes1}{ix}} = \Vloc{i}
-    \\ \because \longThref{NES current location run}{th:nes-current-location-run},
+    \\ \Current{\VVelement{les1}{ix}} = \Vloc{i}
+    \\ \because \longThref{LES current location run}{th:nes-current-location-run},
     \Eref{eq:th-nes-finiteness-28-10}.
 \end{gathered}
 \end{equation}
@@ -5689,8 +5692,8 @@ We next characterize the cardinality of \var{run}.
 \begin{equation}
 \label{eq:th-nes-finiteness-30}
 \begin{gathered}
-   \forall \; \var{ii} \in \Dom{\var{nes1}} :
-   \\ \Current{\VVelement{nes1}{ii}} = \var{i}
+   \forall \; \var{ii} \in \Dom{\var{les1}} :
+   \\ \Current{\VVelement{les1}{ii}} = \var{i}
    \iff \var{a} \le \var{ii} \le \var{z}
    \\ \because \Eref{eq:th-nes-finiteness-22},
     \Eref{eq:th-nes-finiteness-26},
@@ -5749,9 +5752,9 @@ Let
 \begin{equation}
 \label{eq:th-nes-finiteness-40}
 \begin{gathered}
-\Vnes{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
+\Vles{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
     \\ \myparbox{\cuz{}
-        \longThref{NES subsequence}{th:nes-subsequence},
+        \longThref{LES subsequence}{th:nes-subsequence},
         \Eref{eq:th-nes-finiteness-28},
         \Eref{eq:th-nes-finiteness-37},
         \Eref{eq:th-nes-finiteness-38}.
@@ -5795,7 +5798,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{gathered}
     \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}} \deplus
     \Symbol{\Velement{cycle}{0}}
-    \\ \myparbox{\longThref{NES unit derivation}{th:nes-unit-derivation},
+    \\ \myparbox{\longThref{LES unit derivation}{th:nes-unit-derivation},
         \Eref{eq:th-nes-finiteness-40},
         \Eref{eq:th-nes-finiteness-48},
         \Eref{eq:th-nes-finiteness-52}.
@@ -5820,7 +5823,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{equation}
 \label{eq:th-nes-finiteness-60}
 \begin{gathered}
-    \Vsize{nes} \le \var{max} \times (\Current{\Velement{nes}{0}}+1)
+    \Vsize{les} \le \var{max} \times (\Current{\Velement{les}{0}}+1)
     \\ \myparbox{\cuz{} negation of \Eref{eq:th-nes-finiteness-14}
         by reductio \Eref{eq:th-nes-finiteness-14}--\Eref{eq:th-nes-finiteness-58}.%
     }
@@ -5836,32 +5839,32 @@ completing the proof.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES uniqueness]
+\begin{theorem}[LES uniqueness]
 \label{th:nes-uniqueness}
-If two NES's of the same length have the same base element,
+If two LES's of the same length have the same base element,
 then they are identical.
 \end{theorem}
 
 \begin{proof}
-Let \var{nes1} and \var{nes2} be two NES's of the same
+Let \var{les1} and \var{les2} be two LES's of the same
 length.
 We assume for a reductio that they differ.
-If \var{nes1} and \var{nes2} differ, they must differ
+If \var{les1} and \var{les2} differ, they must differ
 in one of the elements.
 Therefore, there will be a first index at which the elements differ,
 call it \Vnat{first}.
 \begin{equation}
 \label{eq:th-nes-uniqueness-10}
-        \VVelement{nes1}{first} \neq \VVelement{nes2}{first}
+        \VVelement{les1}{first} \neq \VVelement{les2}{first}
         \because \text{AF reductio}.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-uniqueness-12}
-        \forall \Vnat{ix} < \var{first} : \VVelement{nes1}{ix} = \VVelement{nes2}{ix}
+        \forall \Vnat{ix} < \var{first} : \VVelement{les1}{ix} = \VVelement{les2}{ix}
         \because \text{AF reductio}.
 \end{equation}
 Since, by assumption for the theorem,
-\var{nes1} and \var{nes2} share the same base
+\var{les1} and \var{les2} share the same base
 element, we know that
 \begin{equation}
 \label{eq:th-nes-uniqueness-20}
@@ -5872,21 +5875,21 @@ element, we know that
 \label{eq:th-nes-uniqueness-22}
 \begin{gathered}
     \myfn{Next-Eligible}{
-        \VVelement{nes1}{first},
-        \Velement{nes1}{\var{first}\subtract 1}}
+        \VVelement{les1}{first},
+        \Velement{les1}{\var{first}\subtract 1}}
     \\ \land \; \myfn{Next-Eligible}{
-        \VVelement{nes2}{first},
-        \Velement{nes2}{\var{first}\subtract 1}}
+        \VVelement{les2}{first},
+        \Velement{les2}{\var{first}\subtract 1}}
 \\ \because
-        \longDfref{NES}{def:next-eligible-sequence},
+        \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-nes-uniqueness-20}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-uniqueness-24}
 \begin{gathered}
-        \Velement{nes1}{\var{first}\subtract 1}
-        \neq \Velement{nes2}{\var{first}\subtract 1}
+        \Velement{les1}{\var{first}\subtract 1}
+        \neq \Velement{les2}{\var{first}\subtract 1}
     \\ \because \longThref{Next eligible uniqueness}{th:next-eligible-uniqueness},
     \Eref{eq:th-nes-uniqueness-22}.
 \end{gathered}
@@ -5897,78 +5900,78 @@ and the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[NES trichotomy]
+\begin{theorem}[LES trichotomy]
 \label{th:nes-trichotomy}
-If two NES's of the same length have the same base element,
+If two LES's of the same length have the same base element,
 then there are three mutually exclusive possibilites:
 \begin{itemize}
 \item They are identical.
-\item The first NES is a proper prefix of the second.
-\item The second NES is a proper prefix of the first.
+\item The first LES is a proper prefix of the second.
+\item The second LES is a proper prefix of the first.
 \end{itemize}
 That is, if
 \begin{gather}
 \label{eq:th-nes-trichotomy-02}
-\var{nes1} \in \type{NES}
+\var{les1} \in \type{LES}
 \\ \label{eq:th-nes-trichotomy-04}
-\; \land \; \var{nes2} \in \type{NES}
+\; \land \; \var{les2} \in \type{LES}
 \\ \label{eq:th-nes-trichotomy-06}
-\land \; \Velement{nes1}{0} = \Velement{nes2}{0}
+\land \; \Velement{les1}{0} = \Velement{les2}{0}
 \end{gather}
 then
 \begin{gather}
-\var{nes1} = \var{nes2}
+\var{les1} = \var{les2}
 \\
 \lor \; \left(
-    \Vsize{nes1} < \Vsize{nes2} \land \var{nes1} = \Velement{nes2}{0\ldots \Vlastix{nes1}}
+    \Vsize{les1} < \Vsize{les2} \land \var{les1} = \Velement{les2}{0\ldots \Vlastix{les1}}
     \right)
 \\
 \lor \; \left(
-    \Vsize{nes2} < \Vsize{nes1} \land \var{nes2} = \Velement{nes1}{0\ldots \Vlastix{nes2}}
+    \Vsize{les2} < \Vsize{les1} \land \var{les2} = \Velement{les1}{0\ldots \Vlastix{les2}}
     \right).
 \end{gather}
 \end{theorem}
 
 \begin{proof}
 The proof is by mutually exclusive cases:
-$\Vsize{nes2} = \Vsize{nes1}$,
-$\Vsize{nes1} < \Vsize{nes2}$, and
-$\Vsize{nes2} > \Vsize{nes1}$.
+$\Vsize{les2} = \Vsize{les1}$,
+$\Vsize{les1} < \Vsize{les2}$, and
+$\Vsize{les2} > \Vsize{les1}$.
 The case where
-$\Vsize{nes2} = \Vsize{nes1}$ is shown in
-\longThref{NES uniqueness}{th:nes-uniqueness}.
+$\Vsize{les2} = \Vsize{les1}$ is shown in
+\longThref{LES uniqueness}{th:nes-uniqueness}.
 
 For the case where
 \begin{equation}
 \label{eq:th-nes-trichotomy-18}
-\Vsize{nes1} < \Vsize{nes2}
+\Vsize{les1} < \Vsize{les2}
 \end{equation}
 we have
 \mypareq{eq:th-nes-trichotomy-20}{%
-    \Vnes{subNes2} = \Velement{nes2}{0\ldots \Vlastix{nes1}}
-    \linebreak \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+    \Vles{subNes2} = \Velement{les2}{0\ldots \Vlastix{les1}}
+    \linebreak \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
         \Eref{eq:th-nes-trichotomy-18}.%
 }
 \begin{equation}
 \label{eq:th-nes-trichotomy-22}
-\Vsize{subNes2} = \Vsize{nes1} \because \Eref{eq:th-nes-trichotomy-20}
+\Vsize{subNes2} = \Vsize{les1} \because \Eref{eq:th-nes-trichotomy-20}
 \end{equation}
 \mypareq{eq:th-nes-trichotomy-24}{%
-    \Velement{subNes2}{0} = \Velement{nes2}{0} \cuz{} \Eref{eq:th-nes-trichotomy-20}.%
+    \Velement{subNes2}{0} = \Velement{les2}{0} \cuz{} \Eref{eq:th-nes-trichotomy-20}.%
 }
 \mypareq{eq:th-nes-trichotomy-26}{%
-    \Velement{subNes2}{0} = \Velement{nes1}{0} \cuz{}
+    \Velement{subNes2}{0} = \Velement{les1}{0} \cuz{}
         \Eref{eq:th-nes-trichotomy-06}, \Eref{eq:th-nes-trichotomy-24}.%
 }
 \mypareq{eq:th-nes-trichotomy-27}{%
-    \var{subNes2} = \var{nes1} \linebreak
+    \var{subNes2} = \var{les1} \linebreak
     \cuz{}
-        \longThref{NES uniqueness}{th:nes-uniqueness},
+        \longThref{LES uniqueness}{th:nes-uniqueness},
         \Eref{eq:th-nes-trichotomy-22},
         \Eref{eq:th-nes-trichotomy-26}.%
 }
 \mypareq{eq:th-nes-trichotomy-28}{%
-    \Vnes{nes1} is a proper prefix of \Vnes{nes2}
+    \Vles{les1} is a proper prefix of \Vles{les2}
     \cuz{} \Eref{eq:th-nes-trichotomy-18},
     \Eref{eq:th-nes-trichotomy-20},
     \Eref{eq:th-nes-trichotomy-27}, and the definition of
@@ -5976,7 +5979,7 @@ we have
 }
 
 The last of the three cases,
-$\Vsize{nes2} < \Vsize{nes1}$, is the exact reverse of the previous case,
+$\Vsize{les2} < \Vsize{les1}$, is the exact reverse of the previous case,
 and has a symmetrical proof.
 \myqed
 \end{proof}
@@ -6053,18 +6056,21 @@ and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
 \dispEnd
 \end{definition}
 
+\chapter{Leo Source Sequences}
+\label{sec:lss}
+
 \begin{definition}[Leo source sequence {[}LSS{]}]
 \label{def:leo-source-sequence}
 A \dfn{Leo source EIM sequence},
-or \dfn{Leo source sequence} is an NES,
+or \dfn{Leo source sequence} is an LES,
 every element of which is a Leo source EIM.
 That is,
 \begin{equation}
 \label{eq:def-leo-source-sequence-10}
 \type{LSS} = \set{
 \begin{gathered}
-    \var{nes} \in \type{NES} :
-    \\ \forall \; \Vnat{i} \in \Dom{\var{nes}} : \myfn{Is-source}{\VVelement{nes}{i}}
+    \var{les} \in \type{LES} :
+    \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{Is-source}{\VVelement{les}{i}}
 \end{gathered}
 }.
 \quad \dispEnd
@@ -6104,8 +6110,8 @@ Our example of an LSS containing \var{eim} as its base element is
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-source-eim-containment-18}{%
-   $\var{example} \in \type{NES}$ \cuz{}
-        \longDfref{NES}{def:next-eligible-sequence},
+   $\var{example} \in \type{LES}$ \cuz{}
+        \longDfref{LES}{def:next-eligible-sequence},
        \Eref{eq:th-source-eim-containment-14},
        \Eref{eq:th-source-eim-containment-16}.%
 }
@@ -6130,16 +6136,16 @@ to say that \var{lss} is maximal.
 \dispEnd
 \end{definition}
 
-\begin{theorem}[NES--LSS equivalence]
+\begin{theorem}[LES--LSS equivalence]
 \label{th:nes-lss-equivalence}
-Two LSS's are equal iff their underlying NES's
+Two LSS's are equal iff their underlying LES's
 are equal.
 \end{theorem}
 
 \begin{proof}
-Let \var{lss} be an LSS and \var{nes} be its underlying NES.
-\var{lss} and \var{nes} are defined to be the same sequence
-of EIM's, so that $\Vnes{lss} = \Vnes{nes}$.
+Let \var{lss} be an LSS and \var{les} be its underlying LES.
+\var{lss} and \var{les} are defined to be the same sequence
+of EIM's, so that $\Vles{lss} = \Vles{les}$.
 The theorem follows directly.
 \myqed
 \end{proof}
@@ -6153,10 +6159,10 @@ then they are identical.
 \begin{proof}
 \todo{Prove this}
 Let \Vlss{lss1} and \Vlss{lss2} be two LSS's,
-and let their underlying NES's be \Vnes{nes1}
-and \Vnes{nes2} so that
+and let their underlying LES's be \Vles{les1}
+and \Vles{les2} so that
 \mypareq{eq:th-lss-uniqueness-10}{%
-    $\var{nes1} = \var{lss1} \land \var{nes2} = \var{lss2}$
+    $\var{les1} = \var{lss1} \land \var{les2} = \var{lss2}$
         \cuz{} \longDfref{LSS}{def:leo-source-sequence}.%
 }
 We proceed by reductio.
@@ -6170,15 +6176,15 @@ We proceed by reductio.
     $\var{lss1} \neq \var{lss2}$ \cuz{} AF reductio.%
 }
 \mypareq{eq:th-lss-uniqueness-26}{%
-    $\Vsize{nes1} = \Vsize{nes2}$ \cuz{}
+    $\Vsize{les1} = \Vsize{les2}$ \cuz{}
         \Eref{eq:th-lss-uniqueness-10}, \Eref{eq:th-lss-uniqueness-20}.%
 }
 \mypareq{eq:th-lss-uniqueness-28}{%
-    $\Velement{nes1}{0} = \Velement{nes2}{0}$ \cuz{}
+    $\Velement{les1}{0} = \Velement{les2}{0}$ \cuz{}
         \Eref{eq:th-lss-uniqueness-10}, \Eref{eq:th-lss-uniqueness-22}.%
 }
 \mypareq{eq:th-lss-uniqueness-30}{%
-     $\var{nes1} = \var{nes2}$ \cuz{} \longThref{NES uniqueness}{th:nes-uniqueness},
+     $\var{les1} = \var{les2}$ \cuz{} \longThref{LES uniqueness}{th:nes-uniqueness},
         \Eref{eq:th-lss-uniqueness-26}, \Eref{eq:th-lss-uniqueness-28}.%
 }
 \mypareq{eq:th-lss-uniqueness-32}{%
@@ -6212,13 +6218,13 @@ then
 
 \begin{proof}
 \mypareq{eq:th-lss-subsequence-10}{%
-   $\var{seq} \in \type{NES}$
+   $\var{seq} \in \type{LES}$
         \cuz{} \longDfref{LSS}{def:leo-source-sequence},
         \Eref{eq:th-lss-subsequence-02}.%
 }
 \mypareq{eq:th-lss-subsequence-12}{%
-   $\var{subseq} \in \type{NES}$
-        \cuz{} \longThref{NES subsequence}{th:nes-subsequence},
+   $\var{subseq} \in \type{LES}$
+        \cuz{} \longThref{LES subsequence}{th:nes-subsequence},
         \Eref{eq:th-lss-subsequence-04},
         \Eref{eq:th-lss-subsequence-06},
         \Eref{eq:th-lss-subsequence-10}.%
@@ -6269,7 +6275,7 @@ iff
 \begin{proof}
 The forward direction follows immediately from the definition
 of an LSS \Dfref{def:leo-source-sequence},
-and definition of an NES \Dfref{def:next-eligible-sequence}.
+and definition of an LES \Dfref{def:next-eligible-sequence}.
 We prove the reverse direction, by assuming
 the antecedant to show the consequent.
 \mypareq{eq:th-lss-extension-10}{%
@@ -6296,8 +6302,8 @@ the antecedant to show the consequent.
        new \var{extended} for convenience.
 }
 \mypareq{eq:th-lss-extension-20}{%
-   $\var{extended} \in \type{NES}$
-   \cuz{} \longThref{NES extension}{th:nes-extension},
+   $\var{extended} \in \type{LES}$
+   \cuz{} \longThref{LES extension}{th:nes-extension},
         \Eref{eq:th-lss-extension-12},
         \Eref{eq:th-lss-extension-18}.
 }
@@ -6634,28 +6640,28 @@ For any length,
     \Eref{eq:th-maximal-lss-existence-10-20}.
 \end{gathered}
 \end{equation}
-Among the NES's with \var{eim} as their base,
+Among the LES's with \var{eim} as their base,
 there is a maximum length,
 call it \Vnat{possible}:
 \begin{equation}
 \label{eq:th-maximal-lss-existence-18}
 \begin{gathered}
-\forall \; \Vnes{nes} : \Velement{nes}{0} = \var{eim}
-    \implies \Vsize{nes} \le \Vnat{possible}
-     \\ \text{where } \var{possible} = \size{\Vocab{\Vint{g}}}+1 \times (\Current{\Velement{nes}{0}}+1),
-    \\ \because \longThref{NES finiteness}{th:nes-finiteness},
+\forall \; \Vles{les} : \Velement{les}{0} = \var{eim}
+    \implies \Vsize{les} \le \Vnat{possible}
+     \\ \text{where } \var{possible} = \size{\Vocab{\Vint{g}}}+1 \times (\Current{\Velement{les}{0}}+1),
+    \\ \because \longThref{LES finiteness}{th:nes-finiteness},
 \end{gathered}
 \end{equation}
 Therefore, there is a maximum possible LSS length for
 LSS's with \var{eim} as their base.
 \mypareq{eq:th-maximal-lss-existence-20}{%
-    The length of an LSS is the same as that of its underlying NES
+    The length of an LSS is the same as that of its underlying LES
     \cuz{} \longDfref{LSS}{def:leo-source-sequence}.
 }
 \begin{equation}
 \label{eq:th-maximal-lss-existence-22}
 \begin{gathered}
-\forall \; \Vnes{lss} \in \var{based} : \Vsize{lss} \le \var{possible}
+\forall \; \Vles{lss} \in \var{based} : \Vsize{lss} \le \var{possible}
     \\ \because \Eref{eq:th-maximal-lss-existence-10-20},
     \Eref{eq:th-maximal-lss-existence-18},
         \Eref{eq:th-maximal-lss-existence-20}.
@@ -7299,7 +7305,7 @@ for a derivation.
     \Eref{eq:th-maximal-lss-lim-invariant-62}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-66}{%
-    $\var{max} \in \type{NES}$
+    $\var{max} \in \type{LES}$
     \cuz{} \longDfref{LSS}{def:leo-source-sequence},
         \Eref{eq:th-maximal-lss-lim-invariant-42}.
 }
@@ -7328,7 +7334,7 @@ for a derivation.
 \end{equation}
 \mypareq{eq:th-maximal-lss-lim-invariant-74}{%
     $\Valid{\Velement{max}{0}}$
-    \cuz{} \longDfref{NES}{def:next-eligible-sequence},
+    \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-maximal-lss-lim-invariant-66}.
 }
 \begin{equation}
