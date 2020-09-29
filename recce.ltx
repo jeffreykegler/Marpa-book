@@ -5635,7 +5635,9 @@ Since \var{nes1} is a sequence
 and contains at least one element whose current location is \Vloc{i}
 \Eref{eq:th-nes-finiteness-23b},
 there clearly is a first element of \var{nes1}
-whose current location is \Vloc{i}, call it \Vnat{a}:
+whose current location is \Vloc{i}.
+Call that first element \VVelement{nes1}{a},
+so that
 \begin{gather}
 \label{eq:th-nes-finiteness-24a}
    \Vnat{a} \le \Vlastix{nes1}
@@ -5655,9 +5657,9 @@ We let \var{run} be a new NES:
 \end{equation}
 \Vnes{run} is so called because it is
 a run of EIM's with the property that
-they share the same current location.
-We next prove
-that \var{run} actually has this property.
+they share the same current location,
+though we have yet to prove this.
+We do so next.
 \begin{equation}
 \label{eq:th-nes-finiteness-28-10}
 \begin{gathered}
@@ -5677,10 +5679,11 @@ that \var{run} actually has this property.
 \end{equation}
 \begin{equation}
 \label{eq:th-nes-finiteness-28-30}
-\begin{gathered}
-    \forall \; \Vnat{ix} \in \Dom{\var{run}} : \Current{\VVelement{run}{ix}} = \Vloc{i}
-    \\ \because \Eref{eq:th-nes-finiteness-28}, \Eref{eq:th-nes-finiteness-28-20}.
-\end{gathered}
+   \forall \; \Vnat{ix} \in \Dom{\var{run}} : 
+       \Current{\VVelement{run}{ix}} = \var{i}
+   \because
+    \Eref{eq:th-nes-finiteness-28},
+    \Eref{eq:th-nes-finiteness-28-20}.
 \end{equation}
 We next characterize the cardinality of \var{run}.
 \begin{equation}
@@ -5688,9 +5691,10 @@ We next characterize the cardinality of \var{run}.
 \begin{gathered}
    \forall \; \var{ii} \in \Dom{\var{nes1}} :
    \\ \Current{\VVelement{nes1}{ii}} = \var{i}
-   \implies \var{a} \le \var{ii} \le \var{z}
+   \iff \var{a} \le \var{ii} \le \var{z}
    \\ \because \Eref{eq:th-nes-finiteness-22},
-    \Eref{eq:th-nes-finiteness-26}.
+    \Eref{eq:th-nes-finiteness-26},
+    \Eref{eq:th-nes-finiteness-28-20}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5699,7 +5703,6 @@ We next characterize the cardinality of \var{run}.
    \because
     \Eref{eq:th-nes-finiteness-23b},
     \Eref{eq:th-nes-finiteness-28},
-   \Eref{eq:th-nes-finiteness-28-30},
     \Eref{eq:th-nes-finiteness-30}.
 \end{equation}
 \begin{equation}
@@ -5747,10 +5750,12 @@ Let
 \label{eq:th-nes-finiteness-40}
 \begin{gathered}
 \Vnes{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
-    \\ \because \longThref{NES subsequence}{th:nes-subsequence},
+    \\ \myparbox{\cuz{}
+        \longThref{NES subsequence}{th:nes-subsequence},
         \Eref{eq:th-nes-finiteness-28},
         \Eref{eq:th-nes-finiteness-37},
-        \Eref{eq:th-nes-finiteness-38}.%
+        \Eref{eq:th-nes-finiteness-38}.
+    }
 \end{gathered}
 \end{equation}
 In \Eref{eq:th-nes-finiteness-40},
@@ -5781,7 +5786,8 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \label{eq:th-nes-finiteness-52}
 \begin{gathered}
         \forall \; \Vnat{ix} \in \Dom{\var{cycle}} : \Current{\VVelement{cycle}{ix}} = \Vloc{i}
-        \\ \because \Eref{eq:th-nes-finiteness-28-30}, \Eref{eq:th-nes-finiteness-40}.
+        \\ \because \Eref{eq:th-nes-finiteness-28-30},
+            \Eref{eq:th-nes-finiteness-40}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5790,13 +5796,12 @@ we know that \Velement{run}{\var{zz}+1} exists because of
     \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtract 1}} \deplus
     \Symbol{\Velement{cycle}{0}}
     \\ \myparbox{\longThref{NES unit derivation}{th:nes-unit-derivation},
+        \Eref{eq:th-nes-finiteness-40},
         \Eref{eq:th-nes-finiteness-48},
-        \Eref{eq:th-nes-finiteness-52}.%
+        \Eref{eq:th-nes-finiteness-52}.
     }
 \end{gathered}
 \end{equation}
-In \Eref{eq:th-nes-finiteness-54}, recall that we know that
-        $\var{cycle} \in \type{NES}$ by \Eref{eq:th-nes-finiteness-40}.
 \begin{equation}
 \label{eq:th-nes-finiteness-56}
 \begin{gathered}
@@ -5822,11 +5827,12 @@ In \Eref{eq:th-nes-finiteness-54}, recall that we know that
 \end{gathered}
 \end{equation}
 
-\Eref{eq:th-nes-finiteness-60}
+The equation \Eref{eq:th-nes-finiteness-60}
 is \Eref{eq:th-nes-finiteness-02} of the theorem.
-We conclude \Eref{eq:th-nes-finiteness-06} directly
+We conclude \Eref{eq:th-nes-finiteness-06} of
+the theorem immediately
 from \Eref{eq:th-nes-finiteness-02},
-which completes the proof.
+completing the proof.
 \myqed
 \end{proof}
 
