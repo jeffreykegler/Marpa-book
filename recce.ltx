@@ -5531,6 +5531,7 @@ With the induction, we have the theorem.
 
 \begin{theorem}[LES finiteness]
 \label{th:les-finiteness}
+\todo{Split LES finiteness theorem in half}
 Let \var{les} be an arbitrary LES.
 Then
 \begin{gather}
@@ -5682,7 +5683,7 @@ We do so next.
 \end{equation}
 \begin{equation}
 \label{eq:th-les-finiteness-28-30}
-   \forall \; \Vnat{ix} \in \Dom{\var{run}} : 
+   \forall \; \Vnat{ix} \in \Dom{\var{run}} :
        \Current{\VVelement{run}{ix}} = \var{i}
    \because
     \Eref{eq:th-les-finiteness-28},
@@ -5848,13 +5849,20 @@ then they are identical.
 \begin{proof}
 Let \var{les1} and \var{les2} be two LES's of the same
 length.
+If $\Vsize{les1} = \Vsize{les1} = 1$, we have the theorem trivially.
+Therefore, for the rest of this proof, we may assume that
+\mypareq{eq:th-les-uniqueness-10}{%
+    $\Vsize{les1} > 1 \land \Vsize{les2} > 1$
+    \cuz AF subcase.
+}
+
 We assume for a reductio that they differ.
 If \var{les1} and \var{les2} differ, they must differ
 in one of the elements.
 Therefore, there will be a first index at which the elements differ,
 call it \Vnat{first}.
 \begin{equation}
-\label{eq:th-les-uniqueness-10}
+\label{eq:th-les-uniqueness-11}
         \VVelement{les1}{first} \neq \VVelement{les2}{first}
         \because \text{AF reductio}.
 \end{equation}
@@ -5869,7 +5877,7 @@ element, we know that
 \begin{equation}
 \label{eq:th-les-uniqueness-20}
 \var{first} > 0 \because \text{AF theorem},
-    \Eref{eq:th-les-uniqueness-10}.
+    \Eref{eq:th-les-uniqueness-11}.
 \end{equation}
 \begin{equation}
 \label{eq:th-les-uniqueness-22}
@@ -5894,7 +5902,8 @@ element, we know that
     \Eref{eq:th-les-uniqueness-22}.
 \end{gathered}
 \end{equation}
-\Eref{eq:th-les-uniqueness-24} contradicts \Eref{eq:th-les-uniqueness-12},
+The equation \Eref{eq:th-les-uniqueness-24}
+contradicts \Eref{eq:th-les-uniqueness-12},
 which shows the reductio
 and the theorem.
 \myqed
@@ -5996,7 +6005,7 @@ Then the set of LIM's of \var{src} is
 \\ \left\lbrace
     \begin{gathered}
     \tuple{ \Vdr{dr}, \Postdot{\var{src}}, \Vorig{orig}, \Current{\var{src}}} :
-    \\ \Valid{\var{src}}
+    \\ \Valid{\var{src}} \land \myfn{Is-Leo-Eligible}{\var{src}}
     \\ \land \;
         \left( \begin{gathered}
             \size{\myfn{next-lims}{\var{src}}} = 0
@@ -6038,10 +6047,6 @@ and we say that \mylim{\ell} is valid if \Valid{\ell} where
 
 \end{definition}
 
-We will prove that there is at most one LIM
-in the set \myfn{lim}{\var{src}}, but for now we
-cannot assume that.
-
 \begin{definition}[Leo source EIM]
 \label{def:leo-source-eim}
 \[
@@ -6055,6 +6060,23 @@ we say that the EIM \Veim{src} is the \dfn{source} of $\ell$,
 and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
 \dispEnd
 \end{definition}
+
+\begin{theorem}[Source function]
+\label{th:source-fn}
+There is a function
+\[
+    \Source{\mylim{\ell}}
+    \defined \riota \var{src} \in \type{EIM} :
+    \ell \in \myfn{lims}{\var{src}}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Source function theorem}
+\end{proof}
+
+We will prove that there is also a \myfn{LIM}{}
+function, but we are not yet in a position to do this.
 
 \chapter{Leo source sequences}
 \label{sec:lss}
