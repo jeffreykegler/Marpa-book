@@ -98,18 +98,19 @@
 \setlength\abovedisplayshortskip{3pt}
 \setlength\belowdisplayshortskip{3pt}
 
-\newcommand{\fnset}[2]{\ensuremath{{#1}^{\textstyle#2}}}
+\newcommand{\fnset}[2]{\ensuremath{{#1}\to{#2}}}
 \newcommand{\finseq}[1]{\ensuremath{
-    \set{ \var{f} : \exists \; \var{X} \in \naturals : \var{f} \in \fnset{\var{#1}}{\var{X}} }
+    \set{ \var{f} : \exists \; \var{X} \in \naturals : \var{f} \in \fnset{\var{X}}{\var{#1}} }
 }}
 \newcommand{\infseq}[1]{\ensuremath{
     \set{ \var{f} : \exists \; \var{X} \in (\naturals \cup \set{\naturals}) :
-        \var{f} \in \fnset{\var{#1}}{\var{X}} }
+        \var{f} \in \fnset{\var{X}}{\var{#1}} }
 }}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 \newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
+\newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -869,7 +870,7 @@ We believe this erase of the field's history is much
 of the explanation for its slowed progress
 after the 1970s.
 
-This document is fated to a primarily electronic
+This book is fated to a primarily electronic
 dissemination,
 and this liberates us from the cruel trade-offs of
 printed dissemination.
@@ -882,7 +883,7 @@ into mere symbol-pushing.
 
 We will be willing to include explanations,
 or adopt conventions,
-which increase the length of this document,
+which increase the length of this book,
 if they shorten the time needed for a careful reading.
 We include narrative and motivation if they
 seem likely to be helpful in the preservation of
@@ -890,6 +891,15 @@ useful history.
 And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which can pose a challenge to the eyesight.
+
+Mathematics in this book may be written \dfn{verbally} or
+in \dfn{notation}.
+We say that a mathematical statement is written ``verbally'' if it uses words
+of the English language.
+We say that a mathematical statement is ``in notation'' if it uses mathematical
+symbols.
+For example, the statement ``six times seven equals forty-two'' is written
+verbally --- its equivalent in notation is $6\times7=42$.
 
 In this paper,
 internal references will be of the form
@@ -979,7 +989,43 @@ would be written as
 \forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
 \]
 
-We write \fnset{Y}{X} for the set of functions from \var{X} to \var{Y}.
+We use $\existsUniq$ as a uniqueness quantification operator,
+so that
+\[
+    \existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}
+\]
+is equivalent to
+$$\exists \; \var{x} \in \var{A} : \myfn{P}{\var{x}} \land \forall \; \var{y} : \myfn{P}{\var{y}} \implies \var{y}=\var{x}.$$
+We use Russell's iota operator,
+so that
+\begin{equation}
+\label{eq:def-riota}
+\riota \var{x} \in \var{A} : \myfn{P}{x}
+\end{equation}
+is the unique \var{x} in the set \var{A} such that 
+\myfn{P}{x} is true.
+\Eref{eq:def-riota}
+is defined iff
+$\existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}$.
+
+We write \fnset{\var{X}}{\var{Y}}
+for the set of functions from \var{X} to \var{Y},%
+\footnote{%
+    The set of functions from
+    \var{Y} to \var{X} is often written
+    $\var{X}^\var{Y}$, but we prefer to avoid
+    the optometric and typographic difficulties
+    that superscripts introduce.
+}
+so that $\var{f}\in\fnset{\var{X}}{\var{Y}}$ states
+that \var{f} is a function with domain \var{X}
+and codomain \var{Y}.%
+\footnote{%
+    \fnset{\var{X}}{\var{Y}}
+    is often written
+    $\var{f}:\fnset{\var{X}}{\var{Y}}$ but we prefer to avoid
+    overloading the colon operator.
+}
 In our naive set theory, a sequence of \var{Y}'s is identical to a function from
 integers to \var{Y}, so that \infseq{Y} is the set of sequences of \var{Y}'s,
 and \finseq{Y} is the set of finite sequences of \var{Y}'s.
@@ -1278,7 +1324,7 @@ $\myfn{floor}{\var{a}}$.
 {$\implies$} & Implication \\
 {$\iff$} & Logical equivalence \\
 {$:$}    & ``such that'' \\
-{$\riota$ $\exists$ $\forall$} & Quantifiers \\
+{$\riota$ $\exists$ $\existsUniq$ $\forall$} & Quantifiers \\
 {$\defined$} & Definition \\[12pt]
 {$\because$} & ``because'' (hint separator) \\[12pt]
 \hline
