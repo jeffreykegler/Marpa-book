@@ -6108,23 +6108,6 @@ and we say that the EIM \mylim{\ell} is the \dfn{lim} of \Veim{src}.
 \dispEnd
 \end{definition}
 
-\begin{theorem}[Source function]
-\label{th:source-fn}
-There is a function
-\[
-    \Source{\mylim{\ell}}
-    \defined \riota \var{src} \in \type{EIM} :
-    \ell \in \myfn{lims}{\var{src}}
-\]
-\end{theorem}
-
-\begin{proof}
-\todo{Prove Source function theorem}
-\end{proof}
-
-We will prove that there is also a \myfn{LIM}{}
-function, but we are not yet in a position to do this.
-
 \chapter{Leo source sequences}
 \label{sec:lss}
 
@@ -6152,13 +6135,31 @@ Every source EIM is the base element of at least one LSS.
 \end{theorem}
 
 \begin{proof}
-The proof is by construction of an example.
-Let \Veim{eim} be an arbitrary source EIM.
-\begin{equation}
-\label{eq:th-source-eim-containment-10}
-\myfn{Is-source}{\var{eim}}
-\because \longDfref{Leo source EIM}{def:leo-source-eim}.
-\end{equation}
+Our proof strategy is first,
+given an arbitrary source EIM,
+call it Veim{eim},
+to construct an example
+of an \type{LSS} which has \var{eim}
+as its base element.
+The theorem will follow immediately by existential generalization.
+
+\mypareq{eq:th-source-eim-containment-10-10}{%
+    $\myfn{Is-source}{\var{eim}}$
+    \cuz{} \longDfref{Leo source EIM}{def:leo-source-eim},
+    AF theorem.
+}
+\mypareq{eq:th-source-eim-containment-10-20}{%
+    $\Valid{\var{eim}}$
+    \cuz{} \Dfref{def:leo-source-eim},
+        \longDfref{LIMs of an EIM}{def:lim-validity},
+        \Eref{eq:th-source-eim-containment-10-10}.
+}
+\mypareq{eq:th-source-eim-containment-10-30}{%
+    $\myfn{Is-Leo-Eligible}{\var{eim}}$
+    \cuz{} \Dfref{def:leo-source-eim},
+        \Dfref{def:lim-validity},
+        \Eref{eq:th-source-eim-containment-10-10}.
+}
 Our example of an LSS containing \var{eim} as its base element is
 \mypareq{eq:th-source-eim-containment-12}{%
    $\var{example} = \tuple{\var{eim}}$ \cuz{} AF construction.
@@ -6178,21 +6179,40 @@ Our example of an LSS containing \var{eim} as its base element is
    \\ \because \text{vacuously}.
 \end{gathered}
 \end{equation}
+\begin{equation}
+\label{eq:th-source-eim-containment-17}
+   \begin{gathered}
+        \forall \Vnat{i} \in \Dom{\var{example}} :
+       \\ \Valid{\VVelement{example}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{example}{i}}
+       \\ \land \; \left(
+           \begin{gathered}
+           \var{i} < \Vlastix{example}
+           \\ \implies \myfn{Next-Eligible}{\Velement{example}{\var{i}+1}, \VVelement{example}{i}}
+           \end{gathered}
+       \right)
+       \\ \because
+            \Eref{eq:th-source-eim-containment-10-20},
+            \Eref{eq:th-source-eim-containment-10-30},
+            \Eref{eq:th-source-eim-containment-13},
+            \Eref{eq:th-source-eim-containment-16}.
+   \end{gathered}
+\end{equation}
 \mypareq{eq:th-source-eim-containment-18}{%
    $\var{example} \in \type{LES}$ \cuz{}
         \longDfref{LES}{def:next-eligible-sequence},
        \Eref{eq:th-source-eim-containment-14},
-       \Eref{eq:th-source-eim-containment-16}.%
+       \Eref{eq:th-source-eim-containment-17}.%
 }
 \mypareq{eq:th-source-eim-containment-20}{%
    $\var{example} \in \type{LSS}$ \cuz{}
        \longDfref{LSS}{def:leo-source-sequence},
-       \Eref{eq:th-source-eim-containment-10},
+       \Eref{eq:th-source-eim-containment-10-10},
        \Eref{eq:th-source-eim-containment-18}.
 }
-The theorem is
-\Eref{eq:th-source-eim-containment-13} and
-\Eref{eq:th-source-eim-containment-13}.
+The conclusion of the theorem
+is the existential generalization of \var{example}
+in \Eref{eq:th-source-eim-containment-13} and
+\Eref{eq:th-source-eim-containment-20}.
 \myqed
 \end{proof}
 
@@ -7535,6 +7555,22 @@ Every ES has at most
 \todo{LIM's per ES proof}
 \myqed
 \end{proof}
+
+\begin{theorem}[Source function]
+\label{th:source-fn}
+There is a function
+\[
+    \Source{\mylim{\ell}}
+    \defined \riota \var{src} \in \type{EIM} :
+    \ell \in \myfn{lims}{\var{src}}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Prove Source function theorem}
+\end{proof}
+
+\todo{Prove there is also a \myfn{LIM}{} function}
 
 \section{LIM predecessor}
 
