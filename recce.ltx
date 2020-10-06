@@ -6549,58 +6549,54 @@ That is, if
 \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
 \end{gather}
 then
-\begin{gather}
+\begin{equation}
 \label{eq:th-lss-trichotomy-08-10}
-\var{lss1} = \var{lss2}
-\\ \label{eq:th-lss-trichotomy-08-20}
-\lor \; \left(
-    \Vsize{lss1} < \Vsize{lss2} \land \var{lss1} = \Velement{lss2}{0\ldots \Vlastix{lss1}}
-    \right)
-\\ \label{eq:th-lss-trichotomy-08-30}
-\lor \; \left(
-    \Vsize{lss2} < \Vsize{lss1} \land \var{lss2} = \Velement{lss1}{0\ldots \Vlastix{lss2}}
-    \right).
-\end{gather}
+\begin{gathered}
+\size{\set{\var{x} \in \set{\var{lss1}} : \var{lss1} = \var{lss2}}}
+\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \PrPfx{\var{lss1},\var{lss2}}}}
+\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \PrPfx{\var{lss2},\var{lss1}}}} = 1
+\end{gathered}
+\end{equation}
 \end{theorem}
 
 \begin{proof}
-We proceed by reductio:
-\mypareq{eq:th-lss-trichotomy-10}{%
-    There are two LSS's,
-    \var{lss1} and \var{lss2},
-    which do not fit any case of the LSS trichotomy
-    \cuz{} AF reductio.%
-}
-Within the reductio, we proceed by cases,
-according to the relative size of \var{lss1}
-and \var{lss2}.
-The first case is $\Vsize{lss1} = \Vsize{lss2}$.
-By \longThref{LSS uniqueness}{th:lss-uniqueness} and
-\Eref{eq:th-lss-trichotomy-06},
+The proof strategy is direct, assuming
+the hypothesis of the theorem to show
+its conclusion.
+We first note that
+from the Trichotomy Law for integers we have
+\begin{equation}
+\label{eq:th-lss-trichotomy-10}
+\begin{gathered}
+\size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss1} = \Vsize{lss2}}}
+\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss1} < \Vsize{lss2}}}
+\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss1} > \Vsize{lss2}}} = 1
+\end{gathered}
+\end{equation}
+By the ``LSS uniqueness'' Theorem
 we have
-$\var{lss1} = \var{lss2}$, which is the first case
-of the trichotomy \Eref{eq:th-lss-trichotomy-08-10},
-which contradicts \Eref{eq:th-lss-trichotomy-10}.
-This contradiction shows the reductio for
-$\Vsize{lss1} = \Vsize{lss2}$.
+\mypareq{eq:th-lss-trichotomy-12}{%
+     $\Vsize{lss1} = \Vsize{lss2}
+     \iff \var{lss1} = \var{lss2}$
+     \linebreak \cuz{} \Thref{th:lss-uniqueness}, \Eref{eq:th-lss-trichotomy-06}.
+}
 
-Proceeding with the second case,
 \mypareq{eq:th-lss-trichotomy-20}{%
-    $\Vsize{lss1} < \Vsize{lss2}$ \cuz{} AF second case
-    \Eref{eq:th-lss-trichotomy-08-20}.
+    $\Vsize{lss1} < \Vsize{lss2}$ \cuz{} AF derivation.
 }
 \mypareq{eq:th-lss-trichotomy-22}{%
     $\Vlss{preLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
     \cuz{} \longThref{LSS subsequence}{th:lss-subsequence},
-        \Eref{eq:th-lss-trichotomy-20}.%
+        \Eref{eq:th-lss-trichotomy-20},
+            new \Vlss{preLss2} for convenience.
 }
 \mypareq{eq:th-lss-trichotomy-24}{%
-    \var{preLss2} is a proper prefix of \var{lss2}
-        \cuz{} \Eref{eq:th-lss-trichotomy-20}, \Eref{eq:th-lss-trichotomy-22}.%
+    $\PrPfx{\var{preLss2},\var{lss2}}$
+        \cuz{} \Eref{eq:th-lss-trichotomy-20}, \Eref{eq:th-lss-trichotomy-22}.
 }
 \mypareq{eq:th-lss-trichotomy-26}{%
     $\Velement{preLss2}{0} = \Velement{lss1}{0}$
-    \cuz{} \Eref{eq:th-lss-trichotomy-06}, \Eref{eq:th-lss-trichotomy-22}.%
+    \cuz{} \Eref{eq:th-lss-trichotomy-06}, \Eref{eq:th-lss-trichotomy-22}.
 }
 \mypareq{eq:th-lss-trichotomy-28}{%
     $\Vsize{preLss2} = \Vsize{lss1}$
@@ -6610,21 +6606,41 @@ Proceeding with the second case,
     $\Vlss{preLss2} = \Vlss{lss1}$
     \cuz{} \longThref{LSS uniqueness}{th:lss-uniqueness},
     \Eref{eq:th-lss-trichotomy-26},
-    \Eref{eq:th-lss-trichotomy-28}.%
+    \Eref{eq:th-lss-trichotomy-28}.
 }
 \mypareq{eq:th-lss-trichotomy-32}{%
-    \var{lss1} is a proper prefix of \var{lss2}
-        \cuz{} \Eref{eq:th-lss-trichotomy-24}, \Eref{eq:th-lss-trichotomy-30}.%
+    $\PrPfx{\var{lss1},\var{lss2}}$
+        \cuz{} \Eref{eq:th-lss-trichotomy-24}, \Eref{eq:th-lss-trichotomy-30}.
 }
-\Eref{eq:th-lss-trichotomy-32} is the second case \Eref{eq:th-lss-trichotomy-08-20}
-of the trichotomy,
-which contradicts the assumption for the reductio \Eref{eq:th-lss-trichotomy-10}.
+\mypareq{eq:th-lss-trichotomy-34}{%
+    $\Vsize{lss1} < \Vsize{lss2}
+    \implies \PrPfx{\var{lss1},\var{lss2}}$
+    \cuz derivation \Eref{eq:th-lss-trichotomy-10},
+        \Eref{eq:th-lss-trichotomy-32}.
+}
+\mypareq{eq:th-lss-trichotomy-36}{%
+    $\PrPfx{\var{lss1},\var{lss2}}
+    \implies \Vsize{lss1} < \Vsize{lss2}$
+    \cuz{} \longDfref{Proper prefix}{def:prefix}.
+}
+\mypareq{eq:th-lss-trichotomy-38}{%
+    $\Vsize{lss1} < \Vsize{lss2}
+    \iff \PrPfx{\var{lss1},\var{lss2}}$
+    \cuz{} \Eref{eq:th-lss-trichotomy-34},
+        \Eref{eq:th-lss-trichotomy-36}.
+}
+\mypareq{eq:th-lss-trichotomy-40}{%
+    $\Vsize{lss1} > \Vsize{lss2}
+    \iff \PrPfx{\var{lss2},\var{lss1}}$
+        \cuz{} derivation symmetrical
+        to \Eref{eq:th-lss-trichotomy-20}--\Eref{eq:th-lss-trichotomy-38}.
+}
 
-The third case is $\Vsize{lss1} < \Vsize{lss2}$, which is the reverse of
-\Eref{eq:th-lss-trichotomy-20}, and the reductio is shown with a derivation symmetrical
-to \Eref{eq:th-lss-trichotomy-20}--\Eref{eq:th-lss-trichotomy-32}.
-With this third and last case, we have all the cases,
-the reductio and the theorem.
+The conclusion of the theorem follows from
+\Eref{eq:th-lss-trichotomy-10},
+\Eref{eq:th-lss-trichotomy-12},
+\Eref{eq:th-lss-trichotomy-38},
+and \Eref{eq:th-lss-trichotomy-40}.
 \myqed
 \end{proof}
 
