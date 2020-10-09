@@ -3024,7 +3024,7 @@ is an arbitrary EIM,
 \end{gather}
 
 When a dotted rule concept is applied to an EIM,
-it is the same as applying that concept to the EIM's
+it is the same as applying that concept to the \type{EIM}s
 dotted rule.
 When a rule concept is applied to an dotted rule
 it is the same as applying that concept to the rule
@@ -3191,7 +3191,7 @@ The match of an EIM with a location,
 \end{equation*}
 \end{definition}
 
-\begin{theorem}[Matching EIM's direction]
+\begin{theorem}[Matching EIMs direction]
 \label{th:matching-eims-direction}
 \begin{equation}
 \label{eq:th-matching-eims-direction-03}
@@ -3839,7 +3839,7 @@ The count of valid predictions in an Earley set is \Oc{}.
 \begin{proof}
 Let \Ves{es} be an arbitrary Earley set.
 From the context and the binding assumptions,
-we know that \Ves{es} is valid and therefore all EIM's in \var{es} are valid.
+we know that \Ves{es} is valid and therefore all \type{EIM}s in \var{es} are valid.
 
 Let \var{origs} be the set of origins
 of valid predictions in an arbitrary Earley set \Ves{es}, so that
@@ -3877,7 +3877,7 @@ the ``ES subset count'' theorem \Thref{th:es-subset-count}.
 
 \begin{theorem}[ES EIM count]
 \label{th:es-eim-count}
-The count of valid EIM's in the Earley set at \Vloc{j} is \order{\var{j}}.
+The count of valid \type{EIM}s in the Earley set at \Vloc{j} is \order{\var{j}}.
 \end{theorem}
 
 \begin{proof}
@@ -3885,7 +3885,7 @@ From the context and the binding assumptions,
 we know that
 \VVelement{S}{j} is the Earley set at \Vloc{j},
 that \VVelement{S}{j} is valid
-and therefore that all EIM's in \VVelement{S}{j} are valid.
+and therefore that all \type{EIM}s in \VVelement{S}{j} are valid.
 
 Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelement{S}{j}, so that
 \begin{equation}
@@ -3954,14 +3954,15 @@ and left the field shortly thereafter.
 By 1973 Jay Earley had earned a second Ph.D. and
 was a practicing psychotherapist in California.
 
+Earley had been correct.
 In a 1991 paper, Joop Leo~\cite{Leo1991}
-showed that Earley had been correct.
-Leo modified the algorithm of Earley to be linear,
+modified the Earley's algorithm so that
+it was was linear,
 not just for all DCFG's,
 but for the LR-regular grammars,
 a superset.
 Leo did his work while unaware of the 1968 conjecture ---
-Leo first encountered Earley's conjecture in the course of writing up his
+Leo first encountered Earley's surmise in the course of writing up his
 own discovery.%
 \footnote{Leo, Joop, personal email to Jeffrey Kegler,
 11 September, 2015.}
@@ -3970,23 +3971,23 @@ The problem both investigators noticed was that,
 while \Earley{} is \On{}
 for left recursion,
 it is $\order{\var{n}^2}$ for right recursion.
-This is because \Earley\! creates EIM's
+This is because \Earley\! creates \type{EIM}s
 to represent a right recursion at every parse location
 where the right recursion might end.
 At those locations where the right recursion does not end,
-most of these EIM's will be useless.
+most of these \type{EIM}s will be useless.
+
+\section{\Marpa{} and right recursion}
 
 Leo's solution was to
 memoize penults.
 Leo restricted the memoization to situations where
 the penult is unambiguous.
-
-\section{\Marpa{} and right recursion}
-
 Every right recursion involves a penult,
 so that Leo's method also memoizes right recursions.
 Recall that we
-call a dotted rule \Vdr{d} a \dfn{penult} if $\Penult{\var{d}} \neq \Lambda$.
+call a dotted rule \Vdr{d},
+a \dfn{penult}, if $\Penult{\var{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
 
@@ -4004,18 +4005,19 @@ This more careful targeting of the memoization is for efficiency reasons.
 If all penults are memoized,
 many memoizations will be performed where
 the maximum length of a Leo sequence is less than a constant,
-usually a small one.
-For these limited-length sequences,
+often a small constant.
+For limited-length sequences,
 the payoff of Leo memoization is also limited.
-In practice, the payoff usually does not justify
+In practice, the payoff seldom justifies
 even the modest overhead of Leo memoization.
 
 A future extension might be to identify
 non-right-recursive rules
 which generate Leo sequences long enough to
-repay inclusion in the Leo memoizations.
+reward the trouble of including
+them in Leo memoizations.
 Such cases would be unusual,
-but may occur often enough to be worth
+but they may occur often enough to be worth
 providing for.
 
 % TODO Refer to proof that omission memoization does not affect correctness
@@ -4032,7 +4034,7 @@ Leo\cite{Leo1991} intact.
 
 The \Marpa{} implementation does not implement
 Leo memoization in Earley set 0.
-$\es{(0)}$ memoization
+Earley set 0 memoization
 would have to be implemented as a special case,
 while omission of $\es{(0)}$ memoization
 results in at most one extra EIM per ES.
@@ -4041,17 +4043,17 @@ results in at most one extra EIM per ES.
 
 Leo's memoization method is simple from one point of view ---
 it involves a sequence of memos, called Leo items.
-The Leo items are matched to certain EIM's in a straightforward way.
+The Leo items are matched to certain \type{EIM}s in a straightforward way.
 An EIM matched to an Leo item is called a ``source EIM''.
 
 Nonetheless, many have found the Leo method
 challenging to the intuition.
 One reason may be that
-the natural order of the sequence of EIM's runs
+the natural order of the sequence of \type{EIM}s runs
 in a direction opposite to the direction of
 the intuitive order of the Leo items.
 To understand
-the building of the sequences of matched source EIM's
+the building of the sequences of matched source \type{EIM}s
 and Leo items, one must think
 in both directions at once.
 In the hopes of orienting the reader prior to our journey
@@ -4065,30 +4067,26 @@ are proceeding in non-decreasing Earley set order.
 We say that we are proceeding ``right-to-left'' if we
 are proceeding in non-increasing Earley set order.
 
-The natural direction of the source EIM's is
+The natural direction of the source \type{EIM}s is
 the same as that of the Earley sets --- left-to-right.
 The intuitive direction of the Leo items, however, is the one
 in which the right recursion must be unfolded.
 The conceptual order of the right recursion,
 and the order in which a memoized right recursion must be rebuilt
-is from the bottom-up.
+is from the bottom up.
 
-The trickiness occurs because as the Earley sets are built,
+The trickiness occurs because,
+as the Earley sets are built,
 left-to-right, each new Leo item becomes the bottom of a new potential
 right recursion.
 Therefore the intuitive, bottom-up order of Leo items
 is right-to-left in terms of the Earley sets.
 
-In implementation, this reversal works out fine --
-EIM's and their Leo memos are both created left-to-right.
-But an investigator studying the Leo method needs to think both right-to-left
-and left-to-right.
-
-In subsequent discussion we will introduce ``Leo eligible sequences'' (LES's).
-The ``next'' item in an LES
-will be in the same ES as, or in an earlier ES than, its ``previous''
-item.  In other words, previous-to-next in LES terms
-is right-to-left in Earley set terms.
+For the implementation, this reversal works out fine --
+\type{EIM}s and their Leo memos are both created left-to-right.
+But an investigator studying the implementation
+must think simultaneously
+in right-to-left and left-to-right terms.
 
 \chapter{Leo items}
 
@@ -4190,8 +4188,8 @@ Note in
 that,
 while \Veim{x} is restricted to penults,
 \Veim{y} ranges over all the
-EIMs of Earley set \Ves{j},
-including those EIM's which are not penults.
+\type{EIM}s of Earley set \Ves{j},
+including those \type{EIM}s which are not penults.
 We say that
 an EIM \Veim{uniq}
 is \dfn{Leo unique} in \Ves{j}
@@ -4419,7 +4417,7 @@ The proof strategy is direct.
 \begin{theorem}[Leo eligible EIM count]
 \label{th:leo-eligible-eim-count}
 There are at most \size{\Vocab{\Vint{g}}} Leo eligible
-EIM's in any ES.
+\type{EIM}s in any ES.
 That is,
 \[
 \begin{gathered}
@@ -4441,12 +4439,12 @@ By \Thref{th:leo-eligible-postdot-uniqueness}
 and \longDfref{ES validity}{def:es-validity},
 \var{elig} is the only EIM in \ES{\var{j}}
 with \Postdot{\var{elig}} as its postdot symbol.
-This means there cannot be more Leo eligible EIM's
+This means there cannot be more Leo eligible \type{EIM}s
 in \ES{\var{j}} than there are postdot symbols.
 There are only
 $\size{\Vocab{\var{g}}}$ symbols in \Vint{g},
 so the number of postdot symbols,
-and therefore the number of Leo eligible EIM's,
+and therefore the number of Leo eligible \type{EIM}s,
 cannot exceed
 $\size{\Vocab{\var{g}}}$.
 \myqed
@@ -4483,13 +4481,13 @@ or \dfn{previous eligible EIM}, of \Veim{next}.
 \begin{proof}
 The theorem follows from
 \longDfref{Next eligible EIM}{def:next-eligible-eim}
-and \longDfref{Matching EIM's}{def:matching-1}.
+and \longDfref{Matching EIMs}{def:matching-1}.
 \myqed
 \end{proof}
 
 \begin{theorem}[Next eligible direction]
 \label{th:next-eligible-direction}
-The current location of eligible EIM's in previous-to-next order
+The current location of eligible \type{EIM}s in previous-to-next order
 is non-increasing.  That is,
 \begin{gather*}
     \myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
@@ -4716,7 +4714,7 @@ The theorem is
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
 A \dfn{next eligible sequence} (type \type{LES}) is
-a non-empty sequence of valid, Leo eligible EIM's
+a non-empty sequence of valid, Leo eligible \type{EIM}s
 such that every EIM
 except the top EIM
 is the next eligible EIM of the
@@ -5707,7 +5705,7 @@ We let \var{run} be a new LES:
         \Eref{eq:th-les-finiteness-24a}.
 \end{equation}
 \Vles{run} is so called because it is
-a run of EIM's with the property that
+a run of \type{EIM}s with the property that
 they share the same current location,
 though we have yet to prove this.
 We do so next.
@@ -5779,12 +5777,12 @@ and since there are only
 \Vocab{\Vint{g}} symbols in \Vint{g},
 and since
 \var{prerun} contains
-$\Vocab{\Vint{g}}+1$ EIM's
+$\Vocab{\Vint{g}}+1$ \type{EIM}s
 \Eref{eq:th-les-finiteness-36},
 at least one symbol must be used twice as the symbol of an
 EIM in \var{prerun}.
 Let this symbol be \Vsym{cycle-lhs},
-and let the first and second EIM's with \Vsym{cycle-lhs} as their symbol be
+and let the first and second \type{EIM}s with \Vsym{cycle-lhs} as their symbol be
 \VVelement{prerun}{aa} and
 \VVelement{prerun}{zz}, respectively:
 \begin{equation}
@@ -6241,7 +6239,7 @@ are equal.
 \begin{proof}
 Let \var{lss} be an LSS and \var{les} be its underlying LES.
 \var{lss} and \var{les} are defined to be the same sequence
-of EIM's, so that $\Vles{lss} = \Vles{les}$.
+of \type{EIM}s, so that $\Vles{lss} = \Vles{les}$.
 The theorem follows directly.
 \myqed
 \end{proof}
@@ -7722,7 +7720,7 @@ We divide space into two kinds:
 
 \begin{definition}[Try, dup and new resource]
 \label{def:try-dup-new}
-We ``charge'' all resource to EIM's.
+We ``charge'' all resource to \type{EIM}s.
 Recall that when an attempt is made to add a duplicate EIM to an Earley set,
 that it does not change the Earley set.
 \dfn{Try-charged resource}, or \dfn{try resource},
@@ -8037,7 +8035,7 @@ that depends on the grammar \Dfref{def:context-free-grammar}.
 For each Earley set,
 \var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
-Earley sets never have duplicated EIM's and
+Earley sets never have duplicated \type{EIM}s and
 \var{seen} is used to efficiently enforce this.
 PSL's are described in detail in section
 \Sref{sec:per-set-lists}.
@@ -10940,7 +10938,7 @@ open accounts.
 \begin{observation}[Ancestry]
 \label{obs:reducer-ancestry}
 The \Marpa{} implementation tracks all link pairs for reducer-generated
-EIM's.
+\type{EIM}s.
 The cause of a reducer-generated EIM will always be
 a completed EIM.
 The predecessor of a reducer-generated EIM varies depending on whether the attempt
@@ -12061,7 +12059,7 @@ a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-While \Marpa{} is adjoining EIM's into \Ves{j},
+While \Marpa{} is adjoining \type{EIM}s into \Ves{j},
 the PSL for \Ves{i}
 keeps track of the Earley items in \Ves{j} that have \Vloc{i}
 as their origin.
@@ -12135,7 +12133,7 @@ and \var{false} otherwise.
 showing the use of PSL's.
 The reader may notice that
 \Aref{alg:adjoin-eim} could be simplified,
-because the data to be kept for EIM's is a single boolean.
+because the data to be kept for \type{EIM}s is a single boolean.
 Further, this boolean is never set to \var{false}, so that
 if a PSL entry exists, its boolean may be assumed to be \var{true}.
 This means that an explicit boolean is not actually needed.
@@ -12689,7 +12687,7 @@ and let $\Veim{base} \in \Ves{current}$ be a valid EIM which
 matches \var{chain}.
 Then the \dfn{Leo edge}, or just \dfn{edge},
 of \var{chain} and \var{base}
-is a sequence of complete EIM's, call it \Veimset{edge},
+is a sequence of complete \type{EIM}s, call it \Veimset{edge},
 such that
 \begin{equation}
 \label{eq:d-leo-edge-10}
@@ -13553,7 +13551,7 @@ We know the \Earley{} completer operation preserves
 validity
 \Thref{th:earley-completer-is-consistent},
 and therefore any operation which creates some subset of the
-EIM's that
+\type{EIM}s that
 the \Earley{} completer operation creates also
 preserves validity.
 
@@ -13605,7 +13603,7 @@ $\because$ DFPP.
 are ``complete as far as''
 the \Marpa{} \var{Scanner} operation of Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
-and if they contain all the visible valid EIM's with a predot terminal
+and if they contain all the visible valid \type{EIM}s with a predot terminal
 $\because$ DFPP.
 }
 \end{equation}
@@ -13614,7 +13612,7 @@ $\because$ DFPP.
 are ``complete as far as''
 the \Marpa{} \op{Reducer} operation of Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
-and if they contain all the visible valid confirmed EIM's
+and if they contain all the visible valid confirmed \type{EIM}s
 $\because$ DFPP.
 }
 \end{equation}
@@ -13624,7 +13622,7 @@ is depth counted in terms of
 visible confirmed EIM causes.
 We will write \var{Depth}(\Veim{x}) for the visible depth
 of \Veim{x}.
-When speaking of several EIM's,
+When speaking of several \type{EIM}s,
 we will say that the one with the
 numerically lowest depth value
 is the ``deepest''.
@@ -13661,7 +13659,7 @@ a hidden EIM,
 or a prediction.
 In other words,
 visible depth is
-defined only for visible confirmed EIM's
+defined only for visible confirmed \type{EIM}s
 $\because$ DFPP.
 }
 \end{equation}
@@ -13684,7 +13682,7 @@ $\because$ DFPP.
 \myparbox{The Earley tables are ``complete as far as''
 visible depth \var{n} in Earley set \var{j},
 if they are complete as far as Earley set $\var{j}\subtract 1$,
-and if they contain all the visible valid EIM's of visible depth
+and if they contain all the visible valid \type{EIM}s of visible depth
 \var{n} or less
 $\because$ DFPP.
 }
@@ -13712,7 +13710,7 @@ We take for the induction hypothesis
 \myparbox{After a \Marpa{} \op{Reducer} operation at \Ves{j},
 \Ves{j} is complete
 with respect to the
-the EIM's of visible depth \var{ix}.}
+the \type{EIM}s of visible depth \var{ix}.}
 \end{equation}
 
 \todo{finish this proof}
@@ -13743,14 +13741,14 @@ $\because$ AF reductio.}
 \end{equation}
 \begin{equation}
 \label{eq:lem-marpa-visible-depth-completeness-10}
-\myparbox{$\Vpim{rez} = \Veim{rez} \because$ only EIM's have
+\myparbox{$\Vpim{rez} = \Veim{rez} \because$ only \type{EIM}s have
 a visible depth
 \Eref{eq:def-complete-as-far-as-26}.}
 \end{equation}
 \begin{equation}
 \label{eq:lem-marpa-visible-depth-completeness-12}
 \myparbox{\Veim{rez} is confirmed
-$\because$ only confirmed EIM's have a visible depth
+$\because$ only confirmed \type{EIM}s have a visible depth
 \Eref{eq:def-complete-as-far-as-26}.}
 \end{equation}
 \begin{equation}
@@ -13791,7 +13789,7 @@ or they are disjoint
 Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
 be an unambiguous parse,
 where $\var{n} = \size{\Vstr{w}}$.
-The number of useful complete right recursive EIM's
+The number of useful complete right recursive \type{EIM}s
 in \var{p} is less than or equal to $2 \times \var{n} \subtract 1$,
 or \On{}.
 \end{theorem}
@@ -13809,12 +13807,12 @@ or \On{}.
 At evaluation time,
 it is desirable to expand the Leo memoizations,
 but in almost all practical cases,
-only the useful EIM's
+only the useful \type{EIM}s
 need to be expanded.
 
 \begin{theorem}[Useful EIM count]
 Let $[\Vint{g}, \Vstr{partial}]$ be a \Marpa{} partial parse.
-the number of useful EIM's is \On{},
+the number of useful \type{EIM}s is \On{},
 where $\var{n} = \Vsize{partial}$.
 \end{theorem}
 
@@ -13865,7 +13863,7 @@ The possible values of \Vloc{x} range from
 Therefore the number of possible Earley items
 in \Ves{j} is
 is $\Vloc{j} \times \Oc{}$.
-Recall that the size of an Earley set is the number of EIM's
+Recall that the size of an Earley set is the number of \type{EIM}s
 that it contains.
 It follows
 that the maximum size of the Earley
@@ -14631,7 +14629,7 @@ Let \Vterm{input1},
 of $\Term{\Vint{g}}^\ast$.
 
 Let $\var{j} = \size{\Vterm{input1}}$.
-If two distinct derivations both put incomplete EIM's into
+If two distinct derivations both put incomplete \type{EIM}s into
 \Ves{j}, they have the form
 \begin{align}
 \label{eq:incompletion-bound-1}
@@ -14811,7 +14809,7 @@ for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtract 1$,
 $\var{chain}[\var{i}]$ is the cause of the link pair
 of $\var{chain}[\var{i}+1]$.
 
-EIM's may not have more than one cause,
+\type{EIM}s may not have more than one cause,
 but they may share causes.
 Call a cause chain where no EIM is the cause of more than one other
 EIM, a ``single-cause chain''.  We will now consider the maximum length
@@ -14824,14 +14822,14 @@ an LHS will occur twice, and therefore the portion of the chain between
 the duplicate occurrences will be Leo-unique and right recursive
 and therefore Leo-eligible.
 Any Leo-eligible stretch of a single-cause chain is memoized and reduced to
-two EIM's -- the bottom and the top.
+two \type{EIM}s -- the bottom and the top.
 So
 \begin{equation}
 \label{eq:th-completion-bound-20}
 \text{the longest single-cause chain is $\size{\NT{\var{g}}}+1$.}
 \end{equation}
 
-We now look at the EIM's in a single Earley set, call it \Ves{j},
+We now look at the \type{EIM}s in a single Earley set, call it \Ves{j},
 seeking to establish the relationship between the count of complete and incomplete
 items.
 We exclude predictions and organize the rest into a ``cause chain tree''.
@@ -14865,7 +14863,7 @@ To maximize the number of interior nodes, we assume that pairs of first-layer bo
 nodes share their causes, and that the causes of the first-layer
 bottom notes are in turn the top of a second layer
 of single-cause chains.
-For the second layer, we again maximize by assuming that pairs of bottom EIM's of the second
+For the second layer, we again maximize by assuming that pairs of bottom \type{EIM}s of the second
 layer share causes.
 
 Let \var{leaves} be the number of ``leaves'' in the cause tree,
