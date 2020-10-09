@@ -405,12 +405,22 @@
 }
 % A "My paragraph-based equation"
 \newcommand{\mypareq}[2]{%
-   \begin{equation}%
-   \label{#1}
+   \ifthenelse{\equal{#1}{}}%
+   {%
+       \begin{equation*}
+   }{%
+       \begin{equation}
+       \label{#1}
+   }%
    \begin{gathered}%
    \myparbox{#2}%
    \end{gathered}%
-   \end{equation}%
+   \ifthenelse{\equal{#1}{}}%
+   {%
+       \end{equation*}
+   }{%
+       \end{equation}
+   }%
 }
 \newcommand{\rawparcomment}[2][\mathparwidth]{%
   \myparbox[#1]{#2}%
@@ -4108,12 +4118,13 @@ where
 \]
 If
 \[
-\Vlim{x}
+\Vlim{x} =
 \tuple{ \Vdr{top}, \Vsym{transition}, \Vorig{top}, \Vcurr{j} }
 \]
 is an arbitrary LIM,
 we say that
 \Vsym{transition} is the \dfn{transition symbol} of \Vlim{x},
+and
 \begin{align}
 \DR{\Vlim{x}} & \defined \Vdr{top}, \\
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
@@ -4121,7 +4132,6 @@ we say that
     \Current{\Vlim{x}} & \defined \Vcurr{j}.
        \quad \dispEnd
 \end{align}
-
 \end{definition}
 
 \begin{definition}[Transition of a PIM]
@@ -4130,12 +4140,10 @@ Let \Vpim{pim} be an arbitrary PIM.
 The \dfn{transition symbol},
 or \dfn{transition},
 of \var{pim} is
-\begin{equation*}
-\left\lbrace \begin{array}{ll}
-\Transition{\var{pim}} & \text{ if \var{pim} is a LIM, and} \\
-\Postdot{\var{pim}} & \text{ if \var{pim} is an EIM.}
-\end{array} \right.
-\end{equation*}
+\mypareq{}{%
+    \Transition{\var{pim}} if \var{pim} is a LIM, and 
+    \linebreak \Postdot{\var{pim}} if \var{pim} is an EIM.
+}
 In either case, the transition symbol
 of \var{pim}
 may be written
@@ -4148,12 +4156,10 @@ Let \Vpim{pim} be an arbitrary PIM.
 The \dfn{current location},
 or \dfn{location},
 of \var{pim} is
-\begin{equation*}
-\left\lbrace \begin{array}{ll}
-\Current{\var{pim}} & \text{ if \var{pim} is a LIM, and} \\
-\Current{\var{pim}} & \text{ if \var{pim} is an EIM.}
-\end{array} \right.
-\end{equation*}
+\mypareq{}{%
+    \Current{\var{pim}} if \var{pim} is a LIM, and
+    \linebreak \Current{\var{pim}} if \var{pim} is an EIM.
+}
 In either case, the current location
 of \Vpim{pim}
 may be written
