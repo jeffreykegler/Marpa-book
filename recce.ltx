@@ -4446,8 +4446,7 @@ assuming the hypothesis to show the conclusion.
     \myparbox{%
         $\Postdot{\var{x}} = \Postdot{\var{y}}
             \implies \var{x} = \var{y}$
-        \linebreak \cuz{} \longDfref{ES validity}{def:es-validity},
-        \Eref{eq:th-leo-eligible-postdot-uniqueness-25-20},
+        \linebreak \cuz{} \Eref{eq:th-leo-eligible-postdot-uniqueness-25-20},
         instantiating \Veim{z}
         as \Veim{y}.%
     }
@@ -4486,8 +4485,7 @@ That is,
 
 \begin{proof}
 Let \Veim{elig} be a Leo eligible EIM in \Velement{S}{\Ves{j}}.
-By \Thref{th:leo-eligible-postdot-uniqueness}
-and \longDfref{ES validity}{def:es-validity},
+By \Thref{th:leo-eligible-postdot-uniqueness},
 \var{elig} is the only EIM in \Velement{S}{\var{j}}
 with \Postdot{\var{elig}} as its postdot symbol.
 This means there cannot be more Leo eligible \type{EIM}s
@@ -4614,6 +4612,34 @@ We assume the hypothesis of the theorem to show the conclusion.
     This is the conclusion of the theorem. \myqed
 }
 \end{proof}
+
+\chapter{Leo eligible sequences}
+\label{ch:les}
+
+\begin{definition}[Next eligible sequence]
+\label{def:next-eligible-sequence}
+A \dfn{next eligible sequence} (type \type{LES}) is
+a non-empty sequence of valid, Leo eligible \type{EIM}s
+such that every EIM
+except the top EIM
+is the next eligible EIM of the
+previous EIM in the sequence.  That is,
+\[
+\type{LES} = \set{
+   \begin{gathered}
+       \Veimseq{les} : \forall \Vnat{i} \in \Dom{\var{les}} :
+       \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
+       \\ \land \; \left(
+           \var{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\var{i}+1}, \VVelement{les}{i}}
+       \right)
+   \end{gathered}
+   }.
+\]
+If \var{les} is an LES,
+We say that \Velement{les}{0} is the \dfn{base} of \var{les},
+and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \var{les}.
+\dispEnd
+\end{definition}
 
 \begin{theorem}[Next Leo eligible rule]
 \label{th:next-eligible-rule}
@@ -4758,34 +4784,6 @@ The theorem is
     \Eref{eq:th-next-eligible-rule-42}.
 \myqed
 \end{proof}
-
-\chapter{Leo eligible sequences}
-\label{ch:les}
-
-\begin{definition}[Next eligible sequence]
-\label{def:next-eligible-sequence}
-A \dfn{next eligible sequence} (type \type{LES}) is
-a non-empty sequence of valid, Leo eligible \type{EIM}s
-such that every EIM
-except the top EIM
-is the next eligible EIM of the
-previous EIM in the sequence.  That is,
-\[
-\type{LES} = \set{
-   \begin{gathered}
-       \Veimseq{les} : \forall \Vnat{i} \in \Dom{\var{les}} :
-       \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
-       \\ \land \; \left(
-           \var{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\var{i}+1}, \VVelement{les}{i}}
-       \right)
-   \end{gathered}
-   }.
-\]
-If \var{les} is an LES,
-We say that \Velement{les}{0} is the \dfn{base} of \var{les},
-and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \var{les}.
-\dispEnd
-\end{definition}
 
 \begin{theorem}[LES subsequence]
 \label{th:les-subsequence}
