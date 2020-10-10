@@ -275,6 +275,7 @@
 \newcommand{\mylim}[1]{\ensuremath{#1_\type{LIM}}}
 \newcommand{\lss}[1]{\ensuremath{#1_\type{LSS}}}
 \newcommand{\les}[1]{\ensuremath{#1_\type{LES}}}
+\newcommand{\mes}[1]{\ensuremath{#1_\type{MES}}}
 % Delete NSS?
 \newcommand{\nss}[1]{\ensuremath{#1_\type{NSS}}}
 \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
@@ -301,6 +302,7 @@
 \newcommand{\Vlimset}[1]{\Tvarset{#1}{LIM}}
 \newcommand{\Vloc}[1]{\Tvar{#1}{LOC}}
 \newcommand{\Vles}[1]{\les{\var{#1}}}
+\newcommand{\Vmes}[1]{\mes{\var{#1}}}
 % Delete Vnss?
 \newcommand{\Vnss}[1]{\nss{\var{#1}}}
 \newcommand{\Vcurr}[1]{\Tvar{#1}{CURR}}
@@ -4174,17 +4176,11 @@ may be written
 \LeoUnique{\Vloc{j}} \defined \\
   \left\lbrace
     \begin{gathered}
-    \Veim{x} \in \set{
-        \begin{gathered}
-        \var{x} \in \VVelement{S}{j} :
+    \Veim{x} \in \VVelement{S}{j} :
         \Penult{\var{x}} \neq \Lambda
-        \end{gathered} } :
-    \\
-        \forall \; \Veim{y} \in \VVelement{S}{j} : \\
-            \Postdot{\var{x}} = \Postdot{\var{y}}
-            \implies
-            \var{x} = \var{y}
-    \\
+        \\ \land \; \forall \; \Veim{y} \in \VVelement{S}{j} :
+        \\ \Postdot{\var{x}} = \Postdot{\var{y}}
+            \implies \var{x} = \var{y}
     \end{gathered}
   \right\rbrace .
 \end{gathered}
@@ -4245,7 +4241,7 @@ show the consequent.
 \label{eq:th-leo-eligible-location-10}
 \myparbox{%
     $\myfn{Is-Leo-Eligible}{\Veim{x}}$ \cuz{}
-    antecedant of forward direction, AF direction.%
+    AF forward direction.
 }
 \end{equation}
 \begin{equation}
@@ -4290,8 +4286,8 @@ show the consequent.
     \Eref{eq:th-leo-eligible-location-14},
     \Eref{eq:th-leo-eligible-location-18}.
 \end{equation}
-\Eref{eq:th-leo-eligible-location-20} is the consequent of
-the forward direction, so that the deduction
+Equation \Eref{eq:th-leo-eligible-location-20} is the consequent of
+the forward direction, so that the derivation
 \Eref{eq:th-leo-eligible-location-10}--%
 \Eref{eq:th-leo-eligible-location-20} shows
 the forward direction.
@@ -4303,7 +4299,7 @@ to show the consequent.
 \myparbox{%
     $\Veim{x} \in \LeoEligible{\Current{\var{x}}}$
     \linebreak \cuz{}
-    antecedant of reverse direction, AF direction.%
+    AF reverse direction.
 }
 \end{equation}
 \begin{equation}
@@ -4324,11 +4320,67 @@ to show the consequent.
        \Eref{eq:th-leo-eligible-location-32}.%
 }
 \end{equation}
-\Eref{eq:th-leo-eligible-location-34} is the consequent of
-the reverse direction, so that the deduction
+Equation \Eref{eq:th-leo-eligible-location-34} is the consequent of
+the reverse direction, so that the derivation
 \Eref{eq:th-leo-eligible-location-30}--%
 \Eref{eq:th-leo-eligible-location-34} shows
 the reverse direction.
+\myqed
+\end{proof}
+
+\begin{theorem}[Leo eligible penult]
+Every Leo eligible EIM is a penult.  That is,
+\label{th:leo-eligible-penult}
+\[
+  \myfn{Is-Leo-Eligible}{\Veim{x}} \implies \Penult{\var{x}}.
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is direct.
+We assume the hypothesis to
+show the conclusion.
+\begin{equation}
+\label{eq:th-leo-eligible-penult-10}
+\myparbox{%
+    $\myfn{Is-Leo-Eligible}{\Veim{x}}$ \cuz{}
+    hypothesis of theorem.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-penult-12}
+\myparbox{%
+   $\exists \Vloc{i} : \Veim{x} \in \LeoEligible{\var{i}}$
+   \linebreak
+   \cuz{}
+       \longDfref{\var{Is-Leo-Eligible}}{def:leo-eligible},
+       \Eref{eq:th-leo-eligible-penult-10}.%
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-penult-14}
+\myparbox{$\Veim{x} \in \LeoEligible{\Vloc{j}}$
+   \cuz{} \Eref{eq:th-leo-eligible-penult-12},
+   existential instantiation, arbitrary \Vloc{j}.
+}
+\end{equation}
+\begin{equation}
+\label{eq:th-leo-eligible-penult-15}
+\myparbox{$\Veim{x} \in \LeoUnique{\var{j}}$ \cuz{}
+       \longDfref{Leo Eligible}{def:leo-eligible},
+        \Eref{eq:th-leo-eligible-penult-14}.
+}
+\end{equation}
+\mypareq{eq:th-leo-eligible-penult-16}{%
+$\Penult{\Veim{x}}$ \cuz{}
+       \longDfref{Leo Unique}{def:leo-unique},
+        \Eref{eq:th-leo-eligible-penult-15}.
+}
+\Eref{eq:th-leo-eligible-penult-16} is the conclusion of
+the theorem and the derivation
+\Eref{eq:th-leo-eligible-penult-10}--%
+\Eref{eq:th-leo-eligible-penult-16}
+show the theorem.
 \myqed
 \end{proof}
 
