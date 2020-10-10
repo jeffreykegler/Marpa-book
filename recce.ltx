@@ -347,7 +347,6 @@
 \newcommand{\DotPos}[1]{\ensuremath{\mymathop{DotPos}(#1)}}
 \newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
-\newcommand{\ES}[1]{\ensuremath{\mymathop{ES}(#1)}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\Invocs}[1]{\ensuremath{\mymathop{Invocs}(#1)}}
@@ -4406,7 +4405,8 @@ then
 \end{theorem}
 
 \begin{proof}
-The proof strategy is direct.
+The proof strategy is direct,
+assuming the hypothesis to show the conclusion.
 \begin{equation}
 \label{eq:th-leo-eligible-postdot-uniqueness-14}
 \begin{gathered}
@@ -4415,29 +4415,23 @@ The proof strategy is direct.
     \Eref{eq:th-leo-eligible-postdot-uniqueness-02}.
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-leo-eligible-postdot-uniqueness-22}
-\Veim{x} \in \LeoUnique{\Current{\var{x}}}
-\because \Eref{eq:th-leo-eligible-postdot-uniqueness-14},
-    \Dfref{def:leo-eligible}.
-\end{equation}
-\begin{equation}
-\label{eq:th-leo-eligible-postdot-uniqueness-24}
-\begin{gathered}
-    \myparbox{%
-        $\forall \; \Veim{z} \in \ES{\Current{\var{x}}} :$ \linebreak
-        $\Postdot{\var{x}} = \Postdot{\var{z}} \implies \var{x} = \var{z}$ \linebreak
-        \cuz{} \longDfref{Leo unique}{def:leo-unique},
-          \Eref{eq:th-leo-eligible-postdot-uniqueness-22}.%
-    }
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-leo-eligible-postdot-uniqueness-22}{%
+    $\Veim{x} \in \LeoUnique{\Current{\var{x}}}$
+    \linebreak \cuz{} \longDfref{Leo Eligible}{def:leo-eligible},
+    \Eref{eq:th-leo-eligible-postdot-uniqueness-14}.
+}
+\mypareq{eq:th-leo-eligible-postdot-uniqueness-24}{%
+    $\forall \; \Veim{y} \in \VVelement{S}{\Current{\var{x}}} :$
+    \linebreak $\Postdot{\var{x}} = \Postdot{\var{y}} \implies \var{x} = \var{y}$
+    \linebreak \cuz{} \Eref{eq:th-leo-eligible-postdot-uniqueness-22},
+        \longDfref{Leo unique}{def:leo-unique}.
+}
 %
 \begin{equation}
-\label{eq:th-leo-eligible-postdot-uniqueness-25}
+\label{eq:th-leo-eligible-postdot-uniqueness-25-20}
 \begin{gathered}
     \myparbox{%
-        $\forall \; \Veim{z} \in \ES{\Current{\var{y}}} :$ \linebreak
+        $\forall \; \Veim{z} \in \Velement{S}{\Current{\var{y}}} :$ \linebreak
         $\Postdot{\var{x}} = \Postdot{\var{z}} \implies \var{x} = \var{z}$ \linebreak
         \cuz
             \Eref{eq:th-leo-eligible-postdot-uniqueness-04},
@@ -4451,10 +4445,9 @@ The proof strategy is direct.
 \begin{gathered}
     \myparbox{%
         $\Postdot{\var{x}} = \Postdot{\var{y}}
-        \implies
-        \var{x} = \var{y}$ \linebreak
-        \cuz{} \longDfref{ES validity}{def:es-validity},
-        \Eref{eq:th-leo-eligible-postdot-uniqueness-25},
+            \implies \var{x} = \var{y}$
+        \linebreak \cuz{} \longDfref{ES validity}{def:es-validity},
+        \Eref{eq:th-leo-eligible-postdot-uniqueness-25-20},
         instantiating \Veim{z}
         as \Veim{y}.%
     }
@@ -4482,7 +4475,7 @@ That is,
 \forall \; 0 \le \Ves{j} \le \Vlastix{table} : \\
 \size{
    \set{
-            \Veim{x} \in \ES{\var{j}} :
+            \Veim{x} \in \Velement{S}{\var{j}} :
     \myfn{Is-Leo-Eligible}{\var{x}}
    }
 }
@@ -4492,13 +4485,13 @@ That is,
 \end{theorem}
 
 \begin{proof}
-Let \Veim{elig} be a Leo eligible EIM in \ES{\Ves{j}}.
+Let \Veim{elig} be a Leo eligible EIM in \Velement{S}{\Ves{j}}.
 By \Thref{th:leo-eligible-postdot-uniqueness}
 and \longDfref{ES validity}{def:es-validity},
-\var{elig} is the only EIM in \ES{\var{j}}
+\var{elig} is the only EIM in \Velement{S}{\var{j}}
 with \Postdot{\var{elig}} as its postdot symbol.
 This means there cannot be more Leo eligible \type{EIM}s
-in \ES{\var{j}} than there are postdot symbols.
+in \Velement{S}{\var{j}} than there are postdot symbols.
 There are only
 $\size{\Vocab{\var{g}}}$ symbols in \Vint{g},
 so the number of postdot symbols,
@@ -7958,17 +7951,17 @@ Their precise meaning will defined in the context in which they are used.
 } \\
 \label{eq:def-es-of-pim}
 \myparbox{%
- $\Time{\ES{\Vpim{p}}} = \Oc{}, \because$
+ $\Time{\Velement{S}{\Vpim{p}}} = \Oc{}, \because$
   Marpa::R2 stores a pointer to its Earley set
   in each PIM.%
 } \\
 \label{eq:def-es-of-loc}
 \myparbox{%
-  $\Time{\ES{\Vloc{j}} = \Oc{}} \because$
+  $\Time{\Velement{S}{\Vloc{j}} = \Oc{}} \because$
   Marpa::R2 uses a dynamic array.}
 \end{gather}
 
-\ES{\Vloc{j}} is not actually used
+\Velement{S}{\Vloc{j}} is not actually used
 by the \Marpa{} implementation during parsing,
 to avoid the constant overhead of dynamic arrays.
 During parsing
@@ -7983,7 +7976,7 @@ a link to the current Earley set is kept,
 and the event mechanism works using links.
 
 But for tracing and debugging in \Rtwo{},
-\ES{\Vloc{j}} is used.
+\Velement{S}{\Vloc{j}} is used.
 The major reason for this is that the trace and
 debug facilities must allow the developer to
 specify arbitrary Earley sets,
@@ -7992,7 +7985,7 @@ its numerical ID.
 
 An array is also needed for evaluation,
 but at evaluation time the dynamic array implementing
-\ES{\Vloc{j}} is usually dynamic in theory only.
+\Velement{S}{\Vloc{j}} is usually dynamic in theory only.
 For most applications, evaluation only
 occurs after the parse is complete,
 the array of Earley sets will be static,
@@ -8377,7 +8370,7 @@ the housekeeping time of the callee is unchanged.
 \label{line:marpa-predict-75}
 \State $\LinkPairs{\var{prediction}} = \set{}$ \Comment \tightMath{\var{x}=1\times\var{new}}
 \label{line:marpa-predict-80}
-\State Add \var{prediction} to \ES{\Current{\var{prediction}}}
+\State Add \var{prediction} to \Velement{S}{\Current{\var{prediction}}}
 \Statex  \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{new}}
 \label{line:marpa-predict-85}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
