@@ -4652,7 +4652,7 @@ previous EIM in the sequence.  That is,
    \end{gathered}
    }.
 \]
-If \var{les} is an LES,
+If \var{les} is an \type{LES},
 we say that \Velement{les}{0} is the \dfn{base} of \var{les},
 and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \var{les}.
 \dispEnd
@@ -4799,7 +4799,7 @@ The theorem is
 
 \begin{theorem}[LES subsequence]
 \label{th:les-subsequence}
-Every subsequence of an LES is an LES.
+Every subsequence of an \type{LES} is an \type{LES}.
 That is,
 \begin{gather}
 \label{eq:th-les-subsequence-02}
@@ -4924,10 +4924,10 @@ we assume
 to show
 \Eref{eq:th-les-extension-04}--\Eref{eq:th-les-extension-07}.
 Equation \Eref{eq:th-les-extension-04} follows via
-the ``LES subsequence'' theorem
+the ``\type{LES} subsequence'' theorem
 \Thref{th:les-subsequence}.
 Equations \Eref{eq:th-les-extension-05}--\Eref{eq:th-les-extension-07}
-follow immediately from the definition of LES \Dfref{def:next-eligible-sequence}.
+follow immediately from the definition of \type{LES} \Dfref{def:next-eligible-sequence}.
 
 It remains to show the reverse direction.
 For this we assume \Eref{eq:th-les-extension-04}--\Eref{eq:th-les-extension-07}
@@ -5041,7 +5041,7 @@ With both directions, we have the theorem.
 
 \begin{theorem}[LES adjacent direction]
 \label{lm:les-adjacent-direction}
-If \Veim{prev} is an element of an LES,
+If \Veim{prev} is an element of an \type{LES},
 and \Veim{next} is the next element,
 then the current location of \var{next}
 is less than or equal to the current location of \var{prev}.
@@ -5067,10 +5067,9 @@ The lemma follows from
 \begin{theorem}[LES direction]
 \label{th-les-direction}
 The current location of
-every element of an LES is at or before
-the current location of every element
-at a lesser index
-of the LES.
+every element of an \type{LES} is at or before
+the current location of every lesser-indexed element
+of the \type{LES}.
 That is,
 \label{th:les-direction}
 \[
@@ -5086,16 +5085,15 @@ That is,
 
 \begin{proof}
 The proof is by induction
-on the last, in LES sequence order,
-of the two elements to be compared.
-We will find that every LES is finite,
+on the higher-indexed
+of the two \type{LES} elements to be compared.
+We will find that every \type{LES} is finite,
 but we have yet to prove this,
-so we allow the LES to be either finite
+so we allow the \type{LES} to be either finite
 or countably infinite.
 We let the induction index, \Vnat{indx},
-be the highest
-of the indexes of the two LES elements
-to be compared.
+be the higher
+of the two \type{LES} indexes.
 The induction hypothesis is
 \begin{equation}
 \label{eq:th-les-direction-10}
@@ -5114,13 +5112,8 @@ as the basis of the induction.
     $\var{indx} = 0$ \cuz{} AF basis,
         \Eref{eq:th-les-direction-10}.
 }
-We proceed by instantiating the universal qualifiers with arbitrary
-values, to show the consequent of the implication
-in \Eref{eq:th-les-direction-10}.
 \mypareq{eq:th-les-direction-14}{%
-    $\var{lesB} \in \type{LES}$ \cuz{}
-        \Eref{eq:th-les-direction-10},
-        universal instantiation, new free \var{lesB}.
+    $\var{lesB} \in \type{LES}$ \cuz{} new free \var{lesB}.
 }
 \mypareq{eq:th-les-direction-15}{%
     $\Vsize{lesB} \ge 1$
@@ -5133,9 +5126,7 @@ in \Eref{eq:th-les-direction-10}.
 }
 \mypareq{eq:th-les-direction-17-10}{%
     $\var{loB} \le \var{indx}$ \cuz{}
-        universal instantiation, new free \var{loB},
-        \Eref{eq:th-les-direction-10},
-        \Eref{eq:th-les-direction-12}.
+        new free \var{loB}.
 }
 \mypareq{eq:th-les-direction-17-20}{%
     $\var{loB} = \var{indx}$ \cuz{}
@@ -5144,8 +5135,7 @@ in \Eref{eq:th-les-direction-10}.
 }
 \mypareq{eq:th-les-direction-18}{%
     $\Current{\VVelement{lesB}{indx}} = \Current{\VVelement{lesB}{loB}}$
-     \cuz{} \Eref{eq:th-les-direction-12},
-     \Eref{eq:th-les-direction-16},
+     \cuz{} \Eref{eq:th-les-direction-16},
      \Eref{eq:th-les-direction-17-20}.
 }
 \mypareq{eq:th-les-direction-19-10}{%
@@ -5160,6 +5150,7 @@ in \Eref{eq:th-les-direction-10}.
 \\ \implies \Current{\VVelement{lesB}{indx}} \le \Current{\VVelement{lesB}{lo}}.
 \\ \myparbox{\cuz{}
     universal generalization of \var{loB},
+    \Eref{eq:th-les-direction-17-10},
     \Eref{eq:th-les-direction-19-10}.
 }
 \end{gathered}
@@ -5171,12 +5162,13 @@ in \Eref{eq:th-les-direction-10}.
 \\ \implies \Current{\VVelement{les}{indx}} \le \Current{\VVelement{les}{lo}}
 \\ \myparbox{\cuz{}
     universal generalization of \var{lesB},
+    \Eref{eq:th-les-direction-14},
     \Eref{eq:th-les-direction-19-20}.
     This is \myfn{INDH}{0}, and the basis of the induction.
 }
 \end{gathered}
 \end{equation}
-
+%
 For the step, we assume
 \myfn{INDH}{\var{n}} to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
@@ -5190,8 +5182,6 @@ For the step, we assume
 \mypareq{eq:th-les-direction-31}{%
    $\var{indx} = \var{n}+1$ \cuz{} AF step.
 }
-Initially, we proceed by
-instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-les-direction-32}{%
     $\var{lesP} \in \type{LES}$ \cuz{} new free \var{loP}.
 }
@@ -5206,9 +5196,13 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
     $\Vnat{loP} \le \var{n}$
         \cuz{} \Eref{eq:th-les-direction-36}.
 }
+\mypareq{eq:th-les-direction-37-10}{%
+    $\var{n}+1 \in \Dom{\var{lesP}}$
+        \cuz{} \Eref{eq:th-les-direction-36}.
+}
 \mypareq{eq:th-les-direction-38}{%
     $\var{n} \in \Dom{\var{lesP}}$ \cuz{} \var{lesP} is a sequence,
-        \Eref{eq:th-les-direction-36}.
+        \Eref{eq:th-les-direction-37-10}.
 }
 \mypareq{eq:th-les-direction-40}{%
     $\Current{\VVelement{lesP}{n}} \le \Current{\VVelement{lesP}{loP}}$
@@ -5222,11 +5216,13 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
     $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{n}}$
     \cuz{}
     \longThref{LES adjacent direction}{lm:les-adjacent-direction},
-        \Eref{eq:th-les-direction-32}, \Eref{eq:th-les-direction-36}.
+        \Eref{eq:th-les-direction-32},
+        \Eref{eq:th-les-direction-37-10},
+        \Eref{eq:th-les-direction-38}.
 }
 \mypareq{eq:th-les-direction-44}{%
     $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{loP}}$
-    \cuz{}
+    \linebreak \cuz{}
         \Eref{eq:th-les-direction-40}, \Eref{eq:th-les-direction-42}.
 }
 \begin{equation}
@@ -5240,14 +5236,16 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
 \end{equation}
 \mypareq{eq:th-les-direction-50}{%
     $\Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{\var{n}+1}}$
-    \cuz{} reflexivity, \Eref{eq:th-les-direction-32}.
+    \linebreak \cuz{} reflexivity, \Eref{eq:th-les-direction-32},
+        \Eref{eq:th-les-direction-37-10}.
 }
 \begin{equation}
 \label{eq:th-les-direction-52}
 \begin{gathered}
     \Vnat{loP} = \var{n}+1 \land \var{n}+1 \in \Dom{\var{lesP}}
-    \\ \implies \Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{lo}}
-    \\ \because \Eref{eq:th-les-direction-50}.
+    \\ \implies \Current{\VVelement{lesP}{\var{n}+1}} \le \Current{\VVelement{lesP}{loP}}
+    \\ \because \Eref{eq:th-les-direction-46},
+        \Eref{eq:th-les-direction-50}.
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -5258,7 +5256,8 @@ instantiating the universal qualifiers of \myfn{INDH}{\var{n}+1}.
     \\ \myparbox{\cuz{}
         universal generalization of \var{loP} as \var{lo} and
         of \var{lesP} as \var{les},
-        \Eref{eq:th-les-direction-46}, \Eref{eq:th-les-direction-52}.
+        \Eref{eq:th-les-direction-32}, \Eref{eq:th-les-direction-34},
+        \Eref{eq:th-les-direction-52}.
         This is \myfn{INDH}{\var{n}+1}.
     }
 \end{gathered}
@@ -5274,8 +5273,8 @@ we have the induction and theorem.
 
 \begin{theorem}[LES current location run]
 \label{th:les-current-location-run}
-If two elements of an LES are at the same
-current location, they bound a run of LES elements
+If two elements of an \type{LES} are at the same
+current location, they bound a run of \type{LES} elements
 at that current location.
 That is, if
 \begin{gather}
@@ -5356,7 +5355,7 @@ reductio and the theorem.
 
 \begin{theorem}[LES unit derivation]
 \label{th:les-unit-derivation}
-If an LES is of finite length at least 3,
+If an \type{LES} is of finite length at least 3,
 and begins and ends at the same current location,
 then there is a non-trivial unit derivation from
 the symbol of its penultimate element to the
@@ -5380,7 +5379,7 @@ then
 
 \begin{proof}
 The proof is by induction.
-The induction variable is the length of the LES,
+The induction variable is the length of the \type{LES},
 offset by 3.
 The induction hypothesis is
 \begin{equation}
@@ -5664,7 +5663,7 @@ With the induction, we have the theorem.
 \begin{theorem}[LES finiteness]
 \label{th:les-finiteness}
 \todo{Split LES finiteness theorem in half}
-Let \var{les} be an arbitrary LES.
+Let \var{les} be an arbitrary \type{LES}.
 Then
 \begin{gather}
 \label{eq:th-les-finiteness-02}
@@ -5672,7 +5671,7 @@ Then
 \\ \label{eq:th-les-finiteness-04}
     \text{where } \Vnat{max} = \size{\Vocab{\Vint{g}}}+1.
 \end{gather}
-Also, every LES is finite:
+Also, every \type{LES} is finite:
 \begin{equation}
 \label{eq:th-les-finiteness-06}
 \forall \; \var{les} \in \type{LES} : \var{les} \in \naturals.
@@ -5783,7 +5782,7 @@ so that
    \forall \; \var{ii} < \var{a} : \Current{\VVelement{les1}{ii}} \neq \var{i}.
 \end{gather}
 
-We let \var{run} be a new LES:
+We let \var{run} be a new \type{LES}:
 \begin{equation}
 \label{eq:th-les-finiteness-28}
 \Vles{run} = \Velement{les1}{\var{a}\ldots \var{z}}
@@ -5974,12 +5973,12 @@ completing the proof.
 
 \begin{theorem}[LES uniqueness]
 \label{th:les-uniqueness}
-Two LES's of the same length have the same base element,
+Two \type{LES}'s of the same length have the same base element,
 iff they are identical.
 \end{theorem}
 
 \begin{proof}
-If two LES's are identical, they obviously have the same
+If two \type{LES}'s are identical, they obviously have the same
 base element and length.
 This shows the reverse direction of the theorem trivially.
 
@@ -5990,11 +5989,11 @@ $$\Vsize{les1} = \Vsize{les2} \text{\cuz{} AF direction,
 $$\Velement{les1}{0} = \Velement{les2}{0} \text{\cuz{} AF direction.}$$
 
 Consider the subcase
-where \var{les1} and \var{les2} are two LES's of length 1:
+where \var{les1} and \var{les2} are two \type{LES}'s of length 1:
 $$\Vsize{les1} = \Vsize{les1} = 1.$$
 In this subcase we have the direction trivially.
 
-We assume for a reductio that the two LES's differ.
+We assume for a reductio that the two \type{LES}'s differ.
 If \var{les1} and \var{les2} differ, they must differ
 in one of the elements.
 Therefore, there will be a first index at which the elements differ,
@@ -6050,12 +6049,12 @@ With both directions, we have the theorem.
 
 \begin{theorem}[LES trichotomy]
 \label{th:les-trichotomy}
-If two LES's of the same length have the same base element,
+If two \type{LES}'s of the same length have the same base element,
 then there are three mutually exclusive possibilites:
 \begin{itemize}
 \item They are identical.
-\item The first LES is a proper prefix of the second.
-\item The second LES is a proper prefix of the first.
+\item The first \type{LES} is a proper prefix of the second.
+\item The second \type{LES} is a proper prefix of the first.
 \end{itemize}
 That is, if
 \begin{gather}
@@ -6296,7 +6295,7 @@ which shows the reductio and theorem.
 \begin{definition}[Leo source sequence {[}LSS{]}]
 \label{def:leo-source-sequence}
 A \dfn{Leo source EIM sequence},
-or \dfn{Leo source sequence} is an LES,
+or \dfn{Leo source sequence} is an \type{LES},
 every element of which is a Leo source EIM.
 That is,
 \begin{equation}
@@ -6409,12 +6408,12 @@ to say that \var{lss} is maximal.
 
 \begin{theorem}[LES--LSS equivalence]
 \label{th:les-lss-equivalence}
-Two LSS's are equal iff their underlying LES's
+Two LSS's are equal iff their underlying \type{LES}'s
 are equal.
 \end{theorem}
 
 \begin{proof}
-Let \var{lss} be an LSS and \var{les} be its underlying LES.
+Let \var{lss} be an LSS and \var{les} be its underlying \type{LES}.
 \var{lss} and \var{les} are defined to be the same sequence
 of \type{EIM}s, so that $\Vles{lss} = \Vles{les}$.
 The theorem follows directly.
@@ -6430,7 +6429,7 @@ then they are identical.
 \begin{proof}
 \todo{Prove this}
 Let \Vlss{lss1} and \Vlss{lss2} be two LSS's,
-and let their underlying LES's be \Vles{les1}
+and let their underlying \type{LES}'s be \Vles{les1}
 and \Vles{les2} so that
 \mypareq{eq:th-lss-uniqueness-10}{%
     $\var{les1} = \var{lss1} \land \var{les2} = \var{lss2}$
@@ -6546,7 +6545,7 @@ iff
 \begin{proof}
 The forward direction follows immediately from the definition
 of an LSS \Dfref{def:leo-source-sequence},
-and definition of an LES \Dfref{def:next-eligible-sequence}.
+and definition of an \type{LES} \Dfref{def:next-eligible-sequence}.
 We prove the reverse direction, by assuming
 the antecedant to show the consequent.
 \mypareq{eq:th-lss-extension-10}{%
@@ -6927,7 +6926,7 @@ For any length,
     \Eref{eq:th-maximal-lss-existence-10-20}.
 \end{gathered}
 \end{equation}
-Among the LES's with \var{eim} as their base,
+Among the \type{LES}'s with \var{eim} as their base,
 there is a maximum length,
 call it \Vnat{possible}:
 \begin{equation}
@@ -6942,7 +6941,7 @@ call it \Vnat{possible}:
 Therefore, there is a maximum possible LSS length for
 LSS's with \var{eim} as their base.
 \mypareq{eq:th-maximal-lss-existence-20}{%
-    The length of an LSS is the same as that of its underlying LES
+    The length of an LSS is the same as that of its underlying \type{LES}
     \cuz{} \longDfref{LSS}{def:leo-source-sequence}.
 }
 \begin{equation}
