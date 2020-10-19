@@ -6083,10 +6083,10 @@ With both directions, we have the theorem.
 
 \begin{theorem}[LES trichotomy]
 \label{th:les-trichotomy}
-If two \type{LES}'s of the same length have the same base element,
-then there are three mutually exclusive possibilites:
+If two \type{LES}'s have the same base element,
+then exactly one of the following three statements is true:
 \begin{itemize}
-\item They are identical.
+\item The two \type{LES}'s are identical.
 \item The first \type{LES} is a proper prefix of the second.
 \item The second \type{LES} is a proper prefix of the first.
 \end{itemize}
@@ -6100,27 +6100,71 @@ That is, if
 \land \; \Velement{les1}{0} = \Velement{les2}{0}
 \end{gather}
 then
+\mypareq{eq:th-les-trichotomy-08}{%
+   \size{\var{fn} \in \set{\var{Eq},\var{Lt},\var{Gt}} :
+       \myfn{fn}{\var{les1},\var{les2}}} = 1
+}
+where \var{Eq}, \var{Lt} and \var{Gt} are boolean functions,
+defined within the context of this theorem and its proof,
+such that
 \begin{gather}
-\var{les1} = \var{les2}
-\\
-\lor \; \left(
-    \Vsize{les1} < \Vsize{les2} \land \var{les1} = \Velement{les2}{0\ldots \Vlastix{les1}}
-    \right)
-\\
-\lor \; \left(
-    \Vsize{les2} < \Vsize{les1} \land \var{les2} = \Velement{les1}{0\ldots \Vlastix{les2}}
-    \right).
+\label{eq:th-les-trichotomy-09a}
+    \myfn{Eq}{\Vles{x},\Vles{y}} \iff \var{x} = \var{y},
+    \\ \label{eq:th-les-trichotomy-09b}
+    \myfn{Lt}{\Vles{x},\Vles{y}} \iff \PrPfx{\var{les1},\var{les2}}\text{, and}
+    \\ \label{eq:th-les-trichotomy-09c}
+    \myfn{Gt}{\Vles{x},\Vles{y}} \iff \PrPfx{\var{les2},\var{les1}}.
 \end{gather}
 \end{theorem}
 
 \begin{proof}
-The proof is by mutually exclusive cases:
-$\Vsize{les2} = \Vsize{les1}$,
-$\Vsize{les1} < \Vsize{les2}$, and
-$\Vsize{les2} > \Vsize{les1}$.
-The case where
-$\Vsize{les2} = \Vsize{les1}$ is shown in
-\longThref{LES uniqueness}{th:les-uniqueness}.
+The proof is direct.
+We first note that,
+by the Trichotomy Law for the ordering of the natural numbers,
+\mypareq{eq:th-les-trichotomy-10}{%
+   \size{\var{fn} \in \set{\var{EqSz},\var{LtSz},\var{GtSz}} :
+       \myfn{fn}{\var{les1},\var{les2}}} = 1
+}
+where \var{EqSz}, \var{LtSz} and \var{GtSz} are boolean functions,
+defined within the context of this theorem and its proof,
+such that
+\begin{gather}
+\label{eq:th-les-trichotomy-12}
+   \myfn{EqSz}{\Vles{x},\Vles{y}} \iff \Vsize{x} = \Vsize{y},
+\\ \label{eq:th-les-trichotomy-14}
+    \myfn{LtSz}{\Vles{x},\Vles{y}} \iff \Vsize{les1} < \Vsize{les2}\text{, and}
+\\ \label{eq:th-les-trichotomy-16}
+    \myfn{GtSz}{\Vles{x},\Vles{y}} \iff \Vsize{les1} > \Vsize{les2}.
+\end{gather}
+
+We now show three derivations, one for each of the functions
+\var{EqSz}, \var{LtSz} and \var{GtSz}.
+\mypareq{eq:th-les-trichotomy-17-18}{
+   \myfn{EqSz}{\Vles{x},\Vles{y}} \cuz{} AF derivation;
+   new arbitrary \Vles{x}, \Vles{y}.
+}
+\mypareq{eq:th-les-trichotomy-17-20}{
+   $\Vsize{x} = \Vsize{y}$ \cuz{} \Eref{eq:th-les-trichotomy-12},
+       \Eref{eq:th-les-trichotomy-17-18}.
+}
+\mypareq{eq:th-les-trichotomy-17-22}{
+   $\Vles{x} = \Vles{y}$ \cuz{}
+    \longThref{LES uniqueness}{th:les-uniqueness},
+    \Eref{eq:th-les-trichotomy-06},
+   \Eref{eq:th-les-trichotomy-17-20}.
+}
+\mypareq{eq:th-les-trichotomy-17-24}{
+   \myfn{Eq}{\Vles{x},\Vles{y}}
+   \cuz{} \Eref{eq:th-les-trichotomy-09a},
+       \Eref{eq:th-les-trichotomy-17-22}.
+}
+\mypareq{eq:th-les-trichotomy-17-26}{
+   $\forall \; \Vles{x} : \forall \; \Vles{y} :$
+   $\myfn{EqSz}{\Vles{x},\Vles{y}}
+   \implies \myfn{Eq}{\Vles{x},\Vles{y}}$
+   \linebreak \cuz{} derivation \Eref{eq:th-les-trichotomy-17-18}--\Eref{eq:th-les-trichotomy-17-24},
+   \linebreak universal generalization of \Vles{x}, \Vles{y}.
+}
 
 For the case where
 \begin{equation}
