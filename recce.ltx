@@ -5969,8 +5969,21 @@ completing the proof.
 
 \begin{theorem}[LES uniqueness]
 \label{th:les-uniqueness}
-Two \type{LES}'s of the same length have the same base element,
+Two \type{LES}'s of the same length have the same base element
 iff they are identical.
+That is,
+\begin{gather}
+\label{eq:th-les-uniqueness-02}
+   \forall \; \var{les1} \in \type{LES} :
+       \forall \; \var{les2} \in \type{LES} :
+\\ \label{eq:th-les-uniqueness-04}
+   \Vsize{les1} = \Vsize{les2}
+\\ \label{eq:th-les-uniqueness-06}
+   \land \; \Velement{les1}{0} = \Velement{les2}{0}
+\\ \nonumber \iff
+\\ \label{eq:th-les-uniqueness-08}
+   \var{les1} = \var{les2}.
+\end{gather}
 \end{theorem}
 
 \begin{proof}
@@ -5978,40 +5991,60 @@ If two \type{LES}'s are identical, they obviously have the same
 base element and length.
 This shows the reverse direction of the theorem trivially.
 
-For the forward direction,
-we assume the antecedants to show the consequent:
-$$\Vsize{les1} = \Vsize{les2} \text{\cuz{} AF direction,
-    new \Vles{les1}, new \Vles{les2}.}$$
-$$\Velement{les1}{0} = \Velement{les2}{0} \text{\cuz{} AF direction.}$$
+For the forward direction, we divide the proof into two subcases,
+based on the value of \Vsize{les1}.
+We show the first subcase directly.
+\mypareq{eq:th-les-uniqueness-10-12}{%
+    $\Vsize{les1} = 1$ \cuz{} AF first subcase.
+}
+\mypareq{eq:th-les-uniqueness-10-14}{%
+    $\Vsize{les2} = 1$ \cuz{} \Eref{eq:th-les-uniqueness-04},
+        \Eref{eq:th-les-uniqueness-10-12}.
+}
+\mypareq{eq:th-les-uniqueness-10-16}{%
+   $\var{les1} = \tuple{\Velement{les1}{0}}
+       = \tuple{\Velement{les2}{0}} = \var{les2}$
+   \linebreak \cuz{} \Eref{eq:th-les-uniqueness-06},
+        \Eref{eq:th-les-uniqueness-10-12},
+        \Eref{eq:th-les-uniqueness-10-14}.
+}
+\mypareq{eq:th-les-uniqueness-10-18}{%
+   $\var{les1} = \var{les2}$ \cuz{} \Eref{eq:th-les-uniqueness-10-16}.
+   This is the consequent \Eref{eq:th-les-uniqueness-08}
+      and shows the first subcase of the foward direction.
+}
 
-Consider the subcase
-where \var{les1} and \var{les2} are two \type{LES}'s of length 1:
-$$\Vsize{les1} = \Vsize{les1} = 1.$$
-In this subcase we have the direction trivially.
-
-We assume for a reductio that the two \type{LES}'s differ.
+For the second subcase, we proceed via a reductio.
+\mypareq{eq:th-les-uniqueness-10-20}{%
+    $\Vsize{les1} > 1$ \cuz{} AF second subcase.
+}
+\mypareq{eq:th-les-uniqueness-10-22}{%
+    $\Vsize{les2} > 1$ \cuz{} \Eref{eq:th-les-uniqueness-04},
+        \Eref{eq:th-les-uniqueness-10-20}.
+}
+For our reductio,
+we assume that the two \type{LES}'s differ.
+\mypareq{eq:th-les-uniqueness-10-24}{%
+   $\var{les1} \ne \var{les2}$ \cuz{} AF reductio.
+}
 If \var{les1} and \var{les2} differ, they must differ
 in one of the elements.
-Therefore, there will be a first index at which the elements differ,
-call it \Vnat{first}.
-\begin{equation}
-\label{eq:th-les-uniqueness-11}
-        \VVelement{les1}{first} \neq \VVelement{les2}{first}
-        \because \text{AF reductio}.
-\end{equation}
-\begin{equation}
-\label{eq:th-les-uniqueness-12}
-        \forall \Vnat{ix} < \var{first} : \VVelement{les1}{ix} = \VVelement{les2}{ix}
-        \because \text{AF reductio}.
-\end{equation}
-Since, by assumption for the theorem,
+Therefore, there will be a first index at which the elements differ.
+\mypareq{eq:th-les-uniqueness-11}{%
+        $\VVelement{les1}{\Vnat{first}} \neq \VVelement{les2}{\var{first}}$
+        \linebreak $\land \; \forall \; \Vnat{ix} < \var{first} : \VVelement{les1}{ix} = \VVelement{les2}{ix}$
+        \linebreak \cuz{} \Eref{eq:th-les-uniqueness-10-24}, new \Vnat{first}.
+}
+%
+Since, by hypothesis for the theorem,
 \var{les1} and \var{les2} share the same base
 element, we know that
 \begin{equation}
 \label{eq:th-les-uniqueness-20}
-\var{first} > 0 \because \text{AF theorem},
+\var{first} > 0 \because \Eref{eq:th-les-uniqueness-06},
     \Eref{eq:th-les-uniqueness-11}.
 \end{equation}
+%
 \begin{equation}
 \label{eq:th-les-uniqueness-22}
 \begin{gathered}
@@ -6023,6 +6056,9 @@ element, we know that
         \Velement{les2}{\var{first}\subtract 1}}
 \\ \because
         \longDfref{LES}{def:next-eligible-sequence},
+        \Eref{eq:th-les-uniqueness-10-20},
+        \Eref{eq:th-les-uniqueness-10-22},
+        \Eref{eq:th-les-uniqueness-11},
         \Eref{eq:th-les-uniqueness-20}.
 \end{gathered}
 \end{equation}
@@ -6035,8 +6071,8 @@ element, we know that
     \Eref{eq:th-les-uniqueness-22}.
 \end{gathered}
 \end{equation}
-The equation \Eref{eq:th-les-uniqueness-24}
-contradicts \Eref{eq:th-les-uniqueness-12},
+Equation \Eref{eq:th-les-uniqueness-24}
+contradicts \Eref{eq:th-les-uniqueness-10-18},
 which shows the reductio, the subcase
 and the forward direction.
 With both directions, we have the theorem.
