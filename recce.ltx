@@ -6440,7 +6440,7 @@ which shows the reductio and theorem.
 \label{chap:lss}
 
 \begin{definition}[Leo source sequence {[}LSS{]}]
-\label{def:leo-source-sequence}
+\label{def:lss}
 A \dfn{Leo source EIM sequence},
 or \dfn{Leo source sequence} is an \type{LES},
 every element of which is a Leo source EIM.
@@ -6448,13 +6448,145 @@ That is,
 \begin{equation}
 \label{eq:def-leo-source-sequence-10}
 \type{LSS} = \set{
-\begin{gathered}
-    \var{les} \in \type{LES} :
-    \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{Is-source}{\VVelement{les}{i}}
-\end{gathered}
-}.
-\quad \dispEnd
+    \begin{gathered}
+        \var{les} \in \type{LES} :
+        \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{Is-source}{\VVelement{les}{i}}
+    \end{gathered}
+}.  \quad \dispEnd
 \end{equation}
+\end{definition}
+
+\begin{theorem}[LSS--LES identity]
+\label{th:lss-les-identity}
+The function
+\[
+\begin{gathered}
+    \myfn{LES-of}{\Vlss{lss}} \defined \riota \; \var{lss} \in \type{LES} :
+    \forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-source}{\VVelement{lss}{i}}
+\end{gathered}
+\]
+where $\Dom{\myfnname{LES-of}} = \type{LSS}$, exists.
+Further for all \Vlss{lss},
+\begin{gather}
+    \Vlss{lss} = \myfn{LES-of}{\var{lss}},
+   \\ \Vsize{lss} =
+        \Vsize{\myfn{LES-of}{\var{lss}}},
+   \\ \forall \; \Vnat{i} \in \Dom{\var{lss}} :
+       \VVelement{lss}{i} = \VVelement{(\myfn{LES-of}{\Vlss{lss}})}{i}\text{, and}
+   \\ \begin{gathered}
+   \forall \; \Vnat{b} \in \Dom{\var{lss}} :
+       \forall \; \Vnat{a} \le \var{b} :
+       \\ \tuple{ \VVelement{lss}{a}\ldots \VVelement{lss}{b} }
+       = \tuple{ \VVelement{(\myfn{LES-of}{\var{lss})}}{a}
+           \ldots \VVelement{(\myfn{LES-of}{\var{lss})}}{b} }.
+    \end{gathered}
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+Consider the relation
+\begin{equation}
+\label{eq:th-lss-les-identity-10}
+\begin{gathered}
+    \var{LES-of-Rel} = \set{
+    \begin{gathered}
+    \tuple{\var{lss},\var{lss}} : \var{lss} \in \type{LES}
+    \\ \land \; \forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-source}{\VVelement{lss}{i}}
+    \end{gathered}
+    }
+    \\ \because \text{new relation \var{LES-of-Rel} for convenience.}
+\end{gathered}
+\end{equation}
+The relation \myfnname{LES-of-Rel} clearly exists,
+and by the definition of \type{LSS} \Dfref{def:lss},
+$\Dom{\myfnname{LES-of-Rel}} = \type{LSS}$.
+We have yet to show that 
+\myfnname{LES-of-Rel} is a function.
+
+To see that \myfnname{LES-of-Rel} is a function,
+consider two tuples with the same argument:
+\mypareq{eq:th-lss-les-identity-18}{%
+    $\var{t1} \in \var{LES-of-Rel}
+    \land \var{t2} \in \var{LES-of-Rel}
+    \land \Velement{t1}{0} = \Velement{t2}{0}$.
+    \linebreak \cuz{} AF derivation.
+}
+\mypareq{eq:th-lss-les-identity-20}{%
+    $\var{t1} = \tuple{\Vlss{arg},\Vles{val1}}
+    \land \var{t2} = \tuple{\Vlss{arg},\Vles{val2}}$
+    \linebreak \cuz{} \Eref{eq:th-lss-les-identity-20},
+        WLOG.
+}
+But from the definition of \myfnname{LES-of-Rel}, we know that
+the two elements of each of its tuples must be equal:
+\mypareq{eq:th-lss-les-identity-22}{%
+    $\Vlss{arg} = \Vles{val1} \land \Vlss{arg} = \Vles{val2}$
+    \cuz{} \Eref{eq:th-lss-les-identity-10},
+    \Eref{eq:th-lss-les-identity-20}.
+}
+\mypareq{eq:th-lss-les-identity-24}{%
+    $\Vles{val1} = \Vles{val2}$
+    \cuz{} \Eref{eq:th-lss-les-identity-22}.
+}
+\mypareq{eq:th-lss-les-identity-26}{%
+    $\var{t1} = \var{t2}$
+    \cuz{}
+    \Eref{eq:th-lss-les-identity-20},
+    \Eref{eq:th-lss-les-identity-24}.
+}
+The derivation from
+\Eref{eq:th-lss-les-identity-18} to
+\Eref{eq:th-lss-les-identity-26}
+shows that two tuples with the same argument
+in \myfnname{LES-of-Rel} must be equal ---
+in other words that
+\myfnname{LES-of-Rel} is a function.
+
+
+That there is at least one \type{LES} for every \type{LSS},
+follows directly from the definition of \type{LSS} \Dfref{def:lss}.
+To show that \myfnname{LES-of} is a function it is necessary
+to show that there is at most one \type{LES} for
+every \type{LSS}.
+To do this, we assume that there are two \type{LES}'s
+such that match the definition of \myfnname{LES-of},
+and show that they must be identical:
+
+The proof is direct.
+\mypareq{th:lss-les-identity-10}{%
+    $\var{lss} \in \type{LSS}$ \cuz{} AF theorem.
+}
+\mypareq{th:lss-les-identity-12}{%
+    $\exists \; \var{les} :
+       \var{les} \in \type{LES}
+       \land \var{les} = \var{lss}$
+       \linebreak \cuz{}
+       \longDfref{LSS}{def:lss},
+        \Eref{th:lss-les-identity-10}.
+}
+\mypareq{th:lss-les-identity-14}{%
+    $\exists \; \var{les} :
+       \var{les} \in \type{LES}
+       \land \var{lss} \in \type{LSS}
+       \land \var{les} = \var{lss}$
+       \linebreak \cuz{}
+        \Eref{th:lss-les-identity-10},
+        \Eref{th:lss-les-identity-12}.
+}
+\mypareq{th:lss-les-identity-16}{%
+    $\exists \; \var{les} :
+           \var{les} = \myfn{LES-of}{\var{lss}}$
+       \cuz{} \longDfref{LES-of}{def:lss},
+        \Eref{th:lss-les-identity-14}.
+}
+\todo{Prove LSS--LES identity}
+\end{proof}
+
+\begin{definition}[Underlying LES]
+\label{def:underlying-les}
+If $\Vles{les} = \myfn{LES-of}{\Vlss{lss}}$ we say that
+\var{les} is the \dfn{underlying LES} of \Vlss{lss}.
+\dispEnd
 \end{definition}
 
 \begin{theorem}[Source EIM containment]
@@ -6538,7 +6670,7 @@ Our example of an LSS containing \var{eim} as its base element is
 }
 \mypareq{eq:th-source-eim-containment-20}{%
    $\var{example} \in \type{LSS}$ \cuz{}
-       \longDfref{LSS}{def:leo-source-sequence},
+       \longDfref{LSS}{def:lss},
        \Eref{eq:th-source-eim-containment-10-10},
         \Eref{eq:th-source-eim-containment-13},
         \Eref{eq:th-source-eim-containment-14},
@@ -6606,7 +6738,7 @@ and let their underlying \type{LES}'s be \Vles{les1}
 and \Vles{les2} so that
 \mypareq{eq:th-lss-uniqueness-10}{%
     $\var{les1} = \var{lss1} \land \var{les2} = \var{lss2}$
-        \cuz{} \longDfref{LSS}{def:leo-source-sequence}.%
+        \cuz{} \longDfref{LSS}{def:lss}.%
 }
 We proceed by reductio.
 \mypareq{eq:th-lss-uniqueness-20}{%
@@ -6662,7 +6794,7 @@ then
 \begin{proof}
 \mypareq{eq:th-lss-subsequence-10}{%
    $\var{seq} \in \type{LES}$
-        \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+        \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-lss-subsequence-02}.%
 }
 \mypareq{eq:th-lss-subsequence-12}{%
@@ -6677,7 +6809,7 @@ then
 \begin{gathered}
     \forall \; \Vnat{i} \in \Dom{\var{seq}} :
         \size{\myfn{lims}{\VVelement{seq}{i}}} > 0
-    \\ \because \longDfref{LSS}{def:leo-source-sequence},
+    \\ \because \longDfref{LSS}{def:lss},
         \Eref{eq:th-lss-subsequence-02}.
 \end{gathered}
 \end{equation}
@@ -6692,7 +6824,7 @@ then
 \end{equation}
 \mypareq{eq:th-lss-subsequence-24}{%
    $\var{subseq} \in \type{LSS}$
-        \cuz{} \Dfref{def:leo-source-sequence},
+        \cuz{} \Dfref{def:lss},
         \Eref{eq:th-lss-subsequence-12},
         \Eref{eq:th-lss-subsequence-22}. \quad \myqed
 }
@@ -6717,7 +6849,7 @@ iff
 
 \begin{proof}
 The forward direction follows immediately from the definition
-of an LSS \Dfref{def:leo-source-sequence},
+of an LSS \Dfref{def:lss},
 and definition of an \type{LES} \Dfref{def:next-eligible-sequence}.
 We prove the reverse direction, by assuming
 the antecedant to show the consequent.
@@ -6736,7 +6868,7 @@ the antecedant to show the consequent.
 }
 \mypareq{eq:th-lss-extension-16}{%
     $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-source}{\VVelement{lss}{i}}$
-        \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+        \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-lss-extension-14}.
 }
 \mypareq{eq:th-lss-extension-18}{%
@@ -6758,7 +6890,7 @@ the antecedant to show the consequent.
 }
 \mypareq{eq:th-lss-extension-24}{%
    $\var{extended} \in \type{LSS}$
-    \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+    \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-lss-extension-20},
         \Eref{eq:th-lss-extension-22}.
 }
@@ -7069,7 +7201,7 @@ with \var{eim} as their base:
 $\Vlssset{based} = \set{
    \Vlss{lss} : \Velement{lss}{0} = \var{eim}}$
     \linebreak \cuz{}
-        \longDfref{LSS}{def:leo-source-sequence},
+        \longDfref{LSS}{def:lss},
         antecedant of theorem \Eref{eq:th-maximal-lss-existence-02},
        new \var{based} for convenience.
 }
@@ -7115,7 +7247,7 @@ Therefore, there is a maximum possible LSS length for
 LSS's with \var{eim} as their base.
 \mypareq{eq:th-maximal-lss-existence-20}{%
     The length of an LSS is the same as that of its underlying \type{LES}
-    \cuz{} \longDfref{LSS}{def:leo-source-sequence}.
+    \cuz{} \longDfref{LSS}{def:lss}.
 }
 \begin{equation}
 \label{eq:th-maximal-lss-existence-22}
@@ -7283,7 +7415,7 @@ with a value of the same name.
 Every element of \var{lss} must be a Leo source item:
 \mypareq{eq:th-maximal-lss-dichotomy-12}{%
     \myfn{Is-source}{\var{eim}} \cuz{}
-        \longDfref{LSS}{def:leo-source-sequence},
+        \longDfref{LSS}{def:lss},
         \Eref{eq:th-maximal-lss-dichotomy-10}.%
 }
 \mypareq{eq:th-maximal-lss-dichotomy-14}{%
@@ -7754,7 +7886,7 @@ for a derivation.
 \end{equation}
 \mypareq{eq:th-maximal-lss-lim-invariant-62}{%
    \myfn{Is-source}{\Velement{max}{1}}
-   \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+   \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-maximal-lss-lim-invariant-42},
         \Eref{eq:th-maximal-lss-lim-invariant-46}.
 }
@@ -7765,7 +7897,7 @@ for a derivation.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-66}{%
     $\var{max} \in \type{LES}$
-    \cuz{} \longDfref{LSS}{def:leo-source-sequence},
+    \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-maximal-lss-lim-invariant-42}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-68}{%
