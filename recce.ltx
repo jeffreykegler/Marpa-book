@@ -6924,103 +6924,118 @@ That is, if
 \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
 \end{gather}
 then
-\begin{equation}
-\label{eq:th-lss-trichotomy-08-10}
-\begin{gathered}
-\size{\set{\var{x} \in \set{\var{lss1}} : \var{lss1} = \var{lss2}}}
-\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \PrPfx{\var{lss1},\var{lss2}}}}
-\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \PrPfx{\var{lss2},\var{lss1}}}} = 1
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-lss-trichotomy-08}{%
+   \size{\var{fn} \in \set{\var{Eq},\var{Lt},\var{Gt}} :
+       \myfn{fn}{\var{lss1},\var{lss2}}} = 1
+}
+where \var{Eq}, \var{Lt} and \var{Gt} are boolean functions,
+defined within the context of this theorem and its proof,
+such that
+\begin{gather}
+\label{eq:th-lss-trichotomy-09a}
+    \myfn{Eq}{\Vlss{x},\Vlss{y}} \iff \var{x} = \var{y},
+    \\ \label{eq:th-lss-trichotomy-09b}
+    \myfn{Lt}{\Vlss{x},\Vlss{y}} \iff \PrPfx{\var{lss1},\var{lss2}}\text{, and}
+    \\ \label{eq:th-lss-trichotomy-09c}
+    \myfn{Gt}{\Vlss{x},\Vlss{y}} \iff \PrPfx{\var{lss2},\var{lss1}}.
+\end{gather}
 \end{theorem}
 
 \begin{proof}
+\todo{Recheck this proof after adding LSS prefix theorem}
+This proof is similar to that for
+the ``LES trichotomy'' theorem \Thref{th:les-trichotomy}.
 The proof strategy is direct, assuming
 the hypothesis of the theorem to show
 its conclusion.
-We first note that
-from the Trichotomy Law for integers we have
-\begin{equation}
-\label{eq:th-lss-trichotomy-10}
-\begin{gathered}
-\size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss1} = \Vsize{lss2}}}
-\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss1} < \Vsize{lss2}}}
-\\ + \size{\set{\var{x} \in \set{\var{lss1}} : \Vsize{lss2} < \Vsize{lss1}}} = 1
-\end{gathered}
-\end{equation}
-By the ``LSS uniqueness'' Theorem
-we have
-\mypareq{eq:th-lss-trichotomy-12}{%
-     $\Vsize{lss1} = \Vsize{lss2}
-     \iff \var{lss1} = \var{lss2}$
-     \linebreak \cuz{} \Thref{th:lss-uniqueness}, \Eref{eq:th-lss-trichotomy-06}.
+
+We first note that,
+by the Trichotomy Law for the ordering of the natural numbers,
+\mypareq{eq:th-lss-trichotomy-10}{%
+   \size{\var{fn} \in \set{\var{EqSz},\var{LtSz},\var{GtSz}} :
+       \myfn{fn}{\var{lss1},\var{lss2}}} = 1
+}
+where \var{EqSz}, \var{LtSz} and \var{GtSz} are boolean functions,
+defined within the context of this theorem and its proof,
+such that
+\begin{gather}
+\label{eq:th-lss-trichotomy-12}
+   \myfn{EqSz}{\Vlss{x},\Vlss{y}} \iff \Vsize{x} = \Vsize{y},
+\\ \label{eq:th-lss-trichotomy-14}
+    \myfn{LtSz}{\Vlss{x},\Vlss{y}} \iff \Vsize{lss1} < \Vsize{lss2}\text{, and}
+\\ \label{eq:th-lss-trichotomy-16}
+    \myfn{GtSz}{\Vlss{x},\Vlss{y}} \iff \Vsize{lss1} > \Vsize{lss2}.
+\end{gather}
+
+We now show three derivations, one for each of the functions
+\var{EqSz}, \var{LtSz} and \var{GtSz}.
+\mypareq{eq:th-lss-trichotomy-17-18}{
+   \myfn{EqSz}{\Vlss{x},\Vlss{y}} \cuz{} AF derivation;
+   new arbitrary \Vlss{x}, \Vlss{y}.
+}
+\mypareq{eq:th-lss-trichotomy-17-20}{
+   $\Vsize{x} = \Vsize{y}$ \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-18}
+   using \Eref{eq:th-lss-trichotomy-12}.
+}
+\mypareq{eq:th-lss-trichotomy-17-22}{
+   $\Vlss{x} = \Vlss{y}$ \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-20}
+   using \longThref{LSS uniqueness}{th:lss-uniqueness},
+    \Eref{eq:th-lss-trichotomy-06}.
+}
+\mypareq{eq:th-lss-trichotomy-17-24}{
+   \myfn{Eq}{\Vlss{x},\Vlss{y}} \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-22}
+   using \Eref{eq:th-lss-trichotomy-09a}.
+}
+\mypareq{eq:th-lss-trichotomy-17-26}{
+   $\forall \; \Vlss{x} : \forall \; \Vlss{y} :$
+   $\myfn{EqSz}{\Vlss{x},\Vlss{y}}
+   \iff \myfn{Eq}{\Vlss{x},\Vlss{y}}$
+   \linebreak \cuz{} equivalence \Eref{eq:th-lss-trichotomy-17-18}--\Eref{eq:th-lss-trichotomy-17-24},
+   \linebreak universal generalization of \Vlss{x}, \Vlss{y}.
 }
 
-\mypareq{eq:th-lss-trichotomy-20}{%
-    $\Vsize{lss1} < \Vsize{lss2}$ \cuz{} AF derivation.
+\mypareq{eq:th-lss-trichotomy-17-28}{
+   \myfn{LtSz}{\Vlss{x},\Vlss{y}} \cuz{} AF derivation;
+   new arbitrary \Vlss{x}, \Vlss{y}.
 }
-\mypareq{eq:th-lss-trichotomy-22}{%
-    $\Vlss{preLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
-    \cuz{} \longThref{LSS subsequence}{th:lss-subsequence},
-        \Eref{eq:th-lss-trichotomy-20},
-            new \Vlss{preLss2} for convenience.
+\mypareq{eq:th-lss-trichotomy-17-30}{
+   $\Vsize{x} < \Vsize{y}$ \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-28}
+   using \Eref{eq:th-lss-trichotomy-14}.
 }
-\mypareq{eq:th-lss-trichotomy-24}{%
-    $\PrPfx{\var{preLss2},\var{lss2}}$
-        \cuz{} \Eref{eq:th-lss-trichotomy-20}, \Eref{eq:th-lss-trichotomy-22}.
+\mypareq{eq:th-lss-trichotomy-17-32}{
+   $\Vlss{x} = \Vlss{y}$ \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-30}
+   using \longThref{LSS prefix}{th:lss-prefix},
+    \Eref{eq:th-lss-trichotomy-06}.
 }
-\mypareq{eq:th-lss-trichotomy-26}{%
-    $\Velement{preLss2}{0} = \Velement{lss1}{0}$
-    \cuz{} \Eref{eq:th-lss-trichotomy-06}, \Eref{eq:th-lss-trichotomy-22}.
+\mypareq{eq:th-lss-trichotomy-17-34}{
+   \myfn{Lt}{\Vlss{x},\Vlss{y}} \cuz{}
+   equivalence with \Eref{eq:th-lss-trichotomy-17-32}
+   using \Eref{eq:th-lss-trichotomy-09b}.
 }
-\mypareq{eq:th-lss-trichotomy-28}{%
-    $\Vsize{preLss2} = \Vsize{lss1}$
-    \cuz{} \Eref{eq:th-lss-trichotomy-22}.%
+\mypareq{eq:th-lss-trichotomy-17-36}{
+   $\forall \; \Vlss{x} : \forall \; \Vlss{y} :$
+   $\myfn{LtSz}{\Vlss{x},\Vlss{y}}
+   \iff \myfn{Lt}{\Vlss{x},\Vlss{y}}$
+   \linebreak \cuz{} equivalence \Eref{eq:th-lss-trichotomy-17-28}--\Eref{eq:th-lss-trichotomy-17-34},
+   \linebreak universal generalization of \Vlss{x}, \Vlss{y}.
 }
-\mypareq{eq:th-lss-trichotomy-30}{%
-    $\Vlss{preLss2} = \Vlss{lss1}$
-    \cuz{} \longThref{LSS uniqueness}{th:lss-uniqueness},
-    \Eref{eq:th-lss-trichotomy-26},
-    \Eref{eq:th-lss-trichotomy-28}.
-}
-\mypareq{eq:th-lss-trichotomy-32}{%
-    $\PrPfx{\var{lss1},\var{lss2}}$
-        \cuz{} \Eref{eq:th-lss-trichotomy-24}, \Eref{eq:th-lss-trichotomy-30}.
-}
-\mypareq{eq:th-lss-trichotomy-34}{%
-    $\Vsize{lss1} < \Vsize{lss2}
-    \implies \PrPfx{\var{lss1},\var{lss2}}$
-    \cuz derivation \Eref{eq:th-lss-trichotomy-20}--%
-        \Eref{eq:th-lss-trichotomy-32}.
-}
-\mypareq{eq:th-lss-trichotomy-36}{%
-    $\PrPfx{\var{lss1},\var{lss2}}
-    \implies \Vsize{lss1} < \Vsize{lss2}$
-    \cuz{} \longDfref{Proper prefix}{def:prefix}.
-}
-\mypareq{eq:th-lss-trichotomy-38}{%
-    $\Vsize{lss1} < \Vsize{lss2}
-    \iff \PrPfx{\var{lss1},\var{lss2}}$
-    \cuz{} \Eref{eq:th-lss-trichotomy-34},
-        \Eref{eq:th-lss-trichotomy-36}.
-}
-By reversing \var{lss1} and \var{lss2},
-derivation \Eref{eq:th-lss-trichotomy-20}--\Eref{eq:th-lss-trichotomy-38}
-can be adapted to deal with the case where
-$\Vsize{lss2} < \Vsize{lss1}$:
-\mypareq{eq:th-lss-trichotomy-40}{%
-    $\Vsize{lss2} < \Vsize{lss1}
-    \iff \PrPfx{\var{lss2},\var{lss1}}$
-        \cuz{} derivation
-        \Eref{eq:th-lss-trichotomy-38},
-        symmetry.
+\mypareq{eq:th-lss-trichotomy-17-40}{
+   $\forall \; \Vlss{x} : \forall \; \Vlss{y} :$
+   $\myfn{GtSz}{\Vlss{x},\Vlss{y}}
+   \iff \myfn{Gt}{\Vlss{x},\Vlss{y}}$
+   \linebreak \cuz{} symmetry with
+   \Eref{eq:th-lss-trichotomy-17-28}--\Eref{eq:th-lss-trichotomy-17-36}.
 }
 
-The conclusion of the theorem follows from
-\Eref{eq:th-lss-trichotomy-10},
-\Eref{eq:th-lss-trichotomy-12},
-\Eref{eq:th-lss-trichotomy-38},
-and \Eref{eq:th-lss-trichotomy-40}.
+The theorem follows from
+\Eref{eq:th-lss-trichotomy-10}--\Eref{eq:th-lss-trichotomy-14},
+\Eref{eq:th-lss-trichotomy-17-26},
+\Eref{eq:th-lss-trichotomy-17-36} and \Eref{eq:th-lss-trichotomy-17-40}.
 \myqed
 \end{proof}
 
