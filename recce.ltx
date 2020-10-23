@@ -6905,6 +6905,81 @@ and \Eref{eq:th-maximal-lss-termination-12}.
 \myqed
 \end{proof}
 
+\begin{theorem}[LSS prefix]
+\label{th:lss-prefix}
+Consider two \type{LSS}'s.
+They have different lengths but the same base element
+iff the shorter one is a proper prefix of the longer one.
+That is,
+\begin{gather}
+\label{eq:th-lss-prefix-02}
+   \forall \; \var{lss1} \in \type{LSS} :
+       \forall \; \var{lss2} \in \type{LSS} :
+\\ \label{eq:th-lss-prefix-04}
+   \Vsize{lss1} < \Vsize{lss2}
+\\ \label{eq:th-lss-prefix-06}
+   \land \; \Velement{lss1}{0} = \Velement{lss2}{0}
+\\ \nonumber \iff
+\\ \label{eq:th-lss-prefix-08}
+   \PrPfx{\var{lss1},\var{lss2}}.
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+This proof is similar to the one for ``LES prefix''
+\Thref{th:les-prefix}.
+For the reverse direction,
+\Eref{eq:th-lss-prefix-04} and
+\Eref{eq:th-lss-prefix-06}
+follow immediately from
+\Eref{eq:th-lss-prefix-08},
+via the definition of proper prefix \Dfref{def:prefix}.
+
+It remains to show the forward direction.
+Let
+\mypareq{eq:th-lss-prefix-20}{%
+    $\Vlss{subLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
+    \linebreak \cuz{} \longThref{LSS subsequence}{th:lss-subsequence},
+       antecedant of forward direction
+           \Eref{eq:th-lss-prefix-02}--\Eref{eq:th-lss-prefix-06},
+           new \Vlss{subLss2} for convenience.
+}
+\mypareq{eq:th-lss-prefix-21}{%
+    \PrPfx{\var{subLss2},\var{lss2}} \cuz{}
+        \longDfref{Proper prefix}{def:prefix},
+        \Eref{eq:th-lss-prefix-04}, \Eref{eq:th-lss-prefix-20}.
+}
+\begin{equation}
+\label{eq:th-lss-prefix-22}
+\Vsize{subLss2} = \Vsize{lss1} \because \Eref{eq:th-lss-prefix-20}
+\end{equation}
+\mypareq{eq:th-lss-prefix-24}{%
+    $\Velement{subLss2}{0} = \Velement{lss2}{0}$ \cuz{} \Eref{eq:th-lss-prefix-20}.
+}
+\mypareq{eq:th-lss-prefix-26}{%
+    $\Velement{subLss2}{0} = \Velement{lss1}{0}$
+    \linebreak \cuz{}
+       antecedant of forward direction \Eref{eq:th-lss-prefix-06},
+       \Eref{eq:th-lss-prefix-24}.
+}
+\mypareq{eq:th-lss-prefix-27}{%
+    $\var{subLss2} = \var{lss1}$
+    \linebreak \cuz{} \longThref{LSS uniqueness}{th:lss-prefix},
+        \Eref{eq:th-lss-prefix-22},
+        \Eref{eq:th-lss-prefix-26}.
+}
+\mypareq{eq:th-lss-prefix-28}{%
+    $\PrPfx{\Vlss{lss1}, \Vlss{lss2}}$
+    \cuz{} \Eref{eq:th-lss-prefix-21},
+    \Eref{eq:th-lss-prefix-27}.
+}
+Equation \Eref{eq:th-lss-prefix-28}
+is the consequent of the forward direction,
+which shows the forward direction.
+With both directions, we have the proof.
+\myqed
+\end{proof}
+
 \begin{theorem}[LSS trichotomy]
 \label{th:lss-trichotomy}
 If two LSS's of the same length have the same base element,
@@ -6942,7 +7017,6 @@ such that
 \end{theorem}
 
 \begin{proof}
-\todo{Recheck this proof after adding LSS prefix theorem}
 This proof is similar to that for
 the ``LES trichotomy'' theorem \Thref{th:les-trichotomy}.
 The proof strategy is direct, assuming
