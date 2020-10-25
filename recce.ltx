@@ -7370,50 +7370,38 @@ and the \type{LSS} Existence Theorem \Thref{th:maximal-lss-existence}.
 
 \begin{theorem}[Maximal LSS dichotomy]
 \label{th:maximal-lss-dichotomy}
-Every \type{LSS} based on an EIM is either
+Every \type{LSS} is either
 a maximal \type{LSS}, or a proper prefix of a maximal \type{LSS}.
+Also that maximal \type{LSS} shares the same base \type{EIM}.
 That is,
 \begin{equation}
 \label{eq:th-maximal-lss-dichotomy-02}
 \begin{gathered}
 \forall \; \Vlss{lss} : \exists \; \Vlss{max} :
 \\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
-\\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
+\\ \land \;
+    (\var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}}).
 \end{gathered}
 \end{equation}
 \end{theorem}
 
 \begin{proof}
-The proof strategy is direct, instantiating the universal quanitifier
-of \Eref{eq:th-maximal-lss-dichotomy-02}
-to show \Eref{eq:th-maximal-lss-dichotomy-02}.
-We instantiate \Vlss{lss}
-in \Eref{eq:th-maximal-lss-dichotomy-02}
-with a value of the same name.
+The proof is direct.
 \mypareq{eq:th-maximal-lss-dichotomy-10}{%
-    $\Veim{eim} = \Velement{lss}{0}$
-    \cuz{} \Eref{eq:th-maximal-lss-dichotomy-02},
-    new free \var{lss},
-    new \var{eim} for convenience.
-}
-Every element of \var{lss} must be a Leo source item:
-\mypareq{eq:th-maximal-lss-dichotomy-12}{%
-    \myfn{Is-source}{\var{eim}} \cuz{}
-        \longDfref{LSS}{def:lss},
-        \Eref{eq:th-maximal-lss-dichotomy-10}.%
+    $\var{lss} \in \type{LSS}$
+    \cuz{} AF theorem, new free \Vlss{lss}.
 }
 \mypareq{eq:th-maximal-lss-dichotomy-14}{%
-    $\exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
+    $\exists \; \var{max} : \Velement{max}{0} = \Velement{lss}{0} \land \Maximal{\var{max}}$.
         \cuz{} \longThref{Maximal LSS existence}{th:maximal-lss-existence},
-        \Eref{eq:th-maximal-lss-dichotomy-12}.%
+        \Eref{eq:th-maximal-lss-dichotomy-10}.%
 }
 \mypareq{eq:th-maximal-lss-dichotomy-16}{%
-    $\Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$ \cuz{}
+    $\Velement{max}{0} = \Velement{lss}{0} \land \Maximal{\var{max}}$ \cuz{}
         \Eref{eq:th-maximal-lss-dichotomy-16}, existential instantiation.
 }
 \mypareq{eq:th-maximal-lss-dichotomy-17-20}{%
     $\Velement{max}{0} = \Velement{lss}{0}$ \cuz{}
-        \Eref{eq:th-maximal-lss-dichotomy-10},
         \Eref{eq:th-maximal-lss-dichotomy-16}.
 }
 \mypareq{eq:th-maximal-lss-dichotomy-17-40}{%
@@ -7454,8 +7442,7 @@ We know that a maximal \type{LSS} cannot be a proper prefix of any other \type{L
 \mypareq{eq:th-maximal-lss-dichotomy-26}{%
     $\neg \PrPfx{\var{max}, \var{lss}}$ \cuz{}
         \longDfref{Maximal LSS}{def:maximal-lss},
-        \Eref{eq:th-maximal-lss-dichotomy-17-40},
-        \Eref{eq:th-maximal-lss-dichotomy-20}.
+        \Eref{eq:th-maximal-lss-dichotomy-17-40}.
 }
 \begin{equation}
 \label{eq:th-maximal-lss-dichotomy-28}
@@ -7477,15 +7464,14 @@ We know that a maximal \type{LSS} cannot be a proper prefix of any other \type{L
 \begin{gathered}
 \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
 \\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
-\\ \because \Eref{eq:th-maximal-lss-dichotomy-17-20},
-    \Eref{eq:th-maximal-lss-dichotomy-17-40},
+\\ \because \Eref{eq:th-maximal-lss-dichotomy-16},
     \Eref{eq:th-maximal-lss-dichotomy-30}.
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-maximal-lss-dichotomy-34}
 \begin{gathered}
-\forall \; \Vlss{lss} : \exists \; \Vlss{max}
+\forall \; \Vlss{lss} : \exists \; \Vlss{max} :
 \\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
 \\ \land \; ( \var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}} ).
 \\ \myparbox{\cuz{}
