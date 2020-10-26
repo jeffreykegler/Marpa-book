@@ -8016,6 +8016,74 @@ we have the induction and the theorem.
 \myqed
 \end{proof}
 
+\begin{theorem}[LIM non-duplication]
+\label{th:lim-non-duplication}
+Every Leo source EIM has exactly one LIM.
+That is,
+\[
+\exists \; \Veim{src} : \myfn{Is-source}{\var{src}} \land
+    \size{\myfn{lims}{\var{src}}} \le .
+\]
+\end{theorem}
+
+\begin{proof}
+We know that a Leo source EIM has at least one LIM
+by the definition of \longDfref{Leo source EIM}{def:leo-source-eim}.
+It remains to show that
+a Leo source EIM has at most one LIM.
+
+We proceed by reductio,
+assuming that a Leo source EIM has two distinct LIMs.
+\begin{gather}
+\label{eq:th-lim-non-duplication-10}
+\myfn{Is-source}{\Veim{src}}
+\\ \label{eq:th-lim-non-duplication-12}
+\land \; \size{\myfn{lims}{\var{src}}} \ge 2.
+\\ \nonumber
+\myparbox{\cuz{} new free \Veim{src}, AF reductio.}
+\end{gather}
+\mypareq{eq:th-lim-non-duplication-14}{%
+        $\mylim{\ell1} = \tuple{
+            \Vdr{dr1}, \Postdot{\var{src}}, \Vorig{orig1}, \Current{\var{src}} }$
+        \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-12}, new free \mylim{\ell1}.
+}
+\mypareq{eq:th-lim-non-duplication-16}{%
+        $\mylim{\ell2} = \tuple{
+            \Vdr{dr2}, \Postdot{\var{src}}, \Vorig{orig2}, \Current{\var{src}} }$
+        \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-12}, new free \mylim{\ell2}.
+}
+\mypareq{eq:th-lim-non-duplication-18}{%
+    $\exists \; \var{max} : \Velement{max}{0} = \var{src} \land \Maximal{\var{max}}$.
+    \cuz \longThref{Maximal LSS existence}{th:maximal-lss-existence},
+        \Eref{eq:th-lim-non-duplication-10}.
+}
+\begin{gather}
+\label{eq:th-lim-non-duplication-20}
+    \Velement{max}{0} = \var{src}
+\\ \label{eq:th-lim-non-duplication-22}
+    \land \; \Maximal{\var{max}}.
+\\ \nonumber
+    \myparbox{\cuz{} \Eref{eq:th-lim-non-duplication-18}, existential instantion.}
+\end{gather}
+\begin{equation}
+\label{eq:th-lim-non-duplication-24}
+\begin{gathered}
+\\ \forall \; \mylim{\ell} \in
+\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+} :
+\\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
+\land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
+\\ \myparbox{\cuz{}
+    \longThref{Maximal-LSS--LIM invariant}{th:eq-maximal-lss-lim-invariant},
+    \Eref{eq:th-lim-non-duplication-22},
+    universal instantiation with \Vlss{max}.
+   }
+\end{gathered}
+\end{equation}
+\todo{Finish proof}
+\end{proof}
+
 \todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
 
 \begin{definition}[LIM matching]
@@ -8056,20 +8124,6 @@ Every ES has at most
 \begin{proof}
 \todo{LIM's per ES proof}
 \myqed
-\end{proof}
-
-\begin{theorem}[Source function]
-\label{th:source-fn}
-There is a function
-\[
-    \Source{\mylim{\ell}}
-    \defined \riota \var{src} \in \type{EIM} :
-    \ell \in \myfn{lims}{\var{src}}
-\]
-\end{theorem}
-
-\begin{proof}
-\todo{Prove Source function theorem}
 \end{proof}
 
 \todo{Prove there is also a \myfn{LIM}{} function}
