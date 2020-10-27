@@ -405,6 +405,9 @@
   \vspace{1ex} % add a fixed vertical space
   }%
 }
+\newcommand{\cuzbox}[1]{%
+   \myparbox{\cuz{} #1}
+}
 % A "My paragraph-based equation"
 \newcommand{\mypareq}[2]{%
    \ifthenelse{\equal{#1}{}}%
@@ -6555,7 +6558,7 @@ The theorem will follow immediately by existential generalization.
 \mypareq{eq:th-source-eim-containment-10-20}{%
     $\Valid{\var{eim}}$
     \cuz{} \Dfref{def:leo-source-eim},
-        \longDfref{LIMs of an EIM}{def:lim-validity},
+        \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-source-eim-containment-10-10}.
 }
 \mypareq{eq:th-source-eim-containment-10-30}{%
@@ -7645,7 +7648,7 @@ The proof is by mutual implication.
     $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
     \cuz{} equivalence with
     \Eref{eq:th-maximal-lss-lims-termination-80},
-    using \longDfref{LIMs of an EIM}{def:lim-validity}.
+    using \longDfref{LIM validity}{def:lim-validity}.
 }
 The theorem
 \Eref{eq:th-maximal-lss-lims-termination-02}
@@ -7731,7 +7734,7 @@ to show \myfn{INDH}{0}.
 \mypareq{eq:th-maximal-lss-lim-invariant-28}{%
     $\DR{\ell} = \DR{\Velement{max}{0}}
     \land \Origin{\ell} = \Origin{\Velement{max}{0}}$
-    \cuz{} \longDfref{LIMs of an EIM}{def:lim-validity},
+    \cuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-maximal-lss-lim-invariant-24},
         \Eref{eq:th-maximal-lss-lim-invariant-26}.
 }
@@ -7901,7 +7904,7 @@ to show \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-70}{%
     $\size{\myfn{next-lims}{\Velement{max}{0}}} > 0$
-    \cuz{} \longDfref{LIMs of an EIM}{def:lim-validity},
+    \cuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-maximal-lss-lim-invariant-64},
         \Eref{eq:th-maximal-lss-lim-invariant-68}.
 }
@@ -7942,7 +7945,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \forall \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}} :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
 \\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-\\ \because \longDfref{LIMs of an EIM}{def:lim-validity},
+\\ \because \longDfref{LIM validity}{def:lim-validity},
     \Eref{eq:th-maximal-lss-lim-invariant-68},
     \Eref{eq:th-maximal-lss-lim-invariant-75}.
 \end{gathered}
@@ -8018,69 +8021,94 @@ we have the induction and the theorem.
 
 \begin{theorem}[LIM non-duplication]
 \label{th:lim-non-duplication}
-Every Leo source EIM has exactly one LIM.
+Every EIM has at most one LIM.
 That is,
 \[
-\exists \; \Veim{src} : \myfn{Is-source}{\var{src}} \land
-    \size{\myfn{lims}{\var{src}}} \le .
+\forall \Veim{eim} : \size{\myfn{lims}{\var{eim}}} \le 1.
 \]
 \end{theorem}
 
 \begin{proof}
-We know that a Leo source EIM has at least one LIM
-by the definition of \longDfref{Leo source EIM}{def:leo-source-eim}.
-It remains to show that
-a Leo source EIM has at most one LIM.
-
-We proceed by reductio,
-assuming that a Leo source EIM has two distinct LIMs.
+The proof is by reductio.
 \begin{gather}
 \label{eq:th-lim-non-duplication-10}
-\myfn{Is-source}{\Veim{src}}
+\var{src} \in \type{EIM}
 \\ \label{eq:th-lim-non-duplication-12}
 \land \; \size{\myfn{lims}{\var{src}}} \ge 2.
 \\ \nonumber
-\myparbox{\cuz{} new free \Veim{src}, AF reductio.}
+\myparbox{\cuz{} new arbitrary \Veim{src}, AF reductio.}
+\end{gather}
+\begin{gather}
+\label{eq:th-lim-non-duplication-13-10}
+\ell1 \in \myfn{lims}{\var{src}}
+\\ \label{eq:th-lim-non-duplication-13-20}
+\land \; \ell2 \in \myfn{lims}{\var{src}}
+\\ \label{eq:th-lim-non-duplication-13-30}
+\land \; \ell1 \ne \ell2.
+\\ \nonumber
+\cuzbox{
+    \Eref{eq:th-lim-non-duplication-12},
+    new \mylim{\ell1}, new \mylim{\ell2}.}
 \end{gather}
 \mypareq{eq:th-lim-non-duplication-14}{%
         $\mylim{\ell1} = \tuple{
             \Vdr{dr1}, \Postdot{\var{src}}, \Vorig{orig1}, \Current{\var{src}} }$
-        \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-12}, new free \mylim{\ell1}.
+        \linebreak \cuz{}
+            \longDfref{LIM validity}{def:lim-validity},
+            \Eref{eq:th-lim-non-duplication-13-10}, WLOG,
+            new \Vdr{dr1}, new \Vdr{orig1}.
 }
 \mypareq{eq:th-lim-non-duplication-16}{%
         $\mylim{\ell2} = \tuple{
             \Vdr{dr2}, \Postdot{\var{src}}, \Vorig{orig2}, \Current{\var{src}} }$
-        \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-12}, new free \mylim{\ell2}.
+        \linebreak \cuz{}
+            \Dfref{def:lim-validity},
+            \Eref{eq:th-lim-non-duplication-13-20}, WLOG,
+            new \Vdr{dr2}, new \Vdr{orig2}.
 }
 \mypareq{eq:th-lim-non-duplication-18}{%
-    $\exists \; \var{max} : \Velement{max}{0} = \var{src} \land \Maximal{\var{max}}$.
-    \cuz \longThref{Maximal LSS existence}{th:maximal-lss-existence},
+    $\exists \; \var{max} : \Velement{max}{0} = \var{src} \land \Maximal{\var{max}}$
+    \cuz{} \longThref{Maximal LSS existence}{th:maximal-lss-existence},
         \Eref{eq:th-lim-non-duplication-10}.
 }
 \begin{gather}
-\label{eq:th-lim-non-duplication-20}
+\label{eq:th-lim-non-duplication-19}
+    \var{max} \in \type{LSS}
+\\ \label{eq:th-lim-non-duplication-20}
     \Velement{max}{0} = \var{src}
 \\ \label{eq:th-lim-non-duplication-22}
     \land \; \Maximal{\var{max}}.
 \\ \nonumber
-    \myparbox{\cuz{} \Eref{eq:th-lim-non-duplication-18}, existential instantion.}
+    \cuzbox{\Eref{eq:th-lim-non-duplication-18}, existential instantion.}
 \end{gather}
 \begin{equation}
 \label{eq:th-lim-non-duplication-24}
 \begin{gathered}
-\\ \forall \; \mylim{\ell} \in
-\set{ \ell1 : \exists \; \Vnat{i} \in \Dom{\var{max}} :
-    \ell1 \in \myfn{lims}{\VVelement{max}{i}}
+\forall \; \mylim{\ell} \in
+\set{ \ell\ell : \exists \; \Vnat{i} \in \Dom{\var{max}} :
+    \ell\ell \in \myfn{lims}{\VVelement{max}{i}}
 } :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
 \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-\\ \myparbox{\cuz{}
+\\ \cuzbox{%
     \longThref{Maximal-LSS--LIM invariant}{th:eq-maximal-lss-lim-invariant},
     \Eref{eq:th-lim-non-duplication-22},
     universal instantiation with \Vlss{max}.
    }
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-lim-non-duplication-26}{%
+    $0 \in \Dom{\var{max}} \land \ell1 \in \myfn{lims}{\VVelement{max}{0}}$
+    \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-13-10},
+        \Eref{eq:th-lim-non-duplication-19},
+        \Eref{eq:th-lim-non-duplication-20}.
+}
+\mypareq{eq:th-lim-non-duplication-28}{%
+    $0 \in \Dom{\var{max}} \land \ell1 \in \myfn{lims}{\VVelement{max}{0}}$
+    \linebreak \cuz{} \Eref{eq:th-lim-non-duplication-13-20},
+        \Eref{eq:th-lim-non-duplication-19},
+        \Eref{eq:th-lim-non-duplication-20}.
+}
 \todo{Finish proof}
 \end{proof}
 
