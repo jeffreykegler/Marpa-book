@@ -354,6 +354,7 @@
 \newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
 \newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
+\newcommand{\Lim}[1]{\ensuremath{\mymathop{Lim}(#1)}}
 \newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
 \newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
@@ -6382,13 +6383,22 @@ if \myfn{Is-source}{\Veim{src}}.
 \label{th:leo-source-fn}
 The function
 \[
-    \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
+    \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}},
 \]
+such that \Dom{\myfnname{Source}} is the set of valid LIMs,
 exists.
 \end{theorem}
 
 \begin{proof}
-The proof strategy is to
+To show that the domain of \Dom{\myfnname{Source}} is the valid LIMs,
+we note that a LIM is valid iff it is an element of 
+\myfn{lims}{\var{x}} for some EIM \var{x}
+\Dfref{def:lim-validity}.
+From the same definition, it is clear there is at least one EIM \var{x}
+for every valid LIM in \myfn{lims}{\var{x}}.
+
+It remains to show that there is at most one source for any valid LIM.
+To do this, we
 assume that an arbitrary valid \mylim{\ell} has two distinct valid sources,
 for a reductio.
 \mypareq{eq:th-leo-source-fn-10}{%
@@ -8176,7 +8186,37 @@ and the theorem.
 \myqed
 \end{proof}
 
-\todo{TO HERE Sat Jul  4 21:03:51 EDT 2020}
+\begin{theorem}[LIM function]
+\label{th:lim-fn}
+The function
+\[
+    \Lim{\Veim{src}} \defined \riota \mylim{\ell} : \ell \in \myfn{lims}{\var{src}},
+\]
+such that \Dom{\myfnname{Lim}} is the set of source EIMs,
+exists.
+\end{theorem}
+
+\begin{proof}
+Note, in the following, that every Leo source EIM is valid,
+by the definitions of Leo source EIM and
+of LIM validity.
+\mypareq{eq:th-lim-fn-10}{%
+    Every Leo source EIM has at least one valid LIM
+    \cuz{} \longDfref{source EIM}{def:leo-source-eim}.
+}
+\mypareq{eq:th-lim-fn-12}{%
+    There is at most one valid LIM for any Leo source EIM
+    \cuz{} \longThref{LIM non-duplication theorem}{th:lim-non-duplication}.
+}
+\mypareq{eq:th-lim-fn-14}{%
+    There is exactly one valid LIM for any Leo source EIM
+    \cuz{} \Eref{eq:th-lim-fn-10}, \Eref{eq:th-lim-fn-12}.
+}
+From \Eref{eq:th-lim-fn-14} it follows that the function \myfn{LIM}{}
+over the domain of Leo source EIMs,
+exists.
+\myqed
+\end{proof}
 
 \begin{definition}[LIM matching]
 To deal with LIM's,
@@ -8192,9 +8232,9 @@ we overload \var{Matches} as follows:
 \end{equation*}
 \end{definition}
 
-\todo{Define source function}
-
 \section{Counting Leo items}
+
+\todo{TO HERE Tue 27 Oct 2020 09:53:42 PM EDT}
 
 \begin{theorem}[LIM's per ES]
 \label{th:lims-per-es}
