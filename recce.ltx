@@ -8236,13 +8236,50 @@ Every ES has at most
 one LIM for every symbol in the grammar.
 That is,
 \[
-\forall \Vloc{j} \in \Dom{\Vet{S}} :
+\forall \; \Vloc{j} \in \Dom{\Vet{S}} :
 \size{\set{\mylim{\ell} : \Current{\ell} = \var{j}}} \le
 \size{\Vocab{\var{g}}}.
 \]
 \end{theorem}
 
 \begin{proof}
+\mypareq{eq:th-lims-per-es-10}{%
+$\var{j} \in \naturals$
+    \cuz{} new free \Vnat{j}
+}
+\mypareq{eq:th-lims-per-es-12}{%
+$\var{j} \in \Dom{\Vet{S}}$
+    \cuz{} AF derivation.
+}
+\mypareq{eq:th-lims-per-es-14}{%
+$\size{
+       \set{
+                \Veim{x} \in \Velement{S}{\var{j}} :
+        \myfn{Is-Leo-Eligible}{\var{x}}
+       }
+    }
+    \le \size{\Vocab{\Vint{g}}}$
+    \linebreak \cuz{} \Eref{eq:th-lims-per-es-12},
+        \longThref{Leo Eligible EIM count}{th:leo-eligible-eim-count}.
+}
+\mypareq{eq:th-lims-per-es-16}{%
+$\forall \; \Veim{x} : \myfn{Is-source}{\var{x}}
+    \implies \myfn{Is-Leo-Eligible}{\var{x}}$
+\\ \cuz{} \longDfref{LIM validity}{def:lim-validity},
+            \longDfref{Leo source}{def:leo-source-eim}.
+}
+\mypareq{eq:th-lims-per-es-18}{%
+$\size{
+       \set{
+                \Veim{x} \in \Velement{S}{\var{j}} :
+        \myfn{Is-Source}{\var{x}}
+       }
+    }
+    \le \size{\Vocab{\Vint{g}}}$
+    \linebreak \cuz{} \Eref{eq:th-lims-per-es-14},
+        \Eref{eq:th-lims-per-es-16}.
+}
+
 \todo{LIM's per ES proof}
 \myqed
 \end{proof}
