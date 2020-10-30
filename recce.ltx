@@ -1038,7 +1038,7 @@ so that $\var{f}\in\fnset{\var{X}}{\var{Y}}$ states
 that \var{f} is a function with domain \var{X}
 and codomain \var{Y}.%
 \footnote{%
-    \fnset{\var{X}}{\var{Y}}
+    $\var{f} \in \fnset{\var{X}}{\var{Y}}$
     is often written
     $\var{f}:\fnset{\var{X}}{\var{Y}}$ but we prefer to avoid
     overloading the colon operator.
@@ -4521,7 +4521,7 @@ There are at most \size{\Vocab{\Vint{g}}} Leo eligible
 That is,
 \[
 \begin{gathered}
-\forall \; \Vloc{j} \in \Dom{\Vet{S}} : 
+\forall \; \Vloc{j} \in \Dom{\Vet{S}} :
 \\ \size{
    \set{
             \Veim{x} \in \Velement{S}{\var{j}} :
@@ -6382,19 +6382,31 @@ if \myfn{Is-source}{\Veim{src}}.
 \begin{theorem}[Leo source function]
 \label{th:leo-source-fn}
 The function
-\[
-    \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}},
-\]
-is total over the set of valid LIMs.
+\mypareq{}{%
+$\var{Source} \in \fnset{
+    \set{\mylim{\ell} : \Valid{\ell}}
+}{
+    \set{\Veim{src} : \myfn{Is-source}{\var{src}}}
+}$
+\linebreak
+    such that $\Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}},$
+}
+exists and is a surjection.
 \end{theorem}
 
 \begin{proof}
 To show that the domain of \Dom{\myfnname{Source}} is the valid LIMs,
 we note that a LIM is valid iff it is an element of
-\myfn{lims}{\var{x}} for some EIM \var{x}
-\Dfref{def:lim-validity}.
-From the same definition, it is clear there is at least one EIM \var{x}
-for every valid LIM in \myfn{lims}{\var{x}}.
+\myfn{lims}{\var{x}} for some EIM \var{x},
+by the definition of LIM validity \Dfref{def:lim-validity}.
+To show that the range of \Dom{\myfnname{Source}} is the Leo source EIMs,
+we note that,
+by the definition of a Leo source EIM \Dfref{def:leo-source-eim},
+if \var{src} is a Leo source EIM
+there is some valid LIM $\ell$ such
+that $\ell \in \ \myfn{lims}{\var{src}}$.
+
+\todo{Finish and recheck this proof}
 
 It remains to show that there is at most one source for any valid LIM.
 To do this, we
@@ -15977,9 +15989,6 @@ J.~M. I.~M. Leo.
 } % RaggedRight
 
 \clearpage
-\tableofcontents
-
-\clearpage
 \listofalgorithms
 
 \clearpage
@@ -15993,6 +16002,9 @@ show={theorem,observation,definition}]
     \clearpage
     \listoftodos
 }{}
+
+\clearpage
+\tableofcontents
 
 \end{document}
 % vim: expandtab shiftwidth=4:
