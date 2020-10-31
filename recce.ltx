@@ -6382,38 +6382,46 @@ if \myfn{Is-source}{\Veim{src}}.
 \begin{theorem}[Leo source function]
 \label{th:leo-source-fn}
 The function
-\mypareq{}{%
-$\var{Source} \in \fnset{
+\begin{gather}
+\label{eq:th-leo-source-fn-05}
+\var{Source} \in \fnset{
     \set{\mylim{\ell} : \Valid{\ell}}
 }{
     \set{\Veim{src} : \myfn{Is-source}{\var{src}}}
-}$
-\linebreak
-    such that $\Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}},$
 }
-exists and is a surjection.
+\\ \label{eq:th-leo-source-fn-07}
+    \text{such that } \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
+\end{gather}
+exists and is total and a surjection.
 \end{theorem}
 
 \begin{proof}
-To show that the domain of \Dom{\myfnname{Source}} is the valid LIMs,
-we note that a LIM is valid iff it is an element of
-\myfn{lims}{\var{x}} for some EIM \var{x},
-by the definition of LIM validity \Dfref{def:lim-validity}.
-To show that the range of \Dom{\myfnname{Source}} is the Leo source EIMs,
-we note that,
-by the definition of a Leo source EIM \Dfref{def:leo-source-eim},
-if \var{src} is a Leo source EIM
-there is some valid LIM $\ell$ such
-that $\ell \in \ \myfn{lims}{\var{src}}$.
-
 \todo{Finish and recheck this proof}
+We first show that \myfn{Source}{} is well defined for all of the elements
+of its domain:
+In other words that, for any valid LIM, call it \mylim{\ell},
+\mypareq{eq:th-leo-source-fn-10-10}{%
+    $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
+}
+is well defined.
+This is equivalent to showing that
+\mypareq{eq:th-leo-source-fn-10-12}{%
+    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
+}
+Considering \Eref{eq:th-leo-source-fn-07},
+it is obvious that, if there is some \myfn{lims}{\var{src}},
+then there is also at least one \var{src}:
+\mypareq{eq:th-leo-source-fn-10-12}{%
+    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \ge 1$
+    \linebreak \cuz{} trivially.
+}
 
-It remains to show that there is at most one source for any valid LIM.
-To do this, we
-assume that an arbitrary valid \mylim{\ell} has two distinct valid sources,
-for a reductio.
-\mypareq{eq:th-leo-source-fn-10}{%
-    $\exists \mylim{\ell} :
+Less obvious is that there cannot be more than one such \Veim{src}.
+We assume, for a reductio, that an arbitrary valid \mylim{\ell}
+in \Eref{eq:th-leo-source-fn-10-10}
+has two distinct valid sources.
+\mypareq{eq:th-leo-source-fn-11}{%
+    $\exists \; \mylim{\ell} :
         \exists \; \Veim{src1} :
         \exists \; \Veim{src2} :$
     \linebreak $\Valid{\ell} \land \var{src1} \neq \var{src2}
@@ -6426,7 +6434,7 @@ for a reductio.
         \land \var{src1} \neq \var{src2}
         \land \ell \in \myfn{lims}{\var{src1}}
         \land \ell \in \myfn{lims}{\var{src2}}$
-    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10},
+    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-11},
     existential instantiation of \mylim{\ell},
         \Veim{src1}, \Veim{src2}.
 }
@@ -6482,10 +6490,63 @@ for a reductio.
         \Eref{eq:th-leo-source-fn-16},
         \Eref{eq:th-leo-source-fn-28},
         \Eref{eq:th-leo-source-fn-30}.
+        This contradicts \Eref{eq:th-leo-source-fn-32}.
 }
-The equation \Eref{eq:th-leo-source-fn-34}
-contradicts \Eref{eq:th-leo-source-fn-32},
-which shows the reductio and theorem.
+\mypareq{eq:th-leo-source-fn-36}{%
+    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \le 1$
+    \linebreak \cuz{} contrary of \Eref{eq:th-leo-source-fn-11},
+    \Eref{eq:th-leo-source-fn-11}--\Eref{eq:th-leo-source-fn-34}.
+}
+\mypareq{eq:th-leo-source-fn-38}{%
+    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
+    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10-12},
+        \Eref{eq:th-leo-source-fn-36}.
+}
+\mypareq{eq:th-leo-source-fn-39}{%
+    $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
+    exists for every valid LIM \mylim{\ell}.
+}
+
+From \Eref{eq:th-leo-source-fn-39} we see that \myfn{Source}{} is a total function
+over the domain of valid LIMS.
+It remains to show that
+\myfn{Source}{} is surjective.
+
+\todo{Rewrite from here}
+
+Every element of the domain of \myfnname{Source}
+is a valid LIM.
+By the definition of a Leo source EIM,
+if, for some EIM \var{src}, a valid LIM is an element of \myfn{lims}{\var{src}}
+then \var{src} is a Leo source EIM:
+\mypareq{}{%
+    $\forall \; \mylim{\ell} : \forall \; \Veim{src} :
+    \ell \in \myfn{lims}{\var{src}} \implies \myfn{Is-source}{\var{src}}$
+    \linebreak \cuz{} \Dfref{def:leo-source-eim}.
+}
+Therefore
+the range of \myfnname{Source} is the set of Leo source EIMs.
+
+If \Veim{src} is a Leo source EIM,
+by the definition of a Leo source EIM,
+there must be some LIM such that \myfn{lims}{\var{src}}:
+\mypareq{}{%
+    $\forall \Veim{src} : \myfn{Is-source}{\var{src}} \implies
+        \exists \; \mylim{\ell} : \ell \in \myfn{lims}{\var{src}}$
+    \linebreak \cuz{} \Dfref{def:leo-source-eim}.
+}
+Any LIM such that \myfn{lims}{\var{src}} for some \Veim{src}
+is valid
+Since the valid LIMs are the domain of \myfnname{Source}
+and the Leo source EIMs are the range of \myfnname{Source},
+\myfnname{Source} is surjective.
+we note that a LIM is valid iff it is an element of
+\myfn{lims}{\var{x}} for some EIM \var{x},
+by the definition of LIM validity \Dfref{def:lim-validity}.
+
+if \var{src} is a Leo source EIM
+there is some valid LIM $\ell$ such
+that $\ell \in \ \myfn{lims}{\var{src}}$.
 \myqed
 \end{proof}
 
