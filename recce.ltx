@@ -253,6 +253,7 @@
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]} }
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
+\newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
@@ -975,7 +976,19 @@ consistent with that of
 Halmos 1960~\cite{Halmos1960}.
 Particularly, all of our mathematical objects are sets.
 
-Some of the terminology from Halmos is modernized.
+\chapter{Notation}
+\label{chap:notation}
+
+In this chapter we deal with
+matters of notation.
+We will usually not restate notation 
+that is standard,
+unless the standard has an ambiguity
+relevant for our purposes,
+or unless the standard notation is a modernization
+which differs from
+Halmos 1960~\cite{Halmos1960}.
+
 Functions are partial unless stated otherwise.
 An onto function is a surjection.
 A one-to-one function is an injection.
@@ -983,8 +996,9 @@ A function that is both one-to-one and
 onto is a bijection.
 $\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
 $\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
-$\Dom{\var{f}}$ is the domain of \var{f}.
-$\Ran{\var{f}}$ is the range of \var{f}.
+$\Dom{\var{f}}$ is the domain of \var{f},
+$\Cod{\var{f}}$ is the codomain of \var{f},
+and $\Ran{\var{f}}$ is the range of \var{f}.
 $\powerset{\var{A}}$ is the powerset of the set \var{A}.
 \naturals{} is the set of non-negative integers.
 The abbreviation ``iff'' is used for ``if and only if''.
@@ -1431,6 +1445,7 @@ and the last element is \Velement{seq}{\Vlastix{seq}}.
 Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtract 1$.
 
 We write \Dom{\var{fn}} for the domain of a function \var{fn},
+\Cod{\var{fn}} for the codomain of a function \var{fn},
 and \Ran{\var{fn}} for the range of \var{fn}.
 A sequence is a function whose domain is a set of 0-based consecutive non-negative
 integers so that, where \var{seq} is a sequence,
@@ -6396,6 +6411,31 @@ exists and is total and a surjection.
 \end{theorem}
 
 \begin{proof}
+Consider the relation
+\mypareq{eq:th-leo-source-fn-10-01a}{%
+   \var{Source-Rel} = \set{ \tuple{ \ell, \var{src} } \in \type{LIM} \times \type{EIM} :
+         \ell \in \myfn{lims}{\var{src}}
+   }.
+}
+\mypareq{eq:th-leo-source-fn-10-01b}{%
+    If \var{Source-Rel} is a function,
+    then it is
+    the function \myfnname{Source}
+    \cuz{} \Eref{eq:th-leo-source-fn-07},
+        \Eref{eq:th-leo-source-fn-10-01a}.
+}
+By the definition of LIM validity,
+\mypareq{eq:th-leo-source-fn-10-02}{%
+    $\forall \; \mylim{\ell} : \Valid{\ell} \iff \exists \; \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
+    \cuz{} \Dfref{def:lim-validity}.
+}
+\mypareq{eq:th-leo-source-fn-10-03}{%
+    $\Dom{\var{Source-Rel}} = \Dom{\var{Source}}$
+    \cuz{} \Eref{eq:th-leo-source-fn-05},
+        \Eref{eq:th-leo-source-fn-10-01a},
+        \Eref{eq:th-leo-source-fn-10-02}.
+}
+
 \todo{Finish and recheck this proof}
 We first show that \myfn{Source}{} is well defined for all of the elements
 of its domain:
