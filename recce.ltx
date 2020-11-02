@@ -6417,6 +6417,7 @@ Consider the relation
          \ell \in \myfn{lims}{\var{src}}
    }.
 }
+\var{Source-Rel} obviously exists.
 By the definition of LIM validity,
 \mypareq{eq:th-leo-source-fn-10-02}{%
     $\forall \; \mylim{\ell} : \Valid{\ell} \iff \exists \; \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
@@ -6466,195 +6467,95 @@ By the definition of Leo source EIM,
 }
 
 It remains to show that \var{Source-Rel} is a function.
-To this we must show that
-\todo{Finish and recheck this proof}
-In other words that, for any valid LIM, call it \mylim{\ell},
-\mypareq{eq:th-leo-source-fn-10-10}{%
-    $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
+To this we assume, for a derivation, that two tuples of
+\var{Source-Rel} have the same argument.
+\begin{gather}
+\label{eq:th-leo-source-fn-10-09-32}
+\tuple{ \mylim{\ell}, \Veim{src1} } \in \var{Source-Rel}
+\\ \label{eq:th-leo-source-fn-10-09-34}
+\land \; \tuple{ \ell, \Veim{src1} } \in \var{Source-Rel}
+\\ \nonumber
+\text{\cuz{} AF derivation,
+    new arbitrary \mylim{\ell}, \Veim{src1}, \Veim{src2}.}
+\end{gather}
+\mypareq{eq:th-leo-source-fn-10-09-36}{%
+    $\ell \in \myfn{lims}{\var{src1}}$
+    \cuz{} \Eref{eq:th-leo-source-fn-10-09-32}.
 }
-is well defined.
-This is equivalent to showing that
-\mypareq{}{%
-    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
+\mypareq{eq:th-leo-source-fn-10-09-38}{%
+    $\ell \in \myfn{lims}{\var{src2}}$
+    \cuz{} \Eref{eq:th-leo-source-fn-10-09-34}.
 }
-Considering \Eref{eq:th-leo-source-fn-07},
-it is obvious that, if there is some \myfn{lims}{\var{src}},
-then there is also at least one \var{src}:
-\mypareq{eq:th-leo-source-fn-10-12}{%
-    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \ge 1$
-    \linebreak \cuz{} trivially.
-}
-
-Less obvious is that there cannot be more than one such \Veim{src}.
-We assume, for a reductio, that an arbitrary valid \mylim{\ell}
-in \Eref{eq:th-leo-source-fn-10-10}
-has two distinct valid sources.
-\mypareq{eq:th-leo-source-fn-11}{%
-    $\exists \; \mylim{\ell} :
-        \exists \; \Veim{src1} :
-        \exists \; \Veim{src2} :$
-    \linebreak $\Valid{\ell} \land \var{src1} \neq \var{src2}
-    \land \ell \in \myfn{lims}{\var{src1}}
-    \land \ell \in \myfn{lims}{\var{src2}}$
-    \linebreak \cuz{} AF reductio
-}
-\mypareq{eq:th-leo-source-fn-12}{%
-    $\Valid{\ell}
-        \land \var{src1} \neq \var{src2}
-        \land \ell \in \myfn{lims}{\var{src1}}
-        \land \ell \in \myfn{lims}{\var{src2}}$
-    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-11},
-    existential instantiation of \mylim{\ell},
-        \Veim{src1}, \Veim{src2}.
-}
-\mypareq{eq:th-leo-source-fn-14}{%
-    $\Valid{\ell} \land \ell \in \myfn{lims}{\var{src1}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-12}.
-}
-\mypareq{eq:th-leo-source-fn-16}{%
+\mypareq{eq:th-leo-source-fn-10-09-40}{%
     \myfn{Is-Leo-Eligible}{\var{src1}}
     \cuz{} \longDfref{LIM validity}{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-14}.
+        \Eref{eq:th-leo-source-fn-10-09-36}.
 }
-\mypareq{eq:th-leo-source-fn-18}{%
+\mypareq{eq:th-leo-source-fn-10}{%
     $\Transition{\ell} = \Postdot{\var{src1}}$
     \cuz{} \Dfref{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-14}.
+        \Eref{eq:th-leo-source-fn-10-09-36}.
 }
-\mypareq{eq:th-leo-source-fn-20}{%
+\mypareq{eq:th-leo-source-fn-12}{%
     $\Current{\ell} = \Current{\var{src1}}$
     \cuz{} \Dfref{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-14}.
+        \Eref{eq:th-leo-source-fn-10-09-36}.
+}
+\mypareq{eq:th-leo-source-fn-20}{%
+    \myfn{Is-Leo-Eligible}{\var{src2}}
+    \cuz{} \longDfref{LIM validity}{def:lim-validity},
+        \Eref{eq:th-leo-source-fn-10-09-36}.
 }
 \mypareq{eq:th-leo-source-fn-22}{%
-    $\Valid{\ell} \land \ell \in \myfn{lims}{\var{src2}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-12}.
-}
-\mypareq{eq:th-leo-source-fn-24}{%
     $\Transition{\ell} = \Postdot{\var{src2}}$
     \cuz{} \Dfref{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-22}.
+        \Eref{eq:th-leo-source-fn-10-09-36}.
 }
-\mypareq{eq:th-leo-source-fn-26}{%
+\mypareq{eq:th-leo-source-fn-24}{%
     $\Current{\ell} = \Current{\var{src2}}$
     \cuz{} \Dfref{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-22}.
+        \Eref{eq:th-leo-source-fn-10-09-36}.
 }
 \mypareq{eq:th-leo-source-fn-28}{%
     $\Postdot{\var{src1}} = \Postdot{\var{src2}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-18},
-        \Eref{eq:th-leo-source-fn-24}.
+    \cuz{} \Eref{eq:th-leo-source-fn-10},
+        \Eref{eq:th-leo-source-fn-22}.
 }
 \mypareq{eq:th-leo-source-fn-30}{%
     $\Current{\var{src1}} = \Current{\var{src2}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-20},
-        \Eref{eq:th-leo-source-fn-26}.
-}
-\mypareq{eq:th-leo-source-fn-32}{%
-    $\var{src1} \neq \var{src2}$ \cuz{} \Eref{eq:th-leo-source-fn-12}.
+    \cuz{} \Eref{eq:th-leo-source-fn-12},
+        \Eref{eq:th-leo-source-fn-24}.
 }
 \mypareq{eq:th-leo-source-fn-34}{%
     $\var{src1} = \var{src2}$
     \cuz{} \longThref{Leo eligible postdot uniqueness}{th:leo-eligible-postdot-uniqueness},
-        \Eref{eq:th-leo-source-fn-16},
+        \Eref{eq:th-leo-source-fn-10-09-40},
         \Eref{eq:th-leo-source-fn-28},
         \Eref{eq:th-leo-source-fn-30}.
-        This contradicts \Eref{eq:th-leo-source-fn-32}.
-}
-\mypareq{eq:th-leo-source-fn-36}{%
-    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \le 1$
-    \linebreak \cuz{} contrary of \Eref{eq:th-leo-source-fn-11},
-    \Eref{eq:th-leo-source-fn-11}--\Eref{eq:th-leo-source-fn-34}.
-}
-\mypareq{eq:th-leo-source-fn-38}{%
-    $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
-    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10-12},
-        \Eref{eq:th-leo-source-fn-36}.
-}
-\mypareq{eq:th-leo-source-fn-40}{%
-    $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
-    exists for every valid LIM \mylim{\ell}.
-}
-\mypareq{eq:th-leo-source-fn-42}{%
-    \myfn{Source}{} is a total function
-    over the domain of valid LIMS
-    \cuz{} \Eref{eq:th-leo-source-fn-07},
-    \Eref{eq:th-leo-source-fn-40}.
 }
 
-It remains to show that
-\myfn{Source}{} is surjective.
-We assume an arbitrary Leo source EIM,
-call it \var{src},
-to show that there is a LIM $\ell$
-such that $\Source{\ell} = \var{src}$.
-\mypareq{eq:th-leo-source-fn-50}{%
-    \myfn{Is-source}{\Veim{src}}
-    \cuz{} new arbitrary \Veim{src}, AF derivation.
-}
-\mypareq{eq:th-leo-source-fn-52}{%
-    $\size{\myfn{lims}{\var{src}}} > 0$
-    \cuz{} \longDfref{Leo source EIM}{def:leo-source-eim}.
-}
-\mypareq{eq:th-leo-source-fn-54}{%
-    $\exists \; \ell \in \type{LIM} : \ell \in \myfn{lims}{\var{src}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-52}
-}
-\mypareq{eq:th-leo-source-fn-56}{%
-    $\ell \in \myfn{lims}{\var{src}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-54},
-       existential instantiation.
-}
-\mypareq{eq:th-leo-source-fn-60}{%
-    $\Veim{src} = \Source{\ell}$
-    \cuz{}
-        \Eref{eq:th-leo-source-fn-07},
-        \Eref{eq:th-leo-source-fn-38},
-        \Eref{eq:th-leo-source-fn-56},
-       existential instantiation.
-}
-\mypareq{eq:th-leo-source-fn-62}{%
-    $\Valid{\ell}$
-    \cuz{} \longDfref{LIM validity}{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-56}.
-}
-\mypareq{eq:th-leo-source-fn-64}{%
-    $\ell \in \Dom{\myfnname{Source}} \iff \Valid{\ell}$
-        \cuz{} \Eref{eq:th-leo-source-fn-05}.
-}
-\mypareq{eq:th-leo-source-fn-66}{%
-    $\exists \; \ell \in \Dom{\myfnname{Source}} : \Veim{src} = \Source{\ell}$
-    \linebreak \cuz{} \Eref{eq:th-leo-source-fn-60},
-        \Eref{eq:th-leo-source-fn-62},
-        \Eref{eq:th-leo-source-fn-64},
-        existential generalization.
-}
-\mypareq{eq:th-leo-source-fn-68}{%
-    $\myfn{Is-source}{\Veim{src}} \implies$
-    \linebreak $\exists \; \ell \in \Dom{\myfnname{Source}} : \Veim{src} = \Source{\ell}$
-    \linebreak \cuz{} derivation
-        \Eref{eq:th-leo-source-fn-50}--%
-        \Eref{eq:th-leo-source-fn-66}.
-}
-\mypareq{eq:th-leo-source-fn-70}{%
-    $\var{src} \in \Ran{\myfnname{Source}} \iff \myfn{Is-source}{\Veim{src}}$
-        \cuz{} \Eref{eq:th-leo-source-fn-05}.
-}
-\mypareq{eq:th-leo-source-fn-72}{%
-    $\forall \; \var{src} \in \Ran{\myfnname{Source}} :$
-    \linebreak $\exists \; \ell \in \Dom{\myfnname{Source}} : \Veim{src} = \Source{\ell}$
-    \linebreak \cuz{}
-        \Eref{eq:th-leo-source-fn-68},
-        \Eref{eq:th-leo-source-fn-70},
-        universal generalization.
-}
-\mypareq{eq:th-leo-source-fn-74}{%
-    \myfnname{Source} is a surjection
-    \cuz{} \Eref{eq:th-leo-source-fn-72}.
-}
-The theorem is
-\Eref{eq:th-leo-source-fn-42} and
-\Eref{eq:th-leo-source-fn-74}.
+\todo{Finish and recheck this proof}
+% \mypareq{eq:th-leo-source-fn-36}{%
+%     $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \le 1$
+%     \linebreak \cuz{} contrary of \Eref{eq:th-leo-source-fn-11},
+%     \Eref{eq:th-leo-source-fn-11}--\Eref{eq:th-leo-source-fn-34}.
+% }
+% \mypareq{eq:th-leo-source-fn-38}{%
+%     $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
+%     \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10-12},
+%         \Eref{eq:th-leo-source-fn-36}.
+% }
+% \mypareq{eq:th-leo-source-fn-40}{%
+%     $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
+%     exists for every valid LIM \mylim{\ell}.
+% }
+% \mypareq{eq:th-leo-source-fn-42}{%
+%     \myfn{Source}{} is a total function
+%     over the domain of valid LIMS
+%     \cuz{} \Eref{eq:th-leo-source-fn-07},
+%     \Eref{eq:th-leo-source-fn-40}.
+% }
+
 \myqed
 \end{proof}
 
