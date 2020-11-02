@@ -6411,13 +6411,16 @@ exists and is total and a surjection.
 \end{theorem}
 
 \begin{proof}
-Consider the relation
+\todo{Finish and recheck this proof}
+The proof strategy is to
+consider the relation \var{Source-Rel} ---
+to show that \var{Source-Rel} is the equivalent of \myfnname{Source},
+and to establish the necessary properties for \var{Source-Rel}.
 \mypareq{eq:th-leo-source-fn-10-01}{%
-   \var{Source-Rel} = \set{ \tuple{ \ell, \var{src} } \in \type{LIM} \times \type{EIM} :
+   $\var{Source-Rel} = \set{ \tuple{ \ell, \var{src} } \in \type{LIM} \times \type{EIM} :
          \ell \in \myfn{lims}{\var{src}}
-   }.
+   }$ exists \cuz obvious.
 }
-\var{Source-Rel} obviously exists.
 By the definition of LIM validity,
 \mypareq{eq:th-leo-source-fn-10-02}{%
     $\forall \; \mylim{\ell} : \Valid{\ell} \iff \exists \; \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
@@ -6444,7 +6447,7 @@ By the definition of Leo source EIM,
 \mypareq{eq:th-leo-source-fn-10-09-10}{%
     If \var{Source-Rel} is a function,
     then it is
-    the function \myfnname{Source}
+    equivalent to the function \myfnname{Source}
     \cuz{}
         \Eref{eq:th-leo-source-fn-05},
         \Eref{eq:th-leo-source-fn-07},
@@ -6465,7 +6468,6 @@ By the definition of Leo source EIM,
     \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10-05},
         \Eref{eq:th-leo-source-fn-10-09-10}.
 }
-
 It remains to show that \var{Source-Rel} is a function.
 To this we assume, for a derivation, that two tuples of
 \var{Source-Rel} have the same argument.
@@ -6473,18 +6475,20 @@ To this we assume, for a derivation, that two tuples of
 \label{eq:th-leo-source-fn-10-09-32}
 \tuple{ \mylim{\ell}, \Veim{src1} } \in \var{Source-Rel}
 \\ \label{eq:th-leo-source-fn-10-09-34}
-\land \; \tuple{ \ell, \Veim{src1} } \in \var{Source-Rel}
+\land \; \tuple{ \ell, \Veim{src2} } \in \var{Source-Rel}
 \\ \nonumber
 \text{\cuz{} AF derivation,
     new arbitrary \mylim{\ell}, \Veim{src1}, \Veim{src2}.}
 \end{gather}
 \mypareq{eq:th-leo-source-fn-10-09-36}{%
     $\ell \in \myfn{lims}{\var{src1}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-10-09-32}.
+    \cuz{} \Eref{eq:th-leo-source-fn-10-01},
+        \Eref{eq:th-leo-source-fn-10-09-32}.
 }
 \mypareq{eq:th-leo-source-fn-10-09-38}{%
     $\ell \in \myfn{lims}{\var{src2}}$
-    \cuz{} \Eref{eq:th-leo-source-fn-10-09-34}.
+    \cuz{} \Eref{eq:th-leo-source-fn-10-01},
+        \Eref{eq:th-leo-source-fn-10-09-34}.
 }
 \mypareq{eq:th-leo-source-fn-10-09-40}{%
     \myfn{Is-Leo-Eligible}{\var{src1}}
@@ -6499,11 +6503,6 @@ To this we assume, for a derivation, that two tuples of
 \mypareq{eq:th-leo-source-fn-12}{%
     $\Current{\ell} = \Current{\var{src1}}$
     \cuz{} \Dfref{def:lim-validity},
-        \Eref{eq:th-leo-source-fn-10-09-36}.
-}
-\mypareq{eq:th-leo-source-fn-20}{%
-    \myfn{Is-Leo-Eligible}{\var{src2}}
-    \cuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-leo-source-fn-10-09-36}.
 }
 \mypareq{eq:th-leo-source-fn-22}{%
@@ -6533,30 +6532,34 @@ To this we assume, for a derivation, that two tuples of
         \Eref{eq:th-leo-source-fn-28},
         \Eref{eq:th-leo-source-fn-30}.
 }
-
-\todo{Finish and recheck this proof}
-% \mypareq{eq:th-leo-source-fn-36}{%
-%     $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} \le 1$
-%     \linebreak \cuz{} contrary of \Eref{eq:th-leo-source-fn-11},
-%     \Eref{eq:th-leo-source-fn-11}--\Eref{eq:th-leo-source-fn-34}.
-% }
-% \mypareq{eq:th-leo-source-fn-38}{%
-%     $\forall \; \mylim{\ell} : \Valid{\ell} \implies \size{\set{ \Veim{src} : \ell \in \myfn{lims}{\var{src}} }} = 1$
-%     \linebreak \cuz{} \Eref{eq:th-leo-source-fn-10-12},
-%         \Eref{eq:th-leo-source-fn-36}.
-% }
-% \mypareq{eq:th-leo-source-fn-40}{%
-%     $\riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}$
-%     exists for every valid LIM \mylim{\ell}.
-% }
-% \mypareq{eq:th-leo-source-fn-42}{%
-%     \myfn{Source}{} is a total function
-%     over the domain of valid LIMS
-%     \cuz{} \Eref{eq:th-leo-source-fn-07},
-%     \Eref{eq:th-leo-source-fn-40}.
-% }
-
-\myqed
+\begin{equation}
+\begin{gathered}
+\label{eq:th-leo-source-fn-36}
+    \forall \; \mylim{\ell} : \forall \; \Veim{src1} : \forall \; \Veim{src2} :
+    \\ \tuple{ \mylim{\ell}, \Veim{src1} } \in \var{Source-Rel}
+        \land \; \tuple{ \ell, \Veim{src2} } \in \var{Source-Rel}
+    \\ \implies \var{src1} = \var{src2}
+    \\ \cuzbox{derivation from
+        \Eref{eq:th-leo-source-fn-10-09-32}--\Eref{eq:th-leo-source-fn-10-09-32}
+        to \Eref{eq:th-leo-source-fn-34};
+        universal generalization of \mylim{\ell}, \Veim{src1} and \Veim{src2}.
+    }
+\end{gathered}
+\end{equation}
+By the definition of a functional relation,
+\mypareq{eq:th-leo-source-fn-38}{%
+    \var{Source-Rel} is a function
+    \cuz \Eref{eq:th-leo-source-fn-36}.
+}
+\mypareq{eq:th-leo-source-fn-40}{%
+    The total function \myfnname{Source} exists, and is a surjection
+    \cuz{} \Eref{eq:th-leo-source-fn-10-01},
+        \Eref{eq:th-leo-source-fn-10-09-10},
+        \Eref{eq:th-leo-source-fn-10-09-20},
+        \Eref{eq:th-leo-source-fn-10-09-30},
+        \Eref{eq:th-leo-source-fn-38}.
+        \myqed
+}
 \end{proof}
 
 \chapter{Leo source sequences}
