@@ -8277,25 +8277,30 @@ and is a total bijection.
 \end{theorem}
 
 \begin{proof}
-From
-the \myfnname{Source} function theorem \Thref{th:leo-source-fn},
-we know that
-\myfnname{Source} exists and is total and a surjection.
-It remains to show that
+The strategy is to show that
 \myfnname{Source} is an injection.
-To do this, we treat \myfnname{Source} as a relation
+From this the theorem will follow immediately via
+the \myfnname{Source} function theorem \Thref{th:leo-source-fn}.
+
+To prove that \myfnname{Source}
+has the injection property,
+we treat \myfnname{Source} as a relation
 and consider two tuples with distinct first elements (arguments),
-but otherwise arbitrary,
-seeking to show that this pair of tuples have different second elements (values).
+but otherwise arbitrary.
+We seek to show that this pair of tuples have different second elements (values).
+
+Initially, we consider only the subcase where the size
+of the domain of \myfnname{Source} is greater than 1:
+\mypareq{eq:th-source-fn-injection-98}{
+    $\Dom{\myfnname{Source}} > 1$ \cuz{} AF subcase
+}
 \begin{gather}
 \label{eq:th-source-fn-injection-100}
-\Dom{\myfnname{Source}} \ge 2
-\\ \label{eq:th-source-fn-injection-110}
-\land \tuple{\mylim{\ell1}, \Veim{src1}} \in \myfnname{Source}
+\land\; \tuple{\mylim{\ell1}, \Veim{src1}} \in \myfnname{Source}
 \\ \label{eq:th-source-fn-injection-120}
-\land \tuple{\mylim{\ell2}, \Veim{src2}} \in \myfnname{Source}
+\land\; \tuple{\mylim{\ell2}, \Veim{src2}} \in \myfnname{Source}
 \\ \label{eq:th-source-fn-injection-130}
-\land \ell1 \ne \ell2
+\land\; \ell1 \ne \ell2
 \\ \nonumber \cuzbox{AF derivation;
         new arbitrary \mylim{\ell1}, \mylim{\ell2}, \Veim{src1}, \Veim{src2}.
         }
@@ -8304,13 +8309,54 @@ seeking to show that this pair of tuples have different second elements (values)
     $\var{src1} = \var{src2}$ \cuz{} AF reductio.
 }
 \mypareq{eq:th-source-fn-injection-150}{%
-    \var{src1} has two distinct LIMS,
-    $\ell1$ and $\ell2$ \cuz{}
-        \Eref{eq:th-source-fn-injection-150}.
+    \var{src1} has two distinct valid LIMs,
+    $\ell1$ and $\ell2$ \cuz{} \Eref{eq:th-source-fn-injection-100},
+        \Eref{eq:th-source-fn-injection-120},
+        \Eref{eq:th-source-fn-injection-140}.
 }
-
-\todo{Prove Source function is an bijection}
-\myqed
+\mypareq{eq:th-source-fn-injection-160}{%
+    \var{src1} has at most one distinct valid LIM
+    \cuz{} \longThref{LIM non-duplication}{th:lim-non-duplication}.
+    This contradicts \Eref{eq:th-source-fn-injection-150}.
+}
+\mypareq{eq:th-source-fn-injection-170}{%
+    $\var{src1} \ne \var{src2}$ \cuz{} reductio
+        \Eref{eq:th-source-fn-injection-140}--%
+        \Eref{eq:th-source-fn-injection-160}.
+}
+\begin{gather}
+\label{eq:th-source-fn-injection-190}
+        \Dom{\myfnname{Source}} > 2
+\\ \label{eq:th-source-fn-injection-200}
+        \implies \forall\; \mylim{\ell1} : \forall\; \mylim{\ell2} : \forall\; \Veim{src1} : \forall\; \Veim{src2} :
+\\ \label{eq:th-source-fn-injection-210}
+        \tuple{\mylim{\ell1}, \Veim{src1}} \in \myfnname{Source}
+            \land \; \tuple{\mylim{\ell2}, \Veim{src2}} \in \myfnname{Source}
+\\ \label{eq:th-source-fn-injection-220}
+            \land \; \ell1 \ne \ell2
+\\ \label{eq:th-source-fn-injection-230}
+        \implies \var{src1} \ne \var{src2}
+\\ \nonumber
+        \cuzbox{derivation \Eref{eq:th-source-fn-injection-98}--%
+            \Eref{eq:th-source-fn-injection-170};
+            universal generalization of \mylim{\ell1}, \mylim{\ell2}, \Veim{src1}, \Veim{src2}.
+        }
+\end{gather}
+The subequation \Eref{eq:th-source-fn-injection-200}--\Eref{eq:th-source-fn-injection-230}
+instantiates the definition
+of an injection,
+and every function with an empty or singleton domain is an injection,
+so that
+\mypareq{eq:th-source-fn-injection-250}{%
+    \myfnname{Source} is an injection
+        \cuz{} \Eref{eq:th-source-fn-injection-190}--\Eref{eq:th-source-fn-injection-230};
+        vacuously; trivially.
+}
+\mypareq{eq:th-source-fn-injection-260}{%
+    The total function \myfnname{Source} exists and is a bijection
+    \cuz{} \longThref{\myfnname{Source} function theorem}{th:leo-source-fn}.
+    \myqed
+}
 \end{proof}
 
 \begin{theorem}[LIM function]
