@@ -1074,7 +1074,7 @@ or sequence values with out-of-bounds indexes.)
 Other uses of undefined expressions
 are banned,
 except when explained in the text.
-\begin{table}[tb]
+\begin{table}[t]
 \centering
 \caption{Logical implication convention}
 \begin{tabular}{|c|c|c|}
@@ -1182,7 +1182,7 @@ This overloads a term with a mathematical meaning
 but we feel that following Jay Earley's terminology in \cite{Earley1970}
 justifies any risk of confusion.
 
-\begin{table}[tb]
+\begin{table}[t]
 \centering
 \caption{Type notations}
 \begin{tabular}{ll}
@@ -8480,8 +8480,8 @@ $\size{
        }
     }$
     $\le \size{\Vocab{\Vint{g}}}$
-        \cuz{\Eref{eq:th-lims-per-es-20},
-            \Eref{eq:th-lims-per-es-22}}.
+        \cuz{\Eref{eq:th-lims-per-es-18},
+            \Eref{eq:th-lims-per-es-20}}.
 }
 \mypareq{eq:th-lims-per-es-26}{%
     $\forall\; \Veim{x} : \left( \exists\; \mylim{\ell} : \ell = \Lim{\var{x}} \right)
@@ -8505,12 +8505,36 @@ $\size{
        }
     }$
     \linebreak $\le \size{\Vocab{\Vint{g}}}$
-        \cuz{} \longDfref{ET validity}{def:et-validity},
+    \linebreak \cuz{} \longDfref{ET validity}{def:et-validity},
         \Eref{eq:th-lims-per-es-30}.
 }
-
+\mypareq{eq:th-lims-per-es-32}{%
+    $\forall\; \Veim{x} : \Current{\var{x}} = \Current{\Lim{\var{x}}}$
+    \cuz{} \longDfref{LIM validity}{def:lim-validity},
+        \longThref{\myfnname{Lim} function}{th:lim-fn}.
+}
+\mypareq{eq:th-lims-per-es-34}{%
+    $\size{
+       \set{ \mylim{\ell} :
+            \Current{\ell} = \var{j} \land \ell = \Lim{\var{x}}
+       }
+    } \le \size{\Vocab{\Vint{g}}}$
+    \linebreak \cuz{} \Eref{eq:th-lims-per-es-30}, \Eref{eq:th-lims-per-es-32}.
+}
+\begin{equation}
+\label{eq:th-lims-per-es-36}
+\begin{gathered}
+    \forall \; \Vloc{j} \in \Dom{\Vet{S}} :
+    \size{\set{\mylim{\ell} : \Current{\ell} = \var{j}}} \le
+    \size{\Vocab{\var{g}}}
+    \\ \cuzbox{derivation
+        \Eref{eq:th-lims-per-es-12}--\Eref{eq:th-lims-per-es-34};
+        universal generalization of \Vloc{j}.
+        \myqed
+    }
+\end{gathered}
+\end{equation}
 \todo{LIM's per ES proof}
-\myqed
 \end{proof}
 
 \todo{TO HERE Tue 27 Oct 2020 09:53:42 PM EDT}
@@ -9226,7 +9250,7 @@ the housekeeping time of the callee is unchanged.
 \section{Initializer op}
 \label{sec:initializer}
 
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{\var{Predict1}}
 \label{alg:predict1}
 \begin{algorithmic}[1]
@@ -9395,7 +9419,7 @@ Space for \var{Predict1} is
 \end{equation}
 \end{proof}
 
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{\var{Predict-ES}}
 \label{alg:predict-es}
 \begin{algorithmic}[1]
@@ -10059,7 +10083,7 @@ the transition array
 \dispEnd{}
 \end{observation}
 
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{\op{Initializer}}
 \label{alg:initializer-op}
 \begin{algorithmic}[1]
@@ -10465,7 +10489,7 @@ operation of \Earley{}\cite{Earley1970}.
 \section{Scanner op}
 \label{def:scanner}
 
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{\var{Scanner}}
 \label{alg:scanner-op}
 \begin{algorithmic}[1]
@@ -10991,18 +11015,16 @@ and
 operation of \Earley{}.
 \dispEnd
 \end{observation}
-
+%
+\todo{Define caller-charged, EIM-charged, link-charged}%
+\todo{By default, ``charged'' is EIM-charged}%
+\todo{Define ``new EIM pass''}%
+\todo{Define ``dup EIM pass''}%
+\todo{Define ``EIM try pass'', ``EIM try''}%
 \section{Reducer op}
 \label{def:reducer}
 
-\todo{Define caller-charged, EIM-charged, link-charged}
-\todo{By default, ``charged'' is EIM-charged}
-\todo{Define ``new EIM pass''}
-\todo{Define ``dup EIM pass''}
-\todo{Define ``EIM try pass'', ``EIM try''}
-
-\FloatBarrier
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \caption{\var{Earley-Reducer}}
 \label{alg:earley-reducer-op}
 \begin{algorithmic}[1]
@@ -11030,7 +11052,6 @@ operation of \Earley{}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-\FloatBarrier
 
 \begin{observation}[\op{Earley-Reducer} passes]
 \label{obs:earley-reducer-passes}
@@ -11052,8 +11073,7 @@ For the purposes of analyzing \op{Earley-Reducer},
 refers to a pass of
 loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} line invocations}
 \label{tab:earley-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -11103,7 +11123,6 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{assumption}[\op{Earley-Reducer} time charge]
 \label{asm:earley-reducer-time-charge}
@@ -11122,8 +11141,7 @@ control to its caller.
       \dispEnd
 \end{assumption}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} \var{proc} account time}
 \op{Earley-Reducer} charges \Oc{} time
 to its \var{proc} account, and closes that account.
@@ -11145,9 +11163,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} \var{new} account time}
 \op{Earley-Reducer} charges \Oc{} time
 to the \var{new} account for each new EIM,
@@ -11187,9 +11204,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} \var{dup} account time}
 \op{Earley-Reducer} charges \Oc{} time
 to the \var{dup} account for each dup EIM,
@@ -11223,7 +11239,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{assumption}[\op{Earley-Reducer} space charge]
 \label{asm:earley-reducer-space-charge}
@@ -11242,8 +11257,7 @@ as of the return from \op{Earley-Reducer}.
      \dispEnd
 \end{assumption}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} \var{new} account space}
 \op{Earley-Reducer} charges \Oc{} space to the \var{new}
 account of each new EIM, and closes the account.
@@ -11283,8 +11297,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{\op{Earley-Reducer} \var{link} account space}
 \op{Earley-Reducer} charges \Oc{} space to the \var{link}
 account of each dup EIM, and closes the account.
@@ -11318,8 +11331,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\FloatBarrier
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{\op{Leo-Reducer}}
 \label{alg:leo-reducer-op}
 \begin{algorithmic}[1]
@@ -11344,7 +11356,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
-\FloatBarrier
 
 \begin{observation}[\op{Leo-Reducer} calls]
 \label{obs:leo-reducer-calls}
@@ -11354,8 +11365,7 @@ a new EIM pass or a dup EIM pass,
 but never both.  \dispEnd{}
 \end{observation}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Line invocations for \op{Leo-Reducer}}
 \label{tab:leo-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -11400,7 +11410,6 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{theorem}[\proc{Leo-reducer} invocations]
 \label{th:leo-reducer-invocations}
@@ -11414,8 +11423,7 @@ By \Tbref{tab:leo-reducer-invocations}.
 \myqed
 \end{proof}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Inclusive time per EIM try of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11471,8 +11479,7 @@ The theorem follows from
 \Tbref{tab:leo-reducer-eim-time}.
 \end{proof}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Zero EIM space lines for \op{Leo-Reducer}}
 \label{tab:leo-reducer-zero-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11505,8 +11512,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Inclusive EIM-charged space
     for each new EIM loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-space}
@@ -11528,7 +11534,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{assumption}[\op{Leo-Reducer} space charge]
 \label{asm:leo-reducer-space-charge}
@@ -11545,8 +11550,7 @@ as of the return from \op{Leo-Reducer}.
      \dispEnd
 \end{assumption}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Inclusive link-charged space
     for each dup EIM loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-link-space}
@@ -11568,7 +11572,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 \begin{theorem}[\op{Leo-Reducer} EIM space]
 \label{th:leo-reducer-eim-space}
@@ -11598,8 +11601,7 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \myqed
 \end{proof}
 
-\FloatBarrier
-\begin{algorithm}[H]
+\begin{algorithm}[t]
 \caption{\op{Reducer}}
 \label{alg:reducer-op}
 \begin{algorithmic}[1]
@@ -11628,8 +11630,7 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \end{algorithmic}
 \end{algorithm}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Line invocations for \op{Reducer}}
 \label{tab:reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -11677,7 +11678,6 @@ Lines are deduced in the order
 \\ \hline
 \end{tabular}
 \end{table}
-\FloatBarrier
 
 For the purposes of analyzing \op{Reducer},
 ``loop pass'', or just ``pass'',
@@ -11712,8 +11712,7 @@ By \Tbref{tab:reducer-invocations}.
   \end{itemize}
 \end{assumption}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Inclusive open time charged to \var{caller} account
   for \op{Reducer}}
 \label{tab:reducer-proc-time}
@@ -11737,8 +11736,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Inclusive open time charged to \var{eim}
   account of each \Veim{cuz} by \op{Reducer}}
 \label{tab:reducer-eim-time}
@@ -11799,8 +11797,7 @@ The theorem follows from
 \Tbref{tab:reducer-eim-time}.
 \end{proof}
 
-\FloatBarrier
-\begin{table}[H]
+\begin{table}[t]
 \caption{Open space charged
   by \op{Reducer}}
 \label{tab:reducer-space}
@@ -11940,8 +11937,8 @@ into the Earley table with the link pair
 \section{Memoizer op}
 \label{def:memoizer}
 
-\FloatBarrier
-\begin{algorithm}[H]
+% \FloatBarrier
+\begin{algorithm}[t]
 \caption{\op{Memoizer}}
 \label{alg:memoizer-op}
 \begin{algorithmic}[1]
@@ -12027,7 +12024,7 @@ but we have yet to prove these things.
 
 The top-level view of \Marpa{} is
 shown in \Aref{alg:marpa}.
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{The \Marpa{} Algorithm}
 \label{alg:marpa}
 \begin{algorithmic}[1]
@@ -13036,7 +13033,7 @@ and \Vbool{z} is \var{true} if \Veim{x}
 is already present in \Ves{j},
 and \var{false} otherwise.
 
-\begin{algorithm}[tb]
+\begin{algorithm}[t]
 \caption{Adjoin EIM}
 \label{alg:adjoin-eim}
 \begin{algorithmic}[1]
