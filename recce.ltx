@@ -5130,13 +5130,12 @@ The lemma follows from
 \end{proof}
 
 \begin{theorem}[LES direction]
-\label{th-les-direction}
+\label{th:les-direction}
 The current location of
 every element of an \type{LES} is at or before
 the current location of every lesser-indexed element
 of the \type{LES}.
 That is,
-\label{th:les-direction}
 \[
 \begin{gathered}
 \forall \; \var{les} \in \type{LES} :
@@ -6576,6 +6575,24 @@ By the definition of a functional relation,
         \Eref{eq:th-leo-source-fn-38}.
         \myqed
 }
+\end{proof}
+
+\begin{theorem}[LIM direction]
+\label{th-lim-direction}
+The current location of a LIM is
+the current location of its source.
+That is,
+\[
+\forall \; \var{src} \in \type{EIM} :
+\forall \; \ell \in \myfn{lims}{\var{src}} :
+    \Current{\ell} = \Current{\var{src}}.
+\]
+\end{theorem}
+
+\begin{proof}
+The theorem follows immediately from the
+definition of LIM validity \Dfref{def:lim-validity}.
+\myqed
 \end{proof}
 
 \chapter{Leo source sequences}
@@ -8568,21 +8585,21 @@ where $\var{nxtlims} = \myfn{next-lims}{\Veim{src}}$.
 \dispEnd
 \end{definition}
 
-\begin{theorem}[LIM predecessor not after EIM]
-\label{th:lim-predecessor-not-after-eim}
+\begin{theorem}[LIM predecessor direction]
+\label{th:lim-predecessor-direction}
 \begin{gather*}
     \LIMPredecessor{\Veim{prev}} \ne \Lambda
-    \\ \implies \Current{\LIMPredecessor{\var{prev}}} =
+    \\ \implies \Current{\LIMPredecessor{\var{prev}}} \le
         \Current{\var{prev}}.
 \end{gather*}
 \end{theorem}
 
 \begin{proof}
-\todo{Fix this proof}
 This theorem follows from
-\Thref{th:eim-direction} and
-\ldots
-\todo{lim predecessor connection}
+the Next Eligible EIM Direction Theorem \Thref{th:next-eligible-direction},
+the definition of LIM validity \Dfref{def:lim-validity},
+the LIM Direction Theorem \Thref{th-lim-direction},
+and the definition of the LIM predecessor function \Dfref{def:lim-predecessor-fn}.
 \myqed
 \end{proof}
 
