@@ -8656,7 +8656,7 @@ but \Marpa{} owes much to the
 careful elaboration of the idea in
 \cite{AH2002}.
 }
-and are essential for efficient evaluation.
+which are essential for efficient evaluation.
 
 As we will see below,
 some PIM's do not track link pairs.
@@ -8720,7 +8720,7 @@ is consumed by either
   in which case the try resource is also \dfn{new-charged resource}, or
   \dfn{new resource}.
 \end{itemize}
-Execution of logic which consumes which consumes a type of resource is
+Execution of logic which consumes a type of resource is
 named after that resource,
 so that execution of logic which successfully adds an EIM to an Earley set is called
 \dfn{new-charged execution}, a \dfn{new-charged}, or a \dfn{new}.
@@ -8807,7 +8807,7 @@ Instead, we assume
 that space local to the pseudocode procedures
 resides in a data structure
 (in common implementations, a stack)
-whose maximum space consumed to \Oc{}.
+whose maximum space consumed is \Oc{}.
 
 \begin{definition}[Housekeeping and body execution resource]
 \label{obs:housekeeping-vs-body-execution}
@@ -8818,7 +8818,7 @@ and \dfn{body execution}.
 Resource not consumed by housekeeping
 is considered to be consumed by body execution.
 
-Housekeeping consumes \Oc{} time and zero space.
+Housekeeping always consumes \Oc{} time and zero space.
 Body execution may consume arbitrary resource.
 \dispEnd
 \end{definition}
@@ -8854,48 +8854,56 @@ is consumed ``directly''; and
 directly and indirectly.
 Resource consumed is exclusive unless otherwise stated.
 
+\todo{Delete the "resource functions"?}
 For use in the complexity analysis,
 we define the following ``resource functions'',
 where \var{x} may be a code snippet, a line,
 or an algorithm:
 \begin{itemize}
-\item \Time{\var{x}} $\defined$ the exclusive time consumed by one invocation of \var{x}.
-\item \Space{\var{x}} $\defined$ the exclusive space consumed by one invocation of \var{x}.
-\item \Invocs{\var{x}} $\defined$ the number of invocations during one call of the current pseudocode procedure of \var{x}.
-\item \Passes{\ell} $\defined$ the number of passes during one call of the current pseudocode procedure of the loop $\ell$.
-\item \Invocs{\var{x}}/\var{unit} $\defined$ the number of invocations modulo one \var{unit} of \var{x}.
-\item \Passes{\ell/\var{unit}} $\defined$ the number of passes module one \var{unit} of the loop $\ell$.
+\item \Time{\var{x}} is the exclusive time consumed by one invocation of \var{x}.
+\item \Space{\var{x}} is the exclusive space consumed by one invocation of \var{x}.
+\item \Invocs{\var{x}} is the number of invocations during one call of the current pseudocode procedure of \var{x}.
+\item \Passes{\ell} is the number of passes during one call of the current pseudocode procedure of the loop $\ell$.
+\item \Invocs{\var{x}}/\var{unit} is the number of invocations modulo one \var{unit} of \var{x}.
+\item \Passes{\ell/\var{unit}} is the number of passes modulo one \var{unit} of the loop $\ell$.
 \end{itemize}
-The calls ``module a unit'' are for counting invocations and passes at a level finer than the total count for the pseudocode procedure.
+The resource functions
+defined as ``modulo a unit'' are for counting invocations
+and passes at a level finer than the total count for the pseudocode procedure.
 Their precise meaning will defined in the context in which they are used.
 
 \section{Earley set indexing}
 \label{sec:es-indexing}
 
-\begin{gather}
-\label{eq:def-loc-of_pim}
-\myparbox{%
-  $\Time{\Current{\Vpim{pim}}} = \Oc{} \because$
-  Marpa::R2\cite{Marpa-R2} stores the integer location
-  of each PIM in its data structure.%
-} \\
-\label{eq:def-loc-of_es}
-\myparbox{%
-  $\Time{\Current{\Ves{es}}} = \Oc{}, \because$
-  Marpa::R2 stores the integer location
-  of each Earley set in its data structure.%
-} \\
-\label{eq:def-es-of-pim}
-\myparbox{%
- $\Time{\Velement{S}{\Vpim{p}}} = \Oc{}, \because$
-  Marpa::R2 stores a pointer to its Earley set
-  in each PIM.%
-} \\
-\label{eq:def-es-of-loc}
-\myparbox{%
-  $\Time{\Velement{S}{\Vloc{j}} = \Oc{}} \because$
-  Marpa::R2 uses a dynamic array.}
-\end{gather}
+\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
+\begin{theorem}[Location access time complexity]
+\leavevmode\\
+\label{th:location-time-complexity}
+\begin{itemize}
+\item The function call \Current{\Vpim{pim}} incurs \Oc{} time.
+\item The function call \Current{\Ves{es}} incurs \Oc{} time.
+\item The function call \Velement{S}{\Vloc{j}} incurs \Oc{} time.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+Our computation model, conceptually, is a random access machine,
+but it will be more useful to justify
+the theorem in terms of the \Marpa{} implementation.
+The implementation description is equivalent to,
+or straightforwardly translates to, a description in
+terms of a RAM.
+\Current{\Ves{es}} incurs \Oc{} time because
+\Marpa{} stores its integer location
+in each ES.
+\Velement{S}{\Vloc{j}} incurs \Oc{} time
+because \Marpa{} stores ES's in a dynamic array
+indexed by location.
+\Current{\Vpim{pim}} incurs \Oc{} time
+because it is implemented as the equivalent of
+\Velement{S}{\Current{\var{pim}}}.
+\myqed
+\end{proof}
 
 \Velement{S}{\Vloc{j}} is not actually used
 by the \Marpa{} implementation during parsing,
