@@ -3706,7 +3706,7 @@ notation slightly by writing
 $\es{(\Vloc{j})}$ instead of $\Vet{cxt}[\Vloc{j}]$.
 In fact, when our intent is clear,
 we will carry the abuse a bit further,
-and abbreviate $\es{(\Vloc{j})}$ to \Ves{j}.
+and abbreviate $\es{(\Vloc{j})}$ to \VVelement{S}{j}.
 \dispEnd
 \end{definition}
 
@@ -4275,9 +4275,9 @@ while \Veim{x} is restricted to penults,
 including those \type{EIM}s which are not penults.
 We say that
 an EIM \Veim{uniq}
-is \dfn{Leo unique} in \Ves{j}
+is \dfn{Leo unique} in \VVelement{S}{j}
 iff
-$\Veim{uniq} \in \LeoUnique{\Ves{j}}$.
+$\Veim{uniq} \in \LeoUnique{\VVelement{S}{j}}$.
 \dispEnd{}
 \end{definition}
 
@@ -8615,32 +8615,31 @@ PIM's already exist in the Earley sets before
 it becomes applicable.
 If an operation requires that \Vpim{anc}
 exist in the Earley sets
-before adjoining \Vpim{desc} into an Earley set \Ves{j},
+before adjoining \Vpim{desc} with an Earley set \VVelement{S}{j},
 then \Vpim{anc} is said to be the \dfn{direct ancestor}
 of \Vpim{desc},
 and \Vpim{desc} is said to be the \dfn{direct descendant}
 of \Vpim{anc}.
-if \Vpim{desc} is already a member of \Ves{j}.
+If \Vpim{desc} is already a member of \VVelement{S}{j},
 \Vpim{anc}
 becomes a direct ancestor of \Vpim{desc},
 and \Vpim{desc} becomes a direct descendant of \Vpim{anc}.
 
 An \dfn{ancestor} of \Vpim{p} is recursively defined as
 \begin{itemize}
-\item \Vpim{p} itself, as its own \dfn{trivial ancestor};
-\item any direct ancestor of \Vpim{p}; and
-\item any direct ancestor of an ancestor of \Vpim{p}.
+\item \var{p} itself, as its own \dfn{trivial ancestor};
+\item any direct ancestor of \var{p}; and
+\item any direct ancestor of an ancestor of \var{p}.
 \end{itemize}
-Similarly,
-An \dfn{descendant} of \Vpim{p} is defined to be
-\Vpim{p} itself, as itw own \dfn{trivial descendant};
-any direct descendant of \Vpim{p}; and
-any direct descendant of a descendant of \Vpim{p}.
+Similarly, a \dfn{descendant} of \Vpim{p} is defined to be
+\var{p} itself, as its own \dfn{trivial descendant};
+any direct descendant of \var{p}; and
+any direct descendant of a descendant of \var{p}.
 
 For each operation, there are at most two direct ancestors.
 We follow \cite{AH2002} in calling one the ``predecessor''
 and the other the ``cause''.
-This terminology makes sense in some operations and,
+This terminology makes sense for some operations and,
 for consistency, we stretch it to cover all cases.
 If the predecessor or the cause is not applicable
 to a particular operation, we represent it as a
@@ -8648,23 +8647,8 @@ $\Lambda$ value.
 
 The \Marpa{} implementation tracks the ancestry of
 PIM's.
-The reasons are tracked in \dfn{link pairs},
-and are essential for efficient evaluation.
-
-As we will see below,
-some PIM's do not track link pairs.
-For those PIM's which do track link pairs,
-there is at exactly one link pair for adjunction of a
-PIM into an Earley set.
-
-A link pair
-is a duple of predecessor and cause:
-\[
-[ \var{predecessor}, \var{cause} ]
-\]
-The elements of a link pair are implemented
-as pointers.\footnote{
-The concept of link pairs was present
+The reasons are tracked in \dfn{link pairs},%
+\footnote{The concept of link pairs was present
 in
 \cite{Earley1968} and
 \cite{Earley1970},
@@ -8672,17 +8656,34 @@ but \Marpa{} owes much to the
 careful elaboration of the idea in
 \cite{AH2002}.
 }
-The pointers are used as ``links''.
-to other data.
-$\Lambda$ elements are implemented
-as a null pointer.
+and are essential for efficient evaluation.
+
+As we will see below,
+some PIM's do not track link pairs.
+For those PIM's which do track link pairs,
+there is at exactly one link pair for each adjunction of a
+PIM with an Earley set.
+
+A link pair
+is a duple of predecessor and cause:
+\[
+[ \var{predecessor}, \var{cause} ]
+\]
+In the \Marpa{} implementation,
+the elements of link pairs are pointers
+which are used as ``links'' to other data.
+The \Marpa{} implementation
+represents
+$\Lambda$ elements
+as C language null pointers.
 
 Every link pair is either an \dfn{initial link pair}
 or an \dfn{ambiguity link pair}.
-An initial link pair is the link pair added when a new PIM is
+An \dfn{initial link pair} is the link pair added when a new PIM is
 added to an Earley set.
-An ambiguity link pair is one added to an existing PIM
-when it is already in an Earley set.
+An \dfn{ambiguous link pair} is a link pair
+that is added to a PIM that
+is already an element of an Earley set.
 
 A link pair has type \type{LP}.
 The set of link pairs of a PIM
@@ -9054,8 +9055,8 @@ and the linked lists are of PIM's.
 The \var{transition} array is for efficient lookup
 of EIM and LIM matches.
 
-The function $\var{Transitions}{\Vsym{t}}{\Ves{j}}$
-returns the set of PIM's in \Ves{j} whose transition symbol
+The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+returns the set of PIM's in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
 The return
 
@@ -9093,7 +9094,7 @@ Creation time for a new link in one of the
 \begin{observation}[\var{Transitions} set size]
 \label{obs:transitions-set-size}
 \[
-\size{\Transitions{\Vsym{t}}{\Ves{j}}} = \order{\Vloc{j}}
+\size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
 \because \Thref{th:es-size}, \Obref{obs:transition-array}.
 \]
 \end{observation}
@@ -9667,11 +9668,11 @@ from \Eref{eq:th-predict-es-invocations-16-20},
 
 \begin{theorem}[\var{Predict-ES} time complexity]
 \label{th:predict-es-time}
-The inclusive time of $\var{Predict-ES}(\Ves{j})$
+The inclusive time of $\var{Predict-ES}(\VVelement{S}{j})$
 \Aref{alg:predict-es}
 is
-\Oc{} charged to each EIM of \Ves{j},
-and \Oc{} charged to \Ves{j} itself.
+\Oc{} charged to each EIM of \VVelement{S}{j},
+and \Oc{} charged to \VVelement{S}{j} itself.
 \end{theorem}
 
 \begin{proof}
@@ -9875,8 +9876,8 @@ and \Eref{eq:th-predict-es-time-48}.
 \begin{theorem}[\var{Predict-ES} Space Complexity]
 \label{th:predict-es-space}
 The space consumed by
-\proc[\Ves{j}]{Predict-ES}
-is \Oc{} charged to \Ves{j}
+\proc[\VVelement{S}{j}]{Predict-ES}
+is \Oc{} charged to \VVelement{S}{j}
 and \Oc{} charged to each EIM added.
 \end{theorem}
 
@@ -10120,7 +10121,7 @@ The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition array
-\Obref{obs:transition-array} for \Ves{j}.
+\Obref{obs:transition-array} for \VVelement{S}{j}.
 \dispEnd{}
 \end{observation}
 
@@ -10481,15 +10482,15 @@ The \Marpa{} Predictor op is equivalent to the
 
 \begin{equation}
 \label{eq:def-predictor-op}
-\op[\Ves{j}]{Predictor} \;\; \defined \;\; \proc[\Ves{j}]{Predict-ES}
+\op[\VVelement{S}{j}]{Predictor} \;\; \defined \;\; \proc[\VVelement{S}{j}]{Predict-ES}
 \end{equation}
 
 \begin{theorem}[\op{Predictor} time complexity]
 \label{th:predictor-time}
-The time of $\op{Predictor}(\Ves{j})$
+The time of $\op{Predictor}(\VVelement{S}{j})$
 is
-\Oc{} charged to each EIM of \Ves{j},
-and \Oc{} charged to \Ves{j} itself.
+\Oc{} charged to each EIM of \VVelement{S}{j},
+and \Oc{} charged to \VVelement{S}{j} itself.
 \end{theorem}
 
 \begin{proof}
@@ -10499,10 +10500,10 @@ The theorem follows from
 
 \begin{theorem}[\op{Predictor} space complexity]
 \label{th:predictor-space}
-The space of $\op{Predictor}(\Ves{j})$
+The space of $\op{Predictor}(\VVelement{S}{j})$
 \Aref{alg:predict-es}
 is
-\Oc{} charged to each EIM of \Ves{j},
+\Oc{} charged to each EIM of \VVelement{S}{j},
 and \Oc{} charged to each PIM added.
 \end{theorem}
 
@@ -10534,7 +10535,7 @@ operation of \Earley{}\cite{Earley1970}.
 \caption{\var{Scanner}}
 \label{alg:scanner-op}
 \begin{algorithmic}[1]
-\Procedure{Scanner}{\Ves{j}}
+\Procedure{Scanner}{\VVelement{S}{j}}
 \Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{inp}{\var{j}\subtract 1}, \var{val}}$.
   See \Dfref{def:token}.
 }
@@ -10543,7 +10544,7 @@ operation of \Earley{}\cite{Earley1970}.
 \For{every $\Veim{match} \in \Veimset{matches}$}
    \Comment \tightMath{\var{x}=1+1\times\var{try}}
 \label{line:scanner-op-3}
-\State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}@\Ves{j}$
+\State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}@\VVelement{S}{j}$
 \Statex \Comment \tightMath{\var{x}= 1\times\var{try}}
 \label{line:scanner-op-4}
 \State $\var{lp} = \tuple{\Veim{match},\var{token}}_\type{LP}$
@@ -10563,7 +10564,7 @@ operation of \Earley{}\cite{Earley1970}.
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
       \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-10}
-    \State Add \var{trial} to \Ves{j}
+    \State Add \var{trial} to \VVelement{S}{j}
       \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{new}}
 \label{line:scanner-op-11}
   \EndIf
@@ -11069,7 +11070,7 @@ operation of \Earley{}.
 \caption{\var{Earley-Reducer}}
 \label{alg:earley-reducer-op}
 \begin{algorithmic}[1]
-\Procedure{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
+\Procedure{Earley-Reducer}{\VVelement{S}{j},\Veimset{matches},\Veim{cuz}}
 \For{every $\Veim{match} \in \Veimset{matches}$}
       \label{line:earley-reducer-op-2}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}$
@@ -11086,7 +11087,7 @@ operation of \Earley{}.
       \label{line:earley-reducer-op-8}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
       \label{line:earley-reducer-op-9}
-    \State Add \var{trial} to \Ves{j}
+    \State Add \var{trial} to \VVelement{S}{j}
       \label{line:earley-reducer-op-10}
 \EndIf
 \EndFor
@@ -11376,7 +11377,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \caption{\op{Leo-Reducer}}
 \label{alg:leo-reducer-op}
 \begin{algorithmic}[1]
-\Procedure{Leo-Reducer}{\Ves{j},\Vlim{blocker},\Veim{cuz}}
+\Procedure{Leo-Reducer}{\VVelement{S}{j},\Vlim{blocker},\Veim{cuz}}
 \State $\Veim{trial} = \tuple{\Next{\DR{\var{blocker}}},\Origin{\var{blocker}}}$
   \label{line:leo-reducer-op-2}
 \State $\Vlp{lp} = \tuple{\Vlim{blocker},\Veim{cuz}}$
@@ -11391,7 +11392,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   \label{line:leo-reducer-op-7}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
   \label{line:leo-reducer-op-8}
-    \State Add \var{trial} to \Ves{j}
+    \State Add \var{trial} to \VVelement{S}{j}
   \label{line:leo-reducer-op-9}
 \EndIf
 \EndProcedure
@@ -11646,8 +11647,8 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \caption{\op{Reducer}}
 \label{alg:reducer-op}
 \begin{algorithmic}[1]
-\Procedure{Reducer}{\Ves{j}}
-\For{$\Veim{cuz} \in \Ves{j}$ where \var{cuz} is a completion}
+\Procedure{Reducer}{\VVelement{S}{j}}
+\For{$\Veim{cuz} \in \VVelement{S}{j}$ where \var{cuz} is a completion}
   \label{line:reducer-op-2}
 \State $\Veimset{matches} = \Transitions{\LHS{\Veim{cuz}}}{\Origin{\var{x}}}$
   \label{line:reducer-op-3}
@@ -11659,11 +11660,11 @@ and \Asmref{asm:leo-reducer-space-charge}.
       \label{line:reducer-op-6}
 \ElsIf{\var{match0} is a LIM}
   \label{line:reducer-op-7}
-    \State \Call{Leo-Reducer}{\Ves{j},\Vlim{match0},\Veim{cuz}}
+    \State \Call{Leo-Reducer}{\VVelement{S}{j},\Vlim{match0},\Veim{cuz}}
       \label{line:reducer-op-8}
 \Else
   \label{line:reducer-op-9}
-    \State \Call{Earley-Reducer}{\Ves{j},\Veimset{matches},\Veim{cuz}}
+    \State \Call{Earley-Reducer}{\VVelement{S}{j},\Veimset{matches},\Veim{cuz}}
       \label{line:reducer-op-10}
 \EndIf
 \EndFor
@@ -11827,7 +11828,7 @@ is
 \item \Oc{} charged to the \var{caller} account of \op{Reducer};
 and
 \item \Oc{} charged to \var{eim} account
-of every EIM in \Ves{j},
+of every EIM in \VVelement{S}{j},
 at the time of the return from \op{Reducer}.
 \end{itemize}
 \end{theorem}
@@ -11983,8 +11984,8 @@ into the Earley table with the link pair
 \caption{\op{Memoizer}}
 \label{alg:memoizer-op}
 \begin{algorithmic}[1]
-\Procedure{Memoizer}{\Ves{j}}
-\For{$\Veim{source} \in \LeoEligible{\Ves{j}}$}
+\Procedure{Memoizer}{\VVelement{S}{j}}
+\For{$\Veim{source} \in \LeoEligible{\VVelement{S}{j}}$}
   \label{line:memoizer-op-2}
 \State $\Veim{pred} = \LIMPredecessor{\var{source}}$
   \label{line:memoizer-op-3}
@@ -12001,7 +12002,7 @@ into the Earley table with the link pair
           $\qquad \qquad \qquad \Origin{\var{source}} ]$
       \label{line:memoizer-op-8}
 \EndIf
-    \State Add \Vlim{lim} to \Ves{j}
+    \State Add \Vlim{lim} to \VVelement{S}{j}
   \label{line:memoizer-op-9}
     \State $\LinkPairs{\var{lim}} = \set{\var{lp}}$
       \label{line:memoizer-op-10}
@@ -12072,17 +12073,17 @@ shown in \Aref{alg:marpa}.
 \Procedure{Main}{}
 \State $\Call{Parse-Setup}{{}}$
 \State $\Call{Initializer}{{}}$
-\For{ $\Ves{j}, 1 \le \var{j} \le \Vsize{w}$ }
-\State $\Call{ES-Setup}{\Ves{j}}$
-\State $\Call{Scanner}{\Ves{j}}$
-\If{$\size{\Ves{j}} = 0$}
+\For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
+\State $\Call{ES-Setup}{\VVelement{S}{j}}$
+\State $\Call{Scanner}{\VVelement{S}{j}}$
+\If{$\size{\VVelement{S}{j}} = 0$}
 \State return \Comment Reject \Cw{}
 \EndIf
-\State $\Call{Completer}{\Ves{j}}$
-\State $\Call{Predictor}{\Ves{j}}$
+\State $\Call{Completer}{\VVelement{S}{j}}$
+\State $\Call{Predictor}{\VVelement{S}{j}}$
 \label{alg:marpa-line-80}
-\State $\Call{Memoizer}{\Ves{j}}$
-\State $\Call{Bookkeeper}{\Ves{j}}$
+\State $\Call{Memoizer}{\VVelement{S}{j}}$
+\State $\Call{Bookkeeper}{\VVelement{S}{j}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -12982,7 +12983,7 @@ This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}. \myqed
 In the general case,
 where \var{x} is an arbitrary datum,
 it is not possible
-to use duple $[\Ves{i}, \var{x}]$
+to use duple $[\VVelement{S}{i}, \var{x}]$
 as a search key and expect the search to use
 \Oc{} time.
 Within \Marpa, however, there are specific cases
@@ -12991,7 +12992,7 @@ This is accomplished by
 taking advantage of special properties of the search.
 
 If it can be arranged that there is
-a direct link to the Earley set \Ves{i},
+a direct link to the Earley set \VVelement{S}{i},
 and that $0 \leq \var{x} < \var{c}$,
 where \var{c} is a constant of reasonable size,
 then a search can be made in \Oc{} time,
@@ -13013,14 +13014,14 @@ integers, indexed by an integer,
 and kept as part of the structure
 that implements each Earley set.
 While \Marpa{} is building a new Earley set,
-\Ves{j},
+\VVelement{S}{j},
 a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-While \Marpa{} is adjoining \type{EIM}s into \Ves{j},
-the PSL for \Ves{i}
-keeps track of the Earley items in \Ves{j} that have \Vloc{i}
+While \Marpa{} is adjoining \type{EIM}s into \VVelement{S}{j},
+the PSL for \VVelement{S}{i}
+keeps track of the Earley items in \VVelement{S}{j} that have \Vloc{i}
 as their origin.
 The maximum number of Earley items that must be tracked
 in each PSL is
@@ -13044,7 +13045,7 @@ Intuitively, the idea is avoid most re-computation
 of the PSL's by keeping timestamps with the PSL data.
 To illustrate the use of PSL's,
 we will consider the case
-where \Marpa{} is building \Ves{j}
+where \Marpa{} is building \VVelement{S}{j}
 and wants to check whether Earley item,
 \begin{equation*}
 \Veim{x} = [ \Vdr{x}, \Vorig{x} ],
@@ -13054,7 +13055,7 @@ or if \Veim{x} needs to be adjoined into the Earley sets.
 
 Let
 \begin{equation*}
-\var{psl-entry} = \PSL{\Ves{i}}{\var{y}}
+\var{psl-entry} = \PSL{\VVelement{S}{i}}{\var{y}}
 \end{equation*}
 be the entry for integer \var{y} in the PSL in
 the Earley set at \Vloc{x}, such that
@@ -13071,18 +13072,18 @@ the Earley set at \Vloc{x}, such that
 Here \var{time-stamp} is a time stamp which will be used to
 avoid unnecessary re-computation,
 and \Vbool{z} is \var{true} if \Veim{x}
-is already present in \Ves{j},
+is already present in \VVelement{S}{j},
 and \var{false} otherwise.
 
 \begin{algorithm}[t]
 \caption{Adjoin EIM}
 \label{alg:adjoin-eim}
 \begin{algorithmic}[1]
-\Procedure{Adjoin-EIM}{$[\Vdr{x},\Vorig{x}]@\Ves{j}$}
-\If{$\PSL{\Ves{j}}{\ID{\Vdr{x}}} = [\Vloc{j}, \var{true}]$}
+\Procedure{Adjoin-EIM}{$[\Vdr{x},\Vorig{x}]@\VVelement{S}{j}$}
+\If{$\PSL{\VVelement{S}{j}}{\ID{\Vdr{x}}} = [\Vloc{j}, \var{true}]$}
 \State return \Comment Do nothing if \Veim{x} exists
 \EndIf
-\State $\Ves{j} \gets \Ves{j} \cup \set{[\Vdr{x]}, \Vorig{x}]}$
+\State $\VVelement{S}{j} \gets \VVelement{S}{j} \cup \set{[\Vdr{x]}, \Vorig{x}]}$
 \State $\PSL{\Ves{x}}{\ID{\Vdr{x}}} \gets [\Vloc{j}, \var{true}]$
 \EndProcedure
 \end{algorithmic}
@@ -14552,7 +14553,7 @@ in the \Marpa{} algorithm.
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
 Earley set \var{j},
-if every Earley set, \Ves{i}, $0 \le \var{i} \le \var{j}$,
+if every Earley set, \VVelement{S}{i}, $0 \le \var{i} \le \var{j}$,
 contains all the valid visible PIM's
 $\because$ DFPP.
 }
@@ -14649,14 +14650,14 @@ $\because$ DFPP.
 
 \begin{theorem}
 \label{th:marpa-reducer-completeness}
-Let \Ves{j} be an Earley set in a \Marpa{} parse,
+Let \VVelement{S}{j} be an Earley set in a \Marpa{} parse,
 $\var{j} > 0$.
 If the parse is complete as far as the
 \Marpa{} \var{Scanner} operation of
-Earley set \Ves{j},
+Earley set \VVelement{S}{j},
 then the parse is complete as far as the
 \Marpa{} \op{Reducer} operation of
-Earley set \Ves{j}.
+Earley set \VVelement{S}{j}.
 \end{theorem}
 
 \begin{proof}
@@ -14666,8 +14667,8 @@ visible depth.
 We take for the induction hypothesis
 \begin{equation}
 \label{th:marpa-reducer-completeness-28}
-\myparbox{After a \Marpa{} \op{Reducer} operation at \Ves{j},
-\Ves{j} is complete
+\myparbox{After a \Marpa{} \op{Reducer} operation at \VVelement{S}{j},
+\VVelement{S}{j} is complete
 with respect to the
 the \type{EIM}s of visible depth \var{ix}.}
 \end{equation}
@@ -14678,24 +14679,24 @@ the \type{EIM}s of visible depth \var{ix}.}
 
 \begin{theorem}
 \label{th:marpa-visible-depth-completeness}
-Let \Ves{j} be an Earley set in a \Marpa{} parse,
+Let \VVelement{S}{j} be an Earley set in a \Marpa{} parse,
 $\var{j} > 0$.
 If the parse is complete as far as
 visible depth \var{n}
-in Earley set \Ves{j},
+in Earley set \VVelement{S}{j},
 then the parse is complete as far as
 visible depth $\var{n}+1$
 in
-Earley set \Ves{j}.
+Earley set \VVelement{S}{j}.
 \end{theorem}
 \begin{proof}
 The proof is by a reductio.
 \todo{presence in physical Earley set (PES?) vs theoretical {ES?}.}
 \begin{equation}
 \label{eq:th-marpa-visible-depth-completeness-08}
-\myparbox{Let $\Vpim{rez}@\Ves{j}$ be a valid PIM where
+\myparbox{Let $\Vpim{rez}@\VVelement{S}{j}$ be a valid PIM where
 $\var{Depth}(\var{rez}) = \var{n}+1 \land
-  \neg \var{rez} \in \Ves{j}$
+  \neg \var{rez} \in \VVelement{S}{j}$
 $\because$ AF reductio.}
 \end{equation}
 \begin{equation}
@@ -14820,7 +14821,7 @@ a constant depending on the grammar.
 The possible values of \Vloc{x} range from
 0 to \Vloc{j}.
 Therefore the number of possible Earley items
-in \Ves{j} is
+in \VVelement{S}{j} is
 is $\Vloc{j} \times \Oc{}$.
 Recall that the size of an Earley set is the number of \type{EIM}s
 that it contains.
@@ -14851,7 +14852,7 @@ For the theorem, we assume without loss of generality that
 \label{eq:ambiguous-links-pair-10a}
 \Veim{adjoined} = \left[ \left[ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs2} \right], \Vorig{i} \right], \\
 \label{eq:ambiguous-links-pair-10b}
-\text{$\Veim{adjoined} @ \Ves{j}$ is valid, and} \\
+\text{$\Veim{adjoined} @ \VVelement{S}{j}$ is valid, and} \\
 \label{eq:ambiguous-links-pair-10d}
 \LinkPairs{\Veim{adjoined}} \ge 1.
 \end{gather}
@@ -15572,7 +15573,7 @@ be an LRR
 grammar.
 There is a constant \var{c} such
 that the number of incomplete items
-in each set \Ves{j} is at most \var{c}.
+in each set \VVelement{S}{j} is at most \var{c}.
 \end{theorem}
 
 \begin{proof}
@@ -15589,7 +15590,7 @@ of $\Term{\Vint{g}}^\ast$.
 
 Let $\var{j} = \size{\Vterm{input1}}$.
 If two distinct derivations both put incomplete \type{EIM}s into
-\Ves{j}, they have the form
+\VVelement{S}{j}, they have the form
 \begin{align}
 \label{eq:incompletion-bound-1}
 & \begin{aligned}
@@ -15687,7 +15688,7 @@ From
 \Eref{eq:incompletion-bound-2}, and
 \Eref{eq:incompletion-bound-15},
 we see that every derivation which adjoins an incompletion
-into \Ves{j} for the cell of $\pi$ containing \Vterm{input3} is
+into \VVelement{S}{j} for the cell of $\pi$ containing \Vterm{input3} is
 of the form
 \begin{align}
 \Accept{\Vint{g}} & \xderives{R\ast} \Vstr{beforeA}\Vsym{lhs}\Vterm{input3} \\
@@ -15719,7 +15720,7 @@ and only one
 [ [ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2 } ], \Vorig{i} ]
 \end{equation}
 for each cell of the partition.
-Therefore the maximum number of incompletions at \Ves{j} is
+Therefore the maximum number of incompletions at \VVelement{S}{j} is
 less than
 \begin{equation}
 \label{eq:incompletion-bound-80}
@@ -15750,7 +15751,7 @@ Let
 be an unambiguous
 grammar.
 Let \var{complete} be the number of complete Earley items
-in an arbitrary Earley set \Ves{j},
+in an arbitrary Earley set \VVelement{S}{j},
 and let \var{medial} be the number of confirmed incomplete Earley items.
 Then
 \begin{equation*}
@@ -15788,7 +15789,7 @@ So
 \text{the longest single-cause chain is $\size{\NT{\var{g}}}+1$.}
 \end{equation}
 
-We now look at the \type{EIM}s in a single Earley set, call it \Ves{j},
+We now look at the \type{EIM}s in a single Earley set, call it \VVelement{S}{j},
 seeking to establish the relationship between the count of complete and incomplete
 items.
 We exclude predictions and organize the rest into a ``cause chain tree''.
@@ -15799,7 +15800,7 @@ We call an EIM of the form,
 \end{equation}
 the ``accept completion''.
 Let the ``leaves'' of the cause tree be the confirmed incompletions,
-plus the accept completion, if it exists in \Ves{j}.
+plus the accept completion, if it exists in \VVelement{S}{j}.
 These leaves have in common that they cannot be the cause of any other
 EIM.
 The remaining nodes are the completions, other than the accept completion.
@@ -15857,7 +15858,7 @@ simplifies to
 \var{interior} = \order{\var{leaves}}.
 \end{equation}
 
-There may not be an accept completion in \Ves{j},
+There may not be an accept completion in \VVelement{S}{j},
 but to maximize the number of completions,
 we assume there is one,
 so that
