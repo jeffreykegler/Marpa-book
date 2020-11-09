@@ -9122,20 +9122,27 @@ All of these operations are accesses and none consume space.
 \myqed
 \end{proof}
 
-\begin{observation}[\var{dotZeroUsed} bitmap]
-\label{obs:dotzeroused-bitmap}
-For each Earley set,
 \var{dotZeroUsed} is a bitmap with
 one bit for every rule in the grammar.
-Accesses and writes take \Oc{} time and zero space.
-Creation takes \Oc{} time and \Oc{} space.
+It is used when adding predictions to an Earley set.
 
-{\bf Justification}:
+\begin{theorem}[\var{dotZeroUsed} bitmap]
+\label{th:dotzeroused-bitmap}
+Clearing \var{dotZeroUsed} requires \Oc{} time
+and zero space.
+Bit accesses and writes take \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
 The size of the bitmap is \size{\Rules{\var{g}}}.
 \Rules{\var{g}} is a constant
-that depends on the grammar \Dfref{def:context-free-grammar}.
-\dispEnd{}
-\end{observation}
+that depends on the grammar \Dfref{def:context-free-grammar},
+which justifies the claim of constant time for bit reads
+bit writes, and clearing of the bitmap.
+Space for \var{dotZeroUsed} is accounted for
+a part of the space for the grammar.
+\myqed
+\end{proof}
 
 \begin{observation}[\var{seen} PSL]
 \label{obs:seen-psl}
@@ -9441,7 +9448,7 @@ For the justification in the case of lines
 \ref{line:marpa-predict-90},
 see
 \Thref{th:rule-id-complexity} and
-\Obref{obs:dotzeroused-bitmap}.
+\Thref{th:dotzeroused-bitmap}.
 For the justification of line
 \ref{line:marpa-predict-85},
 see \Thref{th:es-complexity}.
@@ -9487,7 +9494,7 @@ Space for \var{Predict1} is
   consume zero space
   \cuz{}
   \Thref{th:rule-id-complexity},
-  \Obref{obs:dotzeroused-bitmap},
+  \Thref{th:dotzeroused-bitmap},
   \Aref{alg:predict1}.}
 \end{equation}
 \begin{equation}
@@ -9760,14 +9767,14 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \begin{equation}
 \label{eq:th-predict-es-time-14}
 \Time{\ref{line:marpa-predict-es-05}} = \Oc{}
-  \because \Obref{obs:dotzeroused-bitmap}.
+  \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-16}
 \Time{\ref{line:marpa-predict-es-10}} = \Oc{}
   \because
   \Thref{th:rule-id-complexity},
-  \Obref{obs:dotzeroused-bitmap},
+  \Thref{th:dotzeroused-bitmap},
   \Eref{eq:th-predict-es-time-10}.
 \end{equation}
 \begin{equation}
@@ -9959,7 +9966,7 @@ and \Oc{} charged to each EIM added.
 \begin{equation}
 \label{eq:th-predict-es-space-14}
 \Space{\ref{line:marpa-predict-es-05}} = \Oc
-  \because \Obref{obs:dotzeroused-bitmap}.
+  \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-16}
@@ -10257,7 +10264,7 @@ is
 \Time{\ref{line:initializer-op-60}} = \Oc{}
   \because
   \Thref{th:rule-id-complexity},
-  \Obref{obs:dotzeroused-bitmap}.
+  \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-22}
@@ -10398,7 +10405,7 @@ is
 \Space{\ref{line:initializer-op-60}} = 0
   \because
   \Thref{th:rule-id-complexity},
-  \Obref{obs:dotzeroused-bitmap}.
+  \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-space-22}
