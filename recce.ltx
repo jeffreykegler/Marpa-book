@@ -9144,33 +9144,28 @@ a part of the space for the grammar.
 \myqed
 \end{proof}
 
-\begin{observation}[\var{seen} PSL]
-\label{obs:seen-psl}
 For each Earley set,
 \var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
 Earley sets never have duplicated \type{EIM}s and
 \var{seen} is used to efficiently enforce this.
-PSL's are described in detail in section
-\Chref{chap:per-set-lists}.
 
-In each Earley set, \var{seen} will consume \Oc{} space.
-Accesses and writes of \var{seen} consume \Oc{}.
+\begin{theorem}[\var{seen} PSL]
+\label{th:seen-psl}
+In each Earley set,
+set up of \var{seen} consumes \Oc{} time,
+\Oc{} trimmed space
+and zero link space.
+Reads and writes of \var{seen} consume \Oc{} time
+and zero space.
+\end{theorem}
 
-{\bf Justification}:
-Since there
-is one fixed-size entry for every dotted rule in the grammar,
-the size of \var{seen} is \order{\size{\DottedRules{\var{g}}}}.
-\DottedRules{\var{g}}
-is a constant which depends on \Vcfg{g},
-and therefore the space consumed by \var{seen} will be
-\Oc{}.
-It can be seen that creation, each access and each write
-of \var{seen} consumes \Oc{} time from
-section \Chref{chap:per-set-lists},
+\begin{proof}
+The claims of this theorem are justified
+in section \Chref{chap:per-set-lists},
 where PSL's are described in detail.
-\dispEnd{}
-\end{observation}
+\myqed
+\end{proof}
 
 \begin{observation}[\var{transition} array]
 \label{obs:transition-array}
@@ -10803,11 +10798,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -10842,7 +10837,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -10924,11 +10919,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-8}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
@@ -10963,7 +10958,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
@@ -11040,11 +11035,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-8}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
@@ -11079,7 +11074,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\c{}&&0&\Obref{obs:seen-psl}
+    \ref{line:scanner-op-6}&1&\c{}&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11294,11 +11289,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-7}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11335,7 +11330,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11386,11 +11381,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-4}&1&0&&0&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-7}&1&0&&0&
 \\ \hline
-    \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-8}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
@@ -11426,7 +11421,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-4}&1&0&&0&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:earley-reducer-op-5}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11547,13 +11542,13 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-3}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:leo-reducer-op-4}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:leo-reducer-op-5}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
     \ref{line:leo-reducer-op-6}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:leo-reducer-op-7}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
+    \ref{line:leo-reducer-op-7}&0--1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:leo-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11603,11 +11598,11 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-3}&1&0&&0&
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:leo-reducer-op-4}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:leo-reducer-op-6}&1&0&&0&
 \\ \hline
-    \ref{line:leo-reducer-op-7}&1&0&&0&\Obref{obs:seen-psl}
+    \ref{line:leo-reducer-op-7}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:leo-reducer-op-8}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
@@ -13088,6 +13083,18 @@ While \Marpa{} is building a new Earley set,
 a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
+
+\Marpa{} uses a PSL for its \var{seen} data structure.
+In the case of \var{seen},
+there is one fixed-size entry for every dotted rule in the grammar,
+so that the size of \var{seen} for each ES
+is \order{\size{\DottedRules{\var{g}}}}.
+\DottedRules{\var{g}}
+is a constant which depends on \Vcfg{g},
+and therefore the space consumed by \var{seen}
+\Oc{}, all of which is treated as trimmed space.
+For the same reasons, the time used to allocate \var{seen}
+for each ES is \Oc{}.
 
 While \Marpa{} is adjoining \type{EIM}s into \VVelement{S}{j},
 the PSL for \VVelement{S}{i}
