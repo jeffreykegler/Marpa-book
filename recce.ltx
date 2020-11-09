@@ -519,13 +519,13 @@ a public archive on Solstice Day 2011.
 This revision of this paper
 describes the algorithm used
 in the most recent version of \Marpa{},
-Marpa::R2~\cite{Marpa-R2}.
+\Rtwo~\cite{Marpa-R2}.
 It is a simplification of the algorithm presented
 in the first version of this paper.
 
 While the presentation in this paper is theoretical,
 the approach is practical.
-The Marpa::R2 implementation is widely available
+The \Rtwo implementation is widely available
 and has seen considerable use.
 
 % TODO Revise once chapters are settled
@@ -676,7 +676,7 @@ and what the alternatives were.
 
 \section{Event driven parsing}
 As implemented,
-Marpa::R2\cite{Marpa-R2}
+\Rtwo\cite{Marpa-R2}
 allows the user to define ``events''.
 Events can be defined that trigger when a specified rule is complete,
 when a specified rule is predicted,
@@ -714,7 +714,7 @@ parse with a clean
 but oversimplified grammar,
 programming the lexical analyzer to make up for the grammar's
 short-comings on the fly.
-As part of Marpa::R2~\cite{Marpa-R2},
+As part of \Rtwo~\cite{Marpa-R2},
 the author\footnote{
 We refer to the author both as ``the author''
 and as ``we'', despite this paper having a single author.
@@ -774,7 +774,7 @@ and reported at parse time.
 This exploits \Marpa{}'s ability
 to report exactly where
 and what the ambiguity is.
-Marpa::R2's own parser description language, the SLIF,
+\Rtwo's own parser description language, the SLIF,
 uses ambiguity in this way.
 
 \section{Auto-generated languages}
@@ -801,13 +801,13 @@ language could be efficiently parsed.
 
 With \Marpa{}, this barrier is raised.
 As an example,
-Marpa::R2's own parser description language, the SLIF,
+\Rtwo's own parser description language, the SLIF,
 allows ``precedenced rules''.
 Precedenced rules are specified in an extended BNF.
 The BNF extensions allow precedence and associativity
 to be specified for each RHS.
 
-Marpa::R2's precedenced rules are implemented as
+\Rtwo's precedenced rules are implemented as
 a true second order language.
 The SLIF representation of the precedenced rule
 is parsed to auto-generate a pure BNF grammar which is equivalent,
@@ -1170,7 +1170,7 @@ with zero characters of lookahead.
 as described in~\cite{Leo1991}.
 \Marpa{} will refer to the recognizer described in
 this paper, and implemented in
-Marpa::R2~\cite{Marpa-R2}.
+\Rtwo~\cite{Marpa-R2}.
 
 The procedures which are major building blocks
 of \Marpa{} will be called \dfn{ops}.
@@ -8877,13 +8877,11 @@ Their precise meaning will defined in the context in which they are used.
 
 \todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
 \begin{theorem}[Location access time complexity]
-\leavevmode\\
-\label{th:location-time-complexity}
-\begin{itemize}
-\item The function call \Current{\Vpim{pim}} incurs \Oc{} time.
-\item The function call \Current{\Ves{es}} incurs \Oc{} time.
-\item The function call \Velement{S}{\Vloc{j}} incurs \Oc{} time.
-\end{itemize}
+The function calls \Current{\Vpim{pim}} and
+\Current{\Ves{es}},
+and accesses of the form
+\Velement{S}{\Vloc{j}},
+incur \Oc{} time and zero space.
 \end{theorem}
 
 \begin{proof}
@@ -8893,23 +8891,22 @@ the theorem in terms of the \Marpa{} implementation.
 The implementation description is equivalent to,
 or straightforwardly translates to, a description in
 terms of a RAM.
-\Current{\Ves{es}} incurs \Oc{} time because
-\Marpa{} stores its integer location
-in each ES.
-\Velement{S}{\Vloc{j}} incurs \Oc{} time
-because \Marpa{} stores ES's in a dynamic array
-indexed by location.
-\Current{\Vpim{pim}} incurs \Oc{} time
-because it is implemented as the equivalent of
-\Velement{S}{\Current{\var{pim}}}.
+The accesses obviously require no new space.
+The constant times are accomplished by
+storing the integer location of that ES
+in each ES;
+storing ES's in a dynamic array
+indexed by location;
+and storing a pointer to its ES in
+every PIM.
 \myqed
 \end{proof}
 
-\Velement{S}{\Vloc{j}} is not actually used
-by the \Marpa{} implementation during parsing,
-to avoid the constant overhead of dynamic arrays.
+In practice, for efficiency,
+\Velement{S}{\Vloc{j}} accesses are not actually used
+by the \Marpa{} implementation during parsing.
 During parsing
-Marpa::R2\cite{Marpa-R2}
+\Rtwo\cite{Marpa-R2}
 builds Earley sets as a linked list of structures,
 and a dynamic array indexing them is only created
 when needed.
@@ -8919,22 +8916,27 @@ because links to Earley sets are kept in the PIMs,
 a link to the current Earley set is kept,
 and the event mechanism works using links.
 
-But for tracing and debugging in \Rtwo{},
-\Velement{S}{\Vloc{j}} is used.
-The major reason for this is that the trace and
+On the other hand,
+accesses of the form
+\Velement{S}{\Vloc{j}}
+are made use of
+for tracing and debugging in \Rtwo{}.
+The trace and
 debug facilities must allow the developer to
 specify arbitrary Earley sets,
-and the developer will want to identify a location by
+and the developer will often want to identify a location by
 its numerical ID.
 
 An array is also needed for evaluation,
 but at evaluation time the dynamic array implementing
-\Velement{S}{\Vloc{j}} is usually dynamic in theory only.
+\Velement{S}{\Vloc{j}} accesses
+usually is dynamic in theory only.
 For most applications, evaluation only
 occurs after the parse is complete,
-the array of Earley sets will be static,
-and the overhead of using a dynamic array will be
-minimal.
+at which point
+the array of Earley sets is static,
+so that the overhead of using a dynamic array
+is minimal.
 
 \section{Global space}
 \label{sec:global-space}
@@ -8949,10 +8951,11 @@ is \Oc{} and is charged to the parse.
 
 \begin{observation}[Earley set complexity]
 \label{obs:es-complexity}
-Adding an EIM to an Earley set occurs as part of a new charge execution.
+Adding an EIM to an Earley set occurs as part of a new charge execution,
 and includes the add of the intial link pair.
 A new charge execution consumes \Oc{} time
 and \Oc{} space.
+
 Adding link pairs after the first occurs as part of a dup.
 Dup's consume \Oc{} time and \Oc{} space.
 Traversal of an Earley set requires \Oc{} time per PIM.
