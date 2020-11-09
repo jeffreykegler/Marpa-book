@@ -8701,9 +8701,24 @@ for the PIM subtypes.
 Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
 In the complexity context,
-``resource'' means time or space.
+\dfn{resource} means time or space.
 We divide space into two kinds:
-\dfn{EIM space} and \dfn{link space}.
+\dfn{trimmed space} and \dfn{link space}.
+
+Link space is used exclusively for ambiguous link pairs.
+All other space is trimmed space.
+Efficient evaluation is not possible without link
+pairs,
+and it is a rare practical parsing application
+that does not require an evaluation phase of
+some kind.
+We distinguish trimmed space from link space,
+because most of the Earley literature
+reports results in terms of trimmed space.
+We need to have space complexity results in terms 
+of trimmed space
+in order to make ``apples to apples'' comparisons
+with the prior literature.
 
 \begin{definition}[Try, dup and new resource]
 \label{def:try-dup-new}
@@ -8938,59 +8953,150 @@ the array of Earley sets is static,
 so that the overhead of using a dynamic array
 is minimal.
 
-\section{Global space}
-\label{sec:global-space}
+\section{Accounts}
+\label{sec:accounts}
 
-We will use several data structures which are global.
-In some cases these will need to grow.
+In the pseudocode,
+resource is \dfn{incurred},
+or \dfn{consumed}.
+Once incurred, resource must be \dfn{charged} to
+one of the following accounts:
+\begin{itemize}
+\item \var{parse}: An account for resource charged to the parse itself.
+\item \var{es}: One account per ES,
+    for resource charged to the current working Earley set.
+\item \var{eim}: One account per EIM,
+  for resource charged to an eim which already exists.
+\item \var{new}: One account per EIM, for resource charged to a newly created EIM.
+\item \var{dup}: One account per ambiguous link pair,
+    for resource charged to ambiguous link pairs.
+\item \var{try}:
+\todo{Figure "try" accounts out}
+This is not a real account, but
+    a useful shorthand for the total
+    of the \var{new} and \var{dup} accounts
+    for an EIM.
+    It behaves like a per-EIM account.
+\item \var{proc}: A per-pseudocode-procedure account,
+  for resource charged to the current pseudocode procedure.
+  Resource charged to \var{proc} must be constant or less.
+\item \var{caller}: A per-pseudocode-procedure account,
+  for resource charged to the current pseudocode procedure.
+  Resource charged to \var{caller} may be greater than constant.
+\end{itemize}
 
-Our context grammar is \Vint{g}.
-The grammar is a constant, so the space consumed by
-the various data structures to hold its rules, etc.,
-is \Oc{} and is charged to the parse.
+In the statement of theorems, we will sometimes state the
+account to which a resource is charged.
+This charging decision is a matter of choice,
+and so is not subject to proof.
+It is, however, a choice with consequences
+for those later theorems
+which add up the charged resources.
 
-\begin{observation}[Earley set complexity]
-\label{obs:es-complexity}
-Adding an EIM to an Earley set occurs as part of a new charge execution,
-and includes the add of the intial link pair.
-A new charge execution consumes \Oc{} time
-and \Oc{} space.
+The following theorem allows some useful simplifications.
+It states a condition under which we
+may safely ignore \var{proc} time.
 
-Adding link pairs after the first occurs as part of a dup.
-Dup's consume \Oc{} time and \Oc{} space.
-Traversal of an Earley set requires \Oc{} time per PIM.
+\begin{theorem}[Procedure overhead discard]
+\label{th:procedure-overhead-discard}
+When a pseudocode procedure (``caller'') calls another
+pseudocode procedure (``callee''), caller may treat \Oc{} time
+as part of the ``housekeeping''
+for callee.
+\myqed
+\todo{Move this theorem to end of next chapter?}
+\end{theorem}
+
+\begin{proof}
+By \Obref{obs:housekeeping-vs-body-execution},
+a caller always incurs \Oc{} ``housekeeping''
+time when it calls a callee.
+If we add \Oc{} of time from the callee's
+\var{proc} account to the housekeeping time
+of the callee, the total time is
+\[
+    \Oc + \Oc = \Oc,
+\]
+so that, in Landau notation terms,
+the housekeeping time of the callee is unchanged.
+\myqed
+\end{proof}
+
+\section{Space consumption}
+\label{sec:space-consumption}
+
+\begin{theorem}[Grammar complexity]
+Setup of grammar incurs \Oc{} time,
+\Oc{} trimmed space
+and zero link space,
+all of which is charged to the parse.
+\end{theorem}
+
+\begin{proof}
+The grammar is treated as constant,
+and therefore its space and time demands are constant.
+\myqed
+\end{proof}
+
+\begin{theorem}[Earley set complexity]
+\label{th:es-complexity}
 Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
+Adding an EIM to an Earley set
+consumes \Oc{} time,
+\Oc{} trimmed space,
+and zero link space.
+The adjoin of an existing EIM (a dup)
+incurs \Oc{} time, zero trimmed space and \Oc{} link space.
+Traversal of an Earley set requires \Oc{} time per EIM.
+\end{theorem}
 
-{\bf Justification}:
+\begin{proof}
 An Earley set is kept as a linked list.
 When \Marpa{} reaches a new current location,
-it creates an empty Earley set, in time and
-space which may be charged to the Earley set.
+it creates an empty Earley set, which
+requires \Oc{} time,
+\Oc{} trimmed space
+and \Oc{} link space.
 Each EIM is added at the end of a linked list,
-so that each add of a EIM takes \Oc{} time.
-Each EIM data structure requires \Oc{} space.
-Link pairs are kept in a set of linked lists,
-with the heads of the lists stored with the EIM.
-\dispEnd
-\end{observation}
+so that each add of a EIM takes \Oc{} time
+and \Oc{} trimmed space.
+Adding an EIM requires
+zero link space because the initial link pair
+is kept in trimmed space.
 
-\begin{observation}[Rule ID's]
-\label{obs:rule-ID}
+Link pairs are kept in a finite set of linked lists.
+The heads of the lists stored with the EIM and
+occupy trimmed space.
+The rest of the lists of links pairs occupies
+link space.
+\myqed
+\end{proof}
+
+\begin{theorem}[Rule ID Complexity]
+\label{th:rule-id-complexity}
 The function \ID{\Vrule{r}} maps each rule to an
-unique integer ID in \Oc{} time.
-Also, the entire list of rules may be traversed in \Oc{}
-time.
+unique integer ID in \Oc{} time and zero space.
+A rule may be looked up by ID
+in \Oc{} time and zero space.
+Also, the entire list of rules may be traversed
+in \Oc{} time and zero space.
+\end{theorem}
 
-{\bf Justification}:
+\begin{proof}
 The data structure for \Vrule{r}
 contains its ID, so that the time to
 find \ID{\var{r}} is \Oc{}.
-Also, the data structure for \Vint{g}
-contains an array for looking up rules.
-Since \Rules{\var{g}} is a constant depending on \var{g},
-traversal of the rule list is \Oc{}.
-\dispEnd
-\end{observation}
+The data structure for \Vint{g}
+contains an array for looking up rules by ID,
+so that rule lookup by ID is \Oc{}.
+In fact,
+since \Rules{\var{g}} is a constant depending on \var{g},
+the rule list is static,
+so that traversing the entire rule list requires
+\Oc{} time.
+All of these operations are accesses and none consume space.
+\myqed
+\end{proof}
 
 \begin{observation}[Dotted rule ID's]
 \label{obs:dotted-rule-ID}
@@ -9240,63 +9346,6 @@ Later rows in the total give the total amount of resource accounted for in
 that table,
 and the per-table justifications.
 
-\section{Accounts}
-\label{sec:accounts}
-
-In the low-level complexity analysis,
-initially all resource will be charged to an \dfn{account}.
-\begin{itemize}
-\item \var{parse}: An account for resource charged to the parse itself.
-\item \var{es}: One account per ES,
-    for resource charged to the current working Earley set.
-\item \var{eim}: One account per EIM,
-  for resource charged to an eim which already exists.
-\item \var{new}: A per-EIM account, for resource charged to a newly created EIM.
-\item \var{dup}: A per-link-pair account,
-    for resource charged to an ambiguous link pair.
-\item \var{try}: An alternative name for either a \var{new} or a \var{dup}
-    account, for convenient in referring to them in the alternative.
-\item \var{pred}: An per-EIM account,
-    for resource charged to a prediction EIM.
-\item \var{lim}: A per-LIM account, for resource charged to a LIM.
-\item \var{proc}: A per-pseudocode-procedure account,
-  for resource charged to the current pseudocode procedure.
-\end{itemize}
-
-Accounts start \dfn{open},
-and are \dfn{closed} during the low-level complexity analysis.
-The complexity analysis starts from the bottom of the pseudocode
-procedure call hierarchy, and proceeds upward.
-As of exit from the top-level pseudocode procedure,
-all accounts are closed.
-
-The following theorem allows some useful simplifications.
-It states a condition under which we
-may safely ignore \var{proc} time.
-
-\begin{theorem}[Procedure overhead discard]
-\label{th:procedure-overhead-discard}
-When a pseudocode procedure (``caller'') calls another
-pseudocode procedure (``callee''), caller may treat \Oc{} time
-charged to the \var{proc} account of callee as part of the ``housekeeping''
-for callee.
-\end{theorem}
-
-\begin{proof}
-By \Obref{obs:housekeeping-vs-body-execution},
-a caller always incurs \Oc{} ``housekeeping''
-time when it calls a callee.
-If we add \Oc{} of time from the callee's
-\var{proc} account to the housekeeping time
-of the callee, the total time is
-\[
-    \Oc + \Oc = \Oc,
-\]
-so that, in Landau notation terms,
-the housekeeping time of the callee is unchanged.
-\myqed
-\end{proof}
-
 \chapter{The \Marpa{} algorithm}
 \label{chap:marpa}
 
@@ -9388,11 +9437,11 @@ For the justification in the case of lines
 \ref{line:marpa-predict-65} and
 \ref{line:marpa-predict-90},
 see
-\Obref{obs:rule-ID} and
+\Thref{th:rule-id-complexity} and
 \Obref{obs:dotzeroused-bitmap}.
 For the justification of line
 \ref{line:marpa-predict-85},
-see \Obref{obs:es-complexity}.
+see \Thref{th:es-complexity}.
 For other lines, the time complexity follows
 directly from \Aref{alg:predict1}.
 
@@ -9434,7 +9483,7 @@ Space for \var{Predict1} is
   \ref{line:marpa-predict-85},
   consume zero space
   \cuz{}
-  \Obref{obs:rule-ID},
+  \Thref{th:rule-id-complexity},
   \Obref{obs:dotzeroused-bitmap},
   \Aref{alg:predict1}.}
 \end{equation}
@@ -9443,7 +9492,7 @@ Space for \var{Predict1} is
 \myparbox{%
   Line \ref{line:marpa-predict-85}
   consumes \Oc{} space
-  \cuz{} \Obref{obs:es-complexity}.}
+  \cuz{} \Thref{th:es-complexity}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict1-space-20}
@@ -9714,19 +9763,19 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predict-es-time-16}
 \Time{\ref{line:marpa-predict-es-10}} = \Oc{}
   \because
-  \Obref{obs:rule-ID},
+  \Thref{th:rule-id-complexity},
   \Obref{obs:dotzeroused-bitmap},
   \Eref{eq:th-predict-es-time-10}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-18}
 \Time{\ref{line:marpa-predict-es-12}} = \Oc{}
-   \because \Obref{obs:es-complexity}.
+   \because \Thref{th:es-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-20}
 \Time{\ref{line:marpa-predict-es-14}} = \Oc{}
-  \because \Obref{obs:rule-ID}.
+  \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-22}
@@ -9913,17 +9962,17 @@ and \Oc{} charged to each EIM added.
 \label{eq:th-predict-es-space-16}
 \Space{\ref{line:marpa-predict-es-10}} = 0
   \because
-  \Obref{obs:rule-ID}.
+  \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-18}
 \Space{\ref{line:marpa-predict-es-12}} = 0
-   \because \Obref{obs:es-complexity}.
+   \because \Thref{th:es-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-20}
 \Space{\ref{line:marpa-predict-es-14}} = 0
-  \because \Obref{obs:rule-ID}.
+  \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-22}
@@ -10198,13 +10247,13 @@ is
 \begin{equation}
 \label{eq:th-initializer-time-18}
 \Time{\ref{line:initializer-op-30}} = \Oc{}
-   \because \Obref{obs:es-complexity}.
+   \because \Thref{th:es-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-20}
 \Time{\ref{line:initializer-op-60}} = \Oc{}
   \because
-  \Obref{obs:rule-ID},
+  \Thref{th:rule-id-complexity},
   \Obref{obs:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
@@ -10339,13 +10388,13 @@ is
 \begin{equation}
 \label{eq:th-initializer-space-18}
 \Space{\ref{line:initializer-op-30}} = \Oc{}
-   \because \Obref{obs:es-complexity}.
+   \because \Thref{th:es-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-space-20}
 \Space{\ref{line:initializer-op-60}} = 0
   \because
-  \Obref{obs:rule-ID},
+  \Thref{th:rule-id-complexity},
   \Obref{obs:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
@@ -10750,9 +10799,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -10785,7 +10834,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -10871,9 +10920,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -10906,7 +10955,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -10987,9 +11036,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11022,7 +11071,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&\c{}&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11241,9 +11290,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-10}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11278,7 +11327,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11333,9 +11382,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-8}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11369,7 +11418,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:earley-reducer-op-5}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11490,15 +11539,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-4}&1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-5}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
     \ref{line:leo-reducer-op-6}&0--1&\Oc{}&&\Oc{}&
 \\ \hline
     \ref{line:leo-reducer-op-7}&0--1&\Oc{}&&\Oc{}&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:leo-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11550,7 +11599,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-7}&1&0&&0&\Obref{obs:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-8}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-8}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -11574,9 +11623,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-5}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -11612,9 +11661,9 @@ as of the return from \op{Leo-Reducer}.
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:leo-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11774,7 +11823,7 @@ By \Tbref{tab:reducer-invocations}.
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11798,7 +11847,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:es-complexity}
+    \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
     \ref{line:reducer-op-3}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
 \\ \hline
@@ -11859,7 +11908,7 @@ The theorem follows from
 &Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&1&0&&0&\Obref{obs:es-complexity}
+    \ref{line:reducer-op-2}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
     \ref{line:reducer-op-3}&1&0&&0&\Obref{obs:transition-array}
 \\ \hline
