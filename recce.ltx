@@ -8890,7 +8890,6 @@ Their precise meaning will defined in the context in which they are used.
 \section{Earley set indexing}
 \label{sec:es-indexing}
 
-\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
 \begin{theorem}[Location access time complexity]
 The function calls \Current{\Vpim{pim}} and
 \Current{\Ves{es}},
@@ -9167,8 +9166,6 @@ where PSL's are described in detail.
 \myqed
 \end{proof}
 
-\begin{observation}[\var{transition} array]
-\label{obs:transition-array}
 For each Earley set,
 \var{transition} is a sparse array
 of linked lists.
@@ -9177,18 +9174,21 @@ and the linked lists are of PIM's.
 The \var{transition} array is for efficient lookup
 of EIM and LIM matches.
 
-The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of PIM's in \VVelement{S}{j} whose transition symbol
-is \Vsym{t}.
-The return
-
-Creation of \var{transition} consumes \Oc{} time
-and \Oc{} space for per-Earley-set overhead.
+\begin{theorem}[Transition Array Complexity]
+\label{th:transition-array}
+Creation of the \var{transition} array
+consumes \Oc{} time
+\Oc{} trimmed space,
+and \Oc{} link space,
+which is charged to the \var{es}
+account.
 Writes after creation do not occur.
 Accesses by symbol
-to the head of each linked list consume \Oc{} time.
+to the head of each linked list consume \Oc{} time
+and zero space.
+\end{theorem}
 
-{\bf Justification}:
+\begin{proof}
 Since there is at most one entry for every symbol
 in the grammar,
 the number of array entries in \var{transition} is,
@@ -9210,16 +9210,33 @@ when the PIM's are created.
 The lists grow from the head, so that
 Creation time for a new link in one of the
 \var{transitions} linked lists is \Oc{}.
-\dispEnd{}
-\end{observation}
+\myqed
+\end{proof}
 
-\begin{observation}[\var{Transitions} set size]
-\label{obs:transitions-set-size}
+\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
+
+The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+returns the set of PIM's in \VVelement{S}{j} whose transition symbol
+is \Vsym{t}.
+
+\begin{theorem}[\myfn{Transitions}{} Complexity]
+\label{th:transitions-set-size}
+A call of the form 
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+consumes \Oc{} time, and zero space.
+It returns a set of \order{\Vloc{j}} size,
+that is,
 \[
 \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
-\because \Thref{th:es-size}, \Obref{obs:transition-array}.
 \]
-\end{observation}
+\end{theorem}
+
+\begin{proof}
+This theorem follow from the EIM ES Count Theorem
+\Thref{th:es-eim-count},
+and the Transition Array Complexity Theorem
+\Thref{th:transition-array}.
+\end{proof}
 
 \section{Counting invocations}
 
@@ -10186,7 +10203,7 @@ The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition array
-\Obref{obs:transition-array} for \VVelement{S}{j}.
+\Thref{th:transition-array} for \VVelement{S}{j}.
 \dispEnd{}
 \end{observation}
 
@@ -10770,7 +10787,7 @@ which is what we needed for the theorem.
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transition-array}
 \\ \hline
     \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
 \\ \hline
@@ -10891,7 +10908,7 @@ and
 &Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&0&&0&\Obref{obs:transition-array}
+    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transition-array}
 \\ \hline
     \ref{line:scanner-op-3}&1&0&&0&
 \\ \hline
@@ -11007,7 +11024,7 @@ and
 &Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&0&&0&\Obref{obs:transition-array}
+    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transition-array}
 \\ \hline
     \ref{line:scanner-op-3}&1&0&&0&
 \\ \hline
@@ -11259,7 +11276,7 @@ to its \var{proc} account, and closes that account.
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transition-array}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11854,7 +11871,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:reducer-op-3}&1&\Oc{}&&\Oc{}&\Obref{obs:transition-array}
+    \ref{line:reducer-op-3}&1&\Oc{}&&\Oc{}&\Thref{th:transition-array}
 \\ \hline
     \ref{line:reducer-op-4}&1&\Oc{}&&\Oc{}&
 \\ \hline
@@ -11915,7 +11932,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-2}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:reducer-op-3}&1&0&&0&\Obref{obs:transition-array}
+    \ref{line:reducer-op-3}&1&0&&0&\Thref{th:transition-array}
 \\ \hline
     \ref{line:reducer-op-4}&1&0&&0&
 \\ \hline
@@ -14882,37 +14899,6 @@ in an unambiguous parse is \On{}.
 
 \chapter{LRR complexity}
 \label{chap:lrr-complexity}
-
-The following theorem will prove useful.
-
-\begin{theorem}[ES size bound]
-\label{th:es-size}
-The maximum size of an Earley set at \Vloc{j}
-is
-\order{\var{j}}.
-\end{theorem}
-
-\begin{proof}
-Each EIM is of the form
-$[ \Vdr{x}, \Vloc{x} ]$.
-Recall that
-the number of dotted rules is a \Vsize{g},
-a constant depending on the grammar.
-The possible values of \Vloc{x} range from
-0 to \Vloc{j}.
-Therefore the number of possible Earley items
-in \VVelement{S}{j} is
-is $\Vloc{j} \times \Oc{}$.
-Recall that the size of an Earley set is the number of \type{EIM}s
-that it contains.
-It follows
-that the maximum size of the Earley
-set at \Vloc{j} is
-\begin{equation*}
-\Vloc{j} \times \Oc{} = \order{\var{j}} \times \Oc{} = \order{\var{j}}.
-  \quad \myqed
-\end{equation*}
-\end{proof}
 
 \begin{theorem}[A grammar which allows an ambiguity is ambiguous: duplicate?]
 \label{th:ambiguous-links-pair}
