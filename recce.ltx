@@ -3090,7 +3090,7 @@ where
 \[
 \Veim{x} = [\Vdr{x}, \Vorig{x}, \Vcurr{x}]
 \]
-is an arbitrary EIM,
+is an arbitrary \type{EIM},
 \begin{gather}
 \label{eq:def-dr}
 \DR{\Veim{x}} \defined \Vdr{x}, \\
@@ -3100,15 +3100,15 @@ is an arbitrary EIM,
 \Current{\Veim{x}} \defined \Vcurr{x}.
 \end{gather}
 
-When a dotted rule concept is applied to an EIM,
+When a dotted rule concept is applied to an \type{EIM},
 it is the same as applying that concept to the \type{EIM}s
 dotted rule.
 When a rule concept is applied to an dotted rule
 it is the same as applying that concept to the rule
 of the dotted rule.
-When a rule concept is applied to an EIM
+When a rule concept is applied to an \type{EIM}
 it is the same as applying that concept to the rule
-of the dotted rule of the EIM.
+of the dotted rule of the \type{EIM}.
 
 For example, let
 \begin{equation*}
@@ -3127,8 +3127,8 @@ Then
 and so forth.
 
 Similarly, we say that
-an EIM is a \dfn{penult} if its dotted rule is a penult,
-an EIM is a \dfn{prediction} if its dotted rule is a prediction,
+an \type{EIM} is a \dfn{penult} if its dotted rule is a penult,
+an \type{EIM} is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
 A \dfn{parse item} is either an Earley or a Leo item.
@@ -3142,31 +3142,31 @@ will be defined in \Chref{chap:leo}.
 \label{def:eim-validity}
 Let
 \begin{equation}
-\label{eq:EIM-valid-10}
+\label{eq:eim-valid-10}
 \Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i}, \Vcurr{j} \right]
 \end{equation}
-be an arbitrary EIM.
+be an arbitrary \type{EIM}.
 \Veim{x} is \dfn{valid}
 iff
 \begin{gather}
-\label{eq:EIM-valid-20}
+\label{eq:eim-valid-20}
 \var{i} \le \var{j} \le \Vlastix{inp}, \\
-\label{eq:EIM-valid-22a}
+\label{eq:eim-valid-22a}
 \left[ \Vsym{lhs} \de \Vstr{rhs1} \Vstr{rhs2} \right] \in \Rules{\var{g}},
 \\
-\label{eq:EIM-valid-22b}
+\label{eq:eim-valid-22b}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
-\label{eq:EIM-valid-22c}
+\label{eq:eim-valid-22c}
 \Vstr{before} \destar \var{inp}[0  \ldots  (\var{i}\subtract 1)], \text{ and} \\
-\label{eq:EIM-valid-22d}
+\label{eq:eim-valid-22d}
 \Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtract 1)].
 \end{gather}
 \Veim{x}
 is \dfn{useful}
 iff
 \begin{equation*}
-\label{eq:EIM-valid-30}
+\label{eq:eim-valid-30}
 \Vstr{rhs2}\Vstr{after} \destar \var{inp}[\var{j}  \ldots  \Vlastix{inp}].
 \end{equation*}
 The boolean function \Valid{\Veim{x}} is true iff \Veim{x}
@@ -3174,7 +3174,7 @@ is valid.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Symbol of an EIM]
+\begin{definition}[Symbol of an \type{EIM}]
 \begin{equation*}
 \Symbol{\Veim{eim}} \defined \LHS{\var{eim}}. \quad \dispEnd
 \end{equation*}
@@ -3182,7 +3182,7 @@ is valid.
 
 \begin{theorem}[EIM direction]
 \label{th:eim-direction}
-If \Veim{x} is a valid EIM,
+If \Veim{x} is a valid \type{EIM},
 then $\Origin{\var{x}} + \size{\RHS{\var{x}}} = \Current{\var{x}}$.
 Also,
 the origin of \Veim{x} is at or before its current location.
@@ -3192,17 +3192,17 @@ the origin of \Veim{x} is at or before its current location.
 \begin{equation}
 \label{eq:th-eim-origin-not-after-current-10}
 \begin{gathered}
-\text{Let \Veim{x} be a valid EIM, where} \\
+\text{Let \Veim{x} be a valid \type{EIM}, where} \\
 \Veim{x} = \left[ \left[ \Vsym{lhs} \de \Vstr{rhs1} \mydot \Vstr{rhs2}
    \right], \Vorig{i}, \Vcurr{j} \right] \\
-   \because \text{ WLOG, \Eref{eq:EIM-valid-10} in \Dfref{def:eim-validity}.}
+   \because \text{ WLOG, \Eref{eq:eim-valid-10} in \Dfref{def:eim-validity}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-eim-origin-not-after-current-12}
 \begin{gathered}
 \Vorig{i} + \size{\Vstr{rhs1}} = \Vloc{j} \\
-   \because \Eref{eq:EIM-valid-22d} \text{ in } \Dfref{def:eim-validity},
+   \because \Eref{eq:eim-valid-22d} \text{ in } \Dfref{def:eim-validity},
     \Eref{eq:th-eim-origin-not-after-current-10}.
 \end{gathered}
 \end{equation}
@@ -3240,7 +3240,7 @@ we say that \var{l} is a \dfn{left match} of \var{r},
 and that \var{r} is a \dfn{left match} of \var{l}.
 
 Three of the loadings of \var{Matches} are as follows.
-The match of an EIM with another EIM,
+The match of an \type{EIM} with another \type{EIM},
 \begin{equation}
 \label{eq:def-matches-eim-eim}
 \begin{gathered}
@@ -3249,7 +3249,7 @@ The match of an EIM with another EIM,
 \land \; \Current{\var{left}} = \Origin{\var{right}}.
 \end{gathered}
 \end{equation}
-The match of an EIM with a token,
+The match of an \type{EIM} with a token,
 \begin{equation*}
 \begin{gathered}
 \Matches{\Veim{left},\var{token}} \defined \\
@@ -3257,7 +3257,7 @@ The match of an EIM with a token,
 \land \; \Current{\var{left}} = \Origin{\var{token}}.
 \end{gathered}
 \end{equation*}
-The match of an EIM with a location,
+The match of an \type{EIM} with a location,
 \begin{equation*}
 \begin{gathered}
 \Matches{\Veim{left},\Vloc{j}} \defined \\
@@ -3268,7 +3268,7 @@ The match of an EIM with a location,
 \end{equation*}
 \end{definition}
 
-\begin{theorem}[Matching EIMs direction]
+\begin{theorem}[Matching \type{EIM}s direction]
 \label{th:matching-eims-direction}
 \begin{equation}
 \label{eq:th-matching-eims-direction-03}
@@ -3298,7 +3298,7 @@ let
 \begin{equation}
 \label{eq:th-reduction-lemma-02}
 \begin{gathered}
-  \Veim{pred} \text{ be a valid EIM, where } \Veim{pred} = \\
+  \Veim{pred} \text{ be a valid \type{EIM}, where } \Veim{pred} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \mydot \Vsym{postdot} \Vstr{pt3}
       \right],
@@ -3315,7 +3315,7 @@ Then
 \begin{equation}
 \label{eq:th-reduction-lemma-06}
 \begin{gathered}
-  \Veim{reduced} \text{ is a valid EIM, where } \Veim{reduced} = \\
+  \Veim{reduced} \text{ is a valid \type{EIM}, where } \Veim{reduced} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \Vsym{postdot} \mydot \Vstr{pt3}
       \right],
@@ -3330,7 +3330,7 @@ Then
 \label{eq:th-reduction-lemma-10}
 \begin{gathered}
 \Rule{\Veim{pred}} \in \Rules{\var{g}} \\
-\because \Eref{eq:EIM-valid-22a} \text{ in }
+\because \Eref{eq:eim-valid-22a} \text{ in }
     \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-reduction-lemma-02}.
 \end{gathered}
@@ -3358,7 +3358,7 @@ Then
 \label{eq:th-reduction-lemma-16}
 \begin{gathered}
   \Accept{\var{g}} \destar \Vstr{before} \cat \Vsym{lhs} \cat \Vstr{after} \\
-  \because \Eref{eq:EIM-valid-22b} \text{ in }
+  \because \Eref{eq:eim-valid-22b} \text{ in }
     \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-reduction-lemma-02}.
   \end{gathered}
@@ -3367,7 +3367,7 @@ Then
 \label{eq:th-reduction-lemma-18}
 \begin{gathered}
   \Vstr{before} \destar \boldRangeDecr{inp}{0}{\var{i}} \\
-  \because \Eref{eq:EIM-valid-22c} \text{ in }
+  \because \Eref{eq:eim-valid-22c} \text{ in }
     \Dfref{def:eim-validity},
     \Eref{eq:th-reduction-lemma-02}.
   \end{gathered}
@@ -3376,7 +3376,7 @@ Then
 \label{eq:th-reduction-lemma-20}
 \begin{gathered}
   \Vstr{pt1} \destar \boldRangeDecr{inp}{\var{i}}{\var{j}} \\
-  \because \Eref{eq:EIM-valid-22d} \text{ in }
+  \because \Eref{eq:eim-valid-22d} \text{ in }
     \Dfref{def:eim-validity},
     \Eref{eq:th-reduction-lemma-02}.
   \end{gathered}
@@ -3405,7 +3405,7 @@ Let
 \begin{equation}
 \label{eq:th-reduction-by-completion-02}
 \begin{gathered}
-  \Veim{pred} \text{ be a valid EIM, where } \Veim{pred} = \\
+  \Veim{pred} \text{ be a valid \type{EIM}, where } \Veim{pred} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \mydot \Vsym{postdot} \Vstr{pt3}
       \right],
@@ -3416,7 +3416,7 @@ Let
 and let
 \begin{gather}
 \label{eq:th-reduction-by-completion-04}
-\text{\Veim{cuz} be a valid EIM such that} \\
+\text{\Veim{cuz} be a valid \type{EIM} such that} \\
 \label{eq:th-reduction-by-completion-05}
 \Postdot{\var{cuz}} = \Lambda, \\
 \label{eq:th-reduction-by-completion-06}
@@ -3428,7 +3428,7 @@ Then
 \begin{equation}
 \label{eq:th-reduction-by-completion-10}
 \begin{gathered}
-  \Veim{reduced} \text{ is a valid EIM, where } \Veim{reduced} = \\
+  \Veim{reduced} \text{ is a valid \type{EIM}, where } \Veim{reduced} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \Vsym{postdot} \mydot \Vstr{pt3}
       \right],
@@ -3484,7 +3484,7 @@ Let
 \begin{equation}
 \label{eq:th-reduction-by-token-02}
 \begin{gathered}
-  \Veim{pred} \text{ be a valid EIM, where } \Veim{pred} = \\
+  \Veim{pred} \text{ be a valid \type{EIM}, where } \Veim{pred} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \mydot \Vsym{postdot} \Vstr{pt3}
       \right],
@@ -3501,7 +3501,7 @@ Then
 \begin{equation}
 \label{eq:th-reduction-by-token-10}
 \begin{gathered}
-  \Veim{reduced} \text{ is a valid EIM, where } \Veim{reduced} = \\
+  \Veim{reduced} \text{ is a valid \type{EIM}, where } \Veim{reduced} = \\
   \left[
       \left[ \Vsym{lhs} \de \Vstr{pt1} \Vsym{postdot} \mydot \Vstr{pt3}
       \right],
@@ -3538,10 +3538,10 @@ That is,
 \end{definition}
 Note that, since an Earley set is a set
 in the mathematical sense,
-we do not say that PIMs are ``added'' to
+we do not say that \type{PIM}s are ``added'' to
 an Earley set,
 but that they are ``adjoined'' to it.
-The result of adjoining a PIM \var{p} to the Earley set \var{es}
+The result of adjoining a \type{PIM} \var{p} to the Earley set \var{es}
 is $\Ves{es} \cup \set{\Vpim{p}}$, so that if \var{p} is already
 an element of \var{es},
 \var{es} is unchanged:
@@ -3583,7 +3583,7 @@ An Earley table is \dfn{valid} iff
 \item the sequence contains an Earley set for every symbol in the context input
     plus an initial Earley set,
 \item all of these Earley sets are valid, and
-\item the current location of every EIM in each of the Earley sets
+\item the current location of every \type{EIM} in each of the Earley sets
    is the same as the index of that Earley set in the Earley table.
 \end{itemize}
 That is, where \var{tab} is an Earley table,
@@ -3815,7 +3815,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \begin{gathered}
 \Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtract 1)]
 \\ \myparbox{\cuz{}
-    \Eref{eq:EIM-valid-22d} in \longDfref{EIM validity}{def:eim-validity},
+    \Eref{eq:eim-valid-22d} in \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-predictions-location-10-90},
     new \Vstr{inp} for convenience.
 }
@@ -3835,7 +3835,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \end{equation}
 \mypareq{eq:th-predictions-location-18}{%
     $\var{i} \le \var{j}$ \cuz{}
-    \Eref{eq:EIM-valid-20} in \longDfref{EIM validity}{def:eim-validity},
+    \Eref{eq:eim-valid-20} in \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-predictions-location-10-90}.
 }
 \begin{equation}
@@ -3879,17 +3879,17 @@ Then
 \end{theorem}
 
 \begin{proof}
-The proof proceeds by noting that every EIM is a tuple;
+The proof proceeds by noting that every \type{EIM} is a tuple;
 noting that the number of possible values for every tuple is on the order of
 the product of the number of possible values for each of that tuple's elements;
 and calculating this product.
 More specificly,
-the number of possible values for every EIM
+the number of possible values for every \type{EIM}
 is the product of
 \begin{itemize}
 \item the number of possible dotted rules;
-\item the number of possible current locations for EIMS in \Veimset{eims}; and
-\item the number of possible origin locations for EIMS in \Veimset{eims}.
+\item the number of possible current locations for \type{EIM}s in \Veimset{eims}; and
+\item the number of possible origin locations for \type{EIM}s in \Veimset{eims}.
 \end{itemize}
 This means that
 \begin{equation*}
@@ -3964,7 +3964,7 @@ the ``ES subset count'' theorem \Thref{th:es-subset-count}.
 \myqed
 \end{proof}
 
-\begin{theorem}[ES EIM count]
+\begin{theorem}[ES \type{EIM} count]
 \label{th:es-eim-count}
 The count of valid \type{EIM}s in the Earley set at \Vloc{j} is \order{\var{j}}.
 \end{theorem}
@@ -3976,7 +3976,7 @@ we know that
 that \VVelement{S}{j} is valid
 and therefore that all \type{EIM}s in \VVelement{S}{j} are valid.
 
-Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelement{S}{j}, so that
+Let \var{origs} be the set of origins of \type{EIM}s in an arbitrary Earley set \VVelement{S}{j}, so that
 \begin{equation}
 \label{eq:th-es-eim-count-10}
 \var{origs} = \set{
@@ -3987,7 +3987,7 @@ Let \var{origs} be the set of origins of EIMS in an arbitrary Earley set \VVelem
 \end{equation}
 \mypareq{eq:th-es-eim-count-12}{%
     $\Origin{\var{eim}} \le \Current{\Veim{eim}}$
-    \cuz{} \Eref{eq:EIM-valid-20} in \longDfref{EIM validity}{def:eim-validity}.
+    \cuz{} \Eref{eq:eim-valid-20} in \longDfref{EIM validity}{def:eim-validity}.
 }
 \mypareq{eq:th-es-eim-count-14}{%
     $\var{eim} \in \VVelement{S}{j} \implies \Origin{\var{eim}} \le \Current{\VVelement{S}{j}}$
@@ -4126,14 +4126,14 @@ Leo memoization in Earley set 0.
 Earley set 0 memoization
 would have to be implemented as a special case,
 while omission of $\es{(0)}$ memoization
-results in at most one extra EIM per ES.
+results in at most one extra \type{EIM} per ES.
 
 \section{Leo directionality}
 
 Leo's memoization method is simple from one point of view ---
 it involves a sequence of memos, called Leo items.
 The Leo items are matched to certain \type{EIM}s in a straightforward way.
-An EIM matched to an Leo item is called a ``source EIM''.
+An \type{EIM} matched to an Leo item is called a ``source \type{EIM}''.
 
 Nonetheless, many have found the Leo method
 challenging to the intuition.
@@ -4217,15 +4217,15 @@ and
 \end{align}
 \end{definition}
 
-\begin{definition}[Transition of a PIM]
+\begin{definition}[Transition of a \type{PIM}]
 \label{def:transition}
-Let \Vpim{pim} be an arbitrary PIM.
+Let \Vpim{pim} be an arbitrary \type{PIM}.
 The \dfn{transition symbol},
 or \dfn{transition},
 of \var{pim} is
 \mypareq{}{%
     \Transition{\var{pim}} if \var{pim} is a LIM, and
-    \linebreak \Postdot{\var{pim}} if \var{pim} is an EIM.
+    \linebreak \Postdot{\var{pim}} if \var{pim} is an \type{EIM}.
 }
 In either case, the transition symbol
 of \var{pim}
@@ -4233,15 +4233,15 @@ may be written
 \Transition{\var{pim}}. \dispEnd
 \end{definition}
 
-\begin{definition}[Current location of a PIM]
+\begin{definition}[Current location of a \type{PIM}]
 \label{def:pim-current}
-Let \Vpim{pim} be an arbitrary PIM.
+Let \Vpim{pim} be an arbitrary \type{PIM}.
 The \dfn{current location},
 or \dfn{location},
 of \var{pim} is
 \mypareq{}{%
     \Current{\var{pim}} if \var{pim} is a LIM, and
-    \linebreak \Current{\var{pim}} if \var{pim} is an EIM.
+    \linebreak \Current{\var{pim}} if \var{pim} is an \type{EIM}.
 }
 In either case, the current location
 of \Vpim{pim}
@@ -4274,7 +4274,7 @@ while \Veim{x} is restricted to penults,
 \type{EIM}s of Earley set \VVelement{S}{j},
 including those \type{EIM}s which are not penults.
 We say that
-an EIM \Veim{uniq}
+an \type{EIM} \Veim{uniq}
 is \dfn{Leo unique} in \VVelement{S}{j}
 iff
 $\Veim{uniq} \in \LeoUnique{\VVelement{S}{j}}$.
@@ -4300,7 +4300,7 @@ and
 \exists \; \Vloc{i} : \Veim{x} \in \LeoEligible{\var{i}}.
 \end{equation*}
 We say that
-an EIM \Veim{eligible}
+an \type{EIM} \Veim{eligible}
 is \dfn{Leo eligible}
 iff
 \myfn{Is-Leo-Eligible}{\var{eligible}}.
@@ -4410,7 +4410,7 @@ the reverse direction.
 \end{proof}
 
 \begin{theorem}[Leo eligible penult]
-Every Leo eligible EIM is a penult.  That is,
+Every Leo eligible \type{EIM} is a penult.  That is,
 \label{th:leo-eligible-penult}
 \[
   \myfn{Is-Leo-Eligible}{\Veim{x}} \implies \Penult{\var{x}}.
@@ -4467,8 +4467,8 @@ show the theorem.
 
 \begin{theorem}[Leo eligible postdot uniqueness]
 \label{th:leo-eligible-postdot-uniqueness}
-If \Veim{x} is a Leo eligible EIM,
-then it is the only EIM at that location
+If \Veim{x} is a Leo eligible \type{EIM},
+then it is the only \type{EIM} at that location
 with that postdot symbol.
 That is, if
 \begin{gather}
@@ -4546,7 +4546,7 @@ assuming the hypothesis to show the conclusion.
 \end{equation}
 \end{proof}
 
-\begin{theorem}[Leo eligible EIM count]
+\begin{theorem}[Leo eligible \type{EIM} count]
 \label{th:leo-eligible-eim-count}
 There are at most \size{\Vocab{\Vint{g}}} Leo eligible
 \type{EIM}s in any ES.
@@ -4566,9 +4566,9 @@ That is,
 \end{theorem}
 
 \begin{proof}
-Let \Veim{elig} be a Leo eligible EIM in \Velement{S}{\var{j}}.
+Let \Veim{elig} be a Leo eligible \type{EIM} in \Velement{S}{\var{j}}.
 By \Thref{th:leo-eligible-postdot-uniqueness},
-\var{elig} is the only EIM in \Velement{S}{\var{j}}
+\var{elig} is the only \type{EIM} in \Velement{S}{\var{j}}
 with \Postdot{\var{elig}} as its postdot symbol.
 This means there cannot be more Leo eligible \type{EIM}s
 in \Velement{S}{\var{j}} than there are postdot symbols.
@@ -4581,7 +4581,7 @@ $\size{\Vocab{\var{g}}}$.
 \myqed
 \end{proof}
 
-\begin{definition}[Next eligible EIM]
+\begin{definition}[Next eligible \type{EIM}]
 \label{def:next-eligible-eim}
 \[
 \begin{gathered}
@@ -4590,10 +4590,10 @@ $\size{\Vocab{\var{g}}}$.
 \land \; \myfn{Is-Leo-Eligible}{\var{next}} \land \myfn{Is-Leo-Eligible}{\var{prev}}.
 \end{gathered}
 \]
-We say that \Veim{next} is the \dfn{next Leo eligible EIM},
-or \dfn{next eligible EIM}, of \Veim{prev}.
-We say that \Veim{prev} is the \dfn{previous Leo eligible EIM},
-or \dfn{previous eligible EIM}, of \Veim{next}.
+We say that \Veim{next} is the \dfn{next Leo eligible \type{EIM}},
+or \dfn{next eligible \type{EIM}}, of \Veim{prev}.
+We say that \Veim{prev} is the \dfn{previous Leo eligible \type{EIM}},
+or \dfn{previous eligible \type{EIM}}, of \Veim{next}.
 \dispEnd
 \end{definition}
 
@@ -4611,8 +4611,8 @@ or \dfn{previous eligible EIM}, of \Veim{next}.
 
 \begin{proof}
 The theorem follows from
-\longDfref{Next eligible EIM}{def:next-eligible-eim}
-and \longDfref{Matching EIMs}{def:matching-1}.
+\longDfref{Next eligible \type{EIM}}{def:next-eligible-eim}
+and \longDfref{Matching \type{EIM}s}{def:matching-1}.
 \myqed
 \end{proof}
 
@@ -4682,7 +4682,7 @@ We assume the hypothesis of the theorem to show the conclusion.
 \mypareq{eq:th-next-eligible-uniqueness-16}{%
     $\myfn{Is-Leo-Eligible}{\var{next1}}$ \linebreak
         \cuz{}
-        \longDfref{Next eligible EIM}{def:next-eligible-eim},
+        \longDfref{Next eligible \type{EIM}}{def:next-eligible-eim},
         \Eref{eq:th-next-eligible-uniqueness-02}.
 }
 \mypareq{eq:th-next-eligible-uniqueness-18}{%
@@ -4702,10 +4702,10 @@ We assume the hypothesis of the theorem to show the conclusion.
 \label{def:next-eligible-sequence}
 A \dfn{next eligible sequence} (type \type{LES}) is
 a non-empty sequence of valid, Leo eligible \type{EIM}s
-such that every EIM
-except the top EIM
-is the next eligible EIM of the
-previous EIM in the sequence.  That is,
+such that every \type{EIM}
+except the top \type{EIM}
+is the next eligible \type{EIM} of the
+previous \type{EIM} in the sequence.  That is,
 \[
 \type{LES} = \set{
    \begin{gathered}
@@ -4884,12 +4884,12 @@ That is,
 The proof is direct, assuming the hypothesis of
 the theorem to show the conclusion.
 \mypareq{eq:th-les-subsequence-10}{%
-   \Vles{seq} is an EIM sequence \linebreak
+   \Vles{seq} is an \type{EIM} sequence \linebreak
    \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-les-subsequence-02}.%
 }
 \mypareq{eq:th-les-subsequence-12}{%
-   \Vles{subseq} is an EIM sequence \linebreak
+   \Vles{subseq} is an \type{EIM} sequence \linebreak
    \cuz{} \Eref{eq:th-les-subsequence-06},
     \Eref{eq:th-les-subsequence-10}.
 }
@@ -4962,8 +4962,8 @@ of this theorem.
 
 \begin{theorem}[LES extension]
 \label{th:les-extension}
-Let \var{les} be an EIM sequence,
-and let \var{next} be an EIM.
+Let \var{les} be an \type{EIM} sequence,
+and let \var{next} be an \type{EIM}.
 Then
 \mypareq{eq:th-les-extension-02}{%
    $\tuple{\Velement{\var{les}}{0}\ldots
@@ -5021,16 +5021,16 @@ to show
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-les-extension-13-10}{%
-   \var{les} is an EIM sequence
+   \var{les} is an \type{EIM} sequence
        \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-les-extension-04}.
 }
 \mypareq{eq:th-les-extension-13-20}{%
-   \var{next} is an EIM
+   \var{next} is an \type{EIM}
        \cuz{} AF theorem.
 }
 \mypareq{eq:th-les-extension-13-30}{%
-   \var{ext} is an EIM sequence
+   \var{ext} is an \type{EIM} sequence
    \cuz{} \Eref{eq:th-les-extension-13-10},
         \Eref{eq:th-les-extension-13-20}.
 }
@@ -5125,7 +5125,7 @@ then
 \begin{proof}
 The lemma follows from
    \longDfref{LES}{def:next-eligible-sequence},
-   and \longThref{next eligible EIM direction}{th:next-eligible-direction}.
+   and \longThref{next eligible \type{EIM} direction}{th:next-eligible-direction}.
 \myqed
 \end{proof}
 
@@ -5916,7 +5916,7 @@ We now look at a prefix of \var{run}.
 \forall \; \var{i} \in \Dom{\var{prerun}} : \VVelement{prerun}{i} = \VVelement{run}{i}
 \because \Eref{eq:th-les-finiteness-36}
 \end{equation}
-Every EIM in \var{prerun} has a symbol,
+Every \type{EIM} in \var{prerun} has a symbol,
 and since
 \mypareq{}{%
 there are only \size{\Vocab{\Vint{g}}} symbols in \Vint{g}, and
@@ -5926,7 +5926,7 @@ there are only \size{\Vocab{\Vint{g}}} symbols in \Vint{g}, and
     \Eref{eq:th-les-finiteness-36},
 }
 at least one symbol must be used twice as the symbol of an
-EIM in \var{prerun}.
+\type{EIM} in \var{prerun}.
 Let this symbol be \Vsym{cycle-lhs},
 and let the first and second \type{EIM}s with \Vsym{cycle-lhs} as their symbol be
 \VVelement{prerun}{aa} and
@@ -6348,8 +6348,8 @@ The theorem follows from
 
 \begin{definition}[LIM validity]
 \label{def:lim-validity}
-The valid \type{LIM}s of an EIM are defined recursively.
-Let \Veim{src} be an arbitrary EIM.
+The valid \type{LIM}s of an \type{EIM} are defined recursively.
+Let \Veim{src} be an arbitrary \type{EIM}.
 Then the set of \type{LIM}s of \var{src} is
 \begin{equation}
 \nonumber
@@ -6394,18 +6394,18 @@ We overload \myfn{Valid}{} so that
 \end{equation}
 and we say that \mylim{\ell} is \dfn{valid} if \Valid{\ell}.
 If $\mylim{\ell} \in \myfn{lims}{\Veim{src}}$,
-we say that EIM \var{src} is the \dfn{source} of $\ell$,
+we say that \type{EIM} \var{src} is the \dfn{source} of $\ell$,
 and that the LIM $\ell$ is the \dfn{LIM} of \Veim{src}.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Leo source EIM]
+\begin{definition}[Leo source \type{EIM}]
 \label{def:leo-source-eim}
 \[
     \myfn{Is-source}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
 \]
 We say that \var{src} is
-a \dfn{Leo source EIM}, or a \dfn{source EIM},
+a \dfn{Leo source \type{EIM}}, or a \dfn{source \type{EIM}},
 if \myfn{Is-source}{\Veim{src}}.
 \dispEnd
 \end{definition}
@@ -6447,7 +6447,7 @@ By the definition of LIM validity,
         \Eref{eq:th-leo-source-fn-10-01},
         \Eref{eq:th-leo-source-fn-10-02}.
 }
-By the definition of Leo source EIM,
+By the definition of Leo source \type{EIM},
 \mypareq{eq:th-leo-source-fn-10-04}{%
     $\forall \; \Veim{src} : \myfn{Is-source}{\var{src}}
     \iff \exists \; \ell  : \ell \in \myfn{lims}{\var{src}}$
@@ -6600,9 +6600,9 @@ definition of LIM validity \Dfref{def:lim-validity}.
 
 \begin{definition}[Leo source sequence {[}LSS{]}]
 \label{def:lss}
-A \dfn{Leo source EIM sequence},
+A \dfn{Leo source \type{EIM} sequence},
 or \dfn{Leo source sequence} is an \type{LES},
-every element of which is a Leo source EIM.
+every element of which is a Leo source \type{EIM}.
 That is,
 \begin{equation}
 \label{eq:def-leo-source-sequence-10}
@@ -6658,9 +6658,9 @@ If $\Vles{les} = \Vlss{lss}$ we say that
 \dispEnd
 \end{definition}
 
-\begin{theorem}[Source EIM containment]
+\begin{theorem}[Source \type{EIM} containment]
 \label{th:source-eim-containment}
-Every source EIM is the base element of at least one \type{LSS}.
+Every source \type{EIM} is the base element of at least one \type{LSS}.
 That is,
 \[
 \forall \; \Veim{eim} : \myfn{Is-source}{\var{eim}} \implies
@@ -6670,7 +6670,7 @@ That is,
 
 \begin{proof}
 Our proof strategy is first,
-given an arbitrary source EIM,
+given an arbitrary source \type{EIM},
 call it \Veim{eim},
 to construct an example
 of an \type{LSS} which has \var{eim}
@@ -6679,7 +6679,7 @@ The theorem will follow immediately by existential generalization.
 
 \mypareq{eq:th-source-eim-containment-10-10}{%
     $\myfn{Is-source}{\var{eim}}$
-    \cuz{} \longDfref{Leo source EIM}{def:leo-source-eim},
+    \cuz{} \longDfref{Leo source \type{EIM}}{def:leo-source-eim},
     AF derivation.
 }
 \mypareq{eq:th-source-eim-containment-10-20}{%
@@ -6888,7 +6888,7 @@ then
 \begin{theorem}[LSS extension]
 \label{th:lss-extension}
 Let \var{lss} be an \type{LSS},
-and let \var{next} be an EIM.
+and let \var{next} be an \type{EIM}.
 Then
 \mypareq{eq:th-lss-extension-02}{%
    $\tuple{\Velement{\var{lss}}{0}\ldots
@@ -7274,14 +7274,14 @@ The theorem follows from
 
 \begin{theorem}[Maximal LSS non-duplication]
 \label{th:maximal-lss-non-duplication}
-An EIM is the base of at most one maximal \type{LSS}.
+An \type{EIM} is the base of at most one maximal \type{LSS}.
 \end{theorem}
 
 \begin{proof}
-Call the base EIM, \Veim{base}.
+Call the base \type{EIM}, \Veim{base}.
 If there is not a maximal \type{LSS} with base \Veim{base}, we
 have the theorem trivially.
-(This will be the case if \var{base} was not a source EIM.)
+(This will be the case if \var{base} was not a source \type{EIM}.)
 
 For the rest of this theorem, then,
 we may assume the existence of these
@@ -7327,7 +7327,7 @@ Since the choice of \var{max1} and \var{max2} was arbitrary,
 
 \begin{theorem}[Maximal LSS existence]
 \label{th:maximal-lss-existence}
-Every Leo source EIM is the base of at least one
+Every Leo source \type{EIM} is the base of at least one
 maximal \type{LSS}.  That is,
 \mypareq{eq:th-maximal-lss-existence-02}{
     $\myfn{Is-source}{\var{eim}} \implies
@@ -7355,7 +7355,7 @@ $\Vlssset{based} = \set{
    \because \Eref{eq:th-maximal-lss-existence-10-10}.
 \end{equation}
 \var{based} is never empty, because
-any Leo source EIM is the base of
+any Leo source \type{EIM} is the base of
 at least one \type{LSS}
 of length~1:
 \mypareq{eq:th-maximal-lss-existence-14}{%
@@ -7517,7 +7517,7 @@ which is what we needed for the theorem.
 
 \begin{theorem}[Maximal LSS uniqueness]
 \label{th:maximal-lss-uniqueness}
-For every Leo source EIM, there is exactly one maximal \type{LSS}.
+For every Leo source \type{EIM}, there is exactly one maximal \type{LSS}.
 \end{theorem}
 
 \begin{proof}
@@ -7746,7 +7746,7 @@ The proof is by mutual implication.
     \linebreak \cuz{}
     equivalence with
     \Eref{eq:th-maximal-lss-lims-termination-12},
-    using \longDfref{Leo source EIM}{def:leo-source-eim}.
+    using \longDfref{Leo source \type{EIM}}{def:leo-source-eim}.
 }
 \mypareq{eq:th-maximal-lss-lims-termination-16}{%
         $\forall \; \Veim{next} :
@@ -7789,7 +7789,7 @@ follows from the chain of equivalences
 The dotted rule and origin of
 every LIM of a maximal \type{LSS} is the same
 as the
-dotted rule and the origin of the top EIM
+dotted rule and the origin of the top \type{EIM}
 of that maximal \type{LSS}.
 That is,
 \begin{equation}
@@ -8015,7 +8015,7 @@ to show \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-64}{%
     $\size{\myfn{lims}{\Velement{max}{1}}} > 0$
-    \cuz{} \longDfref{Leo source EIM}{def:leo-source-eim},
+    \cuz{} \longDfref{Leo source \type{EIM}}{def:leo-source-eim},
     \Eref{eq:th-maximal-lss-lim-invariant-62}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-66}{%
@@ -8148,7 +8148,7 @@ we have the induction and the theorem.
 
 \begin{theorem}[LIM Non-duplication]
 \label{th:lim-non-duplication}
-Every EIM has at most one valid LIM.
+Every \type{EIM} has at most one valid LIM.
 That is,
 \[
 \forall \; \Veim{eim} : \Valid{\var{eim}} \implies \size{\myfn{lims}{\var{eim}}} \le 1.
@@ -8157,7 +8157,7 @@ That is,
 
 \begin{proof}
 Recall that a LIM is valid iff it is an element of
-\myfn{lims}{\var{x}} for some EIM \var{x}.
+\myfn{lims}{\var{x}} for some \type{EIM} \var{x}.
 The proof is by reductio.
 \begin{gather}
 \label{eq:th-lim-non-duplication-10}
@@ -8465,7 +8465,7 @@ $\size{
     }
     \le \size{\Vocab{\Vint{g}}}$
     \linebreak \cuz{} \Eref{eq:th-es-lim-count-12},
-        \longThref{Leo Eligible EIM count}{th:leo-eligible-eim-count}.
+        \longThref{Leo Eligible \type{EIM} count}{th:leo-eligible-eim-count}.
 }
 \mypareq{eq:th-es-lim-count-16}{%
 $\forall \; \Veim{x} : \myfn{Is-source}{\var{x}}
@@ -8485,8 +8485,8 @@ $\size{
         \Eref{eq:th-es-lim-count-16}.
 }
 By the LIM Non-duplication Theorem,
-there is, for each source EIM,
-at most one LIM with that EIM as its source,
+there is, for each source \type{EIM},
+at most one LIM with that \type{EIM} as its source,
 so that
 \mypareq{eq:th-es-lim-count-20}{%
 $\size{
@@ -8520,7 +8520,7 @@ $\size{
     $\forall\; \Veim{x} : \left( \exists\; \mylim{\ell} : \ell = \Lim{\var{x}} \right)
         \implies \myfn{Is-Source}{\var{x}}$
     \cuz{} \longThref{\myfnname{Lim} function}{th:lim-fn},
-            \longDfref{Leo source EIM}{def:leo-source-eim}.
+            \longDfref{Leo source \type{EIM}}{def:leo-source-eim}.
 }
 \mypareq{eq:th-es-lim-count-28}{%
     $\size{
@@ -8596,7 +8596,7 @@ where $\var{nxtlims} = \myfn{next-lims}{\Veim{src}}$.
 
 \begin{proof}
 This theorem follows from
-the Next Eligible EIM Direction Theorem \Thref{th:next-eligible-direction},
+the Next Eligible \type{EIM} Direction Theorem \Thref{th:next-eligible-direction},
 the definition of LIM validity \Dfref{def:lim-validity},
 the LIM Direction Theorem \Thref{th-lim-direction},
 and the definition of the LIM predecessor function \Dfref{def:lim-predecessor-fn}.
@@ -8611,7 +8611,7 @@ and the definition of the LIM predecessor function \Dfref{def:lim-predecessor-fn
 Earley items and, in \Marpa{}'s case,
 new Leo items.
 A operation may require that one or two other
-PIMs already exist in the Earley sets before
+\type{PIM}s already exist in the Earley sets before
 it becomes applicable.
 If an operation requires that \Vpim{anc}
 exist in the Earley sets
@@ -8646,7 +8646,7 @@ to a particular operation, we represent it as a
 $\Lambda$ value.
 
 The \Marpa{} implementation tracks the ancestry of
-PIMs.
+\type{PIM}s.
 The reasons are tracked in \dfn{link pairs},%
 \footnote{The concept of link pairs was present
 in
@@ -8659,10 +8659,10 @@ careful elaboration of the idea in
 which are essential for efficient evaluation.
 
 As we will see below,
-some PIMs do not track link pairs.
-For those PIMs which do track link pairs,
+some \type{PIM}s do not track link pairs.
+For those \type{PIM}s which do track link pairs,
 there is at exactly one link pair for each adjunction of a
-PIM with an Earley set.
+\type{PIM} with an Earley set.
 
 A link pair
 is a duple of predecessor and cause:
@@ -8679,20 +8679,20 @@ as C language null pointers.
 
 Every link pair is either an \dfn{initial link pair}
 or an \dfn{ambiguity link pair}.
-An \dfn{initial link pair} is the link pair added when a new PIM is
+An \dfn{initial link pair} is the link pair added when a new \type{PIM} is
 added to an Earley set.
 An \dfn{ambiguous link pair} is a link pair
-that is added to a PIM that
+that is added to a \type{PIM} that
 is already an element of an Earley set.
 
 A link pair has type \type{LP}.
-The set of link pairs of a PIM
+The set of link pairs of a \type{PIM}
 can be written
 \LinkPairs{\Vpim{pim}},
 or as
 \LinkPairs{\Veim{eim}}, or
 \LinkPairs{\Vlim{lim}},
-for the PIM subtypes.
+for the \type{PIM} subtypes.
 
 \chapter{Complexity preliminaries}
 \label{chap:complexity-preliminaries}
@@ -8723,7 +8723,7 @@ with the prior literature.
 \begin{definition}[Try, dup and new resource]
 \label{def:try-dup-new}
 We ``charge'' all resource to \type{EIM}s.
-Recall that when an attempt is made to add a duplicate EIM to an Earley set,
+Recall that when an attempt is made to add a duplicate \type{EIM} to an Earley set,
 that it does not change the Earley set.
 \dfn{Try-charged resource}, or \dfn{try resource},
 is consumed by either
@@ -8731,16 +8731,16 @@ is consumed by either
 \item an attempt to add a duplicate to the Earley set,
   in which case the try resource is also called \dfn{dup-charged resource}, or
   \dfn{dup resource};
-\item a successful attempt to add a new EIM to the Earley set,
+\item a successful attempt to add a new \type{EIM} to the Earley set,
   in which case the try resource is also \dfn{new-charged resource}, or
   \dfn{new resource}.
 \end{itemize}
 Execution of logic which consumes a type of resource is
 named after that resource,
-so that execution of logic which successfully adds an EIM to an Earley set is called
+so that execution of logic which successfully adds an \type{EIM} to an Earley set is called
 \dfn{new-charged execution}, a \dfn{new-charged}, or a \dfn{new}.
 Similarly,
-an execution which unsuccessfully attempts to add an EIM is called \dfn{dup-charged execution},
+an execution which unsuccessfully attempts to add an \type{EIM} is called \dfn{dup-charged execution},
 or a \dfn{dup}.
 A dup or a new can also be called
 a \dfn{try-charged execution}, a \dfn{try-charged} or a \dfn{try}.
@@ -8748,23 +8748,23 @@ a \dfn{try-charged execution}, a \dfn{try-charged} or a \dfn{try}.
 
 \begin{definition}[Old resource]
 \label{def:old-resource}
-Resource may also be charged to an EIM outside of an
+Resource may also be charged to an \type{EIM} outside of an
 attempt to add it to the Earley set.
-Resource charged to an existing EIM,
+Resource charged to an existing \type{EIM},
 when it is not dup resource,
 is called \dfn{old resource}.
-Execution of logic which charges resource to an EIM,
+Execution of logic which charges resource to an \type{EIM},
 but which is not a try,
 is called an \dfn{old charge execution}, or an \dfn{old}.
 \end{definition}
 
 We have yet to show this,
 but we will find that,
-for each EIM,
+for each \type{EIM},
 \begin{itemize}
 \item new and dup resource is always \Oc{};
 \item which means that try resource is always \Oc{}; and
-\item total resource for an EIM (old, new and dup)
+\item total resource for an \type{EIM} (old, new and dup)
     is always \Oc{}.
 \end{itemize}
 
@@ -8774,7 +8774,7 @@ or ``to the caller''.
 A ``destination'' is either an ``ultimate destination''
 or an ``intermediate desination''.
 
-The ``ultimate destination'' of a charge is always an EIM.
+The ``ultimate destination'' of a charge is always an \type{EIM}.
 An ``intermediate destination'' can be either an Earley set,
 or the parse itself.
 All charges not made to an ultimate destination are
@@ -8784,23 +8784,23 @@ ultimate destination.
 
 \begin{definition}[Charging to the parse]
 \label{def:charging-to-parse}
-A resource ``charged to the parse'' is re-charged to the first EIM
+A resource ``charged to the parse'' is re-charged to the first \type{EIM}
 of Earley set 0.
-There is always a start EIM in Earley set 0,
-so that the first EIM of Earley set 0
+There is always a start \type{EIM} in Earley set 0,
+so that the first \type{EIM} of Earley set 0
 exists in every parse.
 \dispEnd
 \end{definition}
 
 \begin{definition}[Charging to the Earley set]
 \label{def:charging-to-es}
-A resource ``charged to an Earley set'' is re-charged to the first EIM
+A resource ``charged to an Earley set'' is re-charged to the first \type{EIM}
 of that Earley set.
-In a successful parse, every Earley set will have at least one EIM,
-so that the first EIM of an Earley set will always exist.
-An Earley set without a EIM causes a parse failure,
-so that in a failed parse, every Earley set except the last will have at least one EIM,
-and resource charged to those Earley sets can be charged to their first EIM.
+In a successful parse, every Earley set will have at least one \type{EIM},
+so that the first \type{EIM} of an Earley set will always exist.
+An Earley set without a \type{EIM} causes a parse failure,
+so that in a failed parse, every Earley set except the last will have at least one \type{EIM},
+and resource charged to those Earley sets can be charged to their first \type{EIM}.
 In the last Earley set of a failed parse,
 resource charged to the Earley set is charged to the parse.
 \dispEnd
@@ -8912,7 +8912,7 @@ in each ES;
 storing ES's in a dynamic array
 indexed by location;
 and storing a pointer to its ES in
-every PIM.
+every \type{PIM}.
 \myqed
 \end{proof}
 
@@ -8926,7 +8926,7 @@ and a dynamic array indexing them is only created
 when needed.
 The dynamic array is not needed when
 running the recognizer in normal production,
-because links to Earley sets are kept in the PIMs,
+because links to Earley sets are kept in the \type{PIM}s,
 a link to the current Earley set is kept,
 and the event mechanism works using links.
 
@@ -8964,9 +8964,9 @@ one of the following accounts:
 \item \var{parse}: An account for resource charged to the parse itself.
 \item \var{es}: One account per ES,
     for resource charged to the current working Earley set.
-\item \var{eim}: One account per EIM,
+\item \var{eim}: One account per \type{EIM},
   for resource charged to an eim which already exists.
-\item \var{new}: One account per EIM, for resource charged to a newly created EIM.
+\item \var{new}: One account per \type{EIM}, for resource charged to a newly created \type{EIM}.
 \item \var{dup}: One account per ambiguous link pair,
     for resource charged to ambiguous link pairs.
 \item \var{try}:
@@ -8974,8 +8974,8 @@ one of the following accounts:
 This is not a real account, but
     a useful shorthand for the total
     of the \var{new} and \var{dup} accounts
-    for an EIM.
-    It behaves like a per-EIM account.
+    for an \type{EIM}.
+    It behaves like a per-\type{EIM} account.
 \item \var{proc}: A per-pseudocode-procedure account,
   for resource charged to the current pseudocode procedure.
   Resource charged to \var{proc} must be constant or less.
@@ -9040,13 +9040,13 @@ and therefore its space and time demands are constant.
 \begin{theorem}[Earley set complexity]
 \label{th:es-complexity}
 Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
-Adding an EIM to an Earley set
+Adding an \type{EIM} to an Earley set
 consumes \Oc{} time,
 \Oc{} trimmed space,
 and zero link space.
-The adjoin of an existing EIM (a dup)
+The adjoin of an existing \type{EIM} (a dup)
 incurs \Oc{} time, zero trimmed space and \Oc{} link space.
-Traversal of an Earley set requires \Oc{} time per EIM.
+Traversal of an Earley set requires \Oc{} time per \type{EIM}.
 \end{theorem}
 
 \begin{proof}
@@ -9056,15 +9056,15 @@ it creates an empty Earley set, which
 requires \Oc{} time,
 \Oc{} trimmed space
 and \Oc{} link space.
-Each EIM is added at the end of a linked list,
-so that each add of a EIM takes \Oc{} time
+Each \type{EIM} is added at the end of a linked list,
+so that each add of a \type{EIM} takes \Oc{} time
 and \Oc{} trimmed space.
-Adding an EIM requires
+Adding an \type{EIM} requires
 zero link space because the initial link pair
 is kept in trimmed space.
 
 Link pairs are kept in a finite set of linked lists.
-The heads of the lists stored with the EIM and
+The heads of the lists stored with the \type{EIM} and
 occupy trimmed space.
 The rest of the lists of links pairs occupies
 link space.
@@ -9168,18 +9168,18 @@ where PSL's are described in detail.
 
 For each Earley set,
 \var{transition} is a sparse array
-of linked lists of PIMs.
+of linked lists of \type{PIM}s.
 The entries of the \var{transition} array
 are indexed by symbol.
 The \var{transition} array is for efficient lookup
-of EIM and LIM matches.
+of \type{EIM} and LIM matches.
 
 \begin{theorem}[Transition Array Complexity]
 \label{th:transition-array}
 Creation of the \var{transition} array
-consumes \Oc{} time
+consumes \Oc{} time,
 \Oc{} trimmed space,
-and \Oc{} link space,
+and zero link space,
 which is charged to the \var{es}
 account.
 Writes after creation do not occur.
@@ -9203,10 +9203,10 @@ therefore consumes \Oc{} time and \Oc{} space.
 Since the array is of fixed-size,
 access to the head of the linked lists
 that it stores is \Oc{}.
-Every PIM contains a link to the next item in its
+Every \type{PIM} contains a link to the next item in its
 \var{transition} linked link, so that addition of
 a link consumes zero additonal space over that consumed
-when the PIMs are created.
+when the \type{PIM}s are created.
 The lists grow from the head, so that
 Creation time for a new link in one of the
 \var{transitions} linked lists is \Oc{}.
@@ -9216,7 +9216,7 @@ Creation time for a new link in one of the
 \todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
 
 The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of PIMs in \VVelement{S}{j} whose transition symbol
+returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
 
 \begin{theorem}[\myfn{Transitions}{} Complexity]
@@ -9233,7 +9233,7 @@ that is,
 
 \begin{proof}
 This theorem follow from
-the ES EIM Count Theorem \Thref{th:es-eim-count},
+the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
 the ES LIM Count Theorem \Thref{th:es-lim-count},
 and the Transition Array Complexity Theorem
 \Thref{th:transition-array}.
@@ -9399,7 +9399,7 @@ and the per-table justifications.
 \end{algorithmic}
 \end{algorithm}
 
-The \op{Initializer} op adds the start EIM and its predictions.
+The \op{Initializer} op adds the start \type{EIM} and its predictions.
 We first look at
 Algorithms \Aref{alg:predict1} and \Aref{alg:predict-es},
 which contain the pseudocode for adding predictions.
@@ -9754,7 +9754,7 @@ from \Eref{eq:th-predict-es-invocations-16-20},
 The inclusive time of $\var{Predict-ES}(\VVelement{S}{j})$
 \Aref{alg:predict-es}
 is
-\Oc{} charged to each EIM of \VVelement{S}{j},
+\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
 and \Oc{} charged to \VVelement{S}{j} itself.
 \end{theorem}
 
@@ -9961,7 +9961,7 @@ and \Eref{eq:th-predict-es-time-48}.
 The space consumed by
 \proc[\VVelement{S}{j}]{Predict-ES}
 is \Oc{} charged to \VVelement{S}{j}
-and \Oc{} charged to each EIM added.
+and \Oc{} charged to each \type{EIM} added.
 \end{theorem}
 
 \begin{proof}
@@ -10245,7 +10245,7 @@ consists entirely of sequential executions.
 \label{eq:def-initializer-time-charge}
 \myparbox{%
   Direct time in \proc{Ini\-tial\-izer} is charged to the
-  start EIM
+  start \type{EIM}
   \cuz{} AF complexity analysis.}
 \end{equation}
 
@@ -10253,7 +10253,7 @@ consists entirely of sequential executions.
 \label{th:initializer-time}
 The inclusive time of $\op{Initializer}$
 is
-\Oc{} charged to each EIM of Earley set 0.
+\Oc{} charged to each \type{EIM} of Earley set 0.
 \end{theorem}
 
 \begin{proof}
@@ -10347,7 +10347,7 @@ is
 \label{eq:th-initializer-time-30}
 \myparbox{%
     Total indirect time charged
-    to every EIM of Earley set 0
+    to every \type{EIM} of Earley set 0
     by \op{Initializer}
     is \Oc{}
     \cuz{} \Thref{th:predict-es-time},
@@ -10357,7 +10357,7 @@ is
 \begin{equation}
 \label{eq:th-initializer-time-32}
 \myparbox{%
-    Total time charged to every EIM of Earley set 0
+    Total time charged to every \type{EIM} of Earley set 0
     by \op{Initializer} is \Oc{}
     \cuz{}
     \Eref{eq:def-initializer-time-charge},
@@ -10386,7 +10386,7 @@ The theorem follows from
 \label{eq:def-initializer-space-charge}
 \myparbox{%
   Direct space in \proc{Ini\-tial\-izer} is charged to the
-  start EIM.
+  start \type{EIM}.
   \cuz{} AF complexity analysis.}
 \end{equation}
 
@@ -10394,7 +10394,7 @@ The theorem follows from
 \label{th:initializer-space}
 The inclusive space of $\op{Initializer}$
 is
-\Oc{} charged to each EIM of Earley set 0.
+\Oc{} charged to each \type{EIM} of Earley set 0.
 \end{theorem}
 
 \begin{proof}
@@ -10513,7 +10513,7 @@ is
 \begin{equation}
 \label{eq:th-initializer-space-36}
 \myparbox{%
-    Every EIM added by
+    Every \type{EIM} added by
     \op{Initializer} is either \Veim{start}
     or a prediction \cuz
     \Aref{alg:predict1},
@@ -10526,7 +10526,7 @@ is
 \myparbox{%
     The space consumed by \op{Initializer} is \Oc{}
     for each new,
-    which is charged to that EIM \cuz{}
+    which is charged to that \type{EIM} \cuz{}
     \Eref{eq:th-initializer-space-32},
     \Eref{eq:th-initializer-space-36}.
 }
@@ -10539,7 +10539,7 @@ The theorem is
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
 The \Marpa{} implementation does not keep
-any link pairs for any PIM in Earley set 0.
+any link pairs for any \type{PIM} in Earley set 0.
 \Veim{start} does not have any non-trivial ancestor,
 so that a link pair does not exist for it,
 even conceptually.
@@ -10572,7 +10572,7 @@ The \Marpa{} Predictor op is equivalent to the
 \label{th:predictor-time}
 The time of $\op{Predictor}(\VVelement{S}{j})$
 is
-\Oc{} charged to each EIM of \VVelement{S}{j},
+\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
 and \Oc{} charged to \VVelement{S}{j} itself.
 \end{theorem}
 
@@ -10586,8 +10586,8 @@ The theorem follows from
 The space of $\op{Predictor}(\VVelement{S}{j})$
 \Aref{alg:predict-es}
 is
-\Oc{} charged to each EIM of \VVelement{S}{j},
-and \Oc{} charged to each PIM added.
+\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
+and \Oc{} charged to each \type{PIM} added.
 \end{theorem}
 
 \begin{proof}
@@ -10692,7 +10692,7 @@ operation of \Earley{}\cite{Earley1970}.
 \myparbox{%
     $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{new}$ \\
     \cuz{} line \ref{line:scanner-op-11}
-    adds \Veim{trial} as a new EIM.}
+    adds \Veim{trial} as a new \type{EIM}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-16}
@@ -10766,7 +10766,7 @@ which is what we needed for the theorem.
   to an add of \Veim{trial};
   resource incurred by a try is charged
   to an attempt to add \Veim{trial}; and
-  resource not associated with an EIM add or try is
+  resource not associated with an \type{EIM} add or try is
   charged to the Earley set.
   \cuz{} AF complexity analysis.}
 \end{equation}
@@ -10890,10 +10890,10 @@ the argument of \op{Scanner}.
 For the Earley set charge,
 the theorem follows from
 \Tbref{tab:scanner-es-time}.
-For the EIM add charge,
+For the \type{EIM} add charge,
 the theorem follows from
 \Tbref{tab:scanner-add-time}.
-For the EIM dup charge,
+For the \type{EIM} dup charge,
 the theorem follows from
 \Tbref{tab:scanner-add-time},
 \Tbref{tab:scanner-dup-time},
@@ -10902,7 +10902,7 @@ and
 \end{proof}
 
 \begin{table}[t]
-\caption{Inclusive EIM space charged to Earley set for \op{Scanner}}
+\caption{Inclusive \type{EIM} space charged to Earley set for \op{Scanner}}
 \label{tab:scanner-es-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -10924,7 +10924,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[t]
-\caption{Inclusive add-charged EIM space for \op{Scanner}}
+\caption{Inclusive add-charged \type{EIM} space for \op{Scanner}}
 \label{tab:scanner-add-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -10963,7 +10963,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[t]
-\caption{Inclusive dup-charged EIM space for \op{Scanner}}
+\caption{Inclusive dup-charged \type{EIM} space for \op{Scanner}}
 \label{tab:scanner-dup-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -10995,10 +10995,10 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\op{Scanner} EIM space]
+\begin{theorem}[\op{Scanner} \type{EIM} space]
 \label{eq:th-scanner-eim-space}
 \op{Scanner}
-consumes \Oc{} EIM space per add,
+consumes \Oc{} \type{EIM} space per add,
 which is charged to each add.
 \end{theorem}
 
@@ -11006,10 +11006,10 @@ which is charged to each add.
 For the Earley set charge,
 the theorem follows from
 \Tbref{tab:scanner-es-eim-space}.
-For the EIM add charge,
+For the \type{EIM} add charge,
 the theorem follows from
 \Tbref{tab:scanner-add-eim-space}.
-For the EIM dup charge,
+For the \type{EIM} dup charge,
 the theorem follows from
 \Tbref{tab:scanner-add-eim-space},
 \Tbref{tab:scanner-dup-eim-space},
@@ -11123,10 +11123,10 @@ which is charged to each try.
 For the Earley set charge,
 the theorem follows from
 \Tbref{tab:scanner-es-link-space}.
-For the EIM add charge,
+For the \type{EIM} add charge,
 the theorem follows from
 \Tbref{tab:scanner-add-link-space}.
-For the EIM dup charge,
+For the \type{EIM} dup charge,
 the theorem follows from
 \Tbref{tab:scanner-add-link-space},
 \Tbref{tab:scanner-dup-link-space},
@@ -11141,11 +11141,11 @@ operation of \Earley{}.
 \dispEnd
 \end{observation}
 %
-\todo{Define caller-charged, EIM-charged, link-charged}%
-\todo{By default, ``charged'' is EIM-charged}%
-\todo{Define ``new EIM pass''}%
-\todo{Define ``dup EIM pass''}%
-\todo{Define ``EIM try pass'', ``EIM try''}%
+\todo{Define caller-charged, \type{EIM}-charged, link-charged}%
+\todo{By default, ``charged'' is \type{EIM}-charged}%
+\todo{Define ``new \type{EIM} pass''}%
+\todo{Define ``dup \type{EIM} pass''}%
+\todo{Define ``\type{EIM} try pass'', ``\type{EIM} try''}%
 \section{Reducer op}
 \label{def:reducer}
 
@@ -11188,8 +11188,8 @@ Every pass of loop
 \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
 is
 \begin{itemize}
-\item exactly one EIM try pass; and
-\item a new EIM pass or a dup EIM pass.  \dispEnd{}
+\item exactly one \type{EIM} try pass; and
+\item a new \type{EIM} pass or a dup \type{EIM} pass.  \dispEnd{}
 \end{itemize}
 \end{observation}
 
@@ -11232,8 +11232,8 @@ Line&Invocations&Justification
 \multicolumn{3}{|p{4.5in}|}{
 1/\var{call}: ``once per procedure call''.
 1/\var{pass}: ``once per loop pass''.
-1/\var{dup}: ``once per dup EIM loop pass''.
-1/\var{new}: ``once per new EIM loop pass''.
+1/\var{dup}: ``once per dup \type{EIM} loop pass''.
+1/\var{new}: ``once per new \type{EIM} loop pass''.
 Lines are deduced in the order
       \ref{line:earley-reducer-op-3},
       \ref{line:earley-reducer-op-2},
@@ -11255,9 +11255,9 @@ Lines are deduced in the order
   our strategy in \op{Earley-Reducer} is to charge time
   \begin{itemize}
   \item to the \var{new} account of \Veim{trial},
-      if the time is consumed by a new EIM pass;
+      if the time is consumed by a new \type{EIM} pass;
   \item to the \var{dup} account of \Veim{trial},
-      if the time is consumed by a dup EIM pass; and
+      if the time is consumed by a dup \type{EIM} pass; and
   \item to the \var{proc} account of \op{Earley-Reducer},
       otherwise.
   \end{itemize}
@@ -11292,7 +11292,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \begin{table}[t]
 \caption{\op{Earley-Reducer} \var{new} account time}
 \op{Earley-Reducer} charges \Oc{} time
-to the \var{new} account for each new EIM,
+to the \var{new} account for each new \type{EIM},
 and closes that account.
 \vspace{1ex}
 \label{tab:earley-reducer-eim-time}
@@ -11333,7 +11333,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \begin{table}[t]
 \caption{\op{Earley-Reducer} \var{dup} account time}
 \op{Earley-Reducer} charges \Oc{} time
-to the \var{dup} account for each dup EIM,
+to the \var{dup} account for each dup \type{EIM},
 and closes that account.
 \vspace{1ex}
 \label{tab:earley-reducer-dup-time}
@@ -11370,10 +11370,10 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Earley-Reducer} is
   \begin{itemize}
-  \item charged to the \var{new} account of the newly created EIM,
-     if it is consumed by a new EIM loop pass of \op{Earley-Reducer}; and
+  \item charged to the \var{new} account of the newly created \type{EIM},
+     if it is consumed by a new \type{EIM} loop pass of \op{Earley-Reducer}; and
   \item charged to the \var{link} account of a new ambiguous link pair,
-     if it is consumed by a dup EIM loop pass of \op{Earley-Reducer}.
+     if it is consumed by a dup \type{EIM} loop pass of \op{Earley-Reducer}.
   \end{itemize}
 Note that space is not consumed by
 \op{Earley-Reducer} outside of a loop pass.
@@ -11385,7 +11385,7 @@ as of the return from \op{Earley-Reducer}.
 \begin{table}[t]
 \caption{\op{Earley-Reducer} \var{new} account space}
 \op{Earley-Reducer} charges \Oc{} space to the \var{new}
-account of each new EIM, and closes the account.
+account of each new \type{EIM}, and closes the account.
 \vspace{1ex}
 \label{tab:earley-reducer-new-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11425,7 +11425,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \begin{table}[t]
 \caption{\op{Earley-Reducer} \var{link} account space}
 \op{Earley-Reducer} charges \Oc{} space to the \var{link}
-account of each dup EIM, and closes the account.
+account of each dup \type{EIM}, and closes the account.
 \vspace{1ex}
 \label{tab:earley-reducer-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11486,7 +11486,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \label{obs:leo-reducer-calls}
 Every call of
 \op{Leo-Reducer} is
-a new EIM pass or a dup EIM pass,
+a new \type{EIM} pass or a dup \type{EIM} pass,
 but never both.  \dispEnd{}
 \end{observation}
 
@@ -11519,9 +11519,9 @@ Line&Invocations&Justification
     \ref{line:leo-reducer-op-9}&1/\var{new}&directly
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-1/\var{try}: ``once per EIM try''.
-1/\var{dup}: ``once per dup EIM''.
-1/\var{new}: ``once per new EIM''.
+1/\var{try}: ``once per \type{EIM} try''.
+1/\var{dup}: ``once per dup \type{EIM}''.
+1/\var{new}: ``once per new \type{EIM}''.
 Lines are deduced in the order
       \ref{line:leo-reducer-op-2},
       \ref{line:leo-reducer-op-3},
@@ -11549,7 +11549,7 @@ By \Tbref{tab:leo-reducer-invocations}.
 \end{proof}
 
 \begin{table}[t]
-\caption{Inclusive time per EIM try of \op{Leo-Reducer}}
+\caption{Inclusive time per \type{EIM} try of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11590,13 +11590,13 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct time in \op{Leo-Reducer}
   is
-  charged to an EIM try.
+  charged to an \type{EIM} try.
 \end{assumption}
 
 \begin{theorem}[\op{Leo-Reducer} time]
 \label{th:leo-reducer-time}
 Inclusive time consumed by \op{Leo-Reducer}
-is \Oc{} charged to each EIM try.
+is \Oc{} charged to each \type{EIM} try.
 \end{theorem}
 
 \begin{proof}
@@ -11605,7 +11605,7 @@ The theorem follows from
 \end{proof}
 
 \begin{table}[t]
-\caption{Zero EIM space lines for \op{Leo-Reducer}}
+\caption{Zero \type{EIM} space lines for \op{Leo-Reducer}}
 \label{tab:leo-reducer-zero-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11638,8 +11638,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \begin{table}[t]
-\caption{Inclusive EIM-charged space
-    for each new EIM loop pass of \op{Leo-Reducer}}
+\caption{Inclusive \type{EIM}-charged space
+    for each new \type{EIM} loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11665,10 +11665,10 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
   For the purpose of complexity analysis,
   we assume that direct space in \op{Leo-Reducer} is
   \begin{itemize}
-  \item charged to the \var{new} account of the newly created EIM,
-     if it is consumed by a new EIM call of \op{Leo-Reducer}; and
+  \item charged to the \var{new} account of the newly created \type{EIM},
+     if it is consumed by a new \type{EIM} call of \op{Leo-Reducer}; and
   \item charged to the \var{link} account of a new ambiguous link pair,
-     if it is consumed by a dup EIM call of \op{Leo-Reducer}.
+     if it is consumed by a dup \type{EIM} call of \op{Leo-Reducer}.
   \end{itemize}
     The \var{new} and \var{link} accounts are closed
 as of the return from \op{Leo-Reducer}.
@@ -11677,7 +11677,7 @@ as of the return from \op{Leo-Reducer}.
 
 \begin{table}[t]
 \caption{Inclusive link-charged space
-    for each dup EIM loop pass of \op{Leo-Reducer}}
+    for each dup \type{EIM} loop pass of \op{Leo-Reducer}}
 \label{tab:leo-reducer-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11698,10 +11698,10 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\op{Leo-Reducer} EIM space]
+\begin{theorem}[\op{Leo-Reducer} \type{EIM} space]
 \label{th:leo-reducer-eim-space}
-Inclusive EIM-charged space for \op{Leo-Reducer}
-is \Oc{} per new EIM.
+Inclusive \type{EIM}-charged space for \op{Leo-Reducer}
+is \Oc{} per new \type{EIM}.
 \end{theorem}
 
 \begin{proof}
@@ -11715,7 +11715,7 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \begin{theorem}[\op{Leo-Reducer} link space]
 \label{th:leo-reducer-link-space}
 Inclusive link-charged space for \op{Leo-Reducer}
-is \Oc{} per EIM dup.
+is \Oc{} per \type{EIM} dup.
 \end{theorem}
 
 \begin{proof}
@@ -11808,9 +11808,9 @@ For the purposes of analyzing \op{Reducer},
 ``loop pass'', or just ``pass'',
 refers to a pass of
 loop \enRefs{line:reducer-op-2}{line:reducer-op-9}.
-Each loop pass is exactly one of a ``LIM pass'' or an ``EIM pass''.
+Each loop pass is exactly one of a ``LIM pass'' or an ``\type{EIM} pass''.
 It is a LIM pass if it invokes \op{Leo-Reducer} and
-an EIM pass if it invokes \op{Earley-Reducer}.
+an \type{EIM} pass if it invokes \op{Earley-Reducer}.
 
 \begin{theorem}[\op{Reducer} invocations]
 \label{th:reducer-invocations}
@@ -11831,7 +11831,7 @@ By \Tbref{tab:reducer-invocations}.
   is
   \begin{itemize}
   \item charged to the \var{eim} account of, \Veim{cuz},
-  the EIM that is the loop variable,
+  the \type{EIM} that is the loop variable,
   if it is consumed by a loop pass; and
   \item charged to the \var{caller} account of \op{Reducer}, otherwise. \dispEnd
   \end{itemize}
@@ -11911,7 +11911,7 @@ is
 \item \Oc{} charged to the \var{caller} account of \op{Reducer};
 and
 \item \Oc{} charged to \var{eim} account
-of every EIM in \VVelement{S}{j},
+of every \type{EIM} in \VVelement{S}{j},
 at the time of the return from \op{Reducer}.
 \end{itemize}
 \end{theorem}
@@ -11982,14 +11982,14 @@ open accounts.
 \label{obs:reducer-ancestry}
 The \Marpa{} implementation tracks all link pairs for reducer-generated
 \type{EIM}s.
-The cause of a reducer-generated EIM will always be
-a completed EIM.
-The predecessor of a reducer-generated EIM varies depending on whether the attempt
-to create the reducer-generated EIM was a \op{Leo-Reducer} operation
+The cause of a reducer-generated \type{EIM} will always be
+a completed \type{EIM}.
+The predecessor of a reducer-generated \type{EIM} varies depending on whether the attempt
+to create the reducer-generated \type{EIM} was a \op{Leo-Reducer} operation
 or an \op{Earley-Reducer} operation.
 For an
 \op{Earley-Reducer} operation,
-the predecessor will be an incomplete EIM.
+the predecessor will be an incomplete \type{EIM}.
 For a \op{Leo-Reducer} operation,
 the predecessor will be either a LIM,
 or $\Lambda$.
@@ -12016,7 +12016,7 @@ because it differs in effect from the \Earley{}
 and because the cognates of ``complete'' are
 overloaded in confusing ways.
 For example, the result of an \Earley{} ``Completer'' operation
-is not necessarily an EIM completion.
+is not necessarily an \type{EIM} completion.
 }
 Put another way, \Marpa{}'s \var{Reducer} op
 is the same as the Completer operation of \Earley{},
@@ -12193,25 +12193,25 @@ and
 \begin{observation}[\Marpa{} operation by type of result]
 \label{obs:marpa-op-by-result}
 Let \Vpim{rez} be the result of a \Marpa{} operation.
-Every PIM is the result of exactly \Marpa{} operation,
+Every \type{PIM} is the result of exactly \Marpa{} operation,
 as follows:
 \begin{itemize}
 \item $\Current{\Vpim{rez}} = 0$
 iff \Vpim{rez} is the result of the
 \Marpa{} \var{Initializer} operation.
-\item \Vpim{rez} is an EIM,
+\item \Vpim{rez} is an \type{EIM},
 $\Predot{\Veim{rez}} = \Lambda$, and
 $\Current{\var{rez}} > 0$,
 iff
 \var{rez} is the result of a
 \Marpa{} \var{Predictor} operation.
-\item \Vpim{rez} is an EIM,
+\item \Vpim{rez} is an \type{EIM},
 $\Predot{\Veim{rez}} \in \Term{\var{g}}$, and
 $\Current{\var{rez}} > 0$,
 iff
 \var{rez} is the result of a
 \Marpa{} \var{Scanner} operation.
-\item \Vpim{rez} is an EIM,
+\item \Vpim{rez} is an \type{EIM},
 $\Predot{\Veim{rez}} \in \NT{\var{g}}$, and
 $\Current{\var{rez}} > 0$
 iff \var{rez} is the result of a
@@ -12681,22 +12681,22 @@ This shows the theorem. \myqed
 \end{proof}
 
 \begin{definition}
-\label{def:ambig-EIM}
-An confirmed EIM is \dfn{ambiguous} if it is of the form
+\label{def:ambig-eim}
+An confirmed \type{EIM} is \dfn{ambiguous} if it is of the form
 \begin{equation}
-\label{eq:ambig-EIM-05}
+\label{eq:ambig-eim-05}
 \left[
 [ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \mydot \Vstr{rhs3} ],
 \Vloc{origin}
 \right] @ \Vloc{dot}
 \end{equation}
-\Eref{eq:ambig-EIM-05}
+\Eref{eq:ambig-eim-05}
 and has two distinct and valid link pairs.
 Without loss of generality,
 the predecessor in the first link pair is
-the valid EIM
+the valid \type{EIM}
 \begin{equation}
-\label{eq:ambig-EIM-10a}
+\label{eq:ambig-eim-10a}
 \left[
 \begin{gathered}
 [ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} ], \\
@@ -12704,17 +12704,17 @@ the valid EIM
 \end{gathered}
 \right] @ \Vloc{overlap1},
 \end{equation}
-and its cause is the valid EIM
+and its cause is the valid \type{EIM}
 \begin{equation}
-\label{eq:ambig-EIM-10b}
+\label{eq:ambig-eim-10b}
 \left[
   [ \Vsym{rhs2} \de \Vstr{children1} \mydot ], \var{overlap1}
 \right] @ \Vloc{dot}.
 \end{equation}
 Also without loss of generality,
-the predecessor in the second link pair is the valid EIM
+the predecessor in the second link pair is the valid \type{EIM}
 \begin{equation}
-\label{eq:ambig-EIM-20a}
+\label{eq:ambig-eim-20a}
 \left[
 \begin{gathered}
 [ \var{lhs} \de \Vstr{rhs1} \mydot \Vsym{rhs2} \Vstr{rhs3} ], \\
@@ -12722,30 +12722,30 @@ the predecessor in the second link pair is the valid EIM
 \end{gathered}
 \right] @ \Vloc{overlap2},
 \end{equation}
-and the cause of the second link pair is the valid EIM
+and the cause of the second link pair is the valid \type{EIM}
 \begin{equation}
-\label{eq:ambig-EIM-20b}
+\label{eq:ambig-eim-20b}
 \left[
   [ \Vsym{rhs2} \de \Vstr{children2} \mydot ], \var{overlap2}
 \right] @ \Vloc{dot}.
 \end{equation}
 
-The EIM is \dfn{vertically ambiguous} if
+The \type{EIM} is \dfn{vertically ambiguous} if
 \begin{equation}
-\label{eq:ambig-EIM-02}
+\label{eq:ambig-eim-02}
 \Vloc{overlap1} = \Vloc{overlap2},
 \end{equation}
-and the EIM is
+and the \type{EIM} is
 \dfn{horizontally ambiguous} if
 \begin{equation}
-\label{eq:ambig-EIM-03}
+\label{eq:ambig-eim-03}
 \Vloc{overlap1} \neq \Vloc{overlap2}. \quad \dispEnd
 \end{equation}
 \end{definition}
 
 \begin{theorem}[Parse with horizontal ambiguity is ambiguous]
-\label{th:h-EIM-g-ambig}
-If a partial parse has a horizontally ambiguous EIM,
+\label{th:h-eim-g-ambig}
+If a partial parse has a horizontally ambiguous \type{EIM},
 then any full parse consistent with that partial parse is
 horizontally ambiguous,
 and the grammar shared by the partial and full parse is horizontally ambiguous.
@@ -12755,17 +12755,17 @@ and the grammar shared by the partial and full parse is horizontally ambiguous.
 Assume that,
 for some \Vstr{w} and \Vloc{dot},
 \begin{equation}
-\label{eq:th-h-EIM-g-ambig-15}
+\label{eq:th-h-eim-g-ambig-15}
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
 \end{equation}
 is a partial parse.
 Futher assume that \var{partial}
-has a horizontally ambiguous EIM \Dfref{def:ambig-EIM}.
+has a horizontally ambiguous \type{EIM} \Dfref{def:ambig-eim}.
 
 Without loss of generality,
 let
 \begin{equation}
-\label{eq:th-h-EIM-g-ambig-20}
+\label{eq:th-h-eim-g-ambig-20}
 \begin{gathered}
 \var{full} = \left[\Vcfg{g}, \Vstr{w} \right], \\
 \text{where $\Vstr{w} = \boldRangeDecr{w}{0}{dot} \cat \Vterm{suffix}$} \\
@@ -12777,8 +12777,8 @@ be a full parse consistent with \var{partial}.
 We proceed by showing that there is a horizontal ambiguity in \var{full}
 according to \Dfref{def:h-ambig}.
 By assumption for the theorem,
-\var{partial} has a horizontally ambiguous EIM according to
-\Dfref{def:ambig-EIM}.
+\var{partial} has a horizontally ambiguous \type{EIM} according to
+\Dfref{def:ambig-eim}.
 Let \Vloc{origin},
 \Vloc{overlap1},
 \Vloc{overlap2},
@@ -12787,52 +12787,52 @@ Let \Vloc{origin},
 \Vsym{rhs1}, and
 \Vstr{rhs3}
 in \Dfref{def:h-ambig}
-be their eponyms in \Dfref{def:ambig-EIM}.
+be their eponyms in \Dfref{def:ambig-eim}.
 And let
 \Vstr{rhs2} in \Dfref{def:h-ambig}
 be the string of length 1 whose only character is
-\Vsym{rhs2} in \Dfref{def:ambig-EIM}.
+\Vsym{rhs2} in \Dfref{def:ambig-eim}.
 
-In the horizontally ambiguous EIM
+In the horizontally ambiguous \type{EIM}
 let the 3-partitioned rule be
 \[
 [ \var{lhs} \de \Vstr{rhs1} \Vsym{rhs2} \Vstr{rhs3} ].
 \]
-from \Dfref{def:ambig-EIM}.
+from \Dfref{def:ambig-eim}.
 and let \Vloc{origin}, \Vloc{overlap1}, \Vloc{overlap2},
 \Vloc{dot},
 \Vsym{lhs}, \Vstr{rhs1}, and \Vstr{rhs3}
 in
 \Dfref{def:h-ambig} be their eponyms in
-\Dfref{def:ambig-EIM}.
+\Dfref{def:ambig-eim}.
 Let \Vstr{rhs2}
 in \Dfref{def:h-ambig} be
 the string of length 1 consisting of \Vsym{rhs2}
-in \Dfref{def:ambig-EIM}.
+in \Dfref{def:ambig-eim}.
 
 To show that
 writing the derivation
 \Eref{eq:def-h-ambig-21a}--\Eref{eq:def-h-ambig-21f}
 in \Dfref{def:h-ambig}
 is justified by the definition
-\Dfref{def:ambig-EIM}, we note that
+\Dfref{def:ambig-eim}, we note that
 \begin{itemize}
 \item from the definition of validity
 \Dfref{def:eim-validity}
 for the Earley item
-\Eref{eq:ambig-EIM-05},
+\Eref{eq:ambig-eim-05},
 we have the accessibility and productivity
 of all the symbols in
 \Eref{eq:def-h-ambig-21a}-\Eref{eq:def-h-ambig-21f};
 \item from the validity of
-the EIM \Eref{eq:ambig-EIM-10b}, we have
+the \type{EIM} \Eref{eq:ambig-eim-10b}, we have
 the location of \Vloc{dot}
 in \Eref{eq:def-h-ambig-21d}
 and of \Vloc{origin}
 in \Eref{eq:def-h-ambig-21f}; and
 \item
-from the definition of EIM validity for
-\Eref{eq:ambig-EIM-10b},
+from the definition of \type{EIM} validity for
+\Eref{eq:ambig-eim-10b},
 we have the location of \Vloc{overlap1}
 in \Eref{eq:def-h-ambig-21e}.
 \end{itemize}
@@ -12843,20 +12843,20 @@ we note that
 \begin{itemize}
 \item we have the location of \Vloc{overlap2}
 in \Eref{eq:def-h-ambig-30a}
-from the definition of EIM validity for
-\Eref{eq:ambig-EIM-20a}; and
+from the definition of \type{EIM} validity for
+\Eref{eq:ambig-eim-20a}; and
 \item
 we have \Eref{eq:def-h-ambig-30b}
-from \Eref{eq:ambig-EIM-03}.
+from \Eref{eq:ambig-eim-03}.
 \end{itemize}
 
 We now have shown all the elements
 in the definition of horizontal ambiguity \Dfref{def:h-ambig}.
 Since our assumption of a full parse consistent with
-\Eref{eq:th-h-EIM-g-ambig-15} is without loss of generality
-\Eref{eq:th-h-EIM-g-ambig-20},
+\Eref{eq:th-h-eim-g-ambig-15} is without loss of generality
+\Eref{eq:th-h-eim-g-ambig-20},
 this shows that any full parse consistent with
-\Eref{eq:th-h-EIM-g-ambig-15} is horizontally ambiguous.
+\Eref{eq:th-h-eim-g-ambig-15} is horizontally ambiguous.
 And since by \Thref{th:h-ambig-g}, if a parse is horizontally
 ambiguous,
 its grammar is horizontally ambiguous,
@@ -12864,8 +12864,8 @@ we see that \Vcfg{g} is horizontally ambiguous. \myqed
 \end{proof}
 
 \begin{theorem}[Parse with vertical ambiguity is ambiguous]
-\label{th:v-EIM-g-ambig}
-If a partial parse has a vertically ambiguous EIM,
+\label{th:v-eim-g-ambig}
+If a partial parse has a vertically ambiguous \type{EIM},
 then any full parse consistent with that partial parse is vertically ambiguous,
 and the grammar shared by the partial and full parse is vertically ambiguous.
 \end{theorem}
@@ -12874,18 +12874,18 @@ and the grammar shared by the partial and full parse is vertically ambiguous.
 Assume that,
 for some \Vstr{w} and \Vloc{dot},
 \begin{equation}
-\label{eq:th-v-EIM-g-ambig-15}
+\label{eq:th-v-eim-g-ambig-15}
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
 \end{equation}
 is a partial parse.
 Futher assume that \var{partial}
-has a vertically ambiguous EIM \Dfref{def:ambig-EIM}.
+has a vertically ambiguous \type{EIM} \Dfref{def:ambig-eim}.
 
 Without loss of generality,
 let
 \begin{gather}
 \var{full} = \left[\Vcfg{g}, \Vstr{w} \right], \\
-\label{eq:th-v-EIM-g-ambig-20b}
+\label{eq:th-v-eim-g-ambig-20b}
 \text{where $\Vstr{w} = \boldRangeDecr{w}{0}{dot} \cat \Vterm{suffix}$} \\
 \nonumber
 \text{for some \Vterm{suffix}}
@@ -12895,122 +12895,122 @@ be a full parse consistent with \var{partial}.
 We proceed by showing that there is a vertical ambiguity in \var{full}
 according to \Dfref{def:v-ambig}.
 By assumption for the theorem,
-\var{partial} has a vertically ambiguous EIM according to
-\Dfref{def:ambig-EIM}.
+\var{partial} has a vertically ambiguous \type{EIM} according to
+\Dfref{def:ambig-eim}.
 
 Let
 \begin{align}
-\label{eq:th-v-EIM-g-ambig-25a}
-\text{\Vsym{rhs2} in \Dfref{def:ambig-EIM}} & = \text{\Vsym{lhs} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25b}
-\text{\Vstr{children1} in \Dfref{def:ambig-EIM}} & = \text{\Vstr{rhs1} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25c}
-\text{\Vstr{children2} in \Dfref{def:ambig-EIM}} & = \text{\Vstr{rhs2} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25d}
-\text{\Vloc{dot} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{dot} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25e}
-\text{\Vloc{origin} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25f}
-\text{\Vloc{overlap1} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
-\label{eq:th-v-EIM-g-ambig-25g}
-\text{\Vloc{overlap2} in \Dfref{def:ambig-EIM}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}}
+\label{eq:th-v-eim-g-ambig-25a}
+\text{\Vsym{rhs2} in \Dfref{def:ambig-eim}} & = \text{\Vsym{lhs} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25b}
+\text{\Vstr{children1} in \Dfref{def:ambig-eim}} & = \text{\Vstr{rhs1} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25c}
+\text{\Vstr{children2} in \Dfref{def:ambig-eim}} & = \text{\Vstr{rhs2} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25d}
+\text{\Vloc{dot} in \Dfref{def:ambig-eim}} & = \text{\Vloc{dot} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25e}
+\text{\Vloc{origin} in \Dfref{def:ambig-eim}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25f}
+\text{\Vloc{overlap1} in \Dfref{def:ambig-eim}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}} \\
+\label{eq:th-v-eim-g-ambig-25g}
+\text{\Vloc{overlap2} in \Dfref{def:ambig-eim}} & = \text{\Vloc{origin} in \Dfref{def:v-ambig}}
 \end{align}
 
 To justify writing
 \Eref{eq:def-v-ambig-20a}--\Eref{eq:def-v-ambig-20f}
 after the renamings of
-\Eref{eq:th-v-EIM-g-ambig-25a}--\Eref{eq:th-v-EIM-g-ambig-25g},
+\Eref{eq:th-v-eim-g-ambig-25a}--\Eref{eq:th-v-eim-g-ambig-25g},
 we note that we have
 \begin{itemize}
 \item
 \Eref{eq:def-v-ambig-15a} from
 from
-\Eref{eq:th-v-EIM-g-ambig-25a},
-\Eref{eq:th-v-EIM-g-ambig-25b} and
-\Eref{eq:ambig-EIM-10b};
+\Eref{eq:th-v-eim-g-ambig-25a},
+\Eref{eq:th-v-eim-g-ambig-25b} and
+\Eref{eq:ambig-eim-10b};
 \item
 \Eref{eq:def-v-ambig-15b} from
-\Eref{eq:th-v-EIM-g-ambig-25a},
-\Eref{eq:th-v-EIM-g-ambig-25c} and
-\Eref{eq:ambig-EIM-20b};
+\Eref{eq:th-v-eim-g-ambig-25a},
+\Eref{eq:th-v-eim-g-ambig-25c} and
+\Eref{eq:ambig-eim-20b};
 \item
 the accessibility and productivity of the variables in
 \Eref{eq:def-v-ambig-20a}--\Eref{eq:def-v-ambig-20f}
-from the definition of EIM validity for
-\Eref{eq:ambig-EIM-10b};
+from the definition of \type{EIM} validity for
+\Eref{eq:ambig-eim-10b};
 \item
 the location of \Vloc{dot},
 in \Eref{eq:def-v-ambig-20b}
-from the definition of EIM validity for
-\Eref{eq:ambig-EIM-10b}
-and \Eref{eq:th-v-EIM-g-ambig-25d};
+from the definition of \type{EIM} validity for
+\Eref{eq:ambig-eim-10b}
+and \Eref{eq:th-v-eim-g-ambig-25d};
 \item
 the location of \Vloc{origin}
 in \Eref{eq:def-v-ambig-20d}
-from the definition of EIM validity for
-\Eref{eq:ambig-EIM-10b}
-and \Eref{eq:th-v-EIM-g-ambig-25f}; and
+from the definition of \type{EIM} validity for
+\Eref{eq:ambig-eim-10b}
+and \Eref{eq:th-v-eim-g-ambig-25f}; and
 \item
 \Eref{eq:def-v-ambig-15d} follows from
-\Eref{eq:ambig-EIM-20b},
-\Eref{eq:th-v-EIM-g-ambig-25d}, and
-\Eref{eq:th-v-EIM-g-ambig-25g}.
+\Eref{eq:ambig-eim-20b},
+\Eref{eq:th-v-eim-g-ambig-25d}, and
+\Eref{eq:th-v-eim-g-ambig-25g}.
 \end{itemize}
 
 It remains to justify
 $\var{rhs1} \neq \var{rhs2}$,
 \Eref{eq:def-v-ambig-15c}.
-In \Dfref{def:ambig-EIM}
+In \Dfref{def:ambig-eim}
 the two link pairs are required to be distinct.
 The predecessors of the two links,
-\Eref{eq:ambig-EIM-10a} and
-\Eref{eq:ambig-EIM-20a}, differ only in their dot locations:
+\Eref{eq:ambig-eim-10a} and
+\Eref{eq:ambig-eim-20a}, differ only in their dot locations:
 \Vloc{overlap1} versus \Vloc{overlap2}.
 In
-\Eref{eq:th-v-EIM-g-ambig-25f} and
-\Eref{eq:th-v-EIM-g-ambig-25g},
+\Eref{eq:th-v-eim-g-ambig-25f} and
+\Eref{eq:th-v-eim-g-ambig-25g},
 we have set
 both of these
 to \Vloc{origin}
 in \Dfref{def:v-ambig},
 so that
 \begin{equation}
-\label{eq:th-v-EIM-g-ambig-40}
+\label{eq:th-v-eim-g-ambig-40}
 \begin{gathered}
-\text{\Vloc{overlap1} in \Eref{eq:ambig-EIM-10a}} \\
-= \text{\Vloc{overlap2} in \Eref{eq:ambig-EIM-20a}} \\
+\text{\Vloc{overlap1} in \Eref{eq:ambig-eim-10a}} \\
+= \text{\Vloc{overlap2} in \Eref{eq:ambig-eim-20a}} \\
 = \text{\Vloc{origin} in \Dfref{def:v-ambig}.}
 \end{gathered}
 \end{equation}
 So, to be distinct, the two link pairs must differ in the causes.
 The two causes,
-\Eref{eq:ambig-EIM-10b} and
-\Eref{eq:ambig-EIM-20b}
+\Eref{eq:ambig-eim-10b} and
+\Eref{eq:ambig-eim-20b}
 can differ only in their origins
 and in their RHS's.
 From
-\Eref{eq:th-v-EIM-g-ambig-40}
+\Eref{eq:th-v-eim-g-ambig-40}
 we know that the origins of
-\Eref{eq:ambig-EIM-10a} and
-\Eref{eq:ambig-EIM-10b}
+\Eref{eq:ambig-eim-10a} and
+\Eref{eq:ambig-eim-10b}
 are identical,
 so that
-\Eref{eq:ambig-EIM-10b} must differ from
-\Eref{eq:ambig-EIM-20b} in its RHS:
+\Eref{eq:ambig-eim-10b} must differ from
+\Eref{eq:ambig-eim-20b} in its RHS:
 \begin{equation}
-\label{eq:th-v-EIM-g-ambig-43}
+\label{eq:th-v-eim-g-ambig-43}
 \begin{gathered}
-\text{\Vstr{children1} in \Eref{eq:ambig-EIM-10a}} \\
-\neq \text{\Vstr{children2} in \Eref{eq:ambig-EIM-20a}}.
+\text{\Vstr{children1} in \Eref{eq:ambig-eim-10a}} \\
+\neq \text{\Vstr{children2} in \Eref{eq:ambig-eim-20a}}.
 \end{gathered}
 \end{equation}
 From
-\Eref{eq:th-v-EIM-g-ambig-43},
-\Eref{eq:th-v-EIM-g-ambig-25b}, and
-\Eref{eq:th-v-EIM-g-ambig-25c}
+\Eref{eq:th-v-eim-g-ambig-43},
+\Eref{eq:th-v-eim-g-ambig-25b}, and
+\Eref{eq:th-v-eim-g-ambig-25c}
 we have
 \begin{equation}
-\label{eq:th-v-EIM-g-ambig-46}
+\label{eq:th-v-eim-g-ambig-46}
 \Vstr{rhs1} \neq \Vstr{rhs2}
   \text{ in \Eref{eq:def-v-ambig-15c}
     of \Dfref{def:v-ambig}. \myqed}
@@ -13018,31 +13018,31 @@ we have
 \end{proof}
 
 \begin{theorem}[Grammar of parse with ambiguity is ambiguous]
-\label{th:ambig-EIM-ambig-g}
-If a partial parse has an ambiguous EIM,
+\label{th:ambig-eim-ambig-g}
+If a partial parse has an ambiguous \type{EIM},
 then its grammar is ambiguous.
 \end{theorem}
 
 \begin{proof}
 Let $\var{partial} = [ \Vcfg{g}, \Vstr{prefix} ]$ be a partial
-parse with an ambiguous EIM.
+parse with an ambiguous \type{EIM}.
 Let $\var{full} = [ \Vcfg{g}, \Vstr{prefix}\Vterm{suffix} ]$ be a full
 parse consistent with \var{partial}.
-From \Dfref{def:ambig-EIM}, we see that an ambiguous EIM
-is either a horizontally ambiguous EIM, or
-a vertically ambiguous EIM.
+From \Dfref{def:ambig-eim}, we see that an ambiguous \type{EIM}
+is either a horizontally ambiguous \type{EIM}, or
+a vertically ambiguous \type{EIM}.
 We proceed by cases.
 
-If the ambiguous EIM is horizontally ambiguous then
-by \Thref{th:h-EIM-g-ambig}
+If the ambiguous \type{EIM} is horizontally ambiguous then
+by \Thref{th:h-eim-g-ambig}
 any full parse consistent with the partial parse
 is horizontally ambiguous,
 and therefore \var{full} is horizontally ambiguous.
 By \Thref{th:h-ambig-g} if \var{full} is horizontally ambiguous,
 then \Vcfg{g} is ambiguous.
 
-If the ambiguous EIM is vertically ambiguous then
-by \Thref{th:v-EIM-g-ambig}
+If the ambiguous \type{EIM} is vertically ambiguous then
+by \Thref{th:v-eim-g-ambig}
 any full parse consistent with the partial parse
 is vertically ambiguous,
 and therefore \var{full} is vertically ambiguous.
@@ -13051,13 +13051,13 @@ then \Vcfg{g} is ambiguous. \myqed
 \end{proof}
 
 \begin{theorem}[Unambiguous grammar does not have ambiguity]
-\label{th:unambig-g-unambig-EIM}
+\label{th:unambig-g-unambig-eim}
 If a grammar is unambiguous, then it does not have
-an ambiguous EIM.
+an ambiguous \type{EIM}.
 \end{theorem}
 
 \begin{proof}
-This theorem is the contrapositive of \Thref{th:ambig-EIM-ambig-g}. \myqed
+This theorem is the contrapositive of \Thref{th:ambig-eim-ambig-g}. \myqed
 \end{proof}
 
 \chapter{Per-set lists}
@@ -13174,7 +13174,7 @@ is already present in \VVelement{S}{j},
 and \var{false} otherwise.
 
 \begin{algorithm}[t]
-\caption{Adjoin EIM}
+\caption{Adjoin \type{EIM}}
 \label{alg:adjoin-eim}
 \begin{algorithmic}[1]
 \Procedure{Adjoin-EIM}{$[\Vdr{x},\Vorig{x}]@\VVelement{S}{j}$}
@@ -13307,14 +13307,14 @@ by assumption for theorem.}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-34}
 \Rule{\Veim{pred}} \in \Rules{\var{g}}
-\because \Eref{eq:EIM-valid-22a},
+\because \Eref{eq:eim-valid-22a},
   \Eref{eq:earley-completer-is-consistent-30}.
 \end{equation}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-36}
 \begin{gathered}
   \Accept{\var{g}} \destar \Vstr{before} \cat \LHS{\Veim{pred}} \cat \Vstr{after} \\
-  \because \Eref{eq:EIM-valid-22b},
+  \because \Eref{eq:eim-valid-22b},
     \Eref{eq:earley-completer-is-consistent-30}, \text{WLOG}.
   \end{gathered}
 \end{equation}
@@ -13322,7 +13322,7 @@ by assumption for theorem.}
 \label{eq:earley-completer-is-consistent-38}
 \begin{gathered}
   \Vstr{before} \destar \var{prefix}[0  \ldots  (\var{orig}\subtract 1)] \\
-  \because \Eref{eq:EIM-valid-22c},
+  \because \Eref{eq:eim-valid-22c},
     \Eref{eq:earley-completer-is-consistent-22},
     \Eref{eq:earley-completer-is-consistent-30}.
   \end{gathered}
@@ -13331,7 +13331,7 @@ by assumption for theorem.}
 \label{eq:earley-completer-is-consistent-40}
 \begin{gathered}
   \Vstr{rhs1} \destar \var{prefix}[\var{orig}  \ldots  (\var{meet}\subtract 1)] \\
-  \because \Eref{eq:EIM-valid-22d},
+  \because \Eref{eq:eim-valid-22d},
   \Eref{eq:earley-completer-is-consistent-20},
   \Eref{eq:earley-completer-is-consistent-22},
   \Eref{eq:earley-completer-is-consistent-30}.
@@ -13381,7 +13381,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \label{eq:earley-completer-is-consistent-53}
   \begin{gathered}
     \LHS{\Vdr{cuz}} \destar \var{prefix}[\var{meet}  \ldots  (\var{current}\subtract 1)] \\
-    \because \Eref{eq:EIM-valid-22d},
+    \because \Eref{eq:eim-valid-22d},
     \Eref{eq:earley-completer-is-consistent-26},
     \Eref{eq:earley-completer-is-consistent-32},
     \Eref{eq:earley-completer-is-consistent-52}.
@@ -13722,7 +13722,7 @@ $\because$ AF subcase.%
 
 \begin{definition}[Leo chain--base match]
 \label{def:leo-chain-base-match}
-Let \Veim{base} be an EIM
+Let \Veim{base} be an \type{EIM}
 and let \Vlim{lim} be a LIM.
 We say \Veim{base} \dfn{matches} \Vlim{lim},
 if and only if
@@ -13741,7 +13741,7 @@ if and only if \Veim{base} matches $\var{chain}[0]$.
 \label{def:leo-edge}
 Let \Vint{g} be a grammar,
 let \Vlimset{chain} be a valid Leo chain,
-and let $\Veim{base} \in \Ves{current}$ be a valid EIM which
+and let $\Veim{base} \in \Ves{current}$ be a valid \type{EIM} which
 matches \var{chain}.
 Then the \dfn{Leo edge}, or just \dfn{edge},
 of \var{chain} and \var{base}
@@ -13782,7 +13782,7 @@ An edge is maximal, unless stated otherwise.
 \label{th:leo-edge-length}
 Let \Vint{g} be a grammar;
 let \Vlimset{chain} be a valid partial Leo chain;
-let $\Veim{base} \in \Ves{current}$ be a valid EIM which
+let $\Veim{base} \in \Ves{current}$ be a valid \type{EIM} which
 matches \var{chain};
 and let \Veimset{edge} be their edge.
 Then
@@ -13883,7 +13883,7 @@ The theorem follows directly from
 \label{th:edge-elements-are-complete}
 In a \Marpa{} internal grammar,
 let \Vlimset{chain} be a valid Leo chain,
-and \Veim{base} a valid EIM matching \var{chain}.
+and \Veim{base} a valid \type{EIM} matching \var{chain}.
 Every element of the edge of \var{chain} and \var{base}
 is a valid completion in the same Earley set as \Veim{base},
 and the edge is valid.
@@ -13892,7 +13892,7 @@ and the edge is valid.
 \begin{proof}
 Let \Vint{g} be a \Marpa{} internal grammar,
 let \Vlimset{chain} be a valid Leo chain
-and let \Veim{base} be a valid EIM which matches \var{chain}.
+and let \Veim{base} be a valid \type{EIM} which matches \var{chain}.
 Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
 We proceed by induction on the elements of the edge,
 where the induction hypothesis is
@@ -14301,19 +14301,19 @@ and the theorem. \myqed
 
 \begin{theorem}[Edge Top is Border]
 \label{th:edge-top-is-border}
-If an EIM is the non-trivial descendant of a lower edge EIM,
-it is either another lower edge EIM,
+If an \type{EIM} is the non-trivial descendant of a lower edge \type{EIM},
+it is either another lower edge \type{EIM},
 or the descendant of the top of an edge.
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
 \label{th:edge-top-is-border-22}
-\myparbox{\Veim{lo} is a lower edge EIM $\because$ AF theorem, WLOG.}
+\myparbox{\Veim{lo} is a lower edge \type{EIM} $\because$ AF theorem, WLOG.}
 \end{equation}
 \begin{equation}
 \label{th:edge-top-is-border-24}
-\myparbox{\Veim{no} is an EIM which is not a lower edge $\because$ AF theorem, WLOG.}
+\myparbox{\Veim{no} is an \type{EIM} which is not a lower edge $\because$ AF theorem, WLOG.}
 \end{equation}
 For the purposes of this proof, we define \Veimset{seq} as follows:
 \begin{equation}
@@ -14339,13 +14339,13 @@ without loss of generality.
 \label{th:edge-top-is-border-27}
 \myparbox{\VVelement{seq}{t} is the first element
 of \var{seq}
-that is not a lower edge EIM.
+that is not a lower edge \type{EIM}.
 $\because$ \Eref{th:edge-top-is-border-26}, WLOG.}
 \end{equation}
 \begin{equation}
 \label{th:edge-top-is-border-28}
 \myparbox{\VVelement{seq}{t}
-is the top of an edge, or it is not an edge EIM
+is the top of an edge, or it is not an edge \type{EIM}
 $\because$
 Def of ``Leo edge'' \Dfref{def:leo-edge},
 \Eref{th:edge-top-is-border-27}.}
@@ -14357,21 +14357,21 @@ We now consider
 \begin{equation}
 \label{th:edge-top-is-border-30}
 \myparbox{
-\Velement{seq}{\var{t}\subtract 1} is a lower edge EIM
+\Velement{seq}{\var{t}\subtract 1} is a lower edge \type{EIM}
 $\because$
 \Eref{th:edge-top-is-border-27}.}
 \end{equation}
 \begin{equation}
 \label{th:edge-top-is-border-32}
-\myparbox{One of the descendants of a lower edge EIM
-must be either another lower edge EIM or the top of
+\myparbox{One of the descendants of a lower edge \type{EIM}
+must be either another lower edge \type{EIM} or the top of
 an edge.
 $\because$ Def of ``Leo edge'' \Dfref{def:leo-edge}.}
 \end{equation}
 \begin{equation}
 \label{th:edge-top-is-border-34}
 \myparbox{%
-The descendant of a lower edge EIM
+The descendant of a lower edge \type{EIM}
 is unique
 $\because$ \Thref{th:edge-descendant-uniqueness}.}
 \end{equation}
@@ -14380,7 +14380,7 @@ $\because$ \Thref{th:edge-descendant-uniqueness}.}
 \myparbox{%
 The unique descendant of
 \Velement{seq}{\var{t}\subtract 1} is
-another lower edge EIM or the top of
+another lower edge \type{EIM} or the top of
 an edge
 $\because$
 \Eref{th:edge-top-is-border-30},
@@ -14426,7 +14426,7 @@ theorem. \myqed
 \label{th:leo-edge-top}
 In a \Marpa{} parse,
 let \Vlimset{chain} be a valid LIM chain,
-and let \Veim{base} be a valid EIM which matches \var{chain}.
+and let \Veim{base} be a valid \type{EIM} which matches \var{chain}.
 Then the top of their edge is
 \begin{equation}
 \label{eq:th-leo-edge-top-05}
@@ -14536,28 +14536,28 @@ preserves validity.
 
 \begin{theorem}[\Marpa{} is consistent]
 \Marpa{} is consistent.
-That is, every PIM created by a \Marpa{} parser
+That is, every \type{PIM} created by a \Marpa{} parser
 is valid.
 \end{theorem}
 
 \begin{proof}
 We assume for a reductio,
-that there is \Marpa{} parse that creates an invalid PIM.
-This means that there is a first invalid PIM created
+that there is \Marpa{} parse that creates an invalid \type{PIM}.
+This means that there is a first invalid \type{PIM} created
 by that \Marpa{} parse.
 Inspection of the \Marpa{} algorithm
 \Chref{chap:marpa} shows
-that PIMs are only created by operations.
+that \type{PIM}s are only created by operations.
 
 We now proceed by elimination of subcases,
 where our subcases are the operations
 of the \Marpa{} algorithm.
 We first note that an operation creates
-the first invalid PIM only if it does not preserve
+the first invalid \type{PIM} only if it does not preserve
 validity.
 
 The \Marpa{} initializer operation creates the
-same PIMs as the \Earley{} initializer operation
+same \type{PIM}s as the \Earley{} initializer operation
 \Obref{obs:earley-set-0}.
 The \Earley{} initializer operation preserves
 validity because the \Earley{} algorithm is
@@ -14565,15 +14565,15 @@ correct
 \Thref{th:earley-is-correct}.
 Note in the case of the Initalizer operation,
 validity is preserved vacuously ---
-no PIM is in the ancestry of the Initializer
+no \type{PIM} is in the ancestry of the Initializer
 operation.
 
 The \Marpa{} scanner operation
-creates the same PIMs as the \Earley{}
+creates the same \type{PIM}s as the \Earley{}
 scanner operations
 \Obref{obs:earley-scanner-op}.
 The \Marpa{} predictor operation
-creates the same PIMs as the \Earley{}
+creates the same \type{PIM}s as the \Earley{}
 predictor operations
 \Obref{obs:earley-predictor-op}.
 These two operations preserve
@@ -14597,11 +14597,11 @@ We have shown that the
 From
 \Obref{obs:earley-completer-op}
 and \Aref{alg:earley-reducer-op},
-\op{Earley-Reducer}, creates the EIM that
+\op{Earley-Reducer}, creates the \type{EIM} that
 the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
 \Marpa{}'s \op{Earley-Reducer}.
-Therefore the PIMs created by
+Therefore the \type{PIM}s created by
 the \Marpa{} \op{Earley-Reducer} sub-op
 are a subset of those created by the \Earley{}
 completer operation.
@@ -14615,22 +14615,22 @@ preserves validity.
 
 With this we have shown the last subcase,
 and may conclude that no \Marpa{} operation creates the
-first invalid PIM,
+first invalid \type{PIM},
 and therefore no \Marpa{} operation creates
-an invalid PIM.
+an invalid \type{PIM}.
 Therefore, \Marpa{} is consistent.
 \myqed
 \end{proof}
 
-\begin{definition}[Hidden and Visible PIMs]
-An EIM is \dfn{hidden} if it is an element of the inside
+\begin{definition}[Hidden and Visible \type{PIM}s]
+An \type{EIM} is \dfn{hidden} if it is an element of the inside
 of a Leo edge.
-All other PIMs are \dfn{visible}.
+All other \type{PIM}s are \dfn{visible}.
 \end{definition}
 
-\begin{theorem}[\Marpa{} visible PIMs are complete]
+\begin{theorem}[\Marpa{} visible \type{PIM}s are complete]
 \Marpa{} is complete, except for the hidden
-PIMs.
+\type{PIM}s.
 \end{theorem}
 
 \begin{proof}
@@ -14644,7 +14644,7 @@ we will state some definitions for the purpose of presentation
 Intuitively
 the Earley tables are ``complete as far as X'',
 where X is some point in running of the \Marpa{} algorithm,
-if they contain all the visible valid PIMs
+if they contain all the visible valid \type{PIM}s
 for X and every prior to it in
 in the \Marpa{} algorithm.
 \begin{equation}
@@ -14652,7 +14652,7 @@ in the \Marpa{} algorithm.
 are ``complete as far as''
 Earley set \var{j},
 if every Earley set, \VVelement{S}{i}, $0 \le \var{i} \le \var{j}$,
-contains all the valid visible PIMs
+contains all the valid visible \type{PIM}s
 $\because$ DFPP.
 }
 \end{equation}
@@ -14677,7 +14677,7 @@ $\because$ DFPP.
 
 Intuitively, ``visible depth''
 is depth counted in terms of
-visible confirmed EIM causes.
+visible confirmed \type{EIM} causes.
 We will write \var{Depth}(\Veim{x}) for the visible depth
 of \Veim{x}.
 When speaking of several \type{EIM}s,
@@ -14704,7 +14704,7 @@ $\because$ DFPP.}
 \label{eq:def-complete-as-far-as-24}
 \myparbox{$\var{Depth}(\Veim{x}) = \var{Depth}(\Veim{cuz})+1$,
 where \Veim{cuz} is the ``deepest'' cause of \Veim{x},
-if \var{x} is a visible confirmed EIM where
+if \var{x} is a visible confirmed \type{EIM} where
 \var{x} is not the top of a Leo edge and
 $\Predot{\var{x}} \in \NT{\var{g}}$
 $\because$ DFPP.}
@@ -14713,7 +14713,7 @@ $\because$ DFPP.}
 \label{eq:def-complete-as-far-as-26}
 \myparbox{$\var{Depth}(\Vpim{pim}) = \Lambda$
 if \Vpim{pim} is a LIM,
-a hidden EIM,
+a hidden \type{EIM},
 or a prediction.
 In other words,
 visible depth is
@@ -14792,7 +14792,7 @@ The proof is by a reductio.
 \todo{presence in physical Earley set (PES?) vs theoretical {ES?}.}
 \begin{equation}
 \label{eq:th-marpa-visible-depth-completeness-08}
-\myparbox{Let $\Vpim{rez}@\VVelement{S}{j}$ be a valid PIM where
+\myparbox{Let $\Vpim{rez}@\VVelement{S}{j}$ be a valid \type{PIM} where
 $\var{Depth}(\var{rez}) = \var{n}+1 \land
   \neg \var{rez} \in \VVelement{S}{j}$
 $\because$ AF reductio.}
@@ -14832,7 +14832,7 @@ $\because$ only confirmed \type{EIM}s have a visible depth
 
 \begin{theorem}[Useful completions are disjoint or contained]
 In an unambiguous grammar,
-in every pair of useful complete EIMs,
+in every pair of useful complete \type{EIM}s,
 one is either contained
 in the other,
 or they are disjoint
@@ -14868,7 +14868,7 @@ but in almost all practical cases,
 only the useful \type{EIM}s
 need to be expanded.
 
-\begin{theorem}[Useful EIM count]
+\begin{theorem}[Useful \type{EIM} count]
 Let $[\Vint{g}, \Vstr{partial}]$ be a \Marpa{} partial parse.
 the number of useful \type{EIM}s is \On{},
 where $\var{n} = \Vsize{partial}$.
@@ -14909,7 +14909,7 @@ Lemma 4.6 in
 }%
 Let \Vcfg{g} be a CFG.
 If there is an input \Vstr{w} such that a valid
-confirmed EIM has more than one link pair,
+confirmed \type{EIM} has more than one link pair,
 then \var{g} is ambiguous.
 \end{theorem}
 
@@ -14931,7 +14931,7 @@ We assume for the reductio that
 \text{\var{g} is not ambiguous.}
 \end{equation}
 
-Confirmed EIMs are only adjoined by the Scanner and the Completer.
+Confirmed \type{EIM}s are only adjoined by the Scanner and the Completer.
 
 \todo{Does this duplicate the proof in the ambiguity section?}
 \myqed
@@ -15827,9 +15827,9 @@ Then
 \end{theorem}
 
 \begin{proof}
-Since \Vint{g} is unambiguous, no EIM will have more than one link
-pair \Thref{th:unambig-g-unambig-EIM},
-and therefore no EIM will have more than one cause EIM.
+Since \Vint{g} is unambiguous, no \type{EIM} will have more than one link
+pair \Thref{th:unambig-g-unambig-eim},
+and therefore no \type{EIM} will have more than one cause \type{EIM}.
 In this proof,
 let a ``cause chain'' be a sequence \var{chain} such that
 for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtract 1$,
@@ -15838,11 +15838,11 @@ of $\var{chain}[\var{i}+1]$.
 
 \type{EIM}s may not have more than one cause,
 but they may share causes.
-Call a cause chain where no EIM is the cause of more than one other
-EIM, a ``single-cause chain''.  We will now consider the maximum length
+Call a cause chain where no \type{EIM} is the cause of more than one other
+\type{EIM}, a ``single-cause chain''.  We will now consider the maximum length
 of a single-cause chain in a \Marpa{} parse.
 
-In a single-cause chain, every EIM after the first has exactly one link pair
+In a single-cause chain, every \type{EIM} after the first has exactly one link pair
 and therefore is Leo-unique.
 In any single-chain longer than $\size{\NT{\var{g}}}$
 an LHS will occur twice, and therefore the portion of the chain between
@@ -15861,7 +15861,7 @@ seeking to establish the relationship between the count of complete and incomple
 items.
 We exclude predictions and organize the rest into a ``cause chain tree''.
 
-We call an EIM of the form,
+We call an \type{EIM} of the form,
 \begin{equation}
 \left[\Accept{\var{g}} \de \Vstr{top}], 0\right]
 \end{equation}
@@ -15869,7 +15869,7 @@ the ``accept completion''.
 Let the ``leaves'' of the cause tree be the confirmed incompletions,
 plus the accept completion, if it exists in \VVelement{S}{j}.
 These leaves have in common that they cannot be the cause of any other
-EIM.
+\type{EIM}.
 The remaining nodes are the completions, other than the accept completion.
 We call these the ``interior'' nodes of the cause tree.
 In this proof,
