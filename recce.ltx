@@ -9182,10 +9182,6 @@ consumes \Oc{} time,
 and zero link space,
 which is charged to the \var{es}
 account.
-Writes after creation do not occur.
-Accesses by symbol
-to the head of each linked list consume \Oc{} time
-and zero space.
 \end{theorem}
 
 \begin{proof}
@@ -9215,7 +9211,12 @@ Creation time for a new link in one of the
 
 \todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
 
-The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+Writes to the \var{transition} array
+do not occur once it has been created.
+Reads of the \var{transition} array
+use the \Transition{} function.
+A call of the form
+$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
 returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
 
@@ -9224,19 +9225,28 @@ is \Vsym{t}.
 A call of the form
 \Transitions{\Vsym{t}}{\VVelement{S}{j}}
 consumes \Oc{} time, and zero space.
-It returns a set of \order{\Vloc{j}} size,
+It returns a pointer to
+a linked list of \order{\Vloc{j}} size,
 that is,
-\[
-\size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
-\]
+\begin{gather*}
+\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
+\end{gather*}
 \end{theorem}
 
 \begin{proof}
-This theorem follow from
+A call of the function \myfn{Transitions}{}
+indexes a sparse array, and returns a pointer
+to the head of a linked list:
+this can be done in \Oc{} time.
+The claim for linked list size follows from
 the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
 the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
 and the Transition Array Complexity Theorem
 \Thref{th:transition-array}.
+A \var{transitions} array is not altered after its creation,
+and therefore calls of \myfn{Transitions}{}
+do not consume additional space.
 \end{proof}
 
 \section{Counting invocations}
