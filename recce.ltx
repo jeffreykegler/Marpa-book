@@ -6350,7 +6350,7 @@ The theorem follows from
 \label{def:lim-validity}
 The valid LIMs of an EIM are defined recursively.
 Let \Veim{src} be an arbitrary EIM.
-Then the set of LIM's of \var{src} is
+Then the set of LIMs of \var{src} is
 \begin{equation}
 \nonumber
 \begin{gathered}
@@ -8422,7 +8422,7 @@ From these three facts, the theorem follows immediately.
 \end{proof}
 
 \begin{definition}[LIM matching]
-To deal with LIM's,
+To deal with LIMs,
 we overload \var{Matches} as follows:
 \begin{equation*}
 \begin{gathered}
@@ -8435,7 +8435,7 @@ we overload \var{Matches} as follows:
 \end{equation*}
 \end{definition}
 
-\begin{theorem}[LIM's per ES]
+\begin{theorem}[LIMs per ES]
 \label{th:lims-per-es}
 Every ES has at most
 one LIM for every symbol in the grammar.
@@ -8611,7 +8611,7 @@ and the definition of the LIM predecessor function \Dfref{def:lim-predecessor-fn
 Earley items and, in \Marpa{}'s case,
 new Leo items.
 A operation may require that one or two other
-PIM's already exist in the Earley sets before
+PIMs already exist in the Earley sets before
 it becomes applicable.
 If an operation requires that \Vpim{anc}
 exist in the Earley sets
@@ -8646,7 +8646,7 @@ to a particular operation, we represent it as a
 $\Lambda$ value.
 
 The \Marpa{} implementation tracks the ancestry of
-PIM's.
+PIMs.
 The reasons are tracked in \dfn{link pairs},%
 \footnote{The concept of link pairs was present
 in
@@ -8659,8 +8659,8 @@ careful elaboration of the idea in
 which are essential for efficient evaluation.
 
 As we will see below,
-some PIM's do not track link pairs.
-For those PIM's which do track link pairs,
+some PIMs do not track link pairs.
+For those PIMs which do track link pairs,
 there is at exactly one link pair for each adjunction of a
 PIM with an Earley set.
 
@@ -8715,7 +8715,7 @@ some kind.
 We distinguish trimmed space from link space,
 because most of the Earley literature
 reports results in terms of trimmed space.
-We need to have space complexity results in terms 
+We need to have space complexity results in terms
 of trimmed space
 in order to make ``apples to apples'' comparisons
 with the prior literature.
@@ -9168,9 +9168,9 @@ where PSL's are described in detail.
 
 For each Earley set,
 \var{transition} is a sparse array
-of linked lists.
-The array entries are indexed by symbol,
-and the linked lists are of PIM's.
+of linked lists of PIMs.
+The entries of the \var{transition} array
+are indexed by symbol.
 The \var{transition} array is for efficient lookup
 of EIM and LIM matches.
 
@@ -9206,7 +9206,7 @@ that it stores is \Oc{}.
 Every PIM contains a link to the next item in its
 \var{transition} linked link, so that addition of
 a link consumes zero additonal space over that consumed
-when the PIM's are created.
+when the PIMs are created.
 The lists grow from the head, so that
 Creation time for a new link in one of the
 \var{transitions} linked lists is \Oc{}.
@@ -9216,12 +9216,12 @@ Creation time for a new link in one of the
 \todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
 
 The function $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of PIM's in \VVelement{S}{j} whose transition symbol
+returns the set of PIMs in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
 
 \begin{theorem}[\myfn{Transitions}{} Complexity]
 \label{th:transitions-set-size}
-A call of the form 
+A call of the form
 \Transitions{\Vsym{t}}{\VVelement{S}{j}}
 consumes \Oc{} time, and zero space.
 It returns a set of \order{\Vloc{j}} size,
@@ -12002,7 +12002,7 @@ or $\Lambda$.
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
 \label{obs:earley-completer-op}
-When there are no LIM's in \Ves{predecessor}
+When there are no LIMs in \Ves{predecessor}
 \Marpa{}'s \var{Reducer} op has the same effect as the ``Completer''
 operation of \Earley{}\cite{Earley1970}.\footnote{
 For all other \Marpa{} ops we have used the name of its
@@ -12098,7 +12098,7 @@ into the Earley table with the link pair
 \begin{observation}[Ancestry]
 \label{obs:memoizer-ancestry}
 The \Marpa{} implementation tracks the link pairs
-for the LIM's.
+for the LIMs.
 In the link pair for a LIM, call it \Vlim{$\ell$},
 the ``cause''
 is more often called the \dfn{source} of the LIM;
@@ -12236,7 +12236,7 @@ from the result as described in
 \Obref{obs:marpa-op-by-result},
 except
 in \Earley{} there is no \var{Memoizer} operation,
-and there are no LIM's.
+and there are no LIMs.
 This follows from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-op},
@@ -13432,7 +13432,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \label{def:leo-chain}
 A \dfn{Leo chain},
 or simply \dfn{chain} when the meaning is clear in context,
-is a sequence of one or more LIM's,
+is a sequence of one or more LIMs,
 call it $\Vlimset{links}$,
 where
 \[
@@ -13668,14 +13668,14 @@ The proof is by a reductio.
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr-origin-12}
-\myparbox{LIM's are only added by the
+\myparbox{LIMs are only added by the
 \Marpa{} \var{Memoizer} operation
 $\because$ \Obref{obs:marpa-op-by-result}.%
 }
 \end{equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr-origin-14}
-\myparbox{LIM's are added by either the
+\myparbox{LIMs are added by either the
 \var{Start-Leo-Chain} or
 \var{Extend-Leo-Chain} sub-op
 $\because$
@@ -13686,7 +13686,7 @@ $\because$
 \todo{Add ref to memoizer code to justification for above equation}
 \begin{equation}
 \label{eq-th-LIM-chain-dr-origin-15-20}
-\myparbox{Of the LIM's added which
+\myparbox{Of the LIMs added which
 satisfy
 \Eref{eq-th-LIM-chain-dr-origin-10}
 one, call it \Vlim{first} is added first
@@ -14546,7 +14546,7 @@ This means that there is a first invalid PIM created
 by that \Marpa{} parse.
 Inspection of the \Marpa{} algorithm
 \Chref{chap:marpa} shows
-that PIM's are only created by operations.
+that PIMs are only created by operations.
 
 We now proceed by elimination of subcases,
 where our subcases are the operations
@@ -14556,7 +14556,7 @@ the first invalid PIM only if it does not preserve
 validity.
 
 The \Marpa{} initializer operation creates the
-same PIM's as the \Earley{} initializer operation
+same PIMs as the \Earley{} initializer operation
 \Obref{obs:earley-set-0}.
 The \Earley{} initializer operation preserves
 validity because the \Earley{} algorithm is
@@ -14568,11 +14568,11 @@ no PIM is in the ancestry of the Initializer
 operation.
 
 The \Marpa{} scanner operation
-creates the same PIM's as the \Earley{}
+creates the same PIMs as the \Earley{}
 scanner operations
 \Obref{obs:earley-scanner-op}.
 The \Marpa{} predictor operation
-creates the same PIM's as the \Earley{}
+creates the same PIMs as the \Earley{}
 predictor operations
 \Obref{obs:earley-predictor-op}.
 These two operations preserve
@@ -14600,7 +14600,7 @@ and \Aref{alg:earley-reducer-op},
 the \Earley{} completer operation would have
 created, unless there is a LIM that ``blocks''
 \Marpa{}'s \op{Earley-Reducer}.
-Therefore the PIM's created by
+Therefore the PIMs created by
 the \Marpa{} \op{Earley-Reducer} sub-op
 are a subset of those created by the \Earley{}
 completer operation.
@@ -14621,15 +14621,15 @@ Therefore, \Marpa{} is consistent.
 \myqed
 \end{proof}
 
-\begin{definition}[Hidden and Visible PIM's]
+\begin{definition}[Hidden and Visible PIMs]
 An EIM is \dfn{hidden} if it is an element of the inside
 of a Leo edge.
-All other PIM's are \dfn{visible}.
+All other PIMs are \dfn{visible}.
 \end{definition}
 
-\begin{theorem}[\Marpa{} visible PIM's are complete]
+\begin{theorem}[\Marpa{} visible PIMs are complete]
 \Marpa{} is complete, except for the hidden
-PIM's.
+PIMs.
 \end{theorem}
 
 \begin{proof}
@@ -14643,7 +14643,7 @@ we will state some definitions for the purpose of presentation
 Intuitively
 the Earley tables are ``complete as far as X'',
 where X is some point in running of the \Marpa{} algorithm,
-if they contain all the visible valid PIM's
+if they contain all the visible valid PIMs
 for X and every prior to it in
 in the \Marpa{} algorithm.
 \begin{equation}
@@ -14651,7 +14651,7 @@ in the \Marpa{} algorithm.
 are ``complete as far as''
 Earley set \var{j},
 if every Earley set, \VVelement{S}{i}, $0 \le \var{i} \le \var{j}$,
-contains all the valid visible PIM's
+contains all the valid visible PIMs
 $\because$ DFPP.
 }
 \end{equation}
