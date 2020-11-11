@@ -9021,228 +9021,6 @@ the housekeeping time of the callee is unchanged.
 \myqed
 \end{proof}
 
-\section{Space consumption}
-\label{sec:space-consumption}
-
-\begin{theorem}[Grammar complexity]
-Setup of grammar incurs \Oc{} time,
-\Oc{} trimmed space
-and zero link space,
-all of which is charged to the parse.
-\end{theorem}
-
-\begin{proof}
-The grammar is treated as constant,
-and therefore its space and time demands are constant.
-\myqed
-\end{proof}
-
-\begin{theorem}[Earley set complexity]
-\label{th:es-complexity}
-Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
-Adding an \type{EIM} to an Earley set
-consumes \Oc{} time,
-\Oc{} trimmed space,
-and zero link space.
-The adjoin of an existing \type{EIM} (a dup)
-incurs \Oc{} time, zero trimmed space and \Oc{} link space.
-Traversal of an Earley set requires \Oc{} time per \type{EIM}.
-\end{theorem}
-
-\begin{proof}
-An Earley set is kept as a linked list.
-When \Marpa{} reaches a new current location,
-it creates an empty Earley set, which
-requires \Oc{} time,
-\Oc{} trimmed space
-and \Oc{} link space.
-Each \type{EIM} is added at the end of a linked list,
-so that each add of a \type{EIM} takes \Oc{} time
-and \Oc{} trimmed space.
-Adding an \type{EIM} requires
-zero link space because the initial link pair
-is kept in trimmed space.
-
-Link pairs are kept in a finite set of linked lists.
-The heads of the lists stored with the \type{EIM} and
-occupy trimmed space.
-The rest of the lists of links pairs occupies
-link space.
-\myqed
-\end{proof}
-
-\begin{theorem}[Rule ID Complexity]
-\label{th:rule-id-complexity}
-The function \ID{\Vrule{r}} maps each rule to an
-unique integer ID in \Oc{} time and zero space.
-A rule may be looked up by ID
-in \Oc{} time and zero space.
-Also, the entire list of rules may be traversed
-in \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-The data structure for \Vrule{r}
-contains its ID, so that the time to
-find \ID{\var{r}} is \Oc{}.
-The data structure for \Vint{g}
-contains an array for looking up rules by ID,
-so that rule lookup by ID is \Oc{}.
-In fact,
-since \Rules{\var{g}} is a constant depending on \var{g},
-the rule list is static,
-so that traversing the entire rule list requires
-\Oc{} time.
-All of these operations are accesses and none consume space.
-\myqed
-\end{proof}
-
-\begin{theorem}[Dotted Rule ID Complexity]
-\label{th:dotted-rule-id-complexity}
-The function \ID{\Vdr{x}} maps each dotted rule to
-an ID in \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-One way to assign the
-dotted rule ID's is to interate through the array
-of rules by rule ID,
-and within each rule iterate through its possible dot
-positions,
-assigning an integer to each dot position.
-The data structure for \Vrule{r},
-allows, given a dot position \var{pos},
-the ID of $\tuple{\var{r}, \var{pos}}$ to be found in \Oc{}
-time.
-Also, the data structure for \Vint{g}
-contains an array for looking up a dotted rule in \Oc{} time,
-given its ID.
-All of these operations are accesses and none consume space.
-\myqed
-\end{proof}
-
-\var{dotZeroUsed} is a bitmap with
-one bit for every rule in the grammar.
-It is used when adding predictions to an Earley set.
-
-\begin{theorem}[\var{dotZeroUsed} bitmap]
-\label{th:dotzeroused-bitmap}
-Clearing \var{dotZeroUsed} requires \Oc{} time
-and zero space.
-Bit accesses and writes take \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-The size of the bitmap is \size{\Rules{\var{g}}}.
-\Rules{\var{g}} is a constant
-that depends on the grammar \Dfref{def:context-free-grammar},
-which justifies the claim of constant time for bit reads
-bit writes, and clearing of the bitmap.
-Space for \var{dotZeroUsed} is accounted for
-a part of the space for the grammar.
-\myqed
-\end{proof}
-
-For each Earley set,
-\var{seen} is a PSL with
-one entry for every dotted rule in the grammar.
-Earley sets must not contain duplicated \type{EIM}s and
-\var{seen} is used to efficiently enforce this.
-
-\begin{theorem}[\var{seen} PSL]
-\label{th:seen-psl}
-In each Earley set,
-set up of \var{seen} consumes \Oc{} time,
-\Oc{} trimmed space
-and zero link space.
-Reads and writes of \var{seen} consume \Oc{} time
-and zero space.
-\end{theorem}
-
-\begin{proof}
-The claims of this theorem are justified
-in section \Chref{chap:per-set-lists},
-where PSL's are described in detail.
-\myqed
-\end{proof}
-
-For each Earley set,
-\var{transition} is a sparse array
-of linked lists of \type{PIM}s.
-The entries of the \var{transition} array
-are indexed by symbol.
-The \var{transition} array is for efficient lookup
-of \type{EIM} and \type{LIM} matches.
-
-\begin{theorem}[Transition Array Complexity]
-\label{th:transition-array}
-Creation of the \var{transition} array
-consumes \Oc{} time,
-\Oc{} trimmed space,
-and zero link space,
-which is charged to the \var{es}
-account.
-\end{theorem}
-
-\begin{proof}
-Since there is at most one entry for every symbol
-in the grammar,
-the number of array entries in \var{transition} is,
-\order{\size{\Vocab{\var{g}}}}.
-\Vocab{\var{g}} is a constant which depends on \Vint{g},
-and the \var{transition} array itself,
-excluding the linked lists,
-is therefore of size \Oc{}.
-From this it follows immediately that the
-Per-\type{ES} creation of \var{transition}
-consumes \Oc{} time and \Oc{} space.
-when the \type{PIM}s are created.
-The lists grow from the head, so that
-creation time for a new link in one of the
-\var{transitions}'s linked lists is \Oc{}.
-\myqed
-\end{proof}
-
-\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
-
-Writes to the \var{transition} array
-do not occur once it has been created.
-Reads of the \var{transition} array
-use the \Transition{} function.
-A call of the form
-$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
-is \Vsym{t}.
-
-\begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-set-size}
-A call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
-consumes \Oc{} time, and zero space.
-It returns a pointer to
-a linked list of \order{\Vloc{j}} size,
-that is,
-\begin{gather*}
-\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
-\end{gather*}
-\end{theorem}
-
-\begin{proof}
-A call of the function \myfn{Transitions}{}
-indexes a sparse array, and returns a pointer
-to the head of a linked list:
-this can be done in \Oc{} time.
-The claim for linked list size follows from
-the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
-the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
-and the Transition Array Complexity Theorem
-\Thref{th:transition-array}.
-A \var{transitions} array is not altered after its creation,
-and therefore calls of \myfn{Transitions}{}
-do not consume additional space.
-\end{proof}
-
 \section{Counting invocations}
 
 We first define our conventions for counting line
@@ -9271,19 +9049,23 @@ The first line of a loop is invoked
 \item once for every successful test of the test condition of the loop; and
 \item exactly once for an unsucessful, and therefore final, test
 of the test condition of the loop.
+\dispEnd
 \end{itemize}
+\end{definition}
+
 The need for a final test implies
 that the first line of the loop is invoked at last once.
 There is one successful test of the loop condition for every
 pass of the loop.
-\dispEnd
-\end{definition}
 
-Note that these definitions imply that the number of
+Note that these definitions
+\Dfref{def:line-invocation} and
+\Dfref{def:loop-invocation}
+imply that the number of
 invocations of the first line of a loop
-is not necessarily the same as the number of invocations
-of the loop.
-The two counts will only be identical if the loop has zero passes ---
+is only the same as the number of invocations
+of the loop in a trivial case.
+The two invocation counts will be identical if and only if the loop has zero passes ---
 in other words, if the loop test fails the first time.
 
 In the comments in the following fragment
@@ -9375,6 +9157,74 @@ and the per-table justifications.
 
 \chapter{The \Marpa{} algorithm}
 \label{chap:marpa}
+
+\section{Parse-setup op}
+\label{sec:parse-setup}
+
+\begin{theorem}[Grammar complexity]
+Setup of grammar incurs \Oc{} time,
+\Oc{} trimmed space
+and zero link space,
+all of which is charged to the parse.
+\end{theorem}
+
+\begin{proof}
+The grammar is treated as constant,
+and therefore its space and time demands are constant.
+\myqed
+\end{proof}
+
+\todo{Write parse-setup op section}
+
+\begin{theorem}[Rule ID Complexity]
+\label{th:rule-id-complexity}
+The function \ID{\Vrule{r}} maps each rule to an
+unique integer ID in \Oc{} time and zero space.
+A rule may be looked up by ID
+in \Oc{} time and zero space.
+Also, the entire list of rules may be traversed
+in \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+The data structure for \Vrule{r}
+contains its ID, so that the time to
+find \ID{\var{r}} is \Oc{}.
+The data structure for \Vint{g}
+contains an array for looking up rules by ID,
+so that rule lookup by ID is \Oc{}.
+In fact,
+since \Rules{\var{g}} is a constant depending on \var{g},
+the rule list is static,
+so that traversing the entire rule list requires
+\Oc{} time.
+All of these operations are accesses and none consume space.
+\myqed
+\end{proof}
+
+\begin{theorem}[Dotted Rule ID Complexity]
+\label{th:dotted-rule-id-complexity}
+The function \ID{\Vdr{x}} maps each dotted rule to
+an ID in \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+One way to assign the
+dotted rule ID's is to interate through the array
+of rules by rule ID,
+and within each rule iterate through its possible dot
+positions,
+assigning an integer to each dot position.
+The data structure for \Vrule{r},
+allows, given a dot position \var{pos},
+the ID of $\tuple{\var{r}, \var{pos}}$ to be found in \Oc{}
+time.
+Also, the data structure for \Vint{g}
+contains an array for looking up a dotted rule in \Oc{} time,
+given its ID.
+All of these operations are accesses and none consume space.
+\myqed
+\end{proof}
 
 \section{Initializer op}
 \label{sec:initializer}
@@ -10560,6 +10410,167 @@ predictions
 of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
+
+\section{ES-setup op}
+\label{sec:es-setup}
+
+\begin{theorem}[Earley set complexity]
+\label{th:es-complexity}
+Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
+Adding an \type{EIM} to an Earley set
+consumes \Oc{} time,
+\Oc{} trimmed space,
+and zero link space.
+The adjoin of an existing \type{EIM} (a dup)
+incurs \Oc{} time, zero trimmed space and \Oc{} link space.
+Traversal of an Earley set requires \Oc{} time per \type{EIM}.
+\end{theorem}
+
+\begin{proof}
+An Earley set is kept as a linked list.
+When \Marpa{} reaches a new current location,
+it creates an empty Earley set, which
+requires \Oc{} time,
+\Oc{} trimmed space
+and \Oc{} link space.
+Each \type{EIM} is added at the end of a linked list,
+so that each add of a \type{EIM} takes \Oc{} time
+and \Oc{} trimmed space.
+Adding an \type{EIM} requires
+zero link space because the initial link pair
+is kept in trimmed space.
+
+Link pairs are kept in a finite set of linked lists.
+The heads of the lists stored with the \type{EIM} and
+occupy trimmed space.
+The rest of the lists of links pairs occupies
+link space.
+\myqed
+\end{proof}
+
+\var{dotZeroUsed} is a bitmap with
+one bit for every rule in the grammar.
+It is used when adding predictions to an Earley set.
+
+\begin{theorem}[\var{dotZeroUsed} bitmap]
+\label{th:dotzeroused-bitmap}
+Clearing \var{dotZeroUsed} requires \Oc{} time
+and zero space.
+Bit accesses and writes take \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+The size of the bitmap is \size{\Rules{\var{g}}}.
+\Rules{\var{g}} is a constant
+that depends on the grammar \Dfref{def:context-free-grammar},
+which justifies the claim of constant time for bit reads
+bit writes, and clearing of the bitmap.
+Space for \var{dotZeroUsed} is accounted for
+a part of the space for the grammar.
+\myqed
+\end{proof}
+
+For each Earley set,
+\var{seen} is a PSL with
+one entry for every dotted rule in the grammar.
+Earley sets must not contain duplicated \type{EIM}s and
+\var{seen} is used to efficiently enforce this.
+
+\begin{theorem}[\var{seen} PSL]
+\label{th:seen-psl}
+In each Earley set,
+set up of \var{seen} consumes \Oc{} time,
+\Oc{} trimmed space
+and zero link space.
+Reads and writes of \var{seen} consume \Oc{} time
+and zero space.
+\end{theorem}
+
+\begin{proof}
+The claims of this theorem are justified
+in section \Chref{chap:per-set-lists},
+where PSL's are described in detail.
+\myqed
+\end{proof}
+
+For each Earley set,
+\var{transition} is a sparse array
+of linked lists of \type{PIM}s.
+The entries of the \var{transition} array
+are indexed by symbol.
+The \var{transition} array is for efficient lookup
+of \type{EIM} and \type{LIM} matches.
+
+\begin{theorem}[Transition Array Complexity]
+\label{th:transition-array}
+Creation of the \var{transition} array
+consumes \Oc{} time,
+\Oc{} trimmed space,
+and zero link space,
+which is charged to the \var{es}
+account.
+\end{theorem}
+
+\begin{proof}
+Since there is at most one entry for every symbol
+in the grammar,
+the number of array entries in \var{transition} is,
+\order{\size{\Vocab{\var{g}}}}.
+\Vocab{\var{g}} is a constant which depends on \Vint{g},
+and the \var{transition} array itself,
+excluding the linked lists,
+is therefore of size \Oc{}.
+From this it follows immediately that the
+Per-\type{ES} creation of \var{transition}
+consumes \Oc{} time and \Oc{} space.
+when the \type{PIM}s are created.
+The lists grow from the head, so that
+creation time for a new link in one of the
+\var{transitions}'s linked lists is \Oc{}.
+\myqed
+\end{proof}
+
+\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
+
+Writes to the \var{transition} array
+do not occur once it has been created.
+Reads of the \var{transition} array
+use the \Transition{} function.
+A call of the form
+$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
+is \Vsym{t}.
+
+\begin{theorem}[\myfn{Transitions}{} Complexity]
+\label{th:transitions-set-size}
+A call of the form
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+consumes \Oc{} time, and zero space.
+It returns a pointer to
+a linked list of \order{\Vloc{j}} size,
+that is,
+\begin{gather*}
+\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+A call of the function \myfn{Transitions}{}
+indexes a sparse array, and returns a pointer
+to the head of a linked list:
+this can be done in \Oc{} time.
+The claim for linked list size follows from
+the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
+the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
+and the Transition Array Complexity Theorem
+\Thref{th:transition-array}.
+A \var{transitions} array is not altered after its creation,
+and therefore calls of \myfn{Transitions}{}
+do not consume additional space.
+\end{proof}
+
+\todo{Write ES-setup op section}
 
 \section{Predictor op}
 \label{sec:predictor-op}
@@ -12146,6 +12157,11 @@ but we have yet to prove these things.
 \Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
+
+\section{Bookkeeper op}
+\label{sec:bookkeeper}
+
+\todo{Write bookkeeper op section}
 
 \section{Top level of \Marpa{}}
 
