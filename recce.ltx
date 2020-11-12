@@ -11168,12 +11168,7 @@ and
 operation of \Earley{}.
 \dispEnd
 \end{observation}
-%
-\todo{Define caller-charged, \type{EIM}-charged, link-charged}%
-\todo{By default, ``charged'' is \type{EIM}-charged}%
-\todo{Define ``new \type{EIM} pass''}%
-\todo{Define ``dup \type{EIM} pass''}%
-\todo{Define ``\type{EIM} try pass'', ``\type{EIM} try''}%
+
 \section{Reducer op}
 \label{def:reducer}
 
@@ -11233,45 +11228,39 @@ loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
 \hline
 Line&Invocations&Justification
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1/\var{call}+1/\var{pass}&
-       line \ref{line:earley-reducer-op-3}, \Obref{def:loop-invocation}, sequential execution
+    \ref{line:earley-reducer-op-3}&1/\var{try}&\Obref{def:loop-invocation},
+        this line creates a ``trial'' EIM for either a  dup or new pass
 \\ \hline
-    \ref{line:earley-reducer-op-3}&1/\var{pass}&directly,\Obref{def:loop-invocation}
+    \ref{line:earley-reducer-op-2}&1/\var{proc}+1/\var{try}&
+       line \ref{line:earley-reducer-op-3}, sequential execution,
+           \Obref{def:loop-invocation}
 \\ \hline
-    \ref{line:earley-reducer-op-4}&1/\var{pass}&
+    \ref{line:earley-reducer-op-4}&1/\var{try}&
        line \ref{line:earley-reducer-op-3}, sequential execution
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1/\var{pass}&
-       line \ref{line:earley-reducer-op-3}, sequential execution
+    \ref{line:earley-reducer-op-5}&1/\var{try}&
+       line \ref{line:earley-reducer-op-4}, sequential execution
 \\ \hline
-    \ref{line:earley-reducer-op-6}&1/\var{dup}&directly
+    \ref{line:earley-reducer-op-6}&1/\var{dup}&line adjoins a duplicate
+       EIM
+\\ \hline
+    \ref{line:earley-reducer-op-10}&1/\var{new}&line adds a new EIM
 \\ \hline
     \ref{line:earley-reducer-op-7}&1/\var{new}&
        line \ref{line:earley-reducer-op-10}, sequential execution
 \\ \hline
     \ref{line:earley-reducer-op-8}&1/\var{new}&
-       line \ref{line:earley-reducer-op-10}, sequential execution
+       line \ref{line:earley-reducer-op-7}, sequential execution
 \\ \hline
     \ref{line:earley-reducer-op-9}&1/\var{new}&
-       line \ref{line:earley-reducer-op-10}, sequential execution
-\\ \hline
-    \ref{line:earley-reducer-op-10}&1/\var{new}&directly
+       line \ref{line:earley-reducer-op-8}, sequential execution
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-1/\var{call}: ``once per procedure call''.
-1/\var{pass}: ``once per loop pass''.
+Lines are listed in order of deduction.
+1/\var{proc}: ``once per procedure call''.
+1/\var{try}: ``once per dup or new loop pass''
 1/\var{dup}: ``once per dup \type{EIM} loop pass''.
 1/\var{new}: ``once per new \type{EIM} loop pass''.
-Lines are deduced in the order
-      \ref{line:earley-reducer-op-3},
-      \ref{line:earley-reducer-op-2},
-      \ref{line:earley-reducer-op-4},
-      \ref{line:earley-reducer-op-5},
-      \ref{line:earley-reducer-op-6},
-      \ref{line:earley-reducer-op-10},
-      \ref{line:earley-reducer-op-7},
-      \ref{line:earley-reducer-op-8},
-      \ref{line:earley-reducer-op-9}.
     }
 \\ \hline
 \end{tabular}
@@ -11295,94 +11284,34 @@ control to its caller.
 \end{assumption}
 
 \begin{table}[t]
-\caption{\op{Earley-Reducer} \var{proc} account time}
-\op{Earley-Reducer} charges \Oc{} time
-to its \var{proc} account, and closes that account.
-\vspace{1ex}
-\label{tab:earley-reducer-proc-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transition-array}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
-    \AFref{alg:earley-reducer-op},
-    \Tbref{tab:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-time-charge}.}
-\\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[t]
-\caption{\op{Earley-Reducer} \var{new} account time}
-\op{Earley-Reducer} charges \Oc{} time
-to the \var{new} account for each new \type{EIM},
-and closes that account.
+\caption{\op{Earley-Reducer} Time per invocation}
 \vspace{1ex}
 \label{tab:earley-reducer-eim-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\begin{tabular}{|c|c|p{3.5in}|}
 \hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+Line&Time&Justification
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&
+    \ref{line:earley-reducer-op-2}&\Oc{}&\Thref{th:transition-array}
 \\ \hline
-    \ref{line:earley-reducer-op-3}&1&\Oc{}&&\Oc{}&
+    \ref{line:earley-reducer-op-3}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
+    \ref{line:earley-reducer-op-4}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-5}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-7}&0--1&\Oc{}&&\Oc{}&
+    \ref{line:earley-reducer-op-6}&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-8}&0--1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-7}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-8}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-9}&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{6}{|p{4.5in}|}{
-    \cuz{}
-    \Sref{sec:complexity-tables},
-    \AFref{alg:earley-reducer-op},
-    \Tbref{tab:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-time-charge}.%
-}
+\multicolumn{1}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[t]
-\caption{\op{Earley-Reducer} \var{dup} account time}
-\op{Earley-Reducer} charges \Oc{} time
-to the \var{dup} account for each dup \type{EIM},
-and closes that account.
-\vspace{1ex}
-\label{tab:earley-reducer-dup-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:earley-reducer-op-2}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:earley-reducer-op-3}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:earley-reducer-op-4}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:earley-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
-\\ \hline
-    \ref{line:earley-reducer-op-6}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Earley-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{
+\multicolumn{3}{|p{4.5in}|}{
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
@@ -11411,35 +11340,33 @@ as of the return from \op{Earley-Reducer}.
 \end{assumption}
 
 \begin{table}[t]
-\caption{\op{Earley-Reducer} \var{new} account space}
-\op{Earley-Reducer} charges \Oc{} space to the \var{new}
-account of each new \type{EIM}, and closes the account.
-\vspace{1ex}
+\caption{\op{Earley-Reducer} Space per invocation}
 \label{tab:earley-reducer-new-space}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\begin{tabular}{|c|c|c|p{1.5in}|}
 \hline
-&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+Line&Trimmed&Link&Justification
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1&0&&0&
+    \ref{line:earley-reducer-op-2}&0&0&
 \\ \hline
-    \ref{line:earley-reducer-op-3}&1&0&&0&
+    \ref{line:earley-reducer-op-3}&0&0&
 \\ \hline
-    \ref{line:earley-reducer-op-4}&1&0&&0&
+    \ref{line:earley-reducer-op-4}&0&0&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-5}&0&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-7}&1&0&&0&
+    \ref{line:earley-reducer-op-6}&0&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-    \ref{line:earley-reducer-op-8}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-7}&0&0&
 \\ \hline
-    \ref{line:earley-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-8}&0&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-9}&0&0&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
+    \ref{line:earley-reducer-op-10}&\Oc{}&0&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{6}{|p{4.5in}|}{
+    Totals&\Oc{}&\Oc{}&
+\\ \hline
+\multicolumn{4}{|p{4.5in}|}{
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
@@ -11450,39 +11377,6 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
-\caption{\op{Earley-Reducer} \var{link} account space}
-\op{Earley-Reducer} charges \Oc{} space to the \var{link}
-account of each dup \type{EIM}, and closes the account.
-\vspace{1ex}
-\label{tab:earley-reducer-link-space}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:earley-reducer-op-2}&1&0&&0&
-\\ \hline
-    \ref{line:earley-reducer-op-3}&1&0&&0&
-\\ \hline
-    \ref{line:earley-reducer-op-4}&1&0&&0&
-\\ \hline
-    \ref{line:earley-reducer-op-5}&1&0&&0&\Thref{th:seen-psl}
-\\ \hline
-    \ref{line:earley-reducer-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{
-    \cuz{}
-    \Sref{sec:complexity-tables},
-    \AFref{alg:earley-reducer-op},
-    \Tbref{tab:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-space-charge}.
-}
-\\ \hline
-\end{tabular}
-\end{table}
 
 \begin{algorithm}[t]
 \caption{\op{Leo-Reducer}}
