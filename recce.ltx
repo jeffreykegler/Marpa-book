@@ -382,6 +382,7 @@
 \newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Seen}[1]{\ensuremath{\mymathop{Seen}(#1)}}
+\newcommand{\SetSeen}[1]{\ensuremath{\mymathop{SetSeen}(#1)}}
 \newcommand{\Sfx}[1]{\ensuremath{\mymathop{Sfx}(#1)}}
 \newcommand{\Source}[1]{\ensuremath{\mymathop{Source}(#1)}}
 \newcommand{\Space}[1]{\ensuremath{\mymathop{Space}(#1)}}
@@ -10487,6 +10488,11 @@ For each Earley set,
 one entry for every dotted rule in the grammar.
 Earley sets must not contain duplicated \type{EIM}s and
 \var{seen} is used to efficiently enforce this.
+\myfn{Seen}{\Veim{x}} is a function which returns
+the EIM equal to \var{x} if it already exists,
+and $\Lambda$ otherwise.
+\myfn{SetSeen}{\Veim{x}} is a function which adds
+\var{x} to the PSL.
 
 \begin{theorem}[\var{seen} PSL]
 \label{th:seen-psl}
@@ -10494,7 +10500,8 @@ In each Earley set,
 set up of \var{seen} consumes \Oc{} time,
 \Oc{} trimmed space
 and zero link space.
-Reads and writes of \var{seen} consume \Oc{} time
+Each call of \Seen{} and \SetSeen{} consumes
+consumes \Oc{} time
 and zero space.
 \end{theorem}
 
@@ -11173,26 +11180,34 @@ operation of \Earley{}.
 \section{Reducer op}
 \label{def:reducer}
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
 \caption{\var{Earley-Reducer}}
 \label{alg:earley-reducer-op}
 \begin{algorithmic}[1]
 \Procedure{Earley-Reducer}{\VVelement{S}{j},\Veimset{matches},\Veim{cuz}}
 \For{every $\Veim{match} \in \Veimset{matches}$}
       \label{line:earley-reducer-op-2}
-\State $\Veim{trial} = \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}$
+\State $\Veim{trial} \gets \tuple{
+     \begin{gathered}
+        \Next{\DR{\var{match}}},
+        \\ \Origin{\var{match}}, \Current{\VVelement{S}{j}}
+     \end{gathered}
+        }
+        $
       \label{line:earley-reducer-op-3}
-\State $\Vlp{lp} = \tuple{\Veim{match},\Veim{cuz}}$
+\State $\Vlp{lp} \gets \tuple{\Veim{match},\Veim{cuz}}$
       \label{line:earley-reducer-op-4}
-\If{$\Seen{\Veim{trial}}$}
+\State $\var{found} \gets \Seen{\Veim{trial}}$
+      \label{line:earley-reducer-op-4-50}
+\If{$\var{found} \ne \Lambda$}
       \label{line:earley-reducer-op-5}
-    \State Add \var{lp} to \LinkPairs{\var{trial}}
+    \State Add \var{lp} to \LinkPairs{\Veim{found}}
       \label{line:earley-reducer-op-6}
 \Else
       \label{line:earley-reducer-op-7}
-    \State $\Seen{\Veim{trial}} = \var{true}$
+    \State $\SetSeen{\Veim{trial}}$
       \label{line:earley-reducer-op-8}
-    \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+    \State $\LinkPairs{\var{trial}} \gets \set{\var{lp}}$
       \label{line:earley-reducer-op-9}
     \State Add \var{trial} to \VVelement{S}{j}
       \label{line:earley-reducer-op-10}
@@ -11201,6 +11216,8 @@ operation of \Earley{}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 \begin{definition}[\op{Earley-reducer} passes]
 \label{def:op-earley-reducer-passes}
@@ -11225,16 +11242,19 @@ we see that
 is the only line at which an EIM is added to an ES.
 \item Line \ref{line:earley-reducer-op-9}
 is the only line at which a duplicate EIM is adjoined to an
-ES in \Aref{alg:earley-reducer-op}.
+ES.
 \item One of lines \ref{line:earley-reducer-op-5}
 or \ref{line:earley-reducer-op-9} is always executed,
 but never both.  \myqed
 \end{itemize}
 \end{proof}
 
-\begin{table}[t]
-\caption{\op{Earley-Reducer} line invocations}
+\FloatBarrier
+
+\begin{table}[H]
 \label{tab:earley-reducer-invocations}
+\caption{\op{Earley-Reducer} line invocations}
+\vspace{1ex}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
 Line&Invocations&Justification
@@ -11249,8 +11269,11 @@ Line&Invocations&Justification
     \ref{line:earley-reducer-op-4}&1/\var{try}&
        line \ref{line:earley-reducer-op-3}, sequential execution
 \\ \hline
-    \ref{line:earley-reducer-op-5}&1/\var{try}&
+    \ref{line:earley-reducer-op-4-50}&1/\var{try}&
        line \ref{line:earley-reducer-op-4}, sequential execution
+\\ \hline
+    \ref{line:earley-reducer-op-5}&1/\var{try}&
+       line \ref{line:earley-reducer-op-4-50}, sequential execution
 \\ \hline
     \ref{line:earley-reducer-op-6}&1/\var{dup}&line adjoins a duplicate
        EIM
@@ -11267,12 +11290,12 @@ Line&Invocations&Justification
        line \ref{line:earley-reducer-op-8}, sequential execution
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
+Lines are listed in order of deduction.
 See the definition
-\Dfref{def:op-earley-reducer-passes}
+\Dfref{def:op-earley-reducer-passes} of,
 and theorem
 \Thref{th:op-earley-reducer-passes}
-for \op{Earley-reducer} passes.
-Lines are listed in order of deduction.
+for, \op{Earley-reducer} passes.
 1/\var{proc}: ``once per procedure call''.
 1/\var{try}: ``once per dup or new loop pass''
 1/\var{dup}: ``once per dup \type{EIM} loop pass''.
@@ -11282,10 +11305,10 @@ Lines are listed in order of deduction.
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[H]
+\label{tab:earley-reducer-time}
 \caption{\op{Earley-Reducer} Time per invocation}
 \vspace{1ex}
-\label{tab:earley-reducer-time}
 \begin{tabular}{|c|c|p{3.5in}|}
 \hline
 Line&Time&Justification
@@ -11299,7 +11322,9 @@ Line&Time&Justification
 \\ \hline
     \ref{line:earley-reducer-op-4}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-4-50}&\Oc{}&\Thref{th:seen-psl}
+\\ \hline
+    \ref{line:earley-reducer-op-5}&\Oc{}&
 \\ \hline
     \ref{line:earley-reducer-op-6}&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
@@ -11312,7 +11337,7 @@ Line&Time&Justification
     \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-    \cuz{}
+    See
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
     \Tbref{tab:earley-reducer-invocations}.
@@ -11321,9 +11346,12 @@ Line&Time&Justification
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
-\caption{\op{Earley-Reducer} Time worksheet}
+\FloatBarrier
+
+\begin{table}[H]
 \label{tab:earley-reducer-time-worksheet}
+\caption{\op{Earley-Reducer} Time worksheet}
+\vspace{1ex}
 \begin{tabular}{|c|c|c|c|}
 \hline
 \multicolumn{1}{|c}{}&\multicolumn{3}{|c|}{Accounts}
@@ -11336,26 +11364,26 @@ Line&\var{proc}&\var{new}&\var{dup}
 \\ \cline{1-4}
     \ref{line:earley-reducer-op-4}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
+    \ref{line:earley-reducer-op-4-50}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
     \ref{line:earley-reducer-op-5}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-6}&&\Oc{}&\Oc{}
+    \ref{line:earley-reducer-op-6}&&&\Oc{}
 \\ \cline{1-4}
     \ref{line:earley-reducer-op-7}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-8}&&\Oc{}&\Oc{}
+    \ref{line:earley-reducer-op-8}&&\Oc{}&
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-9}&&\Oc{}&\Oc{}
+    \ref{line:earley-reducer-op-9}&&\Oc{}&
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-10}&&\Oc{}&\Oc{}
+    \ref{line:earley-reducer-op-10}&&\Oc{}&
 \\ \cline{1-4}
     Totals&\Oc{}&\Oc{}&\Oc{}
 \\ \hline
 \end{tabular}
 \;\;\parbox{2.5in}{
     \raggedright
-    Notes on Table \Tbref{tab:earley-reducer-time-worksheet}:
-    Source is
-    \Tbref{tab:earley-reducer-time}.
+    See \Tbref{tab:earley-reducer-time}.
     Charges to \var{proc} are for every call.
     Charges to \var{new} are
     only for calls where \Veim{trial} is a new EIM.
@@ -11364,8 +11392,10 @@ Line&\var{proc}&\var{new}&\var{dup}
 }
 \end{table}
 
+\FloatBarrier
+
 \begin{theorem}[\op{Earley-Reducer} time]
-\label[th:earley-reducer-time]
+\label{th:earley-reducer-time}
 The time that \op{Earley-Reducer} incurs may
 be accounted for as follows:
 \begin{itemize}
@@ -11394,9 +11424,12 @@ and the \op{Earley-reducer} Time Worksheet
 \myqed
 \end{proof}
 
-\begin{table}[t]
-\caption{\op{Earley-Reducer} Space per invocation}
+\FloatBarrier
+
+\begin{table}[H]
 \label{tab:earley-reducer-space}
+\caption{\op{Earley-Reducer} Space per invocation}
+\vspace{1ex}
 \begin{tabular}{|c|c|c|p{1.5in}|}
 \hline
 Line&Trimmed&Link&Justification
@@ -11406,6 +11439,8 @@ Line&Trimmed&Link&Justification
     \ref{line:earley-reducer-op-3}&0&0&
 \\ \hline
     \ref{line:earley-reducer-op-4}&0&0&
+\\ \hline
+    \ref{line:earley-reducer-op-4-50}&0&0&
 \\ \hline
     \ref{line:earley-reducer-op-5}&0&0&\Thref{th:seen-psl}
 \\ \hline
@@ -11420,7 +11455,7 @@ Line&Trimmed&Link&Justification
     \ref{line:earley-reducer-op-10}&\Oc{}&0&\Thref{th:es-complexity}
 \\ \hline
 \multicolumn{4}{|p{4.5in}|}{
-    \cuz{}
+    See
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
     \Tbref{tab:earley-reducer-invocations}.
@@ -13042,6 +13077,8 @@ This theorem is the contrapositive of \Thref{th:ambig-eim-ambig-g}. \myqed
 
 \chapter{Per-set lists}
 \label{chap:per-set-lists}
+
+\todo{Document complexity claims for \Seen{} and \SetSeen{}}
 
 In the general case,
 where \var{x} is an arbitrary datum,
