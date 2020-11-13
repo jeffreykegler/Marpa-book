@@ -9003,7 +9003,6 @@ pseudocode procedure (``callee''), caller may treat \Oc{} time
 as part of the ``housekeeping''
 for callee.
 \myqed
-\todo{Move this theorem to end of next chapter?}
 \end{theorem}
 
 \begin{proof}
@@ -11203,25 +11202,35 @@ operation of \Earley{}.
 \end{algorithmic}
 \end{algorithm}
 
-\begin{observation}[\op{Earley-Reducer} passes]
-\label{obs:earley-reducer-passes}
-The loop of lines
-\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
-is the only one in
-\op{Earley-Reducer}.
-Every pass of loop
-\enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}
-is
-\begin{itemize}
-\item exactly one \type{EIM} try pass; and
-\item a new \type{EIM} pass or a dup \type{EIM} pass.  \dispEnd{}
-\end{itemize}
-\end{observation}
+\begin{definition}[\op{Earley-reducer} passes]
+\label{def:op-earley-reducer-passes}
+A call of \op{Earley-reduced} is a \dfn{new pass}
+if it adds a new EIM to an ES.
+A call of \op{Earley-reduced} is a \dfn{dup pass}
+if it adjoins a duplicate EIM to an ES.
+\dispEnd
+\end{definition}
 
-For the purposes of analyzing \op{Earley-Reducer},
-``loop pass'', or just ``pass'',
-refers to a pass of
-loop \enRefs{line:earley-reducer-op-2}{line:earley-reducer-op-10}.
+\begin{theorem}[\op{Earley-reducer} passes]
+\label{th:op-earley-reducer-passes}
+Every call of \op{Earley-reducer} is either
+a new or a dup pass, but never both.
+\end{theorem}
+
+\begin{proof}
+From examination of \Aref{alg:earley-reducer-op},
+we see that
+\begin{itemize}
+\item Line \ref{line:earley-reducer-op-5}
+is the only line at which an EIM is added to an ES.
+\item Line \ref{line:earley-reducer-op-9}
+is the only line at which a duplicate EIM is adjoined to an
+ES in \Aref{alg:earley-reducer-op}.
+\item One of lines \ref{line:earley-reducer-op-5}
+or \ref{line:earley-reducer-op-9} is always executed,
+but never both.  \myqed
+\end{itemize}
+\end{proof}
 
 \begin{table}[t]
 \caption{\op{Earley-Reducer} line invocations}
@@ -11258,6 +11267,11 @@ Line&Invocations&Justification
        line \ref{line:earley-reducer-op-8}, sequential execution
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
+See the definition
+\Dfref{def:op-earley-reducer-passes}
+and theorem
+\Thref{th:op-earley-reducer-passes}
+for \op{Earley-reducer} passes.
 Lines are listed in order of deduction.
 1/\var{proc}: ``once per procedure call''.
 1/\var{try}: ``once per dup or new loop pass''
@@ -11268,23 +11282,6 @@ Lines are listed in order of deduction.
 \end{tabular}
 \end{table}
 
-\begin{assumption}[\op{Earley-Reducer} time charge]
-\label{asm:earley-reducer-time-charge}
-  For the purpose of complexity analysis,
-  our strategy in \op{Earley-Reducer} is to charge time
-  \begin{itemize}
-  \item to the \var{new} account of \Veim{trial},
-      if the time is consumed by a new \type{EIM} pass;
-  \item to the \var{dup} account of \Veim{trial},
-      if the time is consumed by a dup \type{EIM} pass; and
-  \item to the \var{proc} account of \op{Earley-Reducer},
-      otherwise.
-  \end{itemize}
-\op{Earley-Reducer} closes all of these accounts when it returns
-control to its caller.
-      \dispEnd
-\end{assumption}
-
 \begin{table}[t]
 \caption{\op{Earley-Reducer} Time per invocation}
 \vspace{1ex}
@@ -11293,7 +11290,10 @@ control to its caller.
 \hline
 Line&Time&Justification
 \\ \hline
-    \ref{line:earley-reducer-op-2}&\Oc{}&\Thref{th:transition-array}
+    \ref{line:earley-reducer-op-2}&\Oc{}&
+        \Veimset{match} is a pointer to the head of a linked list,
+        as returned by \myfn{Transition}{}
+        \Thref{th:transition-array}.
 \\ \hline
     \ref{line:earley-reducer-op-3}&\Oc{}&
 \\ \hline
@@ -11315,29 +11315,11 @@ Line&Time&Justification
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \Tbref{tab:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-time-charge}.%
+    \Tbref{tab:earley-reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{assumption}[\op{Earley-Reducer} space charge]
-\label{asm:earley-reducer-space-charge}
-  For the purpose of complexity analysis,
-  we assume that direct space in \op{Earley-Reducer} is
-  \begin{itemize}
-  \item charged to the \var{new} account of the newly created \type{EIM},
-     if it is consumed by a new \type{EIM} loop pass of \op{Earley-Reducer}; and
-  \item charged to the \var{link} account of a new ambiguous link pair,
-     if it is consumed by a dup \type{EIM} loop pass of \op{Earley-Reducer}.
-  \end{itemize}
-Note that space is not consumed by
-\op{Earley-Reducer} outside of a loop pass.
-    The \var{new} and \var{link} accounts are closed
-as of the return from \op{Earley-Reducer}.
-     \dispEnd
-\end{assumption}
 
 \begin{table}[t]
 \caption{\op{Earley-Reducer} Time worksheet}
@@ -11382,6 +11364,36 @@ Line&\var{proc}&\var{new}&\var{dup}
 }
 \end{table}
 
+\begin{theorem}[\op{Earley-Reducer} time]
+\label[th:earley-reducer-time]
+The time that \op{Earley-Reducer} incurs may
+be accounted for as follows:
+\begin{itemize}
+\item \label{item:th-earley-reducer-time-1}
+By charging \Oc{} time to the \var{new} account of
+\Veim{trial}, when \var{eim} is added to the current ES.
+\item \label{item:th-earley-reducer-time-2}
+By charging \Oc{} time to the \var{new} account of
+\Veim{trial}, when \var{eim} is a duplicate of an EIM
+already in the current ES.
+\end{itemize}
+\end{theorem}
+
+\begin{proof}
+By the Procedure Overhead Theorem
+\Thref{th:procedure-overhead-discard},
+we may ignore \var{proc} time.
+The theorem then follows from
+the definition
+\Dfref{def:op-earley-reducer-passes}
+and theorem
+\Thref{th:op-earley-reducer-passes}
+for \op{Earley-reducer} passes,
+and the \op{Earley-reducer} Time Worksheet
+\Tbref{tab:earley-reducer-time-worksheet}.
+\myqed
+\end{proof}
+
 \begin{table}[t]
 \caption{\op{Earley-Reducer} Space per invocation}
 \label{tab:earley-reducer-space}
@@ -11411,13 +11423,13 @@ Line&Trimmed&Link&Justification
     \cuz{}
     \Sref{sec:complexity-tables},
     \AFref{alg:earley-reducer-op},
-    \Tbref{tab:earley-reducer-invocations},
-    \AsmFref{asm:earley-reducer-space-charge}.
+    \Tbref{tab:earley-reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
 
+\FloatBarrier
 
 \begin{algorithm}[t]
 \caption{\op{Leo-Reducer}}
