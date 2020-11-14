@@ -11254,8 +11254,9 @@ but never both.  \myqed
 \FloatBarrier
 
 \begin{table}[H]
-\label{tab:earley-reducer-invocations}
-\caption{\op{Earley-reducer} line invocations}
+\caption{
+    \label{tab:earley-reducer-invocations}
+    \op{Earley-reducer} line invocations}
 \vspace{1ex}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
@@ -11349,8 +11350,9 @@ Line&Time&Justification
 \FloatBarrier
 
 \begin{table}[H]
-\label{tab:earley-reducer-time-worksheet}
-\caption{\op{Earley-reducer} time worksheet}
+\caption{
+    \label{tab:earley-reducer-time-worksheet}
+    \op{Earley-reducer} time worksheet}
 \vspace{1ex}
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -11427,8 +11429,9 @@ and the \op{Earley-reducer} time worksheet
 \FloatBarrier
 
 \begin{table}[H]
-\label{tab:earley-reducer-space}
-\caption{\op{Earley-reducer} space per invocation}
+\caption{
+    \label{tab:earley-reducer-space}
+    \op{Earley-reducer} space per invocation}
 \vspace{1ex}
 \begin{tabular}{|c|c|c|p{1.5in}|}
 \hline
@@ -11469,7 +11472,7 @@ The trimmed space that \op{Earley-reducer} incurs may
 be accounted for
 by charging \Oc{} trimmed space to the \var{new} account of
 \Veim{trial}.
-Trimmed space need only be charged
+Trimmed space needs to be charged only
 for those calls of \op{Earley-reducer} in which
 \var{trial} is not already in the current ES.
 \end{theorem}
@@ -11492,7 +11495,7 @@ The link space that \op{Earley-reducer} incurs may
 be accounted for
 by charging \Oc{} link space to the \var{dup} account of
 \Veim{trial}.
-Link space need only be charged
+Link space needs to be charged only
 for those calls of \op{Earley-reducer} in which
 \var{trial} is a duplicate
 of an EIM already in the current ES.
@@ -11736,49 +11739,90 @@ and the \op{Leo-reducer} time worksheet
 
 \todo{TO HERE Fri 13 Nov 2020 08:59:51 PM EST}
 
-\begin{table}[t]
-\caption{Inclusive \type{EIM}-charged space
-    for each new \type{EIM} loop pass of \op{Leo-reducer}}
-\label{tab:leo-reducer-eim-space}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\begin{table}[H]
+\caption{
+    \label{tab:leo-reducer-space}
+    \op{Leo-reducer} space per invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|p{1.5in}|}
 \hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+Line&Trimmed&Link&Justification
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1&0&&0&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-2}&&&
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-3}&&&
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{0}&
+    \ref{line:leo-reducer-op-3-50}&&&
 \\ \hline
-\multicolumn{6}{|p{4.5in}|}{See
+    \ref{line:leo-reducer-op-4}&&&
+\\ \hline
+    \ref{line:leo-reducer-op-5}&&\Oc{}&\Thref{th:es-complexity}
+\\ \hline
+    \ref{line:leo-reducer-op-6}&&&
+\\ \hline
+    \ref{line:leo-reducer-op-7}&&&
+\\ \hline
+    \ref{line:leo-reducer-op-8}&&&
+\\ \hline
+    \ref{line:leo-reducer-op-9}&\Oc{}&&\Thref{th:es-complexity}
+\\ \hline
+\multicolumn{4}{|p{4.5in}|}{See
     \AFref{alg:leo-reducer-op},
     \Tbref{tab:leo-reducer-invocations}.}
 \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
-\caption{Inclusive link-charged space
-    for each dup \type{EIM} loop pass of \op{Leo-reducer}}
-\label{tab:leo-reducer-link-space}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:leo-reducer-op-5}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
-\\ \hline
-    \ref{line:leo-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|p{4.5in}|}{See
-    \AFref{alg:leo-reducer-op},
-    \Tbref{tab:leo-reducer-invocations}.}
-\\ \hline
-\end{tabular}
-\end{table}
+\FloatBarrier
+
+\begin{theorem}[\op{Leo-reducer} trimmed space]
+\label{th:leo-reducer-trimmed-space}
+The trimmed space that \op{Leo-reducer} incurs may
+be accounted for
+by charging \Oc{} trimmed space to the \var{new} account of
+\Veim{trial}.
+Trimmed space needs to be charged only
+for those calls of \op{Leo-reducer} in which
+\var{trial} is not already in the current ES.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the definition
+\Dfref{def:op-leo-reducer-passes}
+and theorem
+\Thref{th:op-leo-reducer-passes}
+for \op{Leo-reducer} passes,
+and the \op{Leo-reducer} space table
+\Tbref{tab:leo-reducer-space}.
+\myqed
+\end{proof}
+
+\begin{theorem}[\op{Leo-reducer} link space]
+\label{th:leo-reducer-link-space}
+The link space that \op{Leo-reducer} incurs may
+be accounted for
+by charging \Oc{} link space to the \var{dup} account of
+\Veim{trial}.
+Link space needs to be charged only
+for those calls of \op{Leo-reducer} in which
+\var{trial} is a duplicate
+of an EIM already in the current ES.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the definition
+\Dfref{def:op-leo-reducer-passes}
+and theorem
+\Thref{th:op-leo-reducer-passes}
+for \op{Leo-reducer} passes,
+and the \op{Leo-reducer} space table
+\Tbref{tab:leo-reducer-space}.
+\myqed
+\end{proof}
+
+\FloatBarrier
 
 \begin{algorithm}[H]
 \caption{\op{Reducer}}
