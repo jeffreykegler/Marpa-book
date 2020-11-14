@@ -11853,7 +11853,7 @@ and the \op{Leo-reducer} space table
 \end{algorithmic}
 \end{algorithm}
 
-\begin{table}[t]
+\begin{table}[H]
 \caption{Line invocations for \op{Reducer}}
 \label{tab:reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
@@ -11902,40 +11902,7 @@ Lines are deduced in the order
 \end{tabular}
 \end{table}
 
-For the purposes of analyzing \op{Reducer},
-``loop pass'', or just ``pass'',
-refers to a pass of
-loop \enRefs{line:reducer-op-2}{line:reducer-op-9}.
-Each loop pass is exactly one of a ``\type{LIM} pass'' or an ``\type{EIM} pass''.
-It is a \type{LIM} pass if it invokes \op{Leo-reducer} and
-an \type{EIM} pass if it invokes \op{Earley-reducer}.
-
-\begin{theorem}[\op{Reducer} invocations]
-\label{th:reducer-invocations}
-Line invocations for
-\op{Reducer} are as in
-\Tbref{tab:reducer-invocations}.
-\end{theorem}
-
-\begin{proof}
-By \Tbref{tab:reducer-invocations}.
-\myqed
-\end{proof}
-
-\begin{assumption}[\op{Reducer} time charge]
-\label{asm:reducer-time-charge}
-  For the purpose of complexity analysis,
-  we assume that direct time in \op{Reducer}
-  is
-  \begin{itemize}
-  \item charged to the \var{eim} account of, \Veim{cuz},
-  the \type{EIM} that is the loop variable,
-  if it is consumed by a loop pass; and
-  \item charged to the \var{caller} account of \op{Reducer}, otherwise. \dispEnd
-  \end{itemize}
-\end{assumption}
-
-\begin{table}[t]
+\begin{table}[H]
 \caption{Inclusive open time charged to \var{caller} account
   for \op{Reducer}}
 \label{tab:reducer-proc-time}
@@ -11949,17 +11916,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
-    \cuz{}
-    \Sref{sec:complexity-tables},
+    See
     \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations},
-    \AsmFref{asm:reducer-time-charge}.%
+    \ThFref{th:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\begin{table}[H]
 \caption{Inclusive open time charged to \var{eim}
   account of each \Veim{cuz} by \op{Reducer}}
 \label{tab:reducer-eim-time}
@@ -11991,34 +11956,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
-    \cuz{}
-    \Sref{sec:complexity-tables},
-    \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations},
-    \AsmFref{asm:reducer-time-charge}.
+    See \AFref{alg:reducer-op},
+    \ThFref{th:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{theorem}[\op{Reducer} time]
-\label{th:reducer-time}
-Inclusive time consumed by \op{Reducer}
-is
-\begin{itemize}
-\item \Oc{} charged to the \var{caller} account of \op{Reducer};
-and
-\item \Oc{} charged to \var{eim} account
-of every \type{EIM} in \VVelement{S}{j},
-at the time of the return from \op{Reducer}.
-\end{itemize}
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Tbref{tab:reducer-proc-time} and
-\Tbref{tab:reducer-eim-time}.
-\end{proof}
 
 \begin{table}[t]
 \caption{Open space charged
@@ -12052,25 +11995,12 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{4}{|l}{Total for \op{Reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
-    \cuz{}
-    \Sref{sec:complexity-tables},
-    \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations},
-    Note that space was charged
-    by \op{Leo-reducer} in line \ref{line:reducer-op-8} and
-    by \op{Earley-reducer} in line \ref{line:reducer-op-10},
-    but to closed accounts.
+    See \AFref{alg:reducer-op},
+    \ThFref{th:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
-
-\begin{theorem}[\op{Reducer} space]
-\label{th:reducer-space}
-Per \Tbref{tab:reducer-space},
-\op{Reducer} does not charge any space to
-open accounts.
-\end{theorem}
 
 \todo{Finish reducer op}
 
