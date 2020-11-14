@@ -11509,22 +11509,29 @@ and the \op{Earley-reducer} Time Worksheet
 
 \FloatBarrier
 
-\begin{algorithm}[t]
-\caption{\op{Leo-Reducer}}
+\begin{algorithm}[H]
+\caption{\op{Leo-reducer}}
 \label{alg:leo-reducer-op}
 \begin{algorithmic}[1]
-\Procedure{Leo-Reducer}{\VVelement{S}{j},\Vlim{blocker},\Veim{cuz}}
-\State $\Veim{trial} = \tuple{\Next{\DR{\var{blocker}}},\Origin{\var{blocker}}}$
+\Procedure{Leo-reducer}{\VVelement{S}{j},\Vlim{blocker},\Veim{cuz}}
+\State $\Veim{trial} \gets \tuple{
+     \begin{gathered}
+        \Next{\DR{\var{blocker}}},
+        \\ \Origin{\var{blocker}}, \Current{\VVelement{S}{j}}
+     \end{gathered}
+        }$
   \label{line:leo-reducer-op-2}
 \State $\Vlp{lp} = \tuple{\Vlim{blocker},\Veim{cuz}}$
   \label{line:leo-reducer-op-3}
-\If{$\Seen{\Veim{trial}}$}
+\State $\var{found} \gets \Seen{\Veim{trial}}$
+  \label{line:leo-reducer-op-3-50}
+\If{$\var{found} \ne \Lambda$}
   \label{line:leo-reducer-op-4}
-    \State Add \var{lp} to \LinkPairs{\var{trial}}
+\State Add \var{lp} to \LinkPairs{\Veim{found}}
   \label{line:leo-reducer-op-5}
 \Else
   \label{line:leo-reducer-op-6}
-    \State $\Seen{\Veim{trial}} = \var{true}$
+    \State $\SetSeen{\Veim{trial}}$
   \label{line:leo-reducer-op-7}
     \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
   \label{line:leo-reducer-op-8}
@@ -11535,30 +11542,64 @@ and the \op{Earley-reducer} Time Worksheet
 \end{algorithmic}
 \end{algorithm}
 
-\begin{observation}[\op{Leo-Reducer} calls]
-\label{obs:leo-reducer-calls}
-Every call of
-\op{Leo-Reducer} is
-a new \type{EIM} pass or a dup \type{EIM} pass,
-but never both.  \dispEnd{}
-\end{observation}
+\FloatBarrier
+
+\begin{definition}[\op{Leo-reducer} passes]
+\label{def:op-leo-reducer-passes}
+A call of \op{Leo-reducer} is a \dfn{new pass}
+if it adds a new EIM to an ES.
+A call of \op{Leo-reducer} is a \dfn{dup pass}
+if it adjoins a duplicate EIM to an ES.
+\dispEnd
+\end{definition}
+
+\begin{theorem}[\op{Leo-reducer} passes]
+\label{th:op-leo-reducer-passes}
+Every call of \op{Leo-reducer} is either
+a new or a dup pass, but never both.
+\end{theorem}
+
+\begin{proof}
+From examination of \Aref{alg:leo-reducer-op},
+we see that
+\begin{itemize}
+\item Line \ref{line:leo-reducer-op-5}
+is the only line at which a duplicate EIM is adjoined to an
+ES.
+\item Line \ref{line:leo-reducer-op-9}
+is the only line at which an EIM is added to an ES.
+\item One of lines \ref{line:leo-reducer-op-5}
+or \ref{line:leo-reducer-op-9} is always executed,
+but never both.  \myqed
+\end{itemize}
+\end{proof}
+
+\FloatBarrier
 
 \begin{table}[t]
-\caption{Line invocations for \op{Leo-Reducer}}
+\caption{Line invocations for \op{Leo-reducer}}
 \label{tab:leo-reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
 Line&Invocations&Justification
 \\ \hline
-    \ref{line:leo-reducer-op-2}&1/\var{try}&directly,\Obref{def:loop-invocation}
+    \ref{line:leo-reducer-op-2}&1/\var{try}&
+        this line creates a ``trial'' EIM for either a  dup or new pass
 \\ \hline
     \ref{line:leo-reducer-op-3}&1/\var{try}&
        line \ref{line:leo-reducer-op-2}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1/\var{try}&
-       line \ref{line:leo-reducer-op-2}, sequential execution
+    \ref{line:leo-reducer-op-3-50}&1/\var{try}&
+       line \ref{line:leo-reducer-op-3}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1/\var{dup}&directly
+    \ref{line:leo-reducer-op-4}&1/\var{try}&
+       line \ref{line:leo-reducer-op-3-50}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-5}&1/\var{dup}&
+        line adjoins a duplicate EIM
+\\ \hline
+    \ref{line:leo-reducer-op-9}&1/\var{new}&
+        line adds a new EIM
 \\ \hline
     \ref{line:leo-reducer-op-6}&1/\var{new}&
        line \ref{line:leo-reducer-op-9}, sequential execution
@@ -11569,30 +11610,22 @@ Line&Invocations&Justification
     \ref{line:leo-reducer-op-8}&1/\var{new}&
        line \ref{line:leo-reducer-op-9}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1/\var{new}&directly
-\\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-1/\var{try}: ``once per \type{EIM} try''.
-1/\var{dup}: ``once per dup \type{EIM}''.
-1/\var{new}: ``once per new \type{EIM}''.
-Lines are deduced in the order
-      \ref{line:leo-reducer-op-2},
-      \ref{line:leo-reducer-op-3},
-      \ref{line:leo-reducer-op-4},
-      \ref{line:leo-reducer-op-5},
-      \ref{line:leo-reducer-op-9},
-      \ref{line:leo-reducer-op-6},
-      \ref{line:leo-reducer-op-7},
-      \ref{line:leo-reducer-op-8}.
+Lines are listed in order of deduction.
+1/\var{try}: ``once per dup or new call''
+1/\var{dup}: ``once per dup \type{EIM} call''.
+1/\var{new}: ``once per new \type{EIM} call''.
     }
 \\ \hline
 \end{tabular}
 \end{table}
 
+\todo{TO HERE Fri 13 Nov 2020 08:59:51 PM EST}
+
 \begin{theorem}[\proc{Leo-reducer} invocations]
 \label{th:leo-reducer-invocations}
 Line invocations for
-\op{Leo-Reducer} are as in
+\op{Leo-reducer} are as in
 \Tbref{tab:leo-reducer-invocations}.
 \end{theorem}
 
@@ -11602,7 +11635,7 @@ By \Tbref{tab:leo-reducer-invocations}.
 \end{proof}
 
 \begin{table}[t]
-\caption{Inclusive time per \type{EIM} try of \op{Leo-Reducer}}
+\caption{Inclusive time per \type{EIM} try of \op{Leo-reducer}}
 \label{tab:leo-reducer-eim-time}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11625,7 +11658,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-9}&0--1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     \cuz{}
@@ -11638,17 +11671,17 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{assumption}[\op{Leo-Reducer} time charge]
+\begin{assumption}[\op{Leo-reducer} time charge]
 \label{asm:leo-reducer-time-charge}
   For the purpose of complexity analysis,
-  we assume that direct time in \op{Leo-Reducer}
+  we assume that direct time in \op{Leo-reducer}
   is
   charged to an \type{EIM} try.
 \end{assumption}
 
-\begin{theorem}[\op{Leo-Reducer} time]
+\begin{theorem}[\op{Leo-reducer} time]
 \label{th:leo-reducer-time}
-Inclusive time consumed by \op{Leo-Reducer}
+Inclusive time consumed by \op{Leo-reducer}
 is \Oc{} charged to each \type{EIM} try.
 \end{theorem}
 
@@ -11658,7 +11691,7 @@ The theorem follows from
 \end{proof}
 
 \begin{table}[t]
-\caption{Zero \type{EIM} space lines for \op{Leo-Reducer}}
+\caption{Zero \type{EIM} space lines for \op{Leo-reducer}}
 \label{tab:leo-reducer-zero-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11677,7 +11710,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-8}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
+\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     \cuz{}
@@ -11692,7 +11725,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 
 \begin{table}[t]
 \caption{Inclusive \type{EIM}-charged space
-    for each new \type{EIM} loop pass of \op{Leo-Reducer}}
+    for each new \type{EIM} loop pass of \op{Leo-reducer}}
 \label{tab:leo-reducer-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11703,7 +11736,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{0}&
+\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{0}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:leo-reducer-op},
@@ -11713,24 +11746,24 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{assumption}[\op{Leo-Reducer} space charge]
+\begin{assumption}[\op{Leo-reducer} space charge]
 \label{asm:leo-reducer-space-charge}
   For the purpose of complexity analysis,
-  we assume that direct space in \op{Leo-Reducer} is
+  we assume that direct space in \op{Leo-reducer} is
   \begin{itemize}
   \item charged to the \var{new} account of the newly created \type{EIM},
-     if it is consumed by a new \type{EIM} call of \op{Leo-Reducer}; and
+     if it is consumed by a new \type{EIM} call of \op{Leo-reducer}; and
   \item charged to the \var{link} account of a new ambiguous link pair,
-     if it is consumed by a dup \type{EIM} call of \op{Leo-Reducer}.
+     if it is consumed by a dup \type{EIM} call of \op{Leo-reducer}.
   \end{itemize}
     The \var{new} and \var{link} accounts are closed
-as of the return from \op{Leo-Reducer}.
+as of the return from \op{Leo-reducer}.
      \dispEnd
 \end{assumption}
 
 \begin{table}[t]
 \caption{Inclusive link-charged space
-    for each dup \type{EIM} loop pass of \op{Leo-Reducer}}
+    for each dup \type{EIM} loop pass of \op{Leo-reducer}}
 \label{tab:leo-reducer-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
 \hline
@@ -11741,7 +11774,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:leo-reducer-op-9}&1&0&&0&\Thref{th:es-complexity}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Leo-Reducer}}&\multicolumn{1}{c|}{\Oc{}}&
+\multicolumn{4}{|l}{Total for \op{Leo-reducer}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
     \AFref{alg:leo-reducer-op},
@@ -11751,9 +11784,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{theorem}[\op{Leo-Reducer} \type{EIM} space]
+\begin{theorem}[\op{Leo-reducer} \type{EIM} space]
 \label{th:leo-reducer-eim-space}
-Inclusive \type{EIM}-charged space for \op{Leo-Reducer}
+Inclusive \type{EIM}-charged space for \op{Leo-reducer}
 is \Oc{} per new \type{EIM}.
 \end{theorem}
 
@@ -11765,9 +11798,9 @@ and \Asmref{asm:leo-reducer-space-charge}.
 \myqed
 \end{proof}
 
-\begin{theorem}[\op{Leo-Reducer} link space]
+\begin{theorem}[\op{Leo-reducer} link space]
 \label{th:leo-reducer-link-space}
-Inclusive link-charged space for \op{Leo-Reducer}
+Inclusive link-charged space for \op{Leo-reducer}
 is \Oc{} per \type{EIM} dup.
 \end{theorem}
 
@@ -11796,7 +11829,7 @@ and \Asmref{asm:leo-reducer-space-charge}.
       \label{line:reducer-op-6}
 \ElsIf{\var{match0} is a \type{LIM}}
   \label{line:reducer-op-7}
-    \State \Call{Leo-Reducer}{\VVelement{S}{j},\Vlim{match0},\Veim{cuz}}
+    \State \Call{Leo-reducer}{\VVelement{S}{j},\Vlim{match0},\Veim{cuz}}
       \label{line:reducer-op-8}
 \Else
   \label{line:reducer-op-9}
@@ -11862,7 +11895,7 @@ For the purposes of analyzing \op{Reducer},
 refers to a pass of
 loop \enRefs{line:reducer-op-2}{line:reducer-op-9}.
 Each loop pass is exactly one of a ``\type{LIM} pass'' or an ``\type{EIM} pass''.
-It is a \type{LIM} pass if it invokes \op{Leo-Reducer} and
+It is a \type{LIM} pass if it invokes \op{Leo-reducer} and
 an \type{EIM} pass if it invokes \op{Earley-reducer}.
 
 \begin{theorem}[\op{Reducer} invocations]
@@ -12014,7 +12047,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
     \AFref{alg:reducer-op},
     \ThFref{th:reducer-invocations},
     Note that space was charged
-    by \op{Leo-Reducer} in line \ref{line:reducer-op-8} and
+    by \op{Leo-reducer} in line \ref{line:reducer-op-8} and
     by \op{Earley-reducer} in line \ref{line:reducer-op-10},
     but to closed accounts.
 }
@@ -12038,12 +12071,12 @@ The \Marpa{} implementation tracks all link pairs for reducer-generated
 The cause of a reducer-generated \type{EIM} will always be
 a completed \type{EIM}.
 The predecessor of a reducer-generated \type{EIM} varies depending on whether the attempt
-to create the reducer-generated \type{EIM} was a \op{Leo-Reducer} operation
+to create the reducer-generated \type{EIM} was a \op{Leo-reducer} operation
 or an \op{Earley-reducer} operation.
 For an
 \op{Earley-reducer} operation,
 the predecessor will be an incomplete \type{EIM}.
-For a \op{Leo-Reducer} operation,
+For a \op{Leo-reducer} operation,
 the predecessor will be either a \type{LIM},
 or $\Lambda$.
 \dispEnd{}
@@ -12076,7 +12109,7 @@ is the same as the Completer operation of \Earley{},
 if there never is a \type{LIM} in \Vpimset{matches} on
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}.
 In this case,
-we never execute \op{Leo-Reducer}.
+we never execute \op{Leo-reducer}.
 \dispEnd
 \end{observation}
 
@@ -14583,9 +14616,9 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\type{LP}$%
 \end{proof}
 
 
-\begin{theorem}[\op{Leo-Reducer} is consistent]
+\begin{theorem}[\op{Leo-reducer} is consistent]
 \label{th:leo-reducer-is-consistent}
-The \op{Leo-Reducer} sub-op
+The \op{Leo-reducer} sub-op
 of the \Marpa{} \op{Reducer} operation
 preserves validity.
 \end{theorem}
@@ -14649,9 +14682,9 @@ The remaining subcase is the \Marpa{} \op{Reducer} operation.
 The \Marpa{} \op{Reducer} operation consists of two
 sub-ops:
 \op{Earley-reducer} and
-\op{Leo-Reducer}.
+\op{Leo-reducer}.
 We have shown that the
-\op{Leo-Reducer} preserves validity
+\op{Leo-reducer} preserves validity
 \Thref{th:leo-reducer-is-consistent}.
 
 From
