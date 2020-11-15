@@ -11918,7 +11918,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \multicolumn{6}{|p{4.5in}|}{
     See
     \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations}.
+    \Tbref{tab:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
@@ -11957,7 +11957,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     See \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations}.
+    \Tbref{tab:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
@@ -11996,7 +11996,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \multicolumn{6}{|p{4.5in}|}{
     See \AFref{alg:reducer-op},
-    \ThFref{th:reducer-invocations}.
+    \Tbref{tab:reducer-invocations}.
 }
 \\ \hline
 \end{tabular}
@@ -12085,13 +12085,15 @@ into the Earley table with the link pair
 \end{equation}
 \end{observation}
 
+\FloatBarrier
+
 \section{Memoizer op}
 \label{def:memoizer}
 
-% \FloatBarrier
-\begin{algorithm}[t]
-\caption{\op{Memoizer}}
-\label{alg:memoizer-op}
+\begin{algorithm}[H]
+\caption{
+    \label{alg:memoizer-op}
+    \op{Memoizer}}
 \begin{algorithmic}[1]
 \Procedure{Memoizer}{\VVelement{S}{j}}
 \For{$\Veim{source} \in \LeoEligible{\VVelement{S}{j}}$}
@@ -12102,13 +12104,15 @@ into the Earley table with the link pair
   \label{line:memoizer-op-4}
 \If{$\var{pred} \neq \Lambda$}
   \label{line:memoizer-op-5}
-  \State $\Vlim{lim} = \tuple{\DR{\var{pred}}, \Postdot{\var{source}}, \Origin{\var{pred}}}$
+  \State $\Vlim{lim} = [\DR{\var{pred}}, \Postdot{\var{source}},$
+  \Statex \hspace\algorithmicindent \hspace\algorithmicindent \hspace\algorithmicindent
+          $\qquad \qquad \qquad \Origin{\var{pred}}, \Current{\var{source}} ]$
       \label{line:memoizer-op-6}
 \Else
   \label{line:memoizer-op-7}
   \State $ \Vlim{lim} = [\DR{\var{source}}, \Postdot{\var{source}},$
   \Statex \hspace\algorithmicindent \hspace\algorithmicindent \hspace\algorithmicindent
-          $\qquad \qquad \qquad \Origin{\var{source}} ]$
+          $\qquad \qquad \qquad \Origin{\var{source}}, \Current{\var{source}} ]$
       \label{line:memoizer-op-8}
 \EndIf
     \State Add \Vlim{lim} to \VVelement{S}{j}
@@ -12119,6 +12123,48 @@ into the Earley table with the link pair
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
+
+\begin{theorem}[Memoizer op consistency]
+If
+\[
+\forall\; 0 \le \Vnat{i} \le \Vnat{j} : \Valid{\VVelement{S}{i}},
+\]
+then the Memoizer op attempts to add only valid \type{LIM}s.
+\end{theorem}
+
+\begin{proof}
+Inspection of
+Algorithm \Aref{alg:memoizer-op} shows that the Memoizer op
+only attempts to add a \type{LIM}
+at line \ref{line:memoizer-op-9},
+and that
+\Aref{alg:memoizer-op}
+enforces the requirements laid out in
+the definition of \type{LIM} validity \Dfref{def:lim-validity},
+before the attempt by \Aref{alg:memoizer-op}
+to add a \type{LIM}
+at line \ref{line:memoizer-op-9}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Memoizer op non-duplication]
+Let $\ell$ be a valid \type{LIM}.
+Every call of the Memorizer op attempts to add $\ell$
+at most once.
+\end{theorem}
+
+\begin{proof}
+For each element element of \VVelement{S}{j},
+\Veim{source} is set to it in exactly one
+pass of the main loop of \Aref{alg:memoizer-op}.
+Every valid \type{LIM} has exactly one source,
+so there is at most once pass in which
+line \ref{line:memoizer-op-9} attempts to add
+$\ell$ to \VVelement{S}{j}.
+\myqed
+\end{proof}
 
 \todo{Rewrite Memoizer op section}
 
