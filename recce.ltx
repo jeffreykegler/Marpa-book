@@ -8707,20 +8707,41 @@ In the complexity context,
 We divide space into two kinds:
 \dfn{trimmed space} and \dfn{link space}.
 
-Link space is used exclusively for ambiguous link pairs.
-All other space is trimmed space.
-Efficient evaluation is not possible without link
-pairs,
-and it is a rare practical parsing application
-that does not require an evaluation phase of
-some kind.
-We distinguish trimmed space from link space,
-because most of the Earley literature
-reports results in terms of trimmed space.
-We need to have space complexity results in terms
-of trimmed space
-in order to make ``apples to apples'' comparisons
+\todo{Ensure our treatment of link vs. trimmed space is consistent}
+All space, except for links, is charged to trimmed space.
+Link space may be charged either
+to trimmed space or to link space.
+This is a free choice
+and therefore is not justified in proofs.
+However, while free, the choice between link and trimmed
+space has consequences
+for later theorems,
+and cannot be made injudiciously.
+
+In particular, we use the distinction between link
+and trimmed space to allow us to report
+two kinds of complexity results.
+We want to report results which apply to practical
+applications,
+but we also want to report results which
+allow ``apples to apples'' comparisons
 with the prior literature.
+
+It is a rare practical parsing application
+that does not require an evaluation phase of
+some kind, and
+efficient evaluation is not possible without link
+pairs.
+Therefore, to be of practical significance, we
+need to report space complexity results which
+include all link space.
+On the other hand, most of the Earley literature
+reports results in terms of trimmed space,
+and to allow accurate comparisons,
+we need to be able to ignore at least some
+of the space consumed by link pairs.
+This is why we track some of the space consumed
+by link pairs separately.
 
 \begin{definition}[Try, dup and new resource]
 \label{def:try-dup-new}
@@ -8978,6 +8999,8 @@ This is not a real account, but
     of the \var{new} and \var{dup} accounts
     for an \type{EIM}.
     It behaves like a per-\type{EIM} account.
+\item \var{lim}: A per-\type{LIM} account.
+\item \var{pred}: A per-prediction-\type{EIM} account.
 \item \var{proc}: A per-pseudocode-procedure account,
   for resource charged to the current pseudocode procedure.
   Resource charged to \var{proc} must be constant or less.
@@ -11858,45 +11881,45 @@ and the \op{Leo-reducer} space table
 \label{tab:reducer-invocations}
 \begin{tabular}{|c|c|p{2.75in}|}
 \hline
-Line&Invocations&Justification
+Line&Invocations&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&1/\var{call}+1/\var{pass}&
-       line \ref{line:reducer-op-3}, \Obref{def:loop-invocation}, sequential execution
+    \ref{line:reducer-op-3}&1/\var{pass}&\Obref{def:loop-invocation}.
 \\ \hline
-    \ref{line:reducer-op-3}&1/\var{pass}&directly, \Obref{def:loop-invocation}
+    \ref{line:reducer-op-2}&1/\var{proc}+1/\var{pass}&
+       line \ref{line:reducer-op-3}, RSEQ;
+       \Obref{def:loop-invocation}.
 \\ \hline
     \ref{line:reducer-op-4}&1/\var{pass}&
-       line \ref{line:reducer-op-3}, sequential execution
+       line \ref{line:reducer-op-3}, SEQ.
 \\ \hline
     \ref{line:reducer-op-5}&1/\var{pass}&
-       line \ref{line:reducer-op-3}, sequential execution
+       line \ref{line:reducer-op-4}, SEQ.
 \\ \hline
-    \ref{line:reducer-op-6}&0--1/\var{pass}&conditional execution
+    \ref{line:reducer-op-6}&1/\var{pass}&
+        line \ref{line:reducer-op-5}, COND.
 \\ \hline
-    \ref{line:reducer-op-7}&0--1/\var{pass}&
-       line \ref{line:reducer-op-8}, sequential execution
+    \ref{line:reducer-op-7}&1/\var{pass}&
+       line \ref{line:reducer-op-5} or
+       line \ref{line:reducer-op-6}, COND.
 \\ \hline
-    \ref{line:reducer-op-8}&0--1/\var{pass}&conditional execution
+    \ref{line:reducer-op-8}
+    &1/\var{pass}&
+    line \ref{line:reducer-op-7}, COND.
 \\ \hline
-    \ref{line:reducer-op-9}&0--1/\var{pass}&
-       line \ref{line:reducer-op-10}, sequential execution
+    \ref{line:reducer-op-9}&1/\var{pass}&
+       line \ref{line:reducer-op-7} or
+       line \ref{line:reducer-op-8}, COND.
 \\ \hline
-    \ref{line:reducer-op-10}&0--1/\var{pass}&conditional execution
+    \ref{line:reducer-op-10}&1/\var{pass}&
+    line \ref{line:reducer-op-9}, COND.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-1/\var{call}: ``once per procedure call''.
-1/\var{pass}: ``once per loop pass''.
-0--1/\var{pass}: ``at most once per loop pass''.
-Lines are deduced in the order
-      \ref{line:reducer-op-3},
-      \ref{line:reducer-op-2},
-      \ref{line:reducer-op-4},
-      \ref{line:reducer-op-5},
-      \ref{line:reducer-op-6},
-      \ref{line:reducer-op-7},
-      \ref{line:reducer-op-8},
-      \ref{line:reducer-op-9},
-      \ref{line:reducer-op-10}.
+Lines are listed in order of deduction.
+SEQ: sequential execution.
+COND: conditional execution.
+RSEQ: reverse sequential execution.
+1/\var{proc}: ``once per procedure call''.
+1/\var{pass}: ``at most once per loop pass''.
     }
 \\ \hline
 \end{tabular}
