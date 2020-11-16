@@ -12127,29 +12127,38 @@ into the Earley table with the link pair
 \FloatBarrier
 
 \begin{theorem}[Memoizer op consistency]
+\label{th:memoizer-op-consistency}
 If
 \[
 \forall\; 0 \le \Vnat{i} \le \Vnat{j} : \Valid{\VVelement{S}{i}},
 \]
-then the Memoizer op attempts to add only valid \type{LIM}s.
+then the Memoizer op attempts to add only valid \type{LIM}s,
+and only to \VVelement{S}{i}.
 \end{theorem}
 
 \begin{proof}
 Inspection of
-Algorithm \Aref{alg:memoizer-op} shows that the Memoizer op
+Algorithm \Aref{alg:memoizer-op} shows
+\begin{itemize}
+\item that the Memoizer op
 only attempts to add a \type{LIM}
-at line \ref{line:memoizer-op-9},
-and that
-\Aref{alg:memoizer-op}
+at line \ref{line:memoizer-op-9};
+\item
+that line \ref{line:memoizer-op-9} only attempts to add
+\type{LIM}s to \VVelement{S}{i}; and
+\item
+that \Aref{alg:memoizer-op}
 enforces the requirements laid out in
 the definition of \type{LIM} validity \Dfref{def:lim-validity},
 before the attempt by \Aref{alg:memoizer-op}
 to add a \type{LIM}
 at line \ref{line:memoizer-op-9}.
 \myqed
+\end{itemize}
 \end{proof}
 
 \begin{theorem}[Memoizer op non-duplication]
+\label{th:memoizer-op-non-duplication}
 Let $\ell$ be a valid \type{LIM}.
 Every call of the Memorizer op attempts to add $\ell$
 at most once.
@@ -12163,6 +12172,37 @@ Every valid \type{LIM} has exactly one source,
 so there is at most once pass in which
 line \ref{line:memoizer-op-9} attempts to add
 $\ell$ to \VVelement{S}{j}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Memoizer op maximum]
+If
+\[
+\forall\; 0 \le \Vnat{i} \le \Vnat{j} : \Valid{\VVelement{S}{i}},
+\]
+then each call of the Memoizer op
+executes
+line \ref{line:memoizer-op-9}
+of \Aref{alg:memoizer-op}
+at most
+\size{\Vocab{\var{g}}} times.
+\end{theorem}
+
+\begin{proof}
+Each execution of
+line \ref{line:memoizer-op-9}
+is an attempt to
+add a \type{LIM}.
+By the Memoizer non-duplication theorem \Thref{th:memoizer-op-non-duplication},
+if $\ell$ is a valid \type{LIM},
+then each call of the Memoizer op
+attempts to add $\ell$ at most once.
+By the Memoizer consistency theorem \Thref{th:memoizer-op-consistency},
+every attempt to add a \type{LIM} is
+an attempt to add a valid \type{LIM} to \VVelement{S}{j}.
+By the \type{ES} \type{LIM} Count Theorem \Thref{th:es-lim-count},
+there are at most \size{\Vocab{\var{g}}} valid \type{LIM}s
+in \VVelement{S}{j}.
 \myqed
 \end{proof}
 
