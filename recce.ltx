@@ -12165,17 +12165,29 @@ at most once.
 \end{theorem}
 
 \begin{proof}
-For each element element of \VVelement{S}{j},
-\Veim{source} is set to it in exactly one
+Let $ell$ be an arbitrary valid LIM,
+and let
+\mypareq{eq:th-memoizer-op-non-duplication-100}{%
+    \Veim{x} = \Source{\ell}.
+}
+By the Leo source bijection theorem \Thref{th:source-fn-injection},
+we know that there is exactly one such \var{x}.
+From line \ref{line:memoizer-op-3}
+of \Aref{alg:memoizer-op},
+we see that \Veim{source} is set to \var{x} in at most one
 pass of the main loop of \Aref{alg:memoizer-op}.
-Every valid \type{LIM} has exactly one source,
-so there is at most once pass in which
-line \ref{line:memoizer-op-9} attempts to add
-$\ell$ to \VVelement{S}{j}.
+Lines \ref{line:memoizer-op-3}--\ref{line:memoizer-op-8}
+enforce \Eref{eq:th-memoizer-op-non-duplication-100},
+so that the pass
+such that
+$\Veim{source} = \var{x}$
+is the only pass of the main
+loop which could attempt to add $\ell$.
 \myqed
 \end{proof}
 
 \begin{theorem}[Memoizer op maximum]
+\label{th:memoizer-op-maximum}
 If
 \[
 \forall\; 0 \le \Vnat{i} \le \Vnat{j} : \Valid{\VVelement{S}{i}},
@@ -12189,20 +12201,39 @@ at most
 \end{theorem}
 
 \begin{proof}
-Each execution of
-line \ref{line:memoizer-op-9}
-is an attempt to
-add a \type{LIM}.
-By the Memoizer non-duplication theorem \Thref{th:memoizer-op-non-duplication},
-if $\ell$ is a valid \type{LIM},
-then each call of the Memoizer op
-attempts to add $\ell$ at most once.
-By the Memoizer consistency theorem \Thref{th:memoizer-op-consistency},
-every attempt to add a \type{LIM} is
-an attempt to add a valid \type{LIM} to \VVelement{S}{j}.
-By the \type{ES} \type{LIM} Count Theorem \Thref{th:es-lim-count},
-there are at most \size{\Vocab{\var{g}}} valid \type{LIM}s
-in \VVelement{S}{j}.
+\mypareq{eq:th-memoizer-op-maximum-100}{%
+    There are at most \size{\Vocab{\var{g}}} valid \type{LIM}s
+    in \VVelement{S}{j}.
+    \cuz{} \longThref{\type{ES} \type{LIM} Count Theorem}{th:es-lim-count},
+}
+\mypareq{eq:th-memoizer-op-maximum-110}{%
+    Every attempt to add a \type{LIM} in a call of Memoizer op is
+    an attempt to add a valid \type{LIM} to \VVelement{S}{j}
+    \cuz{} \longThref{Memoizer consistency theorem}{th:memoizer-op-consistency}.
+}
+\mypareq{eq:th-memoizer-op-maximum-115}{%
+    Where $\ell$ is a LIM,
+    a call of the Memoizer op
+    attempts to add $\ell$ at most once
+    \cuz{} \longThref{Memoizer non-duplication theorem}{th:memoizer-op-non-duplication}.
+}
+\mypareq{eq:th-memoizer-op-maximum-120}{%
+    There are at most \size{\Vocab{\var{g}}}
+    attempts to add a \type{LIM} in any call of Memoizer op
+    \cuz{} \Eref{eq:th-memoizer-op-maximum-100},
+        \Eref{eq:th-memoizer-op-maximum-110},
+        \Eref{eq:th-memoizer-op-maximum-115}.
+}
+\mypareq{eq:th-memoizer-op-maximum-130}{%
+    Each execution of
+    line \ref{line:memoizer-op-9}
+    is an attempt to
+    add a \type{LIM}
+    \cuz{} \Aref{alg:memoizer-op}.
+}
+This theorem follows from
+\Eref{eq:th-memoizer-op-maximum-120}
+and \Eref{eq:th-memoizer-op-maximum-130}.
 \myqed
 \end{proof}
 
