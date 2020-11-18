@@ -31,6 +31,7 @@
 \usepackage{ragged2e}
 \usepackage{placeins}
 \usepackage{thmtools}
+\usepackage{multirow}
 \renewcommand{\listtheoremname}{List of Displayed Statements}
 % \usepackage[notcite,notref]{showkeys}
 \allowdisplaybreaks[3]
@@ -11912,42 +11913,46 @@ and the \op{Leo-reducer} space table
     \label{tab:reducer-invocations}
     Line invocations for \op{Reducer}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{2.75in}|}
+\begin{tabular}{|r|r|p{2.75in}|}
 \hline
-Line&Invocations&\multicolumn{1}{c|}{Justification}
+\multicolumn{1}{|c|}{Line}
+    &\multicolumn{1}{c|}{Invocations}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-3}&1/\var{pass}&\Obref{def:loop-invocation}.
 \\ \hline
-    \ref{line:reducer-op-2}&1/\var{proc}+1/\var{pass}&
-       \Obref{def:loop-invocation};
-       line \ref{line:reducer-op-3} RSeq.
+    \multirow{2}{*}{\ref{line:reducer-op-2}}
+    &1/\var{proc}&
+    \multirow{2}{*}{\Obref{def:loop-invocation}; Line \ref{line:reducer-op-3} RSeq.}
+\\ 
+    &+\;1/\var{pass}&
 \\ \hline
     \ref{line:reducer-op-4}&1/\var{pass}&
-       line \ref{line:reducer-op-3} Seq.
+       Line \ref{line:reducer-op-3} Seq.
 \\ \hline
     \ref{line:reducer-op-5}&1/\var{pass}&
-       line \ref{line:reducer-op-4} Seq.
+       Line \ref{line:reducer-op-4} Seq.
 \\ \hline
     \ref{line:reducer-op-6}&{$\le$}1/\var{pass}&
-        line \ref{line:reducer-op-5} Cond.
+        Line \ref{line:reducer-op-5} Cond.
 \\ \hline
     \ref{line:reducer-op-7}&1/\var{pass}&
-       line \ref{line:reducer-op-5} Seq.
+       Line \ref{line:reducer-op-5} Seq.
 \\ \hline
     \ref{line:reducer-op-8}
     &{$\le$}1/\var{pass}&
-        line \ref{line:reducer-op-7} Cond.
+        Line \ref{line:reducer-op-7} Cond.
 \\ \hline
     \ref{line:reducer-op-9}&1/\var{pass}&
-       line \ref{line:reducer-op-7} Seq.
+       Line \ref{line:reducer-op-7} Seq.
 \\ \hline
     \ref{line:reducer-op-10}&{$\le$}1/\var{pass}&
-        line \ref{line:reducer-op-9} Cond.
+        Line \ref{line:reducer-op-9} Cond.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
 1/\var{proc}: ``once per procedure call''.
-{$\le$}1/\var{proc}: ``at most once per procedure call''.
+{$\le$}1/\var{proc}: ``once per procedure call''.
 1/\var{pass}: ``at most once per loop pass''.
     }
 \\ \hline
