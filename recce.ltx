@@ -9192,6 +9192,35 @@ Later rows in the table give the total amount of resource accounted for in
 that table,
 and the per-table justifications.
 
+The pseudocode uses a few basic control structures,
+with which the reader is expected to be familiar,
+and our justifications of the invocation counts
+refer only to a few generalized behaviors.
+
+\begin{definition}[Sequential and conditional execution]
+\todo{Define Sequential and conditional execution}
+If an execution of line \var{L2} always follows 
+an execution of line \var{L1} in an execution sequence,
+then clearly line \var{L2} is executed
+the same number of times as line \var{L1}.
+In justification for line \var{L2},
+we will point this out with
+the notation ``line L1 Seq''.
+Just as clearly in the above case,
+line \var{L1} is executed as many times
+as line \var{L2},
+which observation our justifications notate as
+``line L2 RSeq''.
+
+If an execution of line \var{L2} sometimes follows 
+line an execution of \var{L1} in an execution sequence,
+then line \var{L2} is executed
+at most the same number of times as line \var{L1}.
+We notate this observation in the form
+``line L1 Cond''.
+\dispEnd
+\end{definition}
+
 \chapter{The \Marpa{} algorithm}
 \label{chap:marpa}
 
@@ -11886,39 +11915,35 @@ Line&Invocations&\multicolumn{1}{c|}{Justification}
     \ref{line:reducer-op-3}&1/\var{pass}&\Obref{def:loop-invocation}.
 \\ \hline
     \ref{line:reducer-op-2}&1/\var{proc}+1/\var{pass}&
-       line \ref{line:reducer-op-3}, RSEQ;
-       \Obref{def:loop-invocation}.
+       \Obref{def:loop-invocation};
+       line \ref{line:reducer-op-3} RSeq.
 \\ \hline
     \ref{line:reducer-op-4}&1/\var{pass}&
-       line \ref{line:reducer-op-3}, SEQ.
+       line \ref{line:reducer-op-3} Seq.
 \\ \hline
     \ref{line:reducer-op-5}&1/\var{pass}&
-       line \ref{line:reducer-op-4}, SEQ.
+       line \ref{line:reducer-op-4} Seq.
 \\ \hline
-    \ref{line:reducer-op-6}&1/\var{pass}&
-        line \ref{line:reducer-op-5}, COND.
+    \ref{line:reducer-op-6}&{$\le$}1/\var{pass}&
+        line \ref{line:reducer-op-5} Cond.
 \\ \hline
     \ref{line:reducer-op-7}&1/\var{pass}&
-       line \ref{line:reducer-op-5} or
-       line \ref{line:reducer-op-6}, COND.
+       line \ref{line:reducer-op-5} Seq.
 \\ \hline
     \ref{line:reducer-op-8}
-    &1/\var{pass}&
-    line \ref{line:reducer-op-7}, COND.
+    &{$\le$}1/\var{pass}&
+        line \ref{line:reducer-op-7} Cond.
 \\ \hline
     \ref{line:reducer-op-9}&1/\var{pass}&
-       line \ref{line:reducer-op-7} or
-       line \ref{line:reducer-op-8}, COND.
+       line \ref{line:reducer-op-7} Seq.
 \\ \hline
-    \ref{line:reducer-op-10}&1/\var{pass}&
-    line \ref{line:reducer-op-9}, COND.
+    \ref{line:reducer-op-10}&{$\le$}1/\var{pass}&
+        line \ref{line:reducer-op-9} Cond.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
-SEQ: sequential execution.
-COND: conditional execution.
-RSEQ: reverse sequential execution.
 1/\var{proc}: ``once per procedure call''.
+{$\le$}1/\var{proc}: ``at most once per procedure call''.
 1/\var{pass}: ``at most once per loop pass''.
     }
 \\ \hline
