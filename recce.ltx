@@ -8719,14 +8719,20 @@ space has consequences
 for later theorems,
 and cannot be made injudiciously.
 
-In particular, we use the distinction between link
+Sometimes it will be convenient to defer the decision
+to charge a link pair to trimmed or link space.
+Space which is yet to be assigned to trimmed or link space
+is called \dfn{unassigned} space.
+
+We use the distinction between link
 and trimmed space to allow us to report
-two kinds of complexity results.
-We want to report results which apply to practical
-applications,
+two kinds of space complexity results.
+We want to report space complexity results
+which apply to practical applications,
 but we also want to report results which
 allow ``apples to apples'' comparisons
-with the prior literature.
+with the space complexity claims
+in prior literature.
 
 It is a rare practical parsing application
 that does not require an evaluation phase of
@@ -9292,6 +9298,220 @@ given its ID.
 All of these operations are accesses and none consume space.
 \myqed
 \end{proof}
+
+\section{ES-setup op}
+\label{sec:es-setup}
+
+\subsection{Earley set}
+\label{sec:es-complexity}
+
+When \Marpa{} reaches a new current location,
+it creates an empty Earley set.
+For complexity analysis purposes,
+an Earley set can be regarded as a linked list
+of \type{LIM}s and \type{PIM}s.
+
+Link pairs are kept in a finite set of linked lists.
+The heads of the lists stored with the \type{EIM} and
+occupy trimmed space.
+The rest of the lists of links pairs occupies
+unassigned space.
+
+\begin{theorem}[Earley set allocation]
+\label{th:es-allocation}
+The resource incurred
+by allocating an empty Earley set is
+charged as \Oc{} time and \Oc{} trimmed space.
+\end{theorem}
+
+\begin{proof}
+Allocation of an empty linked list
+incurs \Oc{} time and \Oc{} space.
+\myqed
+\end{proof}
+
+When examining the resource consumed in adding
+a new \type{PIM}, it is important to note that
+it includes an update of the \var{transitions} array
+\Sref{sec:transition-complexity}.
+
+\begin{theorem}[Earley set add]
+\label{th:es-add}
+The resource incurred by adding a new
+\type{PIM} is charged as \Oc{}
+time, \Oc{} trimmed space and
+zero link space.
+\end{theorem}
+
+\begin{proof}
+\myqed
+\end{proof}
+
+\begin{theorem}[Earley set complexity]
+\label{th:es-complexity}
+Adding an \type{EIM} to an Earley set
+consumes \Oc{} time,
+\Oc{} trimmed space,
+and zero link space.
+The adjoin of an existing \type{EIM} (a dup)
+incurs \Oc{} time, zero trimmed space and \Oc{} link space.
+Traversal of an Earley set requires \Oc{} time per \type{EIM}.
+\end{theorem}
+
+\begin{proof}
+When \Marpa{} reaches a new current location,
+it creates an empty Earley set.
+which
+requires \Oc{} time,
+\Oc{} trimmed space
+and \Oc{} link space.
+Each \type{EIM} is added at the end of a linked list,
+so that each add of a \type{EIM} takes \Oc{} time
+and \Oc{} trimmed space.
+Adding an \type{EIM} requires
+zero link space because the initial link pair
+is kept in trimmed space.
+\myqed
+\end{proof}
+
+\subsection{\var{dotZeroUsed}}
+\label{sec:dotzeroused-complexity}
+
+\var{dotZeroUsed} is a bitmap with
+one bit for every rule in the grammar.
+It is used when adding predictions to an Earley set.
+
+\begin{theorem}[\var{dotZeroUsed} bitmap]
+\label{th:dotzeroused-bitmap}
+Clearing \var{dotZeroUsed} requires \Oc{} time
+and zero space.
+Bit accesses and writes take \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+The size of the bitmap is \size{\Rules{\var{g}}}.
+\Rules{\var{g}} is a constant
+that depends on the grammar \Dfref{def:context-free-grammar},
+which justifies the claim of constant time for bit reads
+bit writes, and clearing of the bitmap.
+Space for \var{dotZeroUsed} is accounted for
+a part of the space for the grammar.
+\myqed
+\end{proof}
+
+\subsection{\var{seen} PSL}
+\label{sec:seen-psl-complexity}
+
+For each Earley set,
+\var{seen} is a PSL with
+one entry for every dotted rule in the grammar.
+Earley sets must not contain duplicated \type{EIM}s and
+\var{seen} is used to efficiently enforce this.
+\myfn{Seen}{\Veim{x}} is a function which returns
+the EIM equal to \var{x} if it already exists,
+and $\Lambda$ otherwise.
+\myfn{SetSeen}{\Veim{x}} is a function which adds
+\var{x} to the PSL.
+
+\begin{theorem}[\var{seen} PSL]
+\label{th:seen-psl}
+In each Earley set,
+set up of \var{seen} consumes \Oc{} time,
+\Oc{} trimmed space
+and zero link space.
+Each call of \Seen{} and \SetSeen{} consumes
+consumes \Oc{} time
+and zero space.
+\end{theorem}
+
+\begin{proof}
+The claims of this theorem are justified
+in section \Chref{chap:per-set-lists},
+where PSL's are described in detail.
+\myqed
+\end{proof}
+
+\subsection{\var{transition} array}
+\label{sec:transition-complexity}
+
+For each Earley set,
+\var{transition} is a sparse array
+of linked lists of \type{PIM}s.
+The entries of the \var{transition} array
+are indexed by symbol.
+The \var{transition} array is for efficient lookup
+of \type{EIM} and \type{LIM} matches.
+
+\begin{theorem}[Transition Array Complexity]
+\label{th:transition-array}
+Creation of the \var{transition} array
+consumes \Oc{} time,
+\Oc{} trimmed space,
+and zero link space,
+which is charged to the \var{es}
+account.
+\end{theorem}
+
+\begin{proof}
+Since there is at most one entry for every symbol
+in the grammar,
+the number of array entries in \var{transition} is,
+\order{\size{\Vocab{\var{g}}}}.
+\Vocab{\var{g}} is a constant which depends on \Vint{g},
+and the \var{transition} array itself,
+excluding the linked lists,
+is therefore of size \Oc{}.
+From this it follows immediately that the
+Per-\type{ES} creation of \var{transition}
+consumes \Oc{} time and \Oc{} space.
+when the \type{PIM}s are created.
+The lists grow from the head, so that
+creation time for a new link in one of the
+\var{transitions}'s linked lists is \Oc{}.
+\myqed
+\end{proof}
+
+\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
+
+Writes to the \var{transition} array
+do not occur once it has been created.
+Reads of the \var{transition} array
+use the \Transition{} function.
+A call of the form
+$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
+is \Vsym{t}.
+
+\begin{theorem}[\myfn{Transitions}{} Complexity]
+\label{th:transitions-set-size}
+A call of the form
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+consumes \Oc{} time, and zero space.
+It returns a pointer to
+a linked list of \order{\Vloc{j}} size,
+that is,
+\begin{gather*}
+\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+A call of the function \myfn{Transitions}{}
+indexes a sparse array, and returns a pointer
+to the head of a linked list:
+this can be done in \Oc{} time.
+The claim for linked list size follows from
+the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
+the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
+and the Transition Array Complexity Theorem
+\Thref{th:transition-array}.
+A \var{transitions} array is not altered after its creation,
+and therefore calls of \myfn{Transitions}{}
+do not consume additional space.
+\end{proof}
+
+\todo{Write ES-setup op section}
 
 \section{Initializer op}
 \label{sec:initializer}
@@ -10477,173 +10697,6 @@ predictions
 of Earley set 0 by \Earley{}.
 \dispEnd{}
 \end{observation}
-
-\section{ES-setup op}
-\label{sec:es-setup}
-
-\begin{theorem}[Earley set complexity]
-\label{th:es-complexity}
-Allocating an empty Earley set requires \Oc{} time and \Oc{} space.
-Adding an \type{EIM} to an Earley set
-consumes \Oc{} time,
-\Oc{} trimmed space,
-and zero link space.
-The adjoin of an existing \type{EIM} (a dup)
-incurs \Oc{} time, zero trimmed space and \Oc{} link space.
-Traversal of an Earley set requires \Oc{} time per \type{EIM}.
-\end{theorem}
-
-\begin{proof}
-An Earley set is kept as a linked list.
-When \Marpa{} reaches a new current location,
-it creates an empty Earley set, which
-requires \Oc{} time,
-\Oc{} trimmed space
-and \Oc{} link space.
-Each \type{EIM} is added at the end of a linked list,
-so that each add of a \type{EIM} takes \Oc{} time
-and \Oc{} trimmed space.
-Adding an \type{EIM} requires
-zero link space because the initial link pair
-is kept in trimmed space.
-
-Link pairs are kept in a finite set of linked lists.
-The heads of the lists stored with the \type{EIM} and
-occupy trimmed space.
-The rest of the lists of links pairs occupies
-link space.
-\myqed
-\end{proof}
-
-\var{dotZeroUsed} is a bitmap with
-one bit for every rule in the grammar.
-It is used when adding predictions to an Earley set.
-
-\begin{theorem}[\var{dotZeroUsed} bitmap]
-\label{th:dotzeroused-bitmap}
-Clearing \var{dotZeroUsed} requires \Oc{} time
-and zero space.
-Bit accesses and writes take \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-The size of the bitmap is \size{\Rules{\var{g}}}.
-\Rules{\var{g}} is a constant
-that depends on the grammar \Dfref{def:context-free-grammar},
-which justifies the claim of constant time for bit reads
-bit writes, and clearing of the bitmap.
-Space for \var{dotZeroUsed} is accounted for
-a part of the space for the grammar.
-\myqed
-\end{proof}
-
-For each Earley set,
-\var{seen} is a PSL with
-one entry for every dotted rule in the grammar.
-Earley sets must not contain duplicated \type{EIM}s and
-\var{seen} is used to efficiently enforce this.
-\myfn{Seen}{\Veim{x}} is a function which returns
-the EIM equal to \var{x} if it already exists,
-and $\Lambda$ otherwise.
-\myfn{SetSeen}{\Veim{x}} is a function which adds
-\var{x} to the PSL.
-
-\begin{theorem}[\var{seen} PSL]
-\label{th:seen-psl}
-In each Earley set,
-set up of \var{seen} consumes \Oc{} time,
-\Oc{} trimmed space
-and zero link space.
-Each call of \Seen{} and \SetSeen{} consumes
-consumes \Oc{} time
-and zero space.
-\end{theorem}
-
-\begin{proof}
-The claims of this theorem are justified
-in section \Chref{chap:per-set-lists},
-where PSL's are described in detail.
-\myqed
-\end{proof}
-
-For each Earley set,
-\var{transition} is a sparse array
-of linked lists of \type{PIM}s.
-The entries of the \var{transition} array
-are indexed by symbol.
-The \var{transition} array is for efficient lookup
-of \type{EIM} and \type{LIM} matches.
-
-\begin{theorem}[Transition Array Complexity]
-\label{th:transition-array}
-Creation of the \var{transition} array
-consumes \Oc{} time,
-\Oc{} trimmed space,
-and zero link space,
-which is charged to the \var{es}
-account.
-\end{theorem}
-
-\begin{proof}
-Since there is at most one entry for every symbol
-in the grammar,
-the number of array entries in \var{transition} is,
-\order{\size{\Vocab{\var{g}}}}.
-\Vocab{\var{g}} is a constant which depends on \Vint{g},
-and the \var{transition} array itself,
-excluding the linked lists,
-is therefore of size \Oc{}.
-From this it follows immediately that the
-Per-\type{ES} creation of \var{transition}
-consumes \Oc{} time and \Oc{} space.
-when the \type{PIM}s are created.
-The lists grow from the head, so that
-creation time for a new link in one of the
-\var{transitions}'s linked lists is \Oc{}.
-\myqed
-\end{proof}
-
-\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
-
-Writes to the \var{transition} array
-do not occur once it has been created.
-Reads of the \var{transition} array
-use the \Transition{} function.
-A call of the form
-$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
-is \Vsym{t}.
-
-\begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-set-size}
-A call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
-consumes \Oc{} time, and zero space.
-It returns a pointer to
-a linked list of \order{\Vloc{j}} size,
-that is,
-\begin{gather*}
-\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
-\end{gather*}
-\end{theorem}
-
-\begin{proof}
-A call of the function \myfn{Transitions}{}
-indexes a sparse array, and returns a pointer
-to the head of a linked list:
-this can be done in \Oc{} time.
-The claim for linked list size follows from
-the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
-the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
-and the Transition Array Complexity Theorem
-\Thref{th:transition-array}.
-A \var{transitions} array is not altered after its creation,
-and therefore calls of \myfn{Transitions}{}
-do not consume additional space.
-\end{proof}
-
-\todo{Write ES-setup op section}
 
 \section{Predictor op}
 \label{sec:predictor-op}
@@ -12288,11 +12341,6 @@ but we have yet to prove these things.
 \dispEnd{}
 \end{observation}
 
-\section{Bookkeeper op}
-\label{sec:bookkeeper}
-
-\todo{Write bookkeeper op section}
-
 \section{Top level of \Marpa{}}
 
 \todo{Rewrite \Marpa{} top level section}
@@ -12305,9 +12353,10 @@ shown in \Aref{alg:marpa}.
 \begin{algorithmic}[1]
 \Procedure{Main}{}
 \State $\Call{Parse-Setup}{{}}$
+\State $\Call{ES-Setup}{0}$
 \State $\Call{Initializer}{{}}$
 \For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
-\State $\Call{ES-Setup}{\VVelement{S}{j}}$
+\State $\Call{ES-Setup}{\var{j}}$
 \State $\Call{Scanner}{\VVelement{S}{j}}$
 \If{$\size{\VVelement{S}{j}} = 0$}
 \State return \Comment Reject \Cw{}
@@ -12316,7 +12365,6 @@ shown in \Aref{alg:marpa}.
 \State $\Call{Predictor}{\VVelement{S}{j}}$
 \label{alg:marpa-line-80}
 \State $\Call{Memoizer}{\VVelement{S}{j}}$
-\State $\Call{Bookkeeper}{\VVelement{S}{j}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
