@@ -9321,7 +9321,8 @@ unassigned space.
 \label{th:es-allocation}
 The resource incurred
 by allocating an empty Earley set is
-charged as \Oc{} time and \Oc{} trimmed space.
+charged as \Oc{} time,
+\Oc{} trimmed space and zero link space.
 \end{theorem}
 
 \begin{proof}
@@ -9344,6 +9345,10 @@ zero link space.
 \end{theorem}
 
 \begin{proof}
+To add a new \type{PIM}, we must add it to the
+linked list of \type{PIM}s,
+as well as to the transition array.
+\todo{Finish this}
 \myqed
 \end{proof}
 
@@ -9431,14 +9436,23 @@ where PSL's are described in detail.
 \myqed
 \end{proof}
 
-\subsection{\var{transition} array}
-\label{sec:transition-complexity}
+\section{Bookkeeper op}
+\label{sec:bookkeeper}
 
-For each Earley set,
-\var{transition} is a sparse array
-of linked lists of \type{PIM}s.
-The entries of the \var{transition} array
-are indexed by symbol.
+The Bookkeeper op is run for each \type{ES}
+after that \type{ES} is fully populated with \type{PIM}s.
+The Bookkeeper op and creates that \type{ES}s
+\var{transition} array.
+The \var{transition} array contains one entry
+for each of the of the transition symbols \Dfref{def:transition}
+represented by a \type{PIM} in its \type{ES}.
+The entries are in symbol ID order,
+to allow the array to be binary searched.
+
+Each entry in the \var{transition} array
+points to the head of a linked list of the
+\type{PIM}s which have that entry's symbol
+as their transition symbol.
 The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
@@ -11977,7 +11991,7 @@ and the \op{Leo-reducer} space table
     \multirow{2}{*}{\ref{line:reducer-op-2}}
     &1/\var{proc}&
     \multirow{2}{*}{\Obref{def:loop-invocation}; Line \ref{line:reducer-op-3} RSeq.}
-\\ 
+\\
     &+\;1/\var{pass}&
 \\ \hline
     \ref{line:reducer-op-4}&1/\var{pass}&
@@ -12355,16 +12369,18 @@ shown in \Aref{alg:marpa}.
 \State $\Call{Parse-Setup}{{}}$
 \State $\Call{ES-Setup}{0}$
 \State $\Call{Initializer}{{}}$
+\State $\Call{Bookkeeper}{\Velement{S}{0}}$
 \For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
 \State $\Call{ES-Setup}{\var{j}}$
 \State $\Call{Scanner}{\VVelement{S}{j}}$
 \If{$\size{\VVelement{S}{j}} = 0$}
 \State return \Comment Reject \Cw{}
 \EndIf
-\State $\Call{Completer}{\VVelement{S}{j}}$
+\State $\Call{Reducer}{\VVelement{S}{j}}$
 \State $\Call{Predictor}{\VVelement{S}{j}}$
 \label{alg:marpa-line-80}
 \State $\Call{Memoizer}{\VVelement{S}{j}}$
+\State $\Call{Bookkeeper}{\VVelement{S}{j}}$
 \EndFor
 \EndProcedure
 \end{algorithmic}
