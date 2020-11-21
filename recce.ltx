@@ -9441,18 +9441,16 @@ where PSL's are described in detail.
 
 The Bookkeeper op is run for each \type{ES}
 after that \type{ES} is fully populated with \type{PIM}s.
-The Bookkeeper op and creates that \type{ES}s
-\var{transition} array.
-The \var{transition} array contains one entry
-for each of the of the transition symbols \Dfref{def:transition}
-represented by a \type{PIM} in its \type{ES}.
-The entries are in symbol ID order,
-to allow the array to be binary searched.
+The Bookkeeper op and creates
+the \var{transition} array for that \type{ES}.
 
 Each entry in the \var{transition} array
-points to the head of a linked list of the
-\type{PIM}s which have that entry's symbol
-as their transition symbol.
+contains a pointer
+to the head of a linked list of
+\type{PIM}s which have the same
+transition symbol.
+The entries are in symbol ID order,
+to allow the array to be binary searched.
 The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
@@ -9467,6 +9465,22 @@ account.
 \end{theorem}
 
 \begin{proof}
+We first consider
+outline one method of creating the \var{transition} array.
+\begin{algorithmic}[1]
+\State Create \var{work}, an array, one entry per symbol ID,
+and indexed by symbol ID.
+\For{$\Vpim{x} \in \Ves{es}$}
+\State Add \Veim{x} at the head of the linked list at \Velement{work}{\Transition{\Veim{x}}}
+\EndFor
+\State Create \var{transition}, an array of size \var{cnt}
+\State Copy the populated entries of \var{work} to \var{transition},
+   in order.
+\end{algorithmic}
+
+In this method, as a first pass, the \type{ES} is traversed
+and an array
+
 Since there is at most one entry for every symbol
 in the grammar,
 the number of array entries in \var{transition} is,
