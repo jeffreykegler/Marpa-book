@@ -9463,8 +9463,36 @@ where PSL's are described in detail.
 \myqed
 \end{proof}
 
+\FloatBarrier
+
 \section{Bookkeeper op}
 \label{sec:bookkeeper}
+
+\begin{algorithm}[H]
+\caption{
+    \label{alg:bookkeeper-op}
+    \var{Bookkeeper}}
+\begin{algorithmic}[1]
+\Procedure{Bookkeeper}{\VVelement{S}{j}}
+\State Create \var{work}, an temporary working array of length \size{\Vocab{\var{g}}},
+indexed by symbol ID.
+\State $\Vnat{cnt} = 0$
+\For{$\Vpim{x} \in \Ves{es}$}
+\State $\Vnat{ix} = \ID\Transition{\Vpim{x}}$
+\If { \Velement{work}{\var{ix}} is unpopulated }
+\State Create an empty linked list at \Velement{work}{\var{ix}}
+\State $\var{cnt} = \var{cnt}+1$
+\EndIf
+\State Add \Vpim{x} at the head of the list at \Velement{work}{\var{ix}}
+\EndFor
+\State Create \var{transition}, an array of size \var{cnt}
+\State Copy the populated entries of \var{work} to \var{transition},
+   in order.
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\FloatBarrier
 
 The Bookkeeper op is run for each \type{ES}
 after that \type{ES} is fully populated with \type{PIM}s.
@@ -9483,27 +9511,17 @@ of \type{EIM} and \type{LIM} matches.
 
 \begin{theorem}[Transition Array Complexity]
 \label{th:transition-array}
-Creation of the \var{transition} array
-consumes \Oc{} time,
+The resource incurred by
+the Bookkeeper op
+may be charged as to the \var{es} account
+as \Oc{} time,
 \Oc{} trimmed space,
-and zero link space,
-which is charged to the \var{es}
-account.
+and zero link space.
 \end{theorem}
 
 \begin{proof}
 We first consider
 outline one method of creating the \var{transition} array.
-\begin{algorithmic}[1]
-\State Create \var{work}, an temporary working array of length \size{\Vocab{\var{g}}},
-indexed by symbol ID.
-\For{$\Vpim{x} \in \Ves{es}$}
-\State Add \Veim{x} at the head of the linked list at \Velement{work}{\Transition{\Veim{x}}}
-\EndFor
-\State Create \var{transition}, an array of size \var{cnt}
-\State Copy the populated entries of \var{work} to \var{transition},
-   in order.
-\end{algorithmic}
 
 In this method, as a first pass, the \type{ES} is traversed
 and an array
