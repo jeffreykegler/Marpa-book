@@ -9366,12 +9366,13 @@ it includes an update of the \var{transitions} array
 \begin{theorem}[Earley set add]
 \label{th:es-add}
 The resource incurred by adding a new
-\type{PIM} is charged as \Oc{}
-time, \Oc{} trimmed space and
+\type{PIM} to an Earley set incurs
+\Oc{} time, \Oc{} trimmed space and
 zero link space.
 \end{theorem}
 
 \begin{proof}
+\todo{Redo proof}
 To add a new \type{PIM}, we must add it to the
 linked list of \type{PIM}s,
 as well as to the transition array.
@@ -9379,18 +9380,15 @@ as well as to the transition array.
 \myqed
 \end{proof}
 
-\begin{theorem}[Earley set complexity]
-\label{th:es-complexity}
-Adding an \type{EIM} to an Earley set
-consumes \Oc{} time,
-\Oc{} trimmed space,
-and zero link space.
+\begin{theorem}[Earley set adjoin]
+\label{th:es-adjoin}
+\todo{Replace es-complexity with broken down theorems}
 The adjoin of an existing \type{EIM} (a dup)
 incurs \Oc{} time, zero trimmed space and \Oc{} link space.
-Traversal of an Earley set requires \Oc{} time per \type{EIM}.
 \end{theorem}
 
 \begin{proof}
+\todo{Redo proof}
 When \Marpa{} reaches a new current location,
 it creates an empty Earley set.
 which
@@ -9404,6 +9402,20 @@ Adding an \type{EIM} requires
 zero link space because the initial link pair
 is kept in trimmed space.
 \myqed
+\end{proof}
+
+\begin{theorem}[Earley set traversal]
+\label{th:es-traversal}
+\todo{Account for PIM's}
+Let \Ves{eset} be an Earley set.
+Traversal of \var{eset} requires \Oc{} time for each \type{PIM}
+in \var{eset}.
+Also,
+traversal of \var{eset} requires \Oc{} time for each \type{EIM}
+in \var{eset}.
+\end{theorem}
+
+\begin{proof}
 \end{proof}
 
 \subsection{\var{dotZeroUsed}}
@@ -9493,8 +9505,7 @@ indexed by symbol ID
 \State Add \Vpim{x} at the head of the list at \Velement{work}{\var{symID}}
 \label{line:bookkeeper-op-9}
 \EndFor
-\State Create \var{transition}, an per-\type{ES} array of size \var{cnt}, associated with
-    \VVelement{S}{j}
+\State Create \var{transition} for \VVelement{S}{j}, $\Vsize{transition} = \var{cnt}$
 \label{line:bookkeeper-op-10}
 \State Copy the populated entries of \var{work} to \var{transition},
    in order
@@ -9586,7 +9597,9 @@ and that fact that
 \\ \hline
     \multirow{2}{*}{\ref{line:bookkeeper-op-4}}
     &1/\var{proc}&
-    \multirow{2}{*}{\Obref{def:loop-invocation}.}
+    \multirow{2}{*}{
+        Line \ref{line:bookkeeper-op-3} Seq;
+        \Obref{def:loop-invocation}.}
 \\
     &+\;1/\var{pim}&
 \\ \hline
@@ -9619,6 +9632,50 @@ $\type{PIM} \in \VVelement{S}{j}$''.
 {$\le$}1/\var{pim}: ``at most once per
 $\type{PIM} \in \VVelement{S}{j}$''.
     }
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:bookkeeper-time}
+    \op{Bookkeeper} time per invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Time&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:bookkeeper-op-2}&\Oc{}&
+        \Vocab{\var{g}} is a constant which depends on \Vint{g}.
+\\ \hline
+    \ref{line:bookkeeper-op-3}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-4}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-5}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-6}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-7}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-8}&\Oc{}&\Thref{th:bookkeeper-time},
+        \Thref{th:procedure-overhead-discard}.
+        Zero indirect time.
+\\ \hline
+    \ref{line:bookkeeper-op-9}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-10}&\Oc{}&\Tbref{tab:bookkeeper-time},
+        \Thref{th:procedure-overhead-discard}.
+        Zero indirect time.
+\\ \hline
+    \ref{line:bookkeeper-op-11}&\Oc{}&
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    Empty justifications are considered immediately obvious.
+    See \AFref{alg:bookkeeper-op}.
+}
 \\ \hline
 \end{tabular}
 \end{table}
@@ -9660,6 +9717,7 @@ creation time for a new link in one of the
 
 Writes to the \var{transition} array
 do not occur once it has been created.
+
 Reads of the \var{transition} array
 use the \Transition{} function.
 A call of the form
@@ -9668,7 +9726,7 @@ returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
 
 \begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-set-size}
+\label{th:transitions-read}
 A call of the form
 \Transitions{\Vsym{t}}{\VVelement{S}{j}}
 consumes \Oc{} time, and zero space.
@@ -9683,17 +9741,20 @@ that is,
 
 \begin{proof}
 A call of the function \myfn{Transitions}{}
-indexes a sparse array, and returns a pointer
+searches \var{transition} for
+\VVelement{S}{j}, a binary array of \Oc{} size, and returns a pointer
 to the head of a linked list:
 this can be done in \Oc{} time.
-The claim for linked list size follows from
+\Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
+the \type{PIM}s at
+\VVelement{S}{j}, so that
+the claim for linked list size follows from
 the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
-the ES \type{LIM} Count Theorem \Thref{th:es-lim-count},
-and the Transition Array Complexity Theorem
-\Thref{th:transition-array}.
+and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 A \var{transitions} array is not altered after its creation,
 and therefore calls of \myfn{Transitions}{}
 do not consume additional space.
+\myqed
 \end{proof}
 
 \todo{Write ES-setup op section}
@@ -12208,9 +12269,9 @@ Lines are listed in order of deduction.
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&\Oc{}&\Thref{th:es-complexity}.
+    \ref{line:reducer-op-2}&\Oc{}&\Thref{th:es-traversal}.
 \\ \hline
-    \ref{line:reducer-op-3}&\Oc{}&\Thref{th:transition-array}.
+    \ref{line:reducer-op-3}&\Oc{}&\Thref{th:transitions-read}.
 \\ \hline
     \ref{line:reducer-op-4}&\Oc{}&
 \\ \hline
