@@ -9358,11 +9358,6 @@ incurs \Oc{} time and \Oc{} space.
 \myqed
 \end{proof}
 
-When examining the resource consumed in adding
-a new \type{PIM}, it is important to note that
-it includes an update of the \var{transitions} array
-\Sref{sec:transition-complexity}.
-
 \begin{theorem}[Earley set add]
 \label{th:es-add}
 The resource incurred by adding a new
@@ -9382,7 +9377,6 @@ as well as to the transition array.
 
 \begin{theorem}[Earley set adjoin]
 \label{th:es-adjoin}
-\todo{Replace es-complexity with broken down theorems}
 The adjoin of an existing \type{EIM} (a dup)
 incurs \Oc{} time, zero trimmed space and \Oc{} link space.
 \end{theorem}
@@ -9532,6 +9526,7 @@ The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
 \begin{theorem}[\var{cnt} size]
+\label{th:cnt-size}
 In \Aref{alg:bookkeeper-op}, $\var{cnt} = \Oc{}$.
 \end{theorem}
 
@@ -9652,25 +9647,25 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-3}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&
+    \ref{line:bookkeeper-op-4}&\Oc{}&\Thref{th:es-traversal}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&\Oc{}&
+    \ref{line:bookkeeper-op-5}&\Oc{}&\Thref{th:symbol-id-complexity}
 \\ \hline
     \ref{line:bookkeeper-op-6}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-7}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-8}&\Oc{}&\Thref{th:bookkeeper-time},
-        \Thref{th:procedure-overhead-discard}.
-        Zero indirect time.
+    \ref{line:bookkeeper-op-8}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-9}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&\Tbref{tab:bookkeeper-time},
-        \Thref{th:procedure-overhead-discard}.
-        Zero indirect time.
+        $\Vsize{transition} = \Oc{}$ \cuz
+        \Thref{th:cnt-size}.
 \\ \hline
     \ref{line:bookkeeper-op-11}&\Oc{}&
+        $\Vsize{work} = \Oc{}$ \cuz
+        \Vocab{\var{g}} is a constant which depends on \Vint{g}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     Empty justifications are considered immediately obvious.
@@ -9713,17 +9708,14 @@ creation time for a new link in one of the
 \myqed
 \end{proof}
 
-\todo{TO HERE Sun 08 Nov 2020 04:36:21 PM EST}
-
-Writes to the \var{transition} array
-do not occur once it has been created.
-
 Reads of the \var{transition} array
 use the \Transition{} function.
 A call of the form
 $\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
 returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
 is \Vsym{t}.
+Writes to the \var{transition} array
+do not occur once it has been created.
 
 \begin{theorem}[\myfn{Transitions}{} Complexity]
 \label{th:transitions-read}
@@ -9851,7 +9843,7 @@ see
 \Thref{th:dotzeroused-bitmap}.
 For the justification of line
 \ref{line:marpa-predict-85},
-see \Thref{th:es-complexity}.
+see \Thref{th:es-add}.
 For other lines, the time complexity follows
 directly from \Aref{alg:predict1}.
 
@@ -9902,7 +9894,7 @@ Space for \var{Predict1} is
 \myparbox{%
   Line \ref{line:marpa-predict-85}
   consumes \Oc{} space
-  \cuz{} \Thref{th:es-complexity}.}
+  \cuz{} \Thref{th:es-add}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict1-space-20}
@@ -10180,7 +10172,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \begin{equation}
 \label{eq:th-predict-es-time-18}
 \Time{\ref{line:marpa-predict-es-12}} = \Oc{}
-   \because \Thref{th:es-complexity}.
+   \because \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-time-20}
@@ -10377,7 +10369,7 @@ and \Oc{} charged to each \type{EIM} added.
 \begin{equation}
 \label{eq:th-predict-es-space-18}
 \Space{\ref{line:marpa-predict-es-12}} = 0
-   \because \Thref{th:es-complexity}.
+   \because \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predict-es-space-20}
@@ -10591,7 +10583,7 @@ The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition array
-\Thref{th:transition-array} for \VVelement{S}{j}.
+\Sref{sec:bookkeeper} for \VVelement{S}{j}.
 \dispEnd{}
 \end{observation}
 
@@ -10657,7 +10649,7 @@ is
 \begin{equation}
 \label{eq:th-initializer-time-18}
 \Time{\ref{line:initializer-op-30}} = \Oc{}
-   \because \Thref{th:es-complexity}.
+   \because \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-time-20}
@@ -10798,7 +10790,7 @@ is
 \begin{equation}
 \label{eq:th-initializer-space-18}
 \Space{\ref{line:initializer-op-30}} = \Oc{}
-   \because \Thref{th:es-complexity}.
+   \because \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-initializer-space-20}
@@ -11175,7 +11167,7 @@ which is what we needed for the theorem.
 &Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transition-array}
+    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transitions-read}
 \\ \hline
     \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
 \\ \hline
@@ -11209,9 +11201,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11244,7 +11236,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-adjoin}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11296,7 +11288,7 @@ and
 &Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transition-array}
+    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transitions-read}
 \\ \hline
     \ref{line:scanner-op-3}&1&0&&0&
 \\ \hline
@@ -11330,9 +11322,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
+    \ref{line:scanner-op-10}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11365,7 +11357,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-complexity}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-adjoin}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -11412,7 +11404,7 @@ and
 &Invoc-&\multicolumn{2}{|c|}{Space per invocation}&Line& \\ \cline{3-4}
 Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transition-array}
+    \ref{line:scanner-op-2}&1&0&&0&\Thref{th:transitions-read}
 \\ \hline
     \ref{line:scanner-op-3}&1&0&&0&
 \\ \hline
@@ -11446,9 +11438,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:es-complexity}
+    \ref{line:scanner-op-10}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11481,7 +11473,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&\c{}&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11672,7 +11664,7 @@ Line&Time&Justification
     \ref{line:earley-reducer-op-2}&\Oc{}&
         \Veimset{match} is a pointer to the head of a linked list,
         as returned by \myfn{Transition}{}
-        \Thref{th:transition-array}.
+        \Thref{th:transitions-read}.
 \\ \hline
     \ref{line:earley-reducer-op-3}&\Oc{}&
 \\ \hline
@@ -11682,17 +11674,18 @@ Line&Time&Justification
 \\ \hline
     \ref{line:earley-reducer-op-5}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-6}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-6}&\Oc{}&\Thref{th:es-add}
 \\ \hline
     \ref{line:earley-reducer-op-7}&\Oc{}&
 \\ \hline
     \ref{line:earley-reducer-op-8}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-9}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-adjoin}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
+    Empty justifications are considered immediately obvious.
     See \AFref{alg:earley-reducer-op}.
 }
 \\ \hline
@@ -11799,17 +11792,18 @@ Line&Trimmed&Link&Justification
 \\ \hline
     \ref{line:earley-reducer-op-5}&0&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&0&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-6}&0&\Oc{}&\Thref{th:es-adjoin}
 \\ \hline
     \ref{line:earley-reducer-op-7}&0&0&
 \\ \hline
     \ref{line:earley-reducer-op-8}&0&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&0&0&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-9}&0&0&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&0&\Thref{th:es-complexity}
+    \ref{line:earley-reducer-op-10}&\Oc{}&0&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|p{4.5in}|}{
+    Empty justifications are considered immediately obvious.
     See \AFref{alg:earley-reducer-op}.
 }
 \\ \hline
@@ -11997,20 +11991,19 @@ Line&Time&Justification
 \\ \hline
     \ref{line:leo-reducer-op-4}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:es-adjoin}
 \\ \hline
     \ref{line:leo-reducer-op-6}&\Oc{}&
 \\ \hline
     \ref{line:leo-reducer-op-7}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-8}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-8}&\Oc{}&
 \\ \hline
-    \ref{line:leo-reducer-op-9}&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-9}&\Oc{}&\Thref{th:es-add}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-    See
-    \AFref{alg:leo-reducer-op},
-    \Tbref{tab:leo-reducer-invocations}.
+    Empty justifications are considered immediately obvious.
+    See \AFref{alg:leo-reducer-op}.
 }
 \\ \hline
 \end{tabular}
@@ -12108,15 +12101,17 @@ Line&Trimmed&Link&Justification
 \\ \hline
     \ref{line:leo-reducer-op-4}&&&
 \\ \hline
-    \ref{line:leo-reducer-op-5}&&\Oc{}&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-5}&&&
 \\ \hline
-    \ref{line:leo-reducer-op-6}&&&
+    \ref{line:leo-reducer-op-6}&&\Oc{}&\Thref{th:es-adjoin}
 \\ \hline
     \ref{line:leo-reducer-op-7}&&&
 \\ \hline
     \ref{line:leo-reducer-op-8}&&&
 \\ \hline
-    \ref{line:leo-reducer-op-9}&\Oc{}&&\Thref{th:es-complexity}
+    \ref{line:leo-reducer-op-9}&&&
+\\ \hline
+    \ref{line:leo-reducer-op-9}&\Oc{}&&\Thref{th:es-add}
 \\ \hline
 \multicolumn{4}{|p{4.5in}|}{See
     \AFref{alg:leo-reducer-op},
