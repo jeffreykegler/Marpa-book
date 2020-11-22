@@ -9475,28 +9475,39 @@ where PSL's are described in detail.
 \begin{algorithmic}[1]
 \Procedure{Bookkeeper}{\VVelement{S}{j}}
 \State Create \var{work}, an temporary working array of length \size{\Vocab{\var{g}}},
-indexed by symbol ID.
-\State $\Vnat{cnt} = 0$
-\For{$\Vpim{x} \in \Ves{es}$}
-\State $\Vnat{ix} = \ID\Transition{\Vpim{x}}$
-\If { \Velement{work}{\var{ix}} is unpopulated }
-\State Create an empty linked list at \Velement{work}{\var{ix}}
-\State $\var{cnt} = \var{cnt}+1$
+indexed by symbol ID
+\label{line:bookkeeper-op-2}
+\State $\Vnat{cnt} \gets 0$
+\label{line:bookkeeper-op-3}
+\For{$\Vpim{x} \in \VVelement{S}{j}$}
+\label{line:bookkeeper-op-4}
+\State $\Vnat{symID} \gets \ID{\Transition{\Vpim{x}}}$
+\label{line:bookkeeper-op-5}
+\If { \Velement{work}{\var{symID}} is unpopulated }
+\label{line:bookkeeper-op-6}
+\State Create an empty linked list at \Velement{work}{\var{symID}}
+\label{line:bookkeeper-op-7}
+\State $\var{cnt} \gets \var{cnt}+1$
+\label{line:bookkeeper-op-8}
 \EndIf
-\State Add \Vpim{x} at the head of the list at \Velement{work}{\var{ix}}
+\State Add \Vpim{x} at the head of the list at \Velement{work}{\var{symID}}
+\label{line:bookkeeper-op-9}
 \EndFor
-\State Create \var{transition}, an array of size \var{cnt}
+\State Create \var{transition}, an per-\type{ES} array of size \var{cnt}, associated with
+    \VVelement{S}{j}
+\label{line:bookkeeper-op-10}
 \State Copy the populated entries of \var{work} to \var{transition},
-   in order.
+   in order
+\label{line:bookkeeper-op-11}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 \FloatBarrier
 
-The Bookkeeper op is run for each \type{ES}
+The \op{Bookkeeper} op is run for each \type{ES}
 after that \type{ES} is fully populated with \type{PIM}s.
-The Bookkeeper op and creates
+The \op{Bookkeeper} op and creates
 the \var{transition} array for that \type{ES}.
 
 Each entry in the \var{transition} array
@@ -9509,23 +9520,123 @@ to allow the array to be binary searched.
 The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
-\begin{theorem}[Transition Array Complexity]
-\label{th:transition-array}
+\begin{theorem}[\var{cnt} size]
+In \Aref{alg:bookkeeper-op}, $\var{cnt} = \Oc{}$.
+\end{theorem}
+
+\begin{proof}
+\var{cnt} is incremented at line
+\ref{line:bookkeeper-op-8} only if
+\Velement{work}{\var{symID}} is unpopulated
+at line \ref{line:bookkeeper-op-6}.
+But whenever \Velement{work}{\var{symID}} is unpopulated
+at line \ref{line:bookkeeper-op-6},
+it is populated
+at line \ref{line:bookkeeper-op-7}.
+Therefore,
+\mypareq{eq:th-transition-creation-100}{%
+    for every value of \var{symID},
+    line \ref{line:bookkeeper-op-8} is executed at most once.
+}
+\mypareq{eq:th-transition-creation-110}{%
+   \var{symID}
+   at line \ref{line:bookkeeper-op-6}
+   is the ID of a symbol in \Vint{g}
+   \cuz{}
+   line \ref{line:bookkeeper-op-5}.
+}
+\mypareq{eq:th-transition-creation-120}{%
+    Line \ref{line:bookkeeper-op-8} is executed at most
+    \size{\Vocab{\var{g}}} times
+    \cuz{}
+        \Eref{eq:th-transition-creation-100},
+        \Eref{eq:th-transition-creation-110}.
+}
+\mypareq{eq:th-transition-creation-130}{%
+    In \Aref{alg:bookkeeper-op}, $\var{cnt} \le
+    \size{\Vocab{\var{g}}}$
+    \cuz{} lines \ref{line:bookkeeper-op-3},
+        \ref{line:bookkeeper-op-8};
+        \Eref{eq:th-transition-creation-120}.
+}
+The theorem follows from
+\Eref{eq:th-transition-creation-130}
+and that fact that
+\Vocab{\var{g}} is a constant which depends on \Vint{g}.
+\myqed
+\end{proof}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:bookkeeper-invocations}
+    Line invocations for \op{Bookkeeper}}
+\vspace{1ex}
+\begin{tabular}{|r|r|p{2.75in}|}
+\hline
+\multicolumn{1}{|c|}{Line}
+    &\multicolumn{1}{c|}{Invocations}
+    &\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate.
+\\ \hline
+    \ref{line:bookkeeper-op-3}&1/\var{proc}&
+       Line \ref{line:bookkeeper-op-2} Seq.
+\\ \hline
+    \multirow{2}{*}{\ref{line:bookkeeper-op-4}}
+    &1/\var{proc}&
+    \multirow{2}{*}{\Obref{def:loop-invocation}.}
+\\
+    &+\;1/\var{pim}&
+\\ \hline
+    \ref{line:bookkeeper-op-5}&1/\var{pim}&
+       Line \ref{line:bookkeeper-op-4} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-6}&1/\var{pim}&
+       Line \ref{line:bookkeeper-op-5} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-7}&{$\le$}1/\var{pim}&
+       Line \ref{line:bookkeeper-op-6} Cond.
+\\ \hline
+    \ref{line:bookkeeper-op-8}&{$\le$}1/\var{pim}&
+       Line \ref{line:bookkeeper-op-7} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-9}&1/\var{pim}&
+       Line \ref{line:bookkeeper-op-6} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-10}&1/\var{proc}&
+        Line \ref{line:bookkeeper-op-4} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-11}&1/\var{proc}&
+        Line \ref{line:bookkeeper-op-10} Seq.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+Lines are listed in order of deduction.
+1/\var{proc}: ``once per procedure call''.
+1/\var{pim}: ``once per
+$\type{PIM} \in \VVelement{S}{j}$''.
+{$\le$}1/\var{pim}: ``at most once per
+$\type{PIM} \in \VVelement{S}{j}$''.
+    }
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\begin{theorem}[Transition Array Creation]
+\label{th:transition-creation}
 The resource incurred by
-the Bookkeeper op
-may be charged as to the \var{es} account
+the \op{Bookkeeper} op
+may be charged as to
+the \var{es} account of \VVelement{S}{j}
 as \Oc{} time,
 \Oc{} trimmed space,
 and zero link space.
 \end{theorem}
 
 \begin{proof}
-We first consider
-outline one method of creating the \var{transition} array.
-
-In this method, as a first pass, the \type{ES} is traversed
-and an array
-
 Since there is at most one entry for every symbol
 in the grammar,
 the number of array entries in \var{transition} is,
