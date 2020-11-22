@@ -530,7 +530,7 @@ the approach is practical.
 The \Rtwo implementation is widely available
 and has seen considerable use.
 
-% TODO Revise once chapters are settled
+\todo{Revise summary of chapters at end}
 \Chref{chap:features}
 describes the important features of \Marpa{}.
 (The reference \Chref{chap:features} is to
@@ -1777,7 +1777,6 @@ a \dfn{derivation step}.
 A derivation is a \dfn{right derviation} iff
 all of its rewrite steps are right rewrite steps.
 
-% TODO: Do I need the definition of \dfn{derivation sequence}.
 The sequence of strings in a derivation, its sequence of strings
 is called its \dfn{derivation sequence}.
 The derivation sequence of \Eref{eq:derivation} is
@@ -4112,11 +4111,10 @@ Such cases would be unusual,
 but they may occur often enough to be worth
 providing for.
 
-% TODO Refer to proof that omission memoization does not affect correctness
 Omission of a Leo memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
-% TODO Add ref instead of "Later"
+\todo{Refer to later proof that omission of memoization does not affect correctness}
 Later in this paper
 we will prove this,
 and we will also
@@ -9371,7 +9369,6 @@ zero link space.
 To add a new \type{PIM}, we must add it to the
 linked list of \type{PIM}s,
 as well as to the transition array.
-\todo{Finish this}
 \myqed
 \end{proof}
 
@@ -9585,39 +9582,39 @@ and that fact that
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate.
+    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate
 \\ \hline
     \ref{line:bookkeeper-op-3}&1/\var{proc}&
-       Line \ref{line:bookkeeper-op-2} Seq.
+       Line \ref{line:bookkeeper-op-2} Seq
 \\ \hline
     \multirow{2}{*}{\ref{line:bookkeeper-op-4}}
     &1/\var{proc}&
-    \multirow{2}{*}{
+    \multirow{2}{*}{%
         Line \ref{line:bookkeeper-op-3} Seq;
         \Obref{def:loop-invocation}.}
 \\
     &+\;1/\var{pim}&
 \\ \hline
     \ref{line:bookkeeper-op-5}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-4} Seq.
+       Line \ref{line:bookkeeper-op-4} Seq
 \\ \hline
     \ref{line:bookkeeper-op-6}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-5} Seq.
+       Line \ref{line:bookkeeper-op-5} Seq
 \\ \hline
     \ref{line:bookkeeper-op-7}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-6} Cond.
+       Line \ref{line:bookkeeper-op-6} Cond
 \\ \hline
     \ref{line:bookkeeper-op-8}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-7} Seq.
+       Line \ref{line:bookkeeper-op-7} Seq
 \\ \hline
     \ref{line:bookkeeper-op-9}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-6} Seq.
+       Line \ref{line:bookkeeper-op-6} Seq
 \\ \hline
     \ref{line:bookkeeper-op-10}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-4} Seq.
+        Line \ref{line:bookkeeper-op-4} Seq
 \\ \hline
     \ref{line:bookkeeper-op-11}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-10} Seq.
+        Line \ref{line:bookkeeper-op-10} Seq
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
@@ -9664,7 +9661,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
         \Thref{th:cnt-size}.
 \\ \hline
     \ref{line:bookkeeper-op-11}&\Oc{}&
-        $\Vsize{work} = \Oc{}$ \cuz
+        $\Vsize{work} = \Oc{}$ \cuz{}
         \Vocab{\var{g}} is a constant which depends on \Vint{g}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
@@ -9673,6 +9670,48 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 }
 \\ \hline
 \end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:bookkeeper-time-worksheet}
+    \op{Bookkeeper} time worksheet}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
+\\ \cline{2-3}
+Line&\var{proc}&\var{pim}
+\\ \hline
+    \ref{line:bookkeeper-op-2}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-3}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-4}&\Oc{}&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-5}&&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-6}&&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-7}&&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-8}&&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-9}&&\Oc{}
+\\ \hline
+    \ref{line:bookkeeper-op-10}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-11}&\Oc{}&
+\\ \hline
+    Totals&\Oc{}&\Oc{}
+\\ \hline
+\end{tabular}
+\;\;\parbox{2.5in}{
+    See \Tbref{tab:bookkeeper-invocations},
+        \Tbref{tab:bookkeeper-time}.
+}
 \end{table}
 
 \FloatBarrier
@@ -9753,6 +9792,8 @@ do not consume additional space.
 
 \section{Initializer op}
 \label{sec:initializer}
+
+\FloatBarrier
 
 \begin{algorithm}[t]
 \caption{\var{Predict1}}
@@ -9922,6 +9963,8 @@ Space for \var{Predict1} is
   \quad \myqed}
 \end{equation}
 \end{proof}
+
+\FloatBarrier
 
 \begin{algorithm}[t]
 \caption{\var{Predict-ES}}
@@ -10587,6 +10630,8 @@ the transition array
 \dispEnd{}
 \end{observation}
 
+\FloatBarrier
+
 \begin{algorithm}[t]
 \caption{\op{Initializer}}
 \label{alg:initializer-op}
@@ -10992,6 +11037,8 @@ operation of \Earley{}\cite{Earley1970}.
 
 \section{Scanner op}
 \label{def:scanner}
+
+\FloatBarrier
 
 \begin{algorithm}[t]
 \caption{\var{Scanner}}
@@ -11520,10 +11567,10 @@ operation of \Earley{}.
 \dispEnd
 \end{observation}
 
-\FloatBarrier
-
 \section{Reducer op}
 \label{def:reducer}
+
+\FloatBarrier
 
 \begin{algorithm}[H]
 \caption{
@@ -12009,6 +12056,8 @@ Line&Time&Justification
 \end{tabular}
 \end{table}
 
+\FloatBarrier
+
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-time-worksheet}
@@ -12314,11 +12363,6 @@ For a \op{Leo-reducer} operation,
 the predecessor will be either a \type{LIM},
 or $\Lambda$.
 \dispEnd{}
-\end{observation}
-
-\begin{observation}[Complexity]
-\todo{}
-\dispEnd
 \end{observation}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
