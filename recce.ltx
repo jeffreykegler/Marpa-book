@@ -3133,11 +3133,13 @@ an \type{EIM} is a \dfn{penult} if its dotted rule is a penult,
 an \type{EIM} is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
+\begin{definition}[PIM]
+\label{def:pim}
 A \dfn{parse item} is either an Earley or a Leo item.
 Parse items are of type \type{PIM}.
 Leo items (type \type{LIM})
 will be defined in \Chref{chap:leo}.
-
+\end{definition}
 
 \todo{Revisit productivity, accessiblity.  Require in INT?}
 \begin{definition}[EIM validity]
@@ -6579,7 +6581,7 @@ By the definition of a functional relation,
 \end{proof}
 
 \begin{theorem}[LIM direction]
-\label{th-lim-direction}
+\label{th:lim-direction}
 The current location of a \type{LIM} is
 the current location of its source.
 That is,
@@ -8599,7 +8601,7 @@ where $\var{nxtlims} = \myfn{next-lims}{\Veim{src}}$.
 This theorem follows from
 the Next Eligible \type{EIM} Direction Theorem \Thref{th:next-eligible-direction},
 the definition of \type{LIM} validity \Dfref{def:lim-validity},
-the \type{LIM} Direction Theorem \Thref{th-lim-direction},
+the \type{LIM} Direction Theorem \Thref{th:lim-direction},
 and the definition of the \type{LIM} predecessor function \Dfref{def:lim-predecessor-fn}.
 \myqed
 \end{proof}
@@ -9711,39 +9713,79 @@ Line&\var{proc}&\var{pim}
 \;\;\parbox{2.5in}{
     See \Tbref{tab:bookkeeper-invocations},
         \Tbref{tab:bookkeeper-time}.
+    \var{pim} time is charged to each \type{PIM}
+    in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 }
 \end{table}
 
 \FloatBarrier
 
-\begin{theorem}[Transition Array Creation]
-\label{th:transition-creation}
-The resource incurred by
-the \op{Bookkeeper} op
-may be charged as to
-the \var{eim} account of each \type{EIM}
-in \VVelement{S}{j}
-as \Oc{} time,
-\Oc{} trimmed space,
-and zero link space.
+\begin{theorem}[Transition Array Creation Time]
+\label{th:transition-creation-time}
+The time that the \op{Bookkeeper} op incurs
+may be account for by charging
+\Oc{} time
+to the \var{eim} account of each \type{EIM}
+in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 \end{theorem}
 
 \begin{proof}
-Since there is at most one entry for every symbol
-in the grammar,
-the number of array entries in \var{transition} is,
-\order{\size{\Vocab{\var{g}}}}.
-\Vocab{\var{g}} is a constant which depends on \Vint{g},
-and the \var{transition} array itself,
-excluding the linked lists,
-is therefore of size \Oc{}.
-From this it follows immediately that the
-Per-\type{ES} creation of \var{transition}
-consumes \Oc{} time and \Oc{} space.
-when the \type{PIM}s are created.
-The lists grow from the head, so that
-creation time for a new link in one of the
-\var{transitions}'s linked lists is \Oc{}.
+Examining \Tbref{tab:bookkeeper-time-worksheet},
+we see that the
+time that the \op{Bookkeeper} op incurs
+can be charged \Oc{} \var{proc} time and
+\Oc{} ``pim'' time per \type{PIM} in
+in \VVelement{S}{j}.
+By the Procedure Overhead Theorem
+\Thref{th:procedure-overhead-discard},
+we may ignore \var{proc} time.
+
+\mypareq{eq:th-transition-creation-time-200}{%
+    Every \type{PIM} is either a \type{LIM} or a \type{EIM}
+    \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-transition-creation-time-210}{%
+    Every \type{LIM} in \VVelement{S}{j}
+    has exactly one \type{EIM} source.
+    \cuz{} \longThref{\myfnname{Source} Bijection Theorem}{th:source-fn-injection}.
+}
+\mypareq{eq:th-transition-creation-time-220}{%
+    The source \type{EIM} of a \type{LIM}
+    in \VVelement{S}{j} is also in \VVelement{S}{j}.
+    \cuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
+}
+\mypareq{eq:th-transition-creation-time-230}{%
+    The \var{pim} time for every \type{LIM}
+    in \VVelement{S}{j}
+    may be re-charged to its EIM source in \VVelement{S}{j}
+    \cuz{} \Eref{eq:th-transition-creation-time-210},
+    \Eref{eq:th-transition-creation-time-220}.
+}
+%
+From here on, we assume
+time charges take into account
+the re-charging of the \var{pim} time of the \type{LIM}s
+in \Eref{eq:th-transition-creation-time-230}.
+\mypareq{eq:th-transition-creation-time-240}{%
+    All \var{pim} time in \VVelement{S}{j} is charged to
+    one of the \type{EIM}s in \VVelement{S}{j}
+    \cuz{} \Eref{eq:th-transition-creation-time-200},
+        \Eref{eq:th-transition-creation-time-230}.
+}
+\mypareq{eq:th-transition-creation-time-250}{%
+    The \var{pim} time of \type{EIM} is at most
+    $\Oc+\Oc=\Oc$
+    \cuz{} \Eref{eq:th-transition-creation-time-210},
+        \Eref{eq:th-transition-creation-time-240}.
+}
+\mypareq{eq:th-transition-creation-time-260}{%
+    The \Oc{} \var{pim} time of each \type{EIM}
+    in \VVelement{S}{j}
+    may be re-charged as \Oc{} time to the \var{eim}
+    account of that \type{EIM}
+    \cuz{} \Eref{eq:th-transition-creation-time-250}.
+}
+\todo{Finish this proof}
 \myqed
 \end{proof}
 
