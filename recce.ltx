@@ -9538,11 +9538,11 @@ In \Aref{alg:bookkeeper-op}, $\var{cnt} = \Oc{}$.
 \var{cnt} is incremented at line
 \ref{line:bookkeeper-op-7} only if
 the list \Velement{work}{\var{symID}} is empty
-at line \ref{line:bookkeeper-op-5}.
+at line \ref{line:bookkeeper-op-6}.
 But whenever \Velement{work}{\var{symID}} is empty
 at line \ref{line:bookkeeper-op-6},
 an entry is added to it
-at line \ref{line:bookkeeper-op-6}.
+at line \ref{line:bookkeeper-op-8}.
 Therefore,
 \mypareq{eq:th-transition-creation-100}{%
     for every value of \var{symID},
@@ -9557,8 +9557,7 @@ Therefore,
 \mypareq{eq:th-transition-creation-120}{%
     Line \ref{line:bookkeeper-op-7} is executed at most
     \size{\Vocab{\var{g}}} times
-    \cuz{}
-        \Eref{eq:th-transition-creation-100},
+    \bcuz{} \Eref{eq:th-transition-creation-100},
         \Eref{eq:th-transition-creation-110}.
 }
 \mypareq{eq:th-transition-creation-130}{%
@@ -9588,10 +9587,10 @@ and that fact that
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate
+    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate.
 \\ \hline
     \ref{line:bookkeeper-op-3}&1/\var{proc}&
-       Line \ref{line:bookkeeper-op-2} Seq
+       Line \ref{line:bookkeeper-op-2} Seq.
 \\ \hline
     \multirow{2}{*}{\ref{line:bookkeeper-op-4}}
     &1/\var{proc}&
@@ -9602,22 +9601,22 @@ and that fact that
     &+\;1/\var{pim}&
 \\ \hline
     \ref{line:bookkeeper-op-5}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-4} Seq
+       Line \ref{line:bookkeeper-op-4} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-6}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-5} Cond
+       Line \ref{line:bookkeeper-op-5} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-7}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-6} Seq
+       Line \ref{line:bookkeeper-op-6} Cond.
 \\ \hline
     \ref{line:bookkeeper-op-8}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-5} Seq
+       Line \ref{line:bookkeeper-op-5} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-9}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-4} Seq
+        Line \ref{line:bookkeeper-op-4} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-10}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-9} Seq
+        Line \ref{line:bookkeeper-op-9} Seq.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
@@ -9657,7 +9656,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-8}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-9}&\Oc{}&\Tbref{tab:bookkeeper-time},
+    \ref{line:bookkeeper-op-9}&\Oc{}&
         $\Vsize{transition} = \Oc{}$ \cuz
         \Thref{th:cnt-size}.
 \\ \hline
@@ -9707,6 +9706,8 @@ Line&\var{proc}&\var{pim}
 \\ \hline
 \end{tabular}
 \;\;\parbox{2.5in}{
+    All charges in this table are per call
+    of the \op{Bookkeeper} op.
     See \Tbref{tab:bookkeeper-invocations},
         \Tbref{tab:bookkeeper-time}.
     \var{pim} time is charged to each \type{PIM}
@@ -9718,7 +9719,7 @@ Line&\var{proc}&\var{pim}
 
 \begin{theorem}[Transition Array Creation Time]
 \label{th:transition-creation-time}
-The time that the \op{Bookkeeper} op incurs
+The time that each \op{Bookkeeper} op incurs
 may be account for by charging
 \Oc{} time
 to the \var{eim} account of each \type{EIM}
@@ -9727,7 +9728,7 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 
 \begin{proof}
 \mypareq{eq:th-transition-creation-time-100}{%
-    The time that the \op{Bookkeeper} op incurs
+    The time that each \op{Bookkeeper} op incurs
     can be charged as \Oc{} time to the \var{proc} account
     of \op{Bookkeeper} op;
     and \Oc{} time to the \var{pim} account
@@ -9737,24 +9738,24 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 Recall that we may safely discard \Oc{} time
 charged to \var{proc} account ot the procedure.
 \mypareq{eq:th-transition-creation-time-110}{%
-    The time that the \op{Bookkeeper} op incurs
+    The time that each \op{Bookkeeper} op incurs
     can be charged as
     \Oc{} time to the \var{pim} account
     of each \type{PIM} in in \VVelement{S}{j}
     \bcuz{} \Thref{th:procedure-overhead-discard}.
 }
 \mypareq{eq:th-transition-creation-time-200}{%
-    Every \type{PIM} is either a \type{LIM} or a \type{EIM}
-    \bcuz{} \longDfref{PIM}{def:pim}.
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
 }
 \mypareq{eq:th-transition-creation-time-210}{%
     Every \type{LIM} in \VVelement{S}{j}
-    has exactly one \type{EIM} source.
-    \bcuz{} \longThref{\myfnname{Source} Bijection Theorem}{th:source-fn-injection}.
+    has exactly one \type{EIM} source
+    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
 }
 \mypareq{eq:th-transition-creation-time-220}{%
     The source \type{EIM} of a \type{LIM}
-    in \VVelement{S}{j} is also in \VVelement{S}{j}.
+    in \VVelement{S}{j} is also in \VVelement{S}{j}
     \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
 }
 \mypareq{eq:th-transition-creation-time-230}{%
@@ -9768,29 +9769,29 @@ charged to \var{proc} account ot the procedure.
     If the time of its \type{LIM} is charged to it,
     the \var{pim} time of a source \type{EIM} is at most
     $\Oc+\Oc=\Oc$
-    \bcuz{} \Eref{eq:th-transition-creation-time-210},
+    \bcuz{} \Eref{eq:th-transition-creation-time-110},
+        \Eref{eq:th-transition-creation-time-210},
         \Eref{eq:th-transition-creation-time-230}.
 }
 \mypareq{eq:th-transition-creation-time-260}{%
-    The time that the \op{Bookkeeper} op incurs
+    If the time of all \type{LIM}s in \VVelement{S}{j}
+    is charged to their source,
+    the time that each \op{Bookkeeper} op incurs
     can be charged as
     \Oc{} time to the \var{pim} account
     of each \type{EIM} in \VVelement{S}{j}
-    \bcuz{}
-        \Eref{eq:th-transition-creation-time-110},
-        \Eref{eq:th-transition-creation-time-200},
-        \Eref{eq:th-transition-creation-time-230},
+    \bcuz{} \Eref{eq:th-transition-creation-time-110},
         \Eref{eq:th-transition-creation-time-250}.
 }
 \mypareq{eq:th-transition-creation-time-270}{%
     The time that the \op{Bookkeeper} op incurs
     can be charged as
-    \Oc{} time to the \var{pim} account
+    \Oc{} time to the \var{eim} account
     of each \type{EIM} in \VVelement{S}{j}
-    \bcuz{} \Eref{eq:th-transition-creation-time-260}.
+    \bcuz{} \Eref{eq:th-transition-creation-time-110},
+        \Eref{eq:th-transition-creation-time-260}.
     \myqed
 }
-\todo{Finish this proof}
 \end{proof}
 
 \FloatBarrier
@@ -9804,31 +9805,32 @@ charged to \var{proc} account ot the procedure.
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&\Oc{}&
+    \ref{line:bookkeeper-op-2}&0&
         \Vocab{\var{g}} is a constant which depends on \Vint{g},
         so that $\Vsize{work} = \Oc$.
-        \Vsize{work} resides on stack, and include space for
-        empty linked lists.
+        \Vsize{work} resides on the stack.
 \\ \hline
-    \ref{line:bookkeeper-op-3}&\Oc{}&
+    \ref{line:bookkeeper-op-3}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&\Thref{th:es-traversal}
+    \ref{line:bookkeeper-op-4}&0&\Thref{th:es-traversal}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&\Oc{}&\Thref{th:symbol-id-complexity}
+    \ref{line:bookkeeper-op-5}&0&\Thref{th:symbol-id-complexity}
 \\ \hline
-    \ref{line:bookkeeper-op-6}&\Oc{}&
+    \ref{line:bookkeeper-op-6}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-7}&\Oc{}&
+    \ref{line:bookkeeper-op-7}&0&
 \\ \hline
     \ref{line:bookkeeper-op-8}&\Oc{}&
+        For creation of empty linked list.
 \\ \hline
     \ref{line:bookkeeper-op-9}&\Oc{}&\Tbref{tab:bookkeeper-time},
         $\Vsize{transition} = \Oc{}$ \cuz
         \Thref{th:cnt-size}.
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&
-        $\Vsize{work} = \Oc{}$ \cuz{}
-        \Vocab{\var{g}} is a constant which depends on \Vint{g}.
+    \ref{line:bookkeeper-op-10}&0&
+        All space used by \var{transition} is already allocated at
+            lines \ref{line:bookkeeper-op-8} and
+            \ref{line:bookkeeper-op-9}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:bookkeeper-op}.
@@ -9858,16 +9860,20 @@ a linked list of \order{\Vloc{j}} size,
 that is,
 \begin{gather*}
 \forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
 \end{gather*}
 \end{theorem}
 
 \begin{proof}
-A call of the function \myfn{Transitions}{}
-searches \var{transition} for
-\VVelement{S}{j}, a binary array of \Oc{} size, and returns a pointer
-to the head of a linked list:
-this can be done in \Oc{} time.
+\myfn{Transitions}{}
+does a binary search of
+the \var{transition} array for \VVelement{S}{j},
+and returns a pointer
+to the head of a linked list.
+$\Vsize{transition} = \Oc{}$,
+so that the search and pointer return
+can be done in \Oc{} time.
+
 \Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
 the \type{PIM}s at
 \VVelement{S}{j}, so that
