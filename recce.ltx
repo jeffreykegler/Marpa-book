@@ -9342,13 +9342,26 @@ When \Marpa{} reaches a new current location,
 it creates an empty Earley set.
 For complexity analysis purposes,
 an Earley set can be regarded as a linked list
-of \type{LIM}s and \type{PIM}s.
+of \type{PIM}s.
 
 Link pairs are kept in a finite set of linked lists.
 The heads of the lists stored with the \type{EIM} and
 occupy trimmed space.
 The rest of the lists of links pairs occupies
 unassigned space.
+
+\begin{observation}[PIM \var{transitions} array link entry]
+\label{obs:pim-transitions-array-link-entry}
+The data structure for
+every PIM \Vpim{pim}
+includes an entry that
+is reserved for use with the 
+the \var{transitions} array for \Velement{S}{\Current{\var{pim}}}.
+The value of this entry is either $\Lambda$,
+or a pointer to another \type{PIM}
+in the same \type{ES}.
+The \var{transitions} array is described in \Sref{sec:bookkeeper}.
+\end{observation}
 
 \begin{theorem}[Earley set allocation]
 \label{th:es-allocation}
@@ -9820,8 +9833,10 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-7}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-8}&\Oc{}&
-        For creation of empty linked list.
+    \ref{line:bookkeeper-op-8}&0&
+        Links are stored in already allocated space
+        in each \var{PIM}
+        \Obref{obs:pim-transitions-array-link-entry}
 \\ \hline
     \ref{line:bookkeeper-op-9}&\Oc{}&\Tbref{tab:bookkeeper-time},
         $\Vsize{transition} = \Oc{}$ \cuz
@@ -9838,6 +9853,24 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
+
+\FloatBarrier
+
+\begin{theorem}[Transition Array Creation Space]
+\label{th:transition-creation-space}
+If \VVelement{S}{j} of \Aref{alg:bookkeeper-op}
+is non-empty,
+then the space that each \op{Bookkeeper} op incurs
+may be account for by charging
+\Oc{} space
+to the \var{eim} account of the first \type{EIM}
+in \VVelement{S}{j}.
+\end{theorem}
+
+\begin{proof}
+\todo{Write this proof}
+\myqed
+\end{proof}
 
 \FloatBarrier
 
