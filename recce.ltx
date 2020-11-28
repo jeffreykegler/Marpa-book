@@ -9355,7 +9355,7 @@ unassigned space.
 The data structure for
 every PIM \Vpim{pim}
 includes an entry that
-is reserved for use with the 
+is reserved for use with the
 the \var{transitions} array for \Velement{S}{\Current{\var{pim}}}.
 The value of this entry is either $\Lambda$,
 or a pointer to another \type{PIM}
@@ -9858,17 +9858,19 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 
 \begin{theorem}[Transition Array Creation Space]
 \label{th:transition-creation-space}
-If \VVelement{S}{j} of \Aref{alg:bookkeeper-op}
-is non-empty,
-then the space that each \op{Bookkeeper} op incurs
+The space that each \op{Bookkeeper} op incurs
 may be account for by charging
-\Oc{} space
-to the \var{eim} account of the first \type{EIM}
-in \VVelement{S}{j}.
+\Oc{} trimmed space to an arbitrary \type{EIM}.
 \end{theorem}
 
 \begin{proof}
-\todo{Write this proof}
+Per the \Tbref{tab:bookkeeper-invocations}
+and \Tbref{tab:bookkeeper-space}, we see that
+each call of \op{Bookkeeper} incurs \Oc{} space.
+We choose to charge this as trimmed space.
+There is a start \type{EIM}, even in a failed parse,
+so that there will always be an \type{EIM} to whose
+\var{eim} account we may charge the \Oc{} trimmed space.
 \myqed
 \end{proof}
 
@@ -9918,8 +9920,6 @@ and therefore calls of \myfn{Transitions}{}
 do not consume additional space.
 \myqed
 \end{proof}
-
-\todo{Write ES-setup op section}
 
 \section{Initializer op}
 \label{sec:initializer}
