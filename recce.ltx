@@ -978,7 +978,11 @@ and only in cases where they are not expected to cause confusion.
 The basis of our formal presentation is
 a naive set theory,
 consistent with that of
-Halmos 1960~\cite{Halmos1960}.
+Halmos.\footnote{%
+See Halmos 1960~\cite{Halmos1960}.
+Halmos assumes the Axiom of Choice,
+but this paper makes no use of it.
+}
 Particularly, all of our mathematical objects are sets.
 
 \chapter{Notation}
@@ -8815,13 +8819,13 @@ The ``ultimate destination'' of a charge is always an \type{EIM}.
 An ``intermediate destination'' can be either an Earley set,
 or the parse itself.
 All charges not made to an ultimate destination are
-re-charged at some point,
-and eventually every charge is re-charged to an
+recharged at some point,
+and eventually every charge is recharged to an
 ultimate destination.
 
 \begin{definition}[Charging to the parse]
 \label{def:charging-to-parse}
-A resource ``charged to the parse'' is re-charged to the first \type{EIM}
+A resource ``charged to the parse'' is recharged to the first \type{EIM}
 of Earley set 0.
 There is always a start \type{EIM} in Earley set 0,
 so that the first \type{EIM} of Earley set 0
@@ -8831,7 +8835,7 @@ exists in every parse.
 
 \begin{definition}[Charging to the Earley set]
 \label{def:charging-to-es}
-A resource ``charged to an Earley set'' is re-charged to the first \type{EIM}
+A resource ``charged to an Earley set'' is recharged to the first \type{EIM}
 of that Earley set.
 In a successful parse, every Earley set will have at least one \type{EIM},
 so that the first \type{EIM} of an Earley set will always exist.
@@ -8847,7 +8851,7 @@ resource charged to the Earley set is charged to the parse.
 \label{def:charging-to-caller}
 If a resource is ``charged to the caller'',
 the decision of how
-to re-charge the resource is made by
+to recharge the resource is made by
 the pseudocode procedure that called the current pseudocode procedure.
 \dispEnd
 \end{definition}
@@ -9042,7 +9046,6 @@ When a pseudocode procedure (``caller'') calls another
 pseudocode procedure (``callee''), caller may treat \Oc{} time
 as part of the ``housekeeping''
 for callee.
-\myqed
 \end{theorem}
 
 \begin{proof}
@@ -9057,6 +9060,47 @@ of the callee, the total time is
 \]
 so that, in Landau notation terms,
 the housekeeping time of the callee is unchanged.
+\myqed
+\end{proof}
+
+\begin{theorem}[\type{LIM}--\type{EIM} recharge]
+\label{th:lim-eim-recharge}
+\mypareq{eq:th-lim-eim-recharge-050}{%
+    The resource for the \type{LIM}s
+    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
+    in \var{es} in such a way that the resource of
+    every \type{EIM} has the resource of at most
+    one \type{LIM} charged to it.
+}
+\mypareq{eq:th-lim-eim-recharge-060}{%
+    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
+    the resource charged to the \type{EIM}s of the \type{ES}
+    will fully account for the resource charged to
+    \type{PIM}s in \type{ES}.
+}
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-lim-eim-recharge-200}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-lim-eim-recharge-210}{%
+    Every \type{LIM} in \var{es}
+    has exactly one \type{EIM} source
+    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
+}
+\mypareq{eq:th-lim-eim-recharge-220}{%
+    The source \type{EIM} of a \type{LIM}
+    in \var{es} is also in \var{es}
+    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
+}
+\Eref{eq:th-lim-eim-recharge-050} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-210} and
+\Eref{eq:th-lim-eim-recharge-220}.
+\Eref{eq:th-lim-eim-recharge-060} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-050}
+and \Eref{eq:th-lim-eim-recharge-200}.
 \myqed
 \end{proof}
 
@@ -9757,54 +9801,17 @@ charged to \var{proc} account ot the procedure.
     of each \type{PIM} in in \VVelement{S}{j}
     \bcuz{} \Thref{th:procedure-overhead-discard}.
 }
-\mypareq{eq:th-transition-creation-time-200}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
-\mypareq{eq:th-transition-creation-time-210}{%
-    Every \type{LIM} in \VVelement{S}{j}
-    has exactly one \type{EIM} source
-    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
-}
-\mypareq{eq:th-transition-creation-time-220}{%
-    The source \type{EIM} of a \type{LIM}
-    in \VVelement{S}{j} is also in \VVelement{S}{j}
-    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
-}
-\mypareq{eq:th-transition-creation-time-230}{%
-    The \var{pim} time for every \type{LIM}
-    in \VVelement{S}{j}
-    may be re-charged to its EIM source in \VVelement{S}{j}
-    \bcuz{} \Eref{eq:th-transition-creation-time-210},
-    \Eref{eq:th-transition-creation-time-220}.
-}
 \mypareq{eq:th-transition-creation-time-250}{%
     If the time of its \type{LIM} is charged to it,
     the \var{pim} time of a source \type{EIM} is at most
     $\Oc+\Oc=\Oc$
-    \bcuz{} \Eref{eq:th-transition-creation-time-110},
-        \Eref{eq:th-transition-creation-time-210},
-        \Eref{eq:th-transition-creation-time-230}.
+    \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
+        \Eref{eq:th-transition-creation-time-110}.
 }
-\mypareq{eq:th-transition-creation-time-260}{%
-    If the time of all \type{LIM}s in \VVelement{S}{j}
-    is charged to their source,
-    the time that each \op{Bookkeeper} op incurs
-    can be charged as
-    \Oc{} time to the \var{pim} account
-    of each \type{EIM} in \VVelement{S}{j}
-    \bcuz{} \Eref{eq:th-transition-creation-time-110},
-        \Eref{eq:th-transition-creation-time-250}.
-}
-\mypareq{eq:th-transition-creation-time-270}{%
-    The time that the \op{Bookkeeper} op incurs
-    can be charged as
-    \Oc{} time to the \var{eim} account
-    of each \type{EIM} in \VVelement{S}{j}
-    \bcuz{} \Eref{eq:th-transition-creation-time-110},
-        \Eref{eq:th-transition-creation-time-260}.
-    \myqed
-}
+The theorem follows immediately from
+the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}
+and \Eref{eq:th-transition-creation-time-250}.
+\myqed
 \end{proof}
 
 \FloatBarrier
@@ -10478,7 +10485,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predict-es-time-44}
 \myparbox{%
   The indirect time of \proc{Predict-ES} is \Oc{} per \Veim{x},
-       which is re-charged directly to each \Veim{x}
+       which is recharged directly to each \Veim{x}
        \cuz{} \Eref{eq:def-predict-es-time-charge}, \Eref{eq:th-predict-es-time-42}.}
 \end{equation}
 \begin{equation}
@@ -12441,9 +12448,13 @@ Lines are listed in order of deduction.
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&\Oc{}&\Thref{th:es-traversal}.
+    \ref{line:reducer-op-2}&\Oc{}&
+        \type{ES} Traversal Theorem
+        \Thref{th:es-traversal}.
 \\ \hline
-    \ref{line:reducer-op-3}&\Oc{}&\Thref{th:transitions-read}.
+    \ref{line:reducer-op-3}&\Oc{}&
+        \myfn{Transition}{} Read Theorem
+        \Thref{th:transitions-read}.
 \\ \hline
     \ref{line:reducer-op-4}&\Oc{}&
 \\ \hline
@@ -12453,19 +12464,22 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-7}&\Oc{}&
 \\ \hline
-    \ref{line:reducer-op-8}&\Oc{}&\Thref{th:leo-reducer-time},
+    \ref{line:reducer-op-8}&\Oc{}&Zero indirect time by
+        Leo Reducer Time Table
+        \Thref{th:leo-reducer-time},
+        and Procedure Overhead Time Discard Theorem
         \Thref{th:procedure-overhead-discard}.
-        Zero indirect time.
 \\ \hline
     \ref{line:reducer-op-9}&\Oc{}&
 \\ \hline
-    \ref{line:reducer-op-10}&\Oc{}&\Tbref{tab:earley-reducer-time},
+    \ref{line:reducer-op-10}&\Oc{}&Zero indirect time by
+        Earley Reducer Time Table
+        \Tbref{tab:earley-reducer-time},
+        and Procedure Overhead Time Discard Theorem
         \Thref{th:procedure-overhead-discard}.
-        Zero indirect time.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:reducer-op},
-    \Tbref{tab:reducer-invocations}.
+    See \AFref{alg:reducer-op}.
 }
 \\ \hline
 \end{tabular}
