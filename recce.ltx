@@ -9349,7 +9349,6 @@ is kept in trimmed space.
 
 \begin{theorem}[Earley set traversal]
 \label{th:es-traversal}
-\todo{Account for PIM's}
 Let \Ves{eset} be an Earley set.
 Traversal of \var{eset}
 can be charged as \Oc{} time and zero space for each \type{PIM}
@@ -9362,63 +9361,6 @@ in \var{eset}.
 
 \begin{proof}
 \todo{Write this proof}
-\end{proof}
-
-\subsection{\var{dotZeroUsed}}
-\label{sec:dotzeroused-complexity}
-
-\var{dotZeroUsed} is a bitmap with
-one bit for every rule in the grammar.
-It is used when adding predictions to an Earley set.
-
-\begin{theorem}[\var{dotZeroUsed} bitmap]
-\label{th:dotzeroused-bitmap}
-Clearing \var{dotZeroUsed} requires \Oc{} time
-and zero space.
-Bit accesses and writes take \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-The size of the bitmap is \size{\Rules{\var{g}}}.
-\Rules{\var{g}} is a constant
-that depends on the grammar \Dfref{def:context-free-grammar},
-which justifies the claim of constant time for bit reads
-bit writes, and clearing of the bitmap.
-Space for \var{dotZeroUsed} is accounted for
-a part of the space for the grammar.
-\myqed
-\end{proof}
-
-\subsection{\var{seen} PSL}
-\label{sec:seen-psl-complexity}
-
-For each Earley set,
-\var{seen} is a PSL with
-one entry for every dotted rule in the grammar.
-Earley sets must not contain duplicated \type{EIM}s and
-\var{seen} is used to efficiently enforce this.
-\myfn{Seen}{\Veim{x}} is a function which returns
-the EIM equal to \var{x} if it already exists,
-and $\Lambda$ otherwise.
-\myfn{SetSeen}{\Veim{x}} is a function which adds
-\var{x} to the PSL.
-
-\begin{theorem}[\var{seen} PSL]
-\label{th:seen-psl}
-In each Earley set,
-set up of \var{seen} consumes \Oc{} time,
-\Oc{} trimmed space
-and zero link space.
-Each call of \Seen{} and \SetSeen{} consumes
-consumes \Oc{} time
-and zero space.
-\end{theorem}
-
-\begin{proof}
-The claims of this theorem are justified
-in section \Chref{chap:per-set-lists},
-where PSL's are described in detail.
-\myqed
 \end{proof}
 
 \begin{theorem}[\type{LIM}--\type{EIM} recharge]
@@ -9459,6 +9401,21 @@ follows from \Eref{eq:th-lim-eim-recharge-210} and
 \Eref{eq:th-lim-eim-recharge-060} of the theorem
 follows from \Eref{eq:th-lim-eim-recharge-050}
 and \Eref{eq:th-lim-eim-recharge-200}.
+\myqed
+\end{proof}
+
+\begin{theorem}[Earley set \type{EIM} traversal]
+\label{th:es-eim-traversal}
+Let \Ves{eset} be an Earley set.
+Traversal of \var{eset}
+can be charged as \Oc{} time and zero space for each \type{EIM}
+in \var{eset}.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the \type{ES} Traversal Theorem \Thref{th:es-traversal}
+and the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}.
 \myqed
 \end{proof}
 
@@ -9526,6 +9483,63 @@ at which point
 the array of Earley sets is static,
 so that the overhead of using a dynamic array
 is minimal.
+
+\section{\var{dotZeroUsed}}
+\label{sec:dotzeroused-complexity}
+
+\var{dotZeroUsed} is a bitmap with
+one bit for every rule in the grammar.
+It is used when adding predictions to an Earley set.
+
+\begin{theorem}[\var{dotZeroUsed} bitmap]
+\label{th:dotzeroused-bitmap}
+Clearing \var{dotZeroUsed} requires \Oc{} time
+and zero space.
+Bit accesses and writes take \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+The size of the bitmap is \size{\Rules{\var{g}}}.
+\Rules{\var{g}} is a constant
+that depends on the grammar \Dfref{def:context-free-grammar},
+which justifies the claim of constant time for bit reads
+bit writes, and clearing of the bitmap.
+Space for \var{dotZeroUsed} is accounted for
+a part of the space for the grammar.
+\myqed
+\end{proof}
+
+\section{\var{seen} PSL}
+\label{sec:seen-psl-complexity}
+
+For each Earley set,
+\var{seen} is a PSL with
+one entry for every dotted rule in the grammar.
+Earley sets must not contain duplicated \type{EIM}s and
+\var{seen} is used to efficiently enforce this.
+\myfn{Seen}{\Veim{x}} is a function which returns
+the EIM equal to \var{x} if it already exists,
+and $\Lambda$ otherwise.
+\myfn{SetSeen}{\Veim{x}} is a function which adds
+\var{x} to the PSL.
+
+\begin{theorem}[\var{seen} PSL]
+\label{th:seen-psl}
+In each Earley set,
+set up of \var{seen} consumes \Oc{} time,
+\Oc{} trimmed space
+and zero link space.
+Each call of \Seen{} and \SetSeen{} consumes
+consumes \Oc{} time
+and zero space.
+\end{theorem}
+
+\begin{proof}
+The claims of this theorem are justified
+in section \Chref{chap:per-set-lists},
+where PSL's are described in detail.
+\myqed
+\end{proof}
 
 \chapter{The algorithm}
 \label{chap:algorithm}
