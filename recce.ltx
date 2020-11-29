@@ -530,7 +530,7 @@ in the first version of this paper.
 
 While the presentation in this paper is theoretical,
 the approach is practical.
-The \Rtwo implementation is widely available
+The \Rtwo{} implementation is widely available
 and has seen considerable use.
 
 \todo{Revise summary of chapters at end}
@@ -564,7 +564,7 @@ of the ``ancestry'' of Earley items.
 \Chref{chap:complexity-preliminaries} lays our strategy
 for showing the time and speed complexity of \Marpa{}.
 
-\Chref{chap:marpa} describes the \Marpa{} algorithm.
+\Chref{chap:algorithm} describes the \Marpa{} algorithm.
 It includes pseudocode, as well as the low-level complexity analysis.
 
 Section \Chref{chap:ambiguity} contains a treatment of parsing ambiguity,
@@ -8931,71 +8931,6 @@ defined as ``modulo a unit'' are for counting invocations
 and passes at a level finer than the total count for the pseudocode procedure.
 Their precise meaning will defined in the context in which they are used.
 
-\section{Earley set indexing}
-\label{sec:es-indexing}
-
-\begin{theorem}[Location access time complexity]
-The function calls \Current{\Vpim{pim}} and
-\Current{\Ves{es}},
-and accesses of the form
-\Velement{S}{\Vloc{j}},
-incur \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-Our computation model, conceptually, is a random access machine,
-but it will be more useful to justify
-the theorem in terms of the \Marpa{} implementation.
-The implementation description is equivalent to,
-or straightforwardly translates to, a description in
-terms of a RAM.
-The accesses obviously require no new space.
-The constant times are accomplished by
-storing the integer location of that ES
-in each ES;
-storing ES's in a dynamic array
-indexed by location;
-and storing a pointer to its ES in
-every \type{PIM}.
-\myqed
-\end{proof}
-
-In practice, for efficiency,
-\Velement{S}{\Vloc{j}} accesses are not actually used
-by the \Marpa{} implementation during parsing.
-During parsing
-\Rtwo\cite{Marpa-R2}
-builds Earley sets as a linked list of structures,
-and a dynamic array indexing them is only created
-when needed.
-The dynamic array is not needed when
-running the recognizer in normal production,
-because links to Earley sets are kept in the \type{PIM}s,
-a link to the current Earley set is kept,
-and the event mechanism works using links.
-
-On the other hand,
-accesses of the form
-\Velement{S}{\Vloc{j}}
-are made use of
-for tracing and debugging in \Rtwo{}.
-The trace and
-debug facilities must allow the developer to
-specify arbitrary Earley sets,
-and the developer will often want to identify a location by
-its numerical ID.
-
-An array is also needed for evaluation,
-but at evaluation time the dynamic array implementing
-\Velement{S}{\Vloc{j}} accesses
-usually is dynamic in theory only.
-For most applications, evaluation only
-occurs after the parse is complete,
-at which point
-the array of Earley sets is static,
-so that the overhead of using a dynamic array
-is minimal.
-
 \section{Accounts}
 \label{sec:accounts}
 
@@ -9065,48 +9000,6 @@ so that, in Landau notation terms,
 the housekeeping time of the callee is unchanged.
 \myqed
 \end{proof}
-
-\begin{theorem}[\type{LIM}--\type{EIM} recharge]
-\label{th:lim-eim-recharge}
-\mypareq{eq:th-lim-eim-recharge-050}{%
-    The resource for the \type{LIM}s
-    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
-    in \var{es} in such a way that the resource of
-    every \type{EIM} has the resource of at most
-    one \type{LIM} charged to it.
-}
-\mypareq{eq:th-lim-eim-recharge-060}{%
-    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
-    the resource charged to the \type{EIM}s of the \type{ES}
-    will fully account for the resource charged to
-    \type{PIM}s in \type{ES}.
-}
-\end{theorem}
-
-\begin{proof}
-\mypareq{eq:th-lim-eim-recharge-200}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
-\mypareq{eq:th-lim-eim-recharge-210}{%
-    Every \type{LIM} in \var{es}
-    has exactly one \type{EIM} source
-    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
-}
-\mypareq{eq:th-lim-eim-recharge-220}{%
-    The source \type{EIM} of a \type{LIM}
-    in \var{es} is also in \var{es}
-    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
-}
-\Eref{eq:th-lim-eim-recharge-050} of the theorem
-follows from \Eref{eq:th-lim-eim-recharge-210} and
-\Eref{eq:th-lim-eim-recharge-220}.
-\Eref{eq:th-lim-eim-recharge-060} of the theorem
-follows from \Eref{eq:th-lim-eim-recharge-050}
-and \Eref{eq:th-lim-eim-recharge-200}.
-\myqed
-\end{proof}
-
 \section{Counting invocations}
 
 We first define our conventions for counting line
@@ -9281,26 +9174,17 @@ We notate this observation in the form
 \dispEnd
 \end{definition}
 
-\chapter{The \Marpa{} algorithm}
-\label{chap:marpa}
+\chapter{Data structures}
+\label{chap:data-structures}
 
-\section{Parse-setup op}
-\label{sec:parse-setup}
+As preliminary to the pseudocode and
+low-level complexity analysis,
+this section describes some of the
+data structures that are used
+by more one of the pseudocode procedures.
 
-\begin{theorem}[Grammar complexity]
-Setup of grammar incurs \Oc{} time,
-\Oc{} trimmed space
-and zero link space,
-all of which is charged to the parse.
-\end{theorem}
-
-\begin{proof}
-The grammar is treated as constant,
-and therefore its space and time demands are constant.
-\myqed
-\end{proof}
-
-\todo{Write parse-setup op section}
+\section{IDs}
+\label{sec:data-ids}
 
 \begin{theorem}[Symbol ID Complexity]
 \label{th:symbol-id-complexity}
@@ -9378,6 +9262,136 @@ given its ID.
 All of these operations are accesses and none consume space.
 \myqed
 \end{proof}
+
+\section{Earley sets}
+\label{sec:data-es}
+
+\begin{theorem}[\type{LIM}--\type{EIM} recharge]
+\label{th:lim-eim-recharge}
+\mypareq{eq:th-lim-eim-recharge-050}{%
+    The resource for the \type{LIM}s
+    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
+    in \var{es} in such a way that the resource of
+    every \type{EIM} has the resource of at most
+    one \type{LIM} charged to it.
+}
+\mypareq{eq:th-lim-eim-recharge-060}{%
+    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
+    the resource charged to the \type{EIM}s of the \type{ES}
+    will fully account for the resource charged to
+    \type{PIM}s in \type{ES}.
+}
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-lim-eim-recharge-200}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-lim-eim-recharge-210}{%
+    Every \type{LIM} in \var{es}
+    has exactly one \type{EIM} source
+    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
+}
+\mypareq{eq:th-lim-eim-recharge-220}{%
+    The source \type{EIM} of a \type{LIM}
+    in \var{es} is also in \var{es}
+    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
+}
+\Eref{eq:th-lim-eim-recharge-050} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-210} and
+\Eref{eq:th-lim-eim-recharge-220}.
+\Eref{eq:th-lim-eim-recharge-060} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-050}
+and \Eref{eq:th-lim-eim-recharge-200}.
+\myqed
+\end{proof}
+
+\section{Earley set indexing}
+\label{sec:es-indexing}
+
+\begin{theorem}[Location access time complexity]
+The function calls \Current{\Vpim{pim}} and
+\Current{\Ves{es}},
+and accesses of the form
+\Velement{S}{\Vloc{j}},
+incur \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+Our computation model, conceptually, is a random access machine,
+but it will be more useful to justify
+the theorem in terms of the \Marpa{} implementation.
+The implementation description is equivalent to,
+or straightforwardly translates to, a description in
+terms of a RAM.
+The accesses obviously require no new space.
+The constant times are accomplished by
+storing the integer location of that ES
+in each ES;
+storing ES's in a dynamic array
+indexed by location;
+and storing a pointer to its ES in
+every \type{PIM}.
+\myqed
+\end{proof}
+
+In practice, for efficiency,
+\Velement{S}{\Vloc{j}} accesses are not actually used
+by the \Marpa{} implementation during parsing.
+During parsing
+\Rtwo\cite{Marpa-R2}
+builds Earley sets as a linked list of structures,
+and a dynamic array indexing them is only created
+when needed.
+The dynamic array is not needed when
+running the recognizer in normal production,
+because links to Earley sets are kept in the \type{PIM}s,
+a link to the current Earley set is kept,
+and the event mechanism works using links.
+
+On the other hand,
+accesses of the form
+\Velement{S}{\Vloc{j}}
+are made use of
+for tracing and debugging in \Rtwo{}.
+The trace and
+debug facilities must allow the developer to
+specify arbitrary Earley sets,
+and the developer will often want to identify a location by
+its numerical ID.
+
+An array is also needed for evaluation,
+but at evaluation time the dynamic array implementing
+\Velement{S}{\Vloc{j}} accesses
+usually is dynamic in theory only.
+For most applications, evaluation only
+occurs after the parse is complete,
+at which point
+the array of Earley sets is static,
+so that the overhead of using a dynamic array
+is minimal.
+
+\chapter{The algorithm}
+\label{chap:algorithm}
+
+\section{Parse-setup op}
+\label{sec:parse-setup}
+
+\begin{theorem}[Grammar complexity]
+Setup of grammar incurs \Oc{} time,
+\Oc{} trimmed space
+and zero link space,
+all of which is charged to the parse.
+\end{theorem}
+
+\begin{proof}
+The grammar is treated as constant,
+and therefore its space and time demands are constant.
+\myqed
+\end{proof}
+
+\todo{Write parse-setup op section}
 
 \section{ES-setup op}
 \label{sec:es-setup}
@@ -9467,10 +9481,12 @@ is kept in trimmed space.
 \label{th:es-traversal}
 \todo{Account for PIM's}
 Let \Ves{eset} be an Earley set.
-Traversal of \var{eset} requires \Oc{} time for each \type{PIM}
+Traversal of \var{eset}
+can be charged as \Oc{} time and zero space for each \type{PIM}
 in \var{eset}.
-Also,
-traversal of \var{eset} requires \Oc{} time for each \type{EIM}
+Alternatively,
+traversal of \var{eset}
+can be charged as \Oc{} time and zero space for each \type{EIM}
 in \var{eset}.
 \end{theorem}
 
@@ -12835,6 +12851,125 @@ into the Earley table with the link pair
 
 \FloatBarrier
 
+\begin{theorem}[Leo Eligible Traversal]
+\label{th:leo-eligible-traversal}
+Let \Ves{eset} be an Earley set.
+Traversal of the Leo eligible items in \var{eset}
+can be charged as \Oc{} time and zero space for each \type{PIM}
+in \var{eset}.
+Alternatively,
+traversal of the Leo eligible items in \var{eset}
+can be charged as \Oc{} time and zero space for each \type{EIM}
+in \var{eset}.
+\end{theorem}
+
+\begin{proof}
+The proof strategy to state a conceptual algorithm
+which works in the required bounds.
+Our conceptual algorithm has two passes.
+
+In the first pass, we traverse \Ves{eset},
+marking two bitmaps indexed by symbol ID.
+The first bitmap is a one-bit counter.
+The second bitmap tracks overflow of the one-bit counter.
+Both bitmaps are indexed by symbol ID,
+and are cleared initially.
+During the traversal,
+for each \type{PIM}.
+we execute the following steps, in order:
+\begin{itemize}
+\item If the \type{PIM} is a \type{LIM}, we ignore it.
+\item Every remaining \type{PIM} is an \type{EIM}, call it \Veim{eim}.
+    Let $\Vsym{trans} = \Transition{\var{eim}}$.
+\item If \Vsym{trans} is not right recursive, we ignore \var{eim}.
+\item If the bit for \Vsym{trans} is unset in the counter bitmap,
+we set the bit for \Vsym{trans} in the counter bitmap.
+\item If the bit for \Vsym{trans} is set in the counter bitmap,
+we set the bit for \Vsym{trans} in the overflow bitmap.
+\end{itemize}
+Execution of the steps just described
+incurs \Oc{} time per \type{PIM}.
+
+In the second pass, we again traverse \Ves{eset},
+for each \type{PIM}
+executing the following steps, in order:
+\begin{itemize}
+\item If the \type{PIM} is a \type{LIM}, we ignore it.
+\item Every remaining \type{PIM} is an \type{EIM}, call it \Veim{eim}.
+    Let $\Vsym{trans} = \Transition{\var{eim}}$.
+\item If the bit for \Vsym{trans} is unset in the counter bitmap,
+    we ignore \var{eim}.
+\item If the bit for \Vsym{trans} is set in the overflow bitmap,
+    we ignore that \var{eim}.
+\item Any \var{eim} which remains is Leo eligible,
+   and is processed accordingly.
+\end{itemize}
+Execution of the steps just described
+incurs \Oc{} time per \type{PIM}.
+
+By the \type{ES} Traversal Theorem
+each traversal of \var{eset} incurs \Oc{} time
+per \type{PIM}
+\Thref{th:es-traversal}.
+Adding the per-\type{PIM} time for the first and second pass traversals
+themselves
+to the time for the steps itemized above in this proof for the first and second pass,
+we see that
+\mypareq{th:leo-eligible-traversal-300}{%
+    traversal of the Leo eligible items in \var{eset}
+    incurs $\Oc{}+ \Oc{}+ \Oc{}+ \Oc{} = \Oc{}$ time per \type{PIM}.
+}
+
+By the \type{ES} Traversal Theorem
+the two traversals each require zero space.
+The operations use per-symbol two bitmaps which,
+since the number of symbols in \Vint{g} is a constant,
+may be kept on the stack, so that they incur zero additional
+space.
+Totalling the space requirements, we see that
+\mypareq{th:leo-eligible-traversal-350}{%
+    traversal of the Leo eligible items in \var{eset}
+    incurs zero space per \type{PIM}.
+}
+This theorem is
+\Eref{th:leo-eligible-traversal-300} and
+\Eref{th:leo-eligible-traversal-350}.
+\myqed
+\end{proof}
+
+As an aside, an implementation
+using the technique described
+in the proof of \Thref{th:leo-eligible-traversal}.
+might find it more
+convenient to store the bitmaps with the data structure for
+the parse, clearing it every time an Earley set is created.
+The complexity analysis becomes slightly more complicated,
+but the same resource bounds are achieved.
+
+\Rtwo{} does not traverse the Leo eligible \type{PIM}s
+using the technique in the proof of \Thref{th:leo-eligible-traversal}.
+\Rtwo{} uses an technique which interweaves the
+\op{Bookkeeper} and
+\op{Memoizer} ops,
+This technique is faster, but harder to analyze for complexity.
+
+\Rtwo{} first creates the \var{transition} array for \type{EIM}s
+only.
+\Rtwo{} then traverses this partially populated
+\var{transition} array, looking for entries whose index
+symbol is right recursive and which have only
+one \type{EIM} in the linked list.
+These \type{EIM}s will all and only the Leo Eligible \type{EIM}s.
+
+For each Leo eligible \type{EIM} \var{src} that \Rtwo{} finds,
+it creates a \type{LIM}, using \var{src} as the source \type{EIM}.
+\Rtwo{} puts the \type{LIM} at the head of the linked list containing
+\var{src}.
+Since there is only one \type{LIM} per source \type{EIM},
+and since \Rtwo{} has already fully populated the \type{EIM}s
+in \var{transition}'s linked lists,
+this \type{LIM} will always be at the head of its linked list.
+
 \begin{theorem}[Memoizer op consistency]
 \label{th:memoizer-op-consistency}
 If
@@ -15404,7 +15539,7 @@ that there is \Marpa{} parse that creates an invalid \type{PIM}.
 This means that there is a first invalid \type{PIM} created
 by that \Marpa{} parse.
 Inspection of the \Marpa{} algorithm
-\Chref{chap:marpa} shows
+\Chref{chap:algorithm} shows
 that \type{PIM}s are only created by operations.
 
 We now proceed by elimination of subcases,
