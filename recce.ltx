@@ -2980,6 +2980,8 @@ That is,
 \]
 \end{definition}
 
+\begin{definition}[Dotted rule properties]
+\label{def:dotted-rule-properties}
 If we let \Vdr{x} be a dotted rule, such that
 \begin{equation}
 \Vdr{x} = \left[ \Vrule{x}, \var{pos} \right],
@@ -3014,6 +3016,7 @@ then
 \end{cases}
 %
 \end{align}
+\end{definition}
 
 \begin{definition}[Penult]
 \label{def:penult}
@@ -9560,7 +9563,8 @@ $\Vsize{work} = \size{\Vocab{\var{g}}}$.
 \State $\var{cnt} \gets \var{cnt}+1$
 \label{line:bookkeeper-op-8}
 \EndIf
-\State Add \Vpim{x} at the head of the list at \Velement{work}{\var{symID}}
+\State Add \Vpim{x} to the list at \Velement{work}{\var{symID}},
+   so that \type{LIM}s are first in the list.
 \label{line:bookkeeper-op-9}
 \EndIf
 \EndFor
@@ -9582,13 +9586,20 @@ the \var{transition} array for that \type{ES}.
 
 Each entry in the \var{transition} array
 contains a pointer
-to the head of a linked list of
+to a linked list of
 \type{PIM}s which have the same
 transition symbol.
 The entries are in symbol ID order,
 to allow the array to be binary searched.
 The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
+
+The linked lists pointed to by the entries of the \var{transition}
+array have the \type{LIM}s first.
+This could be done by using doubly-linked lists,
+but in the \Rtwo{} implementation the lists are singly-linked,
+new items are added to the head of the list
+and the order of operations is set up so that the \type{LIM}s are added last.
 
 \begin{theorem}[\var{cnt} size]
 \label{th:cnt-size}
@@ -9927,13 +9938,14 @@ do not consume additional space.
 \myqed
 \end{proof}
 
-\begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-read}
+\begin{theorem}[\myfn{Transitions}{} Linked Lists]
+\label{th:transitions-linked-lists}
 A call of the form
 \Transitions{\Vsym{t}}{\VVelement{S}{j}}
 returns a pointer to
 a linked list of
-\type{LIM}s and incomplete \type{EIM}s.
+\type{LIM}s and incomplete \type{EIM}s,
+with the \type{LIM}s first in the list.
 The list
 is of \order{\Vloc{j}} size,
 that is,
@@ -9948,7 +9960,22 @@ From \AFref{alg:bookkeeper-op}.
 we see that
 \Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
 the \type{PIM}s at
-\VVelement{S}{j}.
+\VVelement{S}{j},
+with the \type{LIM}s first in the list.
+
+At line \ref{line:bookkeeper-op-5} of
+\AFref{alg:bookkeeper-op},
+\type{PIM}s whose transition symbol is $\Lambda$
+are excluded.
+By the definition of \myfn{Transition}{}
+\Dfref{def:transition}
+and of \myfn{Postdot}{} \Dfref{def:dotted-rule-properties}
+this excludes all and only the complete \type{EIM}s,
+so that the linked list is of \type{LIM}s and complete \type{EIM}s.
+
+From \AFref{alg:bookkeeper-op},
+we see the
+\type{LIM}s are first in the linked list.
 The claim for linked list size follows from
 the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
 and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
