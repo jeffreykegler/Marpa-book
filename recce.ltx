@@ -9472,6 +9472,7 @@ in \var{eset}.
 \end{theorem}
 
 \begin{proof}
+\todo{Write this proof}
 \end{proof}
 
 \subsection{\var{dotZeroUsed}}
@@ -9550,21 +9551,24 @@ $\Vsize{work} = \size{\Vocab{\var{g}}}$.
 \label{line:bookkeeper-op-3}
 \For{$\Vpim{x} \in \VVelement{S}{j}$}
 \label{line:bookkeeper-op-4}
-\State $\Vnat{symID} \gets \ID{\Transition{\Vpim{x}}}$
+\If { $\Transition{\Vpim{x}} \ne \Lambda$ }
 \label{line:bookkeeper-op-5}
-\If { \Velement{work}{\var{symID}} is an empty list }
+\State $\Vnat{symID} \gets \ID{\Transition{\Vpim{x}}}$
 \label{line:bookkeeper-op-6}
-\State $\var{cnt} \gets \var{cnt}+1$
+\If { \Velement{work}{\var{symID}} is an empty list }
 \label{line:bookkeeper-op-7}
+\State $\var{cnt} \gets \var{cnt}+1$
+\label{line:bookkeeper-op-8}
 \EndIf
 \State Add \Vpim{x} at the head of the list at \Velement{work}{\var{symID}}
-\label{line:bookkeeper-op-8}
+\label{line:bookkeeper-op-9}
+\EndIf
 \EndFor
 \State Create \var{transition} for \VVelement{S}{j}, $\Vsize{transition} = \var{cnt}$
-\label{line:bookkeeper-op-9}
+\label{line:bookkeeper-op-10}
 \State Copy the non-empty entries of \var{work} to \var{transition},
    in order
-\label{line:bookkeeper-op-10}
+\label{line:bookkeeper-op-11}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
@@ -9593,26 +9597,26 @@ In \Aref{alg:bookkeeper-op}, $\var{cnt} = \Oc{}$.
 
 \begin{proof}
 \var{cnt} is incremented at line
-\ref{line:bookkeeper-op-7} only if
+\ref{line:bookkeeper-op-8} only if
 the list \Velement{work}{\var{symID}} is empty
-at line \ref{line:bookkeeper-op-6}.
+at line \ref{line:bookkeeper-op-7}.
 But whenever \Velement{work}{\var{symID}} is empty
-at line \ref{line:bookkeeper-op-6},
+at line \ref{line:bookkeeper-op-7},
 an entry is added to it
-at line \ref{line:bookkeeper-op-8}.
+at line \ref{line:bookkeeper-op-9}.
 Therefore,
 \mypareq{eq:th-transition-creation-100}{%
     for every value of \var{symID},
-    line \ref{line:bookkeeper-op-7} is executed at most once.
+    line \ref{line:bookkeeper-op-8} is executed at most once.
 }
 \mypareq{eq:th-transition-creation-110}{%
    \var{symID}
-   at line \ref{line:bookkeeper-op-5}
+   at line \ref{line:bookkeeper-op-6}
    is the ID of a symbol in \Vint{g}
    \cuz{} \Aref{alg:bookkeeper-op}.
 }
 \mypareq{eq:th-transition-creation-120}{%
-    Line \ref{line:bookkeeper-op-7} is executed at most
+    Line \ref{line:bookkeeper-op-8} is executed at most
     \size{\Vocab{\var{g}}} times
     \bcuz{} \Eref{eq:th-transition-creation-100},
         \Eref{eq:th-transition-creation-110}.
@@ -9621,7 +9625,7 @@ Therefore,
     In \Aref{alg:bookkeeper-op}, $\var{cnt} \le
     \size{\Vocab{\var{g}}}$
     \cuz{} lines \ref{line:bookkeeper-op-3},
-        \ref{line:bookkeeper-op-7};
+        \ref{line:bookkeeper-op-8};
         \Eref{eq:th-transition-creation-120}.
 }
 The theorem follows from
@@ -9664,16 +9668,19 @@ and that fact that
        Line \ref{line:bookkeeper-op-5} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-7}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-6} Cond.
+       Line \ref{line:bookkeeper-op-6} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-8}&1/\var{pim}&
-       Line \ref{line:bookkeeper-op-5} Seq.
+    \ref{line:bookkeeper-op-8}&{$\le$}1/\var{pim}&
+       Line \ref{line:bookkeeper-op-7} Cond.
 \\ \hline
-    \ref{line:bookkeeper-op-9}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-4} Seq.
+    \ref{line:bookkeeper-op-9}&{$\le$}1/\var{pim}&
+       Line \ref{line:bookkeeper-op-8} Seq.
 \\ \hline
     \ref{line:bookkeeper-op-10}&1/\var{proc}&
         Line \ref{line:bookkeeper-op-9} Seq.
+\\ \hline
+    \ref{line:bookkeeper-op-11}&1/\var{proc}&
+        Line \ref{line:bookkeeper-op-10} Seq.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
@@ -9705,19 +9712,21 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-4}&\Oc{}&\Thref{th:es-traversal}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&\Oc{}&\Thref{th:symbol-id-complexity}
+    \ref{line:bookkeeper-op-5}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&\Oc{}&
+    \ref{line:bookkeeper-op-6}&\Oc{}&\Thref{th:symbol-id-complexity}
 \\ \hline
     \ref{line:bookkeeper-op-7}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-8}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-9}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-10}&\Oc{}&
         $\Vsize{transition} = \Oc{}$ \cuz
         \Thref{th:cnt-size}.
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&
+    \ref{line:bookkeeper-op-11}&\Oc{}&
         $\Vsize{work} = \Oc{}$ \cuz{}
         \Vocab{\var{g}} is a constant which depends on \Vint{g}.
 \\ \hline
@@ -9755,9 +9764,11 @@ Line&\var{proc}&\var{pim}
 \\ \hline
     \ref{line:bookkeeper-op-8}&&\Oc{}
 \\ \hline
-    \ref{line:bookkeeper-op-9}&\Oc{}&
+    \ref{line:bookkeeper-op-9}&&\Oc{}
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&
+\\ \hline
+    \ref{line:bookkeeper-op-11}&\Oc{}&
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
@@ -9793,7 +9804,7 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
     \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
 }
 Recall that we may safely discard \Oc{} time
-charged to \var{proc} account ot the procedure.
+charged to \var{proc} account of the procedure.
 \mypareq{eq:th-transition-creation-time-110}{%
     The time that each \op{Bookkeeper} op incurs
     can be charged as
@@ -9834,22 +9845,24 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-4}&0&\Thref{th:es-traversal}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&0&\Thref{th:symbol-id-complexity}
+    \ref{line:bookkeeper-op-5}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&0&
+    \ref{line:bookkeeper-op-6}&0&\Thref{th:symbol-id-complexity}
 \\ \hline
     \ref{line:bookkeeper-op-7}&0&
 \\ \hline
     \ref{line:bookkeeper-op-8}&0&
+\\ \hline
+    \ref{line:bookkeeper-op-9}&0&
         Links are stored in already allocated space
         in each \var{PIM}
         \Obref{obs:pim-transitions-array-link-entry}
 \\ \hline
-    \ref{line:bookkeeper-op-9}&\Oc{}&\Tbref{tab:bookkeeper-time},
+    \ref{line:bookkeeper-op-10}&\Oc{}&\Tbref{tab:bookkeeper-time},
         $\Vsize{transition} = \Oc{}$ \cuz
         \Thref{th:cnt-size}.
 \\ \hline
-    \ref{line:bookkeeper-op-10}&0&
+    \ref{line:bookkeeper-op-11}&0&
         All space used by \var{transition} is already allocated at
             lines \ref{line:bookkeeper-op-8} and
             \ref{line:bookkeeper-op-9}.
@@ -9897,13 +9910,6 @@ do not occur once it has been created.
 A call of the form
 \Transitions{\Vsym{t}}{\VVelement{S}{j}}
 consumes \Oc{} time, and zero space.
-It returns a pointer to
-a linked list of \order{\Vloc{j}} size,
-that is,
-\begin{gather*}
-\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
-\end{gather*}
 \end{theorem}
 
 \begin{proof}
@@ -9915,16 +9921,37 @@ to the head of a linked list.
 $\Vsize{transition} = \Oc{}$,
 so that the search and pointer return
 can be done in \Oc{} time.
-
-\Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
-the \type{PIM}s at
-\VVelement{S}{j}, so that
-the claim for linked list size follows from
-the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
-and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 A \var{transitions} array is not altered after its creation,
 and therefore calls of \myfn{Transitions}{}
 do not consume additional space.
+\myqed
+\end{proof}
+
+\begin{theorem}[\myfn{Transitions}{} Complexity]
+\label{th:transitions-read}
+A call of the form
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+returns a pointer to
+a linked list of
+\type{LIM}s and incomplete \type{EIM}s.
+The list
+is of \order{\Vloc{j}} size,
+that is,
+\begin{gather*}
+\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+From \AFref{alg:bookkeeper-op}.
+we see that
+\Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
+the \type{PIM}s at
+\VVelement{S}{j}.
+The claim for linked list size follows from
+the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
+and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 \myqed
 \end{proof}
 
@@ -12384,6 +12411,8 @@ and the \op{Leo-reducer} space table
 \end{algorithmic}
 \end{algorithm}
 
+\todo{Show that match0 is a LIM iff there is one in transitions}
+
 \FloatBarrier
 
 \begin{table}[H]
@@ -12397,41 +12426,40 @@ and the \op{Leo-reducer} space table
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-3}&1/\var{pass}&\Obref{def:loop-invocation}.
+    \ref{line:reducer-op-3}&{$\le$}1/\var{pim}&\Obref{def:loop-invocation}.
 \\ \hline
     \multirow{2}{*}{\ref{line:reducer-op-2}}
     &1/\var{proc}&
     \multirow{2}{*}{\Obref{def:loop-invocation}; Line \ref{line:reducer-op-3} RSeq.}
 \\
-    &+\;1/\var{pass}&
+    &+\;{$\le$}1/\var{pim}&
 \\ \hline
-    \ref{line:reducer-op-4}&1/\var{pass}&
+    \ref{line:reducer-op-4}&{$\le$}1/\var{pim}&
        Line \ref{line:reducer-op-3} Seq.
 \\ \hline
-    \ref{line:reducer-op-5}&1/\var{pass}&
+    \ref{line:reducer-op-5}&{$\le$}1/\var{pim}&
        Line \ref{line:reducer-op-4} Seq.
 \\ \hline
-    \ref{line:reducer-op-6}&{$\le$}1/\var{pass}&
+    \ref{line:reducer-op-6}&{$\le$}1/\var{pim}&
         Line \ref{line:reducer-op-5} Cond.
 \\ \hline
-    \ref{line:reducer-op-7}&1/\var{pass}&
+    \ref{line:reducer-op-7}&{$\le$}1/\var{pim}&
        Line \ref{line:reducer-op-5} Seq.
 \\ \hline
     \ref{line:reducer-op-8}
-    &{$\le$}1/\var{pass}&
+    &{$\le$}1/\var{pim}&
         Line \ref{line:reducer-op-7} Cond.
 \\ \hline
-    \ref{line:reducer-op-9}&1/\var{pass}&
+    \ref{line:reducer-op-9}&{$\le$}1/\var{pim}&
        Line \ref{line:reducer-op-7} Seq.
 \\ \hline
-    \ref{line:reducer-op-10}&{$\le$}1/\var{pass}&
+    \ref{line:reducer-op-10}&{$\le$}1/\var{pim}&
         Line \ref{line:reducer-op-9} Cond.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
 1/\var{proc}: ``once per procedure call''.
-1/\var{pass}: ``once per loop pass''.
-{$\le$}1/\var{pass}: ``at most once per loop pass''.
+{$\le$}1/\var{pim}: ``at most once per \type{PIM} in \VVelement{S}{j}''.
     }
 \\ \hline
 \end{tabular}
@@ -12487,25 +12515,166 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 
 \FloatBarrier
 
+\begin{theorem}[\op{Reducer} Time]
+\label{th:reducer-time}
+The time that each \op{Reducer} op incurs
+may be account for by charging
+\Oc{} time
+to the \var{eim} account of each \type{EIM}
+in \VVelement{S}{j} of \Aref{alg:reducer-op}.
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-reducer-time-100}{%
+    The time that each \op{Reducer} op incurs
+    can be charged as \Oc{} time to the \var{proc} account
+    of \op{Reducer} op;
+    and \Oc{} time to the \var{pim} account
+    of each \type{PIM} in in \VVelement{S}{j}
+    \bcuz{} \Tbref{tab:reducer-proc-time},
+        \Tbref{tab:reducer-invocations}.
+}
+Recall that we may safely discard \Oc{} time
+charged to \var{proc} account of the procedure.
+\mypareq{eq:th-reducer-time-110}{%
+    The time that each \op{Reducer} op incurs
+    can be charged as
+    \Oc{} time to the \var{pim} account
+    of each \type{PIM} in in \VVelement{S}{j}
+    \bcuz{} \Thref{th:procedure-overhead-discard}.
+}
+\mypareq{eq:th-reducer-time-250}{%
+    If the time of one \type{LIM} is also charged to it,
+    the \var{pim} time of an \type{EIM} is at most
+    $\Oc+\Oc=\Oc$
+    \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
+        \Eref{eq:th-reducer-time-110}.
+}
+The theorem follows immediately from
+the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}
+and \Eref{eq:th-reducer-time-250}.
+\myqed
+\end{proof}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:reducer-proc-space}
+    \op{Reducer} space per invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Space&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:reducer-op-2}&0&
+        \type{ES} Traversal Theorem
+        \Thref{th:es-traversal}.
+\\ \hline
+    \ref{line:reducer-op-3}&0&
+        \myfn{Transition}{} Read Theorem
+        \Thref{th:transitions-read}.
+\\ \hline
+    \ref{line:reducer-op-4}&0&
+\\ \hline
+    \ref{line:reducer-op-5}&0&
+\\ \hline
+    \ref{line:reducer-op-6}&0&
+\\ \hline
+    \ref{line:reducer-op-7}&0&
+\\ \hline
+    \ref{line:reducer-op-8}&0&Zero indirect space by
+        the Leo Reducer Trimmed Space Theorem
+        \Thref{th:leo-reducer-trimmed-space}
+        and the Leo Reducer Link Space Theorem
+        \Thref{th:leo-reducer-link-space}.
+\\ \hline
+    \ref{line:reducer-op-9}&0&
+\\ \hline
+    \ref{line:reducer-op-10}&0&Zero indirect space by
+        the Earley Reducer Trimmed Space Theorem
+        \Thref{th:earley-reducer-trimmed-space}
+        and the Earley Reducer Link Space Theorem
+        \Thref{th:earley-reducer-link-space}.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:reducer-op}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\begin{theorem}{\op{Reducer} space}
+\label{th:reducer-space}
+The \op{Reducer} incurs no space.
+\end{theorem}
+
+\begin{proof}
+This theorem follows immediately from
+\Tbref{tab:reducer-proc-space}.
+\myqed
+\end{proof}
+
 \todo{Finish reducer op}
 
-\begin{observation}[Ancestry]
-\label{obs:reducer-ancestry}
-The \Marpa{} implementation tracks all link pairs for reducer-generated
-\type{EIM}s.
-The cause of a reducer-generated \type{EIM} will always be
-a completed \type{EIM}.
-The predecessor of a reducer-generated \type{EIM} varies depending on whether the attempt
-to create the reducer-generated \type{EIM} was a \op{Leo-reducer} operation
-or an \op{Earley-reducer} operation.
+\begin{theorem}[Reducer Ancestry]
+\label{th:reducer-ancestry}
+\mypareq{eq:th-reducer-ancestry-030}{%
+    The \Marpa{} implementation records a link pair for every
+    adjoin of an \type{EIM} generated by \op{Reducer}.
+}
+\mypareq{eq:th-reducer-ancestry-040}{%
+    The cause of the link pair for an
+    adjoin of an \type{EIM} generated by \op{Reducer}.
+    will always be a completed \type{EIM}.
+}
+\mypareq{eq:th-reducer-ancestry-050}{%
 For an
 \op{Earley-reducer} operation,
-the predecessor will be an incomplete \type{EIM}.
+    the predecessor of the link pair for an
+    adjoin of an \type{EIM} generated by \op{Reducer}.
+    will always be an incomplete \type{EIM}.
+}
+\mypareq{eq:th-reducer-ancestry-060}{%
 For a \op{Leo-reducer} operation,
-the predecessor will be either a \type{LIM},
-or $\Lambda$.
-\dispEnd{}
-\end{observation}
+    the predecessor of the link pair for an
+    adjoin of an \type{EIM} generated by \op{Reducer}.
+    the predecessor will be either a \type{LIM},
+    or $\Lambda$.
+}
+\end{theorem}
+
+\begin{proof}
+\leavevmode\linebreak
+\vspace{1ex}
+\begin{tabular}{|c|p{4in}|}
+\hline
+Equation&\multicolumn{1}{c|}{Justification}
+\\ \hline
+\Eref{eq:th-reducer-ancestry-030}&
+    Lines \ref{line:earley-reducer-op-4},
+    line \ref{line:earley-reducer-op-7}, and
+    line \ref{line:earley-reducer-op-10} of
+    \Aref{alg:earley-reducer-op};
+    Lines \ref{line:leo-reducer-op-3},
+    line \ref{line:leo-reducer-op-6}, and
+    line \ref{line:leo-reducer-op-9} of
+    \Aref{alg:leo-reducer-op}.
+\\ \hline
+\Eref{eq:th-reducer-ancestry-040}&
+Lines \ref{line:reducer-op-2}, \ref{line:reducer-op-8} and
+\ref{line:reducer-op-10} of \Aref{alg:reducer-op};
+line \ref{line:leo-reducer-op-3} of
+\Aref{alg:leo-reducer-op};
+and line \ref{line:earley-reducer-op-4} of
+\Aref{alg:earley-reducer-op}.
+\\ \hline
+\end{tabular}
+\todo{Finish this proof}
+\myqed
+\end{proof}
 
 \begin{observation}[Original Earley algorithm: Completer Operation]
 \label{obs:earley-completer-op}
