@@ -9266,136 +9266,6 @@ All of these operations are accesses and none consume space.
 \section{Earley sets}
 \label{sec:data-es}
 
-\begin{theorem}[\type{LIM}--\type{EIM} recharge]
-\label{th:lim-eim-recharge}
-\mypareq{eq:th-lim-eim-recharge-050}{%
-    The resource for the \type{LIM}s
-    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
-    in \var{es} in such a way that the resource of
-    every \type{EIM} has the resource of at most
-    one \type{LIM} charged to it.
-}
-\mypareq{eq:th-lim-eim-recharge-060}{%
-    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
-    the resource charged to the \type{EIM}s of the \type{ES}
-    will fully account for the resource charged to
-    \type{PIM}s in \type{ES}.
-}
-\end{theorem}
-
-\begin{proof}
-\mypareq{eq:th-lim-eim-recharge-200}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
-\mypareq{eq:th-lim-eim-recharge-210}{%
-    Every \type{LIM} in \var{es}
-    has exactly one \type{EIM} source
-    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
-}
-\mypareq{eq:th-lim-eim-recharge-220}{%
-    The source \type{EIM} of a \type{LIM}
-    in \var{es} is also in \var{es}
-    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
-}
-\Eref{eq:th-lim-eim-recharge-050} of the theorem
-follows from \Eref{eq:th-lim-eim-recharge-210} and
-\Eref{eq:th-lim-eim-recharge-220}.
-\Eref{eq:th-lim-eim-recharge-060} of the theorem
-follows from \Eref{eq:th-lim-eim-recharge-050}
-and \Eref{eq:th-lim-eim-recharge-200}.
-\myqed
-\end{proof}
-
-\section{Earley set indexing}
-\label{sec:es-indexing}
-
-\begin{theorem}[Location access time complexity]
-The function calls \Current{\Vpim{pim}} and
-\Current{\Ves{es}},
-and accesses of the form
-\Velement{S}{\Vloc{j}},
-incur \Oc{} time and zero space.
-\end{theorem}
-
-\begin{proof}
-Our computation model, conceptually, is a random access machine,
-but it will be more useful to justify
-the theorem in terms of the \Marpa{} implementation.
-The implementation description is equivalent to,
-or straightforwardly translates to, a description in
-terms of a RAM.
-The accesses obviously require no new space.
-The constant times are accomplished by
-storing the integer location of that ES
-in each ES;
-storing ES's in a dynamic array
-indexed by location;
-and storing a pointer to its ES in
-every \type{PIM}.
-\myqed
-\end{proof}
-
-In practice, for efficiency,
-\Velement{S}{\Vloc{j}} accesses are not actually used
-by the \Marpa{} implementation during parsing.
-During parsing
-\Rtwo\cite{Marpa-R2}
-builds Earley sets as a linked list of structures,
-and a dynamic array indexing them is only created
-when needed.
-The dynamic array is not needed when
-running the recognizer in normal production,
-because links to Earley sets are kept in the \type{PIM}s,
-a link to the current Earley set is kept,
-and the event mechanism works using links.
-
-On the other hand,
-accesses of the form
-\Velement{S}{\Vloc{j}}
-are made use of
-for tracing and debugging in \Rtwo{}.
-The trace and
-debug facilities must allow the developer to
-specify arbitrary Earley sets,
-and the developer will often want to identify a location by
-its numerical ID.
-
-An array is also needed for evaluation,
-but at evaluation time the dynamic array implementing
-\Velement{S}{\Vloc{j}} accesses
-usually is dynamic in theory only.
-For most applications, evaluation only
-occurs after the parse is complete,
-at which point
-the array of Earley sets is static,
-so that the overhead of using a dynamic array
-is minimal.
-
-\chapter{The algorithm}
-\label{chap:algorithm}
-
-\section{Parse-setup op}
-\label{sec:parse-setup}
-
-\begin{theorem}[Grammar complexity]
-Setup of grammar incurs \Oc{} time,
-\Oc{} trimmed space
-and zero link space,
-all of which is charged to the parse.
-\end{theorem}
-
-\begin{proof}
-The grammar is treated as constant,
-and therefore its space and time demands are constant.
-\myqed
-\end{proof}
-
-\todo{Write parse-setup op section}
-
-\section{ES-setup op}
-\label{sec:es-setup}
-
 \subsection{Earley set}
 \label{sec:es-complexity}
 
@@ -9550,6 +9420,138 @@ in section \Chref{chap:per-set-lists},
 where PSL's are described in detail.
 \myqed
 \end{proof}
+
+\begin{theorem}[\type{LIM}--\type{EIM} recharge]
+\label{th:lim-eim-recharge}
+\mypareq{eq:th-lim-eim-recharge-050}{%
+    The resource for the \type{LIM}s
+    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
+    in \var{es} in such a way that the resource of
+    every \type{EIM} has the resource of at most
+    one \type{LIM} charged to it.
+}
+\mypareq{eq:th-lim-eim-recharge-060}{%
+    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
+    the resource charged to the \type{EIM}s of the \type{ES}
+    will fully account for the resource charged to
+    \type{PIM}s in \type{ES}.
+}
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-lim-eim-recharge-200}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-lim-eim-recharge-210}{%
+    Every \type{LIM} in \var{es}
+    has exactly one \type{EIM} source
+    \bcuz{} \longThref{\myfn{Source}{} Bijection Theorem}{th:source-fn-injection}.
+}
+\mypareq{eq:th-lim-eim-recharge-220}{%
+    The source \type{EIM} of a \type{LIM}
+    in \var{es} is also in \var{es}
+    \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
+}
+\Eref{eq:th-lim-eim-recharge-050} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-210} and
+\Eref{eq:th-lim-eim-recharge-220}.
+\Eref{eq:th-lim-eim-recharge-060} of the theorem
+follows from \Eref{eq:th-lim-eim-recharge-050}
+and \Eref{eq:th-lim-eim-recharge-200}.
+\myqed
+\end{proof}
+
+\section{Earley set indexing}
+\label{sec:es-indexing}
+
+\begin{theorem}[Location access time complexity]
+The function calls \Current{\Vpim{pim}} and
+\Current{\Ves{es}},
+and accesses of the form
+\Velement{S}{\Vloc{j}},
+incur \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+Our computation model, conceptually, is a random access machine,
+but it will be more useful to justify
+the theorem in terms of the \Marpa{} implementation.
+The implementation description is equivalent to,
+or straightforwardly translates to, a description in
+terms of a RAM.
+The accesses obviously require no new space.
+The constant times are accomplished by
+storing the integer location of that ES
+in each ES;
+storing ES's in a dynamic array
+indexed by location;
+and storing a pointer to its ES in
+every \type{PIM}.
+\myqed
+\end{proof}
+
+In practice, for efficiency,
+\Velement{S}{\Vloc{j}} accesses are not actually used
+by the \Marpa{} implementation during parsing.
+During parsing
+\Rtwo\cite{Marpa-R2}
+builds Earley sets as a linked list of structures,
+and a dynamic array indexing them is only created
+when needed.
+The dynamic array is not needed when
+running the recognizer in normal production,
+because links to Earley sets are kept in the \type{PIM}s,
+a link to the current Earley set is kept,
+and the event mechanism works using links.
+
+On the other hand,
+accesses of the form
+\Velement{S}{\Vloc{j}}
+are made use of
+for tracing and debugging in \Rtwo{}.
+The trace and
+debug facilities must allow the developer to
+specify arbitrary Earley sets,
+and the developer will often want to identify a location by
+its numerical ID.
+
+An array is also needed for evaluation,
+but at evaluation time the dynamic array implementing
+\Velement{S}{\Vloc{j}} accesses
+usually is dynamic in theory only.
+For most applications, evaluation only
+occurs after the parse is complete,
+at which point
+the array of Earley sets is static,
+so that the overhead of using a dynamic array
+is minimal.
+
+\chapter{The algorithm}
+\label{chap:algorithm}
+
+\section{Parse-setup op}
+\label{sec:parse-setup}
+
+\begin{theorem}[Grammar complexity]
+Setup of grammar incurs \Oc{} time,
+\Oc{} trimmed space
+and zero link space,
+all of which is charged to the parse.
+\end{theorem}
+
+\begin{proof}
+The grammar is treated as constant,
+and therefore its space and time demands are constant.
+\myqed
+\end{proof}
+
+\todo{Write parse-setup op section}
+
+\section{ES-setup op}
+\label{sec:es-setup}
+
+\todo{Write ES-setup op section}
 
 \FloatBarrier
 
