@@ -9183,6 +9183,59 @@ this section describes some of the
 data structures that are used
 by more one of the pseudocode procedures.
 
+\section{\type{PIM}s}
+\label{sec:data-eims}
+
+This section describes some of the
+non-obvious element of the data structures for \type{PIM}s.
+
+\begin{theorem}[PIM \var{transitions} element]
+\label{th:pim-transitions-element}
+The space incurred by linked lists
+of the \var{transitions} array
+may be ignored.
+\end{theorem}
+
+\begin{proof}
+In every \type{PIM}, we include an element that contains
+a link reserved for use
+by linked list in one entry of the \var{transitions} array
+for one \VVelement{S}{j}.
+Every linked list in a \var{transitions} array
+is for \type{PIM}s with exactly one transition symbol
+in exactly one current \type{ES}.
+Every \type{PIM},
+has at most one transition symbol
+and and exactly one current \type{ES},
+so that every \type{PIM} occurs in at most one
+linked list of a \var{transitions} array.
+Therefore a single link element per-\type{PIM} suffices.
+The space incurred by this element is \Oc{} and can be accounted
+as part of the \Oc{} space consumed by the \type{PIM}.
+
+The \var{transitions} array will be described further
+in \Sref{sec:bookkeeper}.
+\myqed
+\end{proof}
+
+\begin{assumption}[PIM ancestry element]
+\label{asm:pim-ancestry}
+Given access to a \type{PIM} \var{pim},
+it ancestry may be read or written in \Oc{}
+time,
+and its space requirement may be ignored.
+\dispEnd
+\end{assumption}
+
+\begin{proof}
+The data structure for
+every PIM \Vpim{pim}
+includes an element which records its ancestry.
+The time complexity claims follow immediately from this fact.
+The space incurred by the ancestry is \Oc{} and can be accounted
+as part of the \Oc{} space consumed by the \type{PIM}.
+\begin{proof}
+
 \section{IDs}
 \label{sec:data-ids}
 
@@ -9280,19 +9333,6 @@ The heads of the lists stored with the \type{EIM} and
 occupy trimmed space.
 The rest of the lists of links pairs occupies
 unassigned space.
-
-\begin{observation}[PIM \var{transitions} array link entry]
-\label{obs:pim-transitions-array-link-entry}
-The data structure for
-every PIM \Vpim{pim}
-includes an entry that
-is reserved for use with the
-the \var{transitions} array for \Velement{S}{\Current{\var{pim}}}.
-The value of this entry is either $\Lambda$,
-or a pointer to another \type{PIM}
-in the same \type{ES}.
-The \var{transitions} array is described in \Sref{sec:bookkeeper}.
-\end{observation}
 
 \begin{theorem}[Earley set allocation]
 \label{th:es-allocation}
@@ -9540,6 +9580,81 @@ where PSL's are described in detail.
 \myqed
 \end{proof}
 
+\section{The \var{transition} array}
+\label{sec:transition-array}
+
+Each entry in the \var{transition} array
+contains a pointer
+to a linked list of
+\type{PIM}s which have the same
+transition symbol.
+The entries are in symbol ID order,
+to allow the array to be binary searched.
+The \var{transition} array is for efficient lookup
+of \type{EIM} and \type{LIM} matches.
+
+The linked lists pointed to by the entries of the \var{transition}
+array have the \type{LIM}s first.
+This could be done by using doubly-linked lists,
+but in the \Rtwo{} implementation the lists are singly-linked,
+new items are added to the head of the list
+and the order of operations is set up so that the \type{LIM}s are added last.
+
+Reads of the \var{transition} array
+use the \Transition{} function.
+A call of the form
+$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
+returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
+is \Vsym{t}.
+Writes to the \var{transition} array
+do not occur once it has been created.
+
+\begin{theorem}[\myfn{Transitions}{} Complexity]
+\label{th:transitions-read}
+A call of the form
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+consumes \Oc{} time, and zero space.
+\end{theorem}
+
+\begin{proof}
+\myfn{Transitions}{}
+does a binary search of
+the \var{transition} array for \VVelement{S}{j},
+and returns a pointer
+to the head of a linked list.
+$\Vsize{transition} = \Oc{}$,
+so that the search and pointer return
+can be done in \Oc{} time.
+A \var{transitions} array is not altered after its creation,
+and therefore calls of \myfn{Transitions}{}
+do not consume additional space.
+\myqed
+\end{proof}
+
+\begin{theorem}[\myfn{Transitions}{} Linked Lists]
+\label{th:transitions-linked-lists}
+The linked list returned by a call of the form
+\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+is of \order{\Vloc{j}} size.
+That is,
+\begin{gather*}
+\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
+\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
+\end{gather*}
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
+and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
+\myqed
+\end{proof}
+
+\section{\type{LSS} Traversal}
+\label{sec:lss-traversal}
+
+\todo{do LSS traversal section}
+
 \chapter{The algorithm}
 \label{chap:algorithm}
 
@@ -9614,23 +9729,6 @@ The \op{Bookkeeper} op is run for each \type{ES}
 after that \type{ES} is fully populated with \type{PIM}s.
 The \op{Bookkeeper} op and creates
 the \var{transition} array for that \type{ES}.
-
-Each entry in the \var{transition} array
-contains a pointer
-to a linked list of
-\type{PIM}s which have the same
-transition symbol.
-The entries are in symbol ID order,
-to allow the array to be binary searched.
-The \var{transition} array is for efficient lookup
-of \type{EIM} and \type{LIM} matches.
-
-The linked lists pointed to by the entries of the \var{transition}
-array have the \type{LIM}s first.
-This could be done by using doubly-linked lists,
-but in the \Rtwo{} implementation the lists are singly-linked,
-new items are added to the head of the list
-and the order of operations is set up so that the \type{LIM}s are added last.
 
 \begin{theorem}[\var{cnt} size]
 \label{th:cnt-size}
@@ -9830,7 +9928,7 @@ Line&\var{proc}&\var{pim}
 \begin{theorem}[Transition Array Creation Time]
 \label{th:transition-creation-time}
 The time that each \op{Bookkeeper} op incurs
-may be account for by charging
+can be accounted for by charging
 \Oc{} time
 to the \var{eim} account of each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
@@ -9937,81 +10035,6 @@ so that there will always be an \type{EIM} to whose
 \end{proof}
 
 \FloatBarrier
-
-Reads of the \var{transition} array
-use the \Transition{} function.
-A call of the form
-$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
-is \Vsym{t}.
-Writes to the \var{transition} array
-do not occur once it has been created.
-
-\begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-read}
-A call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
-consumes \Oc{} time, and zero space.
-\end{theorem}
-
-\begin{proof}
-\myfn{Transitions}{}
-does a binary search of
-the \var{transition} array for \VVelement{S}{j},
-and returns a pointer
-to the head of a linked list.
-$\Vsize{transition} = \Oc{}$,
-so that the search and pointer return
-can be done in \Oc{} time.
-A \var{transitions} array is not altered after its creation,
-and therefore calls of \myfn{Transitions}{}
-do not consume additional space.
-\myqed
-\end{proof}
-
-\begin{theorem}[\myfn{Transitions}{} Linked Lists]
-\label{th:transitions-linked-lists}
-A call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
-returns a pointer to
-a linked list of
-\type{LIM}s and incomplete \type{EIM}s,
-with the \type{LIM}s first in the list.
-The list
-is of \order{\Vloc{j}} size,
-that is,
-\begin{gather*}
-\forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
-\end{gather*}
-\end{theorem}
-
-\begin{proof}
-From \AFref{alg:bookkeeper-op}.
-we see that
-\Transitions{\Vsym{t}}{\VVelement{S}{j}} returns a linked link of
-the \type{PIM}s at
-\VVelement{S}{j},
-with the \type{LIM}s first in the list.
-
-At line \ref{line:bookkeeper-op-5} of
-\AFref{alg:bookkeeper-op},
-\type{PIM}s whose transition symbol is $\Lambda$
-are excluded.
-By the definition of \myfn{Transition}{}
-\Dfref{def:transition}
-and of \myfn{Postdot}{} \Dfref{def:dotted-rule-properties}
-this excludes all and only the complete \type{EIM}s,
-so that the linked list is of \type{LIM}s and complete \type{EIM}s.
-
-From \AFref{alg:bookkeeper-op},
-we see the
-\type{LIM}s are first in the linked list.
-The claim for linked list size follows from
-the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
-and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
-\myqed
-\end{proof}
 
 \section{Initializer op}
 \label{sec:initializer}
@@ -12714,8 +12737,7 @@ At line \ref{line:reducer-op-10} of \Aref{alg:reducer-op},
 because of lines
 \ref{line:reducer-op-5} and \ref{line:reducer-op-7}
 of \Aref{alg:reducer-op}
-and the \myfn{Transitions}{} Linked List Theorem
-\Thref{th:transitions-linked-lists}.
+and \Sref{sec:transition-array}.
 This theorem then follows from
 \Aref{alg:earley-reducer-op}, especially
 lines \ref{line:earley-reducer-op-2},
@@ -12820,6 +12842,7 @@ into the Earley table with the link pair
     \op{Memoizer}}
 \begin{algorithmic}[1]
 \Procedure{Memoizer}{\VVelement{S}{j}}
+  \label{line:memoizer-op-1}
 \For{$\Veim{source} \in \LeoEligible{\VVelement{S}{j}}$}
   \label{line:memoizer-op-2}
 \State $\Veim{pred} = \LIMPredecessor{\var{source}}$
@@ -12839,10 +12862,10 @@ into the Earley table with the link pair
           $\qquad \qquad \qquad \Origin{\var{source}}, \Current{\var{source}} ]$
       \label{line:memoizer-op-8}
 \EndIf
-    \State Add \Vlim{lim} to \VVelement{S}{j}
-  \label{line:memoizer-op-9}
     \State $\LinkPairs{\var{lim}} = \set{\var{lp}}$
       \label{line:memoizer-op-10}
+  \label{line:memoizer-op-9}
+    \State Add \Vlim{lim} to \VVelement{S}{j}
 \EndFor
 \EndProcedure
 \end{algorithmic}
@@ -12962,6 +12985,174 @@ and since \Rtwo{} has already fully populated the \type{EIM}s
 in \var{transition}'s linked lists,
 this \type{LIM} will always be at the head of its linked list.
 
+\FloatBarrier
+
+\todo{Finish this table}
+\begin{table}[H]
+\caption{
+    \label{tab:memoizer-invocations}
+    Line invocations for \op{Memoizer}}
+\vspace{1ex}
+\begin{tabular}{|r|c|p{2.75in}|}
+\hline
+\multicolumn{1}{|c|}{Line}
+    &\multicolumn{1}{c|}{Invocations}
+    &\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:memoizer-op-2}&
+    1/\var{proc}&
+        Line \ref{line:memoizer-op-1} Seq;
+        \Thref{th:leo-eligible-traversal};
+        \Obref{def:loop-invocation}.
+\\
+    &+\;1/\var{eim}&
+\\ \hline
+    \ref{line:memoizer-op-3}&\Oc{}&
+       Line \ref{line:memoizer-op-2} Seq.;
+       and because, by the Leo Eligible \type{EIM}
+       Count Theorem
+        \Thref{th:leo-eligible-eim-count},
+       there are \Oc{} Leo eligible \type{EIM}s
+       in \VVelement{S}{j}.
+\\ \hline
+    \ref{line:memoizer-op-4}&\Oc{}&
+       Line \ref{line:memoizer-op-3} Seq.
+\\ \hline
+    \ref{line:memoizer-op-5}&\Oc{}&
+       Line \ref{line:memoizer-op-4} Seq.
+\\ \hline
+    \ref{line:memoizer-op-6}&\Oc{}&
+       Line \ref{line:memoizer-op-5} Cond.
+\\ \hline
+    \ref{line:memoizer-op-7}&\Oc{}&
+       Line \ref{line:memoizer-op-5} Seq.
+\\ \hline
+    \ref{line:memoizer-op-8}&\Oc{}&
+       Line \ref{line:memoizer-op-7} Cond.
+\\ \hline
+    \ref{line:memoizer-op-9}&\Oc{}&
+       Line \ref{line:memoizer-op-7} Seq.
+\\ \hline
+    \ref{line:memoizer-op-10}&\Oc{}&
+        Line \ref{line:memoizer-op-9} Seq.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+Lines are listed in order of deduction.
+1/\var{proc}: ``once per procedure call''.
+1/\var{eim}: ``once per
+$\type{EIM} \in \VVelement{S}{j}$''.
+\Oc{}: ``\Oc{} times per procedure call''.
+    }
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\todo{Rewrite Memoizer op section}
+
+\begin{observation}[Ancestry]
+\label{obs:memoizer-ancestry}
+The \Marpa{} implementation tracks the link pairs
+for the \type{LIM}s.
+In the link pair for a \type{LIM}, call it \Vlim{$\ell$},
+the ``cause''
+is more often called the \dfn{source} of the \type{LIM};
+and the ``predecessor'' is
+and is more often called the \dfn{previous link} of the \type{LIM}.
+We may write the previous link of \mylim{\ell} as
+\[
+  \begin{aligned}
+  & \PreviousLink{\Vlim{$\ell$}} \defined
+  \\ \nonumber
+  & \qquad
+    \left\lbrace
+      \LIMPredecessor{\var{source}} :
+      \Veim{source} \in \Source{\mylim{\ell}}
+    \right\rbrace \quad \dispEnd
+  \end{aligned}
+\]
+\end{observation}
+
+In \Marpa{},
+for every valid \type{LIM}, call it \Vlim{lim},
+\begin{itemize}
+\item \Source{\var{lim}} is always a singleton set containing a penult
+in the same Earley set as \var{lim}.
+\item \var{PreviousLink} is a set of cardinality at most one,
+and if its element exists, it is a valid \type{LIM},
+\item $\size{\LinkPairs{\var{lim}}} = 1$,
+\end{itemize}
+but we have yet to prove these things.
+
+\todo{Prove the above later.}
+
+\begin{observation}[Complexity]
+\todo{}
+\dispEnd{}
+\end{observation}
+
+\begin{observation}[Original Earley algorithm: Memorizer Operation]
+\label{obs:earley-memoizer-op}
+\Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
+\dispEnd{}
+\end{observation}
+
+\section{Top level of \Marpa{}}
+
+\todo{Rewrite \Marpa{} top level section}
+
+The top-level view of \Marpa{} is
+shown in \Aref{alg:marpa}.
+\begin{algorithm}[t]
+\caption{The \Marpa{} Algorithm}
+\label{alg:marpa}
+\begin{algorithmic}[1]
+\Procedure{Main}{}
+\State $\Call{Parse-Setup}{{}}$
+\State $\Call{ES-Setup}{0}$
+\State $\Call{Initializer}{{}}$
+\State $\Call{Bookkeeper}{\Velement{S}{0}}$
+\For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
+\State $\Call{ES-Setup}{\var{j}}$
+\State $\Call{Scanner}{\VVelement{S}{j}}$
+\If{$\size{\VVelement{S}{j}} = 0$}
+\State return \Comment Reject \Cw{}
+\EndIf
+\State $\Call{Reducer}{\VVelement{S}{j}}$
+\State $\Call{Predictor}{\VVelement{S}{j}}$
+\label{alg:marpa-line-80}
+\State $\Call{Memoizer}{\VVelement{S}{j}}$
+\State $\Call{Bookkeeper}{\VVelement{S}{j}}$
+\EndFor
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\begin{observation}[Original Earley Algorithm: Top level]
+If line \ref{alg:marpa-line-80} is removed,
+\Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
+This can be seen from
+\Aref{alg:marpa},
+\Obref{obs:earley-set-0},
+\Obref{obs:earley-scanner-op},
+\Obref{obs:earley-completer-op},
+\Obref{obs:earley-predictor-op},
+and
+\Obref{obs:earley-memoizer-op}.
+\dispEnd
+\end{observation}
+
+\chapter{FRAGMENTS}
+\label{chap:FRAGMENTS}
+
+\todo{Eliminate this chapter, by moving or deleting its contents}
+
+This chapter consists of ``fragments'' intended to be moved elsewhere,
+possibly after rewriting, or deleted.
+
+\section{Memoizer fragments}
+
 \begin{theorem}[Memoizer op consistency]
 \label{th:memoizer-op-consistency}
 If
@@ -13075,100 +13266,6 @@ and \Eref{eq:th-memoizer-op-maximum-130}.
 \myqed
 \end{proof}
 
-\todo{Rewrite Memoizer op section}
-
-\begin{observation}[Ancestry]
-\label{obs:memoizer-ancestry}
-The \Marpa{} implementation tracks the link pairs
-for the \type{LIM}s.
-In the link pair for a \type{LIM}, call it \Vlim{$\ell$},
-the ``cause''
-is more often called the \dfn{source} of the \type{LIM};
-and the ``predecessor'' is
-and is more often called the \dfn{previous link} of the \type{LIM}.
-We may write the previous link of \mylim{\ell} as
-\[
-  \begin{aligned}
-  & \PreviousLink{\Vlim{$\ell$}} \defined
-  \\ \nonumber
-  & \qquad
-    \left\lbrace
-      \LIMPredecessor{\var{source}} :
-      \Veim{source} \in \Source{\mylim{\ell}}
-    \right\rbrace \quad \dispEnd
-  \end{aligned}
-\]
-\end{observation}
-
-In \Marpa{},
-for every valid \type{LIM}, call it \Vlim{lim},
-\begin{itemize}
-\item \Source{\var{lim}} is always a singleton set containing a penult
-in the same Earley set as \var{lim}.
-\item \var{PreviousLink} is a set of cardinality at most one,
-and if its element exists, it is a valid \type{LIM},
-\item $\size{\LinkPairs{\var{lim}}} = 1$,
-\end{itemize}
-but we have yet to prove these things.
-
-\todo{Prove the above later.}
-
-\begin{observation}[Complexity]
-\todo{}
-\dispEnd{}
-\end{observation}
-
-\begin{observation}[Original Earley algorithm: Memorizer Operation]
-\label{obs:earley-memoizer-op}
-\Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
-\dispEnd{}
-\end{observation}
-
-\section{Top level of \Marpa{}}
-
-\todo{Rewrite \Marpa{} top level section}
-
-The top-level view of \Marpa{} is
-shown in \Aref{alg:marpa}.
-\begin{algorithm}[t]
-\caption{The \Marpa{} Algorithm}
-\label{alg:marpa}
-\begin{algorithmic}[1]
-\Procedure{Main}{}
-\State $\Call{Parse-Setup}{{}}$
-\State $\Call{ES-Setup}{0}$
-\State $\Call{Initializer}{{}}$
-\State $\Call{Bookkeeper}{\Velement{S}{0}}$
-\For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
-\State $\Call{ES-Setup}{\var{j}}$
-\State $\Call{Scanner}{\VVelement{S}{j}}$
-\If{$\size{\VVelement{S}{j}} = 0$}
-\State return \Comment Reject \Cw{}
-\EndIf
-\State $\Call{Reducer}{\VVelement{S}{j}}$
-\State $\Call{Predictor}{\VVelement{S}{j}}$
-\label{alg:marpa-line-80}
-\State $\Call{Memoizer}{\VVelement{S}{j}}$
-\State $\Call{Bookkeeper}{\VVelement{S}{j}}$
-\EndFor
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-\begin{observation}[Original Earley Algorithm: Top level]
-If line \ref{alg:marpa-line-80} is removed,
-\Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
-This can be seen from
-\Aref{alg:marpa},
-\Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-op},
-\Obref{obs:earley-completer-op},
-\Obref{obs:earley-predictor-op},
-and
-\Obref{obs:earley-memoizer-op}.
-\dispEnd
-\end{observation}
-
 \section{Summary}
 
 \todo{Rewrite operations summary}
@@ -13260,8 +13357,6 @@ This observation follows from
 \Obref{obs:earley-memoizer-op}.
 \dispEnd
 \end{observation}
-
-\todo{complexity observations}
 
 \chapter{Ambiguity}
 \label{chap:ambiguity}
