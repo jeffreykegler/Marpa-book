@@ -67,6 +67,10 @@
 % Lemma lem:
 % Observation obs:
 % Assumption asm:
+% Page page:
+
+% The "page:" metatag is for labels intended as the target of
+% page references.
 
 % The auto-placement of qed's fails a lot and manual
 % replacement with \qedhere often fails as well.  I go with
@@ -9187,7 +9191,7 @@ by more one of the pseudocode procedures.
 \label{sec:data-eims}
 
 This section describes some of the
-non-obvious element of the data structures for \type{PIM}s.
+less obvious aspects of the data structures for \type{PIM}s.
 
 \begin{theorem}[PIM \var{transitions} element]
 \label{th:pim-transitions-element}
@@ -9200,17 +9204,26 @@ may be ignored.
 In every \type{PIM}, we include an element that contains
 a link reserved for use
 by linked list in one entry of the \var{transitions} array
-for one \VVelement{S}{j}.
-Every linked list in a \var{transitions} array
-is for \type{PIM}s with exactly one transition symbol
-in exactly one current \type{ES}.
-Every \type{PIM},
-has at most one transition symbol
-and and exactly one current \type{ES},
-so that every \type{PIM} occurs in at most one
-linked list of a \var{transitions} array.
-Therefore a single link element per-\type{PIM} suffices.
-The space incurred by this element is \Oc{} and can be accounted
+for one \type{ES}.
+
+Let \var{pim} be an arbitrary \type{PIM}.
+\type{PIM}s without transition symbols,
+that is, complete \type{EIM}s do not occur
+in 
+any linked list of a \var{transitions} array.
+So if \var{pim} is in
+the linked list of a \var{transitions} array
+it is in the linked list of \Transition{\var{pim}}
+for the \var{transitions} array of \Velement{S}{\Current{\var{pim}}}.
+For any \type{ES}, each symbol has at most one entry
+in its \var{transitions} array,
+so that a single link element per-\type{PIM} suffices
+for tracking \var{transitions} array links.
+
+The link is either a pointer to another \type{PIM}
+or $\Lambda$, so that
+the space incurred by the link is \Oc{}.
+The \Oc{} space required for the link can be accounted
 as part of the \Oc{} space consumed by the \type{PIM}.
 
 The \var{transitions} array will be described further
@@ -9234,7 +9247,7 @@ includes an element which records its ancestry.
 The time complexity claims follow immediately from this fact.
 The space incurred by the ancestry is \Oc{} and can be accounted
 as part of the \Oc{} space consumed by the \type{PIM}.
-\begin{proof}
+\end{proof}
 
 \section{IDs}
 \label{sec:data-ids}
@@ -9593,12 +9606,21 @@ to allow the array to be binary searched.
 The \var{transition} array is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
+\begin{theorem}[\type{LIM} transition first]
+\label{th:lim-transition-first}
 The linked lists pointed to by the entries of the \var{transition}
 array have the \type{LIM}s first.
-This could be done by using doubly-linked lists,
-but in the \Rtwo{} implementation the lists are singly-linked,
-new items are added to the head of the list
-and the order of operations is set up so that the \type{LIM}s are added last.
+\end{theorem}
+
+\begin{proof}
+The proof by description of a conceptual implementation.
+It can be quaranteed that
+\type{LIM}s are first in the linked lists
+of the \var{transition} arrays by using doubly-linked lists.
+For an actual implementation in \Rtwo{}, see
+page \pageref{page:transition-lim-first}.
+\myqed
+\end{proof}
 
 Reads of the \var{transition} array
 use the \Transition{} function.
@@ -9652,6 +9674,19 @@ and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 
 \section{\type{LSS} Traversal}
 \label{sec:lss-traversal}
+
+\begin{theorem}[\myfn{LIM}{} complexity]
+\label{th:lim-complexity}
+A call of the \myfn{LIM}{} function consumes \Oc{}
+time and zero space.
+\end{theorem}
+
+\begin{proof}
+\todo{Finish LIM read proof}
+\myfn{LIM}{} is a read,
+so no space is required.
+\myqed
+\end{proof}
 
 \todo{do LSS traversal section}
 
@@ -9994,9 +10029,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \ref{line:bookkeeper-op-8}&0&
 \\ \hline
     \ref{line:bookkeeper-op-9}&0&
-        Links are stored in already allocated space
-        in each \var{PIM}
-        \Obref{obs:pim-transitions-array-link-entry}
+        \Thref{th:pim-transitions-element}.
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&\Tbref{tab:bookkeeper-time},
         $\Vsize{transition} = \Oc{}$ \cuz
@@ -12983,6 +13016,7 @@ it creates a \type{LIM}, using \var{src} as the source \type{EIM}.
 Since there is only one \type{LIM} per source \type{EIM},
 and since \Rtwo{} has already fully populated the \type{EIM}s
 in \var{transition}'s linked lists,
+\label{page:transition-lim-first}
 this \type{LIM} will always be at the head of its linked list.
 
 \FloatBarrier
