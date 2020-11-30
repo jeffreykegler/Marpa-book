@@ -9351,12 +9351,9 @@ is kept in trimmed space.
 \label{th:es-traversal}
 Let \Ves{eset} be an Earley set.
 Traversal of \var{eset}
-can be charged as \Oc{} time and zero space for each \type{PIM}
-in \var{eset}.
-Alternatively,
-traversal of \var{eset}
-can be charged as \Oc{} time and zero space for each \type{EIM}
-in \var{eset}.
+incurs \Oc{} time and zero space for each \type{PIM}
+in \var{eset},
+plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
@@ -9409,7 +9406,8 @@ and \Eref{eq:th-lim-eim-recharge-200}.
 Let \Ves{eset} be an Earley set.
 Traversal of \var{eset}
 can be charged as \Oc{} time and zero space for each \type{EIM}
-in \var{eset}.
+in \var{eset},
+plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
@@ -12486,40 +12484,40 @@ and the \op{Leo-reducer} space table
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-3}&{$\le$}1/\var{pim}&\Obref{def:loop-invocation}.
+    \ref{line:reducer-op-3}&{$\le$}1/\var{eim}&\Obref{def:loop-invocation}.
 \\ \hline
     \multirow{2}{*}{\ref{line:reducer-op-2}}
     &1/\var{proc}&
     \multirow{2}{*}{\Obref{def:loop-invocation}; Line \ref{line:reducer-op-3} RSeq.}
 \\
-    &+\;{$\le$}1/\var{pim}&
+    &+\;{$\le$}1/\var{eim}&
 \\ \hline
-    \ref{line:reducer-op-4}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-4}&{$\le$}1/\var{eim}&
        Line \ref{line:reducer-op-3} Seq.
 \\ \hline
-    \ref{line:reducer-op-5}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-5}&{$\le$}1/\var{eim}&
        Line \ref{line:reducer-op-4} Seq.
 \\ \hline
-    \ref{line:reducer-op-6}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-6}&{$\le$}1/\var{eim}&
         Line \ref{line:reducer-op-5} Cond.
 \\ \hline
-    \ref{line:reducer-op-7}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-7}&{$\le$}1/\var{eim}&
        Line \ref{line:reducer-op-5} Seq.
 \\ \hline
     \ref{line:reducer-op-8}
-    &{$\le$}1/\var{pim}&
+    &{$\le$}1/\var{eim}&
         Line \ref{line:reducer-op-7} Cond.
 \\ \hline
-    \ref{line:reducer-op-9}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-9}&{$\le$}1/\var{eim}&
        Line \ref{line:reducer-op-7} Seq.
 \\ \hline
-    \ref{line:reducer-op-10}&{$\le$}1/\var{pim}&
+    \ref{line:reducer-op-10}&{$\le$}1/\var{eim}&
         Line \ref{line:reducer-op-9} Cond.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
 1/\var{proc}: ``once per procedure call''.
-{$\le$}1/\var{pim}: ``at most once per \type{PIM} in \VVelement{S}{j}''.
+{$\le$}1/\var{eim}: ``at most once per \type{EIM} in \VVelement{S}{j}''.
     }
 \\ \hline
 \end{tabular}
@@ -12537,8 +12535,8 @@ Lines are listed in order of deduction.
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-2}&\Oc{}&
-        \type{ES} Traversal Theorem
-        \Thref{th:es-traversal}.
+        \type{ES} \type{EIM} Traversal Theorem
+        \Thref{th:es-eim-traversal}.
 \\ \hline
     \ref{line:reducer-op-3}&\Oc{}&
         \myfn{Transition}{} Read Theorem
@@ -12594,25 +12592,9 @@ in \VVelement{S}{j} of \Aref{alg:reducer-op}.
     \bcuz{} \Tbref{tab:reducer-proc-time},
         \Tbref{tab:reducer-invocations}.
 }
-Recall that we may safely discard \Oc{} time
-charged to \var{proc} account of the procedure.
-\mypareq{eq:th-reducer-time-110}{%
-    The time that each \op{Reducer} op incurs
-    can be charged as
-    \Oc{} time to the \var{pim} account
-    of each \type{PIM} in in \VVelement{S}{j}
-    \bcuz{} \Thref{th:procedure-overhead-discard}.
-}
-\mypareq{eq:th-reducer-time-250}{%
-    If the time of one \type{LIM} is also charged to it,
-    the \var{pim} time of an \type{EIM} is at most
-    $\Oc+\Oc=\Oc$
-    \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
-        \Eref{eq:th-reducer-time-110}.
-}
-The theorem follows immediately from
-the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}
-and \Eref{eq:th-reducer-time-250}.
+The theorem follows from
+    the Procedure Overhead Discard Theorem \Thref{th:procedure-overhead-discard}.
+and \Eref{eq:th-reducer-time-100}.
 \myqed
 \end{proof}
 
@@ -12628,8 +12610,8 @@ and \Eref{eq:th-reducer-time-250}.
 Line&Space&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-2}&0&
-        \type{ES} Traversal Theorem
-        \Thref{th:es-traversal}.
+        \type{ES} \type{EIM} Traversal Theorem
+        \Thref{th:es-eim-traversal}.
 \\ \hline
     \ref{line:reducer-op-3}&0&
         \myfn{Transition}{} Read Theorem
@@ -12666,7 +12648,7 @@ Line&Space&\multicolumn{1}{c|}{Justification}
 
 \FloatBarrier
 
-\begin{theorem}{\op{Reducer} space}
+\begin{theorem}[\op{Reducer} Space]
 \label{th:reducer-space}
 The \op{Reducer} incurs no space.
 \end{theorem}
@@ -12870,14 +12852,10 @@ into the Earley table with the link pair
 
 \begin{theorem}[Leo Eligible Traversal]
 \label{th:leo-eligible-traversal}
-Let \Ves{eset} be an Earley set.
 Traversal of the Leo eligible items in \var{eset}
-can be charged as \Oc{} time and zero space for each \type{PIM}
-in \var{eset}.
-Alternatively,
-traversal of the Leo eligible items in \var{eset}
 can be charged as \Oc{} time and zero space for each \type{EIM}
-in \var{eset}.
+in \var{eset},
+plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
@@ -12892,12 +12870,10 @@ The second bitmap tracks overflow of the one-bit counter.
 Both bitmaps are indexed by symbol ID,
 and are cleared initially.
 During the traversal,
-for each \type{PIM}.
+for each \type{EIM} \var{eim},
 we execute the following steps, in order:
 \begin{itemize}
-\item If the \type{PIM} is a \type{LIM}, we ignore it.
-\item Every remaining \type{PIM} is an \type{EIM}, call it \Veim{eim}.
-    Let $\Vsym{trans} = \Transition{\var{eim}}$.
+\item Let $\Vsym{trans} = \Transition{\var{eim}}$.
 \item If \Vsym{trans} is not right recursive, we ignore \var{eim}.
 \item If the bit for \Vsym{trans} is unset in the counter bitmap,
 we set the bit for \Vsym{trans} in the counter bitmap.
@@ -12905,15 +12881,13 @@ we set the bit for \Vsym{trans} in the counter bitmap.
 we set the bit for \Vsym{trans} in the overflow bitmap.
 \end{itemize}
 Execution of the steps just described
-incurs \Oc{} time per \type{PIM}.
+incurs \Oc{} time per \type{EIM}.
 
-In the second pass, we again traverse \Ves{eset},
-for each \type{PIM}
-executing the following steps, in order:
+In the second pass, we again traverse \Ves{eset}.
+For each \type{EIM} \var{eim},
+we execute the following steps, in order:
 \begin{itemize}
-\item If the \type{PIM} is a \type{LIM}, we ignore it.
-\item Every remaining \type{PIM} is an \type{EIM}, call it \Veim{eim}.
-    Let $\Vsym{trans} = \Transition{\var{eim}}$.
+\item Let $\Vsym{trans} = \Transition{\var{eim}}$.
 \item If the bit for \Vsym{trans} is unset in the counter bitmap,
     we ignore \var{eim}.
 \item If the bit for \Vsym{trans} is set in the overflow bitmap,
@@ -12922,19 +12896,19 @@ executing the following steps, in order:
    and is processed accordingly.
 \end{itemize}
 Execution of the steps just described
-incurs \Oc{} time per \type{PIM}.
+incurs \Oc{} time per \type{EIM}.
 
-By the \type{ES} Traversal Theorem
+By the \type{ES} \type{EIM} Traversal Theorem
 each traversal of \var{eset} incurs \Oc{} time
-per \type{PIM}
-\Thref{th:es-traversal}.
-Adding the per-\type{PIM} time for the first and second pass traversals
+per \type{EIM}
+\Thref{th:es-eim-traversal}.
+Adding the per-\type{EIM} time for the first and second pass traversals
 themselves
 to the time for the steps itemized above in this proof for the first and second pass,
 we see that
 \mypareq{th:leo-eligible-traversal-300}{%
     traversal of the Leo eligible items in \var{eset}
-    incurs $\Oc{}+ \Oc{}+ \Oc{}+ \Oc{} = \Oc{}$ time per \type{PIM}.
+    incurs $\Oc{}+ \Oc{}+ \Oc{}+ \Oc{} = \Oc{}$ time per \type{EIM}.
 }
 
 By the \type{ES} Traversal Theorem
@@ -12946,7 +12920,7 @@ space.
 Totalling the space requirements, we see that
 \mypareq{th:leo-eligible-traversal-350}{%
     traversal of the Leo eligible items in \var{eset}
-    incurs zero space per \type{PIM}.
+    incurs zero space per \type{EIM}.
 }
 This theorem is
 \Eref{th:leo-eligible-traversal-300} and
@@ -12967,8 +12941,9 @@ but the same resource bounds are achieved.
 using the technique in the proof of \Thref{th:leo-eligible-traversal}.
 \Rtwo{} uses an technique which interweaves the
 \op{Bookkeeper} and
-\op{Memoizer} ops,
-This technique is faster, but harder to analyze for complexity.
+\op{Memoizer} ops.
+This technique is faster,
+but slightly harder to analyze for complexity.
 
 \Rtwo{} first creates the \var{transition} array for \type{EIM}s
 only.
@@ -12976,7 +12951,7 @@ only.
 \var{transition} array, looking for entries whose index
 symbol is right recursive and which have only
 one \type{EIM} in the linked list.
-These \type{EIM}s will all and only the Leo Eligible \type{EIM}s.
+These \type{EIM}s will be all and only the Leo Eligible \type{EIM}s.
 
 For each Leo eligible \type{EIM} \var{src} that \Rtwo{} finds,
 it creates a \type{LIM}, using \var{src} as the source \type{EIM}.
