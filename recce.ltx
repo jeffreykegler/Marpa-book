@@ -9209,7 +9209,7 @@ for one \type{ES}.
 Let \var{pim} be an arbitrary \type{PIM}.
 \type{PIM}s without transition symbols,
 that is, complete \type{EIM}s do not occur
-in 
+in
 any linked list of a \var{transitions} array.
 So if \var{pim} is in
 the linked list of a \var{transitions} array
@@ -9231,14 +9231,14 @@ in \Sref{sec:bookkeeper}.
 \myqed
 \end{proof}
 
-\begin{assumption}[PIM ancestry element]
-\label{asm:pim-ancestry}
+\begin{theorem}[PIM ancestry element]
+\label{th:pim-ancestry}
 Given access to a \type{PIM} \var{pim},
 it ancestry may be read or written in \Oc{}
 time,
 and its space requirement may be ignored.
 \dispEnd
-\end{assumption}
+\end{theorem}
 
 \begin{proof}
 The data structure for
@@ -9677,18 +9677,57 @@ and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 
 \begin{theorem}[\myfn{LIM}{} complexity]
 \label{th:lim-complexity}
-A call of the \myfn{LIM}{} function consumes \Oc{}
+A call of the \myfn{LIM}{} function incurs \Oc{}
 time and zero space.
 \end{theorem}
 
 \begin{proof}
-\todo{Finish LIM read proof}
-\myfn{LIM}{} is a read,
-so no space is required.
+Per the \myfn{LIM}{} Theorem \Thref{th:lim-fn}
+and the definition of \type{LIM} Validity \Dfref{def:lim-validity},
+the \type{LIM} and its source \type{EIM}
+have the same transition symbol and the same current \type{ES}.
+Per the \myfn{Transitions}{} Read Theorem \Thref{th:transitions-read},
+the linked list of \type{PIM}s
+for a given pair transition symbol and current \type{ES}
+can be found in \Oc{} time and zero space.
+
+Since \myfn{LIM}{} is a function,
+there is only one \type{LIM} for its source \type{EIM}
+argument.
+Per the \type{LIM} Transition First Theorem \Thref{th:lim-transition-first},
+this \type{LIM} is first in the linked list returned by the
+\myfn{Transitions}{} function.
+The \type{LIM} in that linked list can therefore be found
+in \Oc{} time and zero space.
+Totalling the two resource requirements,
+the time incurred is $\Oc{} + \Oc{} = \Oc{}$
+and the space incurred is $0+0=0$.
 \myqed
 \end{proof}
 
-\todo{do LSS traversal section}
+\begin{theorem}[\myfn{LIM-Predecessor}{} complexity]
+\label{th:lim-predecessor-complexity}
+A call of the \LIMPredecessor{} function
+incurs \Oc{} time and zero space.
+\end{theorem}
+
+\begin{proof}
+Per the \LIMPredecessor{} definition \Dfref{def:lim-predecessor-fn}
+and the definition of \type{LIM} Validity \Dfref{def:lim-validity},
+the LIM Predecessor is the \type{LIM} of the predecessor
+of an \type{EIM}, if it exists.
+The predecessor is part of the ancestry of an \type{EIM}
+and
+per the \type{PIM} Ancestry Complexity Theorem \Thref{th:pim-ancestry},
+can be found by incurring \Oc{} time and zero space.
+Per the \myfn{LIM}{} Complexity Theorem \Thref{th:lim-complexity},
+the \type{LIM} of the predecessor
+can also be found by incurring \Oc{} time and zero space.
+Totalling the two resource requirements,
+the time incurred is $\Oc{} + \Oc{} = \Oc{}$
+and the space incurred is $0+0=0$.
+\myqed
+\end{proof}
 
 \chapter{The algorithm}
 \label{chap:algorithm}
