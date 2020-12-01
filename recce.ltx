@@ -8590,21 +8590,87 @@ $\size{
 \end{equation}
 \end{proof}
 
-\begin{definition}[LIM predecessor function]
-\label{def:lim-predecessor-fn}
+\begin{theorem}[\myfn{next-lims}{} size]
+\label{th:next-lims-size}
+For every \type{EIM} \var{eim},
+\myfn{next-lims}{\var{eim}} is either empty or
+a singleton.
+That is,
+\[
+    \size{\myfn{next-lims}{\var{eim}}} \le 1.
+\]
+\end{theorem}
+
+\begin{proof}
+\mypareq{th-next-lims-cardinality-100}{%
+    $\myfn{next-lims}{\var{eim}} =
+    \set{
+        \begin{gathered}
+        \ell \in \type{LIM} :
+        \myfn{Next-Eligible}{\Veim{next},\var{eim}}
+        \\ \land \; \ell \in \myfn{lims}{\var{next}}
+        \end{gathered}
+    }$
+    \bcuz{} \longDfref{LIM validity}{def:lim-validity}.
+}
+\mypareq{th-next-lims-cardinality-110}{%
+    $\size{\set{ \Veim{next} : \myfn{Next-Eligible}{\Veim{next},\Veim{eim}}}} \le 1$
+    \bcuz{} Next Eligible \type{EIM} Theorem \Thref{th:next-eligible-uniqueness}.
+}
+\mypareq{th-next-lims-cardinality-120}{%
+    $\forall\; \Veim{x} : \ell \in \myfn{lims}{\var{x}} \implies \myfn{LIM}{\var{x}} = \ell$
+    \bcuz{} \myfn{LIM}{} Theorem \Thref{th:lim-fn}.
+}
+\mypareq{th-next-lims-cardinality-130}{%
+    $\forall\; \Veim{x} : \size{ \myfn{lims}{\var{x}} } \le 1$
+    \cuz{} \Eref{th-next-lims-cardinality-120}.
+}
+The theorem follows from
+\Eref{th-next-lims-cardinality-100},
+\Eref{th-next-lims-cardinality-110}, and
+\Eref{th-next-lims-cardinality-130}.
+\myqed
+\end{proof}
+
+\begin{theorem}[LIM predecessor function]
+\label{th:lim-predecessor-fn}
+Let
+\[
+    \myfnname{LIM-Predecessor} \in \fnset{\type{EIM}}{\type{LIM}}
+\]
+be a function such that
+\vspace{1ex}
 \begin{equation}
-\begin{gathered}
-\LIMPredecessor{\Veim{src}} \defined
-    \\ \begin{cases}
-    \riota \mylim{\ell} : \ell \in \var{nxtlims}
-    \\ \qquad \text{ if } \Vsize{nxtlims} = 1;
-    \\ \Lambda\text{, otherwise};
+\label{eq:th-lim-predecessor-fn-050}
+\begin{aligned}
+& \LIMPredecessor{\Veim{src}} \defined
+\\ & \qquad \begin{gathered}
+    \begin{cases}
+    \mylim{\ell} : \ell \in \var{nxtlims},
+        \text{ if } \Vsize{nxtlims} = 1
+    \\ \Lambda, \text{ if } \Vsize{nxtlims} = 0,
     \end{cases}
 \end{gathered}
+\\ & \text{where } \var{nxtlims} = \myfn{next-lims}{\Veim{src}}.
+\end{aligned}
 \end{equation}
-where $\var{nxtlims} = \myfn{next-lims}{\Veim{src}}$.
-\dispEnd
-\end{definition}
+Then \myfnname{LIM-Predecessor} exists and is total.
+\end{theorem}
+
+\begin{proof}
+From \Eref{eq:th-lim-predecessor-fn-050} it is clear that
+\myfn{next-lims}{\Veim{src}} has a unique value for every \Veim{src},
+if it has a value.
+By the \myfn{next-lims}{} Size Theorem \Thref{th:next-lims-size},
+we know that
+\myfn{next-lims}{\Veim{src}} is either empty or a singleton,
+so that the case statement in
+\Eref{eq:th-lim-predecessor-fn-050}
+covers all possibilities,
+and
+\myfn{next-lims}{\Veim{src}} always has a value.
+\myqed
+\end{proof}
 
 \begin{theorem}[LIM predecessor direction]
 \label{th:lim-predecessor-direction}
