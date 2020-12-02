@@ -3259,7 +3259,7 @@ a \var{r} of some type if
 where \var{Matches} is an overloaded boolean function.
 Where \Matches{\var{l},\var{r}},
 we say that \var{l} is a \dfn{left match} of \var{r},
-and that \var{r} is a \dfn{left match} of \var{l}.
+and that \var{r} is a \dfn{right match} of \var{l}.
 
 Three of the loadings of \var{Matches} are as follows.
 The match of an \type{EIM} with another \type{EIM},
@@ -8672,6 +8672,42 @@ and
 \myqed
 \end{proof}
 
+\begin{theorem}[LIM predecessor connection]
+\label{th:lim-predecessor-connection}
+\[
+    \begin{gathered}
+    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
+    \\ \iff \Transition{\ell} = \Symbol{\var{eim}} \land\; \Current{\ell} = \Origin{\var{eim}}.
+    \end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Finish proof}
+\mypareq{th:lim-predecessor-connection-100}{%
+    $\begin{gathered}
+    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
+    \\ \iff \ell \in \myfn{next-lims}{\Veim{eim}}
+    \end{gathered}$
+    \bcuz{} \longThref{\LIMPredecessor{} Theorem}{th:lim-predecessor-fn}.
+}
+\mypareq{th:lim-predecessor-connection-110}{%
+    $\begin{gathered}
+    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
+    \\ \iff
+        \exists\; \Veim{next} :
+        \left(\begin{gathered}
+        \ell \in 
+            \myfn{lims}{\var{next}}
+            \\ \land\; \myfn{Next-Eligible}{\Veim{next},\Veim{eim}}
+        \end{gathered}\right)
+    \end{gathered}$
+    \bcuz{} \longDfref{LIM validity}{def:lim-validity},
+        \Eref{th:lim-predecessor-connection-100}.
+}
+\myqed
+\end{proof}
+
 \begin{theorem}[LIM predecessor direction]
 \label{th:lim-predecessor-direction}
 \begin{gather*}
@@ -8833,6 +8869,11 @@ we need to be able to ignore at least some
 of the space consumed by link pairs.
 This is why we track some of the space consumed
 by link pairs separately.
+
+The complexity results implicitly assume that \Marpa{}
+is ``consistent''.
+We will define and prove this in a later chapter
+\Chref{chap:consistent}.
 
 \begin{definition}[Try, dup and new resource]
 \label{def:try-dup-new}
@@ -14479,6 +14520,11 @@ This means that an explicit boolean is not actually needed.
 The simpler approach, which omits the boolean,
 is the one that
 the \Marpa{} implementation sometimes uses.
+
+\chapter{\Marpa{} is consistent}
+\label{chap:consistent}
+
+\todo{Move consistency stuff here}
 
 \chapter{\Marpa{} is correct}
 \label{chap:correctness}
