@@ -8689,14 +8689,14 @@ and
 \todo{Finish proof}
 \mypareq{th:lim-predecessor-connection-100}{%
     $\begin{gathered}
-    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
-    \\ \iff \ell \in \myfn{next-lims}{\Veim{eim}}
+    \LIMPredecessor{\var{eim}} = \ell \land \ell \in \type{LIM}
+    \\ \iff \ell \in \myfn{next-lims}{\var{eim}}
     \end{gathered}$
     \bcuz{} \longThref{\LIMPredecessor{} Theorem}{th:lim-predecessor-fn}.
 }
 \mypareq{th:lim-predecessor-connection-110}{%
     $\begin{gathered}
-    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
+    \LIMPredecessor{\var{eim}} = \ell \land \ell \in \type{LIM}
     \\ \iff
         \exists\; \Veim{next} :
         \left(\begin{gathered}
@@ -8708,6 +8708,59 @@ and
     \bcuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{th:lim-predecessor-connection-100}.
 }
+\mypareq{th:lim-predecessor-connection-120}{%
+    $\begin{gathered}
+    \forall\; \Veim{x} : \ell \in \myfn{lims}{\var{x}}
+        \\ \iff
+           \left(\begin{gathered}
+               \Transition{\ell} = \Postdot{\var{x}}
+               \\ \land\; \Current{\ell} = \Current{\var{x}}
+           \end{gathered}\right)
+    \end{gathered}$
+    \bcuz{} \longDfref{LIM validity}{def:lim-validity}.
+}
+\mypareq{th:lim-predecessor-connection-130}{%
+    $\begin{gathered}
+    \forall\; \Veim{x} :
+    \myfn{Next-Eligible}{\var{x},\var{eim}}
+    \\ \iff
+       \left(\begin{gathered}
+           \Postdot{\var{x}} = \Symbol{\var{eim}}
+           \\ \land\; \Current{\var{x}} = \Origin{\var{eim}}
+       \end{gathered}\right)
+    \end{gathered}$
+    \bcuz{} \longThref{Next eligible connection}{th:next-eligible-connection}.
+}
+\mypareq{th:lim-predecessor-connection-140}{%
+    $\begin{gathered}
+    \forall\; \Veim{x} : \ell \in \myfn{lims}{\var{x}} \land \myfn{Next-Eligible}{\var{x},\var{eim}}
+    \\ \iff
+       \left(\begin{gathered}
+           \Transition{\ell} = \Symbol{\var{eim}}
+           \\ \land\; \Current{\ell} = \Origin{\var{eim}}
+       \end{gathered}\right)
+    \end{gathered}$
+    \bcuz{} \Eref{th:lim-predecessor-connection-120},
+        \Eref{th:lim-predecessor-connection-130}.
+}
+\mypareq{th:lim-predecessor-connection-150}{%
+    $\begin{gathered}
+    \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
+    \\ \iff
+        \exists\; \Veim{next} :
+       \left(\begin{gathered}
+           \Transition{\ell} = \Symbol{\var{eim}}
+           \\ \land\; \Current{\ell} = \Origin{\var{eim}}
+       \end{gathered}\right)
+    \end{gathered}$
+    \bcuz{} \Eref{th:lim-predecessor-connection-110},
+        \Eref{th:lim-predecessor-connection-140}.
+}
+\Veim{next} is not used in
+\Eref{th:lim-predecessor-connection-150}.
+If we drop the useless existential quantification
+in \Eref{th:lim-predecessor-connection-150},
+we have the theorem.
 \myqed
 \end{proof}
 
