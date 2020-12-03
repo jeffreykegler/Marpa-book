@@ -9547,6 +9547,7 @@ incurs \Oc{} time and \Oc{} space.
 
 \begin{theorem}[Earley set add]
 \label{th:es-add}
+\todo{Assign space later?}
 The resource incurred by adding a new
 \type{PIM} to an Earley set incurs
 \Oc{} time, \Oc{} trimmed space and
@@ -9565,6 +9566,7 @@ We choose to assign the space to trimmed space.
 
 \begin{theorem}[Earley set adjoin]
 \label{th:es-adjoin}
+\todo{Assign space later?}
 The adjoin of an existing \type{EIM} (a dup)
 incurs \Oc{} time, zero trimmed space and \Oc{} link space.
 \end{theorem}
@@ -13071,6 +13073,129 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 
 \FloatBarrier
 
+\begin{table}[H]
+\caption{
+    \label{tab:memoizer-time-worksheet}
+    \op{Memoizer} time worksheet}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
+\\ \cline{2-3}
+Line&\var{proc}&\var{eim}
+\\ \hline
+    \ref{line:memoizer-op-2}&$1\times\Oc{}$&$1\times\Oc{}$
+\\ \hline
+    \ref{line:memoizer-op-3}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-4}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-5}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-6}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-7}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-8}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-9}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    \ref{line:memoizer-op-10}&$\Oc{}\times\Oc{}$&
+\\ \hline
+    Totals&\Oc{}&\Oc{}
+\\ \hline
+\end{tabular}
+\;\;\parbox{2in}{
+    All charges in this table are per call
+    of the \op{Memoizer} op.
+    Cell entries are number of invocations
+    \Tbref{tab:memoizer-invocations}
+    multiplied by time incurred for each invocation
+    \Tbref{tab:memoizer-time}.
+    \var{proc} time is charged to the
+    of the \op{Memoizer} op itself.
+    \var{eim} time is charged to each \type{EIM}
+    in \VVelement{S}{j} of \Aref{alg:memoizer-op}.
+}
+\end{table}
+
+\FloatBarrier
+
+\begin{theorem}[\op{Memoizer} Time Complexity]
+\label{th:memoizer-time}
+The time that each \op{Memoizer} op incurs
+can be accounted for by charging
+\Oc{} time
+to the \var{eim} account of each \type{EIM}
+in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
+\end{theorem}
+
+\begin{proof}
+\mypareq{eq:th-memoizer-time-100}{%
+    The time that each \op{Memoizer} op incurs
+    can be charged as \Oc{} time to the \var{proc} account
+    of \op{Memoizer} op;
+    and \Oc{} time to the \var{eim} account
+    of each \type{EIM} in in \VVelement{S}{j}
+    \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
+}
+The theorem follows immediately from
+\Eref{eq:th-memoizer-time-100}
+and the Procedure Overhead Discard Theorem \Thref{th:procedure-overhead-discard}.
+\myqed
+\end{proof}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:memoizer-space}
+    \op{Memoizer} space per invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Space&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:memoizer-op-2}&0&
+        \parbox{3.5in}{ \raggedright
+            \type{ES} Leo Eligible Traversal Theorem
+            \Thref{th:leo-eligible-traversal},
+            \type{ES} \type{EIM} Traversal Theorem
+            \Thref{th:es-eim-traversal}.
+        }
+\\ \hline
+    \ref{line:memoizer-op-3}&0&
+        \parbox{3.5in}{ \raggedright
+            \LIMPredecessor{} Complexity Theorem
+            \Thref{th:lim-predecessor-complexity}.
+        }
+\\ \hline
+    \ref{line:memoizer-op-4}&0&
+\\ \hline
+    \ref{line:memoizer-op-5}&0&
+\\ \hline
+    \ref{line:memoizer-op-6}&0&
+\\ \hline
+    \ref{line:memoizer-op-7}&0&
+\\ \hline
+    \ref{line:memoizer-op-8}&0&
+\\ \hline
+    \ref{line:memoizer-op-9}&0&
+        \parbox{3.5in}{ \raggedright
+            \type{PIM} Link Pair Write Complexity Theorem \Thref{th:pim-link-pair-write}.
+        }
+\\ \hline
+    \ref{line:memoizer-op-10}&\Oc{}&
+        \type{ES} Add Theorem \Thref{th:es-add}.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:memoizer-op}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 \todo{Rewrite Memoizer op section}
 
 \begin{observation}[Ancestry]
