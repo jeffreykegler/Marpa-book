@@ -10312,6 +10312,76 @@ so that there will always be an \type{EIM} to whose
 \section{Initializer op}
 \label{sec:initializer}
 
+\begin{algorithm}[H]
+\caption{\op{Initializer}}
+\label{alg:initializer-op}
+\begin{algorithmic}[1]
+\Procedure{Initializer}{}
+\State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
+\label{line:initializer-op-10}
+\Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
+\State $\LinkPairs{\Veim{start}} = \set{}$
+\label{line:initializer-op-20}
+\State Add \Veim{start} to \es{(0)}
+  \Comment \tightMath{\var{s}=\Oc}
+\label{line:initializer-op-30}
+\State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
+\label{line:initializer-op-60}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\FloatBarrier
+
+\begin{theorem}[\op{Initializer} Complexity]
+\label{th:initializer-complexity}
+Time incurred by
+the \op{Initializer} op may be ignored.
+Space incurred by the \op{Initializer} op may be
+accounted for as \Oc{} trimmed space charged
+to the \var{eim} account of an arbitrary EIM,
+and zero link space.
+\end{theorem}
+
+\begin{proof}
+Execution in the \op{Initializer} op depends only
+on the grammar \Vint{g}.
+\Vint{g} is constant,
+so that time and space
+incurred by \op{Initializer} is \Oc{}.
+By the Procedure Overhead Time Discard Theorem
+\Thref{th:procedure-overhead-discard},
+the \Oc{} time may be ignored.
+We choose to assign and charge the \Oc{} space
+as described in the statement of the
+theorem.
+\myqed
+\end{proof}
+
+\begin{observation}[Ancestry]
+\label{obs:initializer-ancestry}
+The \Marpa{} implementation does not keep
+any link pairs for any \type{PIM} in Earley set 0.
+\Veim{start} does not have any non-trivial ancestor,
+so that a link pair does not exist for it,
+even conceptually.
+And \Marpa{} does not track link pairs for
+predictions
+\Obref{obs:common-predict-ancestry}.
+\dispEnd{}
+\end{observation}
+
+\begin{observation}[\Earley{}'s Earley set 0]
+\label{obs:earley-set-0}
+\Marpa{}'s % \linebreak
+\op{Ini\-tial\-iza\-tion} op has the same effect as the construction
+of Earley set 0 by \Earley{}.
+\dispEnd{}
+\end{observation}
+
+\section{Predicter op}
+\label{sec:predicter-op}
+
 \FloatBarrier
 
 \begin{algorithm}[H]
@@ -10342,7 +10412,7 @@ so that there will always be an \type{EIM} to whose
 
 The \op{Initializer} op adds the start \type{EIM} and its predictions.
 We first look at
-Algorithms \Aref{alg:predict1} and \Aref{alg:predict-es},
+Algorithms \Aref{alg:predict1} and \Aref{alg:predicter-op},
 which contain the pseudocode for adding predictions.
 
 \begin{theorem}[\var{Predict1} Invocations]
@@ -10488,16 +10558,16 @@ Space for \var{Predict1} is
 \FloatBarrier
 
 \begin{algorithm}[H]
-\caption{\var{Predict-ES}}
-\label{alg:predict-es}
+\caption{\var{Predicter}}
+\label{alg:predicter-op}
 \begin{algorithmic}[1]
-\Procedure{Predict-ES}{\Ves{es}}
-\label{line:marpa-predict-es-00}
+\Procedure{Predicter}{\Ves{es}}
+\label{line:marpa-predicter-00}
 \State Allocate \var{dotZeroUsed}
    \Comment \tightMath{\var{s}=\Oc}
-\label{line:marpa-predict-es-05}
+\label{line:marpa-predicter-05}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
-\label{line:marpa-predict-es-10}
+\label{line:marpa-predicter-10}
 \Statex \hspace\algorithmicindent
     $\triangleright$ \rawparcomment[4.3in]{Loop over every \Veim{x} in \Ves{es},
     including those that \var{Predict1} adds while the loop
@@ -10505,16 +10575,16 @@ Space for \var{Predict1} is
     }
 \For{$\Veim{x} \in \Ves{es}$}
        \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
-\label{line:marpa-predict-es-12}
+\label{line:marpa-predicter-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
-  \label{line:marpa-predict-es-14}
+  \label{line:marpa-predicter-14}
   \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} } @ \Current{\var{es}}$
-      \label{line:marpa-predict-es-16}
+      \label{line:marpa-predicter-16}
        \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State \Call{Predict1}{\var{pred}}
        \Comment \tightMath{\text{Ind};\var{x}=\order{\Current{\var{es}}}}
-    \label{line:marpa-predict-es-18}
+    \label{line:marpa-predicter-18}
   \EndFor
 \EndFor
 \EndProcedure
@@ -10523,64 +10593,64 @@ Space for \var{Predict1} is
 
 \FloatBarrier
 
-\begin{theorem}[\proc{Predict-ES} Invocations]
-\label{th:predict-es-invocations}
-Consider \proc[\Ves{es}]{Predict-ES}.
+\begin{theorem}[\proc{Predicter} Invocations]
+\label{th:predicter-invocations}
+Consider \proc[\Ves{es}]{Predicter}.
 \begin{enumerate}
 \item
-  \label{enum:th-predict-es-invocations-10}
+  \label{enum:th-predicter-invocations-10}
   There are \Oc{} invocations per Earley set
   \begin{itemize}
     \item for each of lines
-      \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}; and
+      \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}; and
     \item for the final, test-failure, invocation of
-      line \ref{line:marpa-predict-es-12}.
+      line \ref{line:marpa-predicter-12}.
   \end{itemize}
 \item
-  \label{enum:th-predict-es-invocations-20}
+  \label{enum:th-predicter-invocations-20}
   There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
   \begin{itemize}
     \item for the non-final, successful, invocations of
-      line \ref{line:marpa-predict-es-12}; and
+      line \ref{line:marpa-predicter-12}; and
     \item for each of lines
-      \enRange{\ref{line:marpa-predict-es-14}}{\ref{line:marpa-predict-es-18}}.
+      \enRange{\ref{line:marpa-predicter-14}}{\ref{line:marpa-predicter-18}}.
   \end{itemize}
 \end{enumerate}
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-predict-es-invocations-10}
-\Invocs{\ref{line:marpa-predict-es-05}} = \Oc{} \because
-   \Aref{alg:predict-es}, \text{sequential execution}.
+\label{eq:th-predicter-invocations-10}
+\Invocs{\ref{line:marpa-predicter-05}} = \Oc{} \because
+   \Aref{alg:predicter-op}, \text{sequential execution}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-12}
-\Invocs{\ref{line:marpa-predict-es-10}} = \Oc{} \because
-    \Eref{eq:th-predict-es-invocations-10},
+\label{eq:th-predicter-invocations-12}
+\Invocs{\ref{line:marpa-predicter-10}} = \Oc{} \because
+    \Eref{eq:th-predicter-invocations-10},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-16}
-  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} = \Oc{}
+\label{eq:th-predicter-invocations-16}
+  \Invocs{\text{loop } \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18}} = \Oc{}
     \because
-    \Eref{eq:th-predict-es-invocations-12},
+    \Eref{eq:th-predicter-invocations-12},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-16-10}
+\label{eq:th-predicter-invocations-16-10}
 \myparbox{%
    There is exactly one final, test-failure invocation of
-    line \ref{line:marpa-predict-es-12} \cuz{}
+    line \ref{line:marpa-predicter-12} \cuz{}
     \Obref{def:loop-invocation}.
-    \Eref{eq:th-predict-es-invocations-16},
+    \Eref{eq:th-predicter-invocations-16},
     \text{sequential execution}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-16-20}
+\label{eq:th-predicter-invocations-16-20}
 \myparbox{%
    There is exactly one successful invocation of
-    line \ref{line:marpa-predict-es-12} for each
+    line \ref{line:marpa-predicter-12} for each
     $\Veim{x} \in \Ves{es}$
     \cuz{} \Obref{def:loop-invocation}.}
 \end{equation}
@@ -10590,20 +10660,20 @@ to say ``passes of loop \var{lp} per \Veim{x}'';
 and $\Invocs{\var{ln}}/\Veim{x}$
 to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
-\label{eq:th-predict-es-invocations-18}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18}} / \Veim{x} = \Oc
-    \because \Eref{eq:th-predict-es-invocations-16-20}.
+\label{eq:th-predicter-invocations-18}
+  \Passes{\text{loop } \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18}} / \Veim{x} = \Oc
+    \because \Eref{eq:th-predicter-invocations-16-20}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-24}
-  \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} / \Veim{x}
+\label{eq:th-predicter-invocations-24}
+  \Invocs{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}} / \Veim{x}
     = \Oc
     \because
-    \Eref{eq:th-predict-es-invocations-18},
+    \Eref{eq:th-predicter-invocations-18},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-26}
+\label{eq:th-predicter-invocations-26}
 \begin{gathered}
   \size{\set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}} = \Oc
   \\
@@ -10611,12 +10681,12 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-28}
+\label{eq:th-predicter-invocations-28}
   \begin{gathered}
-      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+      \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
           / \Veim{x}
     \\
-      = \Invocs{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+      = \Invocs{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
           / \Veim{x}
       \times
       \size{\set{\Vrule{r} : \Postdot{\var{x}}}}
@@ -10625,21 +10695,21 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-29}
+\label{eq:th-predicter-invocations-29}
   \begin{gathered}
-  \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}} / \Veim{x}
+  \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}} / \Veim{x}
       = \Oc{} \times \Oc = \Oc{} \\
     \because
-    \Eref{eq:th-predict-es-invocations-24},
-    \Eref{eq:th-predict-es-invocations-26},
-    \Eref{eq:th-predict-es-invocations-28}.
+    \Eref{eq:th-predicter-invocations-24},
+    \Eref{eq:th-predicter-invocations-26},
+    \Eref{eq:th-predicter-invocations-28}.
   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-30}
+\label{eq:th-predicter-invocations-30}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}}/\Veim{x} =
-      \Passes{\text{loop } \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}/\Veim{x}
+    \Invocs{\ref{line:marpa-predicter-14}}/\Veim{x} =
+      \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}/\Veim{x}
       +1
     \\
     \because
@@ -10647,46 +10717,46 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-32}
+\label{eq:th-predicter-invocations-32}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predict-es-14}}/\Veim{x} =
+    \Invocs{\ref{line:marpa-predicter-14}}/\Veim{x} =
       \Oc+1 = \Oc{}
     \\
     \because
-    \Eref{eq:th-predict-es-invocations-29},
-    \Eref{eq:th-predict-es-invocations-30}.
+    \Eref{eq:th-predicter-invocations-29},
+    \Eref{eq:th-predicter-invocations-30}.
   \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-34}
-    \Invocs{\ref{line:marpa-predict-es-16}}/\Veim{x} = \Oc{}
-    \because \Eref{eq:th-predict-es-invocations-28},
+\label{eq:th-predicter-invocations-34}
+    \Invocs{\ref{line:marpa-predicter-16}}/\Veim{x} = \Oc{}
+    \because \Eref{eq:th-predicter-invocations-28},
     \text{ sequential execution.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-invocations-36}
-    \Invocs{\ref{line:marpa-predict-es-18}}/\Veim{x} = \Oc{}
-    \because \Eref{eq:th-predict-es-invocations-34},
+\label{eq:th-predicter-invocations-36}
+    \Invocs{\ref{line:marpa-predicter-18}}/\Veim{x} = \Oc{}
+    \because \Eref{eq:th-predicter-invocations-34},
     \text{ sequential execution.}
 \end{equation}
-We have \ref{enum:th-predict-es-invocations-10}
-of \Thref{th:predict-es-invocations}
-from \Eref{eq:th-predict-es-invocations-10},
-  \Eref{eq:th-predict-es-invocations-12},
-  \Eref{eq:th-predict-es-invocations-16-10}.
-We have \ref{enum:th-predict-es-invocations-20}
-of \Thref{th:predict-es-invocations}
-from \Eref{eq:th-predict-es-invocations-16-20},
-  \Eref{eq:th-predict-es-invocations-32},
-  \Eref{eq:th-predict-es-invocations-34},
-  \Eref{eq:th-predict-es-invocations-36}.
+We have \ref{enum:th-predicter-invocations-10}
+of \Thref{th:predicter-invocations}
+from \Eref{eq:th-predicter-invocations-10},
+  \Eref{eq:th-predicter-invocations-12},
+  \Eref{eq:th-predicter-invocations-16-10}.
+We have \ref{enum:th-predicter-invocations-20}
+of \Thref{th:predicter-invocations}
+from \Eref{eq:th-predicter-invocations-16-20},
+  \Eref{eq:th-predicter-invocations-32},
+  \Eref{eq:th-predicter-invocations-34},
+  \Eref{eq:th-predicter-invocations-36}.
 \myqed
 \end{proof}
 
 \begin{equation}
-\label{eq:def-predict-es-time-charge}
+\label{eq:def-predicter-time-charge}
 \myparbox{%
-  Time in \var{Predict-ES} is charged to the
+  Time in \var{Predicter} is charged to the
   Earley item which is the loop variable of
   the outer loop, when it is in scope,
   and to the
@@ -10694,10 +10764,10 @@ from \Eref{eq:th-predict-es-invocations-16-20},
   \cuz{} AF complexity analysis.}
 \end{equation}
 
-\begin{theorem}[\var{Predict-ES} time complexity]
-\label{th:predict-es-time}
-The inclusive time of $\var{Predict-ES}(\VVelement{S}{j})$
-\Aref{alg:predict-es}
+\begin{theorem}[\var{Predicter} time complexity]
+\label{th:predicter-time}
+The inclusive time of $\var{Predicter}(\VVelement{S}{j})$
+\Aref{alg:predicter-op}
 is
 \Oc{} charged to each \type{EIM} of \VVelement{S}{j},
 and \Oc{} charged to \VVelement{S}{j} itself.
@@ -10705,195 +10775,195 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-predict-es-time-10}
+\label{eq:th-predicter-time-10}
 \myparbox{%
   \Rules{\Vcfg{g}} is a constant depending on \var{g}
   \cuz{}~\longDfref{CFG}{def:context-free-grammar}.%
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-12}
+\label{eq:th-predicter-time-12}
 \myparbox{%
   The loop variable for
-  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} is in scope
+  loop \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18} is in scope
   for all invocations of
-  lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
+  lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18};
   for all but the final test invocation of
-  line \ref{line:marpa-predict-es-12};
+  line \ref{line:marpa-predicter-12};
   and only for those invocations.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-14}
-\Time{\ref{line:marpa-predict-es-05}} = \Oc{}
+\label{eq:th-predicter-time-14}
+\Time{\ref{line:marpa-predicter-05}} = \Oc{}
   \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-16}
-\Time{\ref{line:marpa-predict-es-10}} = \Oc{}
+\label{eq:th-predicter-time-16}
+\Time{\ref{line:marpa-predicter-10}} = \Oc{}
   \because
   \Thref{th:rule-id-complexity},
   \Thref{th:dotzeroused-bitmap},
-  \Eref{eq:th-predict-es-time-10}.
+  \Eref{eq:th-predicter-time-10}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-18}
-\Time{\ref{line:marpa-predict-es-12}} = \Oc{}
+\label{eq:th-predicter-time-18}
+\Time{\ref{line:marpa-predicter-12}} = \Oc{}
    \because \type{ES} Add Theorem \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-20}
-\Time{\ref{line:marpa-predict-es-14}} = \Oc{}
+\label{eq:th-predicter-time-20}
+\Time{\ref{line:marpa-predicter-14}} = \Oc{}
   \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-22}
-\Time{\ref{line:marpa-predict-es-16}} = \Oc{}
-  \because \text{ direct from line \ref{line:marpa-predict-es-16}}.
+\label{eq:th-predicter-time-22}
+\Time{\ref{line:marpa-predicter-16}} = \Oc{}
+  \because \text{ direct from line \ref{line:marpa-predicter-16}}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-24}
-\Time{\ref{line:marpa-predict-es-18}} = \Oc{}
-  \because \Thref{th:predict-es-time}.
+\label{eq:th-predicter-time-24}
+\Time{\ref{line:marpa-predicter-18}} = \Oc{}
+  \because \Thref{th:predicter-time}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-26}
+\label{eq:th-predicter-time-26}
 \myparbox{%
-   Total exclusive time for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   Total exclusive time for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
    is the number of invocations of each multiplied by the time for each invocation.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-28}
+\label{eq:th-predicter-time-28}
 \begin{gathered}
    \myparbox{%
-     Total exclusive time for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+     Total exclusive time for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
    is}
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}}
+       \var{line}\in\set{\enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}}
      }}}
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
      \because
-     \ref{enum:th-predict-es-invocations-10}\text{ of }\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-time-14},
-     \Eref{eq:th-predict-es-time-16},
-     \Eref{eq:th-predict-es-time-26}.
+     \ref{enum:th-predicter-invocations-10}\text{ of }\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-time-14},
+     \Eref{eq:th-predicter-time-16},
+     \Eref{eq:th-predicter-time-26}.
 \end{gathered}
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-time-30}
+\label{eq:th-predicter-time-30}
 \myparbox{%
    Total exclusive time for the final invocation of
-   line \ref{line:marpa-predict-es-12} is \Oc{}
-   \cuz{} \Eref{eq:th-predict-es-time-18}.
+   line \ref{line:marpa-predicter-12} is \Oc{}
+   \cuz{} \Eref{eq:th-predicter-time-18}.
 }
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-time-32}
+\label{eq:th-predicter-time-32}
 \myparbox{%
-   Total exclusive time for \proc{Predict-ES}
+   Total exclusive time for \proc{Predicter}
    charged to the Earley set is
    $\Oc{} + \Oc{} = \Oc{}$
    \cuz{}
-  \Eref{eq:def-predict-es-time-charge},
-  \Eref{eq:th-predict-es-time-12},
-  \Eref{eq:th-predict-es-time-28},
-  \Eref{eq:th-predict-es-time-30}.}
+  \Eref{eq:def-predicter-time-charge},
+  \Eref{eq:th-predicter-time-12},
+  \Eref{eq:th-predicter-time-28},
+  \Eref{eq:th-predicter-time-30}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-34}
+\label{eq:th-predicter-time-34}
 \myparbox{%
    Total exclusive time
    per \Veim{x}
-   for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
+   for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}
    is the number of invocations
    multiplied by the time for each invocation.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-36}
+\label{eq:th-predicter-time-36}
 \begin{gathered}
    \myparbox{%
      Total exclusive time
      per \Veim{x}
-     for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} is
+     for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18} is
      }
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+       \var{line}\in\set{\enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
      }}}
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
      \because
-     \ref{enum:th-predict-es-invocations-20}\text{ of }\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-time-20},
-     \Eref{eq:th-predict-es-time-22},
-     \Eref{eq:th-predict-es-time-24},
-     \Eref{eq:th-predict-es-time-34}.
+     \ref{enum:th-predicter-invocations-20}\text{ of }\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-time-20},
+     \Eref{eq:th-predicter-time-22},
+     \Eref{eq:th-predicter-time-24},
+     \Eref{eq:th-predicter-time-34}.
 \end{gathered}
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-time-38}
+\label{eq:th-predicter-time-38}
 \myparbox{%
    Total exclusive time for
-   line \ref{line:marpa-predict-es-12}
+   line \ref{line:marpa-predicter-12}
    for each \Veim{x}
    is \Oc{}
-   \cuz{} \ref{enum:th-predict-es-invocations-20}~of~\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-time-18}.
+   \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-time-18}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-40}
+\label{eq:th-predicter-time-40}
 \myparbox{%
-   Total exclusive time for \proc{Predict-ES}
+   Total exclusive time for \proc{Predicter}
    charged to each \Veim{x} is
    $\Oc{} + \Oc{} = \Oc{}$
    \cuz{}
-  \Eref{eq:def-predict-es-time-charge},
-  \Eref{eq:th-predict-es-time-12},
-  \Eref{eq:th-predict-es-time-36},
-  \Eref{eq:th-predict-es-time-38}.}
+  \Eref{eq:def-predicter-time-charge},
+  \Eref{eq:th-predicter-time-12},
+  \Eref{eq:th-predicter-time-36},
+  \Eref{eq:th-predicter-time-38}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-42}
+\label{eq:th-predicter-time-42}
 \myparbox{%
   The only indirect time is \Oc{} at
-       line \ref{line:marpa-predict-es-18}
+       line \ref{line:marpa-predicter-18}
       \cuz{}
       \Obref{obs:direct-vs-indirect},
-      \Aref{alg:predict-es}, \Thref{th:predict1-time}.}
+      \Aref{alg:predicter-op}, \Thref{th:predict1-time}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-44}
+\label{eq:th-predicter-time-44}
 \myparbox{%
-  The indirect time of \proc{Predict-ES} is \Oc{} per \Veim{x},
+  The indirect time of \proc{Predicter} is \Oc{} per \Veim{x},
        which is recharged directly to each \Veim{x}
-       \cuz{} \Eref{eq:def-predict-es-time-charge}, \Eref{eq:th-predict-es-time-42}.}
+       \cuz{} \Eref{eq:def-predicter-time-charge}, \Eref{eq:th-predicter-time-42}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-time-48}
+\label{eq:th-predicter-time-48}
 \myparbox{%
-  The time charged by \proc{Predict-ES} to each \Veim{x} is
+  The time charged by \proc{Predicter} to each \Veim{x} is
   $\Oc + \Oc = \Oc$
   \cuz
-  \Eref{eq:th-predict-es-time-12},
-  \Eref{eq:th-predict-es-time-40},
-  \Eref{eq:th-predict-es-time-44}.
+  \Eref{eq:th-predicter-time-12},
+  \Eref{eq:th-predicter-time-40},
+  \Eref{eq:th-predicter-time-44}.
 }
 \end{equation}
 The theorem follows directly from
-\Eref{eq:th-predict-es-time-32}
-and \Eref{eq:th-predict-es-time-48}.
+\Eref{eq:th-predicter-time-32}
+and \Eref{eq:th-predicter-time-48}.
 \myqed
 \end{proof}
 
 \begin{equation}
-\label{eq:def-predict-es-space-charge}
+\label{eq:def-predicter-space-charge}
 \myparbox{%
-  Direct space in \var{Predict-ES} is charged to the
+  Direct space in \var{Predicter} is charged to the
   Earley item which is the loop variable of
   the outer loop, when it is in scope,
   and to the
@@ -10901,208 +10971,208 @@ and \Eref{eq:th-predict-es-time-48}.
   \cuz{} AF complexity analysis.}
 \end{equation}
 
-\begin{theorem}[\var{Predict-ES} Space Complexity]
-\label{th:predict-es-space}
+\begin{theorem}[\var{Predicter} Space Complexity]
+\label{th:predicter-space}
 The space consumed by
-\proc[\VVelement{S}{j}]{Predict-ES}
+\proc[\VVelement{S}{j}]{Predicter}
 is \Oc{} charged to \VVelement{S}{j}
 and \Oc{} charged to each \type{EIM} added.
 \end{theorem}
 
 \begin{proof}
 \begin{equation}
-\label{eq:th-predict-es-space-12}
+\label{eq:th-predicter-space-12}
 \myparbox{%
   The loop variable for
-  loop \enRefs{line:marpa-predict-es-12}{line:marpa-predict-es-18} is in scope
+  loop \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18} is in scope
   for all invocations of
-  lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18};
+  lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18};
   for all but the final test invocation of
-  line \ref{line:marpa-predict-es-12};
+  line \ref{line:marpa-predicter-12};
   and only for those invocations.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-14}
-\Space{\ref{line:marpa-predict-es-05}} = \Oc
+\label{eq:th-predicter-space-14}
+\Space{\ref{line:marpa-predicter-05}} = \Oc
   \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-16}
-\Space{\ref{line:marpa-predict-es-10}} = 0
+\label{eq:th-predicter-space-16}
+\Space{\ref{line:marpa-predicter-10}} = 0
   \because
   \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-18}
-\Space{\ref{line:marpa-predict-es-12}} = 0
+\label{eq:th-predicter-space-18}
+\Space{\ref{line:marpa-predicter-12}} = 0
    \because \type{ES} Add Theorem \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-20}
-\Space{\ref{line:marpa-predict-es-14}} = 0
+\label{eq:th-predicter-space-20}
+\Space{\ref{line:marpa-predicter-14}} = 0
   \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-22}
-\Space{\ref{line:marpa-predict-es-16}} = 0
-  \because \text{ direct from line \ref{line:marpa-predict-es-16}}.
+\label{eq:th-predicter-space-22}
+\Space{\ref{line:marpa-predicter-16}} = 0
+  \because \text{ direct from line \ref{line:marpa-predicter-16}}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-24}
-\Space{\ref{line:marpa-predict-es-18}} = 0
+\label{eq:th-predicter-space-24}
+\Space{\ref{line:marpa-predicter-18}} = 0
   \because \Thref{th:predict1-space}.
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-26}
+\label{eq:th-predicter-space-26}
 \myparbox{%
-   Total exclusive space for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+   Total exclusive space for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
    is the number of invocations of each multiplied by the space for each invocation.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-28}
+\label{eq:th-predicter-space-28}
 \begin{gathered}
    \myparbox{%
-     Total exclusive space for lines \enRefs{line:marpa-predict-es-05}{line:marpa-predict-es-10}
+     Total exclusive space for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
    is}
    \\
      \left(
          \smashoperator[r]{\sum_{\textstyle{
-           \var{line}\in\set{\ref{line:marpa-predict-es-05}}
+           \var{line}\in\set{\ref{line:marpa-predicter-05}}
          }}}
          \;\; \Oc \times \Oc
      \right)
      + \left(
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predict-es-10}{line:marpa-predict-es-18}}
+       \var{line}\in\set{\enRefs{line:marpa-predicter-10}{line:marpa-predicter-18}}
      }}}
      \;\; 0 \times \Oc
      \right)
      = \Oc
    \\
      \because
-     \ref{enum:th-predict-es-invocations-10}\text{ of }\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-space-14},
-     \Eref{eq:th-predict-es-space-16},
-     \Eref{eq:th-predict-es-space-26}.
+     \ref{enum:th-predicter-invocations-10}\text{ of }\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-space-14},
+     \Eref{eq:th-predicter-space-16},
+     \Eref{eq:th-predicter-space-26}.
 \end{gathered}
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-space-30}
+\label{eq:th-predicter-space-30}
 \myparbox{%
    Total exclusive space for the final invocation of
-   line \ref{line:marpa-predict-es-12} is 0
-   \cuz{} \Eref{eq:th-predict-es-space-18}.
+   line \ref{line:marpa-predicter-12} is 0
+   \cuz{} \Eref{eq:th-predicter-space-18}.
 }
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-space-32}
+\label{eq:th-predicter-space-32}
 \myparbox{%
-   Total exclusive space for \proc{Predict-ES}
+   Total exclusive space for \proc{Predicter}
    charged to the Earley set is
    $\Oc{} + 0 = \Oc{}$
    \cuz{}
-  \Eref{eq:def-predict-es-space-charge},
-  \Eref{eq:th-predict-es-space-12},
-  \Eref{eq:th-predict-es-space-28},
-  \Eref{eq:th-predict-es-space-30}.}
+  \Eref{eq:def-predicter-space-charge},
+  \Eref{eq:th-predicter-space-12},
+  \Eref{eq:th-predicter-space-28},
+  \Eref{eq:th-predicter-space-30}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-34}
+\label{eq:th-predicter-space-34}
 \myparbox{%
    Total exclusive space
    per \Veim{x}
-   for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}
+   for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}
    is the number of invocations
    multiplied by the space for each invocation.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-36}
+\label{eq:th-predicter-space-36}
 \begin{gathered}
    \myparbox{%
      Total exclusive space
      per \Veim{x}
-     for lines \enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18} is
+     for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18} is
      }
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predict-es-14}{line:marpa-predict-es-18}}
+       \var{line}\in\set{\enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
      }}}
      \;\; \Oc \times 0 = 0
    \\
      \because
-     \ref{enum:th-predict-es-invocations-20}\text{ of }\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-space-20},
-     \Eref{eq:th-predict-es-space-22},
-     \Eref{eq:th-predict-es-space-24},
-     \Eref{eq:th-predict-es-space-34}.
+     \ref{enum:th-predicter-invocations-20}\text{ of }\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-space-20},
+     \Eref{eq:th-predicter-space-22},
+     \Eref{eq:th-predicter-space-24},
+     \Eref{eq:th-predicter-space-34}.
 \end{gathered}
 \end{equation}
 %
 \begin{equation}
-\label{eq:th-predict-es-space-38}
+\label{eq:th-predicter-space-38}
 \myparbox{%
    Total exclusive space for
-   line \ref{line:marpa-predict-es-12}
+   line \ref{line:marpa-predicter-12}
    for each \Veim{x}
    is 0
-   \cuz{} \ref{enum:th-predict-es-invocations-20}~of~\Thref{th:predict-es-invocations},
-     \Eref{eq:th-predict-es-space-18}.
+   \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
+     \Eref{eq:th-predicter-space-18}.
 }
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-40}
+\label{eq:th-predicter-space-40}
 \myparbox{%
-   Total exclusive space for \proc{Predict-ES}
+   Total exclusive space for \proc{Predicter}
    charged to each \Veim{x} is
    $0 + 0 = 0$
    \cuz{}
-  \Eref{eq:def-predict-es-space-charge},
-  \Eref{eq:th-predict-es-space-12},
-  \Eref{eq:th-predict-es-space-36},
-  \Eref{eq:th-predict-es-space-38}.}
+  \Eref{eq:def-predicter-space-charge},
+  \Eref{eq:th-predicter-space-12},
+  \Eref{eq:th-predicter-space-36},
+  \Eref{eq:th-predicter-space-38}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-42}
+\label{eq:th-predicter-space-42}
 \myparbox{%
   The only indirect space is \Oc{} at
-       line \ref{line:marpa-predict-es-18}
+       line \ref{line:marpa-predicter-18}
       \cuz{}
       \Obref{obs:direct-vs-indirect},
-      \Aref{alg:predict-es}, \Thref{th:predict1-space}.}
+      \Aref{alg:predicter-op}, \Thref{th:predict1-space}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-44}
+\label{eq:th-predicter-space-44}
 \myparbox{%
-  The indirect space of \proc{Predict-ES} is \Oc{} per prediction added,
+  The indirect space of \proc{Predicter} is \Oc{} per prediction added,
        which is charged to the prediction it adds.
-       \cuz{} \Aref{alg:predict-es}, \Thref{th:predict1-space},
-           \Eref{eq:th-predict-es-space-42}.}
+       \cuz{} \Aref{alg:predicter-op}, \Thref{th:predict1-space},
+           \Eref{eq:th-predicter-space-42}.}
 \end{equation}
 \begin{equation}
-\label{eq:th-predict-es-space-48}
+\label{eq:th-predicter-space-48}
 \myparbox{%
-  The space charged by \proc{Predict-ES} to each \Veim{x} is
+  The space charged by \proc{Predicter} to each \Veim{x} is
   $0 + 0 = 0$
   \cuz{}
-  \Eref{eq:th-predict-es-space-12},
-  \Eref{eq:th-predict-es-space-40},
-  \Eref{eq:th-predict-es-space-44}.
+  \Eref{eq:th-predicter-space-12},
+  \Eref{eq:th-predicter-space-40},
+  \Eref{eq:th-predicter-space-44}.
 }
 \end{equation}
 The theorem follows directly from
-\Eref{eq:th-predict-es-space-32},
-\Eref{eq:th-predict-es-space-44},
-and \Eref{eq:th-predict-es-space-48}.
+\Eref{eq:th-predicter-space-32},
+\Eref{eq:th-predicter-space-44},
+and \Eref{eq:th-predicter-space-48}.
 \myqed
 \end{proof}
 
 If precomputation is used
-\Aref{alg:predict-es} can be sped up using Warshall's algorithm.
-A version of \proc{Predict-ES} using precomputation
+\Aref{alg:predicter-op} can be sped up using Warshall's algorithm.
+A version of \proc{Predicter} using precomputation
 will clearly run no worse than
-\proc{Predict-ES}.
+\proc{Predicter}.
 
 \begin{observation}[Ancestry]
 \label{obs:common-predict-ancestry}
@@ -11121,8 +11191,8 @@ line \ref{line:marpa-predict-80} of \proc{Predict1}~\Aref{alg:predict1}
 would be
 $\tuple{\Veim{x}, \Lambda}$,
 where \Veim{x}
-is the variable of line \ref{line:marpa-predict-es-16}
-of \proc{Predict-ES}~\Aref{alg:predict-es},
+is the variable of line \ref{line:marpa-predicter-16}
+of \proc{Predicter}~\Aref{alg:predicter-op},
 which is not actually in scope at
 line \ref{line:marpa-predict-80} of \proc{Predict1}.
 
@@ -11155,115 +11225,8 @@ the transition array
 
 \FloatBarrier
 
-\begin{algorithm}[H]
-\caption{\op{Initializer}}
-\label{alg:initializer-op}
-\begin{algorithmic}[1]
-\Procedure{Initializer}{}
-\State $\Veim{start} \gets \tuple{\dr{\tuple{\Vrule{accept}, 0}}, 0}$
-\label{line:initializer-op-10}
-\Statex \Comment \Vrule{accept} is the accept rule of \Vint{g} \Eref{eq:def-accept-rule}.
-\State $\LinkPairs{\Veim{start}} = \set{}$
-\label{line:initializer-op-20}
-\State Add \Veim{start} to \es{(0)}
-  \Comment \tightMath{\var{s}=\Oc}
-\label{line:initializer-op-30}
-\State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
-\label{line:initializer-op-60}
-\State \Call{Predict-ES}{\Ves{(0)}} \Comment Ind
-\label{line:initializer-op-70}
-\EndProcedure
-\end{algorithmic}
-\end{algorithm}
-
-\FloatBarrier
-
-\begin{theorem}[\op{Initializer} Complexity]
-\label{th:initializer-complexity}
-Time incurred by
-the \op{Initializer} op may be ignored.
-Space incurred by the \op{Initializer} op may be
-accounted for as \Oc{} trimmed space charged
-to the \var{eim} account of an arbitrary EIM,
-and zero link space.
-\end{theorem}
-
-\begin{proof}
-Execution in the \op{Initializer} op depends only
-on the grammar \Vint{g}.
-\Vint{g} is constant,
-so that time and space
-incurred by \op{Initializer} is \Oc{}.
-By the Procedure Overhead Time Discard Theorem
-\Thref{th:procedure-overhead-discard},
-the \Oc{} time may be ignored.
-We choose to assign and charge the \Oc{} space
-as described in the statement of the
-theorem.
-\myqed
-\end{proof}
-
 \begin{observation}[Ancestry]
-\label{obs:initializer-ancestry}
-The \Marpa{} implementation does not keep
-any link pairs for any \type{PIM} in Earley set 0.
-\Veim{start} does not have any non-trivial ancestor,
-so that a link pair does not exist for it,
-even conceptually.
-And \Marpa{} does not track link pairs for
-predictions
-\Obref{obs:common-predict-ancestry}.
-\dispEnd{}
-\end{observation}
-
-\begin{observation}[\Earley{}'s Earley set 0]
-\label{obs:earley-set-0}
-\Marpa{}'s % \linebreak
-\op{Ini\-tial\-iza\-tion} op has the same effect as the construction
-of Earley set 0 by \Earley{}.
-\dispEnd{}
-\end{observation}
-
-\section{Predictor op}
-\label{sec:predictor-op}
-
-The \Marpa{} Predictor op is equivalent to the
-\proc{Predict-ES} pseudocode procedure \Aref{alg:predict-es}.
-
-\begin{equation}
-\label{eq:def-predictor-op}
-\op[\VVelement{S}{j}]{Predictor} \;\; \defined \;\; \proc[\VVelement{S}{j}]{Predict-ES}
-\end{equation}
-
-\begin{theorem}[\op{Predictor} time complexity]
-\label{th:predictor-time}
-The time of $\op{Predictor}(\VVelement{S}{j})$
-is
-\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
-and \Oc{} charged to \VVelement{S}{j} itself.
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Thref{th:predict-es-time} and \Eref{eq:def-predictor-op}.
-\end{proof}
-
-\begin{theorem}[\op{Predictor} space complexity]
-\label{th:predictor-space}
-The space of $\op{Predictor}(\VVelement{S}{j})$
-\Aref{alg:predict-es}
-is
-\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
-and \Oc{} charged to each \type{PIM} added.
-\end{theorem}
-
-\begin{proof}
-The theorem follows from
-\Thref{th:predict-es-space} and \Eref{eq:def-predictor-op}.
-\end{proof}
-
-\begin{observation}[Ancestry]
-\label{obs:predictor-ancestry}
+\label{obs:predicter-ancestry}
 The \Marpa{} implementation does not track
 link pairs
 for predictions.
@@ -11271,9 +11234,9 @@ For details, see \Obref{obs:common-predict-ancestry}.
 \dispEnd{}
 \end{observation}
 
-\begin{observation}[Original Earley algorithm: Predictor Operation]
-\label{obs:earley-predictor-op}
-\Marpa{}'s predictor op has the same effect as the ``Predictor''
+\begin{observation}[Original Earley algorithm: Predicter Operation]
+\label{obs:earley-predicter-op}
+\Marpa{}'s predicter op has the same effect as the ``Predicter''
 operation of \Earley{}\cite{Earley1970}.
 \dispEnd{}
 \end{observation}
@@ -13015,7 +12978,7 @@ this \type{LIM} will always be at the head of its linked list.
             \Obref{def:loop-invocation}.
        }
 \\ \hline
-    \ref{line:memoizer-op-3}&\Oc{}&
+    \ref{line:memoizer-op-3}&\Oc{}/\var{proc}&
        \parbox{2.75in}{\raggedright\strut
            Line \ref{line:memoizer-op-2} Seq.;
            and because, by the Leo Eligible \type{EIM}
@@ -13024,25 +12987,25 @@ this \type{LIM} will always be at the head of its linked list.
            in \VVelement{S}{j}.\strut
        }
 \\ \hline
-    \ref{line:memoizer-op-4}&\Oc{}&
+    \ref{line:memoizer-op-4}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-3} Seq.
 \\ \hline
-    \ref{line:memoizer-op-5}&\Oc{}&
+    \ref{line:memoizer-op-5}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-4} Seq.
 \\ \hline
-    \ref{line:memoizer-op-6}&\Oc{}&
+    \ref{line:memoizer-op-6}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-5} Cond.
 \\ \hline
-    \ref{line:memoizer-op-7}&\Oc{}&
+    \ref{line:memoizer-op-7}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-5} Seq.
 \\ \hline
-    \ref{line:memoizer-op-8}&\Oc{}&
+    \ref{line:memoizer-op-8}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-7} Cond.
 \\ \hline
-    \ref{line:memoizer-op-9}&\Oc{}&
+    \ref{line:memoizer-op-9}&\Oc{}/\var{proc}&
        Line \ref{line:memoizer-op-7} Seq.
 \\ \hline
-    \ref{line:memoizer-op-10}&\Oc{}&
+    \ref{line:memoizer-op-10}&\Oc{}/\var{proc}&
         Line \ref{line:memoizer-op-9} Seq.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
@@ -13071,6 +13034,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
         \parbox{3.5in}{ \raggedright
             \type{ES} Leo Eligible Traversal Theorem
             \Thref{th:leo-eligible-traversal},
+            \type{ES} \type{EIM} Traversal Theorem
             \Thref{th:es-eim-traversal}.
         }
 \\ \hline
@@ -13173,6 +13137,7 @@ shown in \Aref{alg:marpa}.
 \State $\Call{Parse-Setup}{{}}$
 \State $\Call{ES-Setup}{0}$
 \State $\Call{Initializer}{{}}$
+\State \Call{Predicter}{\Ves{(0)}}
 \State $\Call{Bookkeeper}{\Velement{S}{0}}$
 \For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
 \State $\Call{ES-Setup}{\var{j}}$
@@ -13181,9 +13146,9 @@ shown in \Aref{alg:marpa}.
 \State return \Comment Reject \Cw{}
 \EndIf
 \State $\Call{Reducer}{\VVelement{S}{j}}$
-\State $\Call{Predictor}{\VVelement{S}{j}}$
-\label{alg:marpa-line-80}
+\State $\Call{Predicter}{\VVelement{S}{j}}$
 \State $\Call{Memoizer}{\VVelement{S}{j}}$
+\label{line:marpa-line-memoizer}
 \State $\Call{Bookkeeper}{\VVelement{S}{j}}$
 \EndFor
 \EndProcedure
@@ -13193,14 +13158,16 @@ shown in \Aref{alg:marpa}.
 \FloatBarrier
 
 \begin{observation}[Original Earley Algorithm: Top level]
-If line \ref{alg:marpa-line-80} is removed,
+If line \ref{line:marpa-line-memoizer},
+calling the \op{Memoizer} op,
+is removed,
 \Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
 This can be seen from
 \Aref{alg:marpa},
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-op},
 \Obref{obs:earley-completer-op},
-\Obref{obs:earley-predictor-op},
+\Obref{obs:earley-predicter-op},
 and
 \Obref{obs:earley-memoizer-op}.
 \dispEnd
@@ -13347,7 +13314,7 @@ $\Predot{\Veim{rez}} = \Lambda$, and
 $\Current{\var{rez}} > 0$,
 iff
 \var{rez} is the result of a
-\Marpa{} \var{Predictor} operation.
+\Marpa{} \var{Predicter} operation.
 \item \Vpim{rez} is an \type{EIM},
 $\Predot{\Veim{rez}} \in \Term{\var{g}}$, and
 $\Current{\var{rez}} > 0$,
@@ -13368,7 +13335,7 @@ This observation follows from
 \Aref{alg:initializer-op},
 \Aref{alg:scanner-op},
 \Aref{alg:reducer-op},
-\Eref{eq:def-predictor-op}, and
+\Aref{alg:predicter-op}, and
 \Aref{alg:memoizer-op}.
 \dispEnd
 \end{observation}
@@ -13385,7 +13352,7 @@ This follows from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-op},
 \Obref{obs:earley-completer-op},
-\Obref{obs:earley-predictor-op},
+\Obref{obs:earley-predicter-op},
 \Obref{obs:earley-memoizer-op}, and
 \Obref{obs:marpa-op-by-result}.
 \dispEnd
@@ -13401,7 +13368,7 @@ This observation follows from
 \Aref{alg:initializer-op},
 \Aref{alg:scanner-op},
 \Aref{alg:reducer-op},
-\Eref{eq:def-predictor-op}, and
+\Aref{alg:predicter-op}, and
 \Aref{alg:memoizer-op}.
 \dispEnd
 \end{observation}
@@ -13416,7 +13383,7 @@ This observation follows from
 \Obref{obs:earley-set-0},
 \Obref{obs:earley-scanner-op},
 \Obref{obs:earley-completer-op},
-\Obref{obs:earley-predictor-op} and
+\Obref{obs:earley-predicter-op} and
 \Obref{obs:earley-memoizer-op}.
 \dispEnd
 \end{observation}
@@ -15724,10 +15691,10 @@ The \Marpa{} scanner operation
 creates the same \type{PIM}s as the \Earley{}
 scanner operations
 \Obref{obs:earley-scanner-op}.
-The \Marpa{} predictor operation
+The \Marpa{} predicter operation
 creates the same \type{PIM}s as the \Earley{}
-predictor operations
-\Obref{obs:earley-predictor-op}.
+predicter operations
+\Obref{obs:earley-predicter-op}.
 These two operations preserve
 validity because the \Earley{} algorithm is
 correct
