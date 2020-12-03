@@ -10314,7 +10314,7 @@ so that there will always be an \type{EIM} to whose
 
 \FloatBarrier
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
 \caption{\var{Predict1}}
 \label{alg:predict1}
 \begin{algorithmic}[1]
@@ -10337,6 +10337,8 @@ so that there will always be an \type{EIM} to whose
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 The \op{Initializer} op adds the start \type{EIM} and its predictions.
 We first look at
@@ -10485,7 +10487,7 @@ Space for \var{Predict1} is
 
 \FloatBarrier
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
 \caption{\var{Predict-ES}}
 \label{alg:predict-es}
 \begin{algorithmic}[1]
@@ -10518,6 +10520,8 @@ Space for \var{Predict1} is
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 \begin{theorem}[\proc{Predict-ES} Invocations]
 \label{th:predict-es-invocations}
@@ -11151,7 +11155,7 @@ the transition array
 
 \FloatBarrier
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
 \caption{\op{Initializer}}
 \label{alg:initializer-op}
 \begin{algorithmic}[1]
@@ -11172,310 +11176,30 @@ the transition array
 \end{algorithmic}
 \end{algorithm}
 
-\begin{theorem}[\proc{Initializer} invocations]
-\label{th:initializer-invocations}
-Every line of \proc{Ini\-tial\-izer} is invoked exactly once.
+\FloatBarrier
+
+\begin{theorem}[\op{Initializer} Complexity]
+\label{th:initializer-complexity}
+Time incurred by
+the \op{Initializer} op may be ignored.
+Space incurred by the \op{Initializer} op may be
+accounted for as \Oc{} trimmed space charged
+to the \var{eim} account of an arbitrary EIM,
+and zero link space.
 \end{theorem}
 
 \begin{proof}
-The flow of control in
-\proc{Initializer}~\Aref{alg:initializer-op}
-consists entirely of sequential executions.
-\myqed
-\end{proof}
-
-\begin{equation}
-\label{eq:def-initializer-time-charge}
-\myparbox{%
-  Direct time in \proc{Ini\-tial\-izer} is charged to the
-  start \type{EIM}
-  \cuz{} AF complexity analysis.}
-\end{equation}
-
-\begin{theorem}[\op{Initializer} time complexity]
-\label{th:initializer-time}
-The inclusive time of $\op{Initializer}$
-is
-\Oc{} charged to each \type{EIM} of Earley set 0.
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-initializer-time-14}
-\Time{\ref{line:initializer-op-10}} = \Oc{}
-  \because \text{ direct from \Aref{alg:initializer-op}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-16}
-\Time{\ref{line:initializer-op-20}} = \Oc{}
-  \because \text{ direct from \Aref{alg:initializer-op}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-18}
-\Time{\ref{line:initializer-op-30}} = \Oc{}
-   \because \type{ES} Add Theorem \Thref{th:es-add}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-20}
-\Time{\ref{line:initializer-op-60}} = \Oc{}
-  \because
-  \Thref{th:rule-id-complexity},
-  \Thref{th:dotzeroused-bitmap}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-22}
-\Time{\ref{line:initializer-op-70}} = \Oc{}
-  \because \Obref{obs:housekeeping-vs-body-execution},
-    \Thref{th:predict-es-time}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-24}
-\myparbox{%
-   Total exclusive time
-   for \op{Initializer}
-   is the number of invocations of each line
-   multiplied by the exclusive time for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-26}
-\myparbox{%
-     Total exclusive time
-     by \op{Initializer} is
-   \[
-     \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:initializer-op-10}{line:initializer-op-70}}
-     }}}
-     \;\; \Oc \times \Oc
-   \]
-     \cuz{}
-     \Thref{th:initializer-invocations},
-     \Eref{eq:th-initializer-time-14},
-     \Eref{eq:th-initializer-time-16},
-     \Eref{eq:th-initializer-time-18},
-     \Eref{eq:th-initializer-time-20},
-     \Eref{eq:th-initializer-time-22},
-     \Eref{eq:th-initializer-time-24}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-26-50}
-\myparbox{%
-     Total exclusive time
-     by \op{Initializer} is \Oc{},
-     which is charged to \Veim{start}
-     \cuz{}
-        \Eref{eq:def-initializer-time-charge},
-        \Eref{eq:th-initializer-time-26}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-27}
-\myparbox{%
-   Indirect time is charged by \op{Initializer}
-   only at line \ref{line:initializer-op-70}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-28}
-\myparbox{%
-    Total indirect time charged to \Veim{start}
-    by \op{Initializer} is \Oc{}
-    \cuz{}
-       \Thref{th:predict-es-time},
-       \longDfref{Charging to the ES}{def:charging-to-es},
-       \Eref{eq:th-initializer-time-27}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-30}
-\myparbox{%
-    Total indirect time charged
-    to every \type{EIM} of Earley set 0
-    by \op{Initializer}
-    is \Oc{}
-    \cuz{} \Thref{th:predict-es-time},
-    \Eref{eq:th-initializer-time-27}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-32}
-\myparbox{%
-    Total time charged to every \type{EIM} of Earley set 0
-    by \op{Initializer} is \Oc{}
-    \cuz{}
-    \Eref{eq:def-initializer-time-charge},
-    \Eref{eq:th-initializer-time-30}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-time-34}
-\myparbox{%
-    Total time charged to \Veim{start}
-     by \op{Initializer} is $\Oc+\Oc+\Oc=\Oc$
-   \cuz{}
-       \Eref{eq:def-initializer-time-charge},
-       \Eref{eq:th-initializer-time-26-50},
-       \Eref{eq:th-initializer-time-28},
-       \Eref{eq:th-initializer-time-30}.%
-}
-\end{equation}
-The theorem follows from
-\Eref{eq:th-initializer-time-32} and
-\Eref{eq:th-initializer-time-34}.
-\myqed
-\end{proof}
-
-\begin{equation}
-\label{eq:def-initializer-space-charge}
-\myparbox{%
-  Direct space in \proc{Ini\-tial\-izer} is charged to the
-  start \type{EIM}.
-  \cuz{} AF complexity analysis.}
-\end{equation}
-
-\begin{theorem}[\op{Initializer} space complexity]
-\label{th:initializer-space}
-The inclusive space of $\op{Initializer}$
-is
-\Oc{} charged to each \type{EIM} of Earley set 0.
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-initializer-space-14}
-\Space{\ref{line:initializer-op-10}} = 0
-  \because \text{ direct from \Aref{alg:initializer-op}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-16}
-\Space{\ref{line:initializer-op-20}} = 0
-  \because \text{ direct from \Aref{alg:initializer-op}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-18}
-\Space{\ref{line:initializer-op-30}} = \Oc{}
-   \because \type{ES} Add Theorem \Thref{th:es-add}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-20}
-\Space{\ref{line:initializer-op-60}} = 0
-  \because
-  \Thref{th:rule-id-complexity},
-  \Thref{th:dotzeroused-bitmap}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-22}
-\Space{\ref{line:initializer-op-70}} = 0
-  \because \Obref{obs:housekeeping-vs-body-execution},
-    \Thref{th:predict-es-space}.
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-24}
-\myparbox{%
-   Total exclusive space
-   for \op{Initializer}
-   is the number of invocations of each line
-   multiplied by the exclusive space for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-26}
-\myparbox{%
-     Total exclusive space
-     by \op{Initializer} is
-   \[
-     \left(
-         \smashoperator[r]{\sum_{\textstyle{
-           \var{line}\in\set{\ref{line:initializer-op-30}
-           }
-         }}}
-         \;\; \Oc \times \Oc
-     \right)
-     + \left(
-         \smashoperator[r]{\sum_{\textstyle{
-           \var{line}\in\set{
-               \enRefs{line:initializer-op-10}{line:initializer-op-20},
-               \enRefs{line:initializer-op-60}{line:initializer-op-70}
-           }
-         }}}
-         \;\; \Oc \times 0
-     \right)
-   \]
-     \cuz{}
-     \Thref{th:initializer-invocations},
-     \Eref{eq:th-initializer-space-14},
-     \Eref{eq:th-initializer-space-16},
-     \Eref{eq:th-initializer-space-18},
-     \Eref{eq:th-initializer-space-20},
-     \Eref{eq:th-initializer-space-22},
-     \Eref{eq:th-initializer-space-24}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-26-50}
-\myparbox{%
-     Total exclusive space
-     by \op{Initializer} is \Oc{},
-     which is charged to \Veim{start}
-     \cuz{}
-        \Eref{eq:def-initializer-space-charge},
-        \Eref{eq:th-initializer-space-26}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-27}
-\myparbox{%
-   Indirect space is charged by \op{Initializer}
-   only at line \ref{line:initializer-op-70}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-28}
-\myparbox{%
-    Total indirect space
-    consumed by \op{Initializer} is
-    \Oc{} charged to \Veim{start},
-    and \Oc{} charged to every prediction added by \proc{Predict-ES}
-    \cuz{}
-       \Thref{th:predict-es-space},
-       \Eref{eq:th-initializer-space-27}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-32}
-\myparbox{%
-    Total space charged by \op{Initializer}
-    is
-    $\Oc+\Oc=\Oc$ charged to \Veim{start},
-    and \Oc{} charged to every prediction added by \proc{Predict-ES}
-    \cuz{}
-    \Eref{eq:def-initializer-space-charge},
-    \Eref{eq:th-initializer-space-26-50},
-    \Eref{eq:th-initializer-space-28}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-36}
-\myparbox{%
-    Every \type{EIM} added by
-    \op{Initializer} is either \Veim{start}
-    or a prediction \cuz
-    \Aref{alg:predict1},
-    \Aref{alg:predict-es},
-    \Aref{alg:initializer-op}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-initializer-space-38}
-\myparbox{%
-    The space consumed by \op{Initializer} is \Oc{}
-    for each new,
-    which is charged to that \type{EIM} \cuz{}
-    \Eref{eq:th-initializer-space-32},
-    \Eref{eq:th-initializer-space-36}.
-}
-\end{equation}
-The theorem is
-\Eref{eq:th-initializer-space-38}.
+Execution in the \op{Initializer} op depends only
+on the grammar \Vint{g}.
+\Vint{g} is constant,
+so that time and space
+incurred by \op{Initializer} is \Oc{}.
+By the Procedure Overhead Time Discard Theorem
+\Thref{th:procedure-overhead-discard},
+the \Oc{} time may be ignored.
+We choose to assign and charge the \Oc{} space
+as described in the statement of the
+theorem.
 \myqed
 \end{proof}
 
@@ -11559,7 +11283,7 @@ operation of \Earley{}\cite{Earley1970}.
 
 \FloatBarrier
 
-\begin{algorithm}[t]
+\begin{algorithm}[H]
 \caption{\var{Scanner}}
 \label{alg:scanner-op}
 \begin{algorithmic}[1]
@@ -11600,6 +11324,8 @@ operation of \Earley{}\cite{Earley1970}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 \begin{theorem}[\proc{Scanner} invocations]
 \label{th:scanner-invocations}
@@ -13436,7 +13162,10 @@ but we have yet to prove these things.
 
 The top-level view of \Marpa{} is
 shown in \Aref{alg:marpa}.
-\begin{algorithm}[t]
+
+\FloatBarrier
+
+\begin{algorithm}[H]
 \caption{The \Marpa{} Algorithm}
 \label{alg:marpa}
 \begin{algorithmic}[1]
@@ -13460,6 +13189,8 @@ shown in \Aref{alg:marpa}.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 \begin{observation}[Original Earley Algorithm: Top level]
 If line \ref{alg:marpa-line-80} is removed,
@@ -14585,7 +14316,9 @@ and \Vbool{z} is \var{true} if \Veim{x}
 is already present in \VVelement{S}{j},
 and \var{false} otherwise.
 
-\begin{algorithm}[t]
+\FloatBarrier
+
+\begin{algorithm}[H]
 \caption{Adjoin \type{EIM}}
 \label{alg:adjoin-eim}
 \begin{algorithmic}[1]
@@ -14598,6 +14331,8 @@ and \var{false} otherwise.
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
+
+\FloatBarrier
 
 \Aref{alg:adjoin-eim} contains pseudo-code
 showing the use of PSL's.
