@@ -12141,19 +12141,19 @@ and the \op{Earley-reducer} Time Worksheet
 \State $\Vlp{lp} = \tuple{\Vlim{blocker},\Veim{cuz}}$
   \label{line:leo-reducer-op-3}
 \State $\var{found} \gets \Seen{\Veim{trial}}$
-  \label{line:leo-reducer-op-3-50}
-\If{$\var{found} \ne \Lambda$}
   \label{line:leo-reducer-op-4}
-\State Add \var{lp} to \LinkPairs{\Veim{found}}
+\If{$\var{found} \ne \Lambda$}
   \label{line:leo-reducer-op-5}
-\Else
+\State Add \var{lp} to \LinkPairs{\Veim{found}}
   \label{line:leo-reducer-op-6}
-    \State $\SetSeen{\Veim{trial}}$
+\Else
   \label{line:leo-reducer-op-7}
-    \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+    \State $\SetSeen{\Veim{trial}}$
   \label{line:leo-reducer-op-8}
-    \State Add \var{trial} to \VVelement{S}{j}
+    \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
   \label{line:leo-reducer-op-9}
+    \State Add \var{trial} to \VVelement{S}{j}
+  \label{line:leo-reducer-op-10}
 \EndIf
 \EndProcedure
 \end{algorithmic}
@@ -12181,13 +12181,13 @@ a new or a dup pass, but never both.
 From examination of \Aref{alg:leo-reducer-op},
 we see that
 \begin{itemize}
-\item Line \ref{line:leo-reducer-op-5}
+\item Line \ref{line:leo-reducer-op-6}
 is the only line at which a duplicate EIM is adjoined to an
 ES.
-\item Line \ref{line:leo-reducer-op-9}
+\item Line \ref{line:leo-reducer-op-10}
 is the only line at which an EIM is added to an ES.
-\item One of lines \ref{line:leo-reducer-op-5}
-or \ref{line:leo-reducer-op-9} is always executed,
+\item One of lines \ref{line:leo-reducer-op-6}
+or \ref{line:leo-reducer-op-10} is always executed,
 but never both.  \myqed
 \end{itemize}
 \end{proof}
@@ -12207,26 +12207,26 @@ Line&Invocations&Justification
     \ref{line:leo-reducer-op-3}&1/\var{try}&
        line \ref{line:leo-reducer-op-2}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-3-50}&1/\var{try}&
+    \ref{line:leo-reducer-op-4}&1/\var{try}&
        line \ref{line:leo-reducer-op-3}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1/\var{try}&
-       line \ref{line:leo-reducer-op-3-50}, sequential execution
+    \ref{line:leo-reducer-op-5}&1/\var{try}&
+       line \ref{line:leo-reducer-op-4}, sequential execution
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1/\var{dup}&
+    \ref{line:leo-reducer-op-6}&1/\var{dup}&
         line adjoins a duplicate EIM
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1/\var{new}&
+    \ref{line:leo-reducer-op-10}&1/\var{new}&
         line adds a new EIM
 \\ \hline
-    \ref{line:leo-reducer-op-6}&1/\var{new}&
-       line \ref{line:leo-reducer-op-9}, sequential execution
-\\ \hline
     \ref{line:leo-reducer-op-7}&1/\var{new}&
-       line \ref{line:leo-reducer-op-9}, sequential execution
+       line \ref{line:leo-reducer-op-10}, sequential execution
 \\ \hline
     \ref{line:leo-reducer-op-8}&1/\var{new}&
-       line \ref{line:leo-reducer-op-9}, sequential execution
+       line \ref{line:leo-reducer-op-10}, sequential execution
+\\ \hline
+    \ref{line:leo-reducer-op-9}&1/\var{new}&
+       line \ref{line:leo-reducer-op-10}, sequential execution
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
@@ -12253,19 +12253,19 @@ Line&Time&Justification
 \\ \hline
     \ref{line:leo-reducer-op-3}&\Oc{}&
 \\ \hline
-    \ref{line:leo-reducer-op-3-50}&\Oc{}&\Thref{th:seen-psl}
-\\ \hline
     \ref{line:leo-reducer-op-4}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:es-link-pair-add}
+    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-6}&\Oc{}&
+    \ref{line:leo-reducer-op-6}&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
-    \ref{line:leo-reducer-op-7}&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:leo-reducer-op-7}&\Oc{}&
 \\ \hline
-    \ref{line:leo-reducer-op-8}&\Oc{}&
+    \ref{line:leo-reducer-op-8}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:leo-reducer-op-9}&\Oc{}&
+\\ \hline
+    \ref{line:leo-reducer-op-10}&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
@@ -12292,19 +12292,19 @@ Line&\var{new}&\var{dup}
 \\ \hline
     \ref{line:leo-reducer-op-3}&\Oc{}&\Oc{}
 \\ \hline
-    \ref{line:leo-reducer-op-3-50}&\Oc{}&\Oc{}
-\\ \hline
     \ref{line:leo-reducer-op-4}&\Oc{}&\Oc{}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&&\Oc{}
+    \ref{line:leo-reducer-op-5}&\Oc{}&\Oc{}
 \\ \hline
-    \ref{line:leo-reducer-op-6}&\Oc{}&\Oc{}
+    \ref{line:leo-reducer-op-6}&&\Oc{}
 \\ \hline
-    \ref{line:leo-reducer-op-7}&\Oc{}&
+    \ref{line:leo-reducer-op-7}&\Oc{}&\Oc{}
 \\ \hline
     \ref{line:leo-reducer-op-8}&\Oc{}&
 \\ \hline
     \ref{line:leo-reducer-op-9}&\Oc{}&
+\\ \hline
+    \ref{line:leo-reducer-op-10}&\Oc{}&
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
@@ -12323,6 +12323,7 @@ Line&\var{new}&\var{dup}
 
 \begin{theorem}[\op{Leo-reducer} time]
 \label{th:leo-reducer-time}
+\ifhack{\raggedright}{}
 The time that \op{Leo-reducer} incurs may
 be accounted for as follows:
 \begin{itemize}
@@ -12350,39 +12351,35 @@ and the \op{Leo-reducer} time worksheet
 
 \FloatBarrier
 
-\todo{TO HERE Fri 13 Nov 2020 08:59:51 PM EST}
-
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-space}
     \op{Leo-reducer} space per invocation}
 \vspace{1ex}
-\begin{tabular}{|c|c|c|p{1.5in}|}
+\begin{tabular}{|c|c|p{2.5in}|}
 \hline
-Line&Trimmed&Link&Justification
+Line&Space&Justification
 \\ \hline
-    \ref{line:leo-reducer-op-2}&&&
+    \ref{line:leo-reducer-op-2}&&
 \\ \hline
-    \ref{line:leo-reducer-op-3}&&&
+    \ref{line:leo-reducer-op-3}&&
 \\ \hline
-    \ref{line:leo-reducer-op-3-50}&&&
+    \ref{line:leo-reducer-op-4}&&
 \\ \hline
-    \ref{line:leo-reducer-op-4}&&&
+    \ref{line:leo-reducer-op-5}&&
 \\ \hline
-    \ref{line:leo-reducer-op-5}&&&
+    \ref{line:leo-reducer-op-6}&&
 \\ \hline
-    \ref{line:leo-reducer-op-6}&&\Oc{}&\Thref{th:es-link-pair-add}
+    \ref{line:leo-reducer-op-7}&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
-    \ref{line:leo-reducer-op-7}&&&
+    \ref{line:leo-reducer-op-8}&&
 \\ \hline
-    \ref{line:leo-reducer-op-8}&&&
+    \ref{line:leo-reducer-op-9}&&
 \\ \hline
-    \ref{line:leo-reducer-op-9}&&&
-\\ \hline
-    \ref{line:leo-reducer-op-9}&\Oc{}&&
+    \ref{line:leo-reducer-op-10}&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
-\multicolumn{4}{|p{4.5in}|}{See
+\multicolumn{3}{|p{4.5in}|}{See
     \AFref{alg:leo-reducer-op},
     \Tbref{tab:leo-reducer-invocations}.}
 \\ \hline
@@ -12672,8 +12669,8 @@ line \ref{line:earley-reducer-op-7}, and
 line \ref{line:earley-reducer-op-10} of
 \Aref{alg:earley-reducer-op};
 and from lines \ref{line:leo-reducer-op-3},
-line \ref{line:leo-reducer-op-6}, and
-line \ref{line:leo-reducer-op-9} of
+line \ref{line:leo-reducer-op-7}, and
+line \ref{line:leo-reducer-op-10} of
 \Aref{alg:leo-reducer-op}.
 \myqed
 \end{proof}
@@ -12743,8 +12740,8 @@ This theorem then follows from
 \Aref{alg:leo-reducer-op}, especially
 lines \ref{line:leo-reducer-op-2},
 \ref{line:leo-reducer-op-3},
-\ref{line:leo-reducer-op-6},
-and \ref{line:leo-reducer-op-9}.
+\ref{line:leo-reducer-op-7},
+and \ref{line:leo-reducer-op-10}.
 \myqed
 \end{proof}
 
