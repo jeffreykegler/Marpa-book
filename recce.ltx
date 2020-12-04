@@ -9,6 +9,22 @@
     \usepackage{draftwatermark}
 }{}
 
+% The \ifhack commands are intended for last minute "hacks", adjustments
+% done when the document is final.  These are things like
+% workarounds for over/underfull hboxes, which require hack-ish
+% adjustments that easily break (or become unnecessary) when
+% minor changes are made to the text.
+
+% The "Hack" is the first argument of the command, the non-hack text
+% is the 2nd.  Often there is no "non-hack text".  To turn off hacks
+% and go to a pre-hack state, redefine if \ifhack command.
+%
+% In the event of a major change, we may want to turn off the current
+% hacks and start a new "generation" of hacks.  For a new generation,
+% we create a new \ifhackN command, where N is the generation, so that
+% the commands are \ifhackA, \ifhackB, etc.
+\newcommand{\ifhack}[2]{#1}
+
 % Fix conflict between todonotes and amsart packages
 % See http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/todonotes/todonotes.pdf,
 % p. 10.
@@ -12156,7 +12172,8 @@ if it adjoins a duplicate EIM to an ES.
 
 \begin{theorem}[\op{Leo-reducer} passes]
 \label{th:op-leo-reducer-passes}
-Every call of \op{Leo-reducer} is either
+Every call of\ifhack{\\}{}
+\op{Leo-reducer} is either
 a new or a dup pass, but never both.
 \end{theorem}
 
@@ -13070,7 +13087,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \hline
 \multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
 \\ \cline{2-3}
-Line&\var{proc}&\var{eim}
+Line&Per call&Per \type{EIM}
 \\ \hline
     \ref{line:memoizer-op-2}&$1\times\Oc{}$&$1\times\Oc{}$
 \\ \hline
@@ -13094,16 +13111,16 @@ Line&\var{proc}&\var{eim}
 \\ \hline
 \end{tabular}
 \;\;\parbox{2in}{
-    All charges in this table are per call
+    ``Per call'' charges in this table are per call
     of the \op{Memoizer} op.
+    ``Per \type{EIM}'' charges in this table are
+    per \type{EIM}
+    in \VVelement{S}{j} of \Aref{alg:memoizer-op},
+    within each call of the \op{Memoizer} op.
     Cell entries are number of invocations
     \Tbref{tab:memoizer-invocations}
     multiplied by time incurred for each invocation
     \Tbref{tab:memoizer-time}.
-    \var{proc} time is charged to the
-    of the \op{Memoizer} op itself.
-    \var{eim} time is charged to each \type{EIM}
-    in \VVelement{S}{j} of \Aref{alg:memoizer-op}.
 }
 \end{table}
 
