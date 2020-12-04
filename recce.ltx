@@ -9547,11 +9547,9 @@ incurs \Oc{} time and \Oc{} space.
 
 \begin{theorem}[Earley set add]
 \label{th:es-add}
-\todo{Assign space later?}
 The resource incurred by adding a new
 \type{PIM} to an Earley set incurs
-\Oc{} time, \Oc{} trimmed space and
-zero link space.
+\Oc{} time and \Oc{} space.
 \end{theorem}
 
 \begin{proof}
@@ -9560,31 +9558,21 @@ and a \type{PIM} is added to the \type{ES}
 by putting at the head of list.
 Including addition of the initial link pair,
 this clearly can be done in \Oc{} time and \Oc{} space.
-We choose to assign the space to trimmed space.
 \myqed
 \end{proof}
 
-\begin{theorem}[Earley set adjoin]
-\label{th:es-adjoin}
-\todo{Assign space later?}
-The adjoin of an existing \type{EIM} (a dup)
-incurs \Oc{} time, zero trimmed space and \Oc{} link space.
+\begin{theorem}[\type{ES} Link Pair Add]
+\label{th:es-link-pair-add}
+Adding a link pair
+to an existing \type{EIM} (a dup)
+incurs \Oc{} time and \Oc{} space.
 \end{theorem}
 
 \begin{proof}
-\todo{Redo proof}
-When \Marpa{} reaches a new current location,
-it creates an empty Earley set.
-which
-requires \Oc{} time,
-\Oc{} trimmed space
-and \Oc{} link space.
-Each \type{EIM} is added at the end of a linked list,
-so that each add of a \type{EIM} takes \Oc{} time
-and \Oc{} trimmed space.
-Adding an \type{EIM} requires
-zero link space because the initial link pair
-is kept in trimmed space.
+When an existing \type{PIM} is added to an \type{ES}
+a link pair is added to the ancestry of
+by putting at the head of a list of link pairs.
+This clearly can be done in \Oc{} time and \Oc{} space.
 \myqed
 \end{proof}
 
@@ -11494,7 +11482,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-adjoin}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11616,7 +11604,7 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-adjoin}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -11944,7 +11932,7 @@ Line&Time&Justification
 \\ \hline
     \ref{line:earley-reducer-op-9}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-adjoin}
+    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:earley-reducer-op}.
@@ -12053,7 +12041,7 @@ Line&Trimmed&Link&Justification
 \\ \hline
     \ref{line:earley-reducer-op-5}&0&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-6}&0&\Oc{}&\Thref{th:es-adjoin}
+    \ref{line:earley-reducer-op-6}&0&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
     \ref{line:earley-reducer-op-7}&0&0&
 \\ \hline
@@ -12252,7 +12240,7 @@ Line&Time&Justification
 \\ \hline
     \ref{line:leo-reducer-op-4}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:es-adjoin}
+    \ref{line:leo-reducer-op-5}&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
     \ref{line:leo-reducer-op-6}&\Oc{}&
 \\ \hline
@@ -12366,7 +12354,7 @@ Line&Trimmed&Link&Justification
 \\ \hline
     \ref{line:leo-reducer-op-5}&&&
 \\ \hline
-    \ref{line:leo-reducer-op-6}&&\Oc{}&\Thref{th:es-adjoin}
+    \ref{line:leo-reducer-op-6}&&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
     \ref{line:leo-reducer-op-7}&&&
 \\ \hline
