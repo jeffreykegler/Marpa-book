@@ -12388,50 +12388,71 @@ Line&Space&Justification
 
 \FloatBarrier
 
-\begin{theorem}[\op{Leo-reducer} trimmed space]
-\label{th:leo-reducer-trimmed-space}
-The trimmed space that \op{Leo-reducer} incurs may
-be accounted for
-by charging \Oc{} trimmed space to the \var{new} account of
-\Veim{trial}.
-Trimmed space needs to be charged only
-for those calls of \op{Leo-reducer} in which
-\var{trial} is not already in the current ES.
-\end{theorem}
+\begin{table}[H]
+\caption{
+    \label{tab:leo-reducer-space-worksheet}
+    \op{Leo-reducer} space worksheet}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
+\\ \cline{2-3}
+Line&\var{new}&\var{dup}
+\\ \hline
+    \ref{line:leo-reducer-op-2}&&
+\\ \hline
+    \ref{line:leo-reducer-op-3}&&
+\\ \hline
+    \ref{line:leo-reducer-op-4}&&
+\\ \hline
+    \ref{line:leo-reducer-op-5}&&
+\\ \hline
+    \ref{line:leo-reducer-op-6}&&\Oc{}
+\\ \hline
+    \ref{line:leo-reducer-op-7}&&
+\\ \hline
+    \ref{line:leo-reducer-op-8}&&
+\\ \hline
+    \ref{line:leo-reducer-op-9}&&
+\\ \hline
+    \ref{line:leo-reducer-op-10}&\Oc{}&
+\\ \hline
+    Totals&\Oc{}&\Oc{}
+\\ \hline
+\end{tabular}
+\;\;\parbox{2.5in}{
+    \raggedright
+    See \Tbref{tab:leo-reducer-space}.
+    Charges to \var{new} are
+    only for calls where \Veim{trial} is a new EIM.
+    Charges to \var{dup} are
+    only for calls where \Veim{trial} is a duplicate EIM.
+}
+\end{table}
 
-\begin{proof}
-This theorem follows from
-the definition
-\Dfref{def:op-leo-reducer-passes}
-and theorem
-\Thref{th:op-leo-reducer-passes}
-for \op{Leo-reducer} passes,
-and the \op{Leo-reducer} space table
-\Tbref{tab:leo-reducer-space}.
-\myqed
-\end{proof}
+\FloatBarrier
 
-\begin{theorem}[\op{Leo-reducer} link space]
-\label{th:leo-reducer-link-space}
-The link space that \op{Leo-reducer} incurs may
+\begin{theorem}[\op{Leo-reducer} space]
+\label{th:leo-reducer-space}
+The space that \op{Leo-reducer} incurs may
 be accounted for
-by charging \Oc{} link space to the \var{dup} account of
-\Veim{trial}.
-Link space needs to be charged only
-for those calls of \op{Leo-reducer} in which
-\var{trial} is a duplicate
+by
+\begin{itemize}
+\item charging \Oc{} trimmed space to the \var{new} account of
+\Veim{trial}
+for calls where \Veim{trial} is a new EIM; and
+\item
+charging \Oc{} link space to the \var{dup} account of
+\Veim{trial}
+for calls where \var{trial} is a duplicate
 of an EIM already in the current ES.
+\end{itemize}
 \end{theorem}
 
 \begin{proof}
 This theorem follows from
-the definition
-\Dfref{def:op-leo-reducer-passes}
-and theorem
-\Thref{th:op-leo-reducer-passes}
-for \op{Leo-reducer} passes,
-and the \op{Leo-reducer} space table
-\Tbref{tab:leo-reducer-space}.
+the \op{Leo-reducer} Space Worksheet
+\Tbref{tab:leo-reducer-space-worksheet}.
 \myqed
 \end{proof}
 
@@ -12620,19 +12641,21 @@ Line&Space&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:reducer-op-7}&0&
 \\ \hline
-    \ref{line:reducer-op-8}&0&Zero indirect space by
-        the Leo Reducer Trimmed Space Theorem
-        \Thref{th:leo-reducer-trimmed-space}
-        and the Leo Reducer Link Space Theorem
-        \Thref{th:leo-reducer-link-space}.
+    \ref{line:reducer-op-8}&0&
+       \parbox{3.5in}{\raggedright\strut
+            Zero indirect space by
+            the Leo Reducer Space Theorem
+            \Thref{th:leo-reducer-space}.\strut
+       }
 \\ \hline
     \ref{line:reducer-op-9}&0&
 \\ \hline
-    \ref{line:reducer-op-10}&0&Zero indirect space by
-        the Earley Reducer Trimmed Space Theorem
-        \Thref{th:earley-reducer-trimmed-space}
-        and the Earley Reducer Link Space Theorem
-        \Thref{th:earley-reducer-link-space}.
+    \ref{line:reducer-op-10}&0&
+       \parbox{3.5in}{\raggedright\strut
+            Zero indirect space by
+            the Leo Reducer Space Theorem
+            \Thref{th:leo-reducer-space}.\strut
+       }
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:reducer-op}.
