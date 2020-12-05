@@ -11271,23 +11271,25 @@ operation of \Earley{}\cite{Earley1970}.
 \State $\var{lp} = \tuple{\Veim{match},\var{token}}_\type{LP}$
    \Comment \tightMath{\var{x}= 1\times\var{try}}
 \label{line:scanner-op-5}
-  \If{\Seen{\var{trial}}}
-   \Comment \tightMath{\var{x}= 1\times\var{try}}
+  \State $\var{found} \gets \Seen{\var{trial}}$
 \label{line:scanner-op-6}
+  \If{$\var{found} \ne \Lambda$}
+   \Comment \tightMath{\var{x}= 1\times\var{try}}
+\label{line:scanner-op-7}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
         \Comment \tightMath{\var{ln}=\Oc;\var{x}= 1\times\var{dup}}
-\label{line:scanner-op-7}
-  \Else \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-8}
-    \State $\Seen{\var{trial}} = \var{true}$
-      \Comment \tightMath{\var{x}= 1\times\var{new}}
+  \Else \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-9}
-    \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+    \State $\SetSeen{\var{trial}}$
       \Comment \tightMath{\var{x}= 1\times\var{new}}
 \label{line:scanner-op-10}
+    \State $\LinkPairs{\var{trial}} = \set{\var{lp}}$
+      \Comment \tightMath{\var{x}= 1\times\var{new}}
+\label{line:scanner-op-11}
     \State Add \var{trial} to \VVelement{S}{j}
       \Comment \tightMath{\var{ln}=\var{s}=\Oc;\var{x}=1\times\var{new}}
-\label{line:scanner-op-11}
+\label{line:scanner-op-12}
   \EndIf
 \EndFor
 \EndProcedure
@@ -11302,9 +11304,9 @@ operation of \Earley{}\cite{Earley1970}.
 \begin{align*}
  \text{line }\ref{line:scanner-op-2} & \;\;\text{once;} \\
  \text{line }\ref{line:scanner-op-3} & \;\;\text{once, plus once for each try;} \\
- \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-6} & \;\;\text{once for each try;} \\
- \text{line }\ref{line:scanner-op-7} & \;\;\text{once for each dup; and} \\
- \text{lines }\enRefs{line:scanner-op-8}{line:scanner-op-11} & \;\;\text{once for each add.}
+ \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-7} & \;\;\text{once for each try;} \\
+ \text{line }\ref{line:scanner-op-8} & \;\;\text{once for each dup; and} \\
+ \text{lines }\enRefs{line:scanner-op-9}{line:scanner-op-12} & \;\;\text{once for each add.}
 \end{align*}
 
 \end{theorem}
@@ -11321,37 +11323,37 @@ operation of \Earley{}\cite{Earley1970}.
 \begin{equation}
 \label{eq:th-scanner-invocations-12}
 \myparbox{%
-    $\Invocs{\ref{line:scanner-op-7}} = 1\times\var{dup}$ \\
-    \cuz{} line \ref{line:scanner-op-7}
+    $\Invocs{\ref{line:scanner-op-8}} = 1\times\var{dup}$ \\
+    \cuz{} line \ref{line:scanner-op-8}
     adds a duplicate link for \Veim{trial}.
     This is the theorem for
-    line \ref{line:scanner-op-7}.}
+    line \ref{line:scanner-op-8}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-14}
 \myparbox{%
-    $\Invocs{\ref{line:scanner-op-11}} = 1\times\var{new}$ \\
-    \cuz{} line \ref{line:scanner-op-11}
+    $\Invocs{\ref{line:scanner-op-12}} = 1\times\var{new}$ \\
+    \cuz{} line \ref{line:scanner-op-12}
     adds \Veim{trial} as a new \type{EIM}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-16}
 \myparbox{%
-    $\Invocs{\ref{line:scanner-op-8}}
-        = \Invocs{\ref{line:scanner-op-9}}
-        = \Invocs{\ref{line:scanner-op-10}}$ \\
-    $= \Invocs{\ref{line:scanner-op-11}}
+    $\Invocs{\ref{line:scanner-op-9}}
+        = \Invocs{\ref{line:scanner-op-10}}
+        = \Invocs{\ref{line:scanner-op-11}}$ \\
+    $= \Invocs{\ref{line:scanner-op-12}}
         = 1\times\var{new}$ \\
     \cuz{} \
     \Eref{eq:th-scanner-invocations-14},
     sequential execution.
     This is the theorem for
-    lines \enRefs{line:scanner-op-8}{line:scanner-op-11}.}
+    lines \enRefs{line:scanner-op-9}{line:scanner-op-12}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-18}
 \myparbox{%
-    $\Invocs{\ref{line:scanner-op-6}}
+    $\Invocs{\ref{line:scanner-op-7}}
         = 1\times(\var{new}+\var{dup})$
     \cuz{} \
     combining both branches of the if statement.}
@@ -11361,18 +11363,18 @@ operation of \Earley{}\cite{Earley1970}.
 \myparbox{%
     $\Invocs{\ref{line:scanner-op-4}}
         = \Invocs{\ref{line:scanner-op-5}}
-        = \Invocs{\ref{line:scanner-op-6}}
+        = \Invocs{\ref{line:scanner-op-7}}
         = 1\times\var{try}$ \\
     \cuz{}
     \Eref{eq:th-scanner-invocations-18},
     \longDfref{Try is dup or new}{def:try-dup-new},
     sequential execution.
     This is the theorem for
-    lines \enRefs{line:scanner-op-4}{line:scanner-op-6}.}
+    lines \enRefs{line:scanner-op-4}{line:scanner-op-7}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-scanner-invocations-22}
-\Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-11}}
+\Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-12}}
     = \Invocs{\ref{line:scanner-op-4}}
     \because \Obref{def:loop-invocation}.
 \end{equation}
@@ -11392,7 +11394,7 @@ operation of \Earley{}\cite{Earley1970}.
     This is the theorem for line \ref{line:scanner-op-3}.}
 \end{equation}
 We now have the theorem for lines
-\enRefs{line:scanner-op-2}{line:scanner-op-11},
+\enRefs{line:scanner-op-2}{line:scanner-op-12},
 which is what we needed for the theorem.
 \myqed
 \end{proof}
@@ -11456,15 +11458,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
-\\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&
+\\ \hline
+    \ref{line:scanner-op-12}&1&\Oc{}&&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
@@ -11496,9 +11498,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:es-link-pair-add}
+    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
 \\ \hline
@@ -11578,15 +11580,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-8}&1&0&&0&
+    \ref{line:scanner-op-9}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&
+    \ref{line:scanner-op-11}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-12}&1&\Oc{}&&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
@@ -11618,9 +11620,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:es-link-pair-add}
+    \ref{line:scanner-op-8}&1&0&&0&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{0}&
 \\ \hline
@@ -11695,15 +11697,15 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-8}&1&0&&0&
+    \ref{line:scanner-op-9}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-9}&1&0&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-10}&1&0&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-10}&1&0&&0&
+    \ref{line:scanner-op-11}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-12}&1&\Oc{}&&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
@@ -11735,9 +11737,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:scanner-op-5}&1&0&&0&
 \\ \hline
-    \ref{line:scanner-op-6}&1&\c{}&&0&\Thref{th:seen-psl}
+    \ref{line:scanner-op-7}&1&\c{}&&0&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
 \multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
@@ -11809,19 +11811,19 @@ operation of \Earley{}.
 \State $\Vlp{lp} \gets \tuple{\Veim{match},\Veim{cuz}}$
       \label{line:earley-reducer-op-4}
 \State $\var{found} \gets \Seen{\Veim{trial}}$
-      \label{line:earley-reducer-op-4-50}
-\If{$\var{found} \ne \Lambda$}
       \label{line:earley-reducer-op-5}
-    \State Add \var{lp} to \LinkPairs{\Veim{found}}
+\If{$\var{found} \ne \Lambda$}
       \label{line:earley-reducer-op-6}
-\Else
+    \State Add \var{lp} to \LinkPairs{\Veim{found}}
       \label{line:earley-reducer-op-7}
-    \State $\SetSeen{\Veim{trial}}$
+\Else
       \label{line:earley-reducer-op-8}
-    \State $\LinkPairs{\var{trial}} \gets \set{\var{lp}}$
+    \State $\SetSeen{\Veim{trial}}$
       \label{line:earley-reducer-op-9}
-    \State Add \var{trial} to \VVelement{S}{j}
+    \State $\LinkPairs{\var{trial}} \gets \set{\var{lp}}$
       \label{line:earley-reducer-op-10}
+    \State Add \var{trial} to \VVelement{S}{j}
+      \label{line:earley-reducer-op-11}
 \EndIf
 \EndFor
 \EndProcedure
@@ -11830,86 +11832,76 @@ operation of \Earley{}.
 
 \FloatBarrier
 
-\begin{definition}[\op{Earley-reducer} passes]
-\label{def:op-earley-reducer-passes}
-A call of \op{Earley-reducer} is a \dfn{new pass}
-if it adds a new EIM to an ES.
-A call of \op{Earley-reducer} is a \dfn{dup pass}
-if it adjoins a duplicate EIM to an ES.
-\dispEnd
-\end{definition}
-
-\begin{theorem}[\op{Earley-reducer} passes]
-\label{th:op-earley-reducer-passes}
-Every call of \op{Earley-reducer} is either
-a new or a dup pass, but never both.
-\end{theorem}
-
-\begin{proof}
-From examination of \Aref{alg:earley-reducer-op},
-we see that
-\begin{itemize}
-\item Line \ref{line:earley-reducer-op-6}
-is the only line at which a duplicate EIM is adjoined to an
-ES.
-\item Line \ref{line:earley-reducer-op-10}
-is the only line at which an EIM is added to an ES.
-\item One of lines \ref{line:earley-reducer-op-6}
-or \ref{line:earley-reducer-op-10} is always executed,
-but never both.  \myqed
-\end{itemize}
-\end{proof}
-
-\FloatBarrier
-
 \begin{table}[H]
 \caption{
     \label{tab:earley-reducer-invocations}
     \op{Earley-reducer} line invocations}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{2.75in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Invocations&Justification
+    \parbox{.3in}{\centering\strut
+        Line
+    \strut}&
+    \parbox{.9in}{\centering\strut
+        Invocations per call
+    \strut}&
+    \parbox{3.3in}{\centering\strut
+        Justification
+    \strut}
 \\ \hline
-    \ref{line:earley-reducer-op-3}&1/\var{try}&\Obref{def:loop-invocation},
-        this line creates a ``trial'' EIM for either a  dup or new pass
+    \ref{line:earley-reducer-op-7}&1/\var{dup}&
+        \parbox{3.3in}{\raggedright\strut
+            This link duplicates an existing \type{EIM},
+            and therefore is in a ``dup'' pass
+            of the main loop.
+        \strut}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&1/\var{proc}+1/\var{try}&
-       \makebox{line \ref{line:earley-reducer-op-3}, sequential execution,}
-       \Obref{def:loop-invocation}
+    \ref{line:earley-reducer-op-11}&1/\var{new}&
+        \parbox{3.3in}{\raggedright\strut
+            This link creates a new \type{EIM}:
+            and therefore is in a ``new'' pass
+            of the main loop.
+        \strut}
 \\ \hline
-    \ref{line:earley-reducer-op-4}&1/\var{try}&
-       line \ref{line:earley-reducer-op-3}, sequential execution
-\\ \hline
-    \ref{line:earley-reducer-op-4-50}&1/\var{try}&
-       line \ref{line:earley-reducer-op-4}, sequential execution
-\\ \hline
-    \ref{line:earley-reducer-op-5}&1/\var{try}&
-       line \ref{line:earley-reducer-op-4-50}, sequential execution
-\\ \hline
-    \ref{line:earley-reducer-op-6}&1/\var{dup}&line adjoins a duplicate
-       EIM
-\\ \hline
-    \ref{line:earley-reducer-op-10}&1/\var{new}&line adds a new EIM
-\\ \hline
-    \ref{line:earley-reducer-op-7}&1/\var{new}&
-       line \ref{line:earley-reducer-op-10}, sequential execution
-\\ \hline
-    \ref{line:earley-reducer-op-8}&1/\var{new}&
-       line \ref{line:earley-reducer-op-7}, sequential execution
+    \ref{line:earley-reducer-op-10}&1/\var{new}&
+       Line \ref{line:earley-reducer-op-9} RSeq.
 \\ \hline
     \ref{line:earley-reducer-op-9}&1/\var{new}&
-       line \ref{line:earley-reducer-op-8}, sequential execution
+       Line \ref{line:earley-reducer-op-8} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-8}& 1/\var{new}&
+       Line \ref{line:earley-reducer-op-11} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-6}&
+       1/\var{new}+1/\var{dup}&
+       Line \ref{line:earley-reducer-op-7} RSeq or
+       Line \ref{line:earley-reducer-op-9} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-5}&
+       1/\var{new}+1/\var{dup}&
+       Line \ref{line:earley-reducer-op-6} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-4}&
+       1/\var{new}+1/\var{dup}&
+       Line \ref{line:earley-reducer-op-5} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-3}&
+       1/\var{new}+1/\var{dup}&
+       Line \ref{line:earley-reducer-op-4} RSeq.
+\\ \hline
+    \ref{line:earley-reducer-op-2}&
+        \parbox{.9in}{\centering\strut
+            1+1/\var{new} \\ +1/\var{dup}
+        \strut}&
+        \parbox{3.3in}{\raggedright\strut
+           Line \ref{line:earley-reducer-op-3} RSeq,
+           \Obref{def:loop-invocation}.
+           \type{ES} \type{EIM} Traversal Theorem
+           \Thref{th:es-eim-traversal}.
+        \strut}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
-See the definition
-\Dfref{def:op-earley-reducer-passes} of,
-and theorem
-\Thref{th:op-earley-reducer-passes}
-for, \op{Earley-reducer} passes.
-1/\var{proc}: ``once per procedure call''.
-1/\var{try}: ``once per dup or new loop pass''
 1/\var{dup}: ``once per dup \type{EIM} loop pass''.
 1/\var{new}: ``once per new \type{EIM} loop pass''.
     }
@@ -11935,20 +11927,20 @@ Line&Time&Justification
 \\ \hline
     \ref{line:earley-reducer-op-4}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-4-50}&\Oc{}&\Thref{th:seen-psl}
-\\ \hline
-    \ref{line:earley-reducer-op-5}&\Oc{}&
+    \ref{line:earley-reducer-op-5}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
     \ref{line:earley-reducer-op-6}&\Oc{}&
-        \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
     \ref{line:earley-reducer-op-7}&\Oc{}&
+        \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
-    \ref{line:earley-reducer-op-8}&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:earley-reducer-op-8}&\Oc{}&
 \\ \hline
-    \ref{line:earley-reducer-op-9}&\Oc{}&
+    \ref{line:earley-reducer-op-9}&\Oc{}&\Thref{th:seen-psl}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&\Thref{th:es-link-pair-add}
+    \ref{line:earley-reducer-op-10}&\Oc{}&
+\\ \hline
+    \ref{line:earley-reducer-op-11}&\Oc{}&\Thref{th:es-link-pair-add}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:earley-reducer-op}.
@@ -11976,19 +11968,19 @@ Line&\var{proc}&\var{new}&\var{dup}
 \\ \cline{1-4}
     \ref{line:earley-reducer-op-4}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-4-50}&&\Oc{}&\Oc{}
-\\ \cline{1-4}
     \ref{line:earley-reducer-op-5}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-6}&&&\Oc{}
+    \ref{line:earley-reducer-op-6}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-7}&&\Oc{}&\Oc{}
+    \ref{line:earley-reducer-op-7}&&&\Oc{}
 \\ \cline{1-4}
-    \ref{line:earley-reducer-op-8}&&\Oc{}&
+    \ref{line:earley-reducer-op-8}&&\Oc{}&\Oc{}
 \\ \cline{1-4}
     \ref{line:earley-reducer-op-9}&&\Oc{}&
 \\ \cline{1-4}
     \ref{line:earley-reducer-op-10}&&\Oc{}&
+\\ \cline{1-4}
+    \ref{line:earley-reducer-op-11}&&\Oc{}&
 \\ \cline{1-4}
     Totals&\Oc{}&\Oc{}&\Oc{}
 \\ \hline
@@ -12025,13 +12017,9 @@ already in the current ES.
 By the Procedure Overhead Theorem
 \Thref{th:procedure-overhead-discard},
 we may ignore \var{proc} time.
-This theorem then follows from
-the definition
-\Dfref{def:op-earley-reducer-passes}
-and theorem
-\Thref{th:op-earley-reducer-passes}
-for \op{Earley-reducer} passes,
-and the \op{Earley-reducer} time worksheet
+If \var{proc} time is ignored,
+this proof follows immediately from
+the \op{Earley-reducer} Time Worksheet
 \Tbref{tab:earley-reducer-time-worksheet}.
 \myqed
 \end{proof}
@@ -12053,19 +12041,19 @@ Line&Space&Justification
 \\ \hline
     \ref{line:earley-reducer-op-4}&0&
 \\ \hline
-    \ref{line:earley-reducer-op-4-50}&0&
+    \ref{line:earley-reducer-op-5}&0&
 \\ \hline
-    \ref{line:earley-reducer-op-5}&0&\Thref{th:seen-psl}.
+    \ref{line:earley-reducer-op-6}&0&\Thref{th:seen-psl}.
 \\ \hline
-    \ref{line:earley-reducer-op-6}&\Oc{}&\Thref{th:es-link-pair-add}.
+    \ref{line:earley-reducer-op-7}&\Oc{}&\Thref{th:es-link-pair-add}.
 \\ \hline
-    \ref{line:earley-reducer-op-7}&0&
+    \ref{line:earley-reducer-op-8}&0&
 \\ \hline
-    \ref{line:earley-reducer-op-8}&0&\Thref{th:seen-psl}.
+    \ref{line:earley-reducer-op-9}&0&\Thref{th:seen-psl}.
 \\ \hline
-    \ref{line:earley-reducer-op-9}&0&
+    \ref{line:earley-reducer-op-10}&0&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&
+    \ref{line:earley-reducer-op-11}&\Oc{}&
        \parbox{3.5in}{\raggedright\strut
         \type{ES} Add Theorem \Thref{th:es-add}.\strut
         }
@@ -12096,19 +12084,19 @@ Line&\var{new}&\var{dup}
 \\ \hline
     \ref{line:earley-reducer-op-4}&&
 \\ \hline
-    \ref{line:earley-reducer-op-4-50}&&
-\\ \hline
     \ref{line:earley-reducer-op-5}&&
 \\ \hline
-    \ref{line:earley-reducer-op-6}&&\Oc{}
+    \ref{line:earley-reducer-op-6}&&
 \\ \hline
-    \ref{line:earley-reducer-op-7}&&
+    \ref{line:earley-reducer-op-7}&&\Oc{}
 \\ \hline
     \ref{line:earley-reducer-op-8}&&
 \\ \hline
     \ref{line:earley-reducer-op-9}&&
 \\ \hline
-    \ref{line:earley-reducer-op-10}&\Oc{}&
+    \ref{line:earley-reducer-op-10}&&
+\\ \hline
+    \ref{line:earley-reducer-op-11}&\Oc{}&
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
@@ -12718,8 +12706,8 @@ This theorem follows immediately from
 \begin{proof}
 This theorem follows from
 lines \ref{line:earley-reducer-op-4},
-line \ref{line:earley-reducer-op-7}, and
-line \ref{line:earley-reducer-op-10} of
+line \ref{line:earley-reducer-op-8}, and
+line \ref{line:earley-reducer-op-11} of
 \Aref{alg:earley-reducer-op};
 and from lines \ref{line:leo-reducer-op-3},
 line \ref{line:leo-reducer-op-7}, and
@@ -12767,8 +12755,8 @@ This theorem then follows from
 \Aref{alg:earley-reducer-op}, especially
 lines \ref{line:earley-reducer-op-2},
 \ref{line:earley-reducer-op-4},
-\ref{line:earley-reducer-op-7},
-and \ref{line:earley-reducer-op-10}.
+\ref{line:earley-reducer-op-8},
+and \ref{line:earley-reducer-op-11}.
 \myqed
 \end{proof}
 
@@ -13298,6 +13286,7 @@ The ancestry of a \type{LIM} is a single link pair.
 In the link pair for a \type{LIM} $\ell$,
 the ``cause'' is \Source{\ell}
 and the ``predecessor'' is \PreviousLink{\ell}.
+\dispEnd
 \end{observation}
 
 \begin{theorem}[\type{LIM} Link Pair Uniqueness]
