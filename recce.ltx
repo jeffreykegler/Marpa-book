@@ -8954,54 +8954,6 @@ is ``consistent''.
 We will define and prove this in a later chapter
 \Chref{chap:consistent}.
 
-\begin{definition}[Try, dup and new resource]
-\label{def:try-dup-new}
-We ``charge'' all resource to \type{EIM}s.
-Recall that when an attempt is made to add a duplicate \type{EIM} to an Earley set,
-that it does not change the Earley set.
-\dfn{Try-charged resource}, or \dfn{try resource},
-is consumed by either
-\begin{itemize}
-\item an attempt to add a duplicate to the Earley set,
-  in which case the try resource is also called \dfn{dup-charged resource}, or
-  \dfn{dup resource};
-\item a successful attempt to add a new \type{EIM} to the Earley set,
-  in which case the try resource is also \dfn{new-charged resource}, or
-  \dfn{new resource}.
-\end{itemize}
-Execution of logic which consumes a type of resource is
-named after that resource,
-so that execution of logic which successfully adds an \type{EIM} to an Earley set is called
-\dfn{new-charged execution}, a \dfn{new-charged}, or a \dfn{new}.
-Similarly,
-an execution which unsuccessfully attempts to add an \type{EIM} is called \dfn{dup-charged execution},
-or a \dfn{dup}.
-A dup or a new can also be called
-a \dfn{try-charged execution}, a \dfn{try-charged} or a \dfn{try}.
-\end{definition}
-
-\begin{definition}[Old resource]
-\label{def:old-resource}
-Resource may also be charged to an \type{EIM} outside of an
-attempt to add it to the Earley set.
-Resource charged to an existing \type{EIM},
-when it is not dup resource,
-is called \dfn{old resource}.
-Execution of logic which charges resource to an \type{EIM},
-but which is not a try,
-is called an \dfn{old charge execution}, or an \dfn{old}.
-\end{definition}
-
-We have yet to show this,
-but we will find that,
-for each \type{EIM},
-\begin{itemize}
-\item new and dup resource is always \Oc{};
-\item which means that try resource is always \Oc{}; and
-\item total resource for an \type{EIM} (old, new and dup)
-    is always \Oc{}.
-\end{itemize}
-
 In a pseudocode procedure,
 charges are made either to a ``destination'',
 or ``to the caller''.
@@ -9015,39 +8967,6 @@ All charges not made to an ultimate destination are
 recharged at some point,
 and eventually every charge is recharged to an
 ultimate destination.
-
-\begin{definition}[Charging to the parse]
-\label{def:charging-to-parse}
-A resource ``charged to the parse'' is recharged to the first \type{EIM}
-of Earley set 0.
-There is always a start \type{EIM} in Earley set 0,
-so that the first \type{EIM} of Earley set 0
-exists in every parse.
-\dispEnd
-\end{definition}
-
-\begin{definition}[Charging to the Earley set]
-\label{def:charging-to-es}
-A resource ``charged to an Earley set'' is recharged to the first \type{EIM}
-of that Earley set.
-In a successful parse, every Earley set will have at least one \type{EIM},
-so that the first \type{EIM} of an Earley set will always exist.
-An Earley set without a \type{EIM} causes a parse failure,
-so that in a failed parse, every Earley set except the last will have at least one \type{EIM},
-and resource charged to those Earley sets can be charged to their first \type{EIM}.
-In the last Earley set of a failed parse,
-resource charged to the Earley set is charged to the parse.
-\dispEnd
-\end{definition}
-
-\begin{definition}[Charging to the caller]
-\label{def:charging-to-caller}
-If a resource is ``charged to the caller'',
-the decision of how
-to recharge the resource is made by
-the pseudocode procedure that called the current pseudocode procedure.
-\dispEnd
-\end{definition}
 
 Reads and writes do not consume space -- only allocations of space
 consume space.
@@ -9102,24 +9021,6 @@ is consumed ``directly''; and
 ``Inclusive'' resource means resource consumed both
 directly and indirectly.
 Resource consumed is exclusive unless otherwise stated.
-
-\todo{Delete the "resource functions"?}
-For use in the complexity analysis,
-we define the following ``resource functions'',
-where \var{x} may be a code snippet, a line,
-or an algorithm:
-\begin{itemize}
-\item \Time{\var{x}} is the exclusive time consumed by one invocation of \var{x}.
-\item \Space{\var{x}} is the exclusive space consumed by one invocation of \var{x}.
-\item \Invocs{\var{x}} is the number of invocations during one call of the current pseudocode procedure of \var{x}.
-\item \Passes{\ell} is the number of passes during one call of the current pseudocode procedure of the loop $\ell$.
-\item \Invocs{\var{x}}/\var{unit} is the number of invocations modulo one \var{unit} of \var{x}.
-\item \Passes{\ell/\var{unit}} is the number of passes modulo one \var{unit} of the loop $\ell$.
-\end{itemize}
-The resource functions
-defined as ``modulo a unit'' are for counting invocations
-and passes at a level finer than the total count for the pseudocode procedure.
-Their precise meaning will defined in the context in which they are used.
 
 \section{Accounts}
 \label{sec:accounts}
@@ -11298,107 +11199,6 @@ operation of \Earley{}\cite{Earley1970}.
 
 \FloatBarrier
 
-\begin{theorem}[\proc{Scanner} invocations]
-\label{th:scanner-invocations}
-\op{Scanner} invokes
-\begin{align*}
- \text{line }\ref{line:scanner-op-2} & \;\;\text{once;} \\
- \text{line }\ref{line:scanner-op-3} & \;\;\text{once, plus once for each try;} \\
- \text{lines }\enRefs{line:scanner-op-4}{line:scanner-op-7} & \;\;\text{once for each try;} \\
- \text{line }\ref{line:scanner-op-8} & \;\;\text{once for each dup; and} \\
- \text{lines }\enRefs{line:scanner-op-9}{line:scanner-op-12} & \;\;\text{once for each add.}
-\end{align*}
-
-\end{theorem}
-
-\begin{proof}
-\begin{equation}
-\label{eq:th-scanner-invocations-10}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-2}} = 1$
-    \cuz{} sequential execution.
-    This is the theorem for
-    line \ref{line:scanner-op-2}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-12}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-8}} = 1\times\var{dup}$ \\
-    \cuz{} line \ref{line:scanner-op-8}
-    adds a duplicate link for \Veim{trial}.
-    This is the theorem for
-    line \ref{line:scanner-op-8}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-14}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-12}} = 1\times\var{new}$ \\
-    \cuz{} line \ref{line:scanner-op-12}
-    adds \Veim{trial} as a new \type{EIM}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-16}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-9}}
-        = \Invocs{\ref{line:scanner-op-10}}
-        = \Invocs{\ref{line:scanner-op-11}}$ \\
-    $= \Invocs{\ref{line:scanner-op-12}}
-        = 1\times\var{new}$ \\
-    \cuz{} \
-    \Eref{eq:th-scanner-invocations-14},
-    sequential execution.
-    This is the theorem for
-    lines \enRefs{line:scanner-op-9}{line:scanner-op-12}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-18}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-7}}
-        = 1\times(\var{new}+\var{dup})$
-    \cuz{} \
-    combining both branches of the if statement.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-20}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-4}}
-        = \Invocs{\ref{line:scanner-op-5}}
-        = \Invocs{\ref{line:scanner-op-7}}
-        = 1\times\var{try}$ \\
-    \cuz{}
-    \Eref{eq:th-scanner-invocations-18},
-    \longDfref{Try is dup or new}{def:try-dup-new},
-    sequential execution.
-    This is the theorem for
-    lines \enRefs{line:scanner-op-4}{line:scanner-op-7}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-22}
-\Passes{\text{loop }\enRefs{line:scanner-op-3}{line:scanner-op-12}}
-    = \Invocs{\ref{line:scanner-op-4}}
-    \because \Obref{def:loop-invocation}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-24}
-\Invocs{\ref{line:scanner-op-3}}
-    = \Invocs{\ref{line:scanner-op-4}} + 1
-    \because \Obref{def:loop-invocation},
-        \Eref{eq:th-scanner-invocations-22}.
-\end{equation}
-\begin{equation}
-\label{eq:th-scanner-invocations-26}
-\myparbox{%
-    $\Invocs{\ref{line:scanner-op-3}} = 1+1\times\var{try}
-    \because \Eref{eq:th-scanner-invocations-20},
-        \Eref{eq:th-scanner-invocations-24}$ \\
-    This is the theorem for line \ref{line:scanner-op-3}.}
-\end{equation}
-We now have the theorem for lines
-\enRefs{line:scanner-op-2}{line:scanner-op-12},
-which is what we needed for the theorem.
-\myqed
-\end{proof}
-
 \begin{equation}
 \label{eq:def-scanner-charges}
 \myparbox{%
@@ -11412,15 +11212,6 @@ which is what we needed for the theorem.
   charged to the Earley set.
   \cuz{} AF complexity analysis.}
 \end{equation}
-
-% Headers that allow line ranges -- just in case I want
-% to go back to this.
-% \hline
-% &&&Direct&Indirect&& \\
-% &&Invoc-&time&time&& \\
-% &Line&cations&per in-&per in-&& \\
-% Lines&Count&per line&vocation&vocation&Total&\multicolumn{1}{c|}{Because}
-% \\ \hline
 
 \begin{table}[t]
 \caption{Inclusive time charged to Earley set for \op{Scanner}}
@@ -12018,7 +11809,7 @@ By the Procedure Overhead Theorem
 \Thref{th:procedure-overhead-discard},
 we may ignore \var{proc} time.
 If \var{proc} time is ignored,
-this proof follows immediately from
+this proof then follows immediately from
 the \op{Earley-reducer} Time Worksheet
 \Tbref{tab:earley-reducer-time-worksheet}.
 \myqed
