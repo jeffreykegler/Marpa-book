@@ -480,11 +480,11 @@
 \author{Jeffrey Kegler}
 \ifdraft{
     % legacy draftwatermark options -- update?
-    \SetWatermarkLightness{0.1}
-    \SetWatermarkText{draft \DTMnow}
+    \SetWatermarkLightness{0}
+    \SetWatermarkText{DRAFT \DTMnow{} DRAFT}
     \SetWatermarkAngle{0}
-    \SetWatermarkScale{.5}
-    \SetWatermarkHorCenter{1.5in}
+    % \SetWatermarkScale{1}
+    % \SetWatermarkHorCenter{1.5in}
     \SetWatermarkVerCenter{.5in}
 }{}
 \thanks{\ifdraft{%
@@ -13252,48 +13252,67 @@ Line&Space&\multicolumn{1}{c|}{Justification}
 \end{table}
 
 \FloatBarrier
+
+\begin{theorem}[\op{Memoizer} space]
+\label{th:memoizer-space}
+The space that each \op{Memoizer} op incurs may
+be accounted for by
+charging \Oc{} trimmed space to an arbitrary \type{EIM}.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the \op{Memoizer} Invocations Table \Tbref{tab:memoizer-invocations}
+and the \op{Memoizer} Space per Invocation Table \Tbref{tab:memoizer-space}.
+\myqed
+\end{proof}
+
 \todo{Rewrite Memoizer op section}
 
-\begin{observation}[Ancestry]
-\label{obs:memoizer-ancestry}
-The \Marpa{} implementation tracks the link pairs
-for the \type{LIM}s.
-In the link pair for a \type{LIM}, call it \Vlim{$\ell$},
-the ``cause''
-is more often called the \dfn{source} of the \type{LIM};
-and the ``predecessor'' is
-and is more often called the \dfn{previous link} of the \type{LIM}.
-We may write the previous link of \mylim{\ell} as
+\begin{theorem}[TODO]
+\label{th:previous-link}
+The total function
+\label{def-previous-link}
 \[
-  \begin{aligned}
-  & \PreviousLink{\Vlim{$\ell$}} \defined
-  \\ \nonumber
-  & \qquad
-    \left\lbrace
-      \LIMPredecessor{\var{source}} :
-      \Veim{source} \in \Source{\mylim{\ell}}
-    \right\rbrace \quad \dispEnd
-  \end{aligned}
+   \PreviousLink{\ell} \defined
+      \LIMPredecessor{ \Source{\mylim{\ell}}}.
 \]
-\end{observation}
+exists.
+We say that 
+\PreviousLink{\ell} is
+the \dfn{previous link} of $\ell$.
+\end{theorem}
 
-In \Marpa{},
-for every valid \type{LIM}, call it \Vlim{lim},
-\begin{itemize}
-\item \Source{\var{lim}} is always a singleton set containing a penult
-in the same Earley set as \var{lim}.
-\item \var{PreviousLink} is a set of cardinality at most one,
-and if its element exists, it is a valid \type{LIM},
-\item $\size{\LinkPairs{\var{lim}}} = 1$,
-\end{itemize}
-but we have yet to prove these things.
+\begin{proof}
+This theorem follows from
+the \LIMPredecessor{} Theorem
+\Thref{th:lim-predecessor-fn}
+and
+the \Source{} Theorem \Thref{th:leo-source-fn}.
+\myqed
+\end{proof}
 
-\todo{Prove the above later.}
+\begin{theorem}[\type{LIM} Ancestry]
+\label{def:lim-ancestry}
+The \Marpa{} implementation tracks the ancestry
+of \type{LIM}s.
+The ancestry of a \type{LIM} is a single link pair.
+In the link pair for a \type{LIM} $\ell$,
+the ``cause'' is \Source{\ell}
+and the ``predecessor'' is \PreviousLink{\ell}.
+\end{theorem}
 
-\begin{observation}[Complexity]
-\todo{}
-\dispEnd{}
-\end{observation}
+\begin{theorem}[\type{LIM} Link Pair Uniqueness]
+The ancestry of
+every \type{LIM} contains exactly one
+link pair.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the \Source{} Theorem \Thref{th:leo-source-fn}
+the \PreviousLink{} Theorem \label{th:previous-link}
+\end{proof}
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-op}
