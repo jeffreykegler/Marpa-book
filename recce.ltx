@@ -423,6 +423,15 @@
 \newlength{\longtagwidth}
 \settowidth{\longtagwidth}{(99999)\quad}
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
+
+% These are for putting paragraphs in cells of tables.
+\newcommand{\callboxc}[2]{%
+    \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}
+}
+\newcommand{\callboxr}[2]{%
+    \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}
+}
+
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
   \linespread{1.15}\selectfont
@@ -11199,67 +11208,59 @@ operation of \Earley{}\cite{Earley1970}.
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
-    \parbox{.3in}{\centering\strut
-        Line
-    \strut}&
-    \parbox{.9in}{\centering\strut
-        Invocations per call
-    \strut}&
-    \parbox{3.3in}{\centering\strut
-        Justification
-    \strut}
+    \callboxc{.3in}{Line}&
+    \callboxc{.9in}{Invocations per call}&
+    \callboxc{3.2in}{Justification}
 \\ \hline
     \ref{line:scanner-op-8}&1/\var{dup}&
-        \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
-            This link duplicates an existing \type{EIM},
+        \callboxr{3.2in}{This link duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
-            of the main loop.
-        \strut}
+            of the main loop.}
 \\ \hline
     \ref{line:scanner-op-12}&1/\var{new}&
-        \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
             This link creates a new \type{EIM}:
             and therefore is in a ``new'' pass
             of the main loop.
         \strut}
 \\ \hline
     \ref{line:scanner-op-11}&1/\var{new}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-12} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-10}&1/\var{new}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-11} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-9}& 1/\var{new}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-10} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-7}&
        1/\var{new}+1/\var{dup}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-8} RSeq or
            line \ref{line:scanner-op-9} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-6}&
        1/\var{new}+1/\var{dup}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-7} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-5}&
        1/\var{new}+1/\var{dup}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-6} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-4}&
        1/\var{new}+1/\var{dup}&
-       \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-5} RSeq.
         \strut}
 \\ \hline
@@ -11267,7 +11268,7 @@ operation of \Earley{}\cite{Earley1970}.
         \parbox{.9in}{\centering\strut\linespread{.75}\selectfont
             1+1/\var{new} \\ +1/\var{dup}
         \strut}&
-        \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-4} RSeq,
            \Obref{def:loop-invocation}.
            \type{ES} \type{EIM} Traversal Theorem
@@ -11275,7 +11276,7 @@ operation of \Earley{}\cite{Earley1970}.
         \strut}
 \\ \hline
     \ref{line:scanner-op-2}&1&
-        \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
+        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
        Line \ref{line:scanner-op-3} RSeq,
            \Obref{def:loop-invocation}.
         \strut}
@@ -11294,7 +11295,7 @@ Lines are listed in order of deduction.
 \begin{table}[H]
 \caption{
     \label{tab:scanner-time}
-    \op{Scanner} time per invocation}
+    \op{Scanner} time per line invocation}
 \vspace{1ex}
 \begin{tabular}{|c|c|p{3.5in}|}
 \hline
@@ -11352,16 +11353,83 @@ Line&Time&Justification
 
 \FloatBarrier
 
+\begin{table}[H]
+\caption{
+    \label{tab:scanner-time-worksheet}
+    \op{Scanner} time worksheet}
+\vspace{1ex}
+\begin{tabular}{|c|c|c|c|}
+\hline
+\multicolumn{1}{|c}{}&\multicolumn{3}{|c|}{Accounts}
+\\ \cline{2-4}
+Line&\var{proc}&\var{new}&\var{dup}
+\\ \hline
+    \ref{line:scanner-op-3}&\Oc{}&&
+\\ \hline
+    \ref{line:scanner-op-3}&\Oc{}&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-4}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-5}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-6}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-7}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-8}&&&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-9}&&\Oc{}&\Oc{}
+\\ \cline{1-4}
+    \ref{line:scanner-op-10}&&\Oc{}&
+\\ \cline{1-4}
+    \ref{line:scanner-op-11}&&\Oc{}&
+\\ \cline{1-4}
+    \ref{line:scanner-op-12}&&\Oc{}&
+\\ \cline{1-4}
+    Totals&\Oc{}&\Oc{}&\Oc{}
+\\ \hline
+\end{tabular}
+\;\;\parbox{2.5in}{
+    \raggedright
+    See \Tbref{tab:scanner-time}.
+    Charges to \var{proc} are for every call.
+    Charges to \var{new} are
+    only for calls where \Veim{trial} is a new EIM.
+    Charges to \var{dup} are
+    only for calls where \Veim{trial} is a duplicate EIM.
+}
+\end{table}
+
+\FloatBarrier
+
 \begin{theorem}[\op{Scanner} time]
-\label{eq:th-scanner-times}
-\todo{Write statement of theorem}
+\label{th:scanner-time}
+The time that each call of \op{Scanner} incurs may
+be accounted for as follows:
+\begin{itemize}
+\item
+By charging \Oc{} time to \Veim{trial}, when \var{trial} is added to the current ES.
+\item
+By charging \Oc{} time to
+\Veim{trial}, when \var{trial} is a duplicate of an EIM
+already in the current ES.
+\end{itemize}
 \end{theorem}
 
 \begin{proof}
-\todo{Prove this}
+By the Procedure Overhead Theorem
+\Thref{th:procedure-overhead-discard},
+we may ignore \var{proc} time.
+If \var{proc} time is ignored,
+this proof then follows immediately from
+the \op{Scanner} Time Worksheet
+\Tbref{tab:scanner-time-worksheet}.
+\myqed
 \end{proof}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive \type{EIM} space charged to Earley set for \op{Scanner}}
 \label{tab:scanner-es-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11383,7 +11451,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive add-charged \type{EIM} space for \op{Scanner}}
 \label{tab:scanner-add-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11421,7 +11491,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive dup-charged \type{EIM} space for \op{Scanner}}
 \label{tab:scanner-dup-eim-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11452,6 +11524,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
+\FloatBarrier
+
 \begin{theorem}[\op{Scanner} space]
 \label{eq:th-scanner-space}
 \todo{Write statement of theorem}
@@ -11461,7 +11535,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \todo{Prove this}
 \end{proof}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive link space charged to Earley set for \op{Scanner}}
 \label{tab:scanner-es-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11482,7 +11558,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive new-charged link space for \op{Scanner}}
 \label{tab:scanner-add-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11520,7 +11598,9 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
+\FloatBarrier
+
+\begin{table}[H]
 \caption{Inclusive dup-charged link space for \op{Scanner}}
 \label{tab:scanner-dup-link-space}
 \begin{tabular}{|c|c|c|c|c|p{1.5in}|}
@@ -11551,6 +11631,8 @@ Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
 \\ \hline
 \end{tabular}
 \end{table}
+
+\FloatBarrier
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
 \label{obs:earley-scanner-op}
