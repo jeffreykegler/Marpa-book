@@ -9216,35 +9216,6 @@ Line \ref{line:toy-50}
 is invoked once per pass of the inner loop, or 6 times.
 \end{itemize}
 
-\section{Complexity table conventions}
-\label{sec:complexity-tables}
-
-Let \var{inv} be the number of invocations,
-let \var{dir} the direct resource consumed per invocation,
-let \var{ind} the indirect resource consumed per invocation, and
-let \var{total} the total resource consumed for that line.
-The tables contain columns for \var{inv}, \var{dir}, \var{ind} and \var{total},
-and
-\[
-  \var{total} = \var{inv} \times ( \var{dir} + \var{ind} ).
-\]
-
-In the presence of conditional logic, the number of invocations is sometimes
-given as a range, for example, \var{lo}--\var{hi}.
-In this case only the high value, \var{hi} is relevant
-and we may write it \order{\le\var{hi}}, so that
-\[
-\order{\le\var{hi}} = \order{\var{hi}}.
-\]
-If, for example, $\var{lo}=0$ and $\var{hi}=42$,
-the complexity of the range \var{lo}--\var{hi}
-would be
-$\order{\le42} = \Oc$.
-
-In tables with a ``Justification'' column, that column
-if left empty when we consider the justification immediately
-obvious from the code.
-
 The pseudocode uses a few basic control structures,
 with which the reader is expected to be familiar,
 and our justifications of the invocation counts
@@ -9273,6 +9244,13 @@ We notate this observation in the form
 ``line L1 Cond''.
 \dispEnd
 \end{definition}
+
+\section{Complexity table conventions}
+\label{sec:complexity-tables}
+
+In tables with a ``Justification'' column, that column
+is left empty when we consider the justification immediately
+obvious from the code.
 
 \chapter{Data structures}
 \label{chap:data-structures}
@@ -10305,42 +10283,33 @@ of Earley set 0 by \Earley{}.
 \begin{algorithmic}[1]
 \Procedure{Predict1}{\Veim{prediction}}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
-\label{line:marpa-predict-65}
-\Statex \Comment \tightMath{\var{x}=1\times\var{try}}
-  \State return \Comment \tightMath{\var{x}=1\times\var{dup}}
-\label{line:marpa-predict-70}
+\label{line:marpa-predict1-2}
+  \State return
+\label{line:marpa-predict1-3}
 \EndIf
-\label{line:marpa-predict-75}
-\State $\LinkPairs{\var{prediction}} = \set{}$ \Comment \tightMath{\var{x}=1\times\var{new}}
-\label{line:marpa-predict-80}
+\State $\LinkPairs{\var{prediction}} = \set{}$
+\label{line:marpa-predict1-4}
 \State Add \var{prediction} to \Velement{S}{\Current{\var{prediction}}}
-\Statex  \Comment \tightMath{\var{s}=\Oc;\var{x}=1\times\var{new}}
-\label{line:marpa-predict-85}
+\label{line:marpa-predict1-5}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-   \Comment \tightMath{\var{x}=1\times\var{new}}
-\label{line:marpa-predict-90}
+\label{line:marpa-predict1-6}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 \FloatBarrier
 
-The \op{Initializer} op adds the start \type{EIM} and its predictions.
-We first look at
-Algorithms \Aref{alg:predict1} and \Aref{alg:predicter-op},
-which contain the pseudocode for adding predictions.
-
 \begin{theorem}[\var{Predict1} Invocations]
 \label{th:predict1-invocs}
 \Aref{alg:predict1},
 \begin{enumerate}
 \item \label{enum:th-predict1-invocs-04}
-Lines \enRange{\ref{line:marpa-predict-65}}{\ref{line:marpa-predict-70}}
+Lines \enRange{\ref{line:marpa-predict1-2}}{\ref{line:marpa-predict1-3}}
 of \var{Predict1}
 are invoked once.
 \item \label{enum:th-predict1-invocs-05}
 Lines
-\enRange{\ref{line:marpa-predict-75}}{\ref{line:marpa-predict-90}}
+\enRange{\ref{line:marpa-predict1-3}}{\ref{line:marpa-predict1-6}}
 of \var{Predict1}
 are invoked once per add, and at most once.
 \item \label{enum:th-predict1-invocs-06}
@@ -10383,13 +10352,13 @@ is \Oc{}, charged to the caller.
 \begin{proof}
 All lines of \proc{Predict1} take \Oc{} time.
 For the justification in the case of lines
-\ref{line:marpa-predict-65} and
-\ref{line:marpa-predict-90},
+\ref{line:marpa-predict1-2} and
+\ref{line:marpa-predict1-6},
 see
 \Thref{th:rule-id-complexity} and
 \Thref{th:dotzeroused-bitmap}.
 For the justification of line
-\ref{line:marpa-predict-85},
+\ref{line:marpa-predict1-5},
 see \Thref{th:es-add}.
 For other lines, the time complexity follows
 directly from \Aref{alg:predict1}.
@@ -10398,8 +10367,8 @@ Total time complexity is the sum over all lines of \proc{Predict1} of
 time complexity times the number of invocations, or
 \begin{equation}
 \label{eq:th-predict1-time}
-\sum_{\var{line}=\ref{line:marpa-predict-65}}
-^{\ref{line:marpa-predict-90}} \Oc{} \times \Oc{}
+\sum_{\var{line}=\ref{line:marpa-predict1-2}}
+^{\ref{line:marpa-predict1-6}} \Oc{} \times \Oc{}
 = \Oc{}.
 \end{equation}
 Per \Eref{eq:def-predict1-time-charge},
@@ -10429,7 +10398,7 @@ Space for \var{Predict1} is
 \myparbox{%
   All lines of \proc{Predict1},
   other than
-  \ref{line:marpa-predict-85},
+  \ref{line:marpa-predict1-5},
   consume zero space
   \cuz{}
   \Thref{th:rule-id-complexity},
@@ -10439,14 +10408,14 @@ Space for \var{Predict1} is
 \begin{equation}
 \label{eq:th-predict1-space-15}
 \myparbox{%
-  Line \ref{line:marpa-predict-85}
+  Line \ref{line:marpa-predict1-5}
   consumes \Oc{} space
   \cuz{} \type{ES} Add Theorem \Thref{th:es-add}.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predict1-space-20}
 \myparbox{%
-  Line \ref{line:marpa-predict-85}
+  Line \ref{line:marpa-predict1-5}
   is invoked only when a prediction is added \cuz{}
   \Eref{enum:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
 \end{equation}
@@ -11102,14 +11071,14 @@ Conceptually,
 predictions have predecessors, but no causes,
 and the link pair generated for
 \Veim{prediction} in
-line \ref{line:marpa-predict-80} of \proc{Predict1}~\Aref{alg:predict1}
+line \ref{line:marpa-predict1-4} of \proc{Predict1}~\Aref{alg:predict1}
 would be
 $\tuple{\Veim{x}, \Lambda}$,
 where \Veim{x}
 is the variable of line \ref{line:marpa-predicter-16}
 of \proc{Predicter}~\Aref{alg:predicter-op},
 which is not actually in scope at
-line \ref{line:marpa-predict-80} of \proc{Predict1}.
+line \ref{line:marpa-predict1-4} of \proc{Predict1}.
 
 If link pairs were generated,
 for the arbitrary prediction
