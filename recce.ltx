@@ -9672,8 +9672,7 @@ and $\Lambda$ otherwise.
 \label{th:seen-psl}
 In each Earley set,
 set up of \var{seen} consumes \Oc{} time,
-\Oc{} trimmed space
-and zero link space.
+and \Oc{} space.
 Each call of \Seen{} and \SetSeen{} consumes
 consumes \Oc{} time
 and zero space.
@@ -11243,7 +11242,7 @@ operation of \Earley{}\cite{Earley1970}.
        1/\var{new}+1/\var{dup}&
        \parbox{3.3in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-8} RSeq or
-           Line \ref{line:scanner-op-9} RSeq.
+           line \ref{line:scanner-op-9} RSeq.
        \strut}
 \\ \hline
     \ref{line:scanner-op-6}&
@@ -11292,100 +11291,66 @@ Lines are listed in order of deduction.
 
 \FloatBarrier
 
-\begin{table}[t]
-\caption{Inclusive time charged to Earley set for \op{Scanner}}
-\label{tab:scanner-es-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
+\begin{table}[H]
+\caption{
+    \label{tab:scanner-time}
+    \op{Scanner} time per invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
 \hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+Line&Time&Justification
 \\ \hline
-    \ref{line:scanner-op-2}&1&\Oc{}&&\Oc{}&\Thref{th:transitions-read}
+    \ref{line:scanner-op-2}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+	  \Veimset{matches} is a pointer to the head of a linked list,
+	  as returned by \myfn{Transition}{}
+	  \Thref{th:transitions-read}.
+	\strut}
 \\ \hline
-    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-3}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+           \type{ES} \type{EIM} Traversal Theorem
+           \Thref{th:es-eim-traversal}.
+	\strut}
 \\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
+    \ref{line:scanner-op-4}&\Oc{}&
 \\ \hline
-\multicolumn{6}{|p{4.5in}|}{\cuz{} \Sref{sec:complexity-tables},
-    \AFref{alg:scanner-op},
-    \ThFref{th:scanner-invocations},
-    \Eref{eq:def-scanner-charges}.}
+    \ref{line:scanner-op-5}&\Oc{}&
 \\ \hline
-\end{tabular}
-\end{table}
-
-\begin{table}[t]
-\caption{Inclusive new-charged time for \op{Scanner}}
-\label{tab:scanner-add-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
+    \ref{line:scanner-op-6}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.
+	\strut}
 \\ \hline
-    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-7}&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-4}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-8}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}
+	\strut}
 \\ \hline
-    \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-9}&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:scanner-op-10}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.
+	\strut}
 \\ \hline
-    \ref{line:scanner-op-9}&1&\Oc{}&&\Oc{}&
+    \ref{line:scanner-op-11}&\Oc{}&
 \\ \hline
-    \ref{line:scanner-op-10}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
+    \ref{line:scanner-op-12}&\Oc{}&
+        \parbox{3.5in}{\raggedright\strut\linespread{.75}\selectfont
+	  \type{ES} Add Theorem \Thref{th:es-add}.
+	\strut}
 \\ \hline
-    \ref{line:scanner-op-11}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-12}&1&\Oc{}&&\Oc{}&
-        \type{ES} Add Theorem \Thref{th:es-add}.
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|l|}{
-    \myparbox[4.5in]{%
-        \cuz{}
-        \longDfref{Try is dup or new}{def:try-dup-new},
-        \Sref{sec:complexity-tables},
-        \AFref{alg:scanner-op},
-        \ThFref{th:scanner-invocations},
-        \Eref{eq:def-scanner-charges}.}%
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:scanner-op}.
 }
 \\ \hline
 \end{tabular}
 \end{table}
 
-\begin{table}[t]
-\caption{Inclusive dup-charged time for \op{Scanner}}
-\label{tab:scanner-dup-time}
-\begin{tabular}{|c|c|c|c|c|p{1.5in}|}
-\hline
-&Invoc-&\multicolumn{2}{|c|}{Time per invocation}&Line& \\ \cline{3-4}
-Line&cations&Direct&Indirect&Total&\multicolumn{1}{c|}{Justification}
-\\ \hline
-    \ref{line:scanner-op-3}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-4}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-5}&1&\Oc{}&&\Oc{}&
-\\ \hline
-    \ref{line:scanner-op-7}&1&\Oc{}&&\Oc{}&\Thref{th:seen-psl}
-\\ \hline
-    \ref{line:scanner-op-8}&1&\Oc{}&&\Oc{}&\Thref{th:es-link-pair-add}
-\\ \hline
-\multicolumn{4}{|l}{Total for \op{Scanner}}&\multicolumn{1}{c|}{\Oc{}}&
-\\ \hline
-\multicolumn{6}{|l|}{
-    \myparbox[4.5in]{%
-        \cuz{}
-        \longDfref{Try is dup or new}{def:try-dup-new},
-        \Sref{sec:complexity-tables},
-        \AFref{alg:scanner-op},
-        \ThFref{th:scanner-invocations},
-        \Eref{eq:def-scanner-charges}.}%
-}
-\\ \hline
-\end{tabular}
-\end{table}
+\FloatBarrier
 
 \begin{theorem}[\op{Scanner} time]
 \label{eq:th-scanner-times}
@@ -11745,7 +11710,7 @@ operation of \Earley{}.
     \ref{line:earley-reducer-op-6}&
        1/\var{new}+1/\var{dup}&
        Line \ref{line:earley-reducer-op-7} RSeq or
-       Line \ref{line:earley-reducer-op-9} RSeq.
+       line \ref{line:earley-reducer-op-9} RSeq.
 \\ \hline
     \ref{line:earley-reducer-op-5}&
        1/\var{new}+1/\var{dup}&
