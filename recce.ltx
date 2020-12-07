@@ -3973,47 +3973,50 @@ so that
 \end{equation}
 \end{proof}
 
-\begin{theorem}[ES predictions count]
-\label{th:es-prediction-count}
-The count of valid predictions in an Earley set is \Oc{}.
+\begin{theorem}[Prediction rule non-duplication]
+\label{th:prediction-rule-non-duplication}
+For every rule \Vrule{r},
+there is at most one prediction \Veim{pred} in an \type{ES}
+such $\Rule{\var{pred}} = \var{r}$.
 \end{theorem}
 
 \begin{proof}
-Let \Ves{es} be an arbitrary Earley set.
-From the context and the binding assumptions,
-we know that \Ves{es} is valid and therefore all \type{EIM}s in \var{es} are valid.
+We assume for a reductio that an arbitrary \type{ES} \var{es}
+contains two distinct predictions,
+\Veim{pred1} and \Veim{pred2},
+such that
+\begin{gather}
+\label{eq:th-prediction-rule-non-duplication-100}
+\Rule{\var{pred1}} = \Rule{\var{pred2}}
+\\ \label{eq:th-prediction-rule-non-duplication-120}
+\land\; \Veim{pred1} \ne \Veim{pred2}
+\\ \nonumber
+    \because \text{AF reductio.}
+\end{gather}
+By the definition of \type{EIM} \Dfref{def:eim},
+the definition of prediction \Dfref{def:prediction},
+and the Prediction Locations Theorem \Thref{th:predictions-locations},
+we have
+\[
+   \var{pred1} = \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}
+       = \var{pred2}
+\]
+so that $\var{pred1} = = \var{pred2}$.
+But we assumed for the reductio
+\myqed
+\todo{Finish this proof}
+\end{proof}
 
-Let \var{origs} be the set of origins
-of valid predictions in an arbitrary Earley set \Ves{es}, so that
-\begin{equation}
-\label{eq:th-es-prediction-count-10}
-\var{origs} = \set{
-    \begin{gathered}
-    \Vloc{orig} : \exists \; \Veim{eim} \in \Ves{es} :
-    \\ \DotPos{\var{eim}} = 0 \land \var{orig} = \Origin{\var{eim}}
-    \end{gathered}
-    }.
-\end{equation}
-\mypareq{eq:th-es-prediction-count-12}{%
-    $\Veim{eim} \in \Ves{es} \land \DotPos{\var{eim}} = 0 \implies \Current{\var{es}} = \Origin{\var{eim}}$
-    \cuz{} \longThref{Prediction locations}{th:predictions-locations}.
-}
-The theorem follows trivially if $\Vsize{origs} = 0$,
-so that for the rest of this
-proof we assume that $\Vsize{origs} \ge 1$.
-\mypareq{eq:th-es-prediction-count-20}{%
-$\var{origs} = \set{ \Current{\var{es}} }$
-\cuz{} \Eref{eq:th-es-prediction-count-10},
-    \Eref{eq:th-es-prediction-count-12}.
-}
-\mypareq{eq:th-es-prediction-count-22}{%
-    $\Vsize{origs} = 1 = \Oc{}$
-        \cuz{} \Eref{eq:th-es-prediction-count-20}.
-}
-This theorem follows immediately
-from \Eref{eq:th-es-prediction-count-22}
-and
-the ``ES subset count'' theorem \Thref{th:es-subset-count}.
+\begin{theorem}[ES predictions count]
+\label{th:es-prediction-count}
+The count of valid predictions in an Earley set is
+at most $\size{\Rules{\Vint{g}}} = \Oc{}$.
+\end{theorem}
+
+\begin{proof}
+This proof follows immediately from
+the Prediction Rule Non-duplication Theorem
+\Thref{th:prediction-rule-non-duplication}.
 \myqed
 \end{proof}
 
