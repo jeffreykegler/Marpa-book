@@ -44,6 +44,8 @@
 \usepackage{varioref}
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
+\usepackage{varioref}
+
 \usepackage{ragged2e}
 \usepackage{placeins}
 \usepackage{thmtools}
@@ -10283,160 +10285,119 @@ of Earley set 0 by \Earley{}.
 \begin{algorithmic}[1]
 \Procedure{Predict1}{\Veim{prediction}}
 \If{$\VVelement{dotZeroUsed}{\ID{\Rule{\var{prediction}}}} = \var{true}$}
-\label{line:marpa-predict1-2}
+\label{line:predict1-2}
   \State return
-\label{line:marpa-predict1-3}
+\label{line:predict1-3}
 \EndIf
 \State $\LinkPairs{\var{prediction}} = \set{}$
-\label{line:marpa-predict1-4}
+\label{line:predict1-4}
 \State Add \var{prediction} to \Velement{S}{\Current{\var{prediction}}}
-\label{line:marpa-predict1-5}
+\label{line:predict1-5}
 \State $\VVelement{dotZeroUsed}{\ID{\var{\Rule{\var{prediction}}}}} \gets \var{true}$
-\label{line:marpa-predict1-6}
+\label{line:predict1-6}
 \EndProcedure
 \end{algorithmic}
 \end{algorithm}
 
 \FloatBarrier
 
-\begin{theorem}[\var{Predict1} Invocations]
-\label{th:predict1-invocs}
-\Aref{alg:predict1},
-\begin{enumerate}
-\item \label{enum:th-predict1-invocs-04}
-Lines \enRange{\ref{line:marpa-predict1-2}}{\ref{line:marpa-predict1-3}}
-of \var{Predict1}
-are invoked once.
-\item \label{enum:th-predict1-invocs-05}
-Lines
-\enRange{\ref{line:marpa-predict1-3}}{\ref{line:marpa-predict1-6}}
-of \var{Predict1}
-are invoked once per add, and at most once.
-\item \label{enum:th-predict1-invocs-06}
-For every line of \var{Predict1},
-the number of invocations per call is \Oc{}.
-\end{enumerate}
-\end{theorem}
+\begin{table}[H]
+\caption{
+    \label{tab:predict1-time}
+    \op{Predict1} time per line invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Time&Justification
+\\ \hline
+    \ref{line:predict1-2}&\Oc{}&
+        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+\\ \hline
+    \ref{line:predict1-3}&\Oc{}&
+\\ \hline
+    \ref{line:predict1-4}&\Oc{}&
+\\ \hline
+    \ref{line:predict1-5}&\Oc{}&
+        \type{ES} Add Theorem \Thref{th:es-add}.
+\\ \hline
+    \ref{line:predict1-6}&\Oc{}&
+        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:predict1}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
 
-\begin{proof}
-We have
-\ref{enum:th-predict1-invocs-04}
-and
-\ref{enum:th-predict1-invocs-05}
-of \Thref{th:predict1-invocs}
-directly from \Aref{alg:predict1}.
-\ref{enum:th-predict1-invocs-06}
-of \Thref{th:predict1-invocs}
-follows from
-\ref{enum:th-predict1-invocs-04}
-and
-\ref{enum:th-predict1-invocs-05}
-of \Thref{th:predict1-invocs}.
-\myqed
-\end{proof}
-
-\begin{equation}
-\label{eq:def-predict1-time-charge}
-\myparbox{%
-  Time in \proc{Predict1} is charged to the
-  caller
-  \cuz{} AF complexity analysis.}
-\end{equation}
+\FloatBarrier
 
 \begin{theorem}[\proc{Predict1} Time]
 \label{th:predict1-time}
-The time of \var{Predict1}
-is \Oc{}, charged to the caller.
+  The time incurred by \proc{Predict1} may be ignored.
 \end{theorem}
 
 \begin{proof}
-All lines of \proc{Predict1} take \Oc{} time.
-For the justification in the case of lines
-\ref{line:marpa-predict1-2} and
-\ref{line:marpa-predict1-6},
-see
-\Thref{th:rule-id-complexity} and
-\Thref{th:dotzeroused-bitmap}.
-For the justification of line
-\ref{line:marpa-predict1-5},
-see \Thref{th:es-add}.
-For other lines, the time complexity follows
-directly from \Aref{alg:predict1}.
-
-Total time complexity is the sum over all lines of \proc{Predict1} of
-time complexity times the number of invocations, or
-\begin{equation}
-\label{eq:th-predict1-time}
-\sum_{\var{line}=\ref{line:marpa-predict1-2}}
-^{\ref{line:marpa-predict1-6}} \Oc{} \times \Oc{}
-= \Oc{}.
-\end{equation}
-Per \Eref{eq:def-predict1-time-charge},
-the \Oc{} time of \Eref{eq:th-predict1-time}
-is charged
-to the caller.
+From \AFref{alg:predict1} it is evident that each of its 6 lines
+is invoked at most once.
+From the Time per Line Invocation Table \Tbref{tab:predict1-time},
+we see that each line incurs at most \Oc{} time.
+The time incurred by each call of \myfn{Predict1}{} is therefore
+$6\times\Oc{} = \Oc{}$.
+By the Procedure Overhead Time Discard Theorem
+\Thref{th:procedure-overhead-discard},
+\Oc{} time per procedure call may be ignored.
 \myqed
 \end{proof}
 
-\begin{equation}
-\label{eq:def-predict1-space-charge}
-\myparbox{%
-  Space in \var{Predict1} is charged to the
-  prediction it adds
-  \cuz{} AF complexity analysis.}
-\end{equation}
+\FloatBarrier
 
+\begin{table}[H]
+\caption{
+    \label{tab:predict1-space}
+    \op{Predict1} space per line invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Space&Justification
+\\ \hline
+    \ref{line:predict1-2}&&
+        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+\\ \hline
+    \ref{line:predict1-3}&&
+\\ \hline
+    \ref{line:predict1-4}&&
+\\ \hline
+    \ref{line:predict1-5}&\Oc{}&
+        \type{ES} Add Theorem \Thref{th:es-add}.
+\\ \hline
+    \ref{line:predict1-6}&&
+        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:predict1}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 \begin{theorem}[\var{Predict1} Space]
 \label{th:predict1-space}
-Space for \var{Predict1} is
-\Oc{} charged to the prediction it adds.
+If \var{zeroDotUsed} is cleared before any invocation of
+\myfn{Predict1}{\Veim{prediction}}
+for \VVelement{S}{\Current{\var{prediction}}},
+then the space incurred by \myfn{Predict1}{\var{prediction}}
+may be charged as \Oc{} space to the \type{ES}
+\VVelement{S}{\Current{\var{prediction}}}.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-predict1-space-10}
-\myparbox{%
-  All lines of \proc{Predict1},
-  other than
-  \ref{line:marpa-predict1-5},
-  consume zero space
-  \cuz{}
-  \Thref{th:rule-id-complexity},
-  \Thref{th:dotzeroused-bitmap},
-  \Aref{alg:predict1}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict1-space-15}
-\myparbox{%
-  Line \ref{line:marpa-predict1-5}
-  consumes \Oc{} space
-  \cuz{} \type{ES} Add Theorem \Thref{th:es-add}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict1-space-20}
-\myparbox{%
-  Line \ref{line:marpa-predict1-5}
-  is invoked only when a prediction is added \cuz{}
-  \Eref{enum:th-predict1-invocs-05} of \Thref{th:predict1-invocs}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predict1-space-25}
-\myparbox{%
-  \proc{Predict1} consumes \Oc{} space for each prediction added
-  \cuz{}
-  \Eref{eq:th-predict1-space-10},
-  \Eref{eq:th-predict1-space-15},
-  \Eref{eq:th-predict1-space-20}.}
-\end{equation}
-\begin{equation}
-\myparbox{%
-  Space for \proc{Predict1} is \Oc{} space
-  per prediction added,
-  which is charged to the prediction that it adds
-  \cuz{} \Eref{eq:def-predict1-space-charge},
-    \Eref{eq:th-predict1-space-25}.
-  \quad \myqed}
-\end{equation}
+All space incurred by 
+\myfn{Predict1}{\Veim{prediction}}
+is incurred by the invocation of line
+\ref{line:predict1-5}.
+\todo{Finish this proof}.
 \end{proof}
 
 \FloatBarrier
@@ -10446,12 +10407,12 @@ Space for \var{Predict1} is
 \label{alg:predicter-op}
 \begin{algorithmic}[1]
 \Procedure{Predicter}{\Ves{es}}
-\label{line:marpa-predicter-00}
+\label{line:predicter-00}
 \State Allocate \var{dotZeroUsed}
    \Comment \tightMath{\var{s}=\Oc}
-\label{line:marpa-predicter-05}
+\label{line:predicter-05}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
-\label{line:marpa-predicter-10}
+\label{line:predicter-10}
 \Statex \hspace\algorithmicindent
     $\triangleright$ \rawparcomment[4.3in]{Loop over every \Veim{x} in \Ves{es},
     including those that \var{Predict1} adds while the loop
@@ -10459,16 +10420,16 @@ Space for \var{Predict1} is
     }
 \For{$\Veim{x} \in \Ves{es}$}
        \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
-\label{line:marpa-predicter-12}
+\label{line:predicter-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
-  \label{line:marpa-predicter-14}
+  \label{line:predicter-14}
   \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} } @ \Current{\var{es}}$
-      \label{line:marpa-predicter-16}
+      \label{line:predicter-16}
        \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State \Call{Predict1}{\var{pred}}
        \Comment \tightMath{\text{Ind};\var{x}=\order{\Current{\var{es}}}}
-    \label{line:marpa-predicter-18}
+    \label{line:predicter-18}
   \EndFor
 \EndFor
 \EndProcedure
@@ -10486,18 +10447,18 @@ Consider \proc[\Ves{es}]{Predicter}.
   There are \Oc{} invocations per Earley set
   \begin{itemize}
     \item for each of lines
-      \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}; and
+      \enRefs{line:predicter-05}{line:predicter-10}; and
     \item for the final, test-failure, invocation of
-      line \ref{line:marpa-predicter-12}.
+      line \ref{line:predicter-12}.
   \end{itemize}
 \item
   \label{enum:th-predicter-invocations-20}
   There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
   \begin{itemize}
     \item for the non-final, successful, invocations of
-      line \ref{line:marpa-predicter-12}; and
+      line \ref{line:predicter-12}; and
     \item for each of lines
-      \enRange{\ref{line:marpa-predicter-14}}{\ref{line:marpa-predicter-18}}.
+      \enRange{\ref{line:predicter-14}}{\ref{line:predicter-18}}.
   \end{itemize}
 \end{enumerate}
 \end{theorem}
@@ -10505,18 +10466,18 @@ Consider \proc[\Ves{es}]{Predicter}.
 \begin{proof}
 \begin{equation}
 \label{eq:th-predicter-invocations-10}
-\Invocs{\ref{line:marpa-predicter-05}} = \Oc{} \because
+\Invocs{\ref{line:predicter-05}} = \Oc{} \because
    \Aref{alg:predicter-op}, \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-invocations-12}
-\Invocs{\ref{line:marpa-predicter-10}} = \Oc{} \because
+\Invocs{\ref{line:predicter-10}} = \Oc{} \because
     \Eref{eq:th-predicter-invocations-10},
     \text{sequential execution}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-invocations-16}
-  \Invocs{\text{loop } \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18}} = \Oc{}
+  \Invocs{\text{loop } \enRefs{line:predicter-12}{line:predicter-18}} = \Oc{}
     \because
     \Eref{eq:th-predicter-invocations-12},
     \text{sequential execution}.
@@ -10525,7 +10486,7 @@ Consider \proc[\Ves{es}]{Predicter}.
 \label{eq:th-predicter-invocations-16-10}
 \myparbox{%
    There is exactly one final, test-failure invocation of
-    line \ref{line:marpa-predicter-12} \cuz{}
+    line \ref{line:predicter-12} \cuz{}
     \Obref{def:loop-invocation}.
     \Eref{eq:th-predicter-invocations-16},
     \text{sequential execution}.}
@@ -10534,7 +10495,7 @@ Consider \proc[\Ves{es}]{Predicter}.
 \label{eq:th-predicter-invocations-16-20}
 \myparbox{%
    There is exactly one successful invocation of
-    line \ref{line:marpa-predicter-12} for each
+    line \ref{line:predicter-12} for each
     $\Veim{x} \in \Ves{es}$
     \cuz{} \Obref{def:loop-invocation}.}
 \end{equation}
@@ -10545,12 +10506,12 @@ and $\Invocs{\var{ln}}/\Veim{x}$
 to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predicter-invocations-18}
-  \Passes{\text{loop } \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18}} / \Veim{x} = \Oc
+  \Passes{\text{loop } \enRefs{line:predicter-12}{line:predicter-18}} / \Veim{x} = \Oc
     \because \Eref{eq:th-predicter-invocations-16-20}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-invocations-24}
-  \Invocs{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}} / \Veim{x}
+  \Invocs{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}} / \Veim{x}
     = \Oc
     \because
     \Eref{eq:th-predicter-invocations-18},
@@ -10567,10 +10528,10 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predicter-invocations-28}
   \begin{gathered}
-      \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
+      \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}
           / \Veim{x}
     \\
-      = \Invocs{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
+      = \Invocs{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}
           / \Veim{x}
       \times
       \size{\set{\Vrule{r} : \Postdot{\var{x}}}}
@@ -10581,7 +10542,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predicter-invocations-29}
   \begin{gathered}
-  \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}} / \Veim{x}
+  \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}} / \Veim{x}
       = \Oc{} \times \Oc = \Oc{} \\
     \because
     \Eref{eq:th-predicter-invocations-24},
@@ -10592,8 +10553,8 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predicter-invocations-30}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predicter-14}}/\Veim{x} =
-      \Passes{\text{loop } \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}/\Veim{x}
+    \Invocs{\ref{line:predicter-14}}/\Veim{x} =
+      \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}/\Veim{x}
       +1
     \\
     \because
@@ -10603,7 +10564,7 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \begin{equation}
 \label{eq:th-predicter-invocations-32}
   \begin{gathered}
-    \Invocs{\ref{line:marpa-predicter-14}}/\Veim{x} =
+    \Invocs{\ref{line:predicter-14}}/\Veim{x} =
       \Oc+1 = \Oc{}
     \\
     \because
@@ -10613,13 +10574,13 @@ to say ``invocations of line \var{ln} per \Veim{x}''.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-invocations-34}
-    \Invocs{\ref{line:marpa-predicter-16}}/\Veim{x} = \Oc{}
+    \Invocs{\ref{line:predicter-16}}/\Veim{x} = \Oc{}
     \because \Eref{eq:th-predicter-invocations-28},
     \text{ sequential execution.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-invocations-36}
-    \Invocs{\ref{line:marpa-predicter-18}}/\Veim{x} = \Oc{}
+    \Invocs{\ref{line:predicter-18}}/\Veim{x} = \Oc{}
     \because \Eref{eq:th-predicter-invocations-34},
     \text{ sequential execution.}
 \end{equation}
@@ -10669,21 +10630,21 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predicter-time-12}
 \myparbox{%
   The loop variable for
-  loop \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18} is in scope
+  loop \enRefs{line:predicter-12}{line:predicter-18} is in scope
   for all invocations of
-  lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18};
+  lines \enRefs{line:predicter-14}{line:predicter-18};
   for all but the final test invocation of
-  line \ref{line:marpa-predicter-12};
+  line \ref{line:predicter-12};
   and only for those invocations.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-14}
-\Time{\ref{line:marpa-predicter-05}} = \Oc{}
+\Time{\ref{line:predicter-05}} = \Oc{}
   \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-16}
-\Time{\ref{line:marpa-predicter-10}} = \Oc{}
+\Time{\ref{line:predicter-10}} = \Oc{}
   \because
   \Thref{th:rule-id-complexity},
   \Thref{th:dotzeroused-bitmap},
@@ -10691,39 +10652,39 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-18}
-\Time{\ref{line:marpa-predicter-12}} = \Oc{}
+\Time{\ref{line:predicter-12}} = \Oc{}
    \because \type{ES} Add Theorem \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-20}
-\Time{\ref{line:marpa-predicter-14}} = \Oc{}
+\Time{\ref{line:predicter-14}} = \Oc{}
   \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-22}
-\Time{\ref{line:marpa-predicter-16}} = \Oc{}
-  \because \text{ direct from line \ref{line:marpa-predicter-16}}.
+\Time{\ref{line:predicter-16}} = \Oc{}
+  \because \text{ direct from line \ref{line:predicter-16}}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-24}
-\Time{\ref{line:marpa-predicter-18}} = \Oc{}
+\Time{\ref{line:predicter-18}} = \Oc{}
   \because \Thref{th:predicter-time}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-26}
 \myparbox{%
-   Total exclusive time for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
+   Total exclusive time for lines \enRefs{line:predicter-05}{line:predicter-10}
    is the number of invocations of each multiplied by the time for each invocation.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-time-28}
 \begin{gathered}
    \myparbox{%
-     Total exclusive time for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
+     Total exclusive time for lines \enRefs{line:predicter-05}{line:predicter-10}
    is}
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}}
+       \var{line}\in\set{\enRefs{line:predicter-05}{line:predicter-10}}
      }}}
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
@@ -10739,7 +10700,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predicter-time-30}
 \myparbox{%
    Total exclusive time for the final invocation of
-   line \ref{line:marpa-predicter-12} is \Oc{}
+   line \ref{line:predicter-12} is \Oc{}
    \cuz{} \Eref{eq:th-predicter-time-18}.
 }
 \end{equation}
@@ -10761,7 +10722,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \myparbox{%
    Total exclusive time
    per \Veim{x}
-   for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}
+   for lines \enRefs{line:predicter-14}{line:predicter-18}
    is the number of invocations
    multiplied by the time for each invocation.}
 \end{equation}
@@ -10771,11 +10732,11 @@ and \Oc{} charged to \VVelement{S}{j} itself.
    \myparbox{%
      Total exclusive time
      per \Veim{x}
-     for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18} is
+     for lines \enRefs{line:predicter-14}{line:predicter-18} is
      }
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
+       \var{line}\in\set{\enRefs{line:predicter-14}{line:predicter-18}}
      }}}
      \quad \Oc{} \times \Oc{} = \Oc{}
    \\
@@ -10792,7 +10753,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predicter-time-38}
 \myparbox{%
    Total exclusive time for
-   line \ref{line:marpa-predicter-12}
+   line \ref{line:predicter-12}
    for each \Veim{x}
    is \Oc{}
    \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
@@ -10815,7 +10776,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \label{eq:th-predicter-time-42}
 \myparbox{%
   The only indirect time is \Oc{} at
-       line \ref{line:marpa-predicter-18}
+       line \ref{line:predicter-18}
       \cuz{}
       \Obref{obs:direct-vs-indirect},
       \Aref{alg:predicter-op}, \Thref{th:predict1-time}.}
@@ -10868,66 +10829,66 @@ and \Oc{} charged to each \type{EIM} added.
 \label{eq:th-predicter-space-12}
 \myparbox{%
   The loop variable for
-  loop \enRefs{line:marpa-predicter-12}{line:marpa-predicter-18} is in scope
+  loop \enRefs{line:predicter-12}{line:predicter-18} is in scope
   for all invocations of
-  lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18};
+  lines \enRefs{line:predicter-14}{line:predicter-18};
   for all but the final test invocation of
-  line \ref{line:marpa-predicter-12};
+  line \ref{line:predicter-12};
   and only for those invocations.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-14}
-\Space{\ref{line:marpa-predicter-05}} = \Oc
+\Space{\ref{line:predicter-05}} = \Oc
   \because \Thref{th:dotzeroused-bitmap}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-16}
-\Space{\ref{line:marpa-predicter-10}} = 0
+\Space{\ref{line:predicter-10}} = 0
   \because
   \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-18}
-\Space{\ref{line:marpa-predicter-12}} = 0
+\Space{\ref{line:predicter-12}} = 0
    \because \type{ES} Add Theorem \Thref{th:es-add}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-20}
-\Space{\ref{line:marpa-predicter-14}} = 0
+\Space{\ref{line:predicter-14}} = 0
   \because \Thref{th:rule-id-complexity}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-22}
-\Space{\ref{line:marpa-predicter-16}} = 0
-  \because \text{ direct from line \ref{line:marpa-predicter-16}}.
+\Space{\ref{line:predicter-16}} = 0
+  \because \text{ direct from line \ref{line:predicter-16}}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-24}
-\Space{\ref{line:marpa-predicter-18}} = 0
+\Space{\ref{line:predicter-18}} = 0
   \because \Thref{th:predict1-space}.
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-26}
 \myparbox{%
-   Total exclusive space for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
+   Total exclusive space for lines \enRefs{line:predicter-05}{line:predicter-10}
    is the number of invocations of each multiplied by the space for each invocation.}
 \end{equation}
 \begin{equation}
 \label{eq:th-predicter-space-28}
 \begin{gathered}
    \myparbox{%
-     Total exclusive space for lines \enRefs{line:marpa-predicter-05}{line:marpa-predicter-10}
+     Total exclusive space for lines \enRefs{line:predicter-05}{line:predicter-10}
    is}
    \\
      \left(
          \smashoperator[r]{\sum_{\textstyle{
-           \var{line}\in\set{\ref{line:marpa-predicter-05}}
+           \var{line}\in\set{\ref{line:predicter-05}}
          }}}
          \;\; \Oc \times \Oc
      \right)
      + \left(
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predicter-10}{line:marpa-predicter-18}}
+       \var{line}\in\set{\enRefs{line:predicter-10}{line:predicter-18}}
      }}}
      \;\; 0 \times \Oc
      \right)
@@ -10945,7 +10906,7 @@ and \Oc{} charged to each \type{EIM} added.
 \label{eq:th-predicter-space-30}
 \myparbox{%
    Total exclusive space for the final invocation of
-   line \ref{line:marpa-predicter-12} is 0
+   line \ref{line:predicter-12} is 0
    \cuz{} \Eref{eq:th-predicter-space-18}.
 }
 \end{equation}
@@ -10967,7 +10928,7 @@ and \Oc{} charged to each \type{EIM} added.
 \myparbox{%
    Total exclusive space
    per \Veim{x}
-   for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}
+   for lines \enRefs{line:predicter-14}{line:predicter-18}
    is the number of invocations
    multiplied by the space for each invocation.}
 \end{equation}
@@ -10977,11 +10938,11 @@ and \Oc{} charged to each \type{EIM} added.
    \myparbox{%
      Total exclusive space
      per \Veim{x}
-     for lines \enRefs{line:marpa-predicter-14}{line:marpa-predicter-18} is
+     for lines \enRefs{line:predicter-14}{line:predicter-18} is
      }
    \\
      \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:marpa-predicter-14}{line:marpa-predicter-18}}
+       \var{line}\in\set{\enRefs{line:predicter-14}{line:predicter-18}}
      }}}
      \;\; \Oc \times 0 = 0
    \\
@@ -10998,7 +10959,7 @@ and \Oc{} charged to each \type{EIM} added.
 \label{eq:th-predicter-space-38}
 \myparbox{%
    Total exclusive space for
-   line \ref{line:marpa-predicter-12}
+   line \ref{line:predicter-12}
    for each \Veim{x}
    is 0
    \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
@@ -11021,7 +10982,7 @@ and \Oc{} charged to each \type{EIM} added.
 \label{eq:th-predicter-space-42}
 \myparbox{%
   The only indirect space is \Oc{} at
-       line \ref{line:marpa-predicter-18}
+       line \ref{line:predicter-18}
       \cuz{}
       \Obref{obs:direct-vs-indirect},
       \Aref{alg:predicter-op}, \Thref{th:predict1-space}.}
@@ -11071,14 +11032,14 @@ Conceptually,
 predictions have predecessors, but no causes,
 and the link pair generated for
 \Veim{prediction} in
-line \ref{line:marpa-predict1-4} of \proc{Predict1}~\Aref{alg:predict1}
+line \ref{line:predict1-4} of \proc{Predict1}~\Aref{alg:predict1}
 would be
 $\tuple{\Veim{x}, \Lambda}$,
 where \Veim{x}
-is the variable of line \ref{line:marpa-predicter-16}
+is the variable of line \ref{line:predicter-16}
 of \proc{Predicter}~\Aref{alg:predicter-op},
 which is not actually in scope at
-line \ref{line:marpa-predict1-4} of \proc{Predict1}.
+line \ref{line:predict1-4} of \proc{Predict1}.
 
 If link pairs were generated,
 for the arbitrary prediction
@@ -17365,21 +17326,26 @@ J.~M. I.~M. Leo.
 } % RaggedRight
 
 \clearpage
+\phantomsection
 \listofalgorithms
 
 \clearpage
+\phantomsection
 \listoftheorems[ignoreall,
 show={theorem,observation,definition}]
 
 \clearpage
+\phantomsection
 \listoftables
 
 \ifdraft{
     \clearpage
+    \phantomsection
     \listoftodos
 }{}
 
 \clearpage
+\phantomsection
 \tableofcontents
 
 \end{document}
