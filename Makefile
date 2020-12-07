@@ -25,7 +25,8 @@ travis:
 	pdflatex recce.ltx
 
 clean:
-	rm recce.out recce.aux recce.toc recce.tdo recce.loe
+	rm recce.out recce.aux recce.toc recce.tdo recce.loe \
+	    recce.loa recce.lot recce.pdf
 
 recce.pdf: recce.ltx
 	pdflatex $?
