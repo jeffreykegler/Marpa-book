@@ -112,7 +112,7 @@
 
 % Shorten the distane between equations.  This is not
 % to save space for its own sake, but because
-% we often equations into series, and these
+% we often group equations into series, and these
 % do not look good with too much space.
 \setlength{\abovedisplayskip}{3pt}
 \setlength{\belowdisplayskip}{3pt}
@@ -10250,7 +10250,6 @@ so that there will always be an \type{EIM} to whose
 \State $\LinkPairs{\Veim{start}} = \set{}$
 \label{line:initializer-op-20}
 \State Add \Veim{start} to \es{(0)}
-  \Comment \tightMath{\var{s}=\Oc}
 \label{line:initializer-op-30}
 \State $\VVelement{dotZeroUsed}{\ID{\Vrule{accept}}} \gets \var{true}$
 \label{line:initializer-op-60}
@@ -10424,21 +10423,37 @@ may be charged as \Oc{} space to the \type{ES}
 \end{theorem}
 
 \begin{proof}
-From \AFref{alg:predict1},
-it is clear that all space incurred by
-\myfn{Predict1}{\Veim{prediction}}
-is incurred by the invocation of line
-\ref{line:predict1-5}.
-Noting the assumption that \var{dotZeroUsed} is consistent
-for \VVelement{S}{\Current{\var{prediction}}},
-we see from
-\AFref{alg:predict1},
-the definition of \var{dotZeroUsed} consistency \Dfref{def:dotZeroUsed-consistency},
-and the Prediction Rule Non-Duplication Theorem \Thref{th:prediction-rule-non-duplication},
-that during the course of any run of \Marpa{},
-line \ref{line:predict1-5} of \AFref{alg:predict1},
-is invoked at most once per rule-\type{ES} pair.
-\todo{Finish this proof}
+\mypareq{eq:th-predict1-space-100}{%
+    The space incurred by
+    \myfn{Predict1}{\Veim{prediction}}
+    may be accounted for as
+    \Oc{} space incurred by each invocation of line
+    \ref{line:predict1-5}
+    \cuz{} \Tbref{tab:predict1-space}.
+}
+\mypareq{eq:th-predict1-space-110}{%
+    During the course of any run of \Marpa{},
+    line \ref{line:predict1-5} of \AFref{alg:predict1},
+    is invoked at most once per rule-\type{ES} pair
+    \bcuz{} \AFref{alg:predict1},
+    \longDfref{\var{dotZeroUsed} consistency}{def:dotZeroUsed-consistency},
+    \longThref{Prediction Rule Non-Duplication}{th:prediction-rule-non-duplication}.
+}
+\mypareq{eq:th-predict1-space-120}{%
+    During the course of any run of \Marpa{},
+    line \ref{line:predict1-5} of \AFref{alg:predict1}
+    is invoked at most \size{\Rules{\Vint{g}}} times for each
+    \type{ES}
+    \bcuz{} \Eref{eq:th-predict1-space-110}.
+}
+\mypareq{eq:th-predict1-space-130}{%
+    During the course of any run of \Marpa{},
+    calls of \myfn{Predict1}{} incur at most
+    $\size{\Rules{\Vint{g}}}\times\Oc{}=\Oc{}$ space for each \type{ES}
+    \cuz{} \Eref{eq:th-predict1-space-100},
+        \Eref{eq:th-predict1-space-120}.
+}
+The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 \myqed
 \end{proof}
 
@@ -10458,16 +10473,12 @@ is invoked at most once per rule-\type{ES} pair.
     is running.
     }
 \For{$\Veim{x} \in \Ves{es}$}
-       \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
 \label{line:predicter-12}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
   \label{line:predicter-14}
-  \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} } @ \Current{\var{es}}$
       \label{line:predicter-16}
-       \Statex \Comment \tightMath{\var{x}=\order{\Current{\var{es}}}}
     \State \Call{Predict1}{\var{pred}}
-       \Comment \tightMath{\text{Ind};\var{x}=\order{\Current{\var{es}}}}
     \label{line:predicter-18}
   \EndFor
 \EndFor
