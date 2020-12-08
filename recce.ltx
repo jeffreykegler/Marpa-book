@@ -9885,6 +9885,20 @@ and therefore its space and time demands are constant.
 
 \FloatBarrier
 
+\begin{algorithm}[H]
+\caption{\op{ES-Setup}}
+\label{alg:es-setup-op}
+\begin{algorithmic}[1]
+\Procedure{ES-Setup}{}
+\State $\forall \; \Vrule{r} \in \Rules{\Vint{g}} : \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{false}$
+\label{line:es-setup-2}
+\EndProcedure
+\end{algorithmic}
+\end{algorithm}
+
+\FloatBarrier
+
+
 \section{Bookkeeper op}
 \label{sec:bookkeeper}
 
@@ -10234,10 +10248,10 @@ so that there will always be an \type{EIM} to whose
 \myqed
 \end{proof}
 
-\FloatBarrier
-
 \section{Initializer op}
 \label{sec:initializer}
+
+\FloatBarrier
 
 \begin{algorithm}[H]
 \caption{\op{Initializer}}
@@ -10464,22 +10478,20 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 \label{alg:predicter-op}
 \begin{algorithmic}[1]
 \Procedure{Predicter}{\Ves{es}}
-\label{line:predicter-00}
-\State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
-\label{line:predicter-10}
+\label{line:predicter-op-1}
 \Statex \hspace\algorithmicindent
     $\triangleright$ \rawparcomment[4.3in]{Loop over every \Veim{x} in \Ves{es},
     including those that \var{Predict1} adds while the loop
     is running.
     }
 \For{$\Veim{x} \in \Ves{es}$}
-\label{line:predicter-12}
+\label{line:predicter-op-2}
   \For{$\Vrule{r} \in \set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}$}
-  \label{line:predicter-14}
-    \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} } @ \Current{\var{es}}$
-      \label{line:predicter-16}
+  \label{line:predicter-op-3}
+    \State $\Veim{pred} \gets \tuple{ \dr{\tuple{\Vrule{r}, 0}}, \Current{\var{es}} , \Current{\var{es}}}$
+      \label{line:predicter-op-4}
     \State \Call{Predict1}{\var{pred}}
-    \label{line:predicter-18}
+    \label{line:predicter-op-5}
   \EndFor
 \EndFor
 \EndProcedure
@@ -10488,42 +10500,13 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 
 \FloatBarrier
 
-\begin{theorem}[\proc{Predicter} Invocations]
-\label{th:predicter-invocations}
-Consider \proc[\Ves{es}]{Predicter}.
-\begin{enumerate}
-\item
-  \label{enum:th-predicter-invocations-10}
-  There are \Oc{} invocations per Earley set
-  \begin{itemize}
-    \item for line \ref{line:predicter-10}; and
-    \item for the final, test-failure, invocation of
-      line \ref{line:predicter-12}.
-  \end{itemize}
-\item
-  \label{enum:th-predicter-invocations-20}
-  There are \Oc{} invocations for each $\Veim{x} \in \Ves{es}$
-  \begin{itemize}
-    \item for the non-final, successful, invocations of
-      line \ref{line:predicter-12}; and
-    \item for each of lines
-      \enRange{\ref{line:predicter-14}}{\ref{line:predicter-18}}.
-  \end{itemize}
-\end{enumerate}
-\end{theorem}
-
-\begin{proof}
-\todo{Redo this proof}
-\myqed
-\end{proof}
-
 \begin{theorem}[\var{Predicter} time complexity]
 \label{th:predicter-time}
-The inclusive time of $\var{Predicter}(\VVelement{S}{j})$
-\Aref{alg:predicter-op}
-is
-\Oc{} charged to each \type{EIM} of \VVelement{S}{j},
-and \Oc{} charged to \VVelement{S}{j} itself.
+The incurred by each call of \op{Predicter}
+can be accounted for by charging
+\Oc{} time to each \type{EIM} of \VVelement{S}{j},
+where \VVelement{S}{j} is the argument of the
+\op{Predicter} call.
 \end{theorem}
 
 \begin{proof}
@@ -10533,10 +10516,7 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 
 \begin{theorem}[\var{Predicter} Space Complexity]
 \label{th:predicter-space}
-The space consumed by
-\proc[\VVelement{S}{j}]{Predicter}
-is \Oc{} charged to \VVelement{S}{j}
-and \Oc{} charged to each \type{EIM} added.
+Calls of \op{Predicter} incur no space.
 \end{theorem}
 
 \begin{proof}
@@ -10567,7 +10547,7 @@ line \ref{line:predict1-4} of \proc{Predict1}~\Aref{alg:predict1}
 would be
 $\tuple{\Veim{x}, \Lambda}$,
 where \Veim{x}
-is the variable of line \ref{line:predicter-16}
+is the variable of line \ref{line:predicter-op-2}
 of \proc{Predicter}~\Aref{alg:predicter-op},
 which is not actually in scope at
 line \ref{line:predict1-4} of \proc{Predict1}.
