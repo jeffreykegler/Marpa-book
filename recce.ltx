@@ -424,11 +424,11 @@
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
 
 % These are for putting paragraphs in cells of tables.
-\newcommand{\callboxc}[2]{%
-    \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}
+\newcommand{\cellboxc}[2]{%
+    \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}%
 }
-\newcommand{\callboxr}[2]{%
-    \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}
+\newcommand{\cellboxr}[2]{%
+    \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}%
 }
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
@@ -10500,6 +10500,63 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 
 \FloatBarrier
 
+\begin{table}[H]
+\caption{
+    \label{tab:predicter-invocations}
+    Line invocations per \op{Predicter} call
+}
+\vspace{1ex}
+\begin{tabular}{|r|c|p{2in}|}
+\hline
+\multicolumn{1}{|c|}{Line}
+    &\multicolumn{1}{c|}{Invocations}
+    &\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:predicter-op-2}&$1+\var{eim}$&\cellboxr{2in}{%
+           Line \ref{line:predicter-op-1} Seq;
+           \Obref{def:loop-invocation}.}
+\\ \hline
+    \ref{line:predicter-op-3}
+    &
+        \cellboxc{1.5in}{%
+        \rule[-.25in]{0em}{.6in}$
+        1+\left(
+            \begin{gathered}
+            \var{eim} \; \times
+            \\ \size{\Rules{\Vint{g}}}
+            \end{gathered}
+        \right)
+        $}
+    &\cellboxr{2in}{%
+           Line \ref{line:predicter-op-2} Seq;
+           \Obref{def:loop-invocation}.}
+\\ \hline
+    \ref{line:predicter-op-4}
+    &\cellboxc{1.5in}{%
+        $\var{eim}\times\fixedsize{\Rules{\var{g}}}$}
+    &\cellboxr{2in}{%
+           Line \ref{line:predicter-op-3} Seq;
+           \Obref{def:loop-invocation}.}
+\\ \hline
+    \ref{line:predicter-op-5}
+    &\cellboxc{1.5in}{%
+        $\var{eim}\times\fixedsize{\Rules{\var{g}}}$%
+        }
+    &Line \ref{line:predicter-op-4} Seq.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+See \Aref{alg:predicter-op}.
+Lines are in order of deduction.
+\var{eim} is the number of \type{EIM}'s in 
+\VVelement{S}{j}.
+    }
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+
 \begin{theorem}[\var{Predicter} time complexity]
 \label{th:predicter-time}
 The incurred by each call of \op{Predicter}
@@ -10649,12 +10706,12 @@ operation of \Earley{}\cite{Earley1970}.
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
-    \callboxc{.3in}{Line}&
-    \callboxc{.9in}{Invocations per call}&
-    \callboxc{3.2in}{Justification}
+    \cellboxc{.3in}{Line}&
+    \cellboxc{.9in}{Invocations per call}&
+    \cellboxc{3.2in}{Justification}
 \\ \hline
     \ref{line:scanner-op-8}&1/\var{dup}&
-        \callboxr{3.2in}{This link duplicates an existing \type{EIM},
+        \cellboxr{3.2in}{This link duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
             of the main loop.}
 \\ \hline
@@ -10880,12 +10937,12 @@ the \op{Scanner} Time Worksheet
 Line&Space&Justification
 \\ \hline
     \ref{line:scanner-op-2}&0&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
            \myfn{Transitions}{} Complexity Theorem
            \Thref{th:transitions-read}.}
 \\ \hline
     \ref{line:scanner-op-3}&0&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.}
 \\ \hline
@@ -10896,23 +10953,23 @@ Line&Space&Justification
     \ref{line:scanner-op-6}&0&
 \\ \hline
     \ref{line:scanner-op-7}&0&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
     \ref{line:scanner-op-8}&\Oc{}&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
 \\ \hline
     \ref{line:scanner-op-9}&0&
 \\ \hline
     \ref{line:scanner-op-10}&0&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
     \ref{line:scanner-op-11}&0&
 \\ \hline
     \ref{line:scanner-op-12}&\Oc{}&
-       \callboxr{3.4in}{%
+       \cellboxr{3.4in}{%
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
