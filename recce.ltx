@@ -3981,30 +3981,34 @@ such $\Rule{\var{pred}} = \var{r}$.
 \end{theorem}
 
 \begin{proof}
-We assume for a reductio that an arbitrary \type{ES},
-call it \var{es},
-contains two distinct predictions,
-\Veim{pred1} and \Veim{pred2},
-such that
+The proof strategy is a reductio.
+We assume that two distinct predictions,
+\Veim{pred1} and \Veim{pred2}, are in the same \type{ES}
+and have the same rule:
 \begin{gather}
 \label{eq:th-prediction-rule-non-duplication-100}
 \Rule{\var{pred1}} = \Rule{\var{pred2}}
+\\ \label{eq:th-prediction-rule-non-duplication-110}
+\land\; \Current{\var{pred1}} = \Current{\var{pred2}} = \Current{\Ves{es}}
 \\ \label{eq:th-prediction-rule-non-duplication-120}
 \land\; \Veim{pred1} \ne \Veim{pred2}
 \\ \nonumber
-    \because \text{AF reductio.}
+    \because \text{AF reductio,
+        new arbitrary \Veim{pred1}, \Veim{pred2}, \Ves{es}.}
 \end{gather}
 \mypareq{eq:th-prediction-rule-non-duplication-140}{%
-   $\var{pred1} = \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}$
+   $\var{pred1} = \tuple{\tuple{\Rule{\var{pred1}},0},\Current{\var{es}},\Current{\var{es}}}$
    \linebreak \cuz{} \longDfref{\type{EIM}}{def:eim},
     \longDfref{prediction}{def:prediction},
-    \longThref{Prediction Locations}{th:predictions-locations}.
+    \longThref{Prediction Locations}{th:predictions-locations},
+    \Eref{eq:th-prediction-rule-non-duplication-110}.
 }
 \mypareq{eq:th-prediction-rule-non-duplication-150}{%
-   $\var{pred2} = \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}$
+   $\var{pred2} = \tuple{\tuple{\Rule{\var{pred2}},0},\Current{\var{es}},\Current{\var{es}}}$
    \linebreak \cuz{} \longDfref{\type{EIM}}{def:eim},
     \longDfref{prediction}{def:prediction},
-    \longThref{Prediction Locations}{th:predictions-locations}.
+    \longThref{Prediction Locations}{th:predictions-locations},
+    \Eref{eq:th-prediction-rule-non-duplication-110}.
 }
 \mypareq{eq:th-prediction-rule-non-duplication-160}{%
     $\var{pred1} = \var{pred2}$ \cuz{}
@@ -9655,6 +9659,22 @@ a part of the space for the grammar.
 \myqed
 \end{proof}
 
+\begin{definition}[\var{dotZeroUsed} consistency]
+\label{def:dotZeroUsed-consistency}
+We say that \var{dotZeroUsed} is \dfn{consistent for} \Ves{es}
+iff
+\[
+\forall\; \Veim{eim} \in \Ves{es} :
+\DR{\var{eim}} = \tuple{\Vrule{r},0} \iff \VVelement{dotZeroUsed}{r}.
+\]
+If \var{dotZeroUsed} is \dfn{consistent for} \VVelement{table}{j},
+where \Vet{table} is an Earley table whose identity is clear in
+context,
+we also say that
+\var{dotZeroUsed} is \dfn{consistent for} \var{j}.
+By default \Vet{table} is \var{S}.
+\end{definition}
+
 \section{\var{seen} PSL}
 \label{sec:seen-psl-complexity}
 
@@ -10323,7 +10343,7 @@ of Earley set 0 by \Earley{}.
 Line&Time&Justification
 \\ \hline
     \ref{line:predict1-2}&\Oc{}&
-        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
 \\ \hline
     \ref{line:predict1-3}&\Oc{}&
 \\ \hline
@@ -10333,7 +10353,7 @@ Line&Time&Justification
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
     \ref{line:predict1-6}&\Oc{}&
-        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:predict1}.
@@ -10374,7 +10394,7 @@ By the Procedure Overhead Time Discard Theorem
 Line&Space&Justification
 \\ \hline
     \ref{line:predict1-2}&&
-        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
 \\ \hline
     \ref{line:predict1-3}&&
 \\ \hline
@@ -10384,7 +10404,7 @@ Line&Space&Justification
         \type{ES} Add Theorem \Thref{th:es-add}.
 \\ \hline
     \ref{line:predict1-6}&&
-        \var{zeroDotUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:predict1}.
@@ -10396,20 +10416,30 @@ Line&Space&Justification
 \FloatBarrier
 \begin{theorem}[\var{Predict1} Space]
 \label{th:predict1-space}
-If \var{zeroDotUsed} is cleared before any invocation of
-\myfn{Predict1}{\Veim{prediction}}
-for \VVelement{S}{\Current{\var{prediction}}},
+If \var{dotZeroUsed} is consistent for
+\VVelement{S}{\Current{\var{prediction}}},
 then the space incurred by \myfn{Predict1}{\var{prediction}}
 may be charged as \Oc{} space to the \type{ES}
 \VVelement{S}{\Current{\var{prediction}}}.
 \end{theorem}
 
 \begin{proof}
-All space incurred by
+From \AFref{alg:predict1},
+it is clear that all space incurred by
 \myfn{Predict1}{\Veim{prediction}}
 is incurred by the invocation of line
 \ref{line:predict1-5}.
-\todo{Finish this proof}.
+Noting the assumption that \var{dotZeroUsed} is consistent
+for \VVelement{S}{\Current{\var{prediction}}},
+we see from
+\AFref{alg:predict1},
+the definition of \var{dotZeroUsed} consistency \Dfref{def:dotZeroUsed-consistency},
+and the Prediction Rule Non-Duplication Theorem \Thref{th:prediction-rule-non-duplication},
+that during the course of any run of \Marpa{},
+line \ref{line:predict1-5} of \AFref{alg:predict1},
+is invoked at most once per rule-\type{ES} pair.
+\todo{Finish this proof}
+\myqed
 \end{proof}
 
 \FloatBarrier
@@ -10420,9 +10450,6 @@ is incurred by the invocation of line
 \begin{algorithmic}[1]
 \Procedure{Predicter}{\Ves{es}}
 \label{line:predicter-00}
-\State Allocate \var{dotZeroUsed}
-   \Comment \tightMath{\var{s}=\Oc}
-\label{line:predicter-05}
 \State $\forall \; \Vrule{r}, \VVelement{dotZeroUsed}{\ID{\var{r}}} \gets \var{true}$
 \label{line:predicter-10}
 \Statex \hspace\algorithmicindent
@@ -10458,8 +10485,7 @@ Consider \proc[\Ves{es}]{Predicter}.
   \label{enum:th-predicter-invocations-10}
   There are \Oc{} invocations per Earley set
   \begin{itemize}
-    \item for each of lines
-      \enRefs{line:predicter-05}{line:predicter-10}; and
+    \item for line \ref{line:predicter-10}; and
     \item for the final, test-failure, invocation of
       line \ref{line:predicter-12}.
   \end{itemize}
@@ -10476,150 +10502,9 @@ Consider \proc[\Ves{es}]{Predicter}.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-predicter-invocations-10}
-\Invocs{\ref{line:predicter-05}} = \Oc{} \because
-   \Aref{alg:predicter-op}, \text{sequential execution}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-12}
-\Invocs{\ref{line:predicter-10}} = \Oc{} \because
-    \Eref{eq:th-predicter-invocations-10},
-    \text{sequential execution}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-16}
-  \Invocs{\text{loop } \enRefs{line:predicter-12}{line:predicter-18}} = \Oc{}
-    \because
-    \Eref{eq:th-predicter-invocations-12},
-    \text{sequential execution}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-16-10}
-\myparbox{%
-   There is exactly one final, test-failure invocation of
-    line \ref{line:predicter-12} \cuz{}
-    \Obref{def:loop-invocation}.
-    \Eref{eq:th-predicter-invocations-16},
-    \text{sequential execution}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-16-20}
-\myparbox{%
-   There is exactly one successful invocation of
-    line \ref{line:predicter-12} for each
-    $\Veim{x} \in \Ves{es}$
-    \cuz{} \Obref{def:loop-invocation}.}
-\end{equation}
-In the rest of this proof,
-we will write $\Passes{\var{lp}}/\Veim{x}$
-to say ``passes of loop \var{lp} per \Veim{x}'';
-and $\Invocs{\var{ln}}/\Veim{x}$
-to say ``invocations of line \var{ln} per \Veim{x}''.
-\begin{equation}
-\label{eq:th-predicter-invocations-18}
-  \Passes{\text{loop } \enRefs{line:predicter-12}{line:predicter-18}} / \Veim{x} = \Oc
-    \because \Eref{eq:th-predicter-invocations-16-20}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-24}
-  \Invocs{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}} / \Veim{x}
-    = \Oc
-    \because
-    \Eref{eq:th-predicter-invocations-18},
-    \text{sequential execution}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-26}
-\begin{gathered}
-  \size{\set{\Vrule{r} : \Postdot{\var{x}} = \LHS{\var{r}}}} = \Oc
-  \\
-  \because \text{ \Rules{\var{g}} is a constant depending on \Vint{g}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-28}
-  \begin{gathered}
-      \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}
-          / \Veim{x}
-    \\
-      = \Invocs{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}
-          / \Veim{x}
-      \times
-      \size{\set{\Vrule{r} : \Postdot{\var{x}}}}
-    \\
-      \because \Obref{def:loop-invocation}.
-  \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-29}
-  \begin{gathered}
-  \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}} / \Veim{x}
-      = \Oc{} \times \Oc = \Oc{} \\
-    \because
-    \Eref{eq:th-predicter-invocations-24},
-    \Eref{eq:th-predicter-invocations-26},
-    \Eref{eq:th-predicter-invocations-28}.
-  \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-30}
-  \begin{gathered}
-    \Invocs{\ref{line:predicter-14}}/\Veim{x} =
-      \Passes{\text{loop } \enRefs{line:predicter-14}{line:predicter-18}}/\Veim{x}
-      +1
-    \\
-    \because
-    \Obref{def:loop-invocation}.
-  \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-32}
-  \begin{gathered}
-    \Invocs{\ref{line:predicter-14}}/\Veim{x} =
-      \Oc+1 = \Oc{}
-    \\
-    \because
-    \Eref{eq:th-predicter-invocations-29},
-    \Eref{eq:th-predicter-invocations-30}.
-  \end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-34}
-    \Invocs{\ref{line:predicter-16}}/\Veim{x} = \Oc{}
-    \because \Eref{eq:th-predicter-invocations-28},
-    \text{ sequential execution.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-invocations-36}
-    \Invocs{\ref{line:predicter-18}}/\Veim{x} = \Oc{}
-    \because \Eref{eq:th-predicter-invocations-34},
-    \text{ sequential execution.}
-\end{equation}
-We have \ref{enum:th-predicter-invocations-10}
-of \Thref{th:predicter-invocations}
-from \Eref{eq:th-predicter-invocations-10},
-  \Eref{eq:th-predicter-invocations-12},
-  \Eref{eq:th-predicter-invocations-16-10}.
-We have \ref{enum:th-predicter-invocations-20}
-of \Thref{th:predicter-invocations}
-from \Eref{eq:th-predicter-invocations-16-20},
-  \Eref{eq:th-predicter-invocations-32},
-  \Eref{eq:th-predicter-invocations-34},
-  \Eref{eq:th-predicter-invocations-36}.
+\todo{Redo this proof}
 \myqed
 \end{proof}
-
-\begin{equation}
-\label{eq:def-predicter-time-charge}
-\myparbox{%
-  Time in \var{Predicter} is charged to the
-  Earley item which is the loop variable of
-  the outer loop, when it is in scope,
-  and to the
-  Earley set, otherwise
-  \cuz{} AF complexity analysis.}
-\end{equation}
 
 \begin{theorem}[\var{Predicter} time complexity]
 \label{th:predicter-time}
@@ -10631,202 +10516,9 @@ and \Oc{} charged to \VVelement{S}{j} itself.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-predicter-time-10}
-\myparbox{%
-  \Rules{\Vcfg{g}} is a constant depending on \var{g}
-  \cuz{}~\longDfref{CFG}{def:context-free-grammar}.%
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-12}
-\myparbox{%
-  The loop variable for
-  loop \enRefs{line:predicter-12}{line:predicter-18} is in scope
-  for all invocations of
-  lines \enRefs{line:predicter-14}{line:predicter-18};
-  for all but the final test invocation of
-  line \ref{line:predicter-12};
-  and only for those invocations.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-14}
-\Time{\ref{line:predicter-05}} = \Oc{}
-  \because \Thref{th:dotzeroused-bitmap}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-16}
-\Time{\ref{line:predicter-10}} = \Oc{}
-  \because
-  \Thref{th:rule-id-complexity},
-  \Thref{th:dotzeroused-bitmap},
-  \Eref{eq:th-predicter-time-10}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-18}
-\Time{\ref{line:predicter-12}} = \Oc{}
-   \because \type{ES} Add Theorem \Thref{th:es-add}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-20}
-\Time{\ref{line:predicter-14}} = \Oc{}
-  \because \Thref{th:rule-id-complexity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-22}
-\Time{\ref{line:predicter-16}} = \Oc{}
-  \because \text{ direct from line \ref{line:predicter-16}}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-24}
-\Time{\ref{line:predicter-18}} = \Oc{}
-  \because \Thref{th:predicter-time}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-26}
-\myparbox{%
-   Total exclusive time for lines \enRefs{line:predicter-05}{line:predicter-10}
-   is the number of invocations of each multiplied by the time for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-28}
-\begin{gathered}
-   \myparbox{%
-     Total exclusive time for lines \enRefs{line:predicter-05}{line:predicter-10}
-   is}
-   \\
-     \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:predicter-05}{line:predicter-10}}
-     }}}
-     \quad \Oc{} \times \Oc{} = \Oc{}
-   \\
-     \because
-     \ref{enum:th-predicter-invocations-10}\text{ of }\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-time-14},
-     \Eref{eq:th-predicter-time-16},
-     \Eref{eq:th-predicter-time-26}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-time-30}
-\myparbox{%
-   Total exclusive time for the final invocation of
-   line \ref{line:predicter-12} is \Oc{}
-   \cuz{} \Eref{eq:th-predicter-time-18}.
-}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-time-32}
-\myparbox{%
-   Total exclusive time for \proc{Predicter}
-   charged to the Earley set is
-   $\Oc{} + \Oc{} = \Oc{}$
-   \cuz{}
-  \Eref{eq:def-predicter-time-charge},
-  \Eref{eq:th-predicter-time-12},
-  \Eref{eq:th-predicter-time-28},
-  \Eref{eq:th-predicter-time-30}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-34}
-\myparbox{%
-   Total exclusive time
-   per \Veim{x}
-   for lines \enRefs{line:predicter-14}{line:predicter-18}
-   is the number of invocations
-   multiplied by the time for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-36}
-\begin{gathered}
-   \myparbox{%
-     Total exclusive time
-     per \Veim{x}
-     for lines \enRefs{line:predicter-14}{line:predicter-18} is
-     }
-   \\
-     \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:predicter-14}{line:predicter-18}}
-     }}}
-     \quad \Oc{} \times \Oc{} = \Oc{}
-   \\
-     \because
-     \ref{enum:th-predicter-invocations-20}\text{ of }\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-time-20},
-     \Eref{eq:th-predicter-time-22},
-     \Eref{eq:th-predicter-time-24},
-     \Eref{eq:th-predicter-time-34}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-time-38}
-\myparbox{%
-   Total exclusive time for
-   line \ref{line:predicter-12}
-   for each \Veim{x}
-   is \Oc{}
-   \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-time-18}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-40}
-\myparbox{%
-   Total exclusive time for \proc{Predicter}
-   charged to each \Veim{x} is
-   $\Oc{} + \Oc{} = \Oc{}$
-   \cuz{}
-  \Eref{eq:def-predicter-time-charge},
-  \Eref{eq:th-predicter-time-12},
-  \Eref{eq:th-predicter-time-36},
-  \Eref{eq:th-predicter-time-38}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-42}
-\myparbox{%
-  The only indirect time is \Oc{} at
-       line \ref{line:predicter-18}
-      \cuz{}
-      \Obref{obs:direct-vs-indirect},
-      \Aref{alg:predicter-op}, \Thref{th:predict1-time}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-44}
-\myparbox{%
-  The indirect time of \proc{Predicter} is \Oc{} per \Veim{x},
-       which is recharged directly to each \Veim{x}
-       \cuz{} \Eref{eq:def-predicter-time-charge}, \Eref{eq:th-predicter-time-42}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-time-48}
-\myparbox{%
-  The time charged by \proc{Predicter} to each \Veim{x} is
-  $\Oc + \Oc = \Oc$
-  \cuz
-  \Eref{eq:th-predicter-time-12},
-  \Eref{eq:th-predicter-time-40},
-  \Eref{eq:th-predicter-time-44}.
-}
-\end{equation}
-The theorem follows directly from
-\Eref{eq:th-predicter-time-32}
-and \Eref{eq:th-predicter-time-48}.
+\todo{Redo this proof}
 \myqed
 \end{proof}
-
-\begin{equation}
-\label{eq:def-predicter-space-charge}
-\myparbox{%
-  Direct space in \var{Predicter} is charged to the
-  Earley item which is the loop variable of
-  the outer loop, when it is in scope,
-  and to the
-  Earley set, otherwise
-  \cuz{} AF complexity analysis.}
-\end{equation}
 
 \begin{theorem}[\var{Predicter} Space Complexity]
 \label{th:predicter-space}
@@ -10837,191 +10529,7 @@ and \Oc{} charged to each \type{EIM} added.
 \end{theorem}
 
 \begin{proof}
-\begin{equation}
-\label{eq:th-predicter-space-12}
-\myparbox{%
-  The loop variable for
-  loop \enRefs{line:predicter-12}{line:predicter-18} is in scope
-  for all invocations of
-  lines \enRefs{line:predicter-14}{line:predicter-18};
-  for all but the final test invocation of
-  line \ref{line:predicter-12};
-  and only for those invocations.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-14}
-\Space{\ref{line:predicter-05}} = \Oc
-  \because \Thref{th:dotzeroused-bitmap}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-16}
-\Space{\ref{line:predicter-10}} = 0
-  \because
-  \Thref{th:rule-id-complexity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-18}
-\Space{\ref{line:predicter-12}} = 0
-   \because \type{ES} Add Theorem \Thref{th:es-add}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-20}
-\Space{\ref{line:predicter-14}} = 0
-  \because \Thref{th:rule-id-complexity}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-22}
-\Space{\ref{line:predicter-16}} = 0
-  \because \text{ direct from line \ref{line:predicter-16}}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-24}
-\Space{\ref{line:predicter-18}} = 0
-  \because \Thref{th:predict1-space}.
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-26}
-\myparbox{%
-   Total exclusive space for lines \enRefs{line:predicter-05}{line:predicter-10}
-   is the number of invocations of each multiplied by the space for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-28}
-\begin{gathered}
-   \myparbox{%
-     Total exclusive space for lines \enRefs{line:predicter-05}{line:predicter-10}
-   is}
-   \\
-     \left(
-         \smashoperator[r]{\sum_{\textstyle{
-           \var{line}\in\set{\ref{line:predicter-05}}
-         }}}
-         \;\; \Oc \times \Oc
-     \right)
-     + \left(
-     \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:predicter-10}{line:predicter-18}}
-     }}}
-     \;\; 0 \times \Oc
-     \right)
-     = \Oc
-   \\
-     \because
-     \ref{enum:th-predicter-invocations-10}\text{ of }\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-space-14},
-     \Eref{eq:th-predicter-space-16},
-     \Eref{eq:th-predicter-space-26}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-space-30}
-\myparbox{%
-   Total exclusive space for the final invocation of
-   line \ref{line:predicter-12} is 0
-   \cuz{} \Eref{eq:th-predicter-space-18}.
-}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-space-32}
-\myparbox{%
-   Total exclusive space for \proc{Predicter}
-   charged to the Earley set is
-   $\Oc{} + 0 = \Oc{}$
-   \cuz{}
-  \Eref{eq:def-predicter-space-charge},
-  \Eref{eq:th-predicter-space-12},
-  \Eref{eq:th-predicter-space-28},
-  \Eref{eq:th-predicter-space-30}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-34}
-\myparbox{%
-   Total exclusive space
-   per \Veim{x}
-   for lines \enRefs{line:predicter-14}{line:predicter-18}
-   is the number of invocations
-   multiplied by the space for each invocation.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-36}
-\begin{gathered}
-   \myparbox{%
-     Total exclusive space
-     per \Veim{x}
-     for lines \enRefs{line:predicter-14}{line:predicter-18} is
-     }
-   \\
-     \smashoperator[r]{\sum_{\textstyle{
-       \var{line}\in\set{\enRefs{line:predicter-14}{line:predicter-18}}
-     }}}
-     \;\; \Oc \times 0 = 0
-   \\
-     \because
-     \ref{enum:th-predicter-invocations-20}\text{ of }\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-space-20},
-     \Eref{eq:th-predicter-space-22},
-     \Eref{eq:th-predicter-space-24},
-     \Eref{eq:th-predicter-space-34}.
-\end{gathered}
-\end{equation}
-%
-\begin{equation}
-\label{eq:th-predicter-space-38}
-\myparbox{%
-   Total exclusive space for
-   line \ref{line:predicter-12}
-   for each \Veim{x}
-   is 0
-   \cuz{} \ref{enum:th-predicter-invocations-20}~of~\Thref{th:predicter-invocations},
-     \Eref{eq:th-predicter-space-18}.
-}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-40}
-\myparbox{%
-   Total exclusive space for \proc{Predicter}
-   charged to each \Veim{x} is
-   $0 + 0 = 0$
-   \cuz{}
-  \Eref{eq:def-predicter-space-charge},
-  \Eref{eq:th-predicter-space-12},
-  \Eref{eq:th-predicter-space-36},
-  \Eref{eq:th-predicter-space-38}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-42}
-\myparbox{%
-  The only indirect space is \Oc{} at
-       line \ref{line:predicter-18}
-      \cuz{}
-      \Obref{obs:direct-vs-indirect},
-      \Aref{alg:predicter-op}, \Thref{th:predict1-space}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-44}
-\myparbox{%
-  The indirect space of \proc{Predicter} is \Oc{} per prediction added,
-       which is charged to the prediction it adds.
-       \cuz{} \Aref{alg:predicter-op}, \Thref{th:predict1-space},
-           \Eref{eq:th-predicter-space-42}.}
-\end{equation}
-\begin{equation}
-\label{eq:th-predicter-space-48}
-\myparbox{%
-  The space charged by \proc{Predicter} to each \Veim{x} is
-  $0 + 0 = 0$
-  \cuz{}
-  \Eref{eq:th-predicter-space-12},
-  \Eref{eq:th-predicter-space-40},
-  \Eref{eq:th-predicter-space-44}.
-}
-\end{equation}
-The theorem follows directly from
-\Eref{eq:th-predicter-space-32},
-\Eref{eq:th-predicter-space-44},
-and \Eref{eq:th-predicter-space-48}.
+\todo{Redo this proof}
 \myqed
 \end{proof}
 
