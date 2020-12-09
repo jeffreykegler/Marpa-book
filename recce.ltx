@@ -8936,69 +8936,11 @@ Our approach to proving our complexity claims is based
 on the traditional one for \Earley{} variants.
 In the complexity context,
 \dfn{resource} means time or space.
-We divide space into two kinds:
-\dfn{trimmed space} and \dfn{link space}.
-
-\todo{Ensure our treatment of link vs. trimmed space is consistent}
-All space, except for links, is charged to trimmed space.
-Link space may be charged either
-to trimmed space or to link space.
-This is a free choice
-and therefore is not justified in proofs.
-However, while free, the choice between link and trimmed
-space has consequences
-for later theorems,
-and cannot be made injudiciously.
-
-Sometimes it will be convenient to defer the decision
-to charge a link pair to trimmed or link space.
-Space which is yet to be assigned to trimmed or link space
-is called \dfn{unassigned} space.
-
-We use the distinction between link
-and trimmed space to allow us to report
-two kinds of space complexity results.
-We want to report space complexity results
-which apply to practical applications,
-but we also want to report results which
-allow ``apples to apples'' comparisons
-with the space complexity claims
-in prior literature.
-
-It is a rare practical parsing application
-that does not require an evaluation phase of
-some kind, and
-efficient evaluation is not possible without link
-pairs.
-Therefore, to be of practical significance, we
-need to report space complexity results which
-include all link space.
-On the other hand, most of the Earley literature
-reports results in terms of trimmed space,
-and to allow accurate comparisons,
-we need to be able to ignore at least some
-of the space consumed by link pairs.
-This is why we track some of the space consumed
-by link pairs separately.
 
 The complexity results implicitly assume that \Marpa{}
 is ``consistent''.
 We will define and prove this in a later chapter
 \Chref{chap:consistent}.
-
-In a pseudocode procedure,
-charges are made either to a ``destination'',
-or ``to the caller''.
-A ``destination'' is either an ``ultimate destination''
-or an ``intermediate desination''.
-
-The ``ultimate destination'' of a charge is always an \type{EIM}.
-An ``intermediate destination'' can be either an Earley set,
-or the parse itself.
-All charges not made to an ultimate destination are
-recharged at some point,
-and eventually every charge is recharged to an
-ultimate destination.
 
 Reads and writes do not consume space -- only allocations of space
 consume space.
@@ -9047,12 +8989,6 @@ is consumed ``directly''; and
 \item all other resource is consumed ``indirectly''.
 \end{itemize}
 \end{observation}
-
-``Exclusive'' resource means resource consumed directly.
-``Included'' resource means resource consumed indirectly.
-``Inclusive'' resource means resource consumed both
-directly and indirectly.
-Resource consumed is exclusive unless otherwise stated.
 
 \section{Accounts}
 \label{sec:accounts}
@@ -9271,6 +9207,8 @@ We notate this observation in the form
 \section{Complexity table conventions}
 \label{sec:complexity-tables}
 
+If a table cell has a numeric value of zero,
+it may be left blank to avoid clutter.
 In tables with a ``Justification'' column, that column
 is left empty when we consider the justification immediately
 obvious from the code.
@@ -12695,7 +12633,7 @@ shown in \Aref{alg:marpa}.
 \State $\Call{Initializer}{{}}$
 \State \Call{Predicter}{\Ves{(0)}}
 \State $\Call{Bookkeeper}{\Velement{S}{0}}$
-\For{ $\VVelement{S}{j}, 1 \le \var{j} \le \Vsize{w}$ }
+\For{ \Vnat{j} from 1 to \Vsize{w}, inclusive }
 \State $\Call{ES-Setup}{\var{j}}$
 \State $\Call{Scanner}{\VVelement{S}{j}}$
 \If{$\size{\VVelement{S}{j}} = 0$}
@@ -12728,6 +12666,55 @@ and
 \Obref{obs:earley-memoizer-op}.
 \dispEnd
 \end{observation}
+
+\chapter{Low-level complexity summary}
+\label{chap:low-level-complexity-summary}
+
+\todo{This chapter is fragmentary}
+
+We divide space into two kinds:
+\dfn{trimmed space} and \dfn{link space}.
+
+All space, except for links, is charged to trimmed space.
+Link space may be charged either
+to trimmed space or to link space.
+This is a free choice
+and therefore is not justified in proofs.
+However, while free, the choice between link and trimmed
+space has consequences
+for later theorems,
+and cannot be made injudiciously.
+
+Sometimes it will be convenient to defer the decision
+to charge a link pair to trimmed or link space.
+Space which is yet to be assigned to trimmed or link space
+is called \dfn{unassigned} space.
+
+We use the distinction between link
+and trimmed space to allow us to report
+two kinds of space complexity results.
+We want to report space complexity results
+which apply to practical applications,
+but we also want to report results which
+allow ``apples to apples'' comparisons
+with the space complexity claims
+in prior literature.
+
+It is a rare practical parsing application
+that does not require an evaluation phase of
+some kind, and
+efficient evaluation is not possible without link
+pairs.
+Therefore, to be of practical significance, we
+need to report space complexity results which
+include all link space.
+On the other hand, most of the Earley literature
+reports results in terms of trimmed space,
+and to allow accurate comparisons,
+we need to be able to ignore at least some
+of the space consumed by link pairs.
+This is why we track some of the space consumed
+by link pairs separately.
 
 \chapter{FRAGMENTS}
 \label{chap:FRAGMENTS}
