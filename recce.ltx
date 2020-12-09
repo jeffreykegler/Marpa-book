@@ -4030,7 +4030,12 @@ at most $\size{\Rules{\Vint{g}}} = \Oc{}$.
 \end{theorem}
 
 \begin{proof}
+Recall that \Vint{g} is a constant so that
+\mypareq{eq:th-es-prediction-count-100}{%
+    $\size{\Rules{\Vint{g}}} = \Oc{}$.
+}
 This proof follows immediately from
+\Eref{eq:th-es-prediction-count-100} and
 the Prediction Rule Non-duplication Theorem
 \Thref{th:prediction-rule-non-duplication}.
 \myqed
@@ -10307,7 +10312,7 @@ so that a link pair does not exist for it,
 even conceptually.
 And \Marpa{} does not track link pairs for
 predictions
-\Obref{obs:common-predict-ancestry}.
+\Obref{obs:prediction-ancestry}.
 \dispEnd{}
 \end{observation}
 
@@ -10587,6 +10592,38 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 
 \FloatBarrier
 
+\begin{table}[H]
+\caption{
+    \label{tab:predicter-time-worksheet}
+    \op{Predicter} time worksheet}
+\vspace{1ex}
+\begin{tabular}{|c|r|r|}
+\hline
+Line&\multicolumn{1}{|c|}{Per call}
+&\multicolumn{1}{|c|}{Per EIM in \VVelement{S}{j} of
+    \Aref{alg:predicter-op}}
+\\ \hline
+    \ref{line:predicter-op-2}&$1\times\Oc{}=\Oc{}$&$1\times\Oc{}=\Oc{}$
+\\ \hline
+    \ref{line:predicter-op-3}&$1\times\Oc{}=\Oc{}$&$\fixedsize{\Rules{\Vint{g}}}\times\Oc{}=\Oc{}$
+\\ \hline
+    \ref{line:predicter-op-4}&&$\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$
+\\ \hline
+    \ref{line:predicter-op-5}&&$\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$
+\\ \hline
+    Totals&\Oc{}&\Oc{}
+\\ \hline
+\multicolumn{3}{|c|}{\cellboxr{4in}{%
+    See \Aref{alg:predicter-op},
+        \Tbref{tab:predicter-invocations}, \Tbref{tab:predicter-time}.
+    Recall that \Vint{g} is a constant so that
+        $\size{\Rules{\Vint{g}}} = \Oc{}$.
+}}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 \begin{theorem}[\var{Predicter} time complexity]
 \label{th:predicter-time}
@@ -10598,9 +10635,44 @@ where \VVelement{S}{j} is the argument of the
 \end{theorem}
 
 \begin{proof}
-\todo{Redo this proof}
+This theorem follows from
+the \op{Predictor} Time Worksheet \Tbref{tab:predicter-time-worksheet}
+and the Procedure Overhead Time Discard Theorem
+\Thref{th:procedure-overhead-discard}.
 \myqed
 \end{proof}
+
+\FloatBarrier
+
+\begin{table}[H]
+\caption{
+    \label{tab:predicter-space}
+    \op{Predicter} space per line invocation}
+\vspace{1ex}
+\begin{tabular}{|c|c|p{3.5in}|}
+\hline
+Line&Time&\multicolumn{1}{c|}{Justification}
+\\ \hline
+    \ref{line:predicter-op-2}&0&
+        \type{ES} \type{EIM} Traversal Theorem
+        \Thref{th:es-eim-traversal}.
+\\ \hline
+    \ref{line:predicter-op-3}&0&
+\\ \hline
+    \ref{line:predicter-op-4}&0&
+\\ \hline
+    \ref{line:predicter-op-5}&0&
+        No indirect time per
+        \myfn{Predict1}{} Time Theorem \Thref{th:predict1-time}.
+\\ \hline
+\multicolumn{3}{|p{4.5in}|}{
+    See \AFref{alg:predicter-op}.
+}
+\\ \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 \begin{theorem}[\var{Predicter} Space Complexity]
 \label{th:predicter-space}
@@ -10608,7 +10680,9 @@ Calls of \op{Predicter} incur no space.
 \end{theorem}
 
 \begin{proof}
-\todo{Redo this proof}
+This theorem follows immediately from
+the \op{Predicter} Space per Line Table
+\Tbref{tab:predicter-space}.
 \myqed
 \end{proof}
 
@@ -10618,10 +10692,14 @@ A version of \proc{Predicter} using precomputation
 will clearly run no worse than
 \proc{Predicter}.
 
-\begin{observation}[Ancestry]
-\label{obs:common-predict-ancestry}
-The \Marpa{} implementation
-does not record link pairs for predictions.
+\begin{observation}[Prediction ancestry]
+\label{obs:prediction-ancestry}
+The \Marpa{} implementation does not track
+link pairs
+for predictions.
+\dispEnd{}
+\end{observation}
+
 Tracking link pairs for a prediction would be cumbersome,
 because, even in an unambiguous grammar,
 each prediction can have many reasons to be in an Earley
@@ -10642,47 +10720,31 @@ line \ref{line:predict1-4} of \proc{Predict1}.
 
 If link pairs were generated,
 for the arbitrary prediction
-\begin{equation}
-\left[
-  \left[\Vsym{lhs} \de \mydot \Vstr{rhs}\right],
-  \Vorig{j}
-\right]
-\end{equation}
-they would be
+\[
+  \tuple{\left[\Vsym{lhs} \de \mydot \Vstr{rhs}\right],
+      \Vnat{j}, \var{j}}
+\]
+the ancestry would be
 \begin{equation}
 \label{eq:common-predict-ancestry-10}
 \left\lbrace
   \begin{gathered}
   \tuple{\Veim{pred}, \Lambda}_\type{LP} : \\
   \Current{\var{pred}} = \Vloc{j}
-  \; \land \; \Postdot{\var{pred}} = \Vsym{lhs}.
+  \; \land \; \Postdot{\var{pred}} = \Vsym{lhs}
   \end{gathered}
-\right\rbrace
+\right\rbrace .
 \end{equation}
 The computation of
 \Eref{eq:common-predict-ancestry-10}
 could be sped up using
 the transition array
 \Sref{sec:bookkeeper} for \VVelement{S}{j}.
-\dispEnd{}
-\end{observation}
-
-\FloatBarrier
-
-\begin{observation}[Ancestry]
-\label{obs:predicter-ancestry}
-The \Marpa{} implementation does not track
-link pairs
-for predictions.
-For details, see \Obref{obs:common-predict-ancestry}.
-\dispEnd{}
-\end{observation}
 
 \begin{observation}[Original Earley algorithm: Predicter Operation]
 \label{obs:earley-predicter-op}
 \Marpa{}'s predicter op has the same effect as the ``Predicter''
 operation of \Earley{}\cite{Earley1970}.
-\dispEnd{}
 \end{observation}
 
 \section{Scanner op}
