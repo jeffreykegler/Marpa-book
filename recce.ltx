@@ -8984,6 +8984,8 @@ the procedure,
 and the execution of one more more epilogues,
 which restore the registers and stack.
 
+\todo{Talk about charging}
+
 \section{Accounts}
 \label{sec:accounts}
 
@@ -9029,13 +9031,13 @@ which add up the charged resources.
 
 The following theorem allows some useful simplifications.
 It states a condition under which we
-may safely ignore \var{proc} time.
+may safely ignore the time incurred by a pseudocode procedure.
 
 \begin{theorem}[Procedure overhead discard]
 \label{th:procedure-overhead-discard}
-Consider a case where one pseudocode procedure (the ``caller'') calls another
-pseudocode procedure (the ``callee'').
-\Oc{} callee time may be ignored.
+When one pseudocode procedure calls another
+pseudocode procedure,
+\Oc{} time of the time incurred by the callee may be ignored.
 \end{theorem}
 
 \begin{proof}
@@ -9449,26 +9451,14 @@ plus \Oc{} time and zero space for the final test.
 
 \begin{theorem}[\type{LIM}--\type{EIM} recharge]
 \label{th:lim-eim-recharge}
-\mypareq{eq:th-lim-eim-recharge-050}{%
-    The resource for the \type{LIM}s
-    in an \type{ES} \var{es} may be recharged to the \type{EIM}s
-    in \var{es} in such a way that the resource of
-    every \type{EIM} has the resource of at most
-    one \type{LIM} charged to it.
-}
-\mypareq{eq:th-lim-eim-recharge-060}{%
-    After the procedure of \Eref{eq:th-lim-eim-recharge-050},
-    the resource charged to the \type{EIM}s of the \type{ES}
-    will fully account for the resource charged to
-    \type{PIM}s in \type{ES}.
-}
+The resource for the \type{LIM}s
+in an \type{ES} \var{es} may be recharged to the \type{EIM}s
+in \var{es} in such a way that the resource of
+every \type{EIM} has the resource of at most
+one \type{LIM} charged to it.
 \end{theorem}
 
 \begin{proof}
-\mypareq{eq:th-lim-eim-recharge-200}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
 \mypareq{eq:th-lim-eim-recharge-210}{%
     Every \type{LIM} in \var{es}
     has exactly one \type{EIM} source
@@ -9479,12 +9469,33 @@ plus \Oc{} time and zero space for the final test.
     in \var{es} is also in \var{es}
     \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
 }
-\Eref{eq:th-lim-eim-recharge-050} of the theorem
+The theorem
 follows from \Eref{eq:th-lim-eim-recharge-210} and
 \Eref{eq:th-lim-eim-recharge-220}.
-\Eref{eq:th-lim-eim-recharge-060} of the theorem
-follows from \Eref{eq:th-lim-eim-recharge-050}
-and \Eref{eq:th-lim-eim-recharge-200}.
+\myqed
+\end{proof}
+
+\begin{theorem}[\type{PIM} to \type{EIM} consolidation]
+\label{th:pim-eim-consolidation}
+If the \type{LIM}s in a \type{ES} traversal incur no resource,
+then all the resource of that traversal is incurred by
+its \type{EIM}s and its final test.
+\end{theorem}
+
+\begin{proof}
+Consider an arbitrary \type{ES} traversal.
+\mypareq{eq:th-pim-eim-consolidation-100}{%
+    The \type{LIM}s of the traversal incur no resource
+    \cuz{} hypothesis of theorem.
+}
+\mypareq{eq:th-pim-eim-consolidation-200}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+The consequent of the theorem follows from
+the \type{ES} Traversal Theorem \Thref{th:es-traversal}
+\Eref{eq:th-pim-eim-consolidation-100} and
+\Eref{eq:th-pim-eim-consolidation-200}.
 \myqed
 \end{proof}
 
@@ -9510,17 +9521,6 @@ plus \Oc{} time and zero space for the final test.
     one \type{EIM} in \var{eset}
     \bcuz{} \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}.
 }
-\mypareq{eq:th-es-eim-traversal-120}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
-\mypareq{eq:th-es-eim-traversal-130}{%
-    After the recharge of \Eref{eq:th-es-eim-traversal-110},
-    resource charged to each \type{EIM} accounts for all resource
-    charged to \type{PIM}s in \Eref{eq:th-es-eim-traversal-100}.
-    \bcuz{} \Eref{eq:th-es-eim-traversal-110},
-        \Eref{eq:th-es-eim-traversal-120}.
-}
 \mypareq{eq:th-es-eim-traversal-140}{%
     After the recharge of \Eref{eq:th-es-eim-traversal-110},
     the time incurred by every \type{EIM} in \var{eset}
@@ -9529,15 +9529,12 @@ plus \Oc{} time and zero space for the final test.
     \bcuz{} \Eref{eq:th-es-eim-traversal-100},
         \Eref{eq:th-es-eim-traversal-110}.
 }
-\mypareq{eq:th-es-eim-traversal-150}{%
-    After the recharge of \Eref{eq:th-es-eim-traversal-110},
-    \Oc{} time and zero space charged to each \type{EIM} accounts for all resource
-    charged to \type{PIM}s in \Eref{eq:th-es-eim-traversal-100}
-    \bcuz{} \Eref{eq:th-es-eim-traversal-130},
-        \Eref{eq:th-es-eim-traversal-140}.
-}
 The theorem follows immediately from
-\Eref{eq:th-es-eim-traversal-100} and \Eref{eq:th-es-eim-traversal-150}.
+the \type{PIM} to \type{EIM} Consolidation Theorem
+    \Thref{th:pim-eim-consolidation},
+\Eref{eq:th-es-eim-traversal-100},
+\Eref{eq:th-es-eim-traversal-110},
+and \Eref{eq:th-es-eim-traversal-140}.
 \myqed
 \end{proof}
 
@@ -9837,10 +9834,9 @@ and the space incurred is $0+0+0+0=0$.
 \label{sec:parse-setup}
 
 \begin{theorem}[Grammar complexity]
-Setup of grammar incurs \Oc{} time,
-\Oc{} trimmed space
-and zero link space,
-all of which is charged to the parse.
+Setup of the grammar incurs \Oc{} time,
+and \Oc{} space
+which are charged to the parse.
 \end{theorem}
 
 \begin{proof}
@@ -9874,6 +9870,11 @@ and therefore its space and time demands are constant.
 
 \section{Bookkeeper op}
 \label{sec:bookkeeper}
+
+The \op{Bookkeeper} op is run for each \type{ES}
+after that \type{ES} is fully populated with \type{PIM}s.
+The \op{Bookkeeper} op and creates
+the \var{transition} array for that \type{ES}.
 
 \begin{algorithm}[H]
 \caption{
@@ -9914,11 +9915,6 @@ $\Vsize{work} = \size{\Vocab{\var{g}}}$.
 \end{algorithm}
 
 \FloatBarrier
-
-The \op{Bookkeeper} op is run for each \type{ES}
-after that \type{ES} is fully populated with \type{PIM}s.
-The \op{Bookkeeper} op and creates
-the \var{transition} array for that \type{ES}.
 
 \begin{theorem}[\var{cnt} size]
 \label{th:cnt-size}
@@ -10140,15 +10136,26 @@ charged to \var{proc} account of the procedure.
         \Thref{th:procedure-overhead-discard}.
 }
 \mypareq{eq:th-bookkeeper-time-250}{%
-    If the time of its \type{LIM} is charged to it,
-    the \var{pim} time of a source \type{EIM} is at most
+    If the time of the \type{LIM}s is charged to their sources,
+    the time of a source \type{EIM} is at most
     $\Oc+\Oc=\Oc$
     \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
         \Eref{eq:th-bookkeeper-time-110}.
 }
-The theorem follows immediately from
-the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}
-and \Eref{eq:th-bookkeeper-time-250}.
+\mypareq{eq:th-bookkeeper-time-300}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-bookkeeper-time-310}{%
+    With the recharge of \Eref{eq:th-bookkeeper-time-250},
+    The time that each \op{Bookkeeper} op incurs
+    can be accounted for as
+    \Oc{} time per $\type{EIM} \in \VVelement{S}{j}$
+    \bcuz{} \Eref{eq:th-bookkeeper-time-110},
+        \Eref{eq:th-bookkeeper-time-250},
+        \Eref{eq:th-bookkeeper-time-300}.
+}
+Equation \Eref{eq:th-bookkeeper-time-310} is the theorem.
 \myqed
 \end{proof}
 
@@ -11335,10 +11342,10 @@ The time that \op{Earley-reducer} incurs may
 be accounted for as follows:
 \begin{itemize}
 \item \label{item:th-earley-reducer-time-1}
-By charging \Oc{} time to the \var{new} account of
+By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is added to the current ES.
 \item \label{item:th-earley-reducer-time-2}
-By charging \Oc{} time to the \var{dup} account of
+By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is a duplicate of an EIM
 already in the current ES.
 \end{itemize}
@@ -11670,10 +11677,10 @@ The time that \op{Leo-reducer} incurs may
 be accounted for as follows:
 \begin{itemize}
 \item \label{item:th-leo-reducer-time-1}
-By charging \Oc{} time to the \var{new} account of
+By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is added to the current ES.
 \item \label{item:th-leo-reducer-time-2}
-By charging \Oc{} time to the \var{dup} account of
+By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is a duplicate of an EIM
 already in the current ES.
 \end{itemize}
@@ -11928,9 +11935,9 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \begin{theorem}[\op{Reducer} Time]
 \label{th:reducer-time}
 The time that each \op{Reducer} op incurs
-may be account for by charging
+may be accounted for by charging
 \Oc{} time
-to the \var{eim} account of each \type{EIM}
+to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:reducer-op}.
 \end{theorem}
 
@@ -11939,8 +11946,8 @@ in \VVelement{S}{j} of \Aref{alg:reducer-op}.
     The time that each \op{Reducer} op incurs
     can be charged as \Oc{} time to the \var{proc} account
     of \op{Reducer} op;
-    and \Oc{} time to the \var{pim} account
-    of each \type{PIM} in in \VVelement{S}{j}
+    and \Oc{} time to
+    each \type{PIM} in in \VVelement{S}{j}
     \bcuz{} \Tbref{tab:reducer-proc-time},
         \Tbref{tab:reducer-invocations}.
 }
@@ -12492,17 +12499,17 @@ Line&Per call&Per \type{EIM}
 The time that each \op{Memoizer} op incurs
 can be accounted for by charging
 \Oc{} time
-to the \var{eim} account of each \type{EIM}
+to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 \end{theorem}
 
 \begin{proof}
 \mypareq{eq:th-memoizer-time-100}{%
     The time that each \op{Memoizer} op incurs
-    can be charged as \Oc{} time to the \var{proc} account
-    of \op{Memoizer} op;
-    and \Oc{} time to the \var{eim} account
-    of each \type{EIM} in in \VVelement{S}{j}
+    can be charged as \Oc{} time to the
+    call of \op{Memoizer} op;
+    and \Oc{} time to
+    each \type{EIM} in in \VVelement{S}{j}
     \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
 }
 The theorem follows immediately from
