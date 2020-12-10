@@ -8951,6 +8951,13 @@ resides in a data structure
 (in common implementations, a stack)
 whose maximum space consumed is \Oc{}.
 
+\begin{definition}[Caller and callee]
+In a context where pseudocode procedure \var{P1} invokes (or ``calls'')
+pseudocode procedure \var{P2},
+\var{P1} is the \dfn{caller} and
+\var{P2} is the \dfn{callee}.
+\end{definition}
+
 \begin{definition}[Housekeeping and body execution resource]
 \label{obs:housekeeping-vs-body-execution}
 For the purposes of complexity analysis,
@@ -8960,35 +8967,22 @@ and \dfn{body execution}.
 Resource not consumed by housekeeping
 is considered to be consumed by body execution.
 
-Housekeeping always consumes \Oc{} time and zero space.
-Body execution may consume arbitrary resource.
+Call an pseudocode procedure, \var{P}.
+The housekeeping of \var{P} \Oc{} time and zero space
+which, except in the case of the top-level pseudocode procedure,
+is incurred by the caller of \var{P}.
+Body execution of \var{P} may consume arbitrary resource,
+which is incurred by \var{P}.
 \dispEnd
 \end{definition}
+
+\todo{Account for top-level housekeeping}
 
 In a common implementation, the housekeeping will be execution of
 one or more prologues, which set up registers and stack for
 the procedure,
 and the execution of one more more epilogues,
 which restore the registers and stack.
-
-\begin{observation}[Direct and indirect resource]
-\label{obs:direct-vs-indirect}
-From the point of view of a current pseudocode procedure,
-\begin{itemize}
-\item the resource consumed by the execution of logic in the pseudocode
-which is not a call of another pseudocode procedure,
-is consumed ``directly''; and
-\item the housekeeping resource consumed by the execution of
-calls of another pseudocode procedure,
-is consumed ``directly''; and
-\item resource charged by other pseudocode procedures
-``to the caller'', which is passed up to the current pseudocode
-procedure, and which the current pseudocode procedure charges to
-a destination,
-is consumed ``directly''; and
-\item all other resource is consumed ``indirectly''.
-\end{itemize}
-\end{observation}
 
 \section{Accounts}
 \label{sec:accounts}
@@ -9039,18 +9033,17 @@ may safely ignore \var{proc} time.
 
 \begin{theorem}[Procedure overhead discard]
 \label{th:procedure-overhead-discard}
-When a pseudocode procedure (``caller'') calls another
-pseudocode procedure (``callee''), caller may treat \Oc{} time
-as part of the ``housekeeping''
-for callee.
+Consider a case where one pseudocode procedure (the ``caller'') calls another
+pseudocode procedure (the ``callee'').
+\Oc{} callee time may be ignored.
 \end{theorem}
 
 \begin{proof}
 By \Obref{obs:housekeeping-vs-body-execution},
-a caller always incurs \Oc{} ``housekeeping''
-time when it calls a callee.
-If we add \Oc{} of time from the callee's
-\var{proc} account to the housekeeping time
+caller always incurs \Oc{} ``housekeeping''
+time when it calls callee.
+If we add \Oc{} of time from callee
+to the housekeeping time
 of the callee, the total time is
 \[
     \Oc + \Oc = \Oc,
@@ -9098,8 +9091,8 @@ for every pass of the loop
 there is exactly
 one successful test of the loop condition.
 
-Definitions \Dfref{def:line-invocation} and
-\Dfref{def:loop-invocation}
+The definitions of Line Invocation \Dfref{def:line-invocation} and
+of Loop Invocation \Dfref{def:loop-invocation}
 also imply that the number of
 invocations of the first line of a loop
 is only the same as the number of invocations
@@ -9499,15 +9492,50 @@ and \Eref{eq:th-lim-eim-recharge-200}.
 \label{th:es-eim-traversal}
 Let \Ves{eset} be an Earley set.
 Traversal of \var{eset}
-can be charged as \Oc{} time and zero space for each \type{EIM}
+may be charged as \Oc{} time and zero space for each \type{EIM}
 in \var{eset},
 plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
-This theorem follows from
-the \type{ES} Traversal Theorem \Thref{th:es-traversal}
-and the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}.
+\mypareq{eq:th-es-eim-traversal-100}{%
+    Traversal of \var{eset}
+    incurs \Oc{} time and zero space for each \type{PIM}
+    in \var{eset},
+    plus \Oc{} time and zero space for the final test
+    \bcuz{} \longThref{\type{ES} Traversal}{th:es-traversal}.
+}
+\mypareq{eq:th-es-eim-traversal-110}{%
+    All \type{LIM} resource for \var{eset} may be recharged to at most
+    one \type{EIM} in \var{eset}
+    \bcuz{} \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}.
+}
+\mypareq{eq:th-es-eim-traversal-120}{%
+    $\type{PIM} = \type{EIM} \cup \type{LIM}$
+        \cuz{} \longDfref{PIM}{def:pim}.
+}
+\mypareq{eq:th-es-eim-traversal-130}{%
+    After the recharge of \Eref{eq:th-es-eim-traversal-110},
+    resource charged to each \type{EIM} accounts for all resource
+    charged to \type{PIM}s in \Eref{eq:th-es-eim-traversal-100}.
+}
+\mypareq{eq:th-es-eim-traversal-140}{%
+    After the recharge of \Eref{eq:th-es-eim-traversal-110},
+    the time incurred by every \type{EIM} in \var{eset}
+    is $\Oc+\Oc=\Oc$ and the space incurred
+    by every \type{EIM} in \var{eset} is $0+0=0$.
+    \bcuz{} \Eref{eq:th-es-eim-traversal-100},
+        \Eref{eq:th-es-eim-traversal-110}.
+}
+\mypareq{eq:th-es-eim-traversal-150}{%
+    After the recharge of \Eref{eq:th-es-eim-traversal-110},
+    \Oc{} time and zero space charged to each \type{EIM} accounts for all resource
+    charged to \type{PIM}s in \Eref{eq:th-es-eim-traversal-100}
+    \bcuz{} \Eref{eq:th-es-eim-traversal-130},
+        \Eref{eq:th-es-eim-traversal-140}.
+}
+The theorem follows immediately from
+\Eref{eq:th-es-eim-traversal-100} and \Eref{eq:th-es-eim-traversal-150}.
 \myqed
 \end{proof}
 
@@ -9851,6 +9879,7 @@ and therefore its space and time demands are constant.
     \var{Bookkeeper}}
 \begin{algorithmic}[1]
 \Procedure{Bookkeeper}{\VVelement{S}{j}}
+\label{line:bookkeeper-op-1}
 \State Create \var{work}, an temporary working array of empty linked lists,
 indexed by symbol ID, such that
 $\Vsize{work} = \size{\Vocab{\var{g}}}$.
@@ -9939,55 +9968,52 @@ and that fact that
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-invocations}
-    Line invocations for \op{Bookkeeper}}
+    Line invocations per call of \op{Bookkeeper}}
 \vspace{1ex}
-\begin{tabular}{|r|r|p{2.75in}|}
+\begin{tabular}{|r|c|p{2.75in}|}
 \hline
 \multicolumn{1}{|c|}{Line}
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&1/\var{proc}&Immediate.
+    \ref{line:bookkeeper-op-2}&1&%
+        Line \ref{line:bookkeeper-op-1} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-3}&1/\var{proc}&
+    \ref{line:bookkeeper-op-3}&1&%
        Line \ref{line:bookkeeper-op-2} Seq.
 \\ \hline
-    \multirow{2}{*}{\ref{line:bookkeeper-op-4}}
-    &1/\var{proc}&
-    \multirow{2}{*}{%
+    \ref{line:bookkeeper-op-4}%
+    &\cellboxc{1in}{$1+\var{pim}$}%
+    &\cellboxr{2.75in}{%
         Line \ref{line:bookkeeper-op-3} Seq;
-        \Obref{def:loop-invocation}.}
-\\
-    &+\;1/\var{pim}&
+        \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&1/\var{pim}&
+    \ref{line:bookkeeper-op-5}&\var{pim}&
        Line \ref{line:bookkeeper-op-4} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-6}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-5} Seq.
+    \ref{line:bookkeeper-op-6}&{$\le\var{pim}$}&
+       Line \ref{line:bookkeeper-op-5} Cond.
 \\ \hline
-    \ref{line:bookkeeper-op-7}&{$\le$}1/\var{pim}&
+    \ref{line:bookkeeper-op-7}&{$\le\var{pim}$}&
        Line \ref{line:bookkeeper-op-6} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-8}&{$\le$}1/\var{pim}&
+    \ref{line:bookkeeper-op-8}&{$\le\var{pim}$}&
        Line \ref{line:bookkeeper-op-7} Cond.
 \\ \hline
-    \ref{line:bookkeeper-op-9}&{$\le$}1/\var{pim}&
-       Line \ref{line:bookkeeper-op-8} Seq.
+    \ref{line:bookkeeper-op-9}&{$\le\var{pim}$}&
+       Line \ref{line:bookkeeper-op-6} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-10}&1/\var{proc}&
-        Line \ref{line:bookkeeper-op-9} Seq.
+    \ref{line:bookkeeper-op-10}&1&
+        Line \ref{line:bookkeeper-op-4} Seq.
 \\ \hline
-    \ref{line:bookkeeper-op-11}&1/\var{proc}&
+    \ref{line:bookkeeper-op-11}&1&
         Line \ref{line:bookkeeper-op-10} Seq.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
 Lines are listed in order of deduction.
-1/\var{proc}: ``once per procedure call''.
-1/\var{pim}: ``once per
-$\type{PIM} \in \VVelement{S}{j}$''.
-{$\le$}1/\var{pim}: ``at most once per
-$\type{PIM} \in \VVelement{S}{j}$''.
+1: ``once''.
+\var{pim}: ``once per $\type{PIM} \in \VVelement{S}{j}$''.
+{$\le\var{pim}$}: ``at most once per $\type{PIM} \in \VVelement{S}{j}$''.
     }
 \\ \hline
 \end{tabular}
@@ -10084,43 +10110,43 @@ Line&\var{proc}&\var{pim}
 
 \FloatBarrier
 
-\begin{theorem}[Transition Array Creation Time]
-\label{th:transition-creation-time}
-The time that each \op{Bookkeeper} op incurs
+\begin{theorem}[\op{Bookkeeper} Time]
+\label{th:bookkeeper-time}
+The time that each call of \op{Bookkeeper} incurs
 can be accounted for by charging
 \Oc{} time
-to the \var{eim} account of each \type{EIM}
+to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 \end{theorem}
 
 \begin{proof}
-\mypareq{eq:th-transition-creation-time-100}{%
+\mypareq{eq:th-bookkeeper-time-100}{%
     The time that each \op{Bookkeeper} op incurs
-    can be charged as \Oc{} time to the \var{proc} account
-    of \op{Bookkeeper} op;
-    and \Oc{} time to the \var{pim} account
-    of each \type{PIM} in in \VVelement{S}{j}
+    can be accounted for as
+    \Oc{} time per call of \op{Bookkeeper} op;
+    and \Oc{} time
+    per $\type{PIM} \in \VVelement{S}{j}$
     \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
 }
 Recall that we may safely discard \Oc{} time
 charged to \var{proc} account of the procedure.
-\mypareq{eq:th-transition-creation-time-110}{%
+\mypareq{eq:th-bookkeeper-time-110}{%
     The time that each \op{Bookkeeper} op incurs
-    can be charged as
-    \Oc{} time to the \var{pim} account
-    of each \type{PIM} in in \VVelement{S}{j}
-    \bcuz{} \Thref{th:procedure-overhead-discard}.
+    can be accounted for as
+    \Oc{} time per $\type{PIM} \in \VVelement{S}{j}$
+    \bcuz{} Procedure Overhead Time Discard Theorem
+        \Thref{th:procedure-overhead-discard}.
 }
-\mypareq{eq:th-transition-creation-time-250}{%
+\mypareq{eq:th-bookkeeper-time-250}{%
     If the time of its \type{LIM} is charged to it,
     the \var{pim} time of a source \type{EIM} is at most
     $\Oc+\Oc=\Oc$
     \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
-        \Eref{eq:th-transition-creation-time-110}.
+        \Eref{eq:th-bookkeeper-time-110}.
 }
 The theorem follows immediately from
 the \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}
-and \Eref{eq:th-transition-creation-time-250}.
+and \Eref{eq:th-bookkeeper-time-250}.
 \myqed
 \end{proof}
 
@@ -10177,17 +10203,15 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \label{th:transition-creation-space}
 The space that each \op{Bookkeeper} op incurs
 may be account for by charging
-\Oc{} trimmed space to an arbitrary \type{EIM}.
+\Oc{} space to an arbitrary \type{EIM}.
 \end{theorem}
 
 \begin{proof}
-Per the \Tbref{tab:bookkeeper-invocations}
-and \Tbref{tab:bookkeeper-space}, we see that
-each call of \op{Bookkeeper} incurs \Oc{} space.
-We choose to charge this as trimmed space.
-There is a start \type{EIM}, even in a failed parse,
-so that there will always be an \type{EIM} to whose
-\var{eim} account we may charge the \Oc{} trimmed space.
+This theorem follows from the
+\op{Bookkeeper} Line Invocations Table
+\Tbref{tab:bookkeeper-invocations}
+and the \op{Bookkeeper} Space Table
+\Tbref{tab:bookkeeper-space}.
 \myqed
 \end{proof}
 
@@ -10221,9 +10245,8 @@ so that there will always be an \type{EIM} to whose
 Time incurred by
 the \op{Initializer} op may be ignored.
 Space incurred by the \op{Initializer} op may be
-accounted for as \Oc{} trimmed space charged
-to the \var{eim} account of an arbitrary EIM,
-and zero link space.
+accounted for as \Oc{} space charged
+to an arbitrary EIM.
 \end{theorem}
 
 \begin{proof}
@@ -10457,7 +10480,7 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 \\ \hline
     \ref{line:predicter-op-2}&$1+\var{eim}$&\cellboxr{2in}{%
            Line \ref{line:predicter-op-1} Seq;
-           \Obref{def:loop-invocation}.}
+           \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-3}
     &
@@ -10473,14 +10496,14 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
         $}
     &\cellboxr{2in}{%
            Line \ref{line:predicter-op-2} Seq;
-           \Obref{def:loop-invocation}.}
+           \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-4}
     &\cellboxc{1.5in}{%
         $\var{eim}\times\fixedsize{\Rules{\var{g}}}$}
     &\cellboxr{2in}{%
            Line \ref{line:predicter-op-3} Seq;
-           \Obref{def:loop-invocation}.}
+           \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-5}
     &\cellboxc{1.5in}{%
@@ -10513,7 +10536,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
         \type{ES} \type{EIM} Traversal Theorem
         \Thref{th:es-eim-traversal}.
 \\ \hline
-    \ref{line:predicter-op-3}&\Oc{}&\Obref{def:loop-invocation}.
+    \ref{line:predicter-op-3}&\Oc{}&%
+        \longDfref{Loop invocation}{def:loop-invocation}.
 \\ \hline
     \ref{line:predicter-op-4}&\Oc{}&
 \\ \hline
@@ -10799,7 +10823,7 @@ operation of \Earley{}\cite{Earley1970}.
         \strut}&
         \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
            Line \ref{line:scanner-op-4} RSeq,
-           \Obref{def:loop-invocation}.
+           \longDfref{Loop invocation}{def:loop-invocation}..
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.
         \strut}
@@ -10807,7 +10831,7 @@ operation of \Earley{}\cite{Earley1970}.
     \ref{line:scanner-op-2}&1&
         \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
        Line \ref{line:scanner-op-3} RSeq,
-           \Obref{def:loop-invocation}.
+           \Dfref{def:loop-invocation}.
         \strut}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{\linespread{.75}\selectfont
@@ -11198,7 +11222,7 @@ operation of \Earley{}.
         \strut}&
         \parbox{3.3in}{\raggedright\strut
            Line \ref{line:earley-reducer-op-3} RSeq,
-           \Obref{def:loop-invocation}.
+           \longDfref{Loop invocation}{def:loop-invocation},
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.
         \strut}
@@ -11424,16 +11448,13 @@ Line&\var{new}&\var{dup}
 The space that \op{Earley-reducer} incurs may
 be accounted for
 by
-\begin{itemize}
-\item charging \Oc{} trimmed space to the \var{new} account of
+charging \Oc{} space to 
 \Veim{trial}
-for calls where \Veim{trial} is a new EIM; and
-\item
-charging \Oc{} link space to the \var{dup} account of
+for every call where \Veim{trial} is a new EIM;
+and \Oc{} space to
 \Veim{trial}
-for calls where \var{trial} is a duplicate
+for every calls where \var{trial} is a duplicate
 of an EIM already in the current ES.
-\end{itemize}
 \end{theorem}
 
 \begin{proof}
@@ -11756,16 +11777,11 @@ Line&\var{new}&\var{dup}
 The space that \op{Leo-reducer} incurs may
 be accounted for
 by
-\begin{itemize}
-\item charging \Oc{} trimmed space to the \var{new} account of
-\Veim{trial}
+charging \Oc{} space to \Veim{trial}
 for calls where \Veim{trial} is a new EIM; and
-\item
-charging \Oc{} link space to the \var{dup} account of
-\Veim{trial}
+charging \Oc{} space to \Veim{trial}
 for calls where \var{trial} is a duplicate
 of an EIM already in the current ES.
-\end{itemize}
 \end{theorem}
 
 \begin{proof}
@@ -11821,13 +11837,12 @@ the \op{Leo-reducer} Space Worksheet
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-3}&{$\le$}1/\var{eim}&\Obref{def:loop-invocation}.
+    \ref{line:reducer-op-3}&{$\le$}1/\var{eim}&%
+        \longDfref{Loop invocation}{def:loop-invocation}.
 \\ \hline
-    \multirow{2}{*}{\ref{line:reducer-op-2}}
-    &1/\var{proc}&
-    \multirow{2}{*}{\Obref{def:loop-invocation}; Line \ref{line:reducer-op-3} RSeq.}
-\\
-    &+\;{$\le$}1/\var{eim}&
+    \ref{line:reducer-op-2}&$\le(1+\var{eim})$&\cellboxr{2.75in}{%
+        \Dfref{def:loop-invocation};
+        Line \ref{line:reducer-op-3} RSeq.}
 \\ \hline
     \ref{line:reducer-op-4}&{$\le$}1/\var{eim}&
        Line \ref{line:reducer-op-3} Seq.
@@ -12325,7 +12340,7 @@ this \type{LIM} will always be at the head of its linked list.
        \parbox{3in}{\raggedright
             Line \ref{line:memoizer-op-1} Seq;
             \Thref{th:leo-eligible-traversal};
-            \Obref{def:loop-invocation}.
+            \longDfref{Loop invocation}{def:loop-invocation}.
        }
 \\ \hline
     \ref{line:memoizer-op-3}&\Oc{}/\var{proc}&
@@ -12550,7 +12565,7 @@ Line&Space&\multicolumn{1}{c|}{Justification}
 \label{th:memoizer-space}
 The space that each \op{Memoizer} op incurs may
 be accounted for by
-charging \Oc{} trimmed space to an arbitrary \type{EIM}.
+charging \Oc{} space to an arbitrary \type{EIM}.
 \end{theorem}
 
 \begin{proof}
