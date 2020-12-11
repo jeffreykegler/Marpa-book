@@ -9452,9 +9452,9 @@ plus \Oc{} time and zero space for the final test.
 \begin{theorem}[\type{LIM}--\type{EIM} recharge]
 \label{th:lim-eim-recharge}
 The resource for the \type{LIM}s
-in an \type{ES} \var{es} may be recharged to the \type{EIM}s
-in \var{es} in such a way that the resource of
-every \type{EIM} has the resource of at most
+in an \type{ES} \var{es} may be recharged to their source \type{EIM}s.
+All of the source \type{EIM}s will be in \var{es}
+and will have the resource of exactly
 one \type{LIM} charged to it.
 \end{theorem}
 
@@ -9931,31 +9931,31 @@ at line \ref{line:bookkeeper-op-7},
 an entry is added to it
 at line \ref{line:bookkeeper-op-9}.
 Therefore,
-\mypareq{eq:th-transition-creation-100}{%
+\mypareq{eq:th-bookkeeper-100}{%
     for every value of \var{symID},
     line \ref{line:bookkeeper-op-8} is executed at most once.
 }
-\mypareq{eq:th-transition-creation-110}{%
+\mypareq{eq:th-bookkeeper-110}{%
    \var{symID}
    at line \ref{line:bookkeeper-op-6}
    is the ID of a symbol in \Vint{g}
    \cuz{} \Aref{alg:bookkeeper-op}.
 }
-\mypareq{eq:th-transition-creation-120}{%
+\mypareq{eq:th-bookkeeper-120}{%
     Line \ref{line:bookkeeper-op-8} is executed at most
     \size{\Vocab{\var{g}}} times
-    \bcuz{} \Eref{eq:th-transition-creation-100},
-        \Eref{eq:th-transition-creation-110}.
+    \bcuz{} \Eref{eq:th-bookkeeper-100},
+        \Eref{eq:th-bookkeeper-110}.
 }
-\mypareq{eq:th-transition-creation-130}{%
+\mypareq{eq:th-bookkeeper-130}{%
     In \Aref{alg:bookkeeper-op}, $\var{cnt} \le
     \size{\Vocab{\var{g}}}$
     \cuz{} lines \ref{line:bookkeeper-op-3},
         \ref{line:bookkeeper-op-8};
-        \Eref{eq:th-transition-creation-120}.
+        \Eref{eq:th-bookkeeper-120}.
 }
 The theorem follows from
-\Eref{eq:th-transition-creation-130}
+\Eref{eq:th-bookkeeper-130}
 and that fact that
 \Vocab{\var{g}} is a constant which depends on \Vint{g}.
 \myqed
@@ -10024,7 +10024,7 @@ Lines are listed in order of deduction.
     \label{tab:bookkeeper-time}
     \op{Bookkeeper} time per invocation}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|p{3.5in}|}
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
@@ -10033,11 +10033,13 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-3}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&\Thref{th:es-traversal}
+    \ref{line:bookkeeper-op-4}&\Oc{}&
+        \type{ES} Traversal Theorem \Thref{th:es-traversal}.
 \\ \hline
     \ref{line:bookkeeper-op-5}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&\Oc{}&\Thref{th:symbol-id-complexity}
+    \ref{line:bookkeeper-op-6}&\Oc{}&
+        Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.
 \\ \hline
     \ref{line:bookkeeper-op-7}&\Oc{}&
 \\ \hline
@@ -10046,8 +10048,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \ref{line:bookkeeper-op-9}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&
-        $\Vsize{transition} = \Oc{}$ \cuz
-        \Thref{th:cnt-size}.
+        $\Vsize{transition} = \Oc{} \cuz{} \Thref{th:cnt-size}$.
 \\ \hline
     \ref{line:bookkeeper-op-11}&\Oc{}&
         $\Vsize{work} = \Oc{}$ \cuz{}
@@ -10067,11 +10068,11 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \label{tab:bookkeeper-time-worksheet}
     \op{Bookkeeper} time worksheet}
 \vspace{1ex}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|c|c|c|}
 \hline
-\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
-\\ \cline{2-3}
-Line&\var{proc}&\var{pim}
+Line&\multicolumn{1}{|c|}{Per call}
+&\multicolumn{1}{|c|}{Per \type{PIM} in \VVelement{S}{j} of
+    \Aref{alg:bookkeeper-op}}
 \\ \hline
     \ref{line:bookkeeper-op-2}&\Oc{}&
 \\ \hline
@@ -10095,15 +10096,16 @@ Line&\var{proc}&\var{pim}
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
-\end{tabular}
-\;\;\parbox{2.5in}{
+\multicolumn{3}{|r|}{\cellboxr{3.5in}{%
     All charges in this table are per call
     of the \op{Bookkeeper} op.
     See \Tbref{tab:bookkeeper-invocations},
         \Tbref{tab:bookkeeper-time}.
     \var{pim} time is charged to each \type{PIM}
     in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
-}
+}}
+\\ \hline
+\end{tabular}
 \end{table}
 
 \FloatBarrier
@@ -10126,8 +10128,6 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
     per $\type{PIM} \in \VVelement{S}{j}$
     \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
 }
-Recall that we may safely discard \Oc{} time
-charged to \var{proc} account of the procedure.
 \mypareq{eq:th-bookkeeper-time-110}{%
     The time that each \op{Bookkeeper} op incurs
     can be accounted for as
@@ -10137,23 +10137,21 @@ charged to \var{proc} account of the procedure.
 }
 \mypareq{eq:th-bookkeeper-time-250}{%
     If the time of the \type{LIM}s is charged to their sources,
-    the time of a source \type{EIM} is at most
-    $\Oc+\Oc=\Oc$
+    all of the recharged time will be to \type{EIM}s in
+    \VVelement{S}{j}, and
+    the time of an \type{EIM} will be at most $\Oc+\Oc=\Oc$
     \bcuz{} \longThref{\type{LIM}--\type{EIM} Recharge Theorem}{th:lim-eim-recharge},
         \Eref{eq:th-bookkeeper-time-110}.
 }
-\mypareq{eq:th-bookkeeper-time-300}{%
-    $\type{PIM} = \type{EIM} \cup \type{LIM}$
-        \cuz{} \longDfref{PIM}{def:pim}.
-}
 \mypareq{eq:th-bookkeeper-time-310}{%
     With the recharge of \Eref{eq:th-bookkeeper-time-250},
-    The time that each \op{Bookkeeper} op incurs
+    the time that each \op{Bookkeeper} op incurs
     can be accounted for as
     \Oc{} time per $\type{EIM} \in \VVelement{S}{j}$
-    \bcuz{} \Eref{eq:th-bookkeeper-time-110},
-        \Eref{eq:th-bookkeeper-time-250},
-        \Eref{eq:th-bookkeeper-time-300}.
+    \bcuz{} \type{EIM} Consolidation Theorem
+        \Thref{th:pim-eim-consolidation},
+        \Eref{eq:th-bookkeeper-time-110},
+        \Eref{eq:th-bookkeeper-time-250}.
 }
 Equation \Eref{eq:th-bookkeeper-time-310} is the theorem.
 \myqed
@@ -10181,7 +10179,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-5}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&0&\Thref{th:symbol-id-complexity}
+    \ref{line:bookkeeper-op-6}&0&%
+        Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.
 \\ \hline
     \ref{line:bookkeeper-op-7}&0&
 \\ \hline
@@ -10208,8 +10207,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 
 \FloatBarrier
 
-\begin{theorem}[Transition Array Creation Space]
-\label{th:transition-creation-space}
+\begin{theorem}[\op{Bookkeeper} Space]
+\label{th:bookkeeper-space}
 The space that each \op{Bookkeeper} op incurs
 may be account for by charging
 \Oc{} space to an arbitrary \type{EIM}.
@@ -10571,7 +10570,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \begin{tabular}{|c|r|r|}
 \hline
 Line&\multicolumn{1}{|c|}{Per call}
-&\multicolumn{1}{|c|}{Per EIM in \VVelement{S}{j} of
+&\multicolumn{1}{|c|}{Per \type{EIM} in \VVelement{S}{j} of
     \Aref{alg:predicter-op}}
 \\ \hline
     \ref{line:predicter-op-2}&$1\times\Oc{}=\Oc{}$&$1\times\Oc{}=\Oc{}$
