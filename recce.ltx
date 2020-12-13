@@ -3589,18 +3589,32 @@ That is,
 \type{ES} = \powerset{\type{PIM}}. \quad \dispEnd
 \]
 \end{definition}
-Note that, since an Earley set is a set
+
+\begin{definition}[\type{ES} Adjoinment]
+\label{def:adjoin}
+An Earley set is a set
 in the mathematical sense,
-we do not say that \type{PIM}s are ``added'' to
-an Earley set,
-but that they are ``adjoined'' to it.
-The result of adjoining a \type{PIM} \var{p} to the Earley set \var{es}
-is $\Ves{es} \cup \set{\Vpim{p}}$, so that if \var{p} is already
+so that \type{PIM}s are \dfn{adjoined} to
+an Earley set:
+\[
+    \Ves{after} = \Ves{before} \cup \Vpim{pim}.
+\]
+This means that if \var{p} is already
 an element of \var{es},
 \var{es} is unchanged:
 \[
-    \Vpim{p} \in \Ves{es} \implies \var{es} \cup \set{\var{p}} = \var{es}.
+    \Vpim{p} \in \Ves{before} \implies \var{before} =
+    \Ves{before} \cup \Vpim{pim} =
+    \var{after}.
 \]
+An adjoin of \var{pim} to \var{before} that renders
+$\var{after} \ne \var{before}$ is also called
+an \dfn{add} of \var{pim} to \var{before}.
+An adjoin of \var{pim} to \var{before} that leaves
+$\var{after} = \var{before}$ is also called
+a \dfn{proper adjoin} of \var{pim} to \var{before}.
+\dispEnd
+\end{definition}
 
 \begin{definition}[ES validity]
 \label{def:es-validity}
@@ -8932,30 +8946,98 @@ for the \type{PIM} subtypes.
 \label{chap:complexity-preliminaries}
 \todo{Rewrite ``Complexity preliminaries'' section.}
 
-Our approach to proving our complexity claims is based
-on the traditional one for \Earley{} variants.
+We follow the tradition in the \Earley{} literature by dividing
+the complexity analysis of \Marpa{} into a low-level,
+and a high-level, analysis.
 In the complexity context,
 \dfn{resource} means time or space.
 
-The complexity results implicitly assume that \Marpa{}
-is ``consistent''.
-We will define and prove this in a later chapter
-\Chref{chap:consistent}.
+In the first phase of the low-level analysis,
+all resource is charged to one of
+the following:
+\begin{enumerate}
+\item
+\label{enum:parse-charging}
+The parse itself.
+\item
+\label{enum:es-charging}
+The current \type{ES}.
+\item
+\label{enum:eim-charging}
+An \type{EIM}.
+\item
+\label{enum:proper-adjoin-charging}
+A proper adjoin of some \type{EIM}.
+\end{enumerate}
+Because logic of this first phase is closely intertwined with
+the code itself,
+its details are presented alongside the pseudocode
+\Chref{chap:algorithm}.
 
+A later chapter
+\Chref{chap:low-level-complexity-summary}
+presents
+the second and last phase of the low-level analysis.
+In the second phase the charges of the first phase
+are totaled.
+Then charges to the parse (\ref{enum:parse-charging})
+and to the \type{ES}s
+(\ref{enum:es-charging})
+are \dfn{settled} as
+charges to \type{EIM}s
+(\ref{enum:eim-charging});
+or to proper adjoins
+(\ref{enum:proper-adjoin-charging})
+of \type{EIM}s.
+After this ``charge settlement'',
+only charges of types
+\ref{enum:eim-charging} and
+\ref{enum:proper-adjoin-charging} remain.
+
+In the statement of theorems for low-level complexity,
+note that the manner in which a resource is charged
+is usually a matter of choice,
+and therefore not justified in the theorem's proof.
+However, charging decisions are choices with consequences
+--- they will have consequences for later theorems.%
+\footnote{%
+    Formally, charging decisions could have presented
+    as definitions.
+    We do so for two reasons.
+    First, the charging decision seems, intuitively, to be
+    part of the theorem, so that splitting it out seems
+    unnatural.
+    Second, a definition statement implies that the definition
+    has significance that goes beyond the logic which uses
+    the definition directly. The only significance of a
+    charging decision, on the other hand,
+    is that it is part of one example of a counting scheme that will produce
+    the low-level results.
+}
+
+The high level complexity analyses of later chapters look
+at specific grammar classes,
+counting the \type{EIM}s and proper \type{EIM} adjoins.
+These counts, multiplied by the appropriate result
+of the low-level complexity analysis, show the complexity
+claims for the grammar classes.
+
+\begin{definition}[Space resource conventions]
 Reads and writes do not consume space -- only allocations of space
 consume space.
-We will not examine allocations of non-global space in detail.
-Instead, we assume
-that space local to the pseudocode procedures
-resides in a data structure
-(in common implementations, a stack)
-whose maximum space consumed is \Oc{}.
+We will assume that the implementation allows \Oc{} space globally.
+We do not call any of our pseudocode procedures recursively,
+so that the \Oc{} global space can include a ``stack''
+which allows \Oc{} space for every call of a pseudocode procedure.
+\dispEnd
+\end{definition}
 
 \begin{definition}[Caller and callee]
 In a context where pseudocode procedure \var{P1} invokes (or ``calls'')
 pseudocode procedure \var{P2},
 \var{P1} is the \dfn{caller} and
 \var{P2} is the \dfn{callee}.
+\dispEnd
 \end{definition}
 
 \begin{definition}[Housekeeping and body execution resource]
@@ -8983,51 +9065,6 @@ one or more prologues, which set up registers and stack for
 the procedure,
 and the execution of one more more epilogues,
 which restore the registers and stack.
-
-\todo{Talk about charging}
-
-\section{Accounts}
-\label{sec:accounts}
-
-In the pseudocode,
-resource is \dfn{incurred},
-or \dfn{consumed}.
-Once incurred, resource must be \dfn{charged} to
-one of the following accounts:
-\begin{itemize}
-\item \var{parse}: An account for resource charged to the parse itself.
-\item \var{es}: One account per ES,
-    for resource charged to the current working Earley set.
-\item \var{eim}: One account per \type{EIM},
-  for resource charged to an eim which already exists.
-\item \var{new}: One account per \type{EIM}, for resource charged to a newly created \type{EIM}.
-\item \var{dup}: One account per ambiguous link pair,
-    for resource charged to ambiguous link pairs.
-\item \var{try}:
-\todo{Figure "try" accounts out}
-This is not a real account, but
-    a useful shorthand for the total
-    of the \var{new} and \var{dup} accounts
-    for an \type{EIM}.
-    It behaves like a per-\type{EIM} account.
-\item \var{lim}: A per-\type{LIM} account.
-\item \var{pim}: A per-\type{PIM} account.
-\item \var{pred}: A per-prediction-\type{EIM} account.
-\item \var{proc}: A per-pseudocode-procedure account,
-  for resource charged to the current pseudocode procedure.
-  Resource charged to \var{proc} must be constant or less.
-\item \var{caller}: A per-pseudocode-procedure account,
-  for resource charged to the current pseudocode procedure.
-  Resource charged to \var{caller} may be greater than constant.
-\end{itemize}
-
-In the statement of theorems, we will sometimes state the
-account to which a resource is charged.
-This charging decision is a matter of choice,
-and so is not subject to proof.
-It is, however, a choice with consequences
-for those later theorems
-which add up the charged resources.
 
 The following theorem allows some useful simplifications.
 It states a condition under which we
@@ -9446,16 +9483,26 @@ plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
-\todo{Write this proof}
+The proof is by example of an implementation.
+An \type{ES} could be implementated as a dynamic array,
+which would have the stated complexity for reads.
+\myqed
 \end{proof}
 
 \begin{theorem}[\type{LIM}--\type{EIM} recharge]
-\label{th:lim-eim-recharge}
-The resource for the \type{LIM}s
-in an \type{ES} \var{es} may be recharged to their source \type{EIM}s.
-All of the source \type{EIM}s will be in \var{es}
-and will have the resource of exactly
-one \type{LIM} charged to it.
+\label{th:lim-eim-recharge-new}
+Let \var{es} be an \type{ES} with
+\mypareq{eq:th-lim-eim-recharge-040}{%
+    at most \var{x} resource
+    charged to its \type{EIM}s, and
+}
+\mypareq{eq:th-lim-eim-recharge-050}{%
+    at most \var{y} resource
+    charged to its \type{LIM}s.
+}
+Then that resource for \var{es}
+may also be accounted for as $\var{x}+\var{y}$
+resource charged to each \type{EIM} of \var{es}.
 \end{theorem}
 
 \begin{proof}
@@ -9469,9 +9516,13 @@ one \type{LIM} charged to it.
     in \var{es} is also in \var{es}
     \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
 }
-The theorem
-follows from \Eref{eq:th-lim-eim-recharge-210} and
-\Eref{eq:th-lim-eim-recharge-220}.
+\mypareq{eq:th-lim-eim-recharge-230}{%
+    All \type{LIM} resource for \var{es} may be recharged to at most
+    one \type{EIM} in \var{es}
+    \bcuz{} \Eref{eq:th-lim-eim-recharge-210},
+        \Eref{eq:th-lim-eim-recharge-220}.
+}
+\todo{Finish this theorem}
 \myqed
 \end{proof}
 
