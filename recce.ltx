@@ -9490,7 +9490,7 @@ which would have the stated complexity for reads.
 \end{proof}
 
 \begin{theorem}[\type{LIM}--\type{EIM} recharge]
-\label{th:lim-eim-recharge-new}
+\label{th:lim-eim-recharge-NEW}
 Let \var{es} be an \type{ES} with
 \mypareq{eq:th-lim-eim-recharge-040}{%
     at most \var{x} resource
@@ -9517,75 +9517,77 @@ resource charged to each \type{EIM} of \var{es}.
     \bcuz{} \longThref{\type{LIM} Direction Theorem}{th:lim-direction}.
 }
 \mypareq{eq:th-lim-eim-recharge-230}{%
-    All \type{LIM} resource for \var{es} may be recharged to at most
+    The resource of every \type{LIM} in \var{es} may be recharged to exactly
     one \type{EIM} in \var{es}
     \bcuz{} \Eref{eq:th-lim-eim-recharge-210},
         \Eref{eq:th-lim-eim-recharge-220}.
 }
-\todo{Finish this theorem}
-\myqed
-\end{proof}
-
-\begin{theorem}[\type{PIM} to \type{EIM} consolidation]
-\label{th:pim-eim-consolidation}
-If the \type{LIM}s in a \type{ES} traversal incur no resource,
-then all the resource of that traversal is incurred by
-its \type{EIM}s and its final test.
-\end{theorem}
-
-\begin{proof}
-Consider an arbitrary \type{ES} traversal.
-\mypareq{eq:th-pim-eim-consolidation-100}{%
-    The \type{LIM}s of the traversal incur no resource
-    \cuz{} hypothesis of theorem.
+\mypareq{eq:th-lim-eim-recharge-240}{%
+    The resource of every \type{LIM} in \var{es} may be recharged in such
+    a way that the resource charged to any \type{EIM} is
+    at most $\var{x}+\var{y}$
+    \bcuz{} \Eref{eq:th-lim-eim-recharge-040},
+        \Eref{eq:th-lim-eim-recharge-050},
+        \Eref{eq:th-lim-eim-recharge-230}.
 }
-\mypareq{eq:th-pim-eim-consolidation-200}{%
+\mypareq{eq:th-lim-eim-recharge-250}{%
     $\type{PIM} = \type{EIM} \cup \type{LIM}$
         \cuz{} \longDfref{PIM}{def:pim}.
 }
-The consequent of the theorem follows from
-the \type{ES} Traversal Theorem \Thref{th:es-traversal}
-\Eref{eq:th-pim-eim-consolidation-100} and
-\Eref{eq:th-pim-eim-consolidation-200}.
+\mypareq{eq:th-lim-eim-recharge-260}{%
+    All of the resource of \var{es} may be charged to
+    the \type{EIM}s in \var{es}
+    in such a way that the resource charged to any \type{EIM} is
+    at most $\var{x}+\var{y}$
+    \bcuz{} \Eref{eq:th-lim-eim-recharge-240},
+        \Eref{eq:th-lim-eim-recharge-250}. \myqed
+}
+\end{proof}
+
+\begin{theorem}[\type{PIM} to \type{EIM} consolidation]
+\label{th:pim-eim-consolidation-NEW}
+Let \var{es} be an \type{ES} with
+at most \var{x} resource
+charged to any of its \type{PIM}s.
+Then that resource for \var{es}
+may also be accounted for as $2\times\var{x}$
+resource charged to each \type{EIM} in \var{es}.
+\end{theorem}
+
+\begin{proof}
+This theorem follows from
+the \type{LIM}--\type{EIM} Recharge Theorem
+\Thref{th:lim-eim-recharge-NEW}.
 \myqed
 \end{proof}
 
 \begin{theorem}[Earley set \type{EIM} traversal]
 \label{th:es-eim-traversal}
-Let \Ves{eset} be an Earley set.
-Traversal of \var{eset}
+Let \var{es} be an Earley set.
+Traversal of \var{es}
 may be charged as \Oc{} time and zero space for each \type{EIM}
-in \var{eset},
+in \var{es},
 plus \Oc{} time and zero space for the final test.
 \end{theorem}
 
 \begin{proof}
 \mypareq{eq:th-es-eim-traversal-100}{%
-    Traversal of \var{eset}
+    Traversal of \var{es}
     incurs \Oc{} time and zero space for each \type{PIM}
-    in \var{eset},
+    in \var{es},
     plus \Oc{} time and zero space for the final test
     \bcuz{} \longThref{\type{ES} Traversal}{th:es-traversal}.
 }
 \mypareq{eq:th-es-eim-traversal-110}{%
-    All \type{LIM} resource for \var{eset} may be recharged to at most
-    one \type{EIM} in \var{eset}
-    \bcuz{} \type{LIM}--\type{EIM} Recharge Theorem \Thref{th:lim-eim-recharge}.
+    Traversal of \var{es}
+    incurs $2\times\Oc{}=\Oc{}$ time and
+    $2\times0=0$ space for each \type{EIM}
+    in \var{es},
+    plus \Oc{} time and zero space for the final test
+    \bcuz{} \longThref{\type{PIM}--\type{EIM} Consolidation}
+        {th:pim-eim-consolidation-NEW}.
 }
-\mypareq{eq:th-es-eim-traversal-140}{%
-    After the recharge of \Eref{eq:th-es-eim-traversal-110},
-    the time incurred by every \type{EIM} in \var{eset}
-    is $\Oc+\Oc=\Oc$ and the space incurred
-    by every \type{EIM} in \var{eset} is $0+0=0$.
-    \bcuz{} \Eref{eq:th-es-eim-traversal-100},
-        \Eref{eq:th-es-eim-traversal-110}.
-}
-The theorem follows immediately from
-the \type{PIM} to \type{EIM} Consolidation Theorem
-    \Thref{th:pim-eim-consolidation},
-\Eref{eq:th-es-eim-traversal-100},
-\Eref{eq:th-es-eim-traversal-110},
-and \Eref{eq:th-es-eim-traversal-140}.
+The theorem follows immediately from \Eref{eq:th-es-eim-traversal-110}.
 \myqed
 \end{proof}
 
