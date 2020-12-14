@@ -430,6 +430,9 @@
 \newcommand{\cellboxr}[2]{%
     \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}%
 }
+% A temporary, to be redefined with
+% the current width of the justification field
+\newcommand{\justificationWidth}[1]{1in}
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
@@ -9272,7 +9275,7 @@ less obvious aspects of the data structures for each \type{PIM}.
 \todo{Prove this}
 \end{proof}
 
-\begin{theorem}[PIM \var{transitions} element]
+\begin{theorem}[PIM \var{transitions} list]
 \label{th:pim-transitions-element}
 The space incurred by linked lists
 of the \var{transitions} array
@@ -10101,7 +10104,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \ref{line:bookkeeper-op-9}&\Oc{}&
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&
-        $\Vsize{transition} = \Oc{} \cuz{} \Thref{th:cnt-size}$.
+        $\Vsize{transition} = \Oc{} \cuz{}
+        \var{cnt} Size Theorem \Thref{th:cnt-size}$.
 \\ \hline
     \ref{line:bookkeeper-op-11}&\Oc{}&
         $\Vsize{work} = \Oc{}$ \cuz{}
@@ -10202,44 +10206,50 @@ The theorem follows immediately from
 
 \FloatBarrier
 
+\renewcommand{\justificationWidth}{3.3in}
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-space}
     \op{Bookkeeper} space per invocation}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|p{3.5in}|}
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-2}&0&
-        \Vocab{\var{g}} is a constant which depends on \Vint{g},
-        so that $\Vsize{work} = \Oc$.
-        \Vsize{work} resides on the stack.
+        \cellboxr{\justificationWidth{}}{%
+            \Vocab{\var{g}} is a constant which depends on \Vint{g},
+            so that $\Vsize{work} = \Oc$.
+            \Vsize{work} resides on the stack.}
 \\ \hline
     \ref{line:bookkeeper-op-3}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&0&\Thref{th:es-traversal}
+    \ref{line:bookkeeper-op-4}&0&%
+        \cellboxr{\justificationWidth{}}{%
+            \type{ES} Traversal Theorem \Thref{th:es-traversal}.}
 \\ \hline
     \ref{line:bookkeeper-op-5}&0&
 \\ \hline
     \ref{line:bookkeeper-op-6}&0&%
-        Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.
+        \cellboxr{\justificationWidth{}}{%
+            Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.}
 \\ \hline
     \ref{line:bookkeeper-op-7}&0&
 \\ \hline
     \ref{line:bookkeeper-op-8}&0&
 \\ \hline
-    \ref{line:bookkeeper-op-9}&0&
-        \Thref{th:pim-transitions-element}.
+    \ref{line:bookkeeper-op-9}&0&%
+        \cellboxr{\justificationWidth{}}{%
+            \type{PIM} Transitions List Theorem
+            \Thref{th:pim-transitions-element}.}
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&\Tbref{tab:bookkeeper-time},
-        $\Vsize{transition} = \Oc{}$ \cuz
-        \Thref{th:cnt-size}.
+    \ref{line:bookkeeper-op-10}&\Oc{}&%
+        \cellboxr{\justificationWidth{}}{%
+            \op{Bookkeeper} Time Table \Tbref{tab:bookkeeper-time},
+            $\Vsize{transition} = \Oc{}$ \cuz{}
+            \var{cnt} Size Theorem \Thref{th:cnt-size}.}
 \\ \hline
     \ref{line:bookkeeper-op-11}&0&
-        All space used by \var{transition} is already allocated at
-            lines \ref{line:bookkeeper-op-8} and
-            \ref{line:bookkeeper-op-9}.
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
     See \AFref{alg:bookkeeper-op}.
@@ -10254,7 +10264,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \label{th:bookkeeper-space}
 The space that each \op{Bookkeeper} op incurs
 may be account for by charging
-\Oc{} space to an arbitrary \type{EIM}.
+\Oc{} space to \VVelement{S}{j}
+of \AFref{alg:bookkeeper-op}.
 \end{theorem}
 
 \begin{proof}
