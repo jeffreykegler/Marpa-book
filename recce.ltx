@@ -424,10 +424,11 @@
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
 
 % These are for putting paragraphs in cells of tables.
-\newcommand{\cellboxc}[2]{%
+\newcommand{\cellboxcWidth}[1]{1in}
+\newcommand{\cellboxc}[2][\cellboxcWidth]{%
     \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}%
 }
-\newcommand{\cellboxrWidth}[1]{1in}
+\newcommand{\cellboxrWidth}[1]{4.5in}
 \newcommand{\cellboxr}[2][\cellboxrWidth]{%
     \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}%
 }
@@ -10017,57 +10018,56 @@ and that fact that
 
 \FloatBarrier
 
-\renewcommand{\cellboxrWidth}{2.75in}
+\renewcommand{\cellboxrWidth}{3.25in}
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-invocations}
     Line invocations per call of \op{Bookkeeper}}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{2.75in}|}
+\begin{tabular}{|r|c|p{\cellboxrWidth}|}
 \hline
 \multicolumn{1}{|c|}{Line}
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&1&%
-        Line \ref{line:bookkeeper-op-1} Seq.
+    \ref{line:bookkeeper-op-2}&1&\cellboxr{%
+        Line \ref{line:bookkeeper-op-1} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-3}&1&%
-       Line \ref{line:bookkeeper-op-2} Seq.
+    \ref{line:bookkeeper-op-3}&1&\cellboxr{%
+       Line \ref{line:bookkeeper-op-2} Seq.}
 \\ \hline
     \ref{line:bookkeeper-op-4}%
-    &\cellboxc{1in}{$1+\var{pim}$}%
+    &$1+\var{pim}$%
     &\cellboxr{%
         Line \ref{line:bookkeeper-op-3} Seq;
         \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&\var{pim}&
-       Line \ref{line:bookkeeper-op-4} Seq.
+    \ref{line:bookkeeper-op-5}&\var{pim}&\cellboxr{%
+       Line \ref{line:bookkeeper-op-4} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-6}&{$\le\var{pim}$}&
-       Line \ref{line:bookkeeper-op-5} Cond.
+    \ref{line:bookkeeper-op-6}&{$\le\var{pim}$}&\cellboxr{%
+       Line \ref{line:bookkeeper-op-5} Cond.}
 \\ \hline
-    \ref{line:bookkeeper-op-7}&{$\le\var{pim}$}&
-       Line \ref{line:bookkeeper-op-6} Seq.
+    \ref{line:bookkeeper-op-7}&{$\le\var{pim}$}&\cellboxr{%
+       Line \ref{line:bookkeeper-op-6} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-8}&{$\le\var{pim}$}&
-       Line \ref{line:bookkeeper-op-7} Cond.
+    \ref{line:bookkeeper-op-8}&{$\le\var{pim}$}&\cellboxr{%
+       Line \ref{line:bookkeeper-op-7} Cond.}
 \\ \hline
-    \ref{line:bookkeeper-op-9}&{$\le\var{pim}$}&
-       Line \ref{line:bookkeeper-op-6} Seq.
+    \ref{line:bookkeeper-op-9}&{$\le\var{pim}$}&\cellboxr{%
+       Line \ref{line:bookkeeper-op-6} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-10}&1&
-        Line \ref{line:bookkeeper-op-4} Seq.
+    \ref{line:bookkeeper-op-10}&1&\cellboxr{%
+        Line \ref{line:bookkeeper-op-4} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-11}&1&
-        Line \ref{line:bookkeeper-op-10} Seq.
+    \ref{line:bookkeeper-op-11}&1&\cellboxr{%
+        Line \ref{line:bookkeeper-op-10} Seq.}
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{
+\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
 Lines are listed in order of deduction.
 1: ``once''.
 \var{pim}: ``once per $\type{PIM} \in \VVelement{S}{j}$''.
-{$\le\var{pim}$}: ``at most once per $\type{PIM} \in \VVelement{S}{j}$''.
-    }
+{$\le\var{pim}$}: ``at most once per $\type{PIM} \in \VVelement{S}{j}$''.}}
 \\ \hline
 \end{tabular}
 \end{table}
@@ -10546,7 +10546,7 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
 \\ \hline
     \ref{line:predicter-op-3}
     &
-        \cellboxc{1.5in}{%
+        \cellboxc[1.5in]{%
         % Add space above and below the equation
         \rule[-.25in]{0em}{.6in}$
         1+\left(
@@ -10561,14 +10561,14 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
            \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-4}
-    &\cellboxc{1.5in}{%
+    &\cellboxc[1.5in]{%
         $\var{eim}\times\fixedsize{\Rules{\var{g}}}$}
     &\cellboxr[2in]{%
            Line \ref{line:predicter-op-3} Seq;
            \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-5}
-    &\cellboxc{1.5in}{%
+    &\cellboxc[1.5in]{%
         $\var{eim}\times\fixedsize{\Rules{\var{g}}}$%
         }
     &Line \ref{line:predicter-op-4} Seq.
@@ -10823,9 +10823,9 @@ operation of \Earley{}\cite{Earley1970}.
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
-    \cellboxc{.3in}{Line}&
-    \cellboxc{.9in}{Invocations per call}&
-    \cellboxc{3.2in}{Justification}
+    \cellboxc[.3in]{Line}&
+    \cellboxc[.9in]{Invocations per call}&
+    \cellboxc[3.2in]{Justification}
 \\ \hline
     \ref{line:scanner-op-8}&1/\var{dup}&
         \cellboxr[3.2in]{This link duplicates an existing \type{EIM},
