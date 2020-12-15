@@ -427,12 +427,10 @@
 \newcommand{\cellboxc}[2]{%
     \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}%
 }
-\newcommand{\cellboxr}[2]{%
+\newcommand{\cellboxrWidth}[1]{1in}
+\newcommand{\cellboxr}[2][\cellboxrWidth]{%
     \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}%
 }
-% A temporary, to be redefined with
-% the current width of the justification field
-\newcommand{\justificationWidth}[1]{1in}
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
@@ -10019,6 +10017,7 @@ and that fact that
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{2.75in}
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-invocations}
@@ -10038,7 +10037,7 @@ and that fact that
 \\ \hline
     \ref{line:bookkeeper-op-4}%
     &\cellboxc{1in}{$1+\var{pim}$}%
-    &\cellboxr{2.75in}{%
+    &\cellboxr{%
         Line \ref{line:bookkeeper-op-3} Seq;
         \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
@@ -10075,27 +10074,28 @@ Lines are listed in order of deduction.
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-time}
-    \op{Bookkeeper} time per invocation}
+    Time per call of \op{Bookkeeper}}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{3.5in}|}
+\begin{tabular}{|r|c|p{\cellboxrWidth}|}
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&\Oc{}&
-        \Vocab{\var{g}} is a constant which depends on \Vint{g}.
+    \ref{line:bookkeeper-op-2}&\Oc{}&\cellboxr{%
+        \Vocab{\var{g}} is a constant which depends on \Vint{g}.}
 \\ \hline
     \ref{line:bookkeeper-op-3}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&
-        \type{ES} Traversal Theorem \Thref{th:es-traversal}.
+    \ref{line:bookkeeper-op-4}&\Oc{}&\cellboxr{%
+        \type{ES} Traversal Theorem \Thref{th:es-traversal}.}
 \\ \hline
     \ref{line:bookkeeper-op-5}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&\Oc{}&
-        Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.
+    \ref{line:bookkeeper-op-6}&\Oc{}&\cellboxr{%
+        Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.}
 \\ \hline
     \ref{line:bookkeeper-op-7}&\Oc{}&
 \\ \hline
@@ -10103,16 +10103,16 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-9}&\Oc{}&
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&
-        $\Vsize{transition} = \Oc{} \cuz{}
-        \var{cnt} Size Theorem \Thref{th:cnt-size}$.
+    \ref{line:bookkeeper-op-10}&\Oc{}&\cellboxr{%
+        $\Vsize{transition} = \Oc{}$ \cuz{}
+        \var{cnt} Size Theorem \Thref{th:cnt-size}.}
 \\ \hline
-    \ref{line:bookkeeper-op-11}&\Oc{}&
+    \ref{line:bookkeeper-op-11}&\Oc{}&\cellboxr{%
         $\Vsize{work} = \Oc{}$ \cuz{}
-        \Vocab{\var{g}} is a constant which depends on \Vint{g}.
+        \Vocab{\var{g}} is a constant which depends on \Vint{g}.}
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:bookkeeper-op}.
+\multicolumn{3}{|p{4.5in}|}{\cellboxr[4.5in]{
+    See \AFref{alg:bookkeeper-op}.}
 }
 \\ \hline
 \end{tabular}
@@ -10153,7 +10153,7 @@ Line&\multicolumn{1}{|c|}{Per call}
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
-\multicolumn{3}{|r|}{\cellboxr{3.5in}{%
+\multicolumn{3}{|r|}{\cellboxr[3.5in]{%
     All charges in this table are per call
     of the \op{Bookkeeper} op.
     See \Tbref{tab:bookkeeper-invocations},
@@ -10206,7 +10206,7 @@ The theorem follows immediately from
 
 \FloatBarrier
 
-\renewcommand{\justificationWidth}{3.3in}
+\renewcommand{\cellboxrWidth}{3.3in}
 \begin{table}[H]
 \caption{
     \label{tab:bookkeeper-space}
@@ -10217,7 +10217,7 @@ The theorem follows immediately from
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-2}&0&
-        \cellboxr{\justificationWidth{}}{%
+        \cellboxr{%
             \Vocab{\var{g}} is a constant which depends on \Vint{g},
             so that $\Vsize{work} = \Oc$.
             \Vsize{work} resides on the stack.}
@@ -10225,13 +10225,13 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \ref{line:bookkeeper-op-3}&0&
 \\ \hline
     \ref{line:bookkeeper-op-4}&0&%
-        \cellboxr{\justificationWidth{}}{%
+        \cellboxr{%
             \type{ES} Traversal Theorem \Thref{th:es-traversal}.}
 \\ \hline
     \ref{line:bookkeeper-op-5}&0&
 \\ \hline
     \ref{line:bookkeeper-op-6}&0&%
-        \cellboxr{\justificationWidth{}}{%
+        \cellboxr{%
             Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.}
 \\ \hline
     \ref{line:bookkeeper-op-7}&0&
@@ -10239,12 +10239,12 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \ref{line:bookkeeper-op-8}&0&
 \\ \hline
     \ref{line:bookkeeper-op-9}&0&%
-        \cellboxr{\justificationWidth{}}{%
+        \cellboxr{%
             \type{PIM} Transitions List Theorem
             \Thref{th:pim-transitions-element}.}
 \\ \hline
     \ref{line:bookkeeper-op-10}&\Oc{}&%
-        \cellboxr{\justificationWidth{}}{%
+        \cellboxr{%
             \op{Bookkeeper} Time Table \Tbref{tab:bookkeeper-time},
             $\Vsize{transition} = \Oc{}$ \cuz{}
             \var{cnt} Size Theorem \Thref{th:cnt-size}.}
@@ -10540,7 +10540,7 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
     &\multicolumn{1}{c|}{Invocations}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:predicter-op-2}&$1+\var{eim}$&\cellboxr{2in}{%
+    \ref{line:predicter-op-2}&$1+\var{eim}$&\cellboxr[2in]{%
            Line \ref{line:predicter-op-1} Seq;
            \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
@@ -10556,14 +10556,14 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
             \end{gathered}
         \right)
         $}
-    &\cellboxr{2in}{%
+    &\cellboxr[2in]{%
            Line \ref{line:predicter-op-2} Seq;
            \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:predicter-op-4}
     &\cellboxc{1.5in}{%
         $\var{eim}\times\fixedsize{\Rules{\var{g}}}$}
-    &\cellboxr{2in}{%
+    &\cellboxr[2in]{%
            Line \ref{line:predicter-op-3} Seq;
            \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
@@ -10637,7 +10637,7 @@ Line&\multicolumn{1}{|c|}{Per call}
 \\ \hline
     Totals&\Oc{}&\Oc{}
 \\ \hline
-\multicolumn{3}{|c|}{\cellboxr{4in}{%
+\multicolumn{3}{|c|}{\cellboxr[4in]{%
     See \Aref{alg:predicter-op},
         \Tbref{tab:predicter-invocations}, \Tbref{tab:predicter-time}.
     Recall that \Vint{g} is a constant so that
@@ -10828,7 +10828,7 @@ operation of \Earley{}\cite{Earley1970}.
     \cellboxc{3.2in}{Justification}
 \\ \hline
     \ref{line:scanner-op-8}&1/\var{dup}&
-        \cellboxr{3.2in}{This link duplicates an existing \type{EIM},
+        \cellboxr[3.2in]{This link duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
             of the main loop.}
 \\ \hline
@@ -11054,12 +11054,12 @@ the \op{Scanner} Time Worksheet
 Line&Space&Justification
 \\ \hline
     \ref{line:scanner-op-2}&0&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
            \myfn{Transitions}{} Complexity Theorem
            \Thref{th:transitions-read}.}
 \\ \hline
     \ref{line:scanner-op-3}&0&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.}
 \\ \hline
@@ -11070,23 +11070,23 @@ Line&Space&Justification
     \ref{line:scanner-op-6}&0&
 \\ \hline
     \ref{line:scanner-op-7}&0&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
     \ref{line:scanner-op-8}&\Oc{}&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
 \\ \hline
     \ref{line:scanner-op-9}&0&
 \\ \hline
     \ref{line:scanner-op-10}&0&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
     \ref{line:scanner-op-11}&0&
 \\ \hline
     \ref{line:scanner-op-12}&\Oc{}&
-       \cellboxr{3.4in}{%
+       \cellboxr[3.4in]{%
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \multicolumn{3}{|p{4.5in}|}{
@@ -11902,7 +11902,7 @@ the \op{Leo-reducer} Space Worksheet
     \ref{line:reducer-op-3}&{$\le$}1/\var{eim}&%
         \longDfref{Loop invocation}{def:loop-invocation}.
 \\ \hline
-    \ref{line:reducer-op-2}&$\le(1+\var{eim})$&\cellboxr{2.75in}{%
+    \ref{line:reducer-op-2}&$\le(1+\var{eim})$&\cellboxr[2.75in]{%
         \Dfref{def:loop-invocation};
         Line \ref{line:reducer-op-3} RSeq.}
 \\ \hline
