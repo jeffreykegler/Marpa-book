@@ -10832,8 +10832,8 @@ operation of \Earley{}\cite{Earley1970}.
 
 \FloatBarrier
 
-\renewcommand{\cellboxrWidth}{3.1in}
-\renewcommand{\cellboxcWidth}{1in}
+\renewcommand{\cellboxrWidth}{3.3in}
+\renewcommand{\cellboxcWidth}{.8in}
 \begin{table}[H]
 \caption{
     \label{tab:scanner-invocations}
@@ -10845,60 +10845,62 @@ operation of \Earley{}\cite{Earley1970}.
     &\cellboxc{Invocations per call}
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-8}&\cellboxc{1/\var{dup}}&
-        \cellboxr{This link duplicates an existing \type{EIM},
+    \ref{line:scanner-op-8}&\var{dup}&
+        \cellboxr{This line duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
             of the main loop.}
 \\ \hline
-    \ref{line:scanner-op-12}&\cellboxc{1/\var{new}}&\cellboxr{%
-            This link creates a new \type{EIM}:
+    \ref{line:scanner-op-12}&\var{new}&\cellboxr{%
+            This line creates a new \type{EIM}:
             and therefore is in a ``new'' pass
             of the main loop.}
 \\ \hline
-    \ref{line:scanner-op-11}&\cellboxc{1/\var{new}}&\cellboxr{%
+    \ref{line:scanner-op-11}&\var{new}&\cellboxr{%
            Line \ref{line:scanner-op-12} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-10}&\cellboxc{1/\var{new}}&\cellboxr{%
+    \ref{line:scanner-op-10}&\var{new}&\cellboxr{%
            Line \ref{line:scanner-op-11} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-9}&\cellboxc{1/\var{new}}&\cellboxr{%
+    \ref{line:scanner-op-9}&\var{new}&\cellboxr{%
            Line \ref{line:scanner-op-10} RSeq.}
 \\ \hline
     \ref{line:scanner-op-7}&
-       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+       \var{new}+\var{dup}&\cellboxr{%
            Line \ref{line:scanner-op-8} RSeq or
            line \ref{line:scanner-op-9} RSeq.}
 \\ \hline
     \ref{line:scanner-op-6}&
-       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+       \var{new}+\var{dup}&\cellboxr{%
            Line \ref{line:scanner-op-7} RSeq.}
 \\ \hline
     \ref{line:scanner-op-5}&
-       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+       \var{new}+\var{dup}&\cellboxr{%
            Line \ref{line:scanner-op-6} RSeq.}
 \\ \hline
     \ref{line:scanner-op-4}&
-       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+       \var{new}+\var{dup}&\cellboxr{%
            Line \ref{line:scanner-op-5} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-3}&\cellboxc{%
-            1+1/\var{new} \\ +1/\var{dup}}
-        &\cellboxr{%
+    \ref{line:scanner-op-3}&1+\var{new}+\var{dup}&%
+        \cellboxr{%
            Line \ref{line:scanner-op-4} RSeq,
            \longDfref{Loop invocation}{def:loop-invocation},
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:scanner-op-2}&\cellboxc{1}&\cellboxr{%
+    \ref{line:scanner-op-2}&1&\cellboxr{%
        Line \ref{line:scanner-op-3} RSeq,
            \Dfref{def:loop-invocation}.}
 \\ \hline
-\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
-    Lines are listed in order of deduction.
-    1/\var{dup}: ``once per dup \type{EIM} loop pass''.
-    1/\var{new}: ``once per new \type{EIM} loop pass''.}}
-\\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:scanner-invocations}
+are listed in order of deduction,
+and refer to the \op{Scanner} Algorithm \AFref{alg:scanner-op}.
+\var{dup} is the count of passes that adjoin a duplicate \type{EIM}
+to \VVelement{S}{j}.
+\var{new} is the count of passes that add a new \type{EIM}
+to \VVelement{S}{j}.
 \end{table}
 
 \FloatBarrier
@@ -11217,6 +11219,8 @@ operation of \Earley{}.
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.3in}
+\renewcommand{\cellboxcWidth}{.9in}
 \begin{table}[H]
 \caption{
     \label{tab:earley-reducer-invocations}
@@ -11224,74 +11228,65 @@ operation of \Earley{}.
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
-    \parbox{.3in}{\centering\strut
-        Line
-    \strut}&
-    \parbox{.9in}{\centering\strut
-        Invocations per call
-    \strut}&
-    \parbox{3.3in}{\centering\strut
-        Justification
-    \strut}
+    \multicolumn{1}{|c|}{Line}
+    &\cellboxc{Invocations per call}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:earley-reducer-op-7}&1/\var{dup}&
-        \parbox{3.3in}{\raggedright\strut
-            This link duplicates an existing \type{EIM},
+    \ref{line:earley-reducer-op-7}&\var{dup}&%
+        \cellboxr{%
+            This line duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
-            of the main loop.
-        \strut}
+            of the main loop.}
 \\ \hline
-    \ref{line:earley-reducer-op-11}&1/\var{new}&
-        \parbox{3.3in}{\raggedright\strut
-            This link creates a new \type{EIM}:
+    \ref{line:earley-reducer-op-11}&\var{new}&\cellboxr{%
+            This line creates a new \type{EIM}:
             and therefore is in a ``new'' pass
-            of the main loop.
-        \strut}
+            of the main loop.}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&1/\var{new}&
-       Line \ref{line:earley-reducer-op-9} RSeq.
+    \ref{line:earley-reducer-op-10}&\var{new}&\cellboxr{%
+       Line \ref{line:earley-reducer-op-9} RSeq.}
 \\ \hline
-    \ref{line:earley-reducer-op-9}&1/\var{new}&
-       Line \ref{line:earley-reducer-op-8} RSeq.
+    \ref{line:earley-reducer-op-9}&\var{new}&\cellboxr{%
+       Line \ref{line:earley-reducer-op-8} RSeq.}
 \\ \hline
-    \ref{line:earley-reducer-op-8}& 1/\var{new}&
-       Line \ref{line:earley-reducer-op-11} RSeq.
+    \ref{line:earley-reducer-op-8}&\var{new}&\cellboxr{%
+       Line \ref{line:earley-reducer-op-11} RSeq.}
 \\ \hline
     \ref{line:earley-reducer-op-6}&
-       1/\var{new}+1/\var{dup}&
-       Line \ref{line:earley-reducer-op-7} RSeq or
-       line \ref{line:earley-reducer-op-9} RSeq.
+       \var{new}+\var{dup}&\cellboxr{%
+           Line \ref{line:earley-reducer-op-7} RSeq or
+           line \ref{line:earley-reducer-op-8} RSeq.}
 \\ \hline
     \ref{line:earley-reducer-op-5}&
-       1/\var{new}+1/\var{dup}&
-       Line \ref{line:earley-reducer-op-6} RSeq.
+       \var{new}+\var{dup}&\cellboxr{%
+       Line \ref{line:earley-reducer-op-6} RSeq.}
 \\ \hline
     \ref{line:earley-reducer-op-4}&
-       1/\var{new}+1/\var{dup}&
-       Line \ref{line:earley-reducer-op-5} RSeq.
+       \var{new}+\var{dup}&\cellboxr{%
+       Line \ref{line:earley-reducer-op-5} RSeq.}
 \\ \hline
-    \ref{line:earley-reducer-op-3}&
-       1/\var{new}+1/\var{dup}&
-       Line \ref{line:earley-reducer-op-4} RSeq.
+    \ref{line:earley-reducer-op-3}&%
+       \var{new}+\var{dup}&%
+       \cellboxr{Line \ref{line:earley-reducer-op-4} RSeq.}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&
-        \parbox{.9in}{\centering\strut
-            1+1/\var{new} \\ +1/\var{dup}
-        \strut}&
-        \parbox{3.3in}{\raggedright\strut
+    \ref{line:earley-reducer-op-2}&%
+        1+\var{new}+\var{dup}&%
+        \cellboxr{%
            Line \ref{line:earley-reducer-op-3} RSeq,
            \longDfref{Loop invocation}{def:loop-invocation},
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.
-        \strut}
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-Lines are listed in order of deduction.
-1/\var{dup}: ``once per dup \type{EIM} loop pass''.
-1/\var{new}: ``once per new \type{EIM} loop pass''.
-    }
+        }
 \\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:earley-reducer-invocations}
+are listed in order of deduction,
+and refer to the \op{Earley-Reducer} Algorithm \AFref{alg:earley-reducer-op}.
+\var{dup} is the count of passes that adjoin a duplicate \type{EIM}
+to \VVelement{S}{j}.
+\var{new} is the count of passes that add a new \type{EIM}
+to \VVelement{S}{j}.
 \end{table}
 
 \FloatBarrier
@@ -11592,49 +11587,58 @@ but never both.  \myqed
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{2.75in}
 \begin{table}[t]
 \caption{
     \label{tab:leo-reducer-invocations}
     Line invocations per call of \op{Leo-reducer}}
-\begin{tabular}{|c|c|p{2.75in}|}
+\vspace{1ex}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Invocations&Justification
+    \multicolumn{1}{|c|}{Line}
+    &\cellboxc{Invocations per call}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:leo-reducer-op-2}&1/\var{try}&
-        this line creates a ``trial'' EIM for either a  dup or new pass
+    \ref{line:leo-reducer-op-2}&\var{dup}+\var{new}&\cellboxr{
+        This line creates a ``trial'' EIM.}
 \\ \hline
-    \ref{line:leo-reducer-op-3}&1/\var{try}&
-       line \ref{line:leo-reducer-op-2}, sequential execution
+    \ref{line:leo-reducer-op-3}&\var{dup}+\var{new}&\cellboxr{
+        Line \ref{line:leo-reducer-op-2}, Seq.}
 \\ \hline
-    \ref{line:leo-reducer-op-4}&1/\var{try}&
-       line \ref{line:leo-reducer-op-3}, sequential execution
+    \ref{line:leo-reducer-op-4}&\var{dup}+\var{new}&\cellboxr{
+        Line \ref{line:leo-reducer-op-3}, Seq.}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&1/\var{try}&
-       line \ref{line:leo-reducer-op-4}, sequential execution
+    \ref{line:leo-reducer-op-5}&\var{dup}+\var{new}&\cellboxr{
+        Line \ref{line:leo-reducer-op-4}, Seq.}
 \\ \hline
-    \ref{line:leo-reducer-op-6}&1/\var{dup}&
-        line adjoins a duplicate EIM
+    \ref{line:leo-reducer-op-6}&\var{dup}&\cellboxr{%
+            This line duplicates an existing \type{EIM},
+            and therefore is in a ``dup'' pass
+            of the main loop.}
 \\ \hline
-    \ref{line:leo-reducer-op-10}&1/\var{new}&
-        line adds a new EIM
+    \ref{line:leo-reducer-op-10}&\var{new}&\cellboxr{%
+            This line creates a new \type{EIM}:
+            and therefore is in a ``new'' pass
+            of the main loop.}
 \\ \hline
-    \ref{line:leo-reducer-op-7}&1/\var{new}&
-       line \ref{line:leo-reducer-op-10}, sequential execution
+    \ref{line:leo-reducer-op-7}&\var{new}&\cellboxr{%
+        Line \ref{line:leo-reducer-op-10}, Seq.}
 \\ \hline
-    \ref{line:leo-reducer-op-8}&1/\var{new}&
-       line \ref{line:leo-reducer-op-10}, sequential execution
+    \ref{line:leo-reducer-op-8}&\var{new}&\cellboxr{%
+        Line \ref{line:leo-reducer-op-10}, Seq.}
 \\ \hline
-    \ref{line:leo-reducer-op-9}&1/\var{new}&
-       line \ref{line:leo-reducer-op-10}, sequential execution
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-Lines are listed in order of deduction.
-1/\var{try}: ``once per dup or new call''
-1/\var{dup}: ``once per dup \type{EIM} call''.
-1/\var{new}: ``once per new \type{EIM} call''.
-    }
+    \ref{line:leo-reducer-op-9}&\var{new}&\cellboxr{%
+        Line \ref{line:leo-reducer-op-10}, Seq.}
 \\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:leo-reducer-invocations}
+are listed in order of deduction,
+and refer to the \op{Leo-Reducer} Algorithm \AFref{alg:leo-reducer-op}.
+\var{dup} is the count of passes that adjoin a duplicate \type{EIM}
+to \VVelement{S}{j}.
+\var{new} is the count of passes that add a new \type{EIM}
+to \VVelement{S}{j}.
 \end{table}
 
 \FloatBarrier
