@@ -9080,14 +9080,23 @@ may safely ignore the time incurred by a pseudocode procedure.
 
 \begin{theorem}[Procedure overhead discard]
 \label{th:procedure-overhead-discard}
-When one pseudocode procedure calls another
-pseudocode procedure,
-\Oc{} time of the time incurred by the callee may be ignored.
+\Oc{} time incurred by a
+pseudocode procedure may be ignored.
 \end{theorem}
 
 \begin{proof}
+We consider two cases.
+The first case is the ``main'' or top-level pseudocode procedure;
+and the second case is all other pseudocode procedures.
+In the case of the ``main'' pseudocode procedure,
+\Oc{} time may be charged to the parse.
+\todo{Justify adding ignoring \Oc{} time added to the parse.}
+
+In the case all other pseudocode procedures,
+every pseudocode procedures which is not the top-level
+has a caller.
 By \Obref{obs:housekeeping-vs-body-execution},
-caller always incurs \Oc{} ``housekeeping''
+the caller always incurs \Oc{} ``housekeeping''
 time when it calls callee.
 If we add \Oc{} of time from callee
 to the housekeeping time
@@ -9099,6 +9108,7 @@ so that, in Landau notation terms,
 the housekeeping time of the callee is unchanged.
 \myqed
 \end{proof}
+
 \section{Counting invocations}
 
 We first define our conventions for counting line
@@ -9450,7 +9460,7 @@ incurs \Oc{} time and \Oc{} space.
 \myqed
 \end{proof}
 
-\begin{theorem}[Earley set add]
+\begin{theorem}[\type{ES} add]
 \label{th:es-add}
 The resource incurred by adding a new
 \type{PIM} to an Earley set incurs
@@ -9994,7 +10004,8 @@ at line \ref{line:bookkeeper-op-9}.
 Therefore,
 \mypareq{eq:th-bookkeeper-100}{%
     for every value of \var{symID},
-    line \ref{line:bookkeeper-op-8} is executed at most once.
+    line \ref{line:bookkeeper-op-8} is executed at most once
+    \bcuz{} \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op}.
 }
 \mypareq{eq:th-bookkeeper-110}{%
    \var{symID}
@@ -10049,7 +10060,7 @@ and that fact that
         \longDfref{Loop invocation}{def:loop-invocation}.}
 \\ \hline
     \ref{line:bookkeeper-op-5}&\var{pim}&\cellboxr{%
-       Line \ref{line:bookkeeper-op-4} Seq.}
+       Line \ref{line:bookkeeper-op-4} Seq; \Dfref{def:loop-invocation}.}
 \\ \hline
     \ref{line:bookkeeper-op-6}&{$\le\var{pim}$}&\cellboxr{%
        Line \ref{line:bookkeeper-op-5} Cond.}
@@ -10061,7 +10072,7 @@ and that fact that
        Line \ref{line:bookkeeper-op-7} Cond.}
 \\ \hline
     \ref{line:bookkeeper-op-9}&{$\le\var{pim}$}&\cellboxr{%
-       Line \ref{line:bookkeeper-op-6} Seq.}
+       Line \ref{line:bookkeeper-op-7} Seq.}
 \\ \hline
     \ref{line:bookkeeper-op-10}&1&\cellboxr{%
         Line \ref{line:bookkeeper-op-4} Seq.}
@@ -10107,7 +10118,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-8}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-9}&\cellRule{\Oc{}}&
+    \ref{line:bookkeeper-op-9}&\cellRule{\Oc{}}&\cellboxr{%
+        \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
     \ref{line:bookkeeper-op-10}&\cellRule{\Oc{}}&\cellboxr{%
         $\Vsize{transition} = \Oc{}$ \cuz{}
@@ -10115,10 +10127,10 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-11}&\cellRule{\Oc{}}&\cellboxr{%
         $\Vsize{work} = \Oc{}$ \cuz{}
-        \Vocab{\var{g}} is a constant which depends on \Vint{g}.}
+       Line \ref{line:bookkeeper-op-2} of \AFref{alg:bookkeeper-op}.}
 \\ \hline
 \multicolumn{3}{|l|}{\cellboxr[4.5in]{
-    See \AFref{alg:bookkeeper-op}.}
+    See the \op{Bookkeeper} Algorithm \AFref{alg:bookkeeper-op}.}
 }
 \\ \hline
 \end{tabular}
@@ -10182,23 +10194,21 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
 
 \begin{proof}
 \mypareq{eq:th-bookkeeper-time-100}{%
-    The time that each \op{Bookkeeper} op incurs
-    can be accounted for as
-    \Oc{} time per call of \op{Bookkeeper} op;
-    and \Oc{} time
-    per $\type{PIM} \in \VVelement{S}{j}$
+    The time that each call of the \op{Bookkeeper} op incurs
+    can be accounted for as \Oc{} time plus \\
+    \Oc{} time per $\type{PIM} \in \VVelement{S}{j}$
     \bcuz{} \op{Bookkeeper} Time Worksheet
         \Tbref{tab:bookkeeper-time-worksheet}.
 }
 \mypareq{eq:th-bookkeeper-time-110}{%
-    The time that each \op{Bookkeeper} op incurs
+    The time that each call of the \op{Bookkeeper} op incurs
     can be accounted for as
     \Oc{} time per $\type{PIM} \in \VVelement{S}{j}$
     \bcuz{} Procedure Overhead Time Discard Theorem
         \Thref{th:procedure-overhead-discard}.
 }
 \mypareq{eq:th-bookkeeper-time-250}{%
-    The time that each \op{Bookkeeper} op incurs
+    The time that each call of the \op{Bookkeeper} op incurs
     can be accounted for as
     $2\times\Oc{}=\Oc{}$ time per $\type{EIM} \in \VVelement{S}{j}$
     \bcuz{} \longThref{\type{PIM}--\type{EIM} Consolidation}
@@ -10313,7 +10323,7 @@ Time incurred by
 the \op{Initializer} op may be ignored.
 Space incurred by the \op{Initializer} op may be
 accounted for as \Oc{} space charged
-to an arbitrary EIM.
+to the start \type{EIM}.
 \end{theorem}
 
 \begin{proof}
@@ -10325,9 +10335,6 @@ incurred by \op{Initializer} is \Oc{}.
 By the Procedure Overhead Time Discard Theorem
 \Thref{th:procedure-overhead-discard},
 the \Oc{} time may be ignored.
-We choose to assign and charge the \Oc{} space
-as described in the statement of the
-theorem.
 \myqed
 \end{proof}
 
