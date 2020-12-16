@@ -424,13 +424,19 @@
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
 
 % These are for putting paragraphs in cells of tables.
+% \cellRule takes the string and makes sure there is enough
+% space above and below for parentheses, etc.
+\newcommand{\cellRule}[1]{%
+        \rule{0em}{2.3ex}%
+        #1\rule[-1.05ex]{0em}{0in}%
+}
 \newcommand{\cellboxcWidth}[1]{1in}
 \newcommand{\cellboxc}[2][\cellboxcWidth]{%
-    \parbox{#1}{\centering\strut\linespread{.75}\selectfont#2\strut}%
+    \parbox{#1}{\centering\cellRule{#2}}%
 }
 \newcommand{\cellboxrWidth}[1]{4.5in}
 \newcommand{\cellboxr}[2][\cellboxrWidth]{%
-    \parbox{#1}{\raggedright\strut\linespread{.75}\selectfont#2\strut}%
+    \parbox{#1}{\raggedright\cellRule{#2}}%
 }
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
@@ -9960,10 +9966,10 @@ $\Vsize{work} = \size{\Vocab{\var{g}}}$.
 \label{line:bookkeeper-op-9}
 \EndIf
 \EndFor
-\State Create \var{transition} for \VVelement{S}{j}, $\Vsize{transition} = \var{cnt}$
+\State Create \var{transition} for \VVelement{S}{j}, $\Vsize{transition} = \var{cnt}.$
 \label{line:bookkeeper-op-10}
 \State Copy the non-empty entries of \var{work} to \var{transition},
-   in order
+   in order.
 \label{line:bookkeeper-op-11}
 \EndProcedure
 \end{algorithmic}
@@ -10024,7 +10030,7 @@ and that fact that
     \label{tab:bookkeeper-invocations}
     Line invocations per call of \op{Bookkeeper}}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{\cellboxrWidth}|}
+\begin{tabular}{|r|c|l|}
 \hline
 \multicolumn{1}{|c|}{Line}
     &\multicolumn{1}{c|}{Invocations}
@@ -10080,38 +10086,38 @@ Lines are listed in order of deduction.
     \label{tab:bookkeeper-time}
     Time per call of \op{Bookkeeper}}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{\cellboxrWidth}|}
+\begin{tabular}{|r|c|l|}
 \hline
 Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&\Oc{}&\cellboxr{%
+    \ref{line:bookkeeper-op-2}&\cellRule{\Oc{}}&\cellboxr{%
         \Vocab{\var{g}} is a constant which depends on \Vint{g}.}
 \\ \hline
-    \ref{line:bookkeeper-op-3}&\Oc{}&
+    \ref{line:bookkeeper-op-3}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&\cellboxr{%
+    \ref{line:bookkeeper-op-4}&\cellRule{\Oc{}}&\cellboxr{%
         \type{ES} Traversal Theorem \Thref{th:es-traversal}.}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&\Oc{}&
+    \ref{line:bookkeeper-op-5}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-6}&\Oc{}&\cellboxr{%
+    \ref{line:bookkeeper-op-6}&\cellRule{\Oc{}}&\cellboxr{%
         Symbol ID Complexity Theorem \Thref{th:symbol-id-complexity}.}
 \\ \hline
-    \ref{line:bookkeeper-op-7}&\Oc{}&
+    \ref{line:bookkeeper-op-7}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-8}&\Oc{}&
+    \ref{line:bookkeeper-op-8}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-9}&\Oc{}&
+    \ref{line:bookkeeper-op-9}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&\cellboxr{%
+    \ref{line:bookkeeper-op-10}&\cellRule{\Oc{}}&\cellboxr{%
         $\Vsize{transition} = \Oc{}$ \cuz{}
         \var{cnt} Size Theorem \Thref{th:cnt-size}.}
 \\ \hline
-    \ref{line:bookkeeper-op-11}&\Oc{}&\cellboxr{%
+    \ref{line:bookkeeper-op-11}&\cellRule{\Oc{}}&\cellboxr{%
         $\Vsize{work} = \Oc{}$ \cuz{}
         \Vocab{\var{g}} is a constant which depends on \Vint{g}.}
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{\cellboxr[4.5in]{
+\multicolumn{3}{|l|}{\cellboxr[4.5in]{
     See \AFref{alg:bookkeeper-op}.}
 }
 \\ \hline
@@ -10125,41 +10131,39 @@ Line&Time&\multicolumn{1}{c|}{Justification}
     \label{tab:bookkeeper-time-worksheet}
     \op{Bookkeeper} time worksheet}
 \vspace{1ex}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|r|c|c|}
 \hline
-Line&\multicolumn{1}{|c|}{Per call}
-&\multicolumn{1}{|c|}{Per \type{PIM} in \VVelement{S}{j} of
-    \Aref{alg:bookkeeper-op}}
+\multicolumn{1}{|c|}{Line}
+&\multicolumn{1}{|l|}{\cellboxc[1in]{Per call}}
+&\multicolumn{1}{|c|}{%
+    Per $\type{PIM} \in \VVelement{S}{j}$ per call}
 \\ \hline
-    \ref{line:bookkeeper-op-2}&\Oc{}&
+    \ref{line:bookkeeper-op-2}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-3}&\Oc{}&
+    \ref{line:bookkeeper-op-3}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-4}&\Oc{}&\Oc{}
+    \ref{line:bookkeeper-op-4}&\cellRule{\Oc{}}&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-5}&&\Oc{}
+    \ref{line:bookkeeper-op-5}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-6}&&\Oc{}
+    \ref{line:bookkeeper-op-6}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-7}&&\Oc{}
+    \ref{line:bookkeeper-op-7}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-8}&&\Oc{}
+    \ref{line:bookkeeper-op-8}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-9}&&\Oc{}
+    \ref{line:bookkeeper-op-9}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:bookkeeper-op-10}&\Oc{}&
+    \ref{line:bookkeeper-op-10}&\cellRule{\Oc{}}&
 \\ \hline
-    \ref{line:bookkeeper-op-11}&\Oc{}&
+    \ref{line:bookkeeper-op-11}&\cellRule{\Oc{}}&
 \\ \hline
-    Totals&\Oc{}&\Oc{}
+    Totals&\cellRule{\Oc{}}&\cellRule{\Oc{}}
 \\ \hline
-\multicolumn{3}{|r|}{\cellboxr[3.5in]{%
-    All charges in this table are per call
-    of the \op{Bookkeeper} op.
-    See \Tbref{tab:bookkeeper-invocations},
-        \Tbref{tab:bookkeeper-time}.
-    \var{pim} time is charged to each \type{PIM}
-    in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
+\multicolumn{3}{|l|}{\cellboxr[3.5in]{%
+    See \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op},
+        \op{Bookkeeper} Line Invocations Table \Tbref{tab:bookkeeper-invocations},
+        and \op{Bookkeeper} Time Table \Tbref{tab:bookkeeper-time}.
 }}
 \\ \hline
 \end{tabular}
@@ -10183,7 +10187,8 @@ in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
     \Oc{} time per call of \op{Bookkeeper} op;
     and \Oc{} time
     per $\type{PIM} \in \VVelement{S}{j}$
-    \bcuz{} \Tbref{tab:bookkeeper-time-worksheet}.
+    \bcuz{} \op{Bookkeeper} Time Worksheet
+        \Tbref{tab:bookkeeper-time-worksheet}.
 }
 \mypareq{eq:th-bookkeeper-time-110}{%
     The time that each \op{Bookkeeper} op incurs
@@ -10212,9 +10217,9 @@ The theorem follows immediately from
     \label{tab:bookkeeper-space}
     \op{Bookkeeper} space per invocation}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Time&\multicolumn{1}{c|}{Justification}
+Line&Space&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-2}&0&
         \cellboxr{%
@@ -10251,8 +10256,8 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:bookkeeper-op-11}&0&
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:bookkeeper-op}.
+\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
+    See \op{Bookkeeper} Algorithm \AFref{alg:bookkeeper-op}.}
 }
 \\ \hline
 \end{tabular}
@@ -10263,7 +10268,7 @@ Line&Time&\multicolumn{1}{c|}{Justification}
 \begin{theorem}[\op{Bookkeeper} Space]
 \label{th:bookkeeper-space}
 The space that each \op{Bookkeeper} op incurs
-may be account for by charging
+may be accounted for by charging
 \Oc{} space to \VVelement{S}{j}
 of \AFref{alg:bookkeeper-op}.
 \end{theorem}
