@@ -10062,16 +10062,16 @@ and that fact that
     \ref{line:bookkeeper-op-5}&\var{pim}&\cellboxr{%
        Line \ref{line:bookkeeper-op-4} Seq; \Dfref{def:loop-invocation}.}
 \\ \hline
-    \ref{line:bookkeeper-op-6}&{$\le\var{pim}$}&\cellboxr{%
+    \ref{line:bookkeeper-op-6}&\order{\var{pim}}&\cellboxr{%
        Line \ref{line:bookkeeper-op-5} Cond.}
 \\ \hline
-    \ref{line:bookkeeper-op-7}&{$\le\var{pim}$}&\cellboxr{%
+    \ref{line:bookkeeper-op-7}&\order{\var{pim}}&\cellboxr{%
        Line \ref{line:bookkeeper-op-6} Seq.}
 \\ \hline
-    \ref{line:bookkeeper-op-8}&{$\le\var{pim}$}&\cellboxr{%
+    \ref{line:bookkeeper-op-8}&\order{\var{pim}}&\cellboxr{%
        Line \ref{line:bookkeeper-op-7} Cond.}
 \\ \hline
-    \ref{line:bookkeeper-op-9}&{$\le\var{pim}$}&\cellboxr{%
+    \ref{line:bookkeeper-op-9}&\order{\var{pim}}&\cellboxr{%
        Line \ref{line:bookkeeper-op-7} Seq.}
 \\ \hline
     \ref{line:bookkeeper-op-10}&1&\cellboxr{%
@@ -10080,13 +10080,14 @@ and that fact that
     \ref{line:bookkeeper-op-11}&1&\cellboxr{%
         Line \ref{line:bookkeeper-op-10} Seq.}
 \\ \hline
-\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
-Lines are listed in order of deduction.
-1: ``once''.
-\var{pim}: ``once per $\type{PIM} \in \VVelement{S}{j}$''.
-{$\le\var{pim}$}: ``at most once per $\type{PIM} \in \VVelement{S}{j}$''.}}
-\\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:bookkeeper-invocations}
+are listed in order of deduction
+and refer to the \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op}.
+\var{pim} is the count of \type{PIM}s in
+\VVelement{S}{j}, that is,
+$\var{pim} = \size{\VVelement{S}{j}}$.
 \end{table}
 
 \FloatBarrier
@@ -10411,11 +10412,10 @@ of Earley set 0 by \Earley{}.
     \ref{line:predict1-6}&\cellRule{\Oc{}}&\cellboxr{%
         \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
 \\ \hline
-\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
-    See the \var{Predict1} Algorithm \AFref{alg:predict1}.}
-}
-\\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:predict1-time}
+refer to the \var{Predict1} Algorithm \AFref{alg:predict1}.
 \end{table}
 
 \FloatBarrier
@@ -10589,14 +10589,14 @@ The theorem follows immediately from \Eref{eq:th-predict1-space-130}.
         }
     &\cellboxr{Line \ref{line:predicter-op-4} Seq.}
 \\ \hline
-\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
-    See \op{Predictor} Algorithm \Aref{alg:predicter-op}.
-    Lines are in order of deduction.
-    \var{eim} is the number of \type{EIM}'s in
-    \VVelement{S}{j}.}%
-}
-\\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:predicter-invocations}
+are listed in order of deduction
+and refer to the \op{Predicter} Algorithm \Aref{alg:predicter-op}.
+\var{eim} is the number of \type{EIM}s in
+\VVelement{S}{j}, that is,
+$\var{eim} = \size{\set{\var{x}\in\type{EIM}:\var{x}\in \VVelement{S}{j}}}$.
 \end{table}
 
 \FloatBarrier
@@ -10832,6 +10832,8 @@ operation of \Earley{}\cite{Earley1970}.
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.1in}
+\renewcommand{\cellboxcWidth}{1in}
 \begin{table}[H]
 \caption{
     \label{tab:scanner-invocations}
@@ -10839,84 +10841,62 @@ operation of \Earley{}\cite{Earley1970}.
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
-    \cellboxc[.3in]{Line}&
-    \cellboxc[.9in]{Invocations per call}&
-    \cellboxc[3.2in]{Justification}
+    \multicolumn{1}{|c|}{Line}
+    &\cellboxc{Invocations per call}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-8}&1/\var{dup}&
-        \cellboxr[3.2in]{This link duplicates an existing \type{EIM},
+    \ref{line:scanner-op-8}&\cellboxc{1/\var{dup}}&
+        \cellboxr{This link duplicates an existing \type{EIM},
             and therefore is in a ``dup'' pass
             of the main loop.}
 \\ \hline
-    \ref{line:scanner-op-12}&1/\var{new}&
-        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
+    \ref{line:scanner-op-12}&\cellboxc{1/\var{new}}&\cellboxr{%
             This link creates a new \type{EIM}:
             and therefore is in a ``new'' pass
-            of the main loop.
-        \strut}
+            of the main loop.}
 \\ \hline
-    \ref{line:scanner-op-11}&1/\var{new}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-12} RSeq.
-       \strut}
+    \ref{line:scanner-op-11}&\cellboxc{1/\var{new}}&\cellboxr{%
+           Line \ref{line:scanner-op-12} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-10}&1/\var{new}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-11} RSeq.
-       \strut}
+    \ref{line:scanner-op-10}&\cellboxc{1/\var{new}}&\cellboxr{%
+           Line \ref{line:scanner-op-11} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-9}& 1/\var{new}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-10} RSeq.
-       \strut}
+    \ref{line:scanner-op-9}&\cellboxc{1/\var{new}}&\cellboxr{%
+           Line \ref{line:scanner-op-10} RSeq.}
 \\ \hline
     \ref{line:scanner-op-7}&
-       1/\var{new}+1/\var{dup}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
+       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
            Line \ref{line:scanner-op-8} RSeq or
-           line \ref{line:scanner-op-9} RSeq.
-       \strut}
+           line \ref{line:scanner-op-9} RSeq.}
 \\ \hline
     \ref{line:scanner-op-6}&
-       1/\var{new}+1/\var{dup}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-7} RSeq.
-       \strut}
+       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+           Line \ref{line:scanner-op-7} RSeq.}
 \\ \hline
     \ref{line:scanner-op-5}&
-       1/\var{new}+1/\var{dup}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-6} RSeq.
-       \strut}
+       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+           Line \ref{line:scanner-op-6} RSeq.}
 \\ \hline
     \ref{line:scanner-op-4}&
-       1/\var{new}+1/\var{dup}&
-       \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
-           Line \ref{line:scanner-op-5} RSeq.
-        \strut}
+       \cellboxc{1/\var{new}+1/\var{dup}}&\cellboxr{%
+           Line \ref{line:scanner-op-5} RSeq.}
 \\ \hline
-    \ref{line:scanner-op-3}&
-        \parbox{.9in}{\centering\strut\linespread{.75}\selectfont
-            1+1/\var{new} \\ +1/\var{dup}
-        \strut}&
-        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
+    \ref{line:scanner-op-3}&\cellboxc{%
+            1+1/\var{new} \\ +1/\var{dup}}
+        &\cellboxr{%
            Line \ref{line:scanner-op-4} RSeq,
-           \longDfref{Loop invocation}{def:loop-invocation}..
+           \longDfref{Loop invocation}{def:loop-invocation},
            \type{ES} \type{EIM} Traversal Theorem
-           \Thref{th:es-eim-traversal}.
-        \strut}
+           \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:scanner-op-2}&1&
-        \parbox{3.2in}{\raggedright\strut\linespread{.75}\selectfont
+    \ref{line:scanner-op-2}&\cellboxc{1}&\cellboxr{%
        Line \ref{line:scanner-op-3} RSeq,
-           \Dfref{def:loop-invocation}.
-        \strut}
+           \Dfref{def:loop-invocation}.}
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{\linespread{.75}\selectfont
-Lines are listed in order of deduction.
-1/\var{dup}: ``once per dup \type{EIM} loop pass''.
-1/\var{new}: ``once per new \type{EIM} loop pass''.
-    }
+\multicolumn{3}{|l|}{\cellboxr[4.5in]{%
+    Lines are listed in order of deduction.
+    1/\var{dup}: ``once per dup \type{EIM} loop pass''.
+    1/\var{new}: ``once per new \type{EIM} loop pass''.}}
 \\ \hline
 \end{tabular}
 \end{table}
