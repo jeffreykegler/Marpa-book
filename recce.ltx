@@ -10812,7 +10812,13 @@ operation of \Earley{}\cite{Earley1970}.
 \label{line:scanner-op-2}
 \For{every $\Veim{match} \in \Veimset{matches}$}
 \label{line:scanner-op-3}
-\State $\Veim{trial} \gets \tuple{\Next{\DR{\var{match}}},\Origin{\var{match}}}@\VVelement{S}{j}$
+\State $\Veim{trial} \gets \tuple{
+     \begin{gathered}
+        \Next{\DR{\var{match}}},
+        \\ \Origin{\var{match}}, \Current{\VVelement{S}{j}}
+     \end{gathered}
+        }
+        $
 \label{line:scanner-op-4}
 \State $\var{lp} \gets \tuple{\Veim{match},\var{token}}_\type{LP}$
 \label{line:scanner-op-5}
@@ -10821,7 +10827,6 @@ operation of \Earley{}\cite{Earley1970}.
   \If{$\var{found} \ne \Lambda$}
 \label{line:scanner-op-7}
     \State Add \var{lp} to \LinkPairs{\var{trial}}
-        \Comment \tightMath{\var{ln}=\Oc}
 \label{line:scanner-op-8}
   \Else
 \label{line:scanner-op-9}
@@ -10830,7 +10835,6 @@ operation of \Earley{}\cite{Earley1970}.
     \State $\LinkPairs{\var{trial}} \gets \set{\var{lp}}$
 \label{line:scanner-op-11}
     \State Add \var{trial} to \VVelement{S}{j}
-      \Comment \tightMath{\var{ln}=\var{s}=\Oc}
 \label{line:scanner-op-12}
   \EndIf
 \EndFor
@@ -11088,43 +11092,27 @@ refer to the \op{Scanner} Algorithm \Aref{alg:scanner-op}.}
     \label{tab:scanner-space-worksheet}
     \op{Scanner} space worksheet}
 \vspace{1ex}
-\begin{tabular}{|c|c|c|}
+\begin{tabular}{|r|c|c|}
 \hline
-\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
-\\ \cline{2-3}
-Line&\var{new}&\var{dup}
+\multicolumn{1}{|c|}{Line}
+&\multicolumn{1}{|l|}{\cellboxc[1.75in]{%
+    For every call where
+    \Veim{trial} is a new \type{EIM}}}
+&\multicolumn{1}{|l|}{\cellboxc[2.25in]{%
+    For every call that
+    where \Veim{trial}
+    duplicates an existing \type{EIM}}}
 \\ \hline
-    \ref{line:scanner-op-2}&&
+    \ref{line:scanner-op-8}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:scanner-op-3}&&
+    \ref{line:scanner-op-12}&\Oc{}&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-4}&&
-\\ \hline
-    \ref{line:scanner-op-5}&&
-\\ \hline
-    \ref{line:scanner-op-6}&&
-\\ \hline
-    \ref{line:scanner-op-7}&&
-\\ \hline
-    \ref{line:scanner-op-8}&&\Oc{}
-\\ \hline
-    \ref{line:scanner-op-9}&&
-\\ \hline
-    \ref{line:scanner-op-10}&&
-\\ \hline
-    \ref{line:scanner-op-11}&&
-\\ \hline
-    \ref{line:scanner-op-12}&\Oc{}&
-\\ \hline
-    Totals&\Oc{}&\Oc{}
+    Totals&\Oc{}&\cellRule{\Oc{}}
 \\ \hline
 \end{tabular}
-\mylegend{See \Tbref{tab:scanner-space}.
-    Charges to \var{proc} are for every call.
-    Charges to \var{new} are
-    only for calls where \Veim{trial} is a new EIM.
-    Charges to \var{dup} are
-    only for calls where \Veim{trial} is a duplicate EIM.
+\mylegend{Lines in \Tbref{tab:scanner-space-worksheet}
+    refer to the \op{Scanner} Algorithm \Aref{alg:scanner-op}.
+    Omitted lines have zero values.
 }
 \end{table}
 
@@ -11428,7 +11416,7 @@ the \op{Earley-reducer} Time Worksheet
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \end{tabular}
-\mylegend{Lines in \Tbref{tab:earley-reducer-space-worksheet}
+\mylegend{Lines in \Tbref{tab:earley-reducer-space}
 refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.}
 \end{table}
 
@@ -11450,23 +11438,7 @@ refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.}
     where \Veim{trial}
     duplicates an existing \type{EIM}}}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-3}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-4}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-5}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-6}&&\cellRule{}
-\\ \hline
     \ref{line:earley-reducer-op-7}&&\cellRule{\Oc{}}
-\\ \hline
-    \ref{line:earley-reducer-op-8}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-9}&&\cellRule{}
-\\ \hline
-    \ref{line:earley-reducer-op-10}&&\cellRule{}
 \\ \hline
     \ref{line:earley-reducer-op-11}&\Oc{}&\cellRule{}
 \\ \hline
@@ -11474,7 +11446,8 @@ refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.}
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:earley-reducer-space-worksheet}
-    refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.}
+    refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.
+    Omitted lines have zero values.}
 \end{table}
 
 \FloatBarrier
@@ -11783,39 +11756,27 @@ refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
     \label{tab:leo-reducer-space-worksheet}
     \op{Leo-reducer} space worksheet}
 \vspace{1ex}
-\begin{tabular}{|c|c|c|c|}
+\begin{tabular}{|r|c|c|}
 \hline
-\multicolumn{1}{|c}{}&\multicolumn{2}{|c|}{Accounts}
-\\ \cline{2-3}
-Line&\var{new}&\var{dup}
+\multicolumn{1}{|c|}{Line}
+&\multicolumn{1}{|l|}{\cellboxc[1.75in]{%
+    For every call where
+    \Veim{trial} is a new \type{EIM}}}
+&\multicolumn{1}{|l|}{\cellboxc[2.25in]{%
+    For every call that
+    where \Veim{trial}
+    duplicates an existing \type{EIM}}}
 \\ \hline
-    \ref{line:leo-reducer-op-2}&&
+    \ref{line:leo-reducer-op-6}&&\cellRule{\Oc{}}
 \\ \hline
-    \ref{line:leo-reducer-op-3}&&
+    \ref{line:leo-reducer-op-10}&\Oc{}&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-4}&&
-\\ \hline
-    \ref{line:leo-reducer-op-5}&&
-\\ \hline
-    \ref{line:leo-reducer-op-6}&&\Oc{}
-\\ \hline
-    \ref{line:leo-reducer-op-7}&&
-\\ \hline
-    \ref{line:leo-reducer-op-8}&&
-\\ \hline
-    \ref{line:leo-reducer-op-9}&&
-\\ \hline
-    \ref{line:leo-reducer-op-10}&\Oc{}&
-\\ \hline
-    Totals&\Oc{}&\Oc{}
+    Totals&\Oc{}&\cellRule{\Oc{}}
 \\ \hline
 \end{tabular}
-\mylegend{See \Tbref{tab:leo-reducer-space}.
-    Charges to \var{new} are
-    only for calls where \Veim{trial} is a new EIM.
-    Charges to \var{dup} are
-    only for calls where \Veim{trial} is a duplicate EIM.
-}
+\mylegend{Lines in \Tbref{tab:leo-reducer-space-worksheet}
+    refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.
+    Omitted lines have zero values.}
 \end{table}
 
 \FloatBarrier
