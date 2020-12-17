@@ -424,13 +424,17 @@
 \settowidth{\longtagwidth}{(99999)\quad}
 \setlength{\mathparwidth}{\dimexpr\textwidth-\longtagwidth}
 
-% These are for putting paragraphs in cells of tables.
+% The following set of macros is for putting paragraphs in cells of tables.
+
 % \cellRule takes the string and makes sure there is enough
-% space above and below for parentheses, etc.
+% space above and below for parentheses, etc.  It need only be called
+% once per row, and sometimes is used for an empty cell ("\cellrule{}")
+% just in order to set the vertical spacing for the row.
 \newcommand{\cellRule}[1]{%
         \rule{0em}{2.3ex}%
         #1\rule[-1.05ex]{0em}{0in}%
 }
+
 \newcommand{\cellboxcWidth}[1]{1in}
 \newcommand{\cellboxc}[2][\cellboxcWidth]{%
     \parbox{#1}{\centering\cellRule{#2}}%
@@ -10440,33 +10444,34 @@ By the Procedure Overhead Time Discard Theorem
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:predict1-space}
     Space per line invocation of \op{Predict1}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&Justification
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:predict1-2}&&
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
+    \ref{line:predict1-2}&&\cellboxr{%
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
 \\ \hline
-    \ref{line:predict1-3}&&
+    \ref{line:predict1-3}&&\cellRule{}
 \\ \hline
-    \ref{line:predict1-4}&&
+    \ref{line:predict1-4}&&\cellRule{}
 \\ \hline
-    \ref{line:predict1-5}&\Oc{}&
-        \type{ES} Add Theorem \Thref{th:es-add}.
+    \ref{line:predict1-5}&\Oc{}&\cellboxr{%
+        \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
-    \ref{line:predict1-6}&&
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:predict1}.
-}
+    \ref{line:predict1-6}&&\cellboxr{%
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:predict1-space}
+refer to the \var{Predict1} Algorithm \AFref{alg:predict1}.}
 \end{table}
 
 \FloatBarrier
@@ -10688,32 +10693,31 @@ and the Procedure Overhead Time Discard Theorem
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:predicter-space}
     Space per line invocation of \op{Predicter}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Time&\multicolumn{1}{c|}{Justification}
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:predicter-op-2}&0&
+    \ref{line:predicter-op-2}&0&\cellboxr{%
         \type{ES} \type{EIM} Traversal Theorem
-        \Thref{th:es-eim-traversal}.
+        \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:predicter-op-3}&0&
+    \ref{line:predicter-op-3}&0&\cellRule{}
 \\ \hline
-    \ref{line:predicter-op-4}&0&
+    \ref{line:predicter-op-4}&0&\cellRule{}
 \\ \hline
-    \ref{line:predicter-op-5}&0&
-        No indirect time per
-        \myfn{Predict1}{} Time Theorem \Thref{th:predict1-time}.
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:predicter-op}.
-}
+    \ref{line:predicter-op-5}&0&\cellRule{}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:predicter-space}
+    refer to the \op{Predicter} Algorithm \Aref{alg:predicter-op}.}
 \end{table}
 
 \FloatBarrier
@@ -11030,56 +11034,51 @@ the \op{Scanner} Time Worksheet
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:scanner-space}
     Space per line invocation of \op{Scanner}}
 \vspace{1ex}
-\begin{tabular}{|r|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&Justification
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:scanner-op-2}&0&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-2}&0&\cellboxr{%
            \myfn{Transitions}{} Complexity Theorem
            \Thref{th:transitions-read}.}
 \\ \hline
-    \ref{line:scanner-op-3}&0&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-3}&0&\cellboxr{%
            \type{ES} \type{EIM} Traversal Theorem
            \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:scanner-op-4}&0&
+    \ref{line:scanner-op-4}&0&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-5}&0&
+    \ref{line:scanner-op-5}&0&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-6}&0&
+    \ref{line:scanner-op-6}&0&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-7}&0&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-7}&0&\cellboxr{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
-    \ref{line:scanner-op-8}&\Oc{}&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-8}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
 \\ \hline
-    \ref{line:scanner-op-9}&0&
+    \ref{line:scanner-op-9}&0&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-10}&0&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-10}&0&\cellboxr{%
 	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
-    \ref{line:scanner-op-11}&0&
+    \ref{line:scanner-op-11}&0&\cellRule{}
 \\ \hline
-    \ref{line:scanner-op-12}&\Oc{}&
-       \cellboxr[3.4in]{%
+    \ref{line:scanner-op-12}&\Oc{}&\cellboxr{%
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:scanner-op}.
-}
-\\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:scanner-space}
+refer to the \op{Scanner} Algorithm \Aref{alg:scanner-op}.}
 \end{table}
 
 \FloatBarrier
@@ -11398,17 +11397,19 @@ the \op{Earley-reducer} Time Worksheet
     \label{tab:earley-reducer-space}
     Space per line invocation of \op{Earley-reducer}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&Justification
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:earley-reducer-op-2}&0&
+    \ref{line:earley-reducer-op-2}&0&\cellRule{}
 \\ \hline
-    \ref{line:earley-reducer-op-3}&0&
+    \ref{line:earley-reducer-op-3}&0&\cellRule{}
 \\ \hline
-    \ref{line:earley-reducer-op-4}&0&
+    \ref{line:earley-reducer-op-4}&0&\cellRule{}
 \\ \hline
-    \ref{line:earley-reducer-op-5}&0&
+    \ref{line:earley-reducer-op-5}&0&\cellRule{}
 \\ \hline
     \ref{line:earley-reducer-op-6}&0&\cellboxr{%
 	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
@@ -11416,23 +11417,19 @@ Line&Space&Justification
     \ref{line:earley-reducer-op-7}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
 \\ \hline
-    \ref{line:earley-reducer-op-8}&0&
+    \ref{line:earley-reducer-op-8}&0&\cellRule{}
 \\ \hline
     \ref{line:earley-reducer-op-9}&0&\cellboxr{%
 	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
 \\ \hline
-    \ref{line:earley-reducer-op-10}&0&
+    \ref{line:earley-reducer-op-10}&0&\cellRule{}
 \\ \hline
-    \ref{line:earley-reducer-op-11}&\Oc{}&
-       \parbox{3.5in}{\raggedright\strut
-        \type{ES} Add Theorem \Thref{th:es-add}.\strut
-        }
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:earley-reducer-op}.
-}
+    \ref{line:earley-reducer-op-11}&\Oc{}&\cellboxr{%
+        \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:earley-reducer-space-worksheet}
+refer to the \op{Earley-reducer} Algorithm \Aref{alg:earley-reducer-op}.}
 \end{table}
 
 \FloatBarrier
@@ -11742,40 +11739,41 @@ and the \op{Leo-reducer} time worksheet
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-space}
     Space per line invocation of \op{Leo-reducer}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{2.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&Justification
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:leo-reducer-op-2}&&
+    \ref{line:leo-reducer-op-2}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-3}&&
+    \ref{line:leo-reducer-op-3}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-4}&&
+    \ref{line:leo-reducer-op-4}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&&
+    \ref{line:leo-reducer-op-5}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-6}&&
+    \ref{line:leo-reducer-op-6}&&\cellRule{}
 \\ \hline
     \ref{line:leo-reducer-op-7}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
 \\ \hline
-    \ref{line:leo-reducer-op-8}&&
+    \ref{line:leo-reducer-op-8}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-9}&&
+    \ref{line:leo-reducer-op-9}&&\cellRule{}
 \\ \hline
-    \ref{line:leo-reducer-op-10}&\Oc{}&
-        \type{ES} Add Theorem \Thref{th:es-add}.
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{See
-    \AFref{alg:leo-reducer-op},
-    \Tbref{tab:leo-reducer-invocations}.}
+    \ref{line:leo-reducer-op-10}&\Oc{}&\cellboxr{%
+        \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:leo-reducer-space}
+refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \end{table}
 
 \FloatBarrier
@@ -11994,56 +11992,43 @@ and \Eref{eq:th-reducer-time-100}.
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
-    \label{tab:reducer-proc-space}
+    \label{tab:reducer-space}
     Space per line invocation of \op{Reducer}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&\multicolumn{1}{c|}{Justification}
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:reducer-op-2}&0&
-       \parbox{3.5in}{\raggedright\strut
+    \ref{line:reducer-op-2}&0&\cellboxr{%
         \type{ES} \type{EIM} Traversal Theorem
-        \Thref{th:es-eim-traversal}.\strut
-        }
+        \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:reducer-op-3}&0&
-       \parbox{3.5in}{\raggedright\strut
+    \ref{line:reducer-op-3}&0&\cellboxr{%
         \myfn{Transition}{} Read Theorem
-        \Thref{th:transitions-read}.\strut
-        }
+        \Thref{th:transitions-read}.}
 \\ \hline
-    \ref{line:reducer-op-4}&0&
+    \ref{line:reducer-op-4}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-5}&0&
+    \ref{line:reducer-op-5}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-6}&0&
+    \ref{line:reducer-op-6}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-7}&0&
+    \ref{line:reducer-op-7}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-8}&0&
-       \parbox{3.5in}{\raggedright\strut
-            Zero indirect space by
-            the Leo Reducer Space Theorem
-            \Thref{th:leo-reducer-space}.\strut
-       }
+    \ref{line:reducer-op-8}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-9}&0&
+    \ref{line:reducer-op-9}&0&\cellRule{}
 \\ \hline
-    \ref{line:reducer-op-10}&0&
-       \parbox{3.5in}{\raggedright\strut
-            Zero indirect space by
-            the Leo Reducer Space Theorem
-            \Thref{th:leo-reducer-space}.\strut
-       }
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:reducer-op}.
-}
+    \ref{line:reducer-op-10}&0&\cellRule{}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:reducer-space}
+refer to the \op{Reducer} Algorithm \Aref{alg:reducer-op}.}
 \end{table}
 
 \FloatBarrier
@@ -12055,11 +12040,9 @@ The \op{Reducer} incurs no space.
 
 \begin{proof}
 This theorem follows immediately from
-\Tbref{tab:reducer-proc-space}.
+\Tbref{tab:reducer-space}.
 \myqed
 \end{proof}
-
-\todo{Finish reducer op}
 
 \begin{theorem}[Reducer Ancestry Tracking]
 \label{th:reducer-ancestry-tracking}
@@ -12540,52 +12523,47 @@ and the Procedure Overhead Discard Theorem \Thref{th:procedure-overhead-discard}
 
 \FloatBarrier
 
+\renewcommand{\cellboxrWidth}{3.5in}
 \begin{table}[H]
 \caption{
     \label{tab:memoizer-space}
     Space per line invocation of \op{Memoizer}}
 \vspace{1ex}
-\begin{tabular}{|c|c|p{3.5in}|}
+\begin{tabular}{|r|c|l|}
 \hline
-Line&Space&\multicolumn{1}{c|}{Justification}
+\multicolumn{1}{|c|}{\cellRule{Line}}
+    &\multicolumn{1}{c|}{Space}
+    &\multicolumn{1}{c|}{Justification}
 \\ \hline
-    \ref{line:memoizer-op-2}&0&
-        \parbox{3.5in}{ \raggedright
+    \ref{line:memoizer-op-2}&0&\cellboxr{%
             \type{ES} Leo Eligible Traversal Theorem
             \Thref{th:leo-eligible-traversal},
             \type{ES} \type{EIM} Traversal Theorem
-            \Thref{th:es-eim-traversal}.
-        }
+            \Thref{th:es-eim-traversal}.}
 \\ \hline
-    \ref{line:memoizer-op-3}&0&
-        \parbox{3.5in}{ \raggedright
+    \ref{line:memoizer-op-3}&0&\cellboxr{%
             \LIMPredecessor{} Complexity Theorem
-            \Thref{th:lim-predecessor-complexity}.
-        }
+            \Thref{th:lim-predecessor-complexity}.}
 \\ \hline
-    \ref{line:memoizer-op-4}&0&
+    \ref{line:memoizer-op-4}&0&\cellRule{}
 \\ \hline
-    \ref{line:memoizer-op-5}&0&
+    \ref{line:memoizer-op-5}&0&\cellRule{}
 \\ \hline
-    \ref{line:memoizer-op-6}&0&
+    \ref{line:memoizer-op-6}&0&\cellRule{}
 \\ \hline
-    \ref{line:memoizer-op-7}&0&
+    \ref{line:memoizer-op-7}&0&\cellRule{}
 \\ \hline
-    \ref{line:memoizer-op-8}&0&
+    \ref{line:memoizer-op-8}&0&\cellRule{}
 \\ \hline
-    \ref{line:memoizer-op-9}&0&
-        \parbox{3.5in}{ \raggedright
-            \type{PIM} Link Pair Write Complexity Theorem \Thref{th:pim-link-pair-write}.
-        }
+    \ref{line:memoizer-op-9}&0&\cellboxr{%
+            \type{PIM} Link Pair Write Complexity Theorem \Thref{th:pim-link-pair-write}.}
 \\ \hline
-    \ref{line:memoizer-op-10}&\Oc{}&
-        \type{ES} Add Theorem \Thref{th:es-add}.
-\\ \hline
-\multicolumn{3}{|p{4.5in}|}{
-    See \AFref{alg:memoizer-op}.
-}
+    \ref{line:memoizer-op-10}&\Oc{}&\cellboxr{%
+        \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:memoizer-space}
+    refer to the \op{Memoizer} Algorithm \Aref{alg:memoizer-op}.}
 \end{table}
 
 \FloatBarrier
@@ -12604,7 +12582,7 @@ and the \op{Memoizer} Space per Invocation Table \Tbref{tab:memoizer-space}.
 \myqed
 \end{proof}
 
-\begin{theorem}[TODO]
+\begin{theorem}[\PreviousLink{} function]
 \label{th:previous-link}
 The total function
 \label{def-previous-link}
