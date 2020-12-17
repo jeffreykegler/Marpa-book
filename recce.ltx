@@ -438,6 +438,8 @@
 \newcommand{\cellboxr}[2][\cellboxrWidth]{%
     \parbox{#1}{\raggedright\cellRule{#2}}%
 }
+\newcommand{\mylegend}[1]{%
+    \parbox{\textwidth}{\leavevmode\\[1ex]#1}}
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
@@ -10148,9 +10150,10 @@ refer to the \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op}.
 \begin{tabular}{|r|c|c|}
 \hline
 \multicolumn{1}{|c|}{Line}
-&\multicolumn{1}{|l|}{\cellboxc[1in]{Per call}}
-&\multicolumn{1}{|c|}{%
-    Per $\type{PIM} \in \VVelement{S}{j}$ per call}
+&\multicolumn{1}{|l|}{\cellRule{Per call}}
+&\multicolumn{1}{|l|}{\cellboxc[1.25in]{%
+    Per $\type{PIM} \in \VVelement{S}{j}$
+    \\ per call}}
 \\ \hline
     \ref{line:bookkeeper-op-2}&\cellRule{\Oc{}}&
 \\ \hline
@@ -10174,13 +10177,13 @@ refer to the \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op}.
 \\ \hline
     Totals&\cellRule{\Oc{}}&\cellRule{\Oc{}}
 \\ \hline
-\multicolumn{3}{|l|}{\cellboxr[3.5in]{%
-    See \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op},
-        \op{Bookkeeper} Line Invocations Table \Tbref{tab:bookkeeper-invocations},
-        and \op{Bookkeeper} Time Table \Tbref{tab:bookkeeper-time}.
-}}
-\\ \hline
 \end{tabular}
+\\[1ex]\raggedright
+Lines in \Tbref{tab:bookkeeper-time-worksheet}
+refer to the \op{Bookkeeper} Algorithm \Aref{alg:bookkeeper-op}.
+Cell values are calculated from the
+\op{Bookkeeper} Line Invocations Table \Tbref{tab:bookkeeper-invocations},
+and \op{Bookkeeper} Time Table \Tbref{tab:bookkeeper-time}.
 \end{table}
 
 \FloatBarrier
@@ -10633,35 +10636,41 @@ refer to the \op{Predicter} Algorithm \Aref{alg:predicter-op}.
 
 \FloatBarrier
 
+\renewcommand{\cellboxcWidth}{1.25in}
 \begin{table}[H]
 \caption{
     \label{tab:predicter-time-worksheet}
     \op{Predicter} time worksheet}
 \vspace{1ex}
-\begin{tabular}{|c|r|r|}
+\begin{tabular}{|r|r|r|}
 \hline
-Line&\multicolumn{1}{|c|}{Per call}
-&\multicolumn{1}{|c|}{Per \type{EIM} in \VVelement{S}{j} of
-    \Aref{alg:predicter-op}}
+\multicolumn{1}{|c|}{Line}
+&\multicolumn{1}{|c|}{\cellRule{Per call}}
+&\multicolumn{1}{|c|}{Per $\type{EIM} \in \VVelement{S}{j}$
+    per call}
 \\ \hline
-    \ref{line:predicter-op-2}&$1\times\Oc{}=\Oc{}$&$1\times\Oc{}=\Oc{}$
+    \ref{line:predicter-op-2}&$1\times\Oc{}=\Oc{}$&\cellRule{%
+        $1\times\Oc{}=\Oc{}$}
 \\ \hline
-    \ref{line:predicter-op-3}&$1\times\Oc{}=\Oc{}$&$\fixedsize{\Rules{\Vint{g}}}\times\Oc{}=\Oc{}$
+    \ref{line:predicter-op-3}&$1\times\Oc{}=\Oc{}$&\cellRule{%
+        $\fixedsize{\Rules{\Vint{g}}}\times\Oc{}=\Oc{}$}
 \\ \hline
-    \ref{line:predicter-op-4}&&$\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$
+    \ref{line:predicter-op-4}&&\cellRule{%
+        $\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$}
 \\ \hline
-    \ref{line:predicter-op-5}&&$\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$
+    \ref{line:predicter-op-5}&&\cellRule{%
+        $\fixedsize{\Rules{\var{g}}}\times\Oc{}=\Oc{}$}
 \\ \hline
-    Totals&\Oc{}&\Oc{}
-\\ \hline
-\multicolumn{3}{|c|}{\cellboxr[4in]{%
-    See \Aref{alg:predicter-op},
-        \Tbref{tab:predicter-invocations}, \Tbref{tab:predicter-time}.
-    Recall that \Vint{g} is a constant so that
-        $\size{\Rules{\Vint{g}}} = \Oc{}$.
-}}
+    Totals&\Oc{}&\cellRule{\Oc{}}
 \\ \hline
 \end{tabular}
+\mylegend{Lines in \Tbref{tab:predicter-time-worksheet}
+    refer to the \op{Predicter} Algorithm \Aref{alg:predicter-op}.
+    Cell values are calculated from the
+    \op{Predicter} Line Invocations Table \Tbref{tab:predicter-invocations},
+    and \op{Predicter} Time Table \Tbref{tab:predicter-time}.
+    Recall that \Vint{g} is a constant so that
+    $\size{\Rules{\Vint{g}}} = \Oc{}$.}
 \end{table}
 
 \FloatBarrier
