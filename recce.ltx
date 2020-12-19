@@ -9836,6 +9836,9 @@ a part of the space for the grammar.
 \myqed
 \end{proof}
 
+\todo{zeroDotUsed -- do I need more than correctness for table?
+   Simplify?}
+
 \begin{definition}[\var{dotZeroUsed} validity]
 \label{def:dotZeroUsed-validity}
 We say that \var{dotZeroUsed} is \dfn{valid for} \Ves{es}
@@ -10064,6 +10067,82 @@ the ES \type{EIM} Count Theorem \Thref{th:es-eim-count},
 and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 \myqed
 \end{proof}
+
+\begin{definition}[\myfn{Transitions}{} validity]
+\label{def:transition-validity}
+We say that \myfn{Transitions}{} is \dfn{valid for} \Ves{es}
+iff
+\[
+\begin{gathered}
+    \forall\; \Vsym{t} :
+        \forall\; \var{pim} \in \Transitions{\Vsym{t}}{\var{es}} :
+    \\ \var{pim} \in \var{es} \land \Transition{\var{pim}} = \Vsym{t}.
+\end{gathered}
+\]
+If \myfn{Transitions}{} is \dfn{valid for} \Ves{es},
+then we also say that
+\myfn{Transitions}{} is \dfn{valid for} \Current{\var{es}}.
+
+If \myfn{Transitions}{} is \dfn{valid for} \Vlastix{(\Vet{table})},
+we say that \myfn{Transitions}{} is \dfn{valid for} \var{table}.
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \myfn{Transitions}{} is \dfn{valid}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\myfn{Transitions}{} completeness]
+\label{def:transition-completeness}
+We say that \myfn{Transitions}{} is \dfn{complete for} \Ves{es}
+iff
+\[
+\begin{gathered}
+    \forall\; \Vsym{t} : \forall\; \var{pim} \in \var{es} :
+    \\ \Transition{\var{pim}} = \Vsym{t} \implies
+        \var{pim} \in \Transitions{\Vsym{t}}{\var{es}}.
+\end{gathered}
+\]
+If we say that \myfn{Transitions}{} is \dfn{complete for} \Ves{es},
+then we also say that
+\myfn{Transitions}{} is \dfn{complete for} \Current{\var{es}}.
+
+If \myfn{Transitions}{} is \dfn{complete for} \Vlastix{(\Vet{table})},
+we say that \myfn{Transitions}{} is \dfn{complete for} \Vet{table}.
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \myfn{Transitions}{} is \dfn{complete}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\myfn{Transitions}{} correctness]
+\label{def:transition-correctness}
+Let \var{X} be an \type{ES},
+the current location of some \type{ES},
+or an \type{ET}.
+We say that \myfn{Transitions}{} is \dfn{correct for} \var{X}
+if \myfn{Transitions}{} is valid and complete for \var{X}.
+We say that \myfn{Transitions}{} is \dfn{correct}
+if \myfn{Transitions}{} is valid and complete.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context \myfn{Transitions}{}]
+\label{def:context-dotzeroused}
+From this point on,
+and unless stated otherwise,
+every context scope contains its own
+\myfn{Transitions}{}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\myfn{Transitions}{} binding assumption]
+\label{def:dotzeroused-binding}
+The binding assumption for \myfn{Transitions}{}
+is that \myfn{Transitions}{} is valid for the context
+Earley table.
+(Frequently, the context Earley table is \var{S}.)
+\dispEnd
+\end{definition}
 
 \section{\type{LSS} Traversal}
 \label{sec:lss-traversal}
@@ -14116,7 +14195,8 @@ will usually be a waste of time.}
 \todo{Move consistency stuff here}
 
 [ Important note:
-To show consistency, we must show \myfn{Seen}{} CORRECTNESS,
+To show consistency, we must show
+\var{dotZeroUsed} and \myfn{Seen}{} CORRECTNESS,
 not just consistency. ]
 
 \chapter{\Marpa{} is correct}
