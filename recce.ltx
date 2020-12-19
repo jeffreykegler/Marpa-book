@@ -9848,11 +9848,12 @@ iff
        \in \var{es}.
 \end{gathered}
 \]
-We also say that
+If \var{dotZeroUsed} is \dfn{valid for} \Ves{es},
+then we also say that
 \var{dotZeroUsed} is \dfn{valid for} \Current{\var{es}}.
 
-If \var{dotZeroUsed} is \dfn{valid for} \Vlastix{table},
-we say that \var{dotZeroUsed} is \dfn{valid for} \Vet{table}.
+If \var{dotZeroUsed} is \dfn{valid for} \Vlastix{(\Vet{table})},
+we say that \var{dotZeroUsed} is \dfn{valid for} \var{table}.
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we simply say that \var{dotZeroUsed} is \dfn{valid}.
@@ -9871,10 +9872,11 @@ iff
         \VVelement{dotZeroUsed}{\ID{\var{r}}}.
 \end{gathered}
 \]
-We also say that
+If we say that \var{dotZeroUsed} is \dfn{complete for} \Ves{es},
+then we also say that
 \var{dotZeroUsed} is \dfn{complete for} \Current{\var{es}}.
 
-If \var{dotZeroUsed} is \dfn{complete for} \Vlastix{table},
+If \var{dotZeroUsed} is \dfn{complete for} \Vlastix{(\Vet{table})},
 we say that \var{dotZeroUsed} is \dfn{complete for} \Vet{table}.
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
@@ -9941,6 +9943,48 @@ in section \Chref{chap:per-set-lists},
 where PSL's are described in detail.
 \myqed
 \end{proof}
+
+\todo{Statement of \var{seen} validity/completeness is wrong -- fix it}
+
+\begin{definition}[\myfn{Seen}{} correctness]
+\label{def:seen-validity}
+We say that \myfn{Seen}{} is \dfn{correct for} \Ves{es}
+iff
+\[
+    \forall\; \Veim{eim} :
+    \left(\begin{gathered}
+        \myfn{Seen}{\var{eim}} \land \Current{\var{es}} = \Current{\var{eim}}
+            \\ \iff \Veim{eim} \in \var{es}.
+    \end{gathered}\right)
+\]
+If \myfn{Seen}{} is \dfn{correct for} \Ves{es},
+then we also say that
+\myfn{Seen}{} is \dfn{valid for} \Current{\var{es}}.
+
+If \myfn{Seen}{} is \dfn{valid for} \Vlastix{(\Vet{table})},
+we say that \myfn{Seen}{} is \dfn{valid for} \var{table}.
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \myfn{Seen}{} is \dfn{valid}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context \var{seen} function]
+\label{def:context-seen-fn}
+From this point on,
+and unless stated otherwise,
+every context scope contains its own \myfn{Seen}{} function.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\myfn{Seen}{} binding assumption]
+\label{def:seen-binding}
+The binding assumption for \myfn{Seen}{}
+is that \myfn{Seen}{} is correct for the context
+Earley table.
+(Frequently, the context Earley table is \var{S}.)
+\dispEnd
+\end{definition}
 
 \section{The \var{transition} array}
 \label{sec:transition-array}
@@ -14070,6 +14114,10 @@ Filing pull requests
 will usually be a waste of time.}
 
 \todo{Move consistency stuff here}
+
+[ Important note:
+To show consistency, we must show \myfn{Seen}{} CORRECTNESS,
+not just consistency. ]
 
 \chapter{\Marpa{} is correct}
 \label{chap:correctness}
