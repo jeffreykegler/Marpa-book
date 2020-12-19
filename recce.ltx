@@ -209,6 +209,7 @@
 \newcommand{\Chref}[1]{(Ch\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{#1}\colonpageref{#1})}
+\newcommand{\Pgref}[1]{(page \pageref{#1})}
 
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
@@ -1281,15 +1282,16 @@ $\var{i}_\type{\naturals}$ & Variable \var{i}, a non-negative integer \\
 \label{tab:type-notation}
 \end{table}
 
+\label{page:binding-discussion}
 Parsing theory examples usually require a cumbersome ``setup''
-during which the various variables are introducted and related to
+during which the various variables are introduced and related to
 each other.
 These setups are repetitive, tedious,
 and usually obvious in their details.
 In this paper we try to avoid them in favor of
 a system of ``contextual binding''.
 We believe
-that the reader will find this system intuitive
+that the reader will find this system intuitive,
 to the degree that the reader is able to ignore it.
 
 Variables in this paper,
@@ -1682,10 +1684,12 @@ When the implications of a definition are not obvious,
 the definition is stated as a theorem,
 and the non-obvious implications are proved.
 
-Specifically, the definition of a function implies that there
-a function that satisfies the definition exists ---
-otherwise the function could not be used.
-Proving the existence of the function can be non-trivial,
+Specifically, the definition of a function implies that
+a function that satisfies the definition exists.
+If no function satisfying the definition existed,
+the function could not be used,
+which usually would render the definition pointless.
+Proving the existence of a function can be non-trivial,
 and many of the function definitions in this paper
 are stated as theorems.
 
@@ -1792,12 +1796,10 @@ for the ``floor'' operation: for example,
 \Vterm{terminal}.
 \end{definition}
 
-Traditionally in the parsing literature,
-introducing a new scope requires some definitions and/or
+As stated earlier \Pgref{page:binding-discussion},
+each new scope can require definitions and/or
 other statements to set it up.
-In parsing theory especially,
-these setups often are tedious and repetitive.
-We will avoid this repetition in favor of \dfn{binding assumptions}.
+We will avoid this tedium in favor of \dfn{binding assumptions}.
 The binding assumptions are a set of assumptions
 that are implicitly made,
 unless stated otherwise,
@@ -3789,8 +3791,9 @@ is that,
 where \Vet{cxt} is the context table,
 \[
     \exists \; \Vloc{i} \in \Dom{\Vet{cxt}}: \VVelement{cxt}{i} = \var{es}.
-        \quad \dispEnd
 \]
+Typically, \var{cxt} is \var{S}.
+\dispEnd
 \end{definition}
 
 \begin{definition}[ES current location]
