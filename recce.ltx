@@ -9836,20 +9836,79 @@ a part of the space for the grammar.
 \myqed
 \end{proof}
 
-\begin{definition}[\var{dotZeroUsed} consistency]
-\label{def:dotZeroUsed-consistency}
-We say that \var{dotZeroUsed} is \dfn{consistent for} \Ves{es}
+\begin{definition}[\var{dotZeroUsed} validity]
+\label{def:dotZeroUsed-validity}
+We say that \var{dotZeroUsed} is \dfn{valid for} \Ves{es}
 iff
 \[
-\forall\; \Veim{eim} \in \Ves{es} :
-\DR{\var{eim}} = \tuple{\Vrule{r},0} \iff \VVelement{dotZeroUsed}{r}.
+\begin{gathered}
+    \forall\; \Vrule{r} \in \Rules{\var{g}}:
+    \\ \VVelement{dotZeroUsed}{\ID{\var{r}}} \implies
+    \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}
+       \in \var{es}.
+\end{gathered}
 \]
-If \var{dotZeroUsed} is \dfn{consistent for} \VVelement{table}{j},
-where \Vet{table} is an Earley table whose identity is clear in
-context,
-we also say that
-\var{dotZeroUsed} is \dfn{consistent for} \var{j}.
-By default \Vet{table} is \var{S}.
+We also say that
+\var{dotZeroUsed} is \dfn{valid for} \Current{\var{es}}.
+
+If \var{dotZeroUsed} is \dfn{valid for} \Vlastix{table},
+we say that \var{dotZeroUsed} is \dfn{valid for} \Vet{table}.
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \var{dotZeroUsed} is \dfn{valid}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\var{dotZeroUsed} completeness]
+\label{def:dotZeroUsed-completeness}
+We say that \var{dotZeroUsed} is \dfn{complete for} \Ves{es}
+iff
+\[
+\begin{gathered}
+    \forall\; \Vrule{r} \in \Rules{\var{g}}:
+    \\ \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}
+        \in \var{es} \implies
+        \VVelement{dotZeroUsed}{\ID{\var{r}}}.
+\end{gathered}
+\]
+We also say that
+\var{dotZeroUsed} is \dfn{complete for} \Current{\var{es}}.
+
+If \var{dotZeroUsed} is \dfn{complete for} \Vlastix{table},
+we say that \var{dotZeroUsed} is \dfn{complete for} \Vet{table}.
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \var{dotZeroUsed} is \dfn{complete}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\var{dotZeroUsed} correctness]
+\label{def:dotZeroUsed-correctness}
+Let \var{X} be an \type{ES},
+the current location of some \type{ES},
+or an \type{ET}.
+We say that \var{dotZeroUsed} is \dfn{correct for} \var{X}
+if \var{dotZeroUsed} is valid and complete for \var{X}.
+We say that \var{dotZeroUsed} is \dfn{correct}
+if \var{dotZeroUsed} is valid and complete.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Context \var{dotZeroUsed}]
+\label{def:context-dotzeroused}
+From this point on,
+and unless stated otherwise,
+every context scope contains its own \var{dotZeroUsed} bitmap.
+\dispEnd
+\end{definition}
+
+\begin{definition}[\var{dotZeroUsed} binding assumption]
+\label{def:dotzeroused-binding}
+The binding assumption for \var{dotZeroUsed}
+is that \var{dotZeroUsed} is valid for the context
+Earley table.
+(Frequently, the context Earley table is \var{S}.)
+\dispEnd
 \end{definition}
 
 \section{\var{seen} PSL}
@@ -10634,7 +10693,6 @@ may be charged as \Oc{} space to the \type{ES}
     line \ref{line:predict1-5} of \AFref{alg:predict1},
     is invoked at most once per rule-\type{ES} pair
     \bcuz{} \AFref{alg:predict1},
-    \longDfref{\var{dotZeroUsed} consistency}{def:dotZeroUsed-consistency},
     \longThref{Prediction Rule Non-Duplication}{th:prediction-rule-non-duplication}.
 }
 \mypareq{eq:th-predict1-space-120}{%
