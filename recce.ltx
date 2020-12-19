@@ -1318,24 +1318,23 @@ that scope.
 An observation is a scope, with only the observation
 itself being visible outside the scope.
 
+Scopes may be introduced explicitly.
 The entire paper is the \dfn{global scope}.
-Other scopes will be introduced
-explicitly.
 
 \todo{Rewrite type system description, add "context" discussion}
 In order to abbreviate certain recurring definitions,
 for the purposes of this paper,
 we use a simple and opportunistic ``type system''.%
 \footnote{%
-    We might have used the term ``tag'' instead of
+    We considered using the term ``tag'' instead of
     ``type'', in order to avoid raising certain kinds
     of expectation.
     Our types are not intended to help with automated theorem
     proving.
     Also,
-    though a \Marpa{} implementation might be able
-    to use some of the
-    same type names and concepts,
+    though a \Marpa{} implementation might
+    use some of our
+    type names and concepts,
     the types in this paper are not intended to be taken
     as a model of the type system a \Marpa{} implementation
     should follow.
@@ -1794,9 +1793,11 @@ for the ``floor'' operation: for example,
 \end{definition}
 
 Traditionally in the parsing literature,
-introducing a new scope
-frequently requires a tedious and repetitive setup.
-We will avoid these in favor of \dfn{binding assumptions}.
+introducing a new scope requires some definitions and/or
+other statements to set it up.
+In parsing theory especially,
+these setups often are tedious and repetitive.
+We will avoid this repetition in favor of \dfn{binding assumptions}.
 The binding assumptions are a set of assumptions
 that are implicitly made,
 unless stated otherwise,
@@ -1985,24 +1986,26 @@ a full parse is a special case of a partial parse.
 From this point on, the global scope
 and every new
 definition or theorem scope
-will be a \dfn{context parse scope}.
+will be a \dfn{context scope}.
 Unless otherwise stated,
-the \dfn{context parse} of these scopes
-will be a partial parse $[\Vcfg{g}, \Vstr{w}]$.
-the \dfn{context input} will be \Vstr{w},
-and the \dfn{context grammar} will be \Vcfg{g}.
+the \dfn{context} of these scopes
+will contain the partial parse $[\Vcfg{g}, \Vstr{w}]$.
 \dispEnd
 \end{definition}
 
 \begin{definition}[Context input]
 From this point on, unless otherwise stated,
 the \dfn{context input} is the input of the context parse.
+Often, the context contains the partial parse $[\Vcfg{g}, \Vstr{w}]$,
+so that the \dfn{context input} is \Vstr{w}.
 \dispEnd
 \end{definition}
 
 \begin{definition}[Context grammar redefined]
 From this point on, unless otherwise stated,
 the \dfn{context grammar} is the grammar of the context parse.
+Often, the context contains the partial parse $[\Vcfg{g}, \Vstr{w}]$,
+so that the \dfn{context grammar} is \Vcfg{g}.
 \dispEnd
 \end{definition}
 
