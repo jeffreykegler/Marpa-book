@@ -9805,9 +9805,11 @@ is minimal.
 \section{\var{dotZeroUsed}}
 \label{sec:dotzeroused-complexity}
 
+\begin{definition}[\var{dotZeroUsed} Bitmap]
+\label{def:dotZeroUsed-bitmap}
 \var{dotZeroUsed} is a bitmap with
 one bit for every rule in the grammar.
-It is used when adding predictions to an Earley set.
+\end{definition}
 
 \begin{theorem}[\var{dotZeroUsed} Initialization]
 \label{th:dotzeroused-initialization}
@@ -9821,7 +9823,8 @@ which may be charged to the parse.
 \begin{proof}
 Except for the complexity claims,
 all elements of the theorem
-may be asserted as matters of definition.
+may be asserted as matters of definition,
+either of the algorithm or of the complexity analysis strategy.
 We show the complexity claims by
 reference to a conceptual implementation.
 
@@ -9831,6 +9834,24 @@ Since \var{g} is constant,
 this may be done in \Oc{} time and \Oc{} space.
 \myqed
 \end{proof}
+
+\begin{definition}[\var{dotZeroUsed} Correctness]
+\label{def:dotZeroUsed-correctness}
+We say that \var{dotZeroUsed} is \dfn{correct} for \Vet{table}
+iff
+\[
+\begin{gathered}
+    \forall\; \Vrule{r} \in \Rules{\var{g}}:
+    \\ \VVelement{dotZeroUsed}{\ID{\var{r}}} \iff
+    \tuple{\tuple{\var{r},0},\Vlastix{table},\Vlastix{table}}
+       \in \var{es}.
+\end{gathered}
+\]
+Where \Vet{table} is understood in context
+(usually because it is the context Earley table),
+we simply say that \var{dotZeroUsed} is \dfn{correct}.
+\dispEnd
+\end{definition}
 
 \begin{theorem}[\var{dotZeroUsed} Access]
 \label{th:dotzeroused-access}
@@ -9847,73 +9868,11 @@ so that zero space is incurred.
 
 \Rules{\var{g}} is a constant
 that depends on the grammar \Dfref{def:context-free-grammar},
-which justifies the claim of constant time for bit reads
+which justifies the claim of constant time for bit reads,
 bit writes, and clearing of the bitmap.
 \myqed
 \end{proof}
 
-\todo{zeroDotUsed -- do I need more than correctness for table?
-   Simplify?}
-
-\begin{definition}[\var{dotZeroUsed} validity]
-\label{def:dotZeroUsed-validity}
-We say that \var{dotZeroUsed} is \dfn{valid for} \Ves{es}
-iff
-\[
-\begin{gathered}
-    \forall\; \Vrule{r} \in \Rules{\var{g}}:
-    \\ \VVelement{dotZeroUsed}{\ID{\var{r}}} \implies
-    \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}
-       \in \var{es}.
-\end{gathered}
-\]
-If \var{dotZeroUsed} is \dfn{valid for} \Ves{es},
-then we also say that
-\var{dotZeroUsed} is \dfn{valid for} \Current{\var{es}}.
-
-If \var{dotZeroUsed} is \dfn{valid for} \Vlastix{(\Vet{table})},
-we say that \var{dotZeroUsed} is \dfn{valid for} \var{table}.
-Where \Vet{table} is understood in context
-(usually because it is the context Earley table),
-we simply say that \var{dotZeroUsed} is \dfn{valid}.
-\dispEnd
-\end{definition}
-
-\begin{definition}[\var{dotZeroUsed} completeness]
-\label{def:dotZeroUsed-completeness}
-We say that \var{dotZeroUsed} is \dfn{complete for} \Ves{es}
-iff
-\[
-\begin{gathered}
-    \forall\; \Vrule{r} \in \Rules{\var{g}}:
-    \\ \tuple{\tuple{\var{r},0},\Current{\var{es}},\Current{\var{es}}}
-        \in \var{es} \implies
-        \VVelement{dotZeroUsed}{\ID{\var{r}}}.
-\end{gathered}
-\]
-If we say that \var{dotZeroUsed} is \dfn{complete for} \Ves{es},
-then we also say that
-\var{dotZeroUsed} is \dfn{complete for} \Current{\var{es}}.
-
-If \var{dotZeroUsed} is \dfn{complete for} \Vlastix{(\Vet{table})},
-we say that \var{dotZeroUsed} is \dfn{complete for} \Vet{table}.
-Where \Vet{table} is understood in context
-(usually because it is the context Earley table),
-we simply say that \var{dotZeroUsed} is \dfn{complete}.
-\dispEnd
-\end{definition}
-
-\begin{definition}[\var{dotZeroUsed} correctness]
-\label{def:dotZeroUsed-correctness}
-Let \var{X} be an \type{ES},
-the current location of some \type{ES},
-or an \type{ET}.
-We say that \var{dotZeroUsed} is \dfn{correct for} \var{X}
-if \var{dotZeroUsed} is valid and complete for \var{X}.
-We say that \var{dotZeroUsed} is \dfn{correct}
-if \var{dotZeroUsed} is valid and complete.
-\dispEnd
-\end{definition}
 
 \begin{definition}[Context \var{dotZeroUsed}]
 \label{def:context-dotzeroused}
@@ -9923,10 +9882,10 @@ every context scope contains its own \var{dotZeroUsed} bitmap.
 \dispEnd
 \end{definition}
 
-\begin{definition}[\var{dotZeroUsed} binding assumption]
+\begin{definition}[\var{dotZeroUsed} Binding Assumption]
 \label{def:dotzeroused-binding}
 The binding assumption for \var{dotZeroUsed}
-is that \var{dotZeroUsed} is valid for the context
+is that \var{dotZeroUsed} is correct for the context
 Earley table.
 (Frequently, the context Earley table is \var{S}.)
 \dispEnd
