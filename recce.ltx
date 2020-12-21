@@ -415,7 +415,7 @@
 \newcommand{\Term}[1]{\ensuremath{\mymathop{Term}(#1)}}
 \newcommand{\Time}[1]{\ensuremath{\mymathop{Time}(#1)}}
 \newcommand{\Transition}[1]{\ensuremath{\mymathop{Transition}(#1)}}
-\newcommand{\Transitions}[2]{\ensuremath{\mymathop{Transitions}(#1,#2)}}
+\newcommand{\transitions}[2]{\ensuremath{\var{transitions}[#1][#2]}}
 \newcommand{\Valid}[1]{\ensuremath{\mymathop{Valid}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
 
@@ -9894,21 +9894,36 @@ Earley table.
 \section{\var{seen} PSL}
 \label{sec:seen-psl-complexity}
 
+Earley sets must not contain duplicated \type{EIM}s and
+\var{seen} is used to efficiently enforce this.
+
+\begin{definition}[\var{seen} PSL]
+\label{def:seen-psl}
 For each Earley set,
 \var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
-Earley sets must not contain duplicated \type{EIM}s and
-\var{seen} is used to efficiently enforce this.
+For details on PSL's, see \Chref{chap:per-set-lists}.
 \myfn{Seen}{\Veim{x}} is a function which returns
 the EIM equal to \var{x} if it already exists,
 and $\Lambda$ otherwise.
 \myfn{SetSeen}{\Veim{x}} is a function which adds
 \var{x} to the PSL.
+\end{definition}
 
 \begin{theorem}[\var{seen} PSL]
-\label{th:seen-psl}
+\label{th:seen-psl-initialization}
 In each Earley set,
-set up of \var{seen} consumes \Oc{} time,
+initialization of \var{seen} consumes \Oc{} time.
+\end{theorem}
+
+\begin{proof}
+The claims of this theorem are justified
+in \Chref{chap:per-set-lists}.
+\myqed
+\end{proof}
+
+\begin{theorem}[\var{seen} PSL]
+\label{th:seen-psl-access}
 and \Oc{} space.
 Each call of \Seen{} and \SetSeen{} consumes
 consumes \Oc{} time
@@ -9917,37 +9932,28 @@ and zero space.
 
 \begin{proof}
 The claims of this theorem are justified
-in section \Chref{chap:per-set-lists},
-where PSL's are described in detail.
+in \Chref{chap:per-set-lists}.
 \myqed
 \end{proof}
 
-\todo{Statement of \var{seen} validity/completeness is wrong -- fix it}
-
-\begin{definition}[\myfn{Seen}{} correctness]
+\begin{definition}[\myfn{Seen}{} Correctness]
 \label{def:seen-validity}
-We say that \myfn{Seen}{} is \dfn{correct for} \Ves{es}
+We say that \myfn{Seen}{} is \dfn{correct for} \Vet{table}
 iff
 \[
     \forall\; \Veim{eim} :
     \left(\begin{gathered}
-        \Seen{\var{eim}} \ne \Lambda \land \Current{\var{es}} = \Current{\var{eim}}
-            \\ \iff \Veim{eim} \in \var{es}.
+        \Seen{\var{eim}} \ne \Lambda 
+            \iff \Veim{eim} \in \Velement{table}{\Vlastix{table}}
     \end{gathered}\right)
 \]
-If \myfn{Seen}{} is \dfn{correct for} \Ves{es},
-then we also say that
-\myfn{Seen}{} is \dfn{valid for} \Current{\var{es}}.
-
-If \myfn{Seen}{} is \dfn{valid for} \Vlastix{(\Vet{table})},
-we say that \myfn{Seen}{} is \dfn{valid for} \var{table}.
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we simply say that \myfn{Seen}{} is \dfn{valid}.
 \dispEnd
 \end{definition}
 
-\begin{definition}[Context \var{seen} function]
+\begin{definition}[Context \var{seen} Function]
 \label{def:context-seen-fn}
 From this point on,
 and unless stated otherwise,
@@ -9955,7 +9961,7 @@ every context scope contains its own \myfn{Seen}{} function.
 \dispEnd
 \end{definition}
 
-\begin{definition}[\myfn{Seen}{} binding assumption]
+\begin{definition}[\myfn{Seen}{} Binding Assumption]
 \label{def:seen-binding}
 The binding assumption for \myfn{Seen}{}
 is that \myfn{Seen}{} is correct for the context
@@ -9964,75 +9970,61 @@ Earley table.
 \dispEnd
 \end{definition}
 
-\section{The \var{transition} array}
+\section{The \var{transitions} Array of Arrays}
 \label{sec:transition-array}
 
-Each entry in the \var{transition} array
-contains a pointer
-to a linked list of
-\type{PIM}s which have the same
-transition symbol.
-The entries are in symbol ID order,
-to allow the array to be binary searched.
-The \var{transition} array is for efficient lookup
+The \var{transitions} array of arrays
+is for efficient lookup
 of \type{EIM} and \type{LIM} matches.
 
-\begin{theorem}[\type{LIM} transition first]
+\begin{definition}[\var{transitions} Array]
+\label{def:transitions-array}
+Conceptually,
+\var{transitions} is an array of arrays of sequences.
+The top-level array is
+indexed by Earley set location,
+and each of its elements is an array of sequences.
+Each second-level array, conceptually, is
+indexed by transition symbol ID.
+Each element of a second level array is a sequence
+of \type{PIM}s.
+
+\transitions{\var{j}}{\Vsym{t}}
+is a sequence of \type{PIM}s whose transition symbol
+is \Vsym{t}.
+Writes to each element of the \var{transitions} array
+occur only when that element is initialized --- that is,
+once \VVelement{transitions}{j} is read,
+the contents of \VVelement{transitions}{j} will not change.
+\dispEnd
+\end{definition}
+
+\begin{theorem}[\type{LIM} Transition First]
 \label{th:lim-transition-first}
-The linked lists pointed to by the entries of the \var{transition}
-array have the \type{LIM}s first.
+The sequence of \type{PIM}s in an element of 
+of the \var{transitions} array of arrays
+has its \type{LIM}s first.
 \end{theorem}
 
 \begin{proof}
-The proof by description of a conceptual implementation.
-It can be quaranteed that
-\type{LIM}s are first in the linked lists
-of the \var{transition} arrays by using doubly-linked lists.
+The proof is by description of a conceptual implementation.
+If the sequence of \type{PIM}s is kept as a doubly linked list,
+it can be quaranteed that
+\type{LIM}s are first in the sequence.
 For an actual implementation in \Rtwo{}, see
 page \pageref{page:transition-lim-first}.
 \myqed
 \end{proof}
 
-Reads of the \var{transition} array
-use the \Transition{} function.
-A call of the form
-$\var{Transitions}{\Vsym{t}}{\VVelement{S}{j}}$
-returns the set of \type{PIM}s in \VVelement{S}{j} whose transition symbol
-is \Vsym{t}.
-Writes to the \var{transition} array
-do not occur once it has been created.
-
-\begin{theorem}[\myfn{Transitions}{} Complexity]
-\label{th:transitions-read}
-A call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
-consumes \Oc{} time, and zero space.
-\end{theorem}
-
-\begin{proof}
-\myfn{Transitions}{}
-does a binary search of
-the \var{transition} array for \VVelement{S}{j},
-and returns a pointer
-to the head of a linked list.
-$\Vsize{transition} = \Oc{}$,
-so that the search and pointer return
-can be done in \Oc{} time.
-A \var{transitions} array is not altered after its creation,
-and therefore calls of \myfn{Transitions}{}
-do not consume additional space.
-\myqed
-\end{proof}
-
 \begin{theorem}[\myfn{Transitions}{} Linked Lists]
-\label{th:transitions-linked-lists}
-The linked list returned by a call of the form
-\Transitions{\Vsym{t}}{\VVelement{S}{j}}
+\label{th:transitions-pim-sequence}
+The linked list
+\transitions{\Vloc{j}}{\Vsym{t}}
 is of \order{\Vloc{j}} size.
 That is,
 \begin{gather*}
 \forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
-\\ \size{\Transitions{\Vsym{t}}{\VVelement{S}{j}}} = \order{\Vloc{j}}.
+\\ \size{\transitions{\Vloc{j}}{\Vsym{t}}} = \order{\Vloc{j}}.
 \end{gather*}
 \end{theorem}
 
@@ -10043,6 +10035,29 @@ and the ES \type{LIM} Count Theorem \Thref{th:es-lim-count}.
 \myqed
 \end{proof}
 
+\begin{theorem}[\var{transitions} Read Complexity]
+\label{th:transitions-read}
+A call of the form
+\transitions{\Vloc{j}}{\Vsym{t}}
+consumes \Oc{} time, and zero space.
+\end{theorem}
+
+\begin{proof}
+The proof is by description of the \Rtwo{} implementation.
+\Rtwo{} stores the elements of
+\VVelement{transition}{j}
+in sorted order, so that it can do a
+a binary search of
+\VVelement{transition}{j}.
+By the \var{transitions} \type{PIM} Sequence Theorem
+\Thref{th:transitions-pim-sequence},
+$\size{\VVelement{transition}{j}} = \Oc{}$,
+and the search and pointer return
+can be done in \Oc{} time.
+No space need be incurred in the course of this read.
+\myqed
+\end{proof}
+
 \begin{definition}[\myfn{Transitions}{} validity]
 \label{def:transition-validity}
 We say that \myfn{Transitions}{} is \dfn{valid for} \Ves{es}
@@ -10050,7 +10065,7 @@ iff
 \[
 \begin{gathered}
     \forall\; \Vsym{t} :
-        \forall\; \var{pim} \in \Transitions{\Vsym{t}}{\var{es}} :
+        \forall\; \var{pim} \in \transitions{\Vsym{t}}{\var{es}} :
     \\ \var{pim} \in \var{es} \land \Transition{\var{pim}} = \Vsym{t}.
 \end{gathered}
 \]
@@ -10074,7 +10089,7 @@ iff
 \begin{gathered}
     \forall\; \Vsym{t} : \forall\; \var{pim} \in \var{es} :
     \\ \Transition{\var{pim}} = \Vsym{t} \implies
-        \var{pim} \in \Transitions{\Vsym{t}}{\var{es}}.
+        \var{pim} \in \transitions{\Current{\var{es}}}{\Vsym{t}}.
 \end{gathered}
 \]
 If we say that \myfn{Transitions}{} is \dfn{complete for} \Ves{es},
@@ -10170,7 +10185,7 @@ The algorithm consists of the following steps, in order:
 Clearly this can be done with \Oc{} time and zero space.
 \item Find \Origin{\var{eim}}.
 Again, this clearly can be done with \Oc{} time and zero space.
-\item Execute $\var{ll} \gets \Transitions{\Symbol{\var{eim}}}{\Origin{\var{eim}}}$.
+\item Execute $\var{ll} \gets \transitions{\Origin{\var{eim}}}{\Symbol{\var{eim}}}$.
 Per the \myfn{Transitions}{} Read Theorem \Thref{th:transitions-read},
 this can be done in \Oc{} time and zero space.
 \item
@@ -11083,7 +11098,7 @@ operation of \Earley{}\cite{Earley1970}.
 \Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{inp}{\var{j}\subtract 1}, \var{val}}$.
   See \Dfref{def:token}.
 }
-\State $\var{matches} \gets \Transitions{\Symbol{\var{token}}}{\var{j}\subtract 1}$
+\State $\var{matches} \gets \transitions{\var{j}\subtract 1}{\Symbol{\var{token}}}$
 \label{line:scanner-op-2}
 \For{every $\Veim{match} \in \Veimset{matches}$}
 \label{line:scanner-op-3}
@@ -11214,7 +11229,7 @@ to \VVelement{S}{j}.}
     \ref{line:scanner-op-5}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:scanner-op-6}&\Oc{}&\cellboxr{%
-	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:scanner-op-7}&\Oc{}&\cellboxr{}
 \\ \hline
@@ -11224,7 +11239,7 @@ to \VVelement{S}{j}.}
     \ref{line:scanner-op-9}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:scanner-op-10}&\Oc{}&\cellboxr{%
-	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:scanner-op-11}&\Oc{}&\cellboxr{}
 \\ \hline
@@ -11340,7 +11355,7 @@ the \op{Scanner} Time Worksheet
     \ref{line:scanner-op-6}&0&\cellRule{}
 \\ \hline
     \ref{line:scanner-op-7}&0&\cellboxr{%
-	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:scanner-op-8}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
@@ -11348,7 +11363,7 @@ the \op{Scanner} Time Worksheet
     \ref{line:scanner-op-9}&0&\cellRule{}
 \\ \hline
     \ref{line:scanner-op-10}&0&\cellboxr{%
-	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	  \var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:scanner-op-11}&0&\cellRule{}
 \\ \hline
@@ -11556,7 +11571,7 @@ to \VVelement{S}{j}.}
     \ref{line:earley-reducer-op-4}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:earley-reducer-op-5}&\Oc{}&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:earley-reducer-op-6}&\Oc{}&\cellboxr{}
 \\ \hline
@@ -11566,7 +11581,7 @@ to \VVelement{S}{j}.}
     \ref{line:earley-reducer-op-8}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:earley-reducer-op-9}&\Oc{}&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:earley-reducer-op-10}&\Oc{}&\cellboxr{}
 \\ \hline
@@ -11675,7 +11690,7 @@ the \op{Earley-reducer} Time Worksheet
     \ref{line:earley-reducer-op-5}&0&\cellRule{}
 \\ \hline
     \ref{line:earley-reducer-op-6}&0&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:earley-reducer-op-7}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
@@ -11683,7 +11698,7 @@ the \op{Earley-reducer} Time Worksheet
     \ref{line:earley-reducer-op-8}&0&\cellRule{}
 \\ \hline
     \ref{line:earley-reducer-op-9}&0&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:earley-reducer-op-10}&0&\cellRule{}
 \\ \hline
@@ -11890,9 +11905,9 @@ Note that $\var{dup}+\var{new}=1$.}
     \ref{line:leo-reducer-op-3}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:leo-reducer-op-4}&\Oc{}&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
-    \ref{line:leo-reducer-op-5}&\Oc{}&\cellboxr{\Thref{th:seen-psl}.}
+    \ref{line:leo-reducer-op-5}&\Oc{}&\cellboxr{\Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:leo-reducer-op-6}&\Oc{}&\cellboxr{%
 	  \type{ES} Link Pair Add Theorem \Thref{th:es-link-pair-add}.}
@@ -11900,7 +11915,7 @@ Note that $\var{dup}+\var{new}=1$.}
     \ref{line:leo-reducer-op-7}&\Oc{}&\cellboxr{}
 \\ \hline
     \ref{line:leo-reducer-op-8}&\Oc{}&\cellboxr{%
-	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl}.}
+	\var{seen} PSL Complexity Theorem \Thref{th:seen-psl-access}.}
 \\ \hline
     \ref{line:leo-reducer-op-9}&\Oc{}&\cellboxr{}
 \\ \hline
@@ -12084,7 +12099,7 @@ the \op{Leo-reducer} Space Worksheet
 \Procedure{Reducer}{\VVelement{S}{j}}
 \For{$\Veim{cuz} \in \VVelement{S}{j}$ where \var{cuz} is a completion}
   \label{line:reducer-op-2}
-\State $\Veimset{matches} \gets \Transitions{\LHS{\Veim{cuz}}}{\Origin{\var{x}}}$
+\State $\Veimset{matches} \gets \transitions{\Origin{\var{x}}}{\LHS{\Veim{cuz}}}$
   \label{line:reducer-op-3}
 \State $\var{match0} \gets \Velement{matches}{0}$
   \label{line:reducer-op-4}
@@ -12327,7 +12342,7 @@ will always be an incomplete \type{EIM}.
 \Veimset{matches} in
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}
 is a list of either \type{LIM}s or incomplete \type{EIM}s
-\Thref{th:transitions-linked-lists}.
+\Thref{th:transitions-pim-sequence}.
 At line \ref{line:reducer-op-10} of \Aref{alg:reducer-op},
 \var{matches} is a non-empty list of incomplete \type{EIM}s,
 because of lines
@@ -12355,7 +12370,7 @@ or $\Lambda$.
 \Veimset{matches} in
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}
 is a list of either \type{LIM}s or incomplete \type{EIM}s
-\Thref{th:transitions-linked-lists}.
+\Thref{th:transitions-pim-sequence}.
 At line \ref{line:reducer-op-8} of \Aref{alg:reducer-op},
 \var{match0} is a LIM
 because of line \ref{line:reducer-op-7}
