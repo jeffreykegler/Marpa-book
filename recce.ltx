@@ -1665,11 +1665,6 @@ in that context.
 For clarity, the ``hint'' is separated
 from the body of the equation by a ``because'' symbol (``$\because$'').
 
-Where an equation is a definition,
-its justification will state that is a
-``definition for the purpose of
-presentation'',
-which may be abbreviated ``DFPP''.
 ``WLOG'' abbreviates ``assumed without loss of generality''.
 ``Def'' abbreviates ``definition''.
 ``AF'' abbreviates ``assumed for''.
@@ -1692,6 +1687,15 @@ which usually would render the definition pointless.
 Proving the existence of a function can be non-trivial,
 and many of the function definitions in this paper
 are stated as theorems.
+
+A definition may also be stated as part of a theorem if it
+is closely tied in with that theorem,
+in order to avoid pointless cross-referencing.
+This is often done for definitions which are of details
+of the \Marpa{} algorithm,
+or which are a matter of tactical choice within a proof strategy,
+such as the details of resource charging in our complexity
+analysis.
 
 \chapter{Context-free grammars}
 \label{chap:CFGs}
@@ -9133,24 +9137,11 @@ only charges of types
 
 In the statement of theorems for low-level complexity,
 note that the manner in which a resource is charged
-is usually a matter of choice,
-and therefore not justified in the theorem's proof.
-However, charging decisions are choices with consequences
---- they will have consequences for later theorems.%
-\footnote{%
-    Formally, charging decisions could have presented
-    as definitions.
-    We do so for two reasons.
-    First, the charging decision seems, intuitively, to be
-    part of the theorem, so that splitting it out seems
-    unnatural.
-    Second, a definition statement implies that the definition
-    has significance that goes beyond the logic which uses
-    the definition directly. The only significance of a
-    charging decision, on the other hand,
-    is that it is part of one example of a counting scheme that will produce
-    the low-level results.
-}
+is usually a matter of tactical choice.
+However,
+while charging decisions are choices,
+they are choices with consequences
+--- they will have consequences for later theorems.
 
 The high level complexity analyses of later chapters look
 at specific grammar classes,
@@ -9818,21 +9809,46 @@ is minimal.
 one bit for every rule in the grammar.
 It is used when adding predictions to an Earley set.
 
-\begin{theorem}[\var{dotZeroUsed} bitmap]
-\label{th:dotzeroused-bitmap}
+\begin{theorem}[\var{dotZeroUsed} Initialization]
+\label{th:dotzeroused-initialization}
+\var{dotZeroUsed} initialization
+takes place as part of the initial overhead of
+parsing.
+It incurs \Oc{} time and \Oc{} space,
+which may be charged to the parse.
+\end{theorem}
+
+\begin{proof}
+Except for the complexity claims,
+all elements of the theorem
+may be asserted as matters of definition.
+We show the complexity claims by
+reference to a conceptual implementation.
+
+\var{dotZeroUsed} is initialized to a cleared bitmap
+of length \size{\Rules{\Vint{g}}}.
+Since \var{g} is constant,
+this may be done in \Oc{} time and \Oc{} space.
+\myqed
+\end{proof}
+
+\begin{theorem}[\var{dotZeroUsed} Access]
+\label{th:dotzeroused-access}
 Clearing \var{dotZeroUsed} requires \Oc{} time
 and zero space.
 Bit accesses and writes take \Oc{} time and zero space.
 \end{theorem}
 
 \begin{proof}
-The size of the bitmap is \size{\Rules{\var{g}}}.
+The proof is by reference to the conceptual implementation.
+The size of the bitmap is \size{\Rules{\var{g}}},
+and never changes after initialization,
+so that zero space is incurred.
+
 \Rules{\var{g}} is a constant
 that depends on the grammar \Dfref{def:context-free-grammar},
 which justifies the claim of constant time for bit reads
 bit writes, and clearing of the bitmap.
-Space for \var{dotZeroUsed} is accounted for
-a part of the space for the grammar.
 \myqed
 \end{proof}
 
@@ -10225,23 +10241,6 @@ and much of it may be deleted.
 Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
-
-\section{Parse-setup op}
-\label{sec:parse-setup}
-
-\begin{theorem}[Grammar complexity]
-Setup of the grammar incurs \Oc{} time,
-and \Oc{} space
-which are charged to the parse.
-\end{theorem}
-
-\begin{proof}
-The grammar is treated as constant,
-and therefore its space and time demands are constant.
-\myqed
-\end{proof}
-
-\todo{Write parse-setup op section}
 
 \section{ES-setup op}
 \label{sec:es-setup}
@@ -10723,7 +10722,7 @@ of Earley set 0 by \Earley{}.
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:predict1-2}&\cellRule{\Oc{}}&\cellboxr{%
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-access}.}
 \\ \hline
     \ref{line:predict1-3}&\cellRule{\Oc{}}&
 \\ \hline
@@ -10733,7 +10732,7 @@ of Earley set 0 by \Earley{}.
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
     \ref{line:predict1-6}&\cellRule{\Oc{}}&\cellboxr{%
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-access}.}
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:predict1-time}
@@ -10775,7 +10774,7 @@ By the Procedure Overhead Time Discard Theorem
     &\multicolumn{1}{c|}{Justification}
 \\ \hline
     \ref{line:predict1-2}&&\cellboxr{%
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-access}.}
 \\ \hline
     \ref{line:predict1-3}&&\cellRule{}
 \\ \hline
@@ -10785,7 +10784,7 @@ By the Procedure Overhead Time Discard Theorem
         \type{ES} Add Theorem \Thref{th:es-add}.}
 \\ \hline
     \ref{line:predict1-6}&&\cellboxr{%
-        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-bitmap}.}
+        \var{dotZeroUsed} Complexity Theorem \Thref{th:dotzeroused-access}.}
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:predict1-space}
@@ -12928,7 +12927,6 @@ shown in \Aref{alg:marpa}.
 \label{alg:marpa}
 \begin{algorithmic}[1]
 \Procedure{Main}{}
-\State $\Call{Parse-Setup}{{}}$
 \State $\Call{ES-Setup}{0}$
 \State $\Call{Initializer}{{}}$
 \State \Call{Predicter}{\Ves{(0)}}
@@ -15645,15 +15643,14 @@ All other \type{PIM}s are \dfn{visible}.
 \myqed
 \end{proof}
 
-For convenience in the next few lemma's,
-we will state some definitions for the purpose of presentation
-(DFPP's).
 Intuitively
 the Earley tables are ``complete as far as X'',
 where X is some point in running of the \Marpa{} algorithm,
 if they contain all the visible valid \type{PIM}s
 for X and every prior to it in
 in the \Marpa{} algorithm.
+\todo{Replace DFPP ("definition for the purpose of presentation")
+    throughout, with something more sensible and less awkward.}
 \begin{equation}
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
