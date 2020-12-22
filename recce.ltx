@@ -566,30 +566,31 @@ no such tool had existed for context-free parsing.
 
 The first stable version of \Marpa{} was uploaded to
 a public archive on Solstice Day 2011.
-This revision of this paper
+This book
 describes the algorithm used
 in the most recent version of \Marpa{},
 \Rtwo~\cite{Marpa-R2}.
 It is a simplification of the algorithm presented
-in the first version of this paper.
+in the paper which originally described Marpa~\cite{Kegler2019}.
 
-While the presentation in this paper is theoretical,
+While the presentation in this book is theoretical,
 the approach is practical.
 The \Rtwo{} implementation is widely available
 and has seen considerable use.
 
+Chapter \ref{chap:features} on page \pageref{chap:features}
 \Chref{chap:features}
 describes the important features of \Marpa{}.
-(The reference \Chref{chap:features} is to
-section \ref{chap:features}
-on page \pageref{chap:features}.)
 \Chref{chap:using-features}
 goes into detail about their application.
+The remaining chapters are incomplete and
+inconsistent and the material in them is
+subject to deletion.
 
 \todo{Extend summary of chapters at end}
 
 % Section \Chref{chap:preliminaries}
-% begins the formal part of this paper
+% begins the formal part of this book
 % with preliminary remarks
 % on notation and conventions.
 % Section \Chref{chap:CFGs} defines context-free grammars.
@@ -636,7 +637,7 @@ contains a full description of \Marpa{}'s relationship to
 prior work.
 Readers may find it helpful to read
 \cite{Timeline}
-before this paper.
+before this book.
 
 \chapter{Features}
 \label{chap:features}
@@ -644,9 +645,8 @@ before this paper.
 \section{General context-free parsing}
 The \Marpa{} algorithm is capable of parsing all
 context-free grammars.
-As implemented,
-Marpa parses
-all cycle-free context-free
+\Marpa{}'s \Rtwo{} implementation~\cite{Marpa-R2}
+parses all cycle-free context-free
 grammars.\footnote{
 Earlier implementations of \Marpa{} allowed cycles,
 but support for them
@@ -656,7 +656,7 @@ For more detail, see \Chref{chap:EXTs}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},
-and therefore never worse than $\order{\var{n}^3}$.
+that is, never worse than $\order{\var{n}^3}$.
 
 \section{Linear time for practical grammars}
 Currently, the grammars suitable for practical
@@ -666,7 +666,7 @@ of the deterministic context-free grammars (DCFG's).
 Leo~\cite{Leo1991}
 to run in
 \On{} time for LR-regular (LRR) grammars,
-a superset of the the DCFG's.
+a superset of the DCFG's.
 \Marpa{}
 also parses many ambiguous grammars in linear
 time.
@@ -689,7 +689,7 @@ and can be accessed efficiently during the parse.
 
 \section{Recoverable from read errors}
 When
-\Marpa{} reads a token which it cannot accept,
+\Marpa{} reads a token that it cannot accept,
 the error is fully recoverable.
 An application can attempt to read another
 token,
@@ -701,12 +701,13 @@ as if the unsuccessful read attempts had never been made.
 
 \section{Ambiguous tokens}
 \Marpa{} allows ambiguous tokens.
-These are often useful in natural language processing
-where, for example,
+These are often useful.
+For example,
+in natural language processing
 the same word might be a verb or a noun.
 Use of ambiguous tokens can be combined with
-recovery from rejected tokens so that,
-for example, an application could react to the
+recovery from rejected tokens,
+so that an application could react to the
 rejection of a token by reading two others.
 
 \chapter{Using the features}
@@ -720,14 +721,13 @@ ground-breaking.
 For example,
 users typically regard an ambiguity as an error
 in the grammar.
-\Marpa{}, as currently implemented,
+\Marpa{}, as implemented in \Rtwo{}~\cite{Marpa-R2},
 can detect an ambiguity and report
 specifically where it occurred
 and what the alternatives were.
 
 \section{Event driven parsing}
-As implemented,
-\Rtwo\cite{Marpa-R2}
+As implemented, \Rtwo{}
 allows the user to define ``events''.
 Events can be defined that trigger when a specified rule is complete,
 when a specified rule is predicted,
@@ -765,25 +765,21 @@ parse with a clean
 but oversimplified grammar,
 programming the lexical analyzer to make up for the grammar's
 short-comings on the fly.
-As part of \Rtwo~\cite{Marpa-R2},
-the author\footnote{
-We refer to the author both as ``the author''
-and as ``we'', despite this paper having a single author.
-The use of ``we''
-follows the tradition in which a mathematician
-speaks as a representative of a community of inquiry,
-one which includes the reader.
-The author refers to himself as such in those cases
-where the reference only makes sense
-as being to a specific individual.
-}
+As part of \Rtwo{}, we have
+% \footnote{
+% The use of ``we''
+% follows the tradition in which a mathematician
+% speaks as a representative of a community of inquiry,
+% one which includes the reader.
+% }
 has implemented an HTML parser,
 based on a grammar that assumes that all start
 and end tags are present.
 Such an HTML grammar is too simple even to describe perfectly
-standard-conformant HTML,
-but the lexical analyzer is
-programmed to supply start and end tags as requested by the parser.
+standard-conformant HTML but,
+using the Ruby Slippers,
+the lexical analyzer can
+supply start and end tags as requested by the parser.
 The result is a simple and cleanly designed parser
 that parses very liberal HTML
 and accepts all input files,
@@ -794,13 +790,12 @@ treating them as highly defective HTML.
 In current practice, ambiguity is avoided in language design.
 This is very different from the practice in the languages humans choose
 when communicating with each other.
-For example,
-the language of this paper, English, is notoriously
+The language of this book, English, is notoriously
 ambiguous.
 Human languages exploit ambiguity in order to allow expression
 to be more flexible and powerful.
 
-Ambiguity of course can present a problem.
+Ambiguity, of course, can present a problem.
 A sentence in an ambiguous
 language may have undesired meanings.
 But note that this is not a reason to ban potential ambiguity ---
@@ -831,19 +826,15 @@ uses ambiguity in this way.
 \section{Auto-generated languages}
 \cite[pp. 6-7]{Culik1973} points out that the ability
 to efficiently parse LRR languages
-opens the way to
-auto-\linebreak[4]generated % LINEBREAK HACK
-languages.
-In particular,
-\cite{Culik1973} notes that a parser which
-can parse any LRR language will be
-able to parse a language generated using syntax macros.
+opens the way to auto-generated languages.
+Language auto-generation, in turn, opens the
+way for true second-order languages.
 
 \section{Second order languages}
 In the literature, the term ``second order language''
 is usually used to describe languages with features
-which are useful for second-order programming.
-True second-order languages --- languages which
+that are useful for second-order programming.
+True second-order languages --- languages that
 are auto-generated
 from other languages ---
 have not been seen as practical,
@@ -867,21 +858,20 @@ and which has the desired precedence and associativity.
 In creating the auto-generated BNF grammar,
 the SLIF does a standard parsing textbook transformation,
 translating explicitly specified precedence and associativity
-into pure BNF which implicitly implements
-that precedence and associativity
+into pure BNF that implicitly implements
+that precedence and associativity.
 Since the SLIF is powered by \Marpa{}, which is
 linear for LRR,
 the SLIF can easily ensure that the grammar
 that it auto-generates will
 be parsed in linear time.
 
-Notationally, \Marpa{}'s precedenced rules
+Notationally, the SLIF's precedenced rules
 are an improvement over
 similar features
 in LALR-based parser generators like
 yacc or bison.
-In the SLIF,
-there are two important differences.
+There are two important differences.
 First, in the SLIF's precedenced rules,
 precedence is generalized, so that it does
 not depend on the operators:
@@ -979,7 +969,7 @@ symbols.
 For example, the statement ``six times seven equals forty-two'' is written
 verbally --- its equivalent in notation is $6\times7=42$.
 
-In this paper,
+In this book,
 internal references will be of the form
 ({\it Xn:p}),
 where {\it X} is the reference type,
@@ -997,7 +987,7 @@ where {\it n} is the section number),
 % ``Lm'' (lemma),
 ``Ob'' (observation), and
 ``Th'' (theorem).
-In this paper,
+In this book,
 following the convention in much
 the literature of mathematical typography,
 any displayed mathematical statement is
@@ -1037,7 +1027,7 @@ consistent with that of
 Halmos.\footnote{%
 See Halmos 1960~\cite{Halmos1960}.
 Halmos assumes the Axiom of Choice,
-but this paper makes no use of it.
+but this book makes no use of it.
 }
 Particularly, all of our mathematical objects are sets.
 
@@ -1208,7 +1198,7 @@ Once a piece is small enough that we can conveniently
 characterize its complexity by other means,
 we will break it down no further.\footnote{%
   Those who want more implementation details will find
-  most of the procedures in this paper,
+  most of the procedures in this book,
   including all of
   the procedures required for a practical implementation,
   broken further down in our C language
@@ -1216,7 +1206,7 @@ we will break it down no further.\footnote{%
   \cite{Marpa-R2}.%
 }
 
-In this paper,
+In this book,
 a \dfn{function} is never an algorithm ---
 it always refers to the set theoretic notion.
 Algorithms are also referred to as \dfn{procedures}.
@@ -1241,7 +1231,7 @@ with zero characters of lookahead.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
 \Marpa{} will refer to the recognizer described in
-this paper, and implemented in
+this book, and implemented in
 \Rtwo~\cite{Marpa-R2}.
 
 The procedures which are major building blocks
@@ -1289,13 +1279,13 @@ during which the various variables are introduced and related to
 each other.
 These setups are repetitive, tedious,
 and usually obvious in their details.
-In this paper we try to avoid them in favor of
+In this book we try to avoid them in favor of
 a system of ``contextual binding''.
 We believe
 that the reader will find this system intuitive,
 to the degree that the reader is able to ignore it.
 
-Variables in this paper,
+Variables in this book,
 as in most of the parsing literature,
 have a ``scope''.
 Usually scope conventions are left implicit,
@@ -1322,11 +1312,11 @@ An observation is a scope, with only the observation
 itself being visible outside the scope.
 
 Scopes may be introduced explicitly.
-The entire paper is the \dfn{global scope}.
+The entire book is the \dfn{global scope}.
 
 \todo{Rewrite type system description, add "context" discussion}
 In order to abbreviate certain recurring definitions,
-for the purposes of this paper,
+for the purposes of this book,
 we use a simple and opportunistic ``type system''.%
 \footnote{%
     We considered using the term ``tag'' instead of
@@ -1338,7 +1328,7 @@ we use a simple and opportunistic ``type system''.%
     though a \Marpa{} implementation might
     use some of our
     type names and concepts,
-    the types in this paper are not intended to be taken
+    the types in this book are not intended to be taken
     as a model of the type system a \Marpa{} implementation
     should follow.
 }
@@ -1355,7 +1345,7 @@ have a type.%
    a specific set of definitions for readability purposes.
 }
 
-This paper will
+This book will
 use subscripts to indicate commonly occurring types,
 as shown in
 \Tbref{tab:type-notation}.
@@ -1481,7 +1471,7 @@ Otherwise tradition is followed: bracketing symbols override precedence,
 and where an operator is written out in verbal form (``iff'') it has looser
 precedence than one written in math symbols $\iff$.
 
-In this paper, we will only need to describe countable cardinalities.
+In this book, we will only need to describe countable cardinalities.
 \Vsize{set} is the cardinality of the set \var{set}.
 The notation $\Vsize{set} \in \naturals$
 indicates that \var{set} is finite.
@@ -1642,7 +1632,7 @@ and unequal to any other value.
 
 Explicit ``Definition'' sections and boldface are reserved
 for definitions that are of significance throughout
-this paper.
+this book.
 In some contexts,
 as for example in stating and proving
 some theorems,
@@ -1686,7 +1676,7 @@ If no function satisfying the definition existed,
 the function could not be used,
 which usually would render the definition pointless.
 Proving the existence of a function can be non-trivial,
-and many of the function definitions in this paper
+and many of the function definitions in this book
 are stated as theorems.
 
 A definition may also be stated as part of a theorem if it
@@ -2111,7 +2101,7 @@ for some $\Vterm{lookahead} \in \Term{\var{g}}^\ast$,
 \end{definition}
 
 Let $\Vtermset{phrases} = \Term{\var{g}}^\ast$.
-In this paper, a \dfn{partition}, call it $\pi$,
+In this book, a \dfn{partition}, call it $\pi$,
 is a subset of \powerset{\var{phrases}},
 where all of the elements of $\pi$ are non-empty and disjoint,
 and where the elements of $\pi$ ``cover'' \var{phrases} in the sense that
@@ -2126,7 +2116,7 @@ and
 \begin{gather}
 \forall \; \Vtermset{x} \in \pi : \forall \; \Vtermset{y} \in \pi : \var{x} \cap \var{y} = \emptyset \lor \var{x} = \var{y}
 \end{gather}
-Note that in this paper $\pi$ will usually, but not necessarily,
+Note that in this book $\pi$ will usually, but not necessarily,
 be of finite cardinality.
 
 We call an elements of $\pi$, a \dfn{cell}.
@@ -2398,7 +2388,7 @@ when the unicorn is expected.
 The application will receive control when the event occurs,
 and it can then invoke the custom lexer.
 
-For our theoretical results in this paper,
+For our theoretical results in this book,
 we treat all symbols as if they were productive.
 This is consistent with being conservative,
 since a ``unicorn'' can always be feed to the parser
@@ -2672,7 +2662,7 @@ Marpa records the locations of the eliminated nulling symbols.
 
 A corner case occurs when eliminating nulling symbols from two distinct
 rules makes them identical.
-In this paper,
+In this book,
 we assume a rewrite that creates
 a new LHS symbol for each rule that must remain distinct;
 and that adds new rules to derive the new LHS symbols from the original ones.
@@ -2900,7 +2890,7 @@ that \Marpa{} internal grammars
 \item do not allow the RHS of a rule to be empty.
 \end{itemize}
 
-In the rest of this paper,
+In the rest of this book,
 unless otherwise stated,
 we will be assuming that the grammar
 we are discussing
@@ -3028,7 +3018,7 @@ a \Marpa{} internal grammar.
 \dispEnd
 \end{definition}
 
-Since this paper is intended to describe \Marpa{},
+Since this book is intended to describe \Marpa{},
 many of our results take advantage of Marpa{}'s rewriting,
 and simplify the presentation by
 assuming \Marpa{} internal grammars.
@@ -4309,7 +4299,7 @@ Omission of a Leo memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
 preserves the correctness as shown in Leo\cite{Leo1991}.
 \todo{Refer to later proof that omission of memoization does not affect correctness}
-Later in this paper
+Later in this book
 we will prove this,
 and we will also
 show that this change also leaves
@@ -4391,7 +4381,7 @@ will usually be a waste of time.}
 
 In \cite{Leo1991}, penults were memoized
 using what Leo called ``transitive items''.
-In this paper Leo's ``transitive items''
+In this book Leo's ``transitive items''
 will be called \dfn{Leo items}.
 Recall that every parse item (\type{PIM})
 is either
@@ -14042,7 +14032,7 @@ But neither source gives them a name.
 The term PSL
 (``per-Earley set list'')
 is new
-with this paper.
+with this book.
 
 A PSL is a fixed-length array of
 integers, indexed by an integer,
@@ -14182,7 +14172,7 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-In this paper,
+In this book,
 we call a parsing algorithm \dfn{correct} if and
 only if, for every parse, it is \dfn{consistent} and
 \dfn{complete}.
@@ -17051,7 +17041,7 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-In this paper,
+In this book,
 up to this point,
 the traditional input stream model
 has been assumed.
@@ -17192,7 +17182,7 @@ Ruslan Shvedov
 and
 Ruslan Zakirov
 made many useful suggestions
-that are incorporated in this paper.
+that are incorporated in this book.
 Many members of the \Marpa{} community
 have helped me in many ways,
 and it is risky
