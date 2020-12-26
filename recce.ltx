@@ -1720,8 +1720,177 @@ or which are a matter of tactical choice within a proof strategy,
 such as the details of resource charging in our complexity
 analysis.
 
-The following theorems about trees will prove useful
-more than once.
+\section{Non-unary Trees}
+
+We assume that the reader is familiar with basic graph theory
+and the directed acyclic graphs, also called DAGs or trees.
+We will find the concept of a non-unary tree, and some of its
+properties, useful.
+
+\begin{definition}[Non-unary tree]
+A tree is \dfn{non-unary} iff its set of nodes is finite,
+and no node of the tree has an
+out-degree of 1.
+\end{definition}
+
+In the section, let $\var{tree}=\tuple{\var{A},\var{R}}$ be a tree.
+Recall from graph theory that \var{A} is a set of nodes,
+that \var{R} is a relation on \var{A},
+and that each element of \var{R} is an edge.
+
+For the purpose of this section only,
+consider the ``ancestors'' function,
+$\var{Anc} \in \fnset{\naturals\times\powerset{\var{A}}}{\powerset{\var{A}}}$,
+such that
+\begin{equation}
+\label{eq:non-unary-tree-size-100}
+    \myfn{Anc}{\var{N},\var{nds}} =
+    \begin{cases}
+        \var{nds}, \text{ if } \var{N}= 0
+        \\ \left(\begin{gathered}
+            \myfn{Anc}{\Vdecr{N},\var{nds}}
+            \\ \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+        \end{gathered}\right),
+        \text{ if } \var{N} \ge 1.
+    \end{cases}
+\end{equation}
+Now consider a ``generation'', the set of nodes
+added to the set of ancestors of \var{leaves} at ancestry level
+\var{N}.
+
+\begin{lemma}[Leaf path finiteness]
+\label{lem:leaf-path-finiteness}
+Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree.
+For every node of \var{t},
+there must have be at least one path of length
+less than \Vsize{AA}
+that ends in a leaf.
+\end{lemma}
+
+\begin{proof}
+Let \var{nd} be an arbitrary node of \var{t}.
+Consider \var{path}, a sequence of nodes,
+such that $\Velement{path}{0}=\var{nd}$
+and, for every \var{n}
+such that \VVelement{path}{n} is not a leaf,
+\VVelement{path}{n} is the direct parent of
+\Velement{path}{\var{n}+1}.
+By definition, therefore,
+\var{path} is infinite or ends in a leaf:
+\mypareq{eq:lem-leaf-path-finiteness-100}{%
+    $\Vsize{path} \in \naturals$ or
+    \Velement{path}{\Vlastix{path}} is a leaf.
+}
+
+By the definition of a tree, a path cannot be a cycle,
+which means that every value of the sequence \var{path} must be distinct.
+The values of \var{path} are nodes, and there are only
+\Vsize{AA} nodes in \var{t},
+so that
+\mypareq{eq:lem-leaf-path-finiteness-150}{%
+    $\Vsize{path} \le \Vsize{AA}$.
+}
+This means that \var{path} is finite,
+\mypareq{eq:lem-leaf-path-finiteness-200}{%
+    $\var{path}\in\naturals$.
+}
+The theorem follows from
+\Eref{eq:lem-leaf-path-finiteness-100},
+\Eref{eq:lem-leaf-path-finiteness-150},
+and \Eref{eq:lem-leaf-path-finiteness-200}.
+\myqed
+\end{proof}
+
+\begin{lemma}[Leaf path ancestry]
+\label{lem:leaf-path-ancestry}
+Every node on a leaf path is an element
+of \myfn{Anc}{\var{x},\var{lvs}},
+where \var{lvs} is the set of leaves and
+\Vnat{x} is the distance of the node from the leaf.
+\end{lemma}
+
+\begin{proof}
+Let \var{upath} be a path which goes upward
+in the tree, so that \Velement{upath}{0} is a leaf,
+and so that, where $0 < \var{n} < \Vlastix{upath}$,
+\Velement{upath}{\var{n}+1} is a direct parent of
+\VVelement{upath}{n}.
+Assume, for a reductio, that the theorem is false
+for some node \var{nd}.
+Let \var{nd1} be the first node, in sequence order,
+for which the theorem is false.
+
+We cannot have that $\var{nd1}=0$,
+because \Velement{upath}{0} is a leaf,
+every leaf is in \myfn{Anc}{0,\var{lvs}},
+and therefore the theorem would be true for \var{nd1}.
+So we must have $\var{nd1}>0$.
+
+If $\var{nd1}>0$, \VVelement{upath}{nd1}
+must be the direct parent
+of \Velement{upath}{\Vdecr{nd1}}.
+Since \Velement{upath}{\var{nd1}} is the first element
+of \var{upath} for which the theorem is false,
+the theorem must be true for
+\Velement{upath}{\Vdecr{nd1}}.
+
+If the theorem is true for \Velement{upath}{\Vdecr{nd1}},
+then
+\mypareq{eq:lem-leaf-path-ancestry-200}{%
+    $\Velement{upath}{\Vdecr{nd1}} \in \myfn{Anc}{\Vdecr{nd1},\var{lvs}}$.
+}
+But if
+\Eref{eq:lem-leaf-path-ancestry-200},
+by the definition of \myfn{Anc}{} \Eref{eq:non-unary-tree-size-100},
+we have $\VVelement{upath}{nd1} \in \myfn{Anc}{\var{nd1},\var{lvs}}$,
+so that, contrary to assumption for the reductio,
+the theorem is true for \VVelement{upath}{nd1},
+This contradiction shows the reductio and the theorem.
+\myqed.
+\end{proof}
+
+\begin{lemma}[Non-unary ancestry completeness]
+\label{lem:non-unary-ancestry-completeness}
+Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree,
+and let \var{l} be the set of leaves of \var{t}.
+Then every node of a \var{t} is an element of \myfn{Anc}{\Vnat{n},\var{l}}
+for some \Vnat{n} < \Vsize{AA}.
+\end{lemma}
+
+\begin{proof}
+The proof is by reductio.
+Assume a node \var{nd} such that
+\mypareq{eq:lem-non-unary-ancestry-completeness-100}{%
+    $\forall\; \Vnat{n} : \var{n} \ge \Vsize{AA} \lor \var{nd} \notin \myfn{Anc}{\var{n},\var{l}}$
+    \cuz{} AF reductio.
+}
+\var{nd} cannot be a leaf, because then it is an element of $\myfn{Anc}{0,\var{l}}$:
+\mypareq{eq:lem-non-unary-ancestry-completeness-110}{%
+    $\var{nd} \notin \var{l}$ \cuz{}
+        the definition of \myfn{Anc}{} \Eref{eq:non-unary-tree-size-100},
+        \Eref{eq:lem-non-unary-ancestry-completeness-100}.
+}
+Since \var{nd} is not a leaf, it is the direct parent of another node.
+But, by the assumption for the reductio,
+this not cannot be a node of ancestry level less than that of node.
+\todo{Finish this proof}
+\end{proof}
+
+We define
+$\var{gen} \in \fnset{\naturals}{\powerset{\var{A}}}$,
+the function whose value is the \var{N}'th generation of \var{tree},
+such that
+\begin{equation}
+\label{eq:non-unary-tree-size-120}
+    \Vmyfn{gen}{N} =
+    \begin{cases}
+        \var{leaves}, \text{ if } \var{N}= 0
+        \\
+            \subtract{\myfn{Anc}{\var{N},\var{nds}}}
+            {\myfn{Anc}{\Vdecr{N},\var{nds}}},
+        \text{ if } \var{N} \ge 1.
+    \end{cases}
+\end{equation}
 
 \begin{theorem}[Non-unary Tree Size]
 \label{th:non-unary-tree-size}
@@ -1731,7 +1900,7 @@ that is, every node is either a leaf or has
 two or more child nodes.
 Let \myfn{V}{\var{tree}} be the set of nodes in \var{tree}.
 Assume that \myfn{V}{\var{tree}} is finite.
-Then 
+Then
 $\size{\myfn{V}{\var{tree}}} \le 2\times\Vsize{leaves}$,
 where $\var{leaves}\subseteq\myfn{V}{\var{tree}}$
 is the set of leaves in \var{tree}.
@@ -1771,49 +1940,15 @@ so that
    \because \Eref{th:non-unary-tree-size-120},
        \Eref{th:non-unary-tree-size-130}.
 \end{equation}
-Now, for the purpose of this proof,
-where \var{nds} is a set of nodes,
-define the \var{N}-level ancestry
-\myfn{Anc}{\var{N},\var{nds}}, such that
-\begin{equation}
-\label{th:non-unary-tree-size-150}
-    \myfn{Anc}{\var{N},\var{nds}} =
-    \begin{cases}
-        \var{nds}, \text{ if } \var{N}= 0
-        \\ \left(\begin{gathered}
-            \myfn{Anc}{\Vdecr{N},\var{nds}}
-            \\ \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}
-        \end{gathered}\right),
-        \text{ if } \var{N} \ge 1.
-    \end{cases}
-\end{equation}
-Now, consider
-the set of nodes
-added to the set of ancestors of \var{leaves} at ancestry level
-\var{N}.
-For the purposes of this proof,
-call this the \var{N}'th generation of \var{tree},
-and write it \Vmyfn{gen}{N}, so that
-\begin{equation}
-\label{th:non-unary-tree-size-155}
-    \Vmyfn{gen}{N} =
-    \begin{cases}
-        \var{leaves}, \text{ if } \var{N}= 0
-        \\ 
-            \subtract{\myfn{Anc}{\var{N},\var{nds}}}
-            {\myfn{Anc}{\Vdecr{N},\var{nds}}},
-        \text{ if } \var{N} \ge 1.
-    \end{cases}
-\end{equation}
 \mypareq{th:non-unary-tree-size-160}{%
     $\size{\myfn{Anc}{0,\var{nds}}} = \Vsize{nds}$
-    \cuz{} \Eref{th:non-unary-tree-size-150}.
+    \cuz{} TODO.
 }
 \mypareq{th:non-unary-tree-size-170}{%
         $\var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{nds}}} \le
             \size{\myfn{Anc}{\Vdecr{N},\var{nds}}} +
                 \size{\myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}}$
-    \bcuz{} \Eref{th:non-unary-tree-size-150}.
+    \bcuz{} TODO.
 }
 \begin{equation}
 \label{th:non-unary-tree-size-180}
