@@ -133,6 +133,7 @@
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 \newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
+\newcommand{\condOp}{\mathop{?}}
 \newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
@@ -982,7 +983,7 @@ seem likely to be helpful in the preservation of
 useful history.
 And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
-which can pose a challenge to the eyesight.
+which pose legibility and opthamological challenges.
 
 Mathematics in this book may be written \dfn{verbally} or
 in \dfn{notation}.
@@ -1088,6 +1089,12 @@ and $\Ran{\var{f}}$ is the range of \var{f}.
 $\powerset{\var{A}}$ is the powerset of the set \var{A}.
 \naturals{} is the set of non-negative integers.
 The abbreviation ``iff'' is used for ``if and only if''.
+
+In keeping with our avoidance of sub- and superscripts,
+our preferred notation for the union of the arbitrary set \var{S}
+is $\bigcup \var{S}$.
+By analogy, we write $\sum \var{S}$ to indicate the sum
+of the elements of \var{S}.
 
 Logical quantification is
 always with respect to a specific set,
@@ -1446,6 +1453,20 @@ for this, which we adopt, so that
 \Vdecr{x} = \subtract{\var{x}}{1}.
 \]
 
+Another notation from programming that we adopt is the
+ternary conditional operator:
+\begin{equation}
+\label{eq:conditional-op-example}
+\var{cond} \condOp{} \var{ifT} : \var{ifF}.
+\end{equation}
+where \var{cond} is a boolean.
+\var{ifT} is the value of \Eref{eq:conditional-op-example}
+if \var{cond} is true.
+Otherwise, the value of \Eref{eq:conditional-op-example} is
+\var{ifF}.
+For example, where \var{x} is an integer,
+$\var{x} \ge 0 \condOp{} \var{x} : -\var{x}$ is its absolute value.
+
 Floor brackets are a very intuitive way to indicate terminal
 symbols:
 \Vterm{terminal}.
@@ -1453,43 +1474,66 @@ We therefore represent the floor of a number
 as a function:
 $\myfn{floor}{\var{a}}$.
 
+\renewcommand{\cellboxrWidth}{3in}
 \begin{table}[t]
 \caption{
     \label{tab:op-precedence}
     Operator precedence cheatsheet}
-\begin{tabular}{|p{1.5in}|p{3in}|}
+Precedence is from tightest to loosest, \\
+so that the loosest precedence is last. \\
+Unary operators have tightest precedence and are omitted.
+\\[1.5ex]
+\begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\times$} & Multiplication \\
-{$+$} {$\subtractOP$} & Addition, subtraction \\
+{$\times$} & \cellboxr{Multiplication} \\
+\hline
+{$+$} {$\subtractOP$} & \cellboxr{Addition, subtraction} \\
+\hline
    {$\le$} {$<$}
    {$\ge$} {$>$}
-   & Equality, comparison \\
-{$\cat$} & Concatenation ($a\cat b$) \\
-{$\cup$ $\cap$ $\subtractOP$} & Set union, intersection, difference \\
-{$\times$} & Cartesian product (for sets) \\
+   & \cellboxr{Equality, comparison} \\
+   \hline
+{$\cat$} & \cellboxr{Concatenation, for example $\var{a}\cat \var{b}$} \\
+\hline
+{$\cup$ $\cap$ $\subtractOP$} & \cellboxr{Set union, intersection, difference} \\
+\hline
+{$\times$} & \cellboxr{Cartesian product (for sets)} \\
+\hline
 {$\subset$} {$\subseteq$}
     {$\supset$} {$\supseteq$}
-    & Set inclusion, set containment \\
+    & \cellboxr{Set inclusion, set containment} \\
+    \hline
 {$\in$} {$\notin$}
-    & Set inclusion \\
-{$=$} {$\neq$} & Equality, inequality \\
-{$\neg$} & Logical negation \\
-{$\land$} & Logical and \\
-{$\lor$} & Logical or \\
-{$\implies$} & Implication \\
-{$\iff$} & Logical equivalence \\
-{$:$}    & ``such that'' \\
-{$\riota$ $\exists$ $\existsUniq$ $\forall$} & Quantifiers \\
-{$\defined$} & Definition \\[12pt]
-{$\because$} & ``because'' (hint separator) \\[12pt]
+    & \cellboxr{Set inclusion} \\
+    \hline
+{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
 \hline
-\multicolumn{2}{|l|}{
-    \myparbox[4.5in]{%
-        Precedence
-        is from tightest to loosest,
-        so that the loosest precedence is last.
-    }
-} \\
+{$\neg$} & \cellboxr{Logical negation} \\
+\hline
+{$\land$} & \cellboxr{Logical and} \\
+\hline
+{$\lor$} & \cellboxr{Logical or} \\
+\hline
+%
+% We use \implies and \iff, but to get the spacing right
+% in the cell we need to use the symbols directly.
+{${\Longrightarrow}$} & \cellboxr{Implication} \\
+\hline
+{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
+\hline
+%
+{$\var{a}:\var{b}$}    & \cellboxr{``\var{a} such that \var{b}''} \\
+\hline
+{$\var{c}\condOp{}\var{v1}:\var{v2}$} & \cellboxr{%
+    Ternary conditional operator:\\
+    ``\var{v1} if \var{c}, otherwise \var{b}''} \\
+    \hline
+{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
+\hline
+{$\rule[-2.5ex]{0em}{0in}{\defined}$}
+& \cellboxr{Definition} \\
+\hline
+{$\because$} & \cellboxr{Hint separator: ``because''} \\
 \hline
 \end{tabular}
 \end{table}
@@ -1723,9 +1767,8 @@ analysis.
 \section{Non-unary Trees}
 
 We assume that the reader is familiar with basic graph theory
-and the directed acyclic graphs, also called DAGs or trees.
-We will find the concept of a non-unary tree, and some of its
-properties, useful.
+and directed acyclic graphs, also called DAGs or trees.
+We will find the concept of a non-unary tree useful.
 
 \begin{definition}[Non-unary tree]
 A tree is \dfn{non-unary} iff its set of nodes is finite,
@@ -1738,6 +1781,19 @@ Recall from graph theory that \var{A} is a set of nodes,
 that \var{R} is a relation on \var{A},
 and that each element of \var{R} is an edge.
 
+A path of a tree is a sequence of nodes where
+\[ 0 \le \Vnat{n} < \Vlastix{path} \implies
+    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{R}.
+\]
+A leaf path is path such that \Velement{path}{\Vlastix{path}}
+is a leaf.
+A reversed path is a sequence of nodes where
+\[ 0 \le \Vnat{n} < \Vlastix{path} \implies
+    \tuple{\Velement{path}{\var{n}+1},\VVelement{path}{n}} \in \var{R}
+\]
+and a reversed leaf path is a reversed path such that
+\Velement{path}{0} is a leaf.
+
 For the purpose of this section only,
 consider the ``ancestors'' function,
 $\var{Anc} \in \fnset{\naturals\times\powerset{\var{A}}}{\powerset{\var{A}}}$,
@@ -1745,59 +1801,31 @@ such that
 \begin{equation}
 \label{eq:non-unary-tree-size-100}
     \myfn{Anc}{\var{N},\var{nds}} =
-    \begin{cases}
-        \var{nds}, \text{ if } \var{N}= 0
-        \\ \left(\begin{gathered}
-            \myfn{Anc}{\Vdecr{N},\var{nds}}
-            \\ \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}
-        \end{gathered}\right),
-        \text{ if } \var{N} \ge 1.
-    \end{cases}
+    \left(\begin{gathered}
+    (\var{N}=0) \condOp \var{nds}
+    \\ : \myfn{Anc}{\Vdecr{N},\var{nds}}
+            \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+    \end{gathered}\right)
 \end{equation}
-Now consider a ``generation'', the set of nodes
-added to the set of ancestors of \var{leaves} at ancestry level
-\var{N}.
 
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
 Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree.
-For every node of \var{t},
-there must have be at least one path of length
-less than \Vsize{AA}
-that ends in a leaf.
+For every path \var{pth} of \var{t},
+$\Vsize{pth} \le \Vsize{AA}$.
 \end{lemma}
 
 \begin{proof}
-Let \var{nd} be an arbitrary node of \var{t}.
-Consider \var{path}, a sequence of nodes,
-such that $\Velement{path}{0}=\var{nd}$
-and, for every \var{n}
-such that \VVelement{path}{n} is not a leaf,
-\VVelement{path}{n} is the direct parent of
-\Velement{path}{\var{n}+1}.
-By definition, therefore,
-\var{path} is infinite or ends in a leaf:
-\mypareq{eq:lem-leaf-path-finiteness-100}{%
-    $\Vsize{path} \in \naturals$ or
-    \Velement{path}{\Vlastix{path}} is a leaf.
-}
-
+Let \var{path} be an arbitrary path of \var{t}.
 By the definition of a tree, a path cannot be a cycle,
 which means that every value of the sequence \var{path} must be distinct.
 The values of \var{path} are nodes, and there are only
 \Vsize{AA} nodes in \var{t},
 so that
 \mypareq{eq:lem-leaf-path-finiteness-150}{%
-    $\Vsize{path} \le \Vsize{AA}$.
+    $\Vsize{path} \le \Vsize{AA}$,
 }
-This means that \var{path} is finite,
-\mypareq{eq:lem-leaf-path-finiteness-200}{%
-    $\var{path}\in\naturals$.
-}
-The theorem follows from
-\Eref{eq:lem-leaf-path-finiteness-100},
-\Eref{eq:lem-leaf-path-finiteness-150},
-and \Eref{eq:lem-leaf-path-finiteness-200}.
+which is the consequence of the theorem.
 \myqed
 \end{proof}
 
@@ -1810,41 +1838,37 @@ where \var{lvs} is the set of leaves and
 \end{lemma}
 
 \begin{proof}
-Let \var{upath} be a path which goes upward
-in the tree, so that \Velement{upath}{0} is a leaf,
-and so that, where $0 < \var{n} < \Vlastix{upath}$,
-\Velement{upath}{\var{n}+1} is a direct parent of
-\VVelement{upath}{n}.
+Let \var{rlpath} be a reversed leaf path.
 Assume, for a reductio, that the theorem is false
-for some node \var{nd}.
-Let \var{nd1} be the first node, in sequence order,
+for some node $\var{nd}\in\Ran{\var{rlpath}}$.
+Let \var{nd1} be the first node, in \var{rlpath} sequence order,
 for which the theorem is false.
 
 We cannot have that $\var{nd1}=0$,
-because \Velement{upath}{0} is a leaf,
+because \Velement{rlpath}{0} is a leaf,
 every leaf is in \myfn{Anc}{0,\var{lvs}},
 and therefore the theorem would be true for \var{nd1}.
 So we must have $\var{nd1}>0$.
 
-If $\var{nd1}>0$, \VVelement{upath}{nd1}
+If $\var{nd1}>0$, \VVelement{rlpath}{nd1}
 must be the direct parent
-of \Velement{upath}{\Vdecr{nd1}}.
-Since \Velement{upath}{\var{nd1}} is the first element
-of \var{upath} for which the theorem is false,
+of \Velement{rlpath}{\Vdecr{nd1}}.
+Since \Velement{rlpath}{\var{nd1}} is the first element
+of \var{rlpath} for which the theorem is false,
 the theorem must be true for
-\Velement{upath}{\Vdecr{nd1}}.
+\Velement{rlpath}{\Vdecr{nd1}}.
 
-If the theorem is true for \Velement{upath}{\Vdecr{nd1}},
+If the theorem is true for \Velement{rlpath}{\Vdecr{nd1}},
 then
 \mypareq{eq:lem-leaf-path-ancestry-200}{%
-    $\Velement{upath}{\Vdecr{nd1}} \in \myfn{Anc}{\Vdecr{nd1},\var{lvs}}$.
+    $\Velement{rlpath}{\Vdecr{nd1}} \in \myfn{Anc}{\Vdecr{nd1},\var{lvs}}$.
 }
 But if
 \Eref{eq:lem-leaf-path-ancestry-200},
 by the definition of \myfn{Anc}{} \Eref{eq:non-unary-tree-size-100},
-we have $\VVelement{upath}{nd1} \in \myfn{Anc}{\var{nd1},\var{lvs}}$,
+we have $\VVelement{rlpath}{nd1} \in \myfn{Anc}{\var{nd1},\var{lvs}}$,
 so that, contrary to assumption for the reductio,
-the theorem is true for \VVelement{upath}{nd1},
+the theorem is true for \VVelement{rlpath}{nd1},
 This contradiction shows the reductio and the theorem.
 \myqed.
 \end{proof}
@@ -1857,25 +1881,8 @@ Then every node of a \var{t} is an element of \myfn{Anc}{\Vnat{n},\var{l}}
 for some \Vnat{n} < \Vsize{AA}.
 \end{lemma}
 
-\begin{proof}
-The proof is by reductio.
-Assume a node \var{nd} such that
-\mypareq{eq:lem-non-unary-ancestry-completeness-100}{%
-    $\forall\; \Vnat{n} : \var{n} \ge \Vsize{AA} \lor \var{nd} \notin \myfn{Anc}{\var{n},\var{l}}$
-    \cuz{} AF reductio.
-}
-\var{nd} cannot be a leaf, because then it is an element of $\myfn{Anc}{0,\var{l}}$:
-\mypareq{eq:lem-non-unary-ancestry-completeness-110}{%
-    $\var{nd} \notin \var{l}$ \cuz{}
-        the definition of \myfn{Anc}{} \Eref{eq:non-unary-tree-size-100},
-        \Eref{eq:lem-non-unary-ancestry-completeness-100}.
-}
-Since \var{nd} is not a leaf, it is the direct parent of another node.
-But, by the assumption for the reductio,
-this not cannot be a node of ancestry level less than that of node.
-\todo{Finish this proof}
-\end{proof}
-
+Now consider a ``generation'', the set of nodes
+added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
 We define
 $\var{gen} \in \fnset{\naturals}{\powerset{\var{A}}}$,
 the function whose value is the \var{N}'th generation of \var{tree},
