@@ -2472,80 +2472,19 @@ we say that \var{ss1} and \var{ss2} are ``equivalent modulo $\pi$'', or
 \var{ss1} \iff \var{ss2} \pmod\pi.
 \]
 
+
+\begin{definition}[LR grammar]
+\label{def:LR}
 Intuitively, an LR($\pi$) grammar is a grammar where two
 sentential forms that differ only in their lookaheads
 have the same handle,
 if those lookaheads are in the same cell of $\pi$.
-More precisely,
-
-\begin{definition}[LR grammar]
-\label{def:LR}
-\begin{align}
-\begin{aligned}
-\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
-& \xderives{R} \Vstr{history1}\Vstr{rhs1}\Vstr{lookahead1} \\
-& = \Vstr{behind}\Vstr{lookahead1},
-\end{aligned}
-\\
-\begin{aligned}
-\Accept{\Vint{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead2} \\
-& \xderives{R} \Vstr{history2}\Vstr{rhs2}\Vstr{lookahead2} \\
-& = \Vstr{behind}\Vstr{lookahead2},
-\end{aligned}
-\\
-\Vstr{lookahead1} \iff \Vstr{lookahead2} \pmod \pi,
-\end{align}
-
-We say that an LR($\pi$) grammar is LR-regular (LRR)
-iff $\pi$ is a finite regular partition.
-We say that an LR($\pi$) grammar is LR($\var{k}$)
-iff
-\begin{equation}
-\pi =
-\begin{gathered}
-\left\lbrace
-\left\lbrace
-\var{u}\var{v}
-\; \middle| \;
-\var{v} \in \Term{\var{g}}^\ast
-\right\rbrace
-\; \middle| \;
-(
-\var{u} \in \Term{\var{g}}^\ast \land \Vsize{u} = \var{k}
-)
-\right\rbrace
-\\
-\cup
-\left\lbrace
-\left\lbrace
-\var{u}
-\right\rbrace
-\; \middle|\;
-( \var{u} \in \Term{\var{g}}^\ast \land \Vsize{u} \le \var{k} )
-\right\rbrace
-\end{gathered}
-\end{equation}
-
-Every LR($\pi$) grammar is unambiguous.
-If a grammar is unambiguous then it is LR($\pi$)
-for the partition of infinite cardinality,
-\[
-\pi = \set{\set{\Vstr{x}} : \var{x} \in \Term{\var{g}}^\ast}. \quad \dispEnd
-\]
-
-\end{definition}
-
-\Thref{LR}
-presents \Dfref{def:LR}
-in a way that is easier to apply.
-\begin{theorem}[LR($\pi$) grammar]
-\label{th:LR}
-\footnote{
-The statement of the theorem follows \cite[p. 70]{Culik1973}.
-}%
-A grammar, \Vcfg{g}, is LR($\pi$) for a partition $\pi$,
-if, given
-\begin{gather}
+More precisely\footnote{
+    This definition follows \cite[p. 70]{Culik1973}.
+},
+\Vint{g} is LR($\pi$) for a partition $\pi$ if,
+given
+\begin{gather*}
 \begin{aligned}
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{history1}\Vsym{lhs1}\Vstr{lookahead1} \\
 & \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead1},
@@ -2553,28 +2492,43 @@ if, given
 \\
 \begin{aligned}
 \Accept{\Vcfg{g}} & \xderives{R\ast} \Vstr{history2}\Vsym{lhs2}\Vstr{lookahead3} \\
-& \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead2},
+& \xderives{R} \Vstr{history1}\Vstr{rhs}\Vstr{lookahead2}\text{, and}
 \end{aligned}
-\;\; \text{and}
-\\
-\Vstr{lookahead1} \iff \Vstr{lookahead2} ( \text{mod $\pi$} )
-\end{gather}
+\\ \Vstr{lookahead1} \iff \Vstr{lookahead2} ( \text{mod $\pi$} )
+\end{gather*}
 we have
 \begin{gather*}
-\Vsym{lhs1} =
-\Vsym{lhs2},
-\\
-\Vstr{history1} =
-\Vstr{history2}, \;\; \text{and}
-\\
-\Vstr{lookahead3} =
-\Vstr{lookahead2}.
+\Vstr{history2} = \Vstr{history1},
+\\ \Vsym{lhs2} = \Vsym{lhs1}\text{, and}
+\\ \Vstr{lookahead3} = \Vstr{lookahead2}.
+    \quad \dispEnd
 \end{gather*}
-\end{theorem}
+\end{definition}
 
-\begin{proof}
-Directly from \Dfref{def:LR}. \myqed
-\end{proof}
+Every LR($\pi$) grammar is unambiguous.
+If a grammar is unambiguous then it is LR($\pi$)
+for the partition of infinite cardinality,
+\[
+\pi = \set{ \var{cell} \in \powerset{\Term{\var{g}}^\ast} : \Vsize{cell} = 1 }.
+\]
+
+We say that an LR($\pi$) grammar is LR-regular (LRR)
+iff $\pi$ is a finite regular partition.
+We say that an LR($\pi$) grammar is LR($\var{k}$)
+iff
+\begin{equation*}
+\pi =
+\set{
+    \begin{gathered}
+        \var{cell} \in \powerset{\Term{\var{g}}^\ast} :
+            \exists\; \Vterm{u} :
+        \\ \left(\begin{gathered}
+                \Vsize{u} < \var{k} \condOp \var{cell} = \set{\var{u}} :
+                \\ \var{cell} = \set{\var{u}\var{v} : \var{v} \in \Term{\var{g}}^\ast}
+            \end{gathered}\right)
+    \end{gathered}
+}.
+\end{equation*}
 
 \chapter{External grammars}
 \label{chap:EXTs}
