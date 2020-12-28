@@ -603,7 +603,7 @@ subject to deletion.
 % contains the preliminaries to the deductive
 % reasoning, including
 % remarks on methodology and presentation.
-% Section \Chref{chap:general-definitions}
+% Section \Chref{chap:preliminary-math}
 % contains definitions which are ``general'',
 % that is, for the mathematics which we use as
 % a basis for our parsing discussions.
@@ -985,6 +985,8 @@ And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which pose legibility and opthamological challenges.
 
+\section{Presentation of the deductive logic}
+
 Mathematics in this book may be written \dfn{verbally} or
 in \dfn{notation}.
 We say that a mathematical statement is written ``verbally'' if it uses words
@@ -1046,6 +1048,66 @@ the same thing.
 Shorter synonyms are intended to be used for brevity,
 and only in cases where they are not expected to cause confusion.
 
+Explicit ``Definition'' sections and boldface are reserved
+for definitions that are of significance throughout
+this book.
+In some contexts,
+as for example in stating and proving
+some theorems,
+it is convenient to have definitions
+which are ``local'' ---
+useful only within
+a particular presentation.
+Local definitions are given in double quotes,
+(``definition''),
+and in numbered equations.
+
+Equations are sometimes stated verbally,
+at least in part.
+Whether stated verbally or symbolically,
+equations are often followed by a ``hint''.
+The ``hint'' is a list of considerations,
+such as theorems, definitions
+and other equations,
+intended to justify the assertion of the equation
+in that context.
+For clarity, the ``hint'' is separated
+from the body of the equation by a ``because'' symbol (``$\because$'').
+
+``WLOG'' abbreviates ``assumed without loss of generality''.
+``Def'' abbreviates ``definition''.
+``AF'' abbreviates ``assumed for''.
+For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
+
+The statement of a definition implies that it is consistent,
+and that, if the definition is of a mathematical object,
+that that object exists.
+Usually these implications are obviously true,
+but not always.
+When the implications of a definition are not obvious,
+the definition is stated as a theorem,
+and the non-obvious implications are proved.
+
+Specifically, the definition of a function implies that
+a function that satisfies the definition exists.
+If no function satisfying the definition existed,
+the function could not be used,
+which usually would render the definition pointless.
+Proving the existence of a function can be non-trivial,
+and many of the function definitions in this book
+are stated as theorems.
+
+A definition may also be stated as part of a theorem if it
+is closely tied in with that theorem,
+in order to avoid pointless cross-referencing.
+This is often done for definitions which are of details
+of the \Marpa{} algorithm,
+or which are a matter of tactical choice within a proof strategy,
+such as the details of resource charging in our complexity
+analysis.
+
+\section{Base theories}
+
 The basis of our deductive presentation is
 a naive set theory,
 consistent with that of
@@ -1055,146 +1117,6 @@ Halmos assumes the Axiom of Choice,
 but this book makes no use of it.
 }
 Particularly, all of our mathematical objects are sets.
-
-\chapter{General Definitions}
-\label{chap:general-definitions}
-
-\todo[prepend, caption={``General Definitions'' chapter is FRAGMENTARY}]{%
-This chapter is fragmentary and inconsistent
-and much of it may be deleted.
-Non-author readers are not encouraged.
-Filing pull requests
-will usually be a waste of time.}
-
-In this chapter we deal with
-matters of notation.
-We will usually not restate notation
-that is standard,
-unless the standard has an ambiguity
-relevant for our purposes,
-or unless the standard notation is a modernization
-which differs from
-Halmos 1960~\cite{Halmos1960}.
-
-Functions are partial unless stated otherwise.
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
-$\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
-$\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
-$\Dom{\var{f}}$ is the domain of \var{f},
-$\Cod{\var{f}}$ is the codomain of \var{f},
-and $\Ran{\var{f}}$ is the range of \var{f}.
-$\powerset{\var{A}}$ is the powerset of the set \var{A}.
-\naturals{} is the set of non-negative integers.
-The abbreviation ``iff'' is used for ``if and only if''.
-
-In keeping with our avoidance of sub- and superscripts,
-our preferred notation for the union of the arbitrary set \var{S}
-is $\bigcup \var{S}$.
-By analogy, we write $\sum \var{S}$ to indicate the sum
-of the elements of \var{S}.
-
-Logical quantification is
-always with respect to a specific set,
-which is specified explicitly
-or through the quantified variable's type,
-as described below.
-Where the set is obviously \naturals{},
-and the expression has a single variable,
-the specification may be abbreviated so that, for example,
-\[
-\forall \; \var{j} \in \set{ \var{i} \in \naturals : 0 \le \var{i} \le 42 } :
-    \myfn{P}{\var{j}}
-\]
-would be written as
-\[
-\forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
-\]
-
-We use $\existsUniq$ as a uniqueness quantification operator,
-so that
-\[
-    \existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}
-\]
-is equivalent to
-$$\exists \; \var{x} \in \var{A} : \myfn{P}{\var{x}} \land \forall \; \var{y} : \myfn{P}{\var{y}} \implies \var{y}=\var{x}.$$
-We use Russell's iota operator,
-so that
-\begin{equation}
-\label{eq:def-riota}
-\riota \var{x} \in \var{A} : \myfn{P}{x}
-\end{equation}
-is the unique \var{x} in the set \var{A} such that
-\myfn{P}{x} is true.
-\Eref{eq:def-riota}
-is defined iff
-$\existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}$.
-
-We write \fnset{\var{X}}{\var{Y}}
-for the set of functions from \var{X} to \var{Y},%
-\footnote{%
-    The set of functions from
-    \var{Y} to \var{X} is often written
-    $\var{X}^\var{Y}$, but we prefer to avoid
-    the optometric and typographic difficulties
-    that superscripts introduce.
-}
-so that $\var{f}\in\fnset{\var{X}}{\var{Y}}$ states
-that \var{f} is a function with domain \var{X}
-and codomain \var{Y}.%
-\footnote{%
-    $\var{f} \in \fnset{\var{X}}{\var{Y}}$
-    is often written
-    $\var{f}:\fnset{\var{X}}{\var{Y}}$ but we prefer to avoid
-    overloading the colon operator.
-}
-In our naive set theory, a sequence of \var{Y}'s is identical to a function from
-integers to \var{Y}, so that \infseq{Y} is the set of sequences of \var{Y}'s,
-and \finseq{Y} is the set of finite sequences of \var{Y}'s.
-
-As a way of avoiding tedious special cases,
-logical implication makes an opportunistic use
-of ternary logic.
-An logical implication
-with a \var{false} antecedant
-is allowed to have an undefined consequent,
-and the value of such an implication is \var{true}.
-(Typically the ``undefined'' expressions are
-iota operators
-or sequence values with out-of-bounds indexes.)
-Other uses of undefined expressions
-are banned,
-except when explained in the text.
-\begin{table}[t]
-\centering
-\caption{Logical implication convention}
-\begin{tabular}{|c|c|c|}
-\hline
-%\rule{0pt}{3ex}%
-\multicolumn{3}{|c|}{$\var{a} \implies \var{b}$} \\
-\hline
-\multicolumn{1}{|c|}{Value of \var{a}} &
-    \multicolumn{1}{|c|}{Value of \var{b}} &
-    \multicolumn{1}{|c|}{Value of} \\
-\multicolumn{1}{|c|}{} &
-    \multicolumn{1}{|c|}{} &
-    \multicolumn{1}{|c|}{implication} \\
-\hline
-\var{true} & \var{true} & \var{true} \\
-\var{true} & \var{false} & \var{false} \\
-\var{true} & Undefined & Undefined \\
-\var{false} & \var{true} & \var{true} \\
-\var{false} & \var{false} & \var{true} \\
-\var{false} & Undefined & \var{true} \\
-Undefined & \var{true} & Undefined \\
-Undefined & \var{false} & Undefined \\
-Undefined & Undefined & Undefined \\
-\hline
-\end{tabular}
-\label{tab:ternary-implication}.
-\end{table}
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -1242,67 +1164,12 @@ a \dfn{function} is never an algorithm ---
 it always refers to the set theoretic notion.
 Algorithms are also referred to as \dfn{procedures}.
 
-We consider it clearer to
-avoid representing relations in the form
-\begin{equation}
-\label{eq:relation-example}
-\var{x} \var{R} \var{y},
-\end{equation}
-where \var{R} is a binary relation between \var{x} and \var{y}.
-Instead we prefer to deal with relations in the form of the equivalent
-set,
-or via the boolean function they induce.
-For example we might discuss
-\Eref{eq:relation-example} via the boolean binary function
-\myfn{R}{\var{x}, \var{y}}.
+The presentation of the deductive logic in this book is heavily
+influenced by Tarski~\cite{Tarski}.
 
-\Earley{} will refer to the Earley's original
-recognizer\cite{Earley1970}
-with zero characters of lookahead.
-\Leo{} will refer to Leo's revision of \Earley{}
-as described in~\cite{Leo1991}.
-\Marpa{} will refer to the recognizer described in
-this book, and implemented in
-\Rtwo~\cite{Marpa-R2}.
+\section{Scope and types}
 
-The procedures which are major building blocks
-of \Marpa{} will be called \dfn{ops}.
-A second level of \Marpa{} building blocks will
-be called \dfn{sub-ops}.
-The building blocks of \Earley{} will be
-called \dfn{operations}.
-This overloads a term with a mathematical meaning
-but we feel that following Jay Earley's terminology in \cite{Earley1970}
-justifies any risk of confusion.
-
-\begin{table}[t]
-\centering
-\caption{Type notations}
-\begin{tabular}{ll}
-\hline
-$\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
-$\var{agg-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
-$\var{agg-one}_\seq{\var{T}}$ & The variable \var{seq-one} of type ``sequence of \type{T}'' \\
-\type{SYM} & The type for a symbol \\
-\type{STR} & The type for a string \\
-\type{EIM} & The type for an Earley item \\
-\type{RULE} & The type for the rule of a grammar\\
-\Tvar{a}{SYM} & Variable \var{a} of type \type{SYM}, subscripted form \\
-\Vsym{a} & Variable \var{a} of type \type{SYM}, angle bracket form \\
-\Tvar{a}{STR} & Variable \var{a} of type \type{STR}, subscripted form \\
-\Vstr{a} & Variable \var{a} of type \type{STR}, angle bracket form \\
-\Veim{a} & Variable \var{a} of type \type{EIM} \\
-\Vrule{a} & Variable \var{a} of type \type{RULE} \\
-\Vsymset{agg-two} & Variable \var{agg-two}, an set  of strings \\
-\Vstrset{strings} & Variable \var{strings}, an set of strings \\
-\Veimset{agg-three} & Variable \var{agg-three}, an set of Earley items \\
-\Veimseq{agg-three} & Variable \var{agg-three}, an sequence of Earley items \\
-\Vruleset{agg-four} & Variable \var{agg-four}, an set of grammar rules \\
-$\var{i}_\type{\naturals}$ & Variable \var{i}, a non-negative integer \\
-\hline
-\end{tabular}
-\label{tab:type-notation}
-\end{table}
+\FloatBarrier
 
 \label{page:binding-discussion}
 Parsing theory examples usually require a cumbersome ``setup''
@@ -1427,6 +1294,228 @@ In addition, for every type \var{T},
 whose index set is
 $\naturals$ is a type.
 \end{itemize}
+
+\begin{table}[t]
+\centering
+\caption{Type notations}
+\begin{tabular}{ll}
+\hline
+$\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
+$\var{agg-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
+$\var{agg-one}_\seq{\var{T}}$ & The variable \var{seq-one} of type ``sequence of \type{T}'' \\
+\type{SYM} & The type for a symbol \\
+\type{STR} & The type for a string \\
+\type{EIM} & The type for an Earley item \\
+\type{RULE} & The type for the rule of a grammar\\
+\Tvar{a}{SYM} & Variable \var{a} of type \type{SYM}, subscripted form \\
+\Vsym{a} & Variable \var{a} of type \type{SYM}, angle bracket form \\
+\Tvar{a}{STR} & Variable \var{a} of type \type{STR}, subscripted form \\
+\Vstr{a} & Variable \var{a} of type \type{STR}, angle bracket form \\
+\Veim{a} & Variable \var{a} of type \type{EIM} \\
+\Vrule{a} & Variable \var{a} of type \type{RULE} \\
+\Vsymset{agg-two} & Variable \var{agg-two}, an set  of strings \\
+\Vstrset{strings} & Variable \var{strings}, an set of strings \\
+\Veimset{agg-three} & Variable \var{agg-three}, an set of Earley items \\
+\Veimseq{agg-three} & Variable \var{agg-three}, an sequence of Earley items \\
+\Vruleset{agg-four} & Variable \var{agg-four}, an set of grammar rules \\
+$\var{i}_\type{\naturals}$ & Variable \var{i}, a non-negative integer \\
+\hline
+\end{tabular}
+\label{tab:type-notation}
+\end{table}
+
+\FloatBarrier
+
+\chapter{Preliminary mathematics}
+\label{chap:preliminary-math}
+
+\todo[prepend, caption={``Preliminary Math'' chapter is FRAGMENTARY}]{%
+This chapter is fragmentary and inconsistent
+and much of it may be deleted.
+Non-author readers are not encouraged.
+Filing pull requests
+will usually be a waste of time.}
+
+In this chapter we begin the deductive exposition,
+dealing with matters from preceding disciplines.
+Preceding disciplines to our discussion are
+set theory,
+logic,
+procedures and algorithms,
+graph theory,
+the analysis of algorithms
+and parsing theory.
+This section includes considerations
+which are non-standard;
+which have conflicting or ambiguous standards;
+which differ from Halmos 1960~\cite{Halmos1960};
+or which go beyond the basics of the preceding discipline.
+
+Functions are partial unless stated otherwise.
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
+$\var{A} \subseteq \var{B}$ means that \var{A} is a subset of \var{B}, while
+$\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
+$\Dom{\var{f}}$ is the domain of \var{f},
+$\Cod{\var{f}}$ is the codomain of \var{f},
+and $\Ran{\var{f}}$ is the range of \var{f}.
+$\powerset{\var{A}}$ is the powerset of the set \var{A}.
+\naturals{} is the set of non-negative integers.
+The abbreviation ``iff'' is used for ``if and only if''.
+
+In keeping with our avoidance of sub- and superscripts,
+our preferred notation for the union of the arbitrary set \var{S}
+is $\bigcup \var{S}$.
+By analogy, we write $\sum \var{S}$ to indicate the sum
+of the elements of \var{S}.
+
+Logical quantification is
+always with respect to a specific set,
+which is specified explicitly
+or through the quantified variable's type,
+as described below.
+Where the set is obviously \naturals{},
+and the expression has a single variable,
+the specification may be abbreviated so that, for example,
+\[
+\forall \; \var{j} \in \set{ \var{i} \in \naturals : 0 \le \var{i} \le 42 } :
+    \myfn{P}{\var{j}}
+\]
+would be written as
+\[
+\forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
+\]
+
+We use $\existsUniq$ as a uniqueness quantification operator,
+so that
+\[
+    \existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}
+\]
+is equivalent to
+$$\exists \; \var{x} \in \var{A} : \myfn{P}{\var{x}} \land \forall \; \var{y} : \myfn{P}{\var{y}} \implies \var{y}=\var{x}.$$
+We use Russell's iota operator,
+so that
+\begin{equation}
+\label{eq:def-riota}
+\riota \var{x} \in \var{A} : \myfn{P}{x}
+\end{equation}
+is the unique \var{x} in the set \var{A} such that
+\myfn{P}{x} is true.
+\Eref{eq:def-riota}
+is defined iff
+$\existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}$.
+
+We write \fnset{\var{X}}{\var{Y}}
+for the set of functions from \var{X} to \var{Y},%
+\footnote{%
+    The set of functions from
+    \var{Y} to \var{X} is often written
+    $\var{X}^\var{Y}$, but we prefer to avoid
+    the optometric and typographic difficulties
+    that superscripts introduce.
+}
+so that $\var{f}\in\fnset{\var{X}}{\var{Y}}$ states
+that \var{f} is a function with domain \var{X}
+and codomain \var{Y}.%
+\footnote{%
+    $\var{f} \in \fnset{\var{X}}{\var{Y}}$
+    is often written
+    $\var{f}:\fnset{\var{X}}{\var{Y}}$ but we prefer to avoid
+    overloading the colon operator.
+}
+In our naive set theory, a sequence of \var{Y}'s is identical to a function from
+integers to \var{Y}, so that \infseq{Y} is the set of sequences of \var{Y}'s,
+and \finseq{Y} is the set of finite sequences of \var{Y}'s.
+
+Traditionally mathematical operations,
+even logical operations,
+imply no order of evaluation.
+This is inconvenient for our purposes because
+it means that,
+in cases where an sub-expression is ill-defined,
+the whole expression is also ill-defined.
+One workaround is to special-case potential ill-definedness,
+wherever it occurs,
+but this is awkward and verbose.
+
+Instead, for the purpose of assessing well-definedness,
+we treat logical expressions as if we ``evaluated''
+them from left to right.
+Once, in this ``evaluation'',
+we know what the value of the whole expression would be,
+on the assumption that there is a well-defined boolean value,
+we ``evaluate'' no further,
+ignoring even ill-defined sub-expressions.
+In this book, the expressions that
+traditional, order-free, evaluation
+would consider ill-defined
+typically are iota operators
+or sequence values with out-of-bounds indexes.
+
+In the following examples, let \var{arr} be the sequence
+of length 1 such that $\Velement{arr}{0} = 1749$.
+Consider as an example
+\begin{equation}
+\label{eq:order-of-evaluation-100}
+    \forall\; \Vnat{x} : \var{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
+\end{equation}
+Using traditional order-free evaluation,
+\Eref{eq:order-of-evaluation-100} is not well-defined,
+because if $\var{x}=1$, then $\var{x} \notin \Dom{\var{arr}}$.
+In this book, however,
+\Eref{eq:order-of-evaluation-100} is well-defined and true,
+because if the left hand side of a logical ``or'' is true,
+we ignore its right hand side, even if it is ill-defined.
+As another example, in this book,
+\[
+    \forall\; \Vnat{x} : \var{x} = 0 \land \VVelement{arr}{x} \le 42
+\]
+is considered to be well-defined and false,
+because
+if the left hand side of a logical ``and'' is false,
+we ignore the right hand side.
+Similarly, we consider the equation
+\[
+    \forall\; \Vnat{x} : \var{x} = 0 \implies \VVelement{arr}{x} \ge 42
+\]
+to be well-defined and true.
+
+To avoid ambiguity, especially with multi-character variables,
+we avoid representing relations in the form
+\begin{equation}
+\label{eq:relation-example}
+\var{x} \var{R} \var{y},
+\end{equation}
+where \var{R} is a binary relation between \var{x} and \var{y}.
+Though in desperation we might write
+\Eref{eq:relation-example} as $\var{x}(\var{R})\var{y}$,
+we prefer to deal with relations in the form of the equivalent
+set,
+or via the boolean function they induce.
+For example we might discuss
+\Eref{eq:relation-example} via the boolean binary function
+\myfn{R}{\var{x}, \var{y}}.
+
+\Earley{} will refer to the Earley's original
+recognizer\cite{Earley1970}
+with zero characters of lookahead.
+\Leo{} will refer to Leo's revision of \Earley{}
+as described in~\cite{Leo1991}.
+\Marpa{} will refer to the recognizer described in
+this book, and implemented in
+\Rtwo~\cite{Marpa-R2}.
+
+The procedures which are major building blocks
+of \Marpa{} will be called \dfn{ops}.
+A second level of \Marpa{} building blocks will
+be called \dfn{sub-ops}.
+The building blocks of \Earley{} will be
+called \dfn{operations}.
+This overloads a term with a mathematical meaning
+but we feel that following Jay Earley's terminology in \cite{Earley1970}
+justifies any risk of confusion.
 
 Multi-character variable names will be common.
 When the angle bracket notation is used,
@@ -1695,9 +1784,7 @@ string as its rightmost:
 \Rightmost{\str{\var{str}[\var{a} \ldots \var{z}]}} = \var{z}.
 \]
 
-$\Lambda$ is often used as a special ``null'' value.
-$\Lambda$ is untyped, but a variable of any type may have
-a $\Lambda$ value.
+$\Lambda$ is sometimes used as a special ``null'' value.
 Except when explicitly stated otherwise,
 the only operations allowed for $\Lambda$ are
 assignment to a variable,
@@ -1705,64 +1792,6 @@ and comparison.
 When used in a comparison,
 $\Lambda$ compares equal to itself
 and unequal to any other value.
-
-Explicit ``Definition'' sections and boldface are reserved
-for definitions that are of significance throughout
-this book.
-In some contexts,
-as for example in stating and proving
-some theorems,
-it is convenient to have definitions
-which are ``local'' ---
-useful only within
-a particular presentation.
-Local definitions are given in double quotes,
-(``definition''),
-and in numbered equations.
-
-Equations are sometimes stated verbally,
-at least in part.
-Whether stated verbally or symbolically,
-equations are often followed by a ``hint''.
-The ``hint'' is a list of considerations,
-such as theorems, definitions
-and other equations,
-intended to justify the assertion of the equation
-in that context.
-For clarity, the ``hint'' is separated
-from the body of the equation by a ``because'' symbol (``$\because$'').
-
-``WLOG'' abbreviates ``assumed without loss of generality''.
-``Def'' abbreviates ``definition''.
-``AF'' abbreviates ``assumed for''.
-For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
-
-The statement of a definition implies that it is consistent,
-and that, if the definition is of a mathematical object,
-that that object exists.
-Usually these implications are obviously true,
-but not always.
-When the implications of a definition are not obvious,
-the definition is stated as a theorem,
-and the non-obvious implications are proved.
-
-Specifically, the definition of a function implies that
-a function that satisfies the definition exists.
-If no function satisfying the definition existed,
-the function could not be used,
-which usually would render the definition pointless.
-Proving the existence of a function can be non-trivial,
-and many of the function definitions in this book
-are stated as theorems.
-
-A definition may also be stated as part of a theorem if it
-is closely tied in with that theorem,
-in order to avoid pointless cross-referencing.
-This is often done for definitions which are of details
-of the \Marpa{} algorithm,
-or which are a matter of tactical choice within a proof strategy,
-such as the details of resource charging in our complexity
-analysis.
 
 \section{Non-unary Trees}
 
@@ -2429,7 +2458,7 @@ That is,
 \begin{gather}
 \pi \subseteq \powerset{\var{phrases}}, \\
 \forall \; \var{x} \in \pi : \var{x} \neq \emptyset, \\
-\var{phrases} = \set{\var{phr2} \in \Vtermset{X} : \var{X} \in \pi }
+\var{phrases} = \bigcup \set{\var{x} : \Vtermset{x} \in \pi }
 \end{gather}
 and
 \begin{gather}
