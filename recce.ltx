@@ -1828,37 +1828,36 @@ consider the ``ancestors'' function,
 $\var{Anc} \in \fnset{\naturals\times\powerset{\var{A}}}{\powerset{\var{A}}}$,
 such that
 \begin{equation}
-\label{eq:non-unary-tree-size-100}
-    \myfn{Anc}{\var{N},\var{nds}} =
+\label{eq:def-ancestry}
+    \myfn{Anc}{\var{N},\var{base}} =
     \left(\begin{gathered}
-    \var{N}=0 \condOp \var{nds} :
-    \\ \myfn{Anc}{\Vdecr{N},\var{nds}}
-            \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+    \var{N}=0 \condOp \var{b} :
+    \\ \myfn{Anc}{\Vdecr{N},\var{b}}
+            \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{b}}}
     \end{gathered}\right).
 \end{equation}
-We say that a set \var{A} is an ``\var{N}-level ancestry'' of \var{nds}
+We say that a set \var{A} is an ``\var{N}-level ancestry with base \var{b}''
 iff
 \begin{equation}
 \label{eq:non-unary-tree-120}
-    \var{A}=\myfn{Anc}{\var{N},\var{nds}}.
+    \var{A}=\myfn{Anc}{\var{N},\var{b}}.
 \end{equation}
 We also say that \var{A}
 in \Eref{eq:non-unary-tree-120}
 is an ``\var{N}-level ancestry'' of a node \var{nd}
-iff $\var{nd}\in\var{nds}$.
+iff $\var{nd}\in\var{b}$.
 Where \var{X} is a node or a set of nodes,
-we say that a set \var{A} is an ``ancestry'' of \var{X}
+\begin{itemize}
+\item we say that a set \var{A} is an ``ancestry'' of \var{X}
 iff \var{A} is an \var{N}-level ancestry of \var{X} for
-some \Vnat{N}.
-
-Where \var{X} is a node or a set of nodes,
-we say the \var{A} in \Eref{eq:non-unary-tree-120}
+some \Vnat{N};
+\item we say the \var{A} in \Eref{eq:non-unary-tree-120}
 is a ``proper \var{N}-level ancestry'' of \var{X}
-iff $\var{N}>0 \implies \myfn{Anc}{\Vdecr{N},\var{nds}} \ne \var{A}$.
-Where \var{X} is a node or a set of nodes,
-we say that a set \var{A} is a ``proper ancestry'' of \var{X}
+iff $\var{N}>0 \implies \myfn{Anc}{\Vdecr{N},\var{b}} \ne \var{A}$; and
+\item we say that a set \var{A} is a ``proper ancestry'' of \var{X}
 iff \var{A} is a proper \var{N}-level ancestry of \var{X} for
 some \var{N}.
+\end{itemize}
 
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
@@ -1880,6 +1879,81 @@ so that
 which is the consequent of the theorem.
 \myqed
 \end{proof}
+
+\begin{lemma}[Ancestry containment]
+\label{lem:ancestry-containment}
+Every ancestry of \var{t} contains
+all the same or lower level ancestries of \var{t}
+with the same base.
+That is,
+let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
+and let \var{base} be an arbitary subset of \var{A}.
+Then
+\mypareq{eq:lem-ancestry-containment-050}{%
+    $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \var{N} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vnat{N},\var{base}}$.
+}
+\end{lemma}
+
+\begin{proof}
+The proof is by induction on \Vnat{indx},
+with
+\mypareq{eq:lem-ancestry-containment-105}{%
+    $\forall\; \Vnat{i} \le \var{indx} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{indx},\var{base}}$.
+}
+as the induction hypothesis.
+Since every set is a subset of itself,
+if we let $\var{indx}=0$, we have
+\mypareq{eq:lem-ancestry-containment-110}{%
+    $\forall\; \Vnat{i} \le 0 :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
+        \linebreak \cuz{} trivially.
+        This is the basis.
+}
+For the step,
+\mypareq{eq:lem-ancestry-containment-140}{%
+    $\var{indx}=\Vdecr{N}$ \cuz{} AF step, new arbitrary \var{N}.
+}
+\mypareq{eq:lem-ancestry-containment-150}{%
+    $\forall\; \Vnat{i} \le \Vdecr{N} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vdecr{N},\var{base}}$
+        \cuz{} induction hypothesis \Eref{eq:lem-ancestry-containment-105},
+            with \Eref{eq:lem-ancestry-containment-140}.
+}
+\mypareq{eq:lem-ancestry-containment-155}{%
+    $\var{N} \ge 1$ \cuz{} \Eref{eq:lem-ancestry-containment-140}.
+}
+\mypareq{eq:lem-ancestry-containment-160}{%
+        $\myfn{Anc}{\Vdecr{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+        \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-ancestry},
+            \Eref{eq:lem-ancestry-containment-155}.
+}
+\mypareq{eq:lem-ancestry-containment-170}{%
+    $\forall\; \Vnat{i} \le \Vdecr{N} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-containment-150},
+            \Eref{eq:lem-ancestry-containment-160}.
+}
+\mypareq{eq:lem-ancestry-containment-180}{%
+        $\myfn{Anc}{\var{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+        \cuz{} trivially.
+}
+\mypareq{eq:lem-ancestry-containment-190}{%
+    $\forall\; \Vnat{i} \le \var{N} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-containment-170},
+            \Eref{eq:lem-ancestry-containment-180}.
+    This is the step.
+}
+With the basis \Eref{eq:lem-ancestry-containment-110}
+and the step \Eref{eq:lem-ancestry-containment-190},
+we have the induction and this proof.
+\myqed
+\end{proof}
+
+\todo{TO HERE
+Tue 29 Dec 2020 02:50:33 PM EST}
 
 \begin{lemma}[Leaf path ancestry]
 \label{lem:leaf-path-ancestry}
@@ -1917,7 +1991,7 @@ then
 }
 But if
 \Eref{eq:lem-leaf-path-ancestry-200},
-by the definition of \myfn{Anc}{} \Eref{eq:non-unary-tree-size-100},
+by the definition of \myfn{Anc}{} \Eref{eq:def-ancestry},
 we have $\VVelement{rlpath}{nd1} \in \myfn{Anc}{\var{nd1},\var{lvs}}$,
 so that, contrary to assumption for the reductio,
 the theorem is true for \VVelement{rlpath}{nd1},
@@ -1945,8 +2019,8 @@ such that
     \begin{cases}
         \var{leaves}, \text{ if } \var{N}= 0
         \\
-            \subtract{\myfn{Anc}{\var{N},\var{nds}}}
-            {\myfn{Anc}{\Vdecr{N},\var{nds}}},
+            \subtract{\myfn{Anc}{\var{N},\var{base}}}
+            {\myfn{Anc}{\Vdecr{N},\var{base}}},
         \text{ if } \var{N} \ge 1.
     \end{cases}
 \end{equation}
@@ -2000,20 +2074,20 @@ so that
        \Eref{th:non-unary-tree-size-130}.
 \end{equation}
 \mypareq{th:non-unary-tree-size-160}{%
-    $\size{\myfn{Anc}{0,\var{nds}}} = \Vsize{nds}$
+    $\size{\myfn{Anc}{0,\var{base}}} = \Vsize{base}$
     \cuz{} TODO.
 }
 \mypareq{th:non-unary-tree-size-170}{%
-        $\var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{nds}}} \le
-            \size{\myfn{Anc}{\Vdecr{N},\var{nds}}} +
-                \size{\myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{nds}}}}$
+        $\var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{base}}} \le
+            \size{\myfn{Anc}{\Vdecr{N},\var{base}}} +
+                \size{\myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}}$
     \bcuz{} TODO.
 }
 \begin{equation}
 \label{th:non-unary-tree-size-180}
 \begin{gathered}
-        \var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{nds}}} \le
-            \frac{3}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+        \var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{base}}} \le
+            \frac{3}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \\ \because \Eref{th:non-unary-tree-size-140},
         \Eref{th:non-unary-tree-size-170}.
 \end{gathered}
@@ -2023,12 +2097,12 @@ so that
 \begin{gathered}
     \var{N} \ge 1 \implies
     \\ \subtract{%
-        \size{\myfn{Anc}{\var{N},\var{nds}}}
+        \size{\myfn{Anc}{\var{N},\var{base}}}
     }{%
-        \size{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+        \size{\myfn{Anc}{\Vdecr{N},\var{base}}}
     }
     \le
-        \frac{1}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{nds}}}
+        \frac{1}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \\ \because \Eref{th:non-unary-tree-size-180}.
 \end{gathered}
 \end{equation}
