@@ -1880,8 +1880,8 @@ which is the consequent of the theorem.
 \myqed
 \end{proof}
 
-\begin{lemma}[Ancestry containment]
-\label{lem:ancestry-containment}
+\begin{lemma}[Ancestry monotonicity]
+\label{lem:ancestry-monotonicity}
 Every ancestry of \var{t} contains
 all the same or lower level ancestries of \var{t}
 with the same base.
@@ -1889,7 +1889,7 @@ That is,
 let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
 and let \var{base} be an arbitary subset of \var{A}.
 Then
-\mypareq{eq:lem-ancestry-containment-050}{%
+\mypareq{eq:lem-ancestry-monotonicity-050}{%
     $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \var{N} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vnat{N},\var{base}}$.
 }
@@ -1898,57 +1898,87 @@ Then
 \begin{proof}
 The proof is by induction on \Vnat{indx},
 with
-\mypareq{eq:lem-ancestry-containment-105}{%
+\mypareq{eq:lem-ancestry-monotonicity-105}{%
     $\forall\; \Vnat{i} \le \var{indx} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{indx},\var{base}}$.
 }
 as the induction hypothesis.
 Since every set is a subset of itself,
 if we let $\var{indx}=0$, we have
-\mypareq{eq:lem-ancestry-containment-110}{%
+\mypareq{eq:lem-ancestry-monotonicity-110}{%
     $\forall\; \Vnat{i} \le 0 :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
         \linebreak \cuz{} trivially.
         This is the basis.
 }
 For the step,
-\mypareq{eq:lem-ancestry-containment-140}{%
+\mypareq{eq:lem-ancestry-monotonicity-140}{%
     $\var{indx}=\Vdecr{N}$ \cuz{} AF step, new arbitrary \var{N}.
 }
-\mypareq{eq:lem-ancestry-containment-150}{%
+\mypareq{eq:lem-ancestry-monotonicity-150}{%
     $\forall\; \Vnat{i} \le \Vdecr{N} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vdecr{N},\var{base}}$
-        \cuz{} induction hypothesis \Eref{eq:lem-ancestry-containment-105},
-            with \Eref{eq:lem-ancestry-containment-140}.
+        \cuz{} induction hypothesis \Eref{eq:lem-ancestry-monotonicity-105},
+            with \Eref{eq:lem-ancestry-monotonicity-140}.
 }
-\mypareq{eq:lem-ancestry-containment-155}{%
-    $\var{N} \ge 1$ \cuz{} \Eref{eq:lem-ancestry-containment-140}.
+\mypareq{eq:lem-ancestry-monotonicity-155}{%
+    $\var{N} \ge 1$ \cuz{} \Eref{eq:lem-ancestry-monotonicity-140}.
 }
-\mypareq{eq:lem-ancestry-containment-160}{%
+\mypareq{eq:lem-ancestry-monotonicity-160}{%
         $\myfn{Anc}{\Vdecr{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
         \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-ancestry},
-            \Eref{eq:lem-ancestry-containment-155}.
+            \Eref{eq:lem-ancestry-monotonicity-155}.
 }
-\mypareq{eq:lem-ancestry-containment-170}{%
+\mypareq{eq:lem-ancestry-monotonicity-170}{%
     $\forall\; \Vnat{i} \le \Vdecr{N} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
-        \linebreak \cuz{} \Eref{eq:lem-ancestry-containment-150},
-            \Eref{eq:lem-ancestry-containment-160}.
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-monotonicity-150},
+            \Eref{eq:lem-ancestry-monotonicity-160}.
 }
-\mypareq{eq:lem-ancestry-containment-180}{%
+\mypareq{eq:lem-ancestry-monotonicity-180}{%
         $\myfn{Anc}{\var{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
         \cuz{} trivially.
 }
-\mypareq{eq:lem-ancestry-containment-190}{%
+\mypareq{eq:lem-ancestry-monotonicity-190}{%
     $\forall\; \Vnat{i} \le \var{N} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
-        \linebreak \cuz{} \Eref{eq:lem-ancestry-containment-170},
-            \Eref{eq:lem-ancestry-containment-180}.
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-monotonicity-170},
+            \Eref{eq:lem-ancestry-monotonicity-180}.
     This is the step.
 }
-With the basis \Eref{eq:lem-ancestry-containment-110}
-and the step \Eref{eq:lem-ancestry-containment-190},
+With the basis \Eref{eq:lem-ancestry-monotonicity-110}
+and the step \Eref{eq:lem-ancestry-monotonicity-190},
 we have the induction and this proof.
+\myqed
+\end{proof}
+
+\begin{lemma}[Ancestry closure]
+Every ancestry contains the union
+of all the same or lower level ancestries of \var{t}
+with the same base.
+That is,
+let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
+and let \var{base} be an arbitary subset of \var{A}.
+Then
+\begin{equation}
+\label{eq:lem-ancestry-closure-050}
+\begin{gathered}
+    \forall\; \Vnat{N} : \myfn{Anc}{\var{N},\var{base}}
+    \\ = \bigcup \set{ \var{a} \in \powerset{\var{A}} :
+        \forall\; \Vnat{i} : \var{i} \le \var{N} \land
+        \var{a} = \myfn{Anc}{\var{i},\var{base}}}.
+\end{gathered}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The proof would be by induction.
+Adapting \Eref{eq:lem-ancestry-closure-050} to be the induction
+hypothesis,
+with \var{N} as the induction index,
+we would have both the basis and the step quickly from
+the Ancestry Monotonicity Lemma \Lmref{ancestry-monotonicity}
+and the basic facts about containment and union from set theory.
 \myqed
 \end{proof}
 
