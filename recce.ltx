@@ -915,11 +915,9 @@ will usually be a waste of time.}
 [Mathematical] statements are generally accompanied by arguments whose
 purpose is to demonstrate their truth.}{Tarski, \cite[p. 3]{Tarski}}
 
-After this chapter,
-the burden of the presentation switches to
-deductive reasoning ---
-that is, it becomes mathematics in the strict sense.
-This chapter contains some preliminary remarks.
+This is the first of the mathematical chapters.
+It contains considerations introductory to the deductive reasoning,
+but outside it.
 
 The conventions of the parsing literature were formed
 when its dissemination relied on printed media.
@@ -974,9 +972,9 @@ our reasoning.
 We stop when additional detail seems to degenerate
 into mere symbol-pushing.
 
-We will be willing to include explanations,
-or adopt conventions,
-which increase the length of this book,
+We will be willing to include explanations
+and adopt conventions
+that increase the length of this book,
 if they shorten the time needed for a careful reading.
 We include narrative and motivation if they
 seem likely to be helpful in the preservation of
@@ -985,19 +983,137 @@ And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which pose legibility and opthamological challenges.
 
-\section{Presentation of the deductive logic}
+We make heavy use of multi-character variable names,
+and allow hyphenated variable names.
+This makes implicit operations inconvenient so that,
+with one exception,
+operations are never implicit.
+The exception is the concatenation of strings and symbols ---
+as will be explained in \Chref{chap:preliminary-math},
+these have a special notation which makes implicit operations
+unambiguous.
 
-Mathematics in this book may be written \dfn{verbally} or
-in \dfn{notation}.
-We say that a mathematical statement is written ``verbally'' if it uses words
-of the English language.
-We say that a mathematical statement is ``in notation'' if it uses mathematical
-symbols.
-For example, the statement ``six times seven equals forty-two'' is written
-verbally --- its equivalent in notation is $6\times7=42$.
+Since multiplication is never implicit,
+we overload the Cartesian product operator
+to represent it:
+so that it represents multiplication when its
+operands are integers:
+$\var{n} \times 6$.
+To avoid ambiguity with use of hyphenated variables,
+we distinguish subtraction typographically
+\[
+\subtract{\var{symbol-count}}{\var{terminal-count}}.
+\]
+This book's does not use subtraction often since it borrows
+a handy and compact notation
+for decremention by 1
+from programming languages:
+\subtract{\var{x}}{1}.
+Details of
+our notation for operations are given in
+\Chref{chap:preliminary-math}.
+
+\section{Base theories}
+
+The basis of our deductive presentation is
+a naive set theory,
+consistent with that of
+Halmos.\footnote{%
+See Halmos 1960~\cite{Halmos1960}.
+Halmos assumes the Axiom of Choice,
+but this book makes no use of it.
+}
+Particularly, all of our mathematical objects are sets.
+
+We follow Halmos~\cite{Halmos1960}
+strictly when it comes to the presentation
+of induction.
+An induction
+consists of defining a set and showing that set is equivalent
+to the natural numbers.
+Therefore, every induction is a statement about the natural numbers.
+The set is defined by a condition, using the Axiom of Specification.
+As one consequence,
+our inductions always begin with zero.
+All other forms of mathematical induction can be mapped
+to the natural numbers and,
+when we need them,
+we perform that mapping.
+
+Alongside the set theoretical notions,
+and in concept based on them,
+are algorithmic notions.
+The algorithmic notions are better for describing implementation
+on modern computer architectures,
+and will be essential for our complexity analysis.
+
+The algorithmic notions are, in concept,
+ultimately reducible to sequences of the primitive operations
+of a random access machine (RAM), like the one described by Earley
+but with two addition understandings.%
+\footnote{Jay Earley
+  describes his random access machine model in
+  \cite[p. 61]{Earley1970}.
+}
+First, the word size of our machine must be less than
+$\var{c}\times\var{n}$,
+where \var{c} is a constant and \var{n} is the size of the problem under
+discussion.
+Second, the primitive operations of our RAM
+are understood to be those typical of a modern computer.%
+\footnote{Jay Earley's primitive operations only included addition --
+  his algorithm and his data structure (linked lists) did not need multiplication.
+  Our changes bring us in line with the more modern
+  approach of Cormen et al. 2009~\cite[p. 23--24]{Cormen2009}.
+  In their RAM, multiplication and bit shifts are primitive operations,
+  but their RAM does not have an exponentiation instruction.%
+}
+In fact, we never break any algorithm down even close
+to the primitive operation level.
+Once a piece is small enough that we can conveniently
+characterize its complexity by other means,
+we will break it down no further.\footnote{%
+  Those who want more implementation details will find
+  most of the procedures in this book,
+  including all of
+  the procedures required for a practical implementation,
+  broken further down in our C language
+  implementation
+  \cite{Marpa-R2}.%
+}
 
 In this book,
-internal references will be of the form
+a \dfn{function} is never an algorithm ---
+it always refers to the set theoretic notion.
+Algorithms are also referred to as \dfn{procedures}.
+
+The presentation of the deductive logic in this book is
+influenced by Tarski~\cite{Tarski}.
+
+\section{Presentation of the deductive logic}
+
+The mathematical expressions in this book can be reduced to
+the basic operations of set theory (${\in}$ and ${\subseteq}$)
+and logic.
+Expressions in this book may be written \dfn{verbally} or
+in \dfn{notation}.
+We say that an expression is written ``verbally'' if it uses words
+of the English language.
+We say that an expression is ``in notation'' if it uses mathematical
+symbols.
+An expression in notation is called a \dfn{formula}.
+For example, the expression ``six times seven equals forty-two'' is written
+verbally --- its equivalent as a formula is $6\times7=42$.
+Expressions may mix words and formulas.
+
+In this book, the word \dfn{sentence}
+refers to an expression with a boolean value,
+unless context or explicit statement makes it clear otherwise.
+A sentence is called
+a \dfn{condition} in contexts where we are emphasizing
+its boolean value.
+
+References internal to this book are often of the form
 ({\it Xn:p}),
 where {\it X} is the reference type,
 {\it n} is the number of the referent,
@@ -1005,7 +1121,7 @@ and
 {\it p} is a page reference.
 Reference types are
 ``a'' (algorithm),
-``e'' (equation),
+``e'' (expression),
 ``S'' (section)
 ``L'' (a location within a section,
 where {\it n} is the section number),
@@ -1014,13 +1130,13 @@ where {\it n} is the section number),
 % ``Lm'' (lemma),
 ``Ob'' (observation), and
 ``Th'' (theorem).
-In this book,
-following the convention in much
-the literature of mathematical typography,
-any displayed mathematical statement is
-called an ``equation'',
-regardless of whether it is
-an equation in the dictionary sense.
+We follow the convention in
+the literature of mathematical typography
+by calling
+any displayed mathematical expression
+an ``equation'',
+even when it is not
+an equation in the strict mathematical sense.
 
 For example
 \Eref{eq:restriction1} refers to equation
@@ -1105,67 +1221,6 @@ of the \Marpa{} algorithm,
 or which are a matter of tactical choice within a proof strategy,
 such as the details of resource charging in our complexity
 analysis.
-
-\section{Base theories}
-
-The basis of our deductive presentation is
-a naive set theory,
-consistent with that of
-Halmos.\footnote{%
-See Halmos 1960~\cite{Halmos1960}.
-Halmos assumes the Axiom of Choice,
-but this book makes no use of it.
-}
-Particularly, all of our mathematical objects are sets.
-
-Alongside the set theoretical notions,
-and in concept based on them,
-are algorithmic notions.
-The algorithmic notions are better for describing implementation
-on modern computer architectures,
-and will be essential for our complexity analysis.
-
-The algorithmic notions are, in concept,
-ultimately reducible to sequences of the primitive operations
-of a random access machine (RAM), like the one described by Earley
-but with two addition understandings.%
-\footnote{Jay Earley
-  describes his random access machine model in
-  \cite[p. 61]{Earley1970}.
-}
-First, the word size of our machine must be less than $\var{c}\times\var{n}$,
-where \var{c} is a constant and \var{n} is the size of the problem under
-discussion.
-Second, the primitive operations of our RAM
-are understood to be those typical of a modern computer.%
-\footnote{Jay Earley's primitive operations only included addition --
-  his algorithm and his data structure (linked lists) did not need multiplication.
-  Our changes bring us in line with the more modern
-  approach of Cormen et al. 2009~\cite[p. 23--24]{Cormen2009}.
-  In their RAM, multiplication and bit shifts are primitive operations,
-  but their RAM does not have an exponentiation instruction.%
-}
-In fact, we never break any algorithm down even close
-to the primitive operation level.
-Once a piece is small enough that we can conveniently
-characterize its complexity by other means,
-we will break it down no further.\footnote{%
-  Those who want more implementation details will find
-  most of the procedures in this book,
-  including all of
-  the procedures required for a practical implementation,
-  broken further down in our C language
-  implementation
-  \cite{Marpa-R2}.%
-}
-
-In this book,
-a \dfn{function} is never an algorithm ---
-it always refers to the set theoretic notion.
-Algorithms are also referred to as \dfn{procedures}.
-
-The presentation of the deductive logic in this book is heavily
-influenced by Tarski~\cite{Tarski}.
 
 \section{Scope and types}
 
@@ -1514,35 +1569,28 @@ be called \dfn{sub-ops}.
 The building blocks of \Earley{} will be
 called \dfn{operations}.
 This overloads a term with a mathematical meaning
-but we feel that following Jay Earley's terminology in \cite{Earley1970}
-justifies any risk of confusion.
+but we feel that being able to follow Jay Earley's terminology in \cite{Earley1970}
+outweighs the risk of confusion.
 
-Multi-character variable names will be common.
-When the angle bracket notation is used,
-concatenation of strings and symbols may be implicit.
-Otherwise, operations are never implicit
-
-Since multiplication is never implicit,
-we overload the Cartesian product operator
+Recall
+that we overload the Cartesian product operator
 so that it represents multiplication when its
 operands are integers:
 $\var{n} \times 6$.
 Concatenation may also be made explicit:
 $\var{a} \cat \var{b}$.
-We find it helpful to allow hyphenated variable names,
-and therefore we distinguish subtraction typographically:
+Also recall that we distinguish subtraction typographically:
 \[
 \subtract{\var{symbol-count}}{\var{terminal-count}}.
 \]
-Almost always in this book, subtraction is decrementation by
-one.
-Many programming languages have a compact postfix notation
-for this, which we adopt, so that
+and adopt a
+programming language notation for decrementation by 1:
 \[
 \Vdecr{x} = \subtract{\var{x}}{1}.
 \]
 
-Another notation from programming that we adopt is the
+Another useful notation that we adopt
+from programming is the
 ternary conditional operator:
 \begin{equation}
 \label{eq:conditional-op-example}
