@@ -121,6 +121,10 @@
 \setlength\abovedisplayshortskip{3pt}
 \setlength\belowdisplayshortskip{3pt}
 
+% Some ``temporary variables'' for custom uses
+\newcommand{\basis}[1]{}
+\newcommand{\step}[1]{}
+
 \newcommand{\fnset}[2]{\ensuremath{{#1}\to{#2}}}
 \newcommand{\finseq}[1]{\ensuremath{
     \set{ \var{f} : \exists \; \var{X} \in \naturals : \var{f} \in \fnset{\var{X}}{\var{#1}} }
@@ -1299,6 +1303,7 @@ This book will
 use subscripts to indicate commonly occurring types,
 as shown in
 \Tbref{tab:type-notation}.
+Use of subscripts for other purposes is avoided.
 
 Since a type is a set,
 we may express facts about types using set notation.
@@ -1928,8 +1933,8 @@ which is the consequent of the theorem.
 \begin{lemma}[Ancestry monotonicity]
 \label{lem:ancestry-monotonicity}
 Every ancestry of \var{t} contains
-all the same or lower level ancestries of \var{t}
-with the same base.
+all the ancestries of \var{t}
+at the same or a lower level and with the same base.
 That is,
 let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
 and let \var{base} be an arbitary subset of \var{A}.
@@ -1941,58 +1946,54 @@ Then
 \end{lemma}
 
 \begin{proof}
-The proof is by induction on \Vnat{indx},
-with
-\mypareq{eq:lem-ancestry-monotonicity-105}{%
-    $\forall\; \Vnat{i} \le \var{indx} :
-        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{indx},\var{base}}$.
+The proof is by induction on the level of the ancestry.
+The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
+is the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with 
+the induction variable \var{indx}.
+For the basis, it is a fact of set theory that
+\mypareq{eq:lem-ancestry-monotonicity-103}{%
+        $\myfn{Anc}{0,\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
+        \cuz{} trivial.
 }
-as the induction hypothesis.
-Since every set is a subset of itself,
-if we let $\var{indx}=0$, we have
-\mypareq{eq:lem-ancestry-monotonicity-110}{%
+\mypareq{eq:lem-ancestry-monotonicity-105}{%
     $\forall\; \Vnat{i} \le 0 :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
-        \linebreak \cuz{} trivially.
-        This is the basis.
+        \linebreak \cuz{} universal generalization of \Eref{eq:lem-ancestry-monotonicity-103}.
+        This is \myfn{INDH}{0} and the basis.
 }
-For the step,
-\mypareq{eq:lem-ancestry-monotonicity-140}{%
-    $\var{indx}=\Vdecr{N}$ \cuz{} AF step, new arbitrary \var{N}.
-}
+\renewcommand{\basis}{eq:lem-ancestry-monotonicity-105}
+For the step, we assume \myfn{INDH}{\var{n}}
+to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:lem-ancestry-monotonicity-150}{%
-    $\forall\; \Vnat{i} \le \Vdecr{N} :
-        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vdecr{N},\var{base}}$
-        \cuz{} induction hypothesis \Eref{eq:lem-ancestry-monotonicity-105},
-            with \Eref{eq:lem-ancestry-monotonicity-140}.
-}
-\mypareq{eq:lem-ancestry-monotonicity-155}{%
-    $\var{N} \ge 1$ \cuz{} \Eref{eq:lem-ancestry-monotonicity-140}.
+    $\forall\; \Vnat{i} \le \var{n} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{n},\var{base}}$
+        \linebreak \cuz{} AF step.
+        This is \myfn{INDH}{\var{n}}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-160}{%
-        $\myfn{Anc}{\Vdecr{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
-        \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-ancestry},
-            \Eref{eq:lem-ancestry-monotonicity-155}.
+        $\myfn{Anc}{\var{n},\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
+        \linebreak \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-ancestry}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-170}{%
-    $\forall\; \Vnat{i} \le \Vdecr{N} :
-        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+    $\forall\; \Vnat{i} \le \var{n} :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
         \linebreak \cuz{} \Eref{eq:lem-ancestry-monotonicity-150},
             \Eref{eq:lem-ancestry-monotonicity-160}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-180}{%
-        $\myfn{Anc}{\var{N},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+        $\myfn{Anc}{\var{n}+1,\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
         \cuz{} trivially.
 }
 \mypareq{eq:lem-ancestry-monotonicity-190}{%
-    $\forall\; \Vnat{i} \le \var{N} :
-        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{N},\var{base}}$
+    $\forall\; \Vnat{i} \le \var{n}+1 :
+        \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
         \linebreak \cuz{} \Eref{eq:lem-ancestry-monotonicity-170},
             \Eref{eq:lem-ancestry-monotonicity-180}.
-    This is the step.
+        This is \myfn{INDH}{\var{n}+1}.
 }
-With the basis \Eref{eq:lem-ancestry-monotonicity-110}
-and the step \Eref{eq:lem-ancestry-monotonicity-190},
+With
+\Eref{eq:lem-ancestry-monotonicity-190} we have the step.
+With the step and the basis \Eref{\basis}
 we have the induction and this proof.
 \myqed
 \end{proof}
