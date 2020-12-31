@@ -1999,32 +1999,79 @@ we have the induction and this proof.
 \end{proof}
 
 \begin{lemma}[Ancestry closure]
-Every ancestry contains the union
-of all the same or lower level ancestries of \var{t}
-with the same base.
+\label{lem:ancestry-closure}
+Every ancestry of \var{t} is
+the union of all the ancestries of \var{t}
+at the same or a lower level and with the same base.
 That is,
 let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
 and let \var{base} be an arbitary subset of \var{A}.
 Then
-\begin{equation}
-\label{eq:lem-ancestry-closure-050}
-\begin{gathered}
-    \forall\; \Vnat{N} : \myfn{Anc}{\var{N},\var{base}}
-    \\ = \bigcup \set{ \var{a} \in \powerset{\var{A}} :
-        \forall\; \Vnat{i} : \var{i} \le \var{N} \land
-        \var{a} = \myfn{Anc}{\var{i},\var{base}}}.
-\end{gathered}
-\end{equation}
+\mypareq{eq:lem-ancestry-closure-050}{%
+    $\forall\; \Vnat{N} :
+        \myfn{Anc}{\Vnat{N},\var{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \var{N} : \myfn{Anc}{\var{i},\var{base}}}$.
+}
 \end{lemma}
 
 \begin{proof}
-The proof would be by induction.
-Adapting \Eref{eq:lem-ancestry-closure-050} to be the induction
-hypothesis,
-with \var{N} as the induction index,
-we would have both the basis and the step quickly from
-the Ancestry Monotonicity Lemma \Lmref{ancestry-monotonicity}
-and the basic facts about containment and union from set theory.
+The proof is by induction on the level of the ancestry.
+The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
+is the universal instantiation of \Eref{eq:lem-ancestry-closure-050} with 
+the induction variable \var{indx}.
+For the basis, it is a fact of set theory that
+\mypareq{eq:lem-ancestry-closure-140}{%
+        $\myfn{Anc}{0,\var{base}}
+	  = \bigcup \set{ \forall\; \Vnat{i} \le 0 : \myfn{Anc}{\var{i},\var{base}}}$
+        \cuz{} trivial.
+        This is \myfn{INDH}{0} and the basis.
+}
+\renewcommand{\basis}{eq:lem-ancestry-closure-150}
+For the step, we assume \myfn{INDH}{\var{n}}
+to show \myfn{INDH}{\var{n}+1}.
+\mypareq{eq:lem-ancestry-closure-150}{%
+        $\myfn{Anc}{\Vnat{n},\var{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \var{n} : \myfn{Anc}{\var{i},\var{base}}}$
+        \linebreak \cuz{} AF step.
+        This is \myfn{INDH}{\var{n}}.
+}
+\mypareq{eq:lem-ancestry-closure-170}{%
+    $\myfn{Anc}{\var{n},\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
+        \linebreak \cuz{} \Lmref{ancestry-monotonicity}.
+}
+\mypareq{eq:lem-ancestry-closure-180}{%
+    $\bigcup \set{ \forall\; \Vnat{i} \le \var{n} : \myfn{Anc}{\var{i},\var{base}}}
+      \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-150},
+        \Eref{eq:lem-ancestry-closure-170}.
+}
+Making a basic fact of set theory relative to the underlying set \powerset{\var{A}},
+we obtain
+\mypareq{eq:lem-ancestry-closure-190}{%
+        $\forall\;\var{whole} \in \powerset{\var{A}} :
+        \forall\;\var{part} \in \powerset{\var{A}} :
+	\linebreak
+        \var{part} \subseteq \var{whole} \implies \var{whole} = \var{whole} \cup \var{part}.$
+}
+\mypareq{eq:lem-ancestry-closure-200}{%
+      $\myfn{Anc}{\var{n}+1,\var{base}} =
+      \myfn{Anc}{\var{n}+1,\var{base}} \cup
+        \left(
+            \bigcup \set{ \forall\; \Vnat{i} \le \var{n} : \myfn{Anc}{\var{i},\var{base}}}
+        \right)$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-180},
+            \Eref{eq:lem-ancestry-closure-190}.
+}
+\mypareq{eq:lem-ancestry-closure-210}{%
+      $\myfn{Anc}{\var{n}+1,\var{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \var{n}+1 : \myfn{Anc}{\var{i},\var{base}}}$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-200}.
+        This is \myfn{INDH}{\var{n}+1}.
+}
+With
+\Eref{eq:lem-ancestry-closure-210} we have the step.
+With the step and the basis \Eref{\basis},
+we have the induction and this proof.
 \myqed
 \end{proof}
 
