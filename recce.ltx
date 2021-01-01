@@ -1843,39 +1843,44 @@ When used in a comparison,
 $\Lambda$ compares equal to itself
 and unequal to any other value.
 
-\section{Non-unary Trees}
+\chapter{Non-unary Trees}
+\label{chap:non-unary-trees}
 
-We assume that the reader is familiar with basic graph theory
-and directed acyclic graphs, also called DAGs or trees.
-We will find the concept of a non-unary tree useful.
+Recall that one of our preceding disciplines was graph theory.
+In particular, this book will make extensive use of
+directed acyclic graphs, also called DAGs or trees.
+In this chapter, we define the concept of
+a non-unary tree and show its properties
+that are useful for us.
 
-\begin{definition}[Non-unary tree]
-A tree is \dfn{non-unary} iff its set of nodes is finite,
-and no node of the tree has an
-out-degree of 1.
-\end{definition}
+This chapter is a new context scope,
+which contains an arbitary ``context tree'' \var{tree}.
+$\var{tree}=\tuple{\var{nodes},\var{edges}}$
+where \var{nodes} is a set of ``nodes'',
+and $\var{edges} \in \var{nodes}\times\var{nodes}$
+is a set of ``edges''.
 
-In the section, let $\var{tree}=\tuple{\var{A},\var{R}}$ be a tree.
-Recall from graph theory that \var{A} is a set of nodes,
-that $\var{R} \in \fnset{\var{A}}{\var{A}}$
-and that the elements of \var{R} are called edges.
+\section{Tree ancestries}
 
-A path of a tree is a sequence of nodes where
-\[ 0 \le \Vnat{n} < \Vlastix{path} \implies
-    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{R}.
-\]
-A leaf path is path such that \Velement{path}{\Vlastix{path}}
-is a leaf.
-A reversed path is a sequence of nodes where
-\[ 0 \le \Vnat{n} < \Vlastix{path} \implies
-    \tuple{\Velement{path}{\var{n}+1},\VVelement{path}{n}} \in \var{R}
-\]
-and a reversed leaf path is a reversed path such that
-\Velement{path}{0} is a leaf.
+Let
+\begin{equation}{eq:def-paths}
+\label{eq:def-paths}
+\myfn{Paths} \defined \set{
+    \tuple{ \var{ix}, \var{nd} } :
+         \exists\; \var{len}
+         \var{ix} \le \var{len}
+         \land \var{nd} \in \var{nodes}
+         \land
+    (0 < \var{n} < \var{len} \implies
+    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{edges})
+    }
+\end{equation}
+A ``path'' is an element of \var{Paths}.
+A ``leaf path'' is a path whose last value is a leaf.
 
 For the purpose of this section only,
 consider the ``ancestors'' function,
-$\var{Anc} \in \fnset{\naturals\times\powerset{\var{A}}}{\powerset{\var{A}}}$,
+$\var{Anc} \in \fnset{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$,
 such that
 \begin{equation}
 \label{eq:def-ancestry}
@@ -1908,7 +1913,10 @@ iff $\var{N}>0 \implies \myfn{Anc}{\Vdecr{N},\var{b}} \ne \var{A}$; and
 iff \var{A} is a proper \var{N}-level ancestry of \var{X} for
 some \var{N}.
 \end{itemize}
+We write \myfn{Proper}{\var{A}}
+to say that \var{A} is a proper ancestry.
 
+We write \myfn{Proper}{\var{A}}
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
 Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree.
@@ -1923,10 +1931,12 @@ which means that every value of the sequence \var{path} must be distinct.
 The values of \var{path} are nodes of \var{t},
 and there are only \Vsize{AA} nodes in \var{t},
 so that
-\[
-    \Vsize{path} \le \Vsize{AA},
-\]
-which is the consequent of the theorem.
+\mypareq{lem:leaf-path-finiteness-150}{%
+    $\Vsize{path} \le \Vsize{AA}$.
+}
+With the universal generalization of
+\Eref{lem:leaf-path-finiteness-150},
+we have this proof.
 \myqed
 \end{proof}
 
@@ -1936,8 +1946,7 @@ Every ancestry of \var{t} contains
 all the ancestries of \var{t}
 at the same or a lower level and with the same base.
 That is,
-let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
-and let \var{base} be an arbitary subset of \var{A}.
+let \var{base} be an arbitary subset of \var{nodes}.
 Then
 \mypareq{eq:lem-ancestry-monotonicity-050}{%
     $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \var{N} :
@@ -1948,7 +1957,7 @@ Then
 \begin{proof}
 The proof is by induction on the level of the ancestry.
 The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
-is the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with 
+is the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with
 the induction variable \var{indx}.
 For the basis, it is a fact of set theory that
 \mypareq{eq:lem-ancestry-monotonicity-103}{%
@@ -2004,8 +2013,7 @@ Every ancestry of \var{t} is
 the union of all the ancestries of \var{t}
 at the same or a lower level and with the same base.
 That is,
-let $\var{t}=\tuple{\var{A},\var{R}}$ be a tree,
-and let \var{base} be an arbitary subset of \var{A}.
+let \var{base} be an arbitary subset of \var{nodes}.
 Then
 \mypareq{eq:lem-ancestry-closure-050}{%
     $\forall\; \Vnat{N} :
@@ -2017,7 +2025,7 @@ Then
 \begin{proof}
 The proof is by induction on the level of the ancestry.
 The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
-is the universal instantiation of \Eref{eq:lem-ancestry-closure-050} with 
+is the universal instantiation of \Eref{eq:lem-ancestry-closure-050} with
 the induction variable \var{indx}.
 For the basis, it is a fact of set theory that
 \mypareq{eq:lem-ancestry-closure-140}{%
@@ -2045,11 +2053,11 @@ to show \myfn{INDH}{\var{n}+1}.
         \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-150},
         \Eref{eq:lem-ancestry-closure-170}.
 }
-Making a basic fact of set theory relative to the underlying set \powerset{\var{A}},
+Making a basic fact of set theory relative to the underlying set \powerset{\var{nodes}},
 we obtain
 \mypareq{eq:lem-ancestry-closure-190}{%
-        $\forall\;\var{whole} \in \powerset{\var{A}} :
-        \forall\;\var{part} \in \powerset{\var{A}} :
+        $\forall\;\var{whole} \in \powerset{\var{nodes}} :
+        \forall\;\var{part} \in \powerset{\var{nodes}} :
 	\linebreak
         \var{part} \subseteq \var{whole} \implies \var{whole} = \var{whole} \cup \var{part}.$
 }
@@ -2075,52 +2083,88 @@ we have the induction and this proof.
 \myqed
 \end{proof}
 
-\todo{TO HERE
-Tue 29 Dec 2020 02:50:33 PM EST}
-
-\begin{lemma}[Leaf path ancestry]
-\label{lem:leaf-path-ancestry}
-Every node on a leaf path is an element
-of \myfn{Anc}{\var{x},\var{lvs}},
-where \var{lvs} is the set of leaves and
-\Vnat{x} is the distance of the node from the leaf.
+\begin{lemma}[Ancestry to Path]
+\label{lem:ancestry-to-path}
+For every node in every proper ancestry of every
+-unary tree,
+there is a path in that tree
+from that node to some element of that ancestry's
+base
+such that the length of the path is the same
+as the level of
+the ancestry.
+That is, 
+\begin{gather}
+\label{eq:lem-ancestry-to-path-010}
+    \text{let $\var{base} \in \powerset{\var{nodes}}$ be chosen arbitrarily.}
+\end{gather}
+Then
+\begin{gather}
+\label{eq:lem-ancestry-to-path-020}
+    \forall\; \Vnat{N} :
+    \\ \label{eq:lem-ancestry-to-path-025}
+    \var{anc} = \myfn{Anc}{\var{N}, \var{base}}
+    \\ \label{eq:lem-ancestry-to-path-030}
+        \land\; \myfn{Proper}{\var{anc}}
+    \\ \nonumber
+        \implies
+        \forall\; \var{nd} \in \var{anc} :
+        \exists\; \var{path} \in \myfn{Paths}{\var{t}} :
+    \\ \label{eq:lem-ancestry-to-path-045}
+        \Velement{path}{0} = \var{nd}
+    \\ \label{eq:lem-ancestry-to-path-050}
+        \land\; \Velement{path}{\Vlastix{path}} \in \var{base}
+    \\ \label{eq:lem-ancestry-to-path-055}
+        \land\; \Vsize{path} = \var{N}.
+        \quad \dispEnd
+\end{gather}
 \end{lemma}
 
 \begin{proof}
-Let \var{rlpath} be a reversed leaf path.
-Assume, for a reductio, that the theorem is false
-for some node $\var{nd}\in\Ran{\var{rlpath}}$.
-Let \var{nd1} be the first node, in \var{rlpath} sequence order,
-for which the theorem is false.
-
-We cannot have that $\var{nd1}=0$,
-because \Velement{rlpath}{0} is a leaf,
-every leaf is in \myfn{Anc}{0,\var{lvs}},
-and therefore the theorem would be true for \var{nd1}.
-So we must have $\var{nd1}>0$.
-
-If $\var{nd1}>0$, \VVelement{rlpath}{nd1}
-must be the direct parent
-of \Velement{rlpath}{\Vdecr{nd1}}.
-Since \Velement{rlpath}{\var{nd1}} is the first element
-of \var{rlpath} for which the theorem is false,
-the theorem must be true for
-\Velement{rlpath}{\Vdecr{nd1}}.
-
-If the theorem is true for \Velement{rlpath}{\Vdecr{nd1}},
-then
-\mypareq{eq:lem-leaf-path-ancestry-200}{%
-    $\Velement{rlpath}{\Vdecr{nd1}} \in \myfn{Anc}{\Vdecr{nd1},\var{lvs}}$.
+\mypareq{eq:lem-ancestry-to-path-100}{%
+    $\tuple{\var{A},\var{R}}$ is a non-unary tree
+    \bcuz{} AF theorem, new free \var{A},
+    new free $\var{R} \in \var{A}\times\var{A}$.
 }
-But if
-\Eref{eq:lem-leaf-path-ancestry-200},
-by the definition of \myfn{Anc}{} \Eref{eq:def-ancestry},
-we have $\VVelement{rlpath}{nd1} \in \myfn{Anc}{\var{nd1},\var{lvs}}$,
-so that, contrary to assumption for the reductio,
-the theorem is true for \VVelement{rlpath}{nd1},
-This contradiction shows the reductio and the theorem.
-\myqed.
+\mypareq{eq:lem-ancestry-to-path-110}{%
+    $\var{anc} = \myfn{Anc}{\var{N}, \var{base}}$
+    \bcuz{} AF theorem, new free \Vnat{N},
+    new free $\var{base} \in \var{A}$,
+    \var{anc} for convenience.
+}
+\mypareq{eq:lem-ancestry-to-path-120}{%
+    \myfn{Proper}{\var{anc}}
+    \cuz{} AF theorem.
+}
+\mypareq{eq:lem-ancestry-to-path-130}{%
+    $\var{nd} \in \var{anc}$
+    \cuz{} AF theorem, new free \var{nd}.
+}
+\todo{TO HERE}
+\begin{gather}
+    \forall\; \var{nd} \in \var{A} :
+    \\ \exists\; \var{pth} \in \fnset{\naturals}{\var{A}} :
+    \\ \Velement{pth}{0} = \var{nd}
+    \\ \land\; \Velement{pth}{\Vlastix{pth}} \in \var{base}
+    \\ \land\; \Vsize{pth} = \var{N}.
+\end{gather}
+\myqed
 \end{proof}
+
+\section{Tree generations}
+
+\section{Non-unary tree size}
+
+\begin{definition}[Non-unary tree]
+A tree is \dfn{non-unary} iff its set of nodes is finite,
+and no node of the tree has an
+out-degree of 1.
+\end{definition}
+
+\section{Compressed Trees}
+
+\todo{TO HERE
+Tue 29 Dec 2020 02:50:33 PM EST}
 
 \begin{lemma}[Non-unary ancestry completeness]
 \label{lem:non-unary-ancestry-completeness}
