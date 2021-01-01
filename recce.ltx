@@ -1855,7 +1855,7 @@ that are useful for us.
 
 This chapter is a new context scope,
 which contains an arbitary ``context tree'' \var{tree}.
-$\var{tree}=\tuple{\var{nodes},\var{edges}}$
+\var{tree} is $\tuple{\var{nodes},\var{edges}},$
 where \var{nodes} is a set of ``nodes'',
 and $\var{edges} \in \var{nodes}\times\var{nodes}$
 is a set of ``edges''.
@@ -1863,17 +1863,21 @@ is a set of ``edges''.
 \section{Tree ancestries}
 
 Let
-\begin{equation}{eq:def-paths}
+\begin{equation}
 \label{eq:def-paths}
-\myfn{Paths} \defined \set{
-    \tuple{ \var{ix}, \var{nd} } :
-         \exists\; \var{len}
-         \var{ix} \le \var{len}
-         \land \var{nd} \in \var{nodes}
-         \land
-    (0 < \var{n} < \var{len} \implies
-    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{edges})
-    }
+\myfnname{Paths} \defined \set{
+    \begin{gathered}
+    \tuple{ \var{ix}, \var{nd} } : \exists\; \var{len} :
+        \\ \var{ix} \le \var{len}
+           \land \var{nd} \in \var{nodes}
+        \\ \land\;
+            \left(\begin{gathered}
+                0 < \var{n} < \var{len}
+                \\ \implies
+                    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{edges}
+            \end{gathered}\right)
+    \end{gathered}
+    }.
 \end{equation}
 A ``path'' is an element of \var{Paths}.
 A ``leaf path'' is a path whose last value is a leaf.
@@ -1916,7 +1920,6 @@ some \var{N}.
 We write \myfn{Proper}{\var{A}}
 to say that \var{A} is a proper ancestry.
 
-We write \myfn{Proper}{\var{A}}
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
 Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree.
@@ -1929,7 +1932,7 @@ Let \var{path} be an arbitrary path of \var{t}.
 By the definition of a tree, a path cannot be a cycle,
 which means that every value of the sequence \var{path} must be distinct.
 The values of \var{path} are nodes of \var{t},
-and there are only \Vsize{AA} nodes in \var{t},
+and there are only \Vsize{AA} distinct nodes in \var{t},
 so that
 \mypareq{lem:leaf-path-finiteness-150}{%
     $\Vsize{path} \le \Vsize{AA}$.
