@@ -380,6 +380,8 @@
 
 \newcommand{\myfnname}[1]{\ensuremath{\mymathop{#1}}}
 \newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
+% The \mathopen{} and \mathclose{} eliminate unwanted extra space
+\newcommand{\bigfn}[2]{\ensuremath{\myfnname{#1}\mathopen{}\left(#2\right)\mathclose{}}}
 \newcommand{\Vmyfn}[2]{\ensuremath{\myfn{#1}{\var{#2}}}}
 
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
@@ -1847,18 +1849,20 @@ and unequal to any other value.
 \label{chap:non-unary-trees}
 
 Recall that one of our preceding disciplines was graph theory.
-In particular, this book will make extensive use of
+Parsing theory makes extensive use of
 directed acyclic graphs, also called DAGs or trees.
-In this chapter, we define the concept of
-a non-unary tree and show its properties
-that are useful for us.
+In this chapter, we define
+``non-unary trees'',
+which have properties that we will find useful.
 
 This chapter is a new context scope,
-which contains an arbitary ``context tree'' \var{tree}.
-\var{tree} is $\tuple{\var{nodes},\var{edges}},$
+which contains an finite arbitary ``context tree'' \var{tree}.
+$\var{tree} = \tuple{\var{nodes},\var{edges}},$
 where \var{nodes} is a set of ``nodes'',
 and $\var{edges} \in \var{nodes}\times\var{nodes}$
 is a set of ``edges''.
+Recall that in a ``finite'' tree,
+\var{nodes} is finite.
 
 \section{Tree ancestries}
 
@@ -1882,8 +1886,9 @@ Let
 A ``path'' is an element of \var{Paths}.
 A ``leaf path'' is a path whose last value is a leaf.
 
-For the purpose of this section only,
-consider the ``ancestors'' function,
+Where \var{n} is a set of nodes,
+let \Vmyfn{DP}{n} be the set of direct parents of \var{n}.
+Consider the ``ancestors'' function,
 $\var{Anc} \in \fnset{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$,
 such that
 \begin{equation}
@@ -1892,7 +1897,7 @@ such that
     \left(\begin{gathered}
     \var{N}=0 \condOp \var{b} :
     \\ \myfn{Anc}{\Vdecr{N},\var{b}}
-            \cup\; \myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{b}}}
+            \cup\; \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{b}}}
     \end{gathered}\right).
 \end{equation}
 We say that a set \var{A} is an ``\var{N}-level ancestry with base \var{b}''
@@ -2086,74 +2091,6 @@ With
 \Eref{eq:lem-ancestry-closure-210} we have the step.
 With the step and the basis \Eref{\basis},
 we have the induction and this proof.
-\myqed
-\end{proof}
-
-\begin{lemma}[Ancestry to Path]
-\label{lem:ancestry-to-path}
-For every node in every proper ancestry of every
--unary tree,
-there is a path in that tree
-from that node to some element of that ancestry's
-base
-such that the length of the path is the same
-as the level of
-the ancestry.
-That is, 
-\begin{gather}
-\label{eq:lem-ancestry-to-path-010}
-    \text{let $\var{base} \in \powerset{\var{nodes}}$ be chosen arbitrarily.}
-\end{gather}
-Then
-\begin{gather}
-\label{eq:lem-ancestry-to-path-020}
-    \forall\; \Vnat{N} :
-    \\ \label{eq:lem-ancestry-to-path-025}
-    \var{anc} = \myfn{Anc}{\var{N}, \var{base}}
-    \\ \label{eq:lem-ancestry-to-path-030}
-        \land\; \myfn{Proper}{\var{anc}}
-    \\ \nonumber
-        \implies
-        \forall\; \var{nd} \in \var{anc} :
-        \exists\; \var{path} \in \myfn{Paths}{\var{t}} :
-    \\ \label{eq:lem-ancestry-to-path-045}
-        \Velement{path}{0} = \var{nd}
-    \\ \label{eq:lem-ancestry-to-path-050}
-        \land\; \Velement{path}{\Vlastix{path}} \in \var{base}
-    \\ \label{eq:lem-ancestry-to-path-055}
-        \land\; \Vsize{path} = \var{N}.
-        \quad \dispEnd
-\end{gather}
-\end{lemma}
-
-\begin{proof}
-\mypareq{eq:lem-ancestry-to-path-100}{%
-    $\tuple{\var{A},\var{R}}$ is a non-unary tree
-    \bcuz{} AF theorem, new free \var{A},
-    new free $\var{R} \in \var{A}\times\var{A}$.
-}
-\mypareq{eq:lem-ancestry-to-path-110}{%
-    $\var{anc} = \myfn{Anc}{\var{N}, \var{base}}$
-    \bcuz{} AF theorem, new free \Vnat{N},
-    new free $\var{base} \in \var{A}$,
-    \var{anc} for convenience.
-}
-\mypareq{eq:lem-ancestry-to-path-120}{%
-    \myfn{Proper}{\var{anc}}
-    \cuz{} AF theorem.
-}
-\mypareq{eq:lem-ancestry-to-path-130}{%
-    $\var{nd} \in \var{anc}$
-    \cuz{} AF theorem, new free \var{nd}.
-}
-\todo{TO HERE}
-\begin{gather}
-    \forall\; \var{nd} \in \var{A} :
-    \\ \exists\; \var{pth} \in \fnset{\naturals}{\var{A}} :
-    \\ \Velement{pth}{0} = \var{nd}
-    \\ \land\; \Velement{pth}{\Vlastix{pth}} \in \var{base}
-    \\ \land\; \Vsize{pth} = \var{N}.
-\end{gather}
 \myqed
 \end{proof}
 
