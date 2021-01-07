@@ -1866,15 +1866,15 @@ Recall that in a ``finite'' tree,
 
 \section{Tree ancestries}
 
-Let \var{Paths} be the set of sequences of nodes
+Let \var{Paths} be the set of finite sequences of nodes
 such that each element is the direct parent of the next.
 That is,
 \begin{equation}
 \label{eq:def-paths}
-\myfnname{Paths} \defined \set{
+\var{Paths} \defined \set{
     \begin{gathered}
-        \var{p} \in \finseq{\var{nodes}} :
-        \\ \forall\; \Vnat{ix} < \Vlastix{p} :
+        \var{path} \in \fnset{\naturals}{\var{nodes}} : \exists\; \Vnat{lastIX} :
+        \\ \forall\; \Vnat{ix} < \var{lastIX} :
             \tuple{\VVelement{path}{ix},\Velement{path}{\var{ix}+1}} \in \var{edges}
     \end{gathered}
     }.
@@ -1882,42 +1882,65 @@ That is,
 A ``path'' is an element of \var{Paths}.
 A ``leaf path'' is a path whose last value is a leaf.
 
-Where \var{n} is a set of nodes,
-let \Vmyfn{DP}{n} be the set of direct parents of \var{n}.
-Consider the ``ancestors'' function,
-$\var{Anc} \in \fnset{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$,
-such that
+Where \var{nds} is a set of nodes,
+let $\Vmyfn{DP}{nds} \in \fnset{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$
+be the set of direct parents of \var{nds}, so that
 \begin{equation}
-\label{eq:def-ancestry}
+\label{eq:direct-paths}
+    \myfn{DP}{\var{nds}} = \set{
+        \begin{gathered}
+            \var{parent} :
+                    \tuple{\var{parent},\var{child}} \in \var{edges}
+                    \land \var{child} \in \var{nds}
+        \end{gathered}
+    }.
+\end{equation}
+Let the ``ancestors'' function,
+$\var{Anc} \in \fnset{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$,
+be such that
+\begin{equation}
+\label{eq:def-anc}
     \myfn{Anc}{\var{N},\var{base}} =
     \left(\begin{gathered}
-    \var{N}=0 \condOp \var{b} :
-    \\ \myfn{Anc}{\Vdecr{N},\var{b}}
-            \cup\; \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{b}}}
+    \var{N}=0 \condOp \var{base} :
+    \\ \myfn{Anc}{\Vdecr{N},\var{base}}
+            \cup\; \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \end{gathered}\right).
 \end{equation}
-We say that a set \var{A} is an ``\var{N}-level ancestry with base \var{b}''
-iff
-\begin{equation}
-\label{eq:non-unary-tree-120}
-    \var{A}=\myfn{Anc}{\var{N},\var{b}}.
-\end{equation}
-We also say that \var{A}
-in \Eref{eq:non-unary-tree-120}
-is an ``\var{N}-level ancestry'' of a node \var{nd}
-iff $\var{nd}\in\var{b}$.
-Where \var{X} is a node or a set of nodes,
-\begin{itemize}
-\item we say that a set \var{A} is an ``ancestry'' of \var{X}
-iff \var{A} is an \var{N}-level ancestry of \var{X} for
-some \Vnat{N};
-\item we say the \var{A} in \Eref{eq:non-unary-tree-120}
-is a ``proper \var{N}-level ancestry'' of \var{X}
-iff $\var{N}>0 \implies \myfn{Anc}{\Vdecr{N},\var{b}} \ne \var{A}$; and
-\item we say that a set \var{A} is a ``proper ancestry'' of \var{X}
-iff \var{A} is a proper \var{N}-level ancestry of \var{X} for
-some \var{N}.
-\end{itemize}
+\mypareq{eq:def-n-level-ancestry}{%
+    We say that a set \var{A} is an ``\var{N}-level ancestry with base \var{b}''
+    iff $\var{A}=\myfn{Anc}{\var{N},\var{b}}$.
+}
+% Delete this?
+%\mypareq{eq:def-n-level-node-ancestry}{%
+%    We say that \var{A}
+%    is an ``\var{N}-level ancestry'' of a node \var{nd}
+%    \linebreak iff $\var{nd}\in\var{b}$
+%    where $\var{A}=\myfn{Anc}{\var{N},\var{b}}$.
+%}
+\mypareq{eq:def-ancestry}{%
+    % Delete this?
+    % Where \var{X} is a node or a set of nodes,
+    We say that a set \var{A} is an ``ancestry'' of \var{X}
+    \linebreak iff \var{A} is an \var{N}-level ancestry of \var{X} for
+    some \Vnat{N}.
+}
+\mypareq{eq:def-proper-n-level-ancestry}{%
+    % Delete this?
+    % Where \var{X} is a node or a set of nodes,
+    We say the \var{A}
+    is a ``proper \var{N}-level ancestry'' of \var{X}
+    \linebreak iff \var{A} is an \var{N}-level ancestry of \var{X}
+    \linebreak and
+    $\var{N}=0 \lor \myfn{Anc}{\Vdecr{N},\var{b}} \ne \var{A}$.
+}
+\mypareq{eq:def-proper-ancestry}{%
+    % Delete this?
+    % Where \var{X} is a node or a set of nodes,
+    We say that a set \var{A} is a ``proper ancestry'' of \var{X}
+    \linebreak iff \var{A} is a proper \var{N}-level ancestry of \var{X} for
+    some \var{N}.
+}
 We write \myfn{Proper}{\var{A}}
 to say that \var{A} is a proper ancestry.
 
@@ -1974,7 +1997,8 @@ For the basis, it is a fact of set theory that
     $\forall\; \Vnat{i} \le 0 :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
         \linebreak \cuz{} universal generalization of \Eref{eq:lem-ancestry-monotonicity-103}.
-        This is \myfn{INDH}{0} and the basis.
+        This is the basis: \myfn{INDH}{0},
+        the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with 0.
 }
 \renewcommand{\basis}{eq:lem-ancestry-monotonicity-105}
 For the step, we assume \myfn{INDH}{\var{n}}
@@ -1987,7 +2011,7 @@ to show \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-160}{%
         $\myfn{Anc}{\var{n},\var{base}} \subseteq \myfn{Anc}{\var{n}+1,\var{base}}$
-        \linebreak \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-ancestry}.
+        \linebreak \cuz{} definition of \myfn{Anc}{} \Eref{eq:def-anc}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-170}{%
     $\forall\; \Vnat{i} \le \var{n} :
@@ -2015,9 +2039,9 @@ we have the induction and this proof.
 
 \begin{lemma}[Ancestry closure]
 \label{lem:ancestry-closure}
-Every ancestry of \var{t} is
-the union of all the ancestries of \var{t}
-at the same or a lower level and with the same base.
+Every ancestry is
+the union of all the ancestries with the same base,
+and at the same or a lower level.
 That is,
 let \var{base} be an arbitary subset of \var{nodes}.
 Then
