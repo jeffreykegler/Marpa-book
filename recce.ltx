@@ -289,7 +289,7 @@
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
-\newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]} }
+\newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
@@ -1855,8 +1855,9 @@ In this chapter, we define
 which have properties that we will find useful.
 
 This chapter is a new context scope,
-which contains an finite arbitary ``context tree'' \var{tree}.
-$\var{tree} = \tuple{\var{nodes},\var{edges}},$
+which contains \var{tree},
+a finite arbitary ``context tree''.
+$\var{tree} = \tuple{\var{nodes},\var{edges}}$,
 where \var{nodes} is a set of ``nodes'',
 and $\var{edges} \in \var{nodes}\times\var{nodes}$
 is a set of ``edges''.
@@ -1865,20 +1866,16 @@ Recall that in a ``finite'' tree,
 
 \section{Tree ancestries}
 
-Let
+Let \var{Paths} be the set of sequences of nodes
+such that each element is the direct parent of the next.
+That is,
 \begin{equation}
 \label{eq:def-paths}
 \myfnname{Paths} \defined \set{
     \begin{gathered}
-    \tuple{ \var{ix}, \var{nd} } : \exists\; \var{len} :
-        \\ \var{ix} \le \var{len}
-           \land \var{nd} \in \var{nodes}
-        \\ \land\;
-            \left(\begin{gathered}
-                0 < \var{n} < \var{len}
-                \\ \implies
-                    \tuple{\VVelement{path}{n},\Velement{path}{\var{n}+1}} \in \var{edges}
-            \end{gathered}\right)
+        \var{p} \in \finseq{\var{nodes}} :
+        \\ \forall\; \Vnat{ix} < \Vlastix{p} :
+            \tuple{\VVelement{path}{ix},\Velement{path}{\var{ix}+1}} \in \var{edges}
     \end{gathered}
     }.
 \end{equation}
