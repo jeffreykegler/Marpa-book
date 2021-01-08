@@ -2144,11 +2144,23 @@ base \var{b}, so that
 \end{gathered}
 \end{equation}
 
+\begin{lemma}[Path--Ancestry Equivalence]
+\label{lem:path-ancestry-equivalence}
+A path triple is also an ancestry triple.
+That is,
+\[
+    \myfn{Path3}{\var{nd},\var{N},\var{base}} \iff
+        \myfn{PAnc3}{\var{nd},\var{N},\var{base}}.  \dispEnd
+\]
+\end{lemma}
+
 \todo{TO HERE
 Fri 01 Jan 2021 06:13:28 PM EST
 }
 
 \section{Tree generations}
+
+\todo{Make gen function dyadic -- level, base?}
 
 Now consider a ``generation'', the set of nodes
 added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
@@ -2157,16 +2169,77 @@ $\var{gen} \in \fnset{\naturals}{\powerset{\var{A}}}$,
 the function whose value is the \var{N}'th generation of \var{tree},
 such that
 \begin{equation}
-\label{eq:non-unary-tree-size-120}
-    \Vmyfn{gen}{N} =
+\label{eq:def-gen}
+    \Vmyfn{gen}{\var{N},\var{base}} =
     \begin{cases}
-        \var{leaves}, \text{ if } \var{N}= 0
+        \var{base}, \text{ if } \var{N}= 0
         \\
             \subtract{\myfn{Anc}{\var{N},\var{base}}}
             {\myfn{Anc}{\Vdecr{N},\var{base}}},
         \text{ if } \var{N} \ge 1.
     \end{cases}
 \end{equation}
+
+\todo{Define ``proper'' generation?}
+
+\begin{lemma}[Generation Coverage]
+\label{lem:generation-coverage}
+The union of all generations of level \var{N} or less
+is equal to the \var{N}-level ancestry of the same base.
+That is,
+if \var{base} be an arbitary subset of \var{nodes},
+then
+\mypareq{eq:lem-generation-coverage-050}{%
+    $\forall\; \Vnat{N} :
+    \myfn{Anc}{\var{N},\var{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \var{N} : \myfn{gen}{\var{i},\var{base}}}$.
+    \dispEnd
+}
+\end{lemma}
+
+\begin{proof}
+The proof is by minimal counterexample.
+For a reductio, we assume that
+\Eref{eq:lem-generation-coverage-050} is false.
+This can only be the case if, where
+\mypareq{eq:lem-generation-coverage-150}{%
+    $\Vmyfn{INST}{ex} \defined
+        \myfn{Anc}{\var{ex},\var{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \var{ex} : \myfn{gen}{\var{i},\var{base}}}$
+    \cuz{} instantiation of
+        \Eref{eq:lem-generation-coverage-050} with \var{ex}.
+}
+there is at least one \Vmyfn{INST}{ex} such that
+\Vmyfn{INST}{ex} is false.
+Then, by the well-ordering of the naturals,
+there is a first \var{ex} such that \Vmyfn{INST}{ex} is false.
+Call this number \var{bad}:
+\mypareq{eq:lem-generation-coverage-160}{%
+    $\neg \Vmyfn{INST}{bad}
+    \land \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}$.
+}
+Since by the definitions of \myfnname{Anc} and \myfnname{gen}
+\mypareq{eq:lem-generation-coverage-170}{%
+    $\myfn{Anc}{0,\var{base}} = \var{base} =
+    \myfn{gen}{0,\var{base}}$
+    \linebreak \cuz{}
+        Def of \myfnname{Anc} \Eref{eq:def-anc},
+        Def of \myfnname{gen} \Eref{eq:def-gen}.
+}
+we know that
+\mypareq{eq:lem-generation-coverage-180}{%
+    \Vmyfn{INST}{0} \cuz{} \Eref{eq:lem-generation-coverage-160},
+}
+we have
+\mypareq{eq:lem-generation-coverage-190}{%
+    $\var{bad} > 0$ \cuz{}
+        \Eref{eq:lem-generation-coverage-160},
+        \Eref{eq:lem-generation-coverage-180}.
+}
+
+\todo{Finish proof}
+\myqed
+\end{proof}
 
 \section{Non-unary tree size}
 
