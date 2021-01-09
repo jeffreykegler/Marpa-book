@@ -1968,7 +1968,7 @@ we have this proof.
 \myqed
 \end{proof}
 
-\begin{lemma}[Ancestry monotonicity]
+\begin{lemma}[Ancestry Monotonicity]
 \label{lem:ancestry-monotonicity}
 Every ancestry of \var{t} contains
 all the ancestries of \var{t}
@@ -2237,6 +2237,40 @@ Call this number \var{bad}:
     $\var{bad} > 0$ \cuz{}
         \Eref{eq:lem-generation-coverage-160},
         \Eref{eq:lem-generation-coverage-180}.
+}
+Expanding $\neg \Vmyfn{INST}{bad}$,
+\mypareq{eq:lem-generation-coverage-200}{%
+    $\myfn{Anc}{\var{bad},\var{base}} \ne
+        \bigcup \set{ \forall\; \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}}}$
+        \bcuz{} \Eref{eq:lem-generation-coverage-150},
+            \Eref{eq:lem-generation-coverage-160}.
+}
+\mypareq{eq:lem-generation-coverage-205}{%
+    $\myfn{Anc}{\Vdecr{bad},\var{base}} \subseteq
+    \myfn{Anc}{\var{bad},\var{base}}$
+    \bcuz{} \Lmref{ancestry-monotonicity}
+        \Eref{eq:lem-generation-coverage-190}.
+}
+\mypareq{eq:lem-generation-coverage-207}{%
+    $\var{part} \subseteq \var{whole} \implies
+        \var{whole} =
+        \var{part} \cup (\subtract{\var{whole}}{\var{part}})$
+        \bcuz{} set theory tautology.
+}
+\mypareq{eq:lem-generation-coverage-210}{%
+    $\myfn{Anc}{\var{bad},\var{base}} =
+    \myfn{Anc}{\Vdecr{bad},\var{base}}
+    \cup (\subtract{\myfn{Anc}{\var{bad},\var{base}}}
+        {\myfn{Anc}{\Vdecr{bad},\var{base}}})$
+    \bcuz{} \Eref{eq:lem-generation-coverage-190},
+        \Eref{eq:lem-generation-coverage-207}.
+}
+\mypareq{eq:lem-generation-coverage-220}{%
+    $\myfn{Anc}{\var{bad},\var{base}} =
+    \myfn{Anc}{\Vdecr{bad},\var{base}} \cup
+        \myfn{gen}{\Vdecr{bad},\var{base}}$
+        \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+            \Eref{eq:lem-generation-coverage-190}.
 }
 
 \todo{Finish proof}
