@@ -136,6 +136,7 @@
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
+\newcommand{\Vpowerset}[1]{\ensuremath{\mathcal{P}(\var{#1})}}
 \newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 \newcommand{\condOp}{\mathop{?}}
 \newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
@@ -2312,6 +2313,29 @@ which is what we needed for this proof.
 \myqed
 \end{proof}
 
+\begin{equation}
+\label{eq:def-surface}
+\begin{gathered}
+\myparbox{
+    Let the ``surface'' of a subset of \var{nodes} be
+    the set of its elements which have children outside of
+    that subset.
+    This is,
+    let $\var{Surface} \in \fnset{\Vpowerset{nodes}}{\Vpowerset{nodes}}$
+    be such that
+}
+\\ \myfn{Surface}{\var{ndset}} \defined
+\\ \set{
+    \begin{gathered}
+    \var{child} \in \var{ndset} :
+        \exists\; \var{parent} \in \var{nodes} :
+    \\ \tuple{\var{parent},\var{child} \in \var{edges}}
+        \land \var{parent} \notin \var{ndset}
+    \end{gathered}
+}.
+\end{gathered}
+\end{equation}
+
 \section{Non-unary tree size}
 
 \begin{definition}[Non-unary tree]
@@ -2319,7 +2343,6 @@ A tree is \dfn{non-unary} iff its set of nodes is finite,
 and no node of the tree has an
 out-degree of 1.
 \end{definition}
-
 
 \begin{lemma}[Non-unary ancestry completeness]
 \label{lem:non-unary-ancestry-completeness}
