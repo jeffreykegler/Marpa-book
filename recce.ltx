@@ -2327,12 +2327,92 @@ be such that
     \begin{gathered}
     \var{child} \in \var{ndset} :
         \exists\; \var{parent} \in \var{nodes} :
-    \\ \tuple{\var{parent},\var{child} \in \var{edges}}
+    \\ \tuple{\var{parent},\var{child}} \in \var{edges}
         \land \var{parent} \notin \var{ndset}
     \end{gathered}
 }.
 \end{gathered}
 \end{equation}
+The definition of ``surface'' \Eref{eq:def-surface}
+implies that the root node
+is never an element of the surface.
+
+\begin{lemma}[Surface Disjointness]
+\label{lem:surface-disjointness}
+For the purpose of the statement and proof of this
+lemma, we consider the ``kernel'' of an ancestry to
+be an ancestry with same base
+whose level is one less.
+The kernel of an ancestry and its surface are disjoint.
+That is,
+\[
+\begin{gathered}
+    \forall\;\var{base} \in \Vpowerset{nodes} :
+        \forall\;\Vnat{N} :
+    \\ \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+        \cap \myfn{Anc}{\Vdecr{N},\var{base}} = \emptyset.
+        \quad \dispEnd
+\end{gathered}
+\]
+\end{lemma}
+
+\begin{proof}
+The proof is by reductio.
+We assume that there is a node which is an element of
+both the surface and the kernel:
+\begin{gather}
+\label{eq:lem-surface-disjointness-100}
+    \var{nd} \in \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+\\ \label{eq:lem-surface-disjointness-110}
+    \land \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
+\\ \nonumber
+    \text{\cuz{} AF reductio.
+        New free \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$,
+        $\var{nd} \in \var{nodes}$.
+    }
+\end{gather}
+\mypareq{eq:lem-surface-disjointness-120}{%
+    $\var{nd} \in \var{ndset}$ \cuz{}
+        Def of ``surface'' \Eref{eq:def-surface},
+        \Eref{eq:lem-surface-disjointness-100}.
+}
+\begin{equation}
+\label{eq:lem-surface-disjointness-130}
+\begin{gathered}
+   \exists\; \var{parent} \in \var{nodes} :
+    \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
+        \land \var{parent} \notin \var{ndset}
+    \\ \text{\cuz{} Def of ``surface'' \Eref{eq:def-surface},
+        \Eref{eq:lem-surface-disjointness-100}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-surface-disjointness-140}
+\begin{gathered}
+   \exists\; \var{parent} \in \var{nodes} :
+    \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
+    \implies \var{parent} \in 
+            \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}
+    \\ \text{\cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+            \Eref{eq:lem-surface-disjointness-110}.}
+\end{gathered}
+\end{equation}
+Recalling the definition of a tree,
+we know that the parent of every node
+is unique:
+\begin{equation}
+\label{eq:lem-surface-disjointness-150}
+\begin{gathered}
+    \forall\; \var{parent1} \in \var{nodes} :
+        \forall\; \var{parent2} \in \var{nodes} :
+    \\ \tuple{\var{parent1},\var{nd}} \in \var{edges}
+        \land \tuple{\var{parent2},\var{nd}} \in \var{edges}
+    \\ \implies \var{parent1} \ne \var{parent2}
+    \\ \text{\cuz{} Def of tree from graph theory.}
+\end{gathered}
+\end{equation}
+\todo{Complete this proof}
+\end{proof}
 
 \begin{lemma}[Generation Surface Containment]
 \label{lem:generation surface containment}
