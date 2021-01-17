@@ -2370,9 +2370,9 @@ both the surface and the kernel:
 \\ \label{eq:lem-surface-disjointness-110}
     \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
 \\ \nonumber
-    \text{\cuz{} AF reductio.
-        New free \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$,
-        $\var{nd} \in \var{nodes}$.
+    \myparbox{\cuz{} AF reductio.
+        New free arbitrary \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$.
+        New free $\var{nd} \in \var{nodes}$.
     }
 \end{gather}
 \begin{gather}
@@ -2391,42 +2391,69 @@ both the surface and the kernel:
 \begin{gather}
 \label{eq:lem-surface-disjointness-140}
     \tuple{\var{parent},\var{nd}} \in \var{edges}
-    \\ \label{eq:lem-surface-disjointness-150}
+\\ \label{eq:lem-surface-disjointness-150}
         \land\; \var{parent} \notin \myfn{Anc}{\var{N},\var{base}}
-    \\ \nonumber
+\\ \nonumber
     \text{\cuz{} EI of \Eref{eq:lem-surface-disjointness-130}.
         New free $\var{parent} \in \var{nodes}$.}
 \end{gather}
+If a node in the kernel has a parent,
+then it an element of the set of direct parents
+of the kernel:
 \begin{equation}
 \label{eq:lem-surface-disjointness-240}
 \begin{gathered}
-   \exists\; \var{parent} \in \var{nodes} :
-    \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
-    \implies \var{parent} \in 
+   \forall\; \var{parent1} \in \var{nodes} :
+    \\ \tuple{\var{parent1},\var{nd}} \in \var{edges}
+        \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
+    \\ \implies \var{parent1} \in
             \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \\ \text{\cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
             \Eref{eq:lem-surface-disjointness-110}.}
 \end{gathered}
 \end{equation}
-Recalling the definition of a tree,
-we know that the parent of every node
-is unique:
 \begin{equation}
 \label{eq:lem-surface-disjointness-250}
 \begin{gathered}
-    \forall\; \var{parent1} \in \var{nodes} :
-        \forall\; \var{parent2} \in \var{nodes} :
     \\ \tuple{\var{parent1},\var{nd}} \in \var{edges}
-        \land \tuple{\var{parent2},\var{nd}} \in \var{edges}
-    \\ \implies \var{parent1} \ne \var{parent2}
-    \\ \text{\cuz{} Def of tree from graph theory.}
+        \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
+    \\ \implies \var{parent1} \in
+            \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}
+    \\ \text{\cuz{} UI of \Eref{eq:lem-surface-disjointness-240}
+         with \var{parent}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:lem-surface-disjointness-270}{%
-    $\tuple{\var{parent},\var{nd}} \in \var{edges}.$
-        \cuz{} New free \var{parent}.
+\mypareq{eq:lem-surface-disjointness-260}{%
+    $\var{parent} \in
+            \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}$
+    \cuz{} \Eref{eq:lem-surface-disjointness-110},
+        \Eref{eq:lem-surface-disjointness-140},
+        \Eref{eq:lem-surface-disjointness-250}.
 }
-\todo{Complete this proof}
+\mypareq{eq:lem-surface-disjointness-270}{%
+    $\var{parent} \in \myfn{Anc}{\var{N},\var{base}}$
+        \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+        \Eref{eq:lem-surface-disjointness-260}.
+}
+Equation \Eref{eq:lem-surface-disjointness-270}
+contradicts \Eref{eq:lem-surface-disjointness-150},
+from which we conclude the reductio, so that
+\mypareq{eq:lem-surface-disjointness-280}{%
+    $\var{nd} \notin \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+        \lor\; \var{nd} \notin \myfn{Anc}{\Vdecr{N},\var{base}}$
+    \cuz{} reductio from \Eref{eq:lem-surface-disjointness-100}--%
+        \Eref{eq:lem-surface-disjointness-110}
+        to \Eref{eq:lem-surface-disjointness-270}.
+}
+\mypareq{eq:lem-surface-disjointness-290}{%
+    $\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+        \cap \myfn{Anc}{\Vdecr{N},\var{base}} = \emptyset$
+        \cuz{} \Eref{eq:lem-surface-disjointness-280}.
+}
+Recall that \var{N} and \var{base} were chosen abitrarily.
+The theorem is the universal generalization of
+\var{N} and \var{base} in \Eref{eq:lem-surface-disjointness-290}.
+\myqed
 \end{proof}
 
 \begin{lemma}[Generation Surface Containment]
