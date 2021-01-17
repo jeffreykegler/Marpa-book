@@ -1434,21 +1434,32 @@ is $\bigcup \var{S}$.
 By analogy, we write $\sum \var{S}$ to indicate the sum
 of the elements of \var{S}.
 
-Logical quantification is
-always with respect to a specific set,
-which is specified explicitly
+Logical quantifiers are always guarded.
+The guard set may be specified explicitly
 or through the quantified variable's type,
 as described below.
+
 Where the set is obviously \naturals{},
 and the expression has a single variable,
 the specification may be abbreviated so that, for example,
 \[
-\forall \; \var{j} \in \set{ \var{i} \in \naturals : 0 \le \var{i} \le 42 } :
+\forall \; \var{j} \in \set{ \var{i} \in \naturals : \var{i} \le 42 } :
     \myfn{P}{\var{j}}
 \]
 would be written as
 \[
-\forall \; 0 \le \var{j} \le 42 : \myfn{P}{\var{j}}.
+\forall \; \var{j} \le 42 : \myfn{P}{\var{j}}.
+\]
+Sometimes, a guard expressions which quantifies over the naturals,
+will contain more than one variable.
+In this case
+the quantified variable is always the first free variable in
+the guard expression.
+For example, if \Vnat{lo} and \Vnat{hi} are bound in context,
+and \Vnat{j} is a new, free variable,
+then \var{j} is the quantified variable in
+\[
+\forall \; \var{lo} \le \Vnat{j} \le \var{hi} : \myfn{P}{\var{j}}.
 \]
 
 We use $\existsUniq$ as a uniqueness quantification operator,
@@ -2353,7 +2364,7 @@ That is,
 \begin{gathered}
     \forall\;\var{base} \in \Vpowerset{nodes} :
         \forall\;\Vnat{N} :
-    \\ \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+    \\ \var{N} \ge 1 \implies \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
         \cap \myfn{Anc}{\Vdecr{N},\var{base}} = \emptyset.
         \quad \dispEnd
 \end{gathered}
@@ -2361,7 +2372,17 @@ That is,
 \end{lemma}
 
 \begin{proof}
-The proof is by reductio.
+The proof strategy is to first assume the hypothesis of the implication in
+the theorem, to show the consequent,
+then to use universal generalization.
+The consequent of the implication is shown by reductio.
+
+Accordingly, we assume the hypothesis:
+\mypareq{eq:lem-surface-disjointness-090}{%
+    $\Vnat{N} \ge 1$ \cuz{} AF proof.
+    New free \Vnat{N}.
+}
+For the reductio,
 We assume that there is a node which is an element of
 both the surface and the kernel:
 \begin{gather}
@@ -2370,8 +2391,9 @@ both the surface and the kernel:
 \\ \label{eq:lem-surface-disjointness-110}
     \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
 \\ \nonumber
-    \myparbox{\cuz{} AF reductio.
-        New free arbitrary \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$.
+    \myparbox{\cuz{}
+        \Eref{eq:lem-surface-disjointness-090}, AF reductio.
+        New free arbitrary $\var{base} \in \Vpowerset{nodes}$.
         New free $\var{nd} \in \var{nodes}$.
     }
 \end{gather}
