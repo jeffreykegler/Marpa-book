@@ -1193,10 +1193,14 @@ in that context.
 For clarity, the ``hint'' is separated
 from the body of the equation by a ``because'' symbol (``$\because$'').
 
-``WLOG'' abbreviates ``assumed without loss of generality''.
-``Def'' abbreviates ``definition''.
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
+``Def'' abbreviates ``definition''.
+``EI'' abbreviates ``existential instantiation''.
+``EG'' abbreviates ``existential generalization''.
+``UI'' abbreviates ``universal instantiation''.
+``EG'' abbreviates ``universal generalization''.
+``WLOG'' abbreviates ``assumed without loss of generality''.
 
 The statement of a definition implies that it is consistent,
 and that, if the definition is of a mathematical object,
@@ -1887,12 +1891,12 @@ Where \var{nds} is a set of nodes,
 let $\Vmyfn{DP}{nds} \in \fnset{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$
 be the set of direct parents of \var{nds}, so that
 \begin{equation}
-\label{eq:direct-paths}
-    \myfn{DP}{\var{nds}} = \set{
+\label{eq:def-dp}
+    \myfn{DP}{\var{ndset}} = \set{
         \begin{gathered}
-            \var{parent} :
+            \var{parent} \in \var{nodes} :
+            \\ \exists\; \var{child} \in \var{ndset} :
                     \tuple{\var{parent},\var{child}} \in \var{edges}
-                    \land \var{child} \in \var{nds}
         \end{gathered}
     }.
 \end{equation}
@@ -1997,9 +2001,9 @@ For the basis, it is a fact of set theory that
 \mypareq{eq:lem-ancestry-monotonicity-105}{%
     $\forall\; \Vnat{i} \le 0 :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{0,\var{base}}$
-        \linebreak \cuz{} universal generalization of \Eref{eq:lem-ancestry-monotonicity-103}.
+        \linebreak \cuz{} UG of \Eref{eq:lem-ancestry-monotonicity-103}.
         This is the basis: \myfn{INDH}{0},
-        the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with 0.
+        the UI of \Eref{eq:lem-ancestry-monotonicity-050} with 0.
 }
 \renewcommand{\basis}{eq:lem-ancestry-monotonicity-105}
 For the step, we assume \myfn{INDH}{\var{n}}
@@ -2364,30 +2368,37 @@ both the surface and the kernel:
 \label{eq:lem-surface-disjointness-100}
     \var{nd} \in \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
 \\ \label{eq:lem-surface-disjointness-110}
-    \land \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
+    \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
 \\ \nonumber
     \text{\cuz{} AF reductio.
         New free \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$,
         $\var{nd} \in \var{nodes}$.
     }
 \end{gather}
-\mypareq{eq:lem-surface-disjointness-120}{%
-    $\var{nd} \in \var{base}$ \cuz{}
-        Def of ``surface'' \Eref{eq:def-surface},
-        \Eref{eq:lem-surface-disjointness-100}.
-}
-\begin{equation}
-\label{eq:lem-surface-disjointness-130}
-\begin{gathered}
-   \exists\; \var{parent} \in \var{nodes} :
-    \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
-        \land \var{parent} \notin \var{base}
+\begin{gather}
+\label{eq:lem-surface-disjointness-120}
+    \var{nd} \in \myfn{Anc}{\var{N},\var{base}}
+\\ \label{eq:lem-surface-disjointness-130}
+    \land\;
+    \left( \begin{gathered}
+            \exists\; \var{parent} \in \var{nodes} :
+        \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
+            \land \var{parent} \notin \myfn{Anc}{\var{N},\var{base}}
+    \end{gathered} \right)
     \\ \text{\cuz{} Def of ``surface'' \Eref{eq:def-surface},
         \Eref{eq:lem-surface-disjointness-100}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
+\end{gather}
+\begin{gather}
 \label{eq:lem-surface-disjointness-140}
+    \tuple{\var{parent},\var{nd}} \in \var{edges}
+    \\ \label{eq:lem-surface-disjointness-150}
+        \land\; \var{parent} \notin \myfn{Anc}{\var{N},\var{base}}
+    \\ \nonumber
+    \text{\cuz{} EI of \Eref{eq:lem-surface-disjointness-130}.
+        New free $\var{parent} \in \var{nodes}$.}
+\end{gather}
+\begin{equation}
+\label{eq:lem-surface-disjointness-240}
 \begin{gathered}
    \exists\; \var{parent} \in \var{nodes} :
     \\ \tuple{\var{parent},\var{nd}} \in \var{edges}
@@ -2401,7 +2412,7 @@ Recalling the definition of a tree,
 we know that the parent of every node
 is unique:
 \begin{equation}
-\label{eq:lem-surface-disjointness-150}
+\label{eq:lem-surface-disjointness-250}
 \begin{gathered}
     \forall\; \var{parent1} \in \var{nodes} :
         \forall\; \var{parent2} \in \var{nodes} :
@@ -2411,16 +2422,9 @@ is unique:
     \\ \text{\cuz{} Def of tree from graph theory.}
 \end{gathered}
 \end{equation}
-\todo{Deal explicitly with assumption that \var{nd} is not root.}
-\mypareq{eq:lem-surface-disjointness-170}{%
-    $\tuple{\var{parent},\var{nd}} \in \var{edges}$
-        New free \var{parent}.
-}
-\mypareq{eq:lem-surface-disjointness-180}{%
-    $\land \var{parent} \notin \var{base}$ \cuz{}
-        \Eref{eq:lem-surface-disjointness-130},
-        \Eref{eq:lem-surface-disjointness-150},
-        \Eref{eq:lem-surface-disjointness-170}.
+\mypareq{eq:lem-surface-disjointness-270}{%
+    $\tuple{\var{parent},\var{nd}} \in \var{edges}.$
+        \cuz{} New free \var{parent}.
 }
 \todo{Complete this proof}
 \end{proof}
@@ -6280,7 +6284,7 @@ as the basis of the induction.
 \forall \; \Vnat{lo} \le \var{indx} : \var{indx} \in \Dom{\var{lesB}}
 \\ \implies \Current{\VVelement{lesB}{indx}} \le \Current{\VVelement{lesB}{lo}}.
 \\ \myparbox{\cuz{}
-    universal generalization of \var{loB},
+    UG of \var{loB},
     \Eref{eq:th-les-direction-17-10},
     \Eref{eq:th-les-direction-19-10}.
 }
@@ -6292,7 +6296,7 @@ as the basis of the induction.
 \forall \; \Vles{les} \in \type{LES} : \forall \; \Vnat{lo} \le \var{indx} : \var{indx} \in \Dom{\var{les}}
 \\ \implies \Current{\VVelement{les}{indx}} \le \Current{\VVelement{les}{lo}}
 \\ \myparbox{\cuz{}
-    universal generalization of \var{lesB},
+    UG of \var{lesB},
     \Eref{eq:th-les-direction-14},
     \Eref{eq:th-les-direction-19-20}.
     This is \myfn{INDH}{0}, and the basis of the induction.
