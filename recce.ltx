@@ -126,12 +126,8 @@
 \newcommand{\step}[1]{}
 
 \newcommand{\fnset}[2]{\ensuremath{{#1}\to{#2}}}
-\newcommand{\finseq}[1]{\ensuremath{
-    \set{ \var{f} : \exists \; \var{X} \in \naturals : \var{f} \in \fnset{\var{X}}{\var{#1}} }
-}}
-\newcommand{\infseq}[1]{\ensuremath{
-    \set{ \var{f} : \exists \; \var{X} \in (\naturals \cup \set{\naturals}) :
-        \var{f} \in \fnset{\var{X}}{\var{#1}} }
+\newcommand{\deffn}[3]{\ensuremath{%
+    \var{#1} \mathbin{::} #2 \to #3%
 }}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
@@ -1419,7 +1415,7 @@ which have conflicting or ambiguous standards;
 which differ from Halmos 1960~\cite{Halmos1960};
 or which go beyond the basics of the preceding discipline.
 
-Functions are partial unless stated otherwise.
+Functions are total unless stated otherwise.
 An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
@@ -1485,27 +1481,13 @@ is the unique \var{x} in the set \var{A} such that
 is defined iff
 $\existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}$.
 
-We write \fnset{\var{X}}{\var{Y}}
-for the set of functions from \var{X} to \var{Y},%
-\footnote{%
-    The set of functions from
-    \var{Y} to \var{X} is often written
-    $\var{X}^\var{Y}$, but we prefer to avoid
-    the optometric and typographic difficulties
-    that superscripts introduce.
-}
-so that $\var{f}\in\fnset{\var{X}}{\var{Y}}$ states
-that \var{f} is a function with domain \var{X}
-and codomain \var{Y}.%
-\footnote{%
-    $\var{f} \in \fnset{\var{X}}{\var{Y}}$
-    is often written
-    $\var{f}:\fnset{\var{X}}{\var{Y}}$ but we prefer to avoid
-    overloading the colon operator.
-}
+We write \deffn{f}{\var{X}}{\var{Y}}
+to say that \var{f}
+is a function with domain \var{X}
+and codomain \var{Y}.
 In our naive set theory, a sequence of \var{Y}'s is identical to a function from
-integers to \var{Y}, so that \infseq{Y} is the set of sequences of \var{Y}'s,
-and \finseq{Y} is the set of finite sequences of \var{Y}'s.
+a subset of the naturals to \var{Y},
+and our notation will often make use of this fact.
 
 Traditionally mathematical operations,
 even logical operations,
@@ -1875,14 +1857,18 @@ In this chapter, we define
 which have properties that we will find useful.
 
 This chapter is a new context scope,
-which contains \var{tree},
+which contains
+\begin{equation}
+\label{eq:non-unary-chap-context-tree}
+\var{tree} = \tuple{\var{nodes},\var{edges}},
+\end{equation}
 a finite arbitary ``context tree''.
-$\var{tree} = \tuple{\var{nodes},\var{edges}}$,
-where \var{nodes} is a set of ``nodes'',
+In \Eref{eq:non-unary-chap-context-tree},
+\var{nodes} is a set of ``nodes'',
 and $\var{edges} \in \var{nodes}\times\var{nodes}$
 is a set of ``edges''.
-Recall that in a ``finite'' tree,
-\var{nodes} is finite.
+Recall that, since \var{tree} is finite,
+\var{nodes} is also finite.
 
 \section{Tree ancestries}
 
@@ -1893,14 +1879,19 @@ That is,
 \label{eq:def-paths}
 \var{Paths} \defined \set{
     \begin{gathered}
-        \var{path} \in \fnset{\naturals}{\var{nodes}} : \exists\; \Vnat{lastIX} :
-        \\ \forall\; \Vnat{ix} < \var{lastIX} :
+        \var{path} \in \fnset{\naturals}{\var{nodes}} :
+            \exists\; \Vnat{length} : \forall\; \var{ix} :
+        \\ \var{ix} \le \var{length} \iff
+            ( \exists\; \var{nd} \in \var{nodes} : \tuple{\var{ix},\var{nd}} \in \var{path} )
+        \\ \land\; \var{ix} < \var{length} \implies
             \tuple{\VVelement{path}{ix},\Velement{path}{\var{ix}+1}} \in \var{edges}
     \end{gathered}
     }.
 \end{equation}
 A ``path'' is an element of \var{Paths}.
 A ``leaf path'' is a path whose last value is a leaf.
+Note that by \Eref{eq:def-paths},
+every sequence of nodes of length 1 is a path, vacuously.
 
 Where \var{nds} is a set of nodes,
 let $\Vmyfn{DP}{nds} \in \fnset{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$
@@ -2512,7 +2503,9 @@ The proof is direct.
 We consider an arbitrary node in the surface:
 \mypareq{eq:lem-generation-surface-containment-100}{%
     $\var{nd} \in \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}$
-    \bcuz{} AF proof, new free \var{nd}.
+    \bcuz{} AF proof.
+        New free \var{nd}.
+        New free abitrary \Vnat{N}, $\var{base} \in \Vpowerset{nodes}$.
 }
 \mypareq{eq:lem-generation-surface-containment-110}{%
     $\forall\; \var{ndset} \in \Vpowerset{nodes} :
@@ -2550,8 +2543,20 @@ We now consider the other subcase
         \bcuz{} \longLmref{Surface Disjointness}{surface-disjointness},
             \Eref{eq:lem-generation-surface-containment-150}.
 }
-\todo{Finish this proof}
-\myqed
+\mypareq{eq:lem-generation-surface-containment-180}{%
+    $\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}} \subseteq
+        \subtract{\myfn{Anc}{\var{N},\var{base}}}
+        {\myfn{Anc}{\Vdecr{N},\var{base}}}$
+    \bcuz{} \Eref{eq:lem-generation-surface-containment-160},
+        \Eref{eq:lem-generation-surface-containment-170}.
+}
+\mypareq{eq:lem-generation-surface-containment-190}{%
+    $\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}} \subseteq
+        \myfn{gen}{\var{N},\var{base}}$
+    \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+        \Eref{eq:lem-generation-surface-containment-180}.
+        \quad \myqed
+}
 \end{proof}
 
 \section{Non-unary tree size}
@@ -4654,7 +4659,9 @@ An Earley table, type \type{ET},
 is a finite sequence of Earley sets.
 That is,
 \[
-    \type{ET} = \finseq{\type{ES}}. \quad \dispEnd
+    \type{ET} = \set{ \var{et} \in \naturals\times\type{ES} :
+        \exists\; \var{length} \in \naturals :
+        (\deffn{et}{\var{length}}{\type{ES}})}. \quad \dispEnd
 \]
 \end{definition}
 
