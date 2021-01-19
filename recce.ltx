@@ -2326,17 +2326,11 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
               \myfn{gen}{\var{i},\var{base}}}$
       \linebreak \cuz{} \Eref{eq:lem-generation-coverage-230}, logical tautology.
 }
-\mypareq{eq:lem-generation-coverage-250}{%
-      $\myfn{Anc}{\Vdecr{bad},\var{base}} \cup \myfn{gen}{\var{bad},\var{base}}$
-      \linebreak
-          $\ne \myfn{gen}{\var{bad},\var{base}} \cup \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} :
-              \myfn{gen}{\var{i},\var{base}}}$
-      \linebreak \cuz{} \Eref{eq:lem-generation-coverage-230}, logical tautology.
-}
+\todo{This is wrong, fix it.  We need disjunction of the generations for the tautology.}
 \mypareq{eq:lem-generation-coverage-260}{%
       $\myfn{Anc}{\Vdecr{bad},\var{base}} \ne \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} :
               \myfn{gen}{\var{i},\var{base}}}$
-      \linebreak \cuz{} \Eref{eq:lem-generation-coverage-250}, set theory tautology.
+      \linebreak \cuz{} \Eref{eq:lem-generation-coverage-240}, set theory tautology.
 }
 Equation \Eref{eq:lem-generation-coverage-260} is contrary
 to \Eref{eq:lem-generation-coverage-165}, which shows the reductio.
@@ -2347,7 +2341,7 @@ which is what we needed for this proof.
 \end{proof}
 
 Let the ``surface'' of a subset of \var{nodes} be
-the set of its elements which have children outside of
+the set of its elements which have parents outside of
 that subset.
 This is,
 let
@@ -2361,8 +2355,8 @@ be such that
 \myfn{Surface}{\var{ndset}} \defined
 \\ \set{
     \begin{gathered}
-    \var{child} \in \var{ndset} :
-        \exists\; \var{parent} \in \var{nodes} :
+    \var{parent} \in \var{nodes} :
+        \exists\; \var{child} \in \var{ndset} :
     \\ \tuple{\var{parent},\var{child}} \in \var{edges}
         \land \var{parent} \notin \var{ndset}
     \end{gathered}
@@ -2402,7 +2396,7 @@ The proof strategy is to first assume the hypothesis
 to show the consequent
 \Eref{eq:lem-surface-disjointness-060},
 then to use universal generalization
-so show the theorem.
+to show the theorem.
 \mypareq{eq:lem-surface-disjointness-080}{%
    $\var{N} \in \naturals \land \var{base} \in \Vpowerset{nodes}$.
    New free arbitrary \var{N}, \var{base}.
