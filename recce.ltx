@@ -2052,6 +2052,7 @@ we have the induction and this proof.
 
 \begin{lemma}[Ancestry closure]
 \label{lem:ancestry-closure}
+\todo{Is this theorem needed?}
 Every ancestry is
 the union of all the ancestries with the same base,
 and at the same or a lower level.
@@ -2067,6 +2068,7 @@ Then
 \end{lemma}
 
 \begin{proof}
+\todo{Redo as minimal criminal}
 The proof is by induction on the level of the ancestry.
 The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
 is the universal instantiation of \Eref{eq:lem-ancestry-closure-050} with
@@ -2169,6 +2171,7 @@ That is,
 
 \section{Tree generations}
 
+\todo{define ``kernel''}
 Now consider a ``generation'', the set of nodes
 added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
 Let \deffn{gen}{\naturals\times\Vpowerset{A}}{\Vpowerset{A}}
@@ -2186,7 +2189,37 @@ such that
     }.
 \end{equation}
 
-\todo{Define ``proper'' generation?}
+\todo{Define ``proper'' generation?
+    Or eliminate ``proper'' ancestries?
+}
+
+\begin{lemma}[Direct Parent Generation Containment]
+\label{lem:direct-parent-generation-containment}
+The generation for a level and base is a subset
+of the direct parents of the kernel of the ancestry with that
+level and base.
+That is,
+\[
+\forall\; \var{base} \in \Vpowerset{nodes} :
+\forall\; \Vnat{N} :
+\myfn{gen}{\var{N},\var{base}} \subseteq
+    \myfn{DP}{\Vdecr{N},\var{base}}.
+    \quad \dispEnd
+\]
+\end{lemma}
+
+\begin{proof}
+\todo{Finish this proof}
+\myqed
+\end{proof}
+
+\begin{lemma}[Generation Disjointedness]
+\label{lem:generation-disjointness}
+Every pair of generations with different levels
+and the same base is disjoint.
+\todo{State and prove this theorem}
+\dispEnd
+\end{lemma}
 
 \begin{lemma}[Generation Coverage]
 \label{lem:generation-coverage}
@@ -2205,28 +2238,23 @@ then
 
 \begin{proof}
 The proof is by minimal counterexample.
-For a reductio, we assume that
-\Eref{eq:lem-generation-coverage-050} is false.
-This can only be the case if, where
+Where
 \mypareq{eq:lem-generation-coverage-150}{%
     $\Vmyfn{INST}{ex} \defined
         \myfn{Anc}{\var{ex},\var{base}} =
         \bigcup \set{ \forall\; \Vnat{i} \le \var{ex} : \myfn{gen}{\var{i},\var{base}}}$
-    \cuz{} instantiation of
+    \cuz{} UI of
         \Eref{eq:lem-generation-coverage-050} with \var{ex}.
 }
-there is at least one \Vmyfn{INST}{ex} such that
-\Vmyfn{INST}{ex} is false.
-Then, by the well-ordering of the naturals,
-there is a first \var{ex} such that \Vmyfn{INST}{ex} is false.
-Call this number \var{bad}:
+we assume there is a minimal \var{bad} such that
+\Vmyfn{INST}{bad} is false:
 \begin{gather}
 \label{eq:lem-generation-coverage-160}
     \neg \Vmyfn{INST}{bad}
 \\ \label{eq:lem-generation-coverage-165}
     \land\; \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
-    \because \text{new free \var{bad}}
+    \because \text{new free \var{bad}.}
 \end{gather}
 \mypareq{eq:lem-generation-coverage-170}{%
     $\myfn{Anc}{0,\var{base}} = \var{base} =
