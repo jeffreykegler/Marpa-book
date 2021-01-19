@@ -125,7 +125,6 @@
 \newcommand{\basis}[1]{}
 \newcommand{\step}[1]{}
 
-\newcommand{\fnset}[2]{\ensuremath{{#1}\to{#2}}}
 \newcommand{\deffn}[3]{\ensuremath{%
     \var{#1} \mathbin{::} #2 \to #3%
 }}
@@ -1617,7 +1616,7 @@ as a function:
 $\myfn{floor}{\var{a}}$.
 
 \renewcommand{\cellboxrWidth}{3in}
-\begin{table}[t]
+\begin{table}[p]
 \caption{
     \label{tab:op-precedence}
     Operator precedence cheatsheet}
@@ -1650,6 +1649,10 @@ Unary operators have tightest precedence and are omitted.
     \hline
 {$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
 \hline
+{$\var{f} \mathop{::} \var{dom} \to \var{cod}$} &
+    \cellboxr{True iff \var{f} is function
+        \linebreak from domain \var{dom} to codomain \var{cod}} \\
+\hline
 {$\neg$} & \cellboxr{Logical negation} \\
 \hline
 {$\land$} & \cellboxr{Logical and} \\
@@ -1675,7 +1678,7 @@ Unary operators have tightest precedence and are omitted.
 {$\rule[-2.5ex]{0em}{0in}{\defined}$}
 & \cellboxr{Definition} \\
 \hline
-{$\because$} & \cellboxr{Hint separator: ``because''} \\
+{$\because$} & \cellboxr{Hint separator} \\
 \hline
 \end{tabular}
 \end{table}
@@ -1852,7 +1855,7 @@ and unequal to any other value.
 Recall that one of our preceding disciplines was graph theory.
 Parsing theory makes extensive use of
 directed acyclic graphs, also called DAGs or trees.
-In this chapter, we define
+In this chapter we define
 ``non-unary trees'',
 which have properties that we will find useful.
 
@@ -1908,7 +1911,7 @@ be the set of direct parents of \var{nds}, so that
         \end{gathered}
     }.
 \end{equation}
-Let the ``ancestors'' function,
+Let the ``ancestry'' function,
 \deffn{Anc}{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}},
 be such that
 \begin{equation}
@@ -1956,39 +1959,35 @@ be such that
 }
 We write \myfn{Proper}{\var{A}}
 to say that \var{A} is a proper ancestry.
+\todo{Do I need ``proper'' for ancestries?}
 
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
-Let \var{t}=\tuple{\var{AA},\var{RR}} be an arbitrary tree.
-For every path \var{pth} of \var{t},
-$\Vsize{pth} \le \Vsize{AA}$.
+For every path \var{p} of \var{tree},
+$\Vsize{p} \le \Vsize{nodes}$.
 \dispEnd
 \end{lemma}
 
 \begin{proof}
-Let \var{path} be an arbitrary path of \var{t}.
+Let \var{path} be an arbitrary path of \var{tree}.
 By the definition of a tree, a path cannot be a cycle,
 which means that every value of the sequence \var{path} must be distinct.
-The values of \var{path} are nodes of \var{t},
-and there are only \Vsize{AA} distinct nodes in \var{t},
+The values of \var{path} are nodes of \var{tree},
+and there are only \Vsize{nodes} distinct nodes in \var{t},
 so that
-\mypareq{lem:leaf-path-finiteness-150}{%
-    $\Vsize{path} \le \Vsize{AA}$.
-}
-With the universal generalization of
-\Eref{lem:leaf-path-finiteness-150},
-we have this proof.
+$\Vsize{path} \le \Vsize{nodes}$.
 \myqed
 \end{proof}
 
 \begin{lemma}[Ancestry Monotonicity]
 \label{lem:ancestry-monotonicity}
-Every ancestry of \var{t} contains
-all the ancestries of \var{t}
-at the same or a lower level and with the same base.
+Every ancestry of \var{tree} contains
+all the ancestries of \var{tree}
+that have the same base
+and are at the same or a lower level.
 That is,
-let \var{base} be an arbitary subset of \var{nodes}.
-Then
+if \var{base} is an arbitary subset of \var{nodes},
+then
 \mypareq{eq:lem-ancestry-monotonicity-050}{%
     $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \var{N} :
         \myfn{Anc}{\var{i},\var{base}} \subseteq \myfn{Anc}{\Vnat{N},\var{base}}$.
@@ -1997,6 +1996,7 @@ Then
 \end{lemma}
 
 \begin{proof}
+\todo{Rewrite as minimal criminal}
 The proof is by induction on the level of the ancestry.
 The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
 is the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with
@@ -7573,7 +7573,7 @@ if \myfn{Is-source}{\Veim{src}}.
 
 \begin{theorem}[Leo source function]
 \label{th:leo-source-fn}
-The total function
+The function
 \begin{gather}
 \label{eq:th-leo-source-fn-05}
 \deffn{Source}{
@@ -9581,9 +9581,9 @@ so that
 
 \begin{theorem}[LIM function]
 \label{th:lim-fn}
-The total function
+The function
 \mypareq{}{%
-    $\myfnname{Lim} \in \fnset{
+    $\deffn{Lim}{
         \set{\Veim{src} : \myfn{Is-source}{\var{src}}}
     }{
         \set{\mylim{\ell} : \Valid{\ell}}
