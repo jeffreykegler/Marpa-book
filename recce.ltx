@@ -1879,12 +1879,14 @@ That is,
 \label{eq:def-paths}
 \var{Paths} \defined \set{
     \begin{gathered}
-        \var{path} \in \fnset{\naturals}{\var{nodes}} :
-            \exists\; \Vnat{length} : \forall\; \var{ix} :
-        \\ \var{ix} \le \var{length} \iff
-            ( \exists\; \var{nd} \in \var{nodes} : \tuple{\var{ix},\var{nd}} \in \var{path} )
-        \\ \land\; \var{ix} < \var{length} \implies
-            \tuple{\VVelement{path}{ix},\Velement{path}{\var{ix}+1}} \in \var{edges}
+        \var{path} \in \naturals\times\var{nodes} :
+            \exists\; \Vnat{length} :
+        \\ \deffn{path}{\var{length}}{\var{nodes}}
+        \\ \land\;
+        \left( \begin{gathered}
+            \var{ix} < \var{length}
+            \\ \implies \tuple{\VVelement{path}{ix},\Velement{path}{\var{ix}+1}} \in \var{edges}
+        \end{gathered} \right)
     \end{gathered}
     }.
 \end{equation}
@@ -9807,7 +9809,7 @@ The theorem follows from
 \label{th:lim-predecessor-fn}
 Let
 \[
-    \myfnname{LIM-Predecessor} \in \fnset{\type{EIM}}{\type{LIM}}
+    \deffn{LIM-Predecessor}{\type{EIM}}{\type{LIM}}
 \]
 be a function such that
 \vspace{1ex}
@@ -9825,7 +9827,7 @@ be a function such that
 \\ & \text{where } \var{nxtlims} = \myfn{next-lims}{\Veim{src}}.
 \end{aligned}
 \end{equation}
-Then \myfnname{LIM-Predecessor} exists and is total.
+Then \myfnname{LIM-Predecessor} exists.
 \dispEnd
 \end{theorem}
 
