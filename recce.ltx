@@ -1896,7 +1896,7 @@ Note that by \Eref{eq:def-paths},
 every sequence of nodes of length 1 is a path, vacuously.
 
 Where \var{nds} is a set of nodes,
-let $\Vmyfn{DP}{nds} \in \fnset{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$
+let \deffn{DP}{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}
 be the set of direct parents of \var{nds}, so that
 \begin{equation}
 \label{eq:def-dp}
@@ -1909,7 +1909,7 @@ be the set of direct parents of \var{nds}, so that
     }.
 \end{equation}
 Let the ``ancestors'' function,
-$\var{Anc} \in \fnset{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}}$,
+\deffn{Anc}{\naturals\times\powerset{\var{nodes}}}{\powerset{\var{nodes}}},
 be such that
 \begin{equation}
 \label{eq:def-anc}
@@ -2167,30 +2167,23 @@ That is,
 \]
 \end{lemma}
 
-\todo{TO HERE
-Fri 01 Jan 2021 06:13:28 PM EST
-}
-
 \section{Tree generations}
-
-\todo{Make gen function dyadic -- level, base?}
 
 Now consider a ``generation'', the set of nodes
 added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
-We define
-$\var{gen} \in \fnset{\naturals}{\powerset{\var{A}}}$,
-the function whose value is the \var{N}'th generation of \var{tree},
+Let \deffn{gen}{\naturals\times\Vpowerset{A}}{\Vpowerset{A}}
+be the function whose value is the \var{N}'th generation of \var{tree},
 such that
 \begin{equation}
 \label{eq:def-gen}
     \Vmyfn{gen}{\var{N},\var{base}} =
-    \begin{cases}
-        \var{base}, \text{ if } \var{N}= 0
-        \\
-            \subtract{\myfn{Anc}{\var{N},\var{base}}}
-            {\myfn{Anc}{\Vdecr{N},\var{base}}},
-        \text{ if } \var{N} \ge 1.
-    \end{cases}
+    \set{
+    \begin{gathered}
+     \var{N}= 0 \condOp \var{base} :
+        \\ \subtract{\myfn{Anc}{\var{N},\var{base}}}
+            {\myfn{Anc}{\Vdecr{N},\var{base}}}
+    \end{gathered}
+    }.
 \end{equation}
 
 \todo{Define ``proper'' generation?}
