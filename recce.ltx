@@ -2635,18 +2635,49 @@ two or more child nodes.
 
 \begin{theorem}[Non-trivial Non-unary Tree Size]
 \label{th:non-trivial-non-unary-tree-size}
-Let \var{t} be a non-trivial non-unary tree,
-let \var{v} be the set of nodes in \var{t}.
+Let \var{t} be a non-trivial non-unary tree.
+Let \var{v} be the set of nodes in \var{t},
+and let $\var{l}\subseteq\var{v}$
+be the set of leaves in \var{t}.
+\mypareq{th:non-trivial-non-unary-tree-size-050}{%
+    $\Vsize{v} > 0 \implies \Vsize{v} \le \subtract{2\times\Vsize{l}}{1}$
+}
 (Recall that a tree is trivial iff $\Vsize{v}=0.$)
-Then
-$\Vsize{v} \le \subtract{2\times\Vsize{l}}{1}$,
-where $\var{l}\subseteq\var{v}$
-is the set of leaves in \var{t}.
 \dispEnd
 \end{theorem}
 
 \begin{proof}
-\todo{Finish proof. Via minimal criminal?}
+The proof is by minimal counter-example.
+Let $\var{t}=\tuple{\var{v},\var{edges}}$ be
+an arbitrary tree and let
+\var{l} be the set of leaves in \var{t}.
+Where
+\mypareq{th:non-trivial-non-unary-tree-size-090}{%
+    $\Vmyfn{INST}{ex} \defined
+        \Vnat{ex} > 0 \implies \var{ex} \le \subtract{2\times\Vsize{l}}{1}$,
+    \bcuz{} \Eref{th:non-trivial-non-unary-tree-size-050}
+         with \Vnat{ex} for \Vsize{v}.
+}
+we assume there is a minimal \var{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:th-non-trivial-non-unary-tree-size-100}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:th-non-trivial-non-unary-tree-size-110}
+    \land\; \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \because \text{new free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:th-non-trivial-non-unary-tree-size-120}{%
+    \Vmyfn{INST}{0} \cuz{}
+        vacuously from \Eref{eq:lem-generation-coverage-150}.
+}
+\mypareq{eq:th-non-trivial-non-unary-tree-size-130}{%
+    $\var{bad} > 0$ \cuz{}
+        \Eref{eq:th-non-trivial-non-unary-tree-size-100},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-120}.
+}
+\todo{Finish proof.}
 % Noting that
 % \mypareq{th:non-unary-tree-size-100}{%
 %     $0 \le \Vsize{leaves}$ \cuz{} trivial,
@@ -2736,7 +2767,7 @@ the theorem follows immediately from this fact.
 For non-trivial trees,
 the theorem follows immediately from
 the Non-trivial Non-unary Tree Size Theorem
-\Thref{th:non-trivial-non-unary-tree-size}.
+\Thref{non-trivial-non-unary-tree-size}.
 \myqed
 \end{proof}
 
