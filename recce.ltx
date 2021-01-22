@@ -133,7 +133,6 @@
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 \newcommand{\Vpowerset}[1]{\ensuremath{\mathcal{P}(\var{#1})}}
 \newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
-\newcommand{\condOp}{\mathop{?}}
 \newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
@@ -253,8 +252,11 @@
 % I use hyphens in variable names,
 % so I need to ensure that subtraction is
 % clearly distinguished by the typography
-\newcommand{\subtractOP}{\,-\,}
+\newcommand{\subtractOp}{\mathbin{-}}
 \newcommand{\subtract}[2]{\ensuremath{#1\,-\,#2}}
+
+\newcommand{\condOp}{\mathbin{?}}
+\newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
 
 \newcommand{\var}[1]{\ensuremath{\texttt{#1}}}
 \newcommand{\varprime}[2]{\ensuremath{\texttt{#1}#2}}
@@ -300,10 +302,10 @@
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
 \newcommand{\boldRange}[3]{\textbf{#1[#2 \ldots #3]}}
 \newcommand{\boldRangeDecr}[3]{\textbf{#1[#2 \ldots %
-\textbf{($\textbf{#3}\subtractOP 1$)}]}%
+\textbf{($\textbf{#3}\subtractOp 1$)}]}%
 }
 \newcommand{\boldRangeSizeDecr}[3]{\textbf{#1[#2 \ldots %
-\textbf{($\left|\textbf{#3}\right|\subtractOP 1$)}%
+\textbf{($\left|\textbf{#3}\right|\subtractOp 1$)}%
 ]} }
 
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
@@ -923,7 +925,8 @@ will usually be a waste of time.}
 % TODO for each chapter
 % 1.) Change captialization of theorems, lemmas.
 % 2.) \Thend after each theorem, lemma statement.
-% 3.) Convert theorems to lemmas, as appropriate
+% 3.) Convert theorems to lemmas, as appropriate.
+% 4.) Replace subtraction of one with \decr{}.
 
 \epigraph{%
 [Mathematical] statements are generally accompanied by arguments whose
@@ -1606,15 +1609,15 @@ from programming is the
 ternary conditional operator:
 \begin{equation}
 \label{eq:conditional-op-example}
-\var{cond} \condOp{} \var{ifT} : \var{ifF}.
+    \cond{\var{test}}{\var{a}}{\var{b}}
 \end{equation}
-where \var{cond} is a boolean.
-\var{ifT} is the value of \Eref{eq:conditional-op-example}
-if \var{cond} is true.
+where \var{test} is a boolean.
+\var{a} is the value of \Eref{eq:conditional-op-example}
+if \var{test} is true.
 Otherwise, the value of \Eref{eq:conditional-op-example} is
-\var{ifF}.
+\var{b}.
 For example, where \var{x} is an integer,
-$\var{x} \ge 0 \condOp{} \var{x} : -\var{x}$ is its absolute value.
+$\cond{\var{x} \ge 0}{\var{x}}{-\var{x}}$ is its absolute value.
 
 Floor brackets are a very intuitive way to indicate terminal
 symbols:
@@ -1636,7 +1639,7 @@ Unary operators have tightest precedence and are omitted.
 \hline
 {$\times$} & \cellboxr{Multiplication} \\
 \hline
-{$+$} {$\subtractOP$} & \cellboxr{Addition, subtraction} \\
+{$+$} {$\subtractOp$} & \cellboxr{Addition, subtraction} \\
 \hline
    {$\le$} {$<$}
    {$\ge$} {$>$}
@@ -1644,7 +1647,7 @@ Unary operators have tightest precedence and are omitted.
    \hline
 {$\cat$} & \cellboxr{Concatenation, for example $\var{a}\cat \var{b}$} \\
 \hline
-{$\cup$ $\cap$ $\subtractOP$} & \cellboxr{Set union, intersection, difference} \\
+{$\cup$ $\cap$ $\subtractOp$} & \cellboxr{Set union, intersection, difference} \\
 \hline
 {$\times$} & \cellboxr{Cartesian product (for sets)} \\
 \hline
@@ -1677,7 +1680,7 @@ Unary operators have tightest precedence and are omitted.
 %
 {$\var{a}:\var{b}$}    & \cellboxr{``\var{a} such that \var{b}''} \\
 \hline
-{$\var{c}\condOp{}\var{v1}:\var{v2}$} & \cellboxr{%
+{$\cond{c}{\var{v1}}{\var{v2}}$} & \cellboxr{%
     Ternary conditional operator:\\
     ``\var{v1} if \var{c}, otherwise \var{b}''} \\
     \hline
@@ -1734,7 +1737,7 @@ the first element of \var{seq} is \Velement{seq}{0}.%
 }
 Where \var{seq} is a finite sequence,
 and the last element is \Velement{seq}{\Vlastix{seq}}.
-Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOP 1$.
+Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
 
 We write \Dom{\var{fn}} for the domain of a function \var{fn},
 \Cod{\var{fn}} for the codomain of a function \var{fn},
@@ -2635,15 +2638,20 @@ two or more child nodes.
 
 \begin{theorem}[Non-trivial Non-unary Tree Size]
 \label{th:non-trivial-non-unary-tree-size}
-Let \var{t} be a non-trivial non-unary tree.
-Let \var{v} be the set of nodes in \var{t},
-and let $\var{l}\subseteq\var{v}$
-be the set of leaves in \var{t}.
-\mypareq{th:non-trivial-non-unary-tree-size-050}{%
-    $\Vsize{v} > 0 \implies \Vsize{v} \le \subtract{2\times\Vsize{l}}{1}$
-}
-(Recall that a tree is trivial iff $\Vsize{v}=0.$)
-\dispEnd
+For the purposes of this theorem, let \var{tree} be non-unary.
+Let \var{base} be a subset of \var{nodes},
+and let $\var{N}\in\naturals$.
+Then
+\begin{equation}
+\label{th:non-trivial-non-unary-tree-size-050}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{N} : \myfn{gen}{\var{i},\var{base}} }
+    }
+    \\ \le\; \subtract{2\times\var{base}}{(\cond{\var{N}=0}{0}{1})}.
+    \quad \thEnd
+\end{gathered}
+\end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -2670,7 +2678,8 @@ we assume there is a minimal \var{bad} such that
 \end{gather}
 \mypareq{eq:th-non-trivial-non-unary-tree-size-120}{%
     \Vmyfn{INST}{0} \cuz{}
-        vacuously from \Eref{eq:lem-generation-coverage-150}.
+        \Eref{th:non-trivial-non-unary-tree-size-090},
+        vacuously.
 }
 \mypareq{eq:th-non-trivial-non-unary-tree-size-130}{%
     $\var{bad} > 0$ \cuz{}
@@ -4145,7 +4154,7 @@ then
 %
 & \Predot{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\RHS{\Vrule{x}}[\var{pos}\subtractOP 1], \; \text{if $\var{pos} > 0$} \\
+\RHS{\Vrule{x}}[\var{pos}\subtractOp 1], \; \text{if $\var{pos} > 0$} \\
 \Lambda, \; \text{otherwise}
 \end{cases} \\
 \label{eq:def-postdot}
@@ -4163,7 +4172,7 @@ then
 \label{eq:def-penult}
 & \Penult{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\Postdot{\Vdr{x}}, \; \text{if $\var{pos} = \size{\Vrule{x}}\subtractOP 1$} \\
+\Postdot{\Vdr{x}}, \; \text{if $\var{pos} = \size{\Vrule{x}}\subtractOp 1$} \\
 \Lambda, \quad \text{otherwise}
 \end{cases}
 %
@@ -4328,9 +4337,9 @@ iff
 \label{eq:eim-valid-22b}
 \Accept{\var{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
 \label{eq:eim-valid-22c}
-\Vstr{before} \destar \var{inp}[0  \ldots  (\var{i}\subtractOP 1)], \text{ and} \\
+\Vstr{before} \destar \var{inp}[0  \ldots  (\var{i}\subtractOp 1)], \text{ and} \\
 \label{eq:eim-valid-22d}
-\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtractOP 1)].
+\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtractOp 1)].
 \end{gather}
 \Veim{x}
 is \dfn{useful}
@@ -5015,7 +5024,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \begin{equation}
 \label{eq:th-predictions-location-14}
 \begin{gathered}
-\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtractOP 1)]
+\Vstr{rhs1} \destar \var{inp}[\var{i}  \ldots  (\var{j}\subtractOp 1)]
 \\ \myparbox{\cuz{}
     \Eref{eq:eim-valid-22d} in \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-predictions-location-10-90},
@@ -5025,7 +5034,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \end{equation}
 \begin{equation}
 \label{eq:th-predictions-location-16}
-\var{inp}[\var{i}  \ldots  (\var{j}\subtractOP 1)] = \epsilon
+\var{inp}[\var{i}  \ldots  (\var{j}\subtractOp 1)] = \epsilon
 \because
 \Eref{eq:th-predictions-location-12},
 \Eref{eq:th-predictions-location-14}.
@@ -6298,10 +6307,10 @@ to show
 \begin{equation}
 \label{eq:th-les-extension-14}
 \begin{gathered}
-   \forall \; \Vnat{i} \in (\Dom{\var{ext}} \subtractOP \set{\Vlastix{ext}}) :
+   \forall \; \Vnat{i} \in (\Dom{\var{ext}} \subtractOp \set{\Vlastix{ext}}) :
    \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
-       \var{i} < \Vlastix{ext}\subtractOP 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
+       \var{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
    \right)
    \\ \because \Eref{eq:th-les-extension-10},
     \Eref{eq:th-les-extension-12}.
@@ -6327,7 +6336,7 @@ to show
    \forall \; \Vnat{i} \in \Dom{\var{ext}} :
    \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
-       \var{i} < \Vlastix{ext}\subtractOP 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
+       \var{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\var{i}+1}, \VVelement{ext}{i}}
    \right)
    \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-les-extension-14},
@@ -6340,7 +6349,7 @@ to show
     \cuz{} \Eref{eq:th-les-extension-07}, \Eref{eq:th-les-extension-16}.
 }
 \mypareq{eq:th-les-extension-26}{%
-    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{ext}{\Vlastix{ext}\subtractOP 1}}$
+    $\myfn{Next-Eligible}{\Velement{ext}{\Vlastix{ext}},\Velement{ext}{\Vlastix{ext}\subtractOp 1}}$
     \cuz{} \Eref{eq:th-les-extension-12}, \Eref{eq:th-les-extension-24}.
 }
 \begin{equation}
@@ -6374,7 +6383,7 @@ is less than or equal to the current location of \var{prev}.
 That is, if
 \[
 \var{les} \in \type{LES}
-\land \; \Vnat{i} \le (\Vlastix{les}\subtractOP 1)
+\land \; \Vnat{i} \le (\Vlastix{les}\subtractOp 1)
 \]
 then
 \[
@@ -6700,7 +6709,7 @@ symbol of its first element. That is, if
 then
 \begin{equation}
     \label{eq:th-les-unit-derivation-08}
-    \Symbol{\Velement{les}{\Vlastix{les}\subtractOP 1}} \deplus
+    \Symbol{\Velement{les}{\Vlastix{les}\subtractOp 1}} \deplus
     \Symbol{\Velement{les}{0}}.
     \quad \dispEnd
 \end{equation}
@@ -6723,7 +6732,7 @@ The induction hypothesis is
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
     } :
-    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOP 1}} \deplus
+    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOp 1}} \deplus
     \Symbol{\Velement{ines}{0}}.
 \end{gathered}
 \end{equation}
@@ -6774,7 +6783,7 @@ showing it directly.
         \longThref{LES rule}{next-eligible-rule}.
 }
 \mypareq{eq:th-les-unit-derivation-24}{%
-    $\Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOP 1}} \deplus
+    $\Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOp 1}} \deplus
         \Symbol{\Velement{lesB}{0}}$
     \linebreak \cuz{} \Eref{eq:th-les-unit-derivation-12},
         \Eref{eq:th-les-unit-derivation-22}.
@@ -6785,7 +6794,7 @@ showing it directly.
     \size{\Vles{lesB}} = 3 \land
     \Current{\Velement{lesB}{\Vlastix{lesB}}}
         = \Current{\Velement{lesB}{0}}
-    \\ \implies \Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOP 1}} \deplus
+    \\ \implies \Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOp 1}} \deplus
         \Symbol{\Velement{lesB}{0}}
     \\ \myparbox{\cuz{}
         derivation \Eref{eq:th-les-unit-derivation-11}--%
@@ -6826,7 +6835,7 @@ to show \myfn{INDH}{\var{n}+1}.
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
     } :
-    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOP 1}} \deplus
+    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOp 1}} \deplus
     \Symbol{\Velement{ines}{0}}
     \\ \myparbox{\cuz{} \myfn{INDH}{\var{n}}, AF step.%
     }
@@ -6871,30 +6880,30 @@ to show \myfn{INDH}{\var{n}+1}.
         \Eref{eq:th-les-unit-derivation-40}.
 }
 \mypareq{eq:th-les-unit-derivation-46}{%
-    $\Symbol{\Velement{pre}{\Vlastix{pre}\subtractOP 1}} \deplus
+    $\Symbol{\Velement{pre}{\Vlastix{pre}\subtractOp 1}} \deplus
     \Symbol{\Velement{pre}{0}}$
     \linebreak \cuz{} \Eref{eq:th-les-unit-derivation-30},
     \Eref{eq:th-les-unit-derivation-39},
     \Eref{eq:th-les-unit-derivation-42}.
 }
 \mypareq{eq:th-les-unit-derivation-47-10}{%
-    $\Vlastix{pre}\subtractOP 1 = \Vsize{pre}\subtractOP 2
+    $\Vlastix{pre}\subtractOp 1 = \Vsize{pre}\subtractOp 2
         = \var{n}+1$
     \cuz{} \Eref{eq:th-les-unit-derivation-39}.
 }
 \mypareq{eq:th-les-unit-derivation-47-20}{%
     $\var{n}+1
-    = \Vsize{lesP}\subtractOP 3 =
-    \Vlastix{lesP}\subtractOP 2$
+    = \Vsize{lesP}\subtractOp 3 =
+    \Vlastix{lesP}\subtractOp 2$
     \cuz{} \Eref{eq:th-les-unit-derivation-32}.
 }
 \mypareq{eq:th-les-unit-derivation-47-30}{%
-    $\Vlastix{pre}\subtractOP 1 = \Vlastix{lesP}\subtractOP 2$
+    $\Vlastix{pre}\subtractOp 1 = \Vlastix{lesP}\subtractOp 2$
     \cuz{} \Eref{eq:th-les-unit-derivation-47-10},
     \Eref{eq:th-les-unit-derivation-47-20}.
 }
 \mypareq{eq:th-les-unit-derivation-48}{%
-    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOP 2}} \deplus
+    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOp 2}} \deplus
     \Symbol{\Velement{lesP}{0}}$
     \cuz{} \Eref{eq:th-les-unit-derivation-40},
     \Eref{eq:th-les-unit-derivation-46},
@@ -6903,19 +6912,19 @@ to show \myfn{INDH}{\var{n}+1}.
 \mypareq{eq:th-les-unit-derivation-50}{%
     \myfn{Next-Eligible}{
         \Velement{lesP}{\Vlastix{lesP}},
-        \Velement{lesP}{\Vlastix{lesP}\subtractOP 1}}
+        \Velement{lesP}{\Vlastix{lesP}\subtractOp 1}}
     \linebreak \cuz{} \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-les-unit-derivation-32}.
 }
 \mypareq{eq:th-les-unit-derivation-52}{%
     \myfn{Next-Eligible}{
-        \Velement{lesP}{\Vlastix{lesP}\subtractOP 1},
-        \Velement{lesP}{\Vlastix{lesP}\subtractOP 2}}
+        \Velement{lesP}{\Vlastix{lesP}\subtractOp 1},
+        \Velement{lesP}{\Vlastix{lesP}\subtractOp 2}}
     \linebreak \cuz{} \Dfref{def:next-eligible-sequence},
     \Eref{eq:th-les-unit-derivation-32}.
 }
 \mypareq{eq:th-les-unit-derivation-54}{%
-    $\Current{\Velement{lesP}{\Vlastix{lesP}\subtractOP 1}} = \Current{\Velement{lesP}{\Vlastix{lesP}\subtractOP 2}}$
+    $\Current{\Velement{lesP}{\Vlastix{lesP}\subtractOp 1}} = \Current{\Velement{lesP}{\Vlastix{lesP}\subtractOp 2}}$
     \linebreak \cuz{} \Eref{eq:th-les-unit-derivation-32},
         \Eref{eq:th-les-unit-derivation-36}.
 }
@@ -6924,8 +6933,8 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{gathered}
     \tuple{
     \begin{gathered}
-    \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOP 1}}
-    \\ \de \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOP 2}}
+    \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOp 1}}
+    \\ \de \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOp 2}}
     \end{gathered}
     }
      \in \Rules{\Vint{g}}
@@ -6936,7 +6945,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-les-unit-derivation-58}{%
-    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOP 1}} \deplus
+    $\Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOp 1}} \deplus
     \Symbol{\Velement{lesP}{0}}$
     \cuz{} \Eref{eq:th-les-unit-derivation-48},
     \Eref{eq:th-les-unit-derivation-56}.
@@ -6947,7 +6956,7 @@ to show \myfn{INDH}{\var{n}+1}.
     \Vsize{\Vles{lesP}} = \var{n} + 3 + 1
     \\ \land \; \Current{\Velement{lesP}{\Vlastix{lesP}}} =
         \Current{\Velement{lesP}{0}}
-    \\ \implies \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOP 1}} \deplus
+    \\ \implies \Symbol{\Velement{lesP}{\Vlastix{lesP}\subtractOp 1}} \deplus
         \Symbol{\Velement{lesP}{0}}
     \\ \myparbox{\cuz{}
         derivation \Eref{eq:th-les-unit-derivation-32}--%
@@ -6966,7 +6975,7 @@ to show \myfn{INDH}{\var{n}+1}.
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
     } :
-    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOP 1}} \deplus
+    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOp 1}} \deplus
     \Symbol{\Velement{ines}{0}}
     \\ \myparbox{\cuz{}
         universal generalization of arbitrary \Vles{lesP},
@@ -7231,7 +7240,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{equation}
 \label{eq:th-les-finiteness-44}
 \begin{gathered}
-    \Symbol{\Velement{cycle}{0}} = \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtractOP 1}}
+    \Symbol{\Velement{cycle}{0}} = \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtractOp 1}}
     \\ \because \Eref{eq:th-les-finiteness-40}, \Eref{eq:th-les-finiteness-42}.
 \end{gathered}
 \end{equation}
@@ -7254,7 +7263,7 @@ we know that \Velement{run}{\var{zz}+1} exists because of
 \begin{equation}
 \label{eq:th-les-finiteness-54}
 \begin{gathered}
-    \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtractOP 1}} \deplus
+    \Symbol{\Velement{cycle}{\Vlastix{cycle}\subtractOp 1}} \deplus
     \Symbol{\Velement{cycle}{0}}
     \\ \myparbox{\longThref{LES unit derivation}{les-unit-derivation},
         \Eref{eq:th-les-finiteness-40},
@@ -7384,10 +7393,10 @@ element, we know that
 \begin{gathered}
     \myfn{Next-Eligible}{
         \VVelement{les1}{first},
-        \Velement{les1}{\var{first}\subtractOP 1}}
+        \Velement{les1}{\var{first}\subtractOp 1}}
     \\ \land \; \myfn{Next-Eligible}{
         \VVelement{les2}{first},
-        \Velement{les2}{\var{first}\subtractOP 1}}
+        \Velement{les2}{\var{first}\subtractOp 1}}
 \\ \because
         \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-les-uniqueness-10-20},
@@ -7398,8 +7407,8 @@ element, we know that
 \begin{equation}
 \label{eq:th-les-uniqueness-24}
 \begin{gathered}
-        \Velement{les1}{\var{first}\subtractOP 1}
-        \neq \Velement{les2}{\var{first}\subtractOP 1}
+        \Velement{les1}{\var{first}\subtractOp 1}
+        \neq \Velement{les2}{\var{first}\subtractOp 1}
     \\ \because \longThref{Next eligible uniqueness}{next-eligible-uniqueness},
     \Eref{eq:th-les-uniqueness-22}.
 \end{gathered}
@@ -12223,10 +12232,10 @@ operation of \Earley{}\cite{Earley1970}.
 \label{alg:scanner-op}
 \begin{algorithmic}[1]
 \Procedure{Scanner}{\VVelement{S}{j}}
-\Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{inp}{\var{j}\subtractOP 1}, \var{val}}$.
+\Statex \lcomment{$\Vtoken{token} = \tuple{\Velement{inp}{\var{j}\subtractOp 1}, \var{val}}$.
   See \Dfref{def:token}.
 }
-\State $\var{matches} \gets \transitions{\var{j}\subtractOP 1}{\Symbol{\var{token}}}$
+\State $\var{matches} \gets \transitions{\var{j}\subtractOp 1}{\Symbol{\var{token}}}$
 \label{line:scanner-op-2}
 \For{every $\Veim{match} \in \Veimset{matches}$}
 \label{line:scanner-op-3}
@@ -14406,9 +14415,9 @@ The 3-partitioned rule may be written as
 \end{equation}
 where
 \begin{gather}
-\Vstr{rhs1} = (\RHS{\var{r}})[0 \ldots \var{pos1}\subtractOP 1], \\
-\Vstr{rhs2} = (\RHS{\var{r}})[\var{pos1} \ldots \var{pos2}\subtractOP 1], \;\; \text{and} \\
-\Vstr{rhs3} = (\RHS{\var{r}})[\var{pos2} \ldots \size{\RHS{\var{r}}}\subtractOP 1].
+\Vstr{rhs1} = (\RHS{\var{r}})[0 \ldots \var{pos1}\subtractOp 1], \\
+\Vstr{rhs2} = (\RHS{\var{r}})[\var{pos1} \ldots \var{pos2}\subtractOp 1], \;\; \text{and} \\
+\Vstr{rhs3} = (\RHS{\var{r}})[\var{pos2} \ldots \size{\RHS{\var{r}}}\subtractOp 1].
 \end{gather}
 A \dfn{horizontal ambiguity} is a 5-tuple,
 \begin{equation}
@@ -14451,7 +14460,7 @@ The duple $[\var{overlap1}, \var{overlap2}]$ is
 called its \dfn{overlap}.
 The string
 \[
-\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtractOP 1)]
+\var{w}[\var{overlap1}\ldots(\var{overlap2}\subtractOp 1)]
 \]
 is also called its \dfn{overlap}.
 
@@ -15443,7 +15452,7 @@ by assumption for theorem.}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-38}
 \begin{gathered}
-  \Vstr{before} \destar \var{prefix}[0  \ldots  (\var{orig}\subtractOP 1)] \\
+  \Vstr{before} \destar \var{prefix}[0  \ldots  (\var{orig}\subtractOp 1)] \\
   \because \Eref{eq:eim-valid-22c},
     \Eref{eq:earley-completer-is-consistent-22},
     \Eref{eq:earley-completer-is-consistent-30}.
@@ -15452,7 +15461,7 @@ by assumption for theorem.}
 \begin{equation}
 \label{eq:earley-completer-is-consistent-40}
 \begin{gathered}
-  \Vstr{rhs1} \destar \var{prefix}[\var{orig}  \ldots  (\var{meet}\subtractOP 1)] \\
+  \Vstr{rhs1} \destar \var{prefix}[\var{orig}  \ldots  (\var{meet}\subtractOp 1)] \\
   \because \Eref{eq:eim-valid-22d},
   \Eref{eq:earley-completer-is-consistent-20},
   \Eref{eq:earley-completer-is-consistent-22},
@@ -15502,7 +15511,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \begin{equation}
 \label{eq:earley-completer-is-consistent-53}
   \begin{gathered}
-    \LHS{\Vdr{cuz}} \destar \var{prefix}[\var{meet}  \ldots  (\var{current}\subtractOP 1)] \\
+    \LHS{\Vdr{cuz}} \destar \var{prefix}[\var{meet}  \ldots  (\var{current}\subtractOp 1)] \\
     \because \Eref{eq:eim-valid-22d},
     \Eref{eq:earley-completer-is-consistent-26},
     \Eref{eq:earley-completer-is-consistent-32},
@@ -15514,7 +15523,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \label{eq:earley-completer-is-consistent-54}
   \begin{gathered}
   \Vstr{postdot} \destar
-  \var{prefix}[\var{meet}  \ldots  (\var{current}\subtractOP 1)] \\
+  \var{prefix}[\var{meet}  \ldots  (\var{current}\subtractOp 1)] \\
   \because
   \Eref{eq:earley-completer-is-consistent-24},
   \Eref{eq:earley-completer-is-consistent-53}.
@@ -15525,7 +15534,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 \label{eq:earley-completer-is-consistent-56}
 \begin{aligned}
   & \Vstr{rhs1} \Vstr{postdot} \\
-  & \qquad \destar \var{prefix}[\var{orig}  \ldots  (\var{current}\subtractOP 1)] \\
+  & \qquad \destar \var{prefix}[\var{orig}  \ldots  (\var{current}\subtractOp 1)] \\
   & \qquad \qquad \because \Eref{eq:earley-completer-is-consistent-40},
     \Eref{eq:earley-completer-is-consistent-54}
   \end{aligned}
@@ -15888,7 +15897,7 @@ are valid.
 The \dfn{top} of the edge is \Velement{edge}{\Vlastix{edge}}.
 The \dfn{bottom} of the edge is \Velement{edge}{0}.
 The \dfn{inside} of the edge is the sequence
-\Velement{edge}{1 \ldots (\Vlastix{edge}\subtractOP 1)}.
+\Velement{edge}{1 \ldots (\Vlastix{edge}\subtractOp 1)}.
 An \dfn{inside element} of an edge is a element of the
 inside of the edge.
 An \dfn{upper element} of an edge is a top or an inside element.
@@ -16449,7 +16458,7 @@ For the purposes of this proof, we define \Veimset{seq} as follows:
   \item $\Velement{seq}{\Vlastix{seq}} = \Veim{no}$; and
   \item for all \var{i} such that $0 < \var{i} \le \Vlastix{seq}$,
   \eim{(\VVelement{seq}{i})}
-  is the direct descendant of \eim{(\Velement{seq}{\var{i}\subtractOP 1})}.
+  is the direct descendant of \eim{(\Velement{seq}{\var{i}\subtractOp 1})}.
   \end{itemize}%
 }
 \end{equation}
@@ -16474,12 +16483,12 @@ Def of ``Leo edge'' \Dfref{def:leo-edge},
 \end{equation}
 %
 We now consider
-\Velement{seq}{\var{t}\subtractOP 1}.
+\Velement{seq}{\var{t}\subtractOp 1}.
 %
 \begin{equation}
 \label{th:edge-top-is-border-30}
 \myparbox{
-\Velement{seq}{\var{t}\subtractOP 1} is a lower edge \type{EIM}
+\Velement{seq}{\var{t}\subtractOp 1} is a lower edge \type{EIM}
 $\because$
 \Eref{th:edge-top-is-border-27}.}
 \end{equation}
@@ -16501,7 +16510,7 @@ $\because$ \Thref{edge-descendant-uniqueness}.}
 \label{th:edge-top-is-border-36}
 \myparbox{%
 The unique descendant of
-\Velement{seq}{\var{t}\subtractOP 1} is
+\Velement{seq}{\var{t}\subtractOp 1} is
 another lower edge \type{EIM} or the top of
 an edge
 $\because$
@@ -16512,7 +16521,7 @@ $\because$
 \begin{equation}
 \label{th:edge-top-is-border-38}
 \myparbox{\VVelement{seq}{t} is the unique descendant
-of \Velement{seq}{\var{t}\subtractOP 1}.
+of \Velement{seq}{\var{t}\subtractOp 1}.
 $\because$
 \Eref{th:edge-top-is-border-30}
 \Eref{th:edge-top-is-border-34}.}`
@@ -16570,7 +16579,7 @@ $\because$ Def of ``Leo edge'' \Dfref{def:leo-edge}.}
 \begin{equation}
 \label{eq:th-leo-edge-top-12}
 \begin{gathered}
-\left[ \Source{\Velement{chain}{\Vlastix{edge}\subtractOP 1}}, \Velement{edge}{\Vlastix{edge}\subtractOP 1} \right]_\type{LP} \\
+\left[ \Source{\Velement{chain}{\Vlastix{edge}\subtractOp 1}}, \Velement{edge}{\Vlastix{edge}\subtractOp 1} \right]_\type{LP} \\
   \in \LinkPairs{\Velement{edge}{\Vlastix{edge}}} \\
 \because \text{\Eref{def:leo-edge-30} in \Dfref{def:leo-edge}}.
 \end{gathered}
@@ -16781,7 +16790,7 @@ $\because$ DFPP.
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
 the \Marpa{} \var{Scanner} operation of Earley set \var{j},
-if they are complete as far as Earley set $\var{j}\subtractOP 1$,
+if they are complete as far as Earley set $\var{j}\subtractOp 1$,
 and if they contain all the visible valid \type{EIM}s with a predot terminal
 $\because$ DFPP.
 }
@@ -16790,7 +16799,7 @@ $\because$ DFPP.
 \myparbox{The Earley tables of a \Marpa{} parse
 are ``complete as far as''
 the \Marpa{} \op{Reducer} operation of Earley set \var{j},
-if they are complete as far as Earley set $\var{j}\subtractOP 1$,
+if they are complete as far as Earley set $\var{j}\subtractOp 1$,
 and if they contain all the visible valid confirmed \type{EIM}s
 $\because$ DFPP.
 }
@@ -16860,7 +16869,7 @@ $\because$ DFPP.
 \label{eq:def-complete-as-far-as-28}
 \myparbox{The Earley tables are ``complete as far as''
 visible depth \var{n} in Earley set \var{j},
-if they are complete as far as Earley set $\var{j}\subtractOP 1$,
+if they are complete as far as Earley set $\var{j}\subtractOp 1$,
 and if they contain all the visible valid \type{EIM}s of visible depth
 \var{n} or less
 $\because$ DFPP.
@@ -16969,7 +16978,7 @@ Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
 be an unambiguous parse,
 where $\var{n} = \size{\Vstr{w}}$.
 The number of useful complete right recursive \type{EIM}s
-in \var{p} is less than or equal to $2 \times \var{n} \subtractOP 1$,
+in \var{p} is less than or equal to $2 \times \var{n} \subtractOp 1$,
 or \On{}.
 \end{theorem}
 
@@ -17302,7 +17311,7 @@ Expand \Eref{eq:left-congruence1} into
 \begin{aligned}
 & \var{sfseqA}[\var{lenA}]\cat\Vterm{suffixA} = \Vstr{sfA}\cat\Vterm{suffixA}
 \\
-& \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtractOP 1]\cat\Vterm{suffixA} \\
+& \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtractOp 1]\cat\Vterm{suffixA} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqA}[1]\cat\Vterm{suffixA}] = \Vstr{prefix}\Vterm{suffixA} \\
 \end{aligned}
@@ -17312,7 +17321,7 @@ and expand \Eref{eq:left-congruence2} into
 \label{eq:left-congruence10b}
 \begin{aligned}
 & \var{sfseqB}[\var{lenB}]\cat\Vterm{suffixB} = \Vstr{sfB}\cat\Vterm{suffixB} \\
-& \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtractOP 1]\cat\Vterm{suffixB} \\
+& \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtractOp 1]\cat\Vterm{suffixB} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqB}[1]\cat\Vterm{suffixB} = \Vstr{prefix}\Vterm{suffixB} \\
 \end{aligned}
@@ -17367,7 +17376,7 @@ where
 \begin{equation}
 \label{eq:left-congruence15a1}
 \Vstr{preA}\Vsym{rhsA}\Vterm{postA} =
-\var{sfseqA}[\var{j}\subtractOP 1]
+\var{sfseqA}[\var{j}\subtractOp 1]
 \end{equation}
 and similarly, we can write
 for some $\Vterm{postB} \in \Term{\var{g}}^\ast$,
@@ -17377,20 +17386,20 @@ for some $\Vterm{postB} \in \Term{\var{g}}^\ast$,
 & \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\cat\Vterm{suffixB} \\
 & \qquad = \Vstr{preB}\Vsym{lhsB}\Vterm{postB}\Vterm{suffixB} \\
 & \qquad \xderives{R} \Vstr{preB}\Vsym{rhsB}\Vterm{postB}\Vterm{suffixB} \\
-& \qquad = \var{sfseqB}[\var{j}\subtractOP 1]\cat\Vterm{suffixB}
+& \qquad = \var{sfseqB}[\var{j}\subtractOp 1]\cat\Vterm{suffixB}
 \end{aligned}
 \end{equation}
 where
 \begin{equation}
 \label{eq:left-congruence15b1}
 \Vstr{preB}\Vsym{rhsB}\Vterm{postB} =
-\var{sfseqB}[\var{j}\subtractOP 1].
+\var{sfseqB}[\var{j}\subtractOp 1].
 \end{equation}
 Then
 \begin{gather}
 \label{eq:left-congruence18}
 \begin{gathered}
-\var{sfseqA}[\var{j}\subtractOP 1] = \var{sfseqB}[\var{j}\subtractOP 1], \\
+\var{sfseqA}[\var{j}\subtractOp 1] = \var{sfseqB}[\var{j}\subtractOp 1], \\
 \because \Eref{eq:left-congruence12b}, \;\; \text{and}
 \end{gathered}
 \\[5pt]
@@ -17968,7 +17977,7 @@ pair \Thref{unambig-g-unambig-eim},
 and therefore no \type{EIM} will have more than one cause \type{EIM}.
 In this proof,
 let a ``cause chain'' be a sequence \var{chain} such that
-for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtractOP 1$,
+for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtractOp 1$,
 $\var{chain}[\var{i}]$ is the cause of the link pair
 of $\var{chain}[\var{i}+1]$.
 
@@ -18037,7 +18046,7 @@ Stating the above reasoning more precisely, we have
 \var{chains} \le \var{leaves} + \frac{\var{leaves}}{2} + \frac{\var{leaves}}{4} + \ldots + 1
 \\
 \label{eq:th-completion-bound-23}
-\var{chains} = 2 \times \var{leaves} \subtractOP 1 \because \Eref{eq:th-completion-bound-22}.
+\var{chains} = 2 \times \var{leaves} \subtractOp 1 \because \Eref{eq:th-completion-bound-22}.
 \end{gather}
 Letting \var{interior} be the number of interior nodes in the cause tree,
 \begin{gather}
@@ -18047,7 +18056,7 @@ Letting \var{interior} be the number of interior nodes in the cause tree,
 \\
 \label{eq:th-completion-bound-25b}
 \begin{gathered}
-\var{interior} \le (2 \times \var{leaves} \subtractOP 1) \times (\size{\NT{\var{g}}}+1) \\
+\var{interior} \le (2 \times \var{leaves} \subtractOp 1) \times (\size{\NT{\var{g}}}+1) \\
 \because \Eref{eq:th-completion-bound-23},
 \Eref{eq:th-completion-bound-25a}.
 \end{gathered}
@@ -18069,7 +18078,7 @@ so that
 \label{eq:th-completion-bound-32a}
 \text{$\var{complete} = \var{interior}+1$ and} \\
 \label{eq:th-completion-bound-32b}
-\var{medial} = \var{leaves} \subtractOP 1.
+\var{medial} = \var{leaves} \subtractOp 1.
 \end{gather}
 Then
 \begin{equation}
