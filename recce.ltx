@@ -2617,8 +2617,29 @@ in \var{tree}.
 That is,
 \[
 \var{nodes} = \bigcup \set{ \var{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} :
-    g = \myfn{gen}{\var{N},\var{leaves}}}. \quad \thEnd
+    \var{g} = \myfn{gen}{\var{N},\var{leaves}}}. \quad \thEnd
 \]
+\end{lemma}
+
+\begin{proof}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\begin{lemma}[Generation Size]
+\label{lem:generation-size}
+Every generation is more than twice the size
+of the successor generation with the same base.
+That is,
+\begin{equation}
+\label{eq:lem-generation-size-050}
+\begin{gathered}
+     \forall\; \Vnat{N} : \forall\; \var{base} \in \Vpowerset{nodes} :
+     \\ \myfn{gen}{\Vdecr{N},\var{base}} \ge
+     2 \times \myfn{gen}{\var{N},\var{base}}.
+     \quad \thEnd
+\end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -2648,7 +2669,7 @@ Then
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \var{N} : \myfn{gen}{\var{i},\var{base}} }
     }
-    \\ \le\; \subtract{2\times\var{base}}{(\cond{\var{N}=0}{0}{1})}.
+    \\ \le\; \subtract{2\times\Vsize{base}}{(\cond{\var{N}=0}{0}{1})}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -2656,103 +2677,29 @@ Then
 
 \begin{proof}
 The proof is by minimal counter-example.
-Let $\var{t}=\tuple{\var{v},\var{edges}}$ be
-an arbitrary tree and let
-\var{l} be the set of leaves in \var{t}.
 Where
-\mypareq{th:non-trivial-non-unary-tree-size-090}{%
-    $\Vmyfn{INST}{ex} \defined
-        \Vnat{ex} > 0 \implies \var{ex} \le \subtract{2\times\Vsize{l}}{1}$,
-    \bcuz{} \Eref{th:non-trivial-non-unary-tree-size-050}
-         with \Vnat{ex} for \Vsize{v}.
-}
+\begin{equation}
+\label{th:non-trivial-non-unary-tree-size-100}
+\begin{gathered}
+    \Vmyfn{INST}{ex} \defined
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{ex} : \myfn{gen}{\var{i},\var{base}} }
+    }
+    \\ \le\; \subtract{2\times\Vsize{base}}{(\cond{\var{ex}=0}{0}{1})}
+    \\ \text{\cuz{} \Eref{th:non-trivial-non-unary-tree-size-050}
+         with \Vnat{ex} for \Vsize{v}.}
+\end{gathered}
+\end{equation}
 we assume there is a minimal \var{bad} such that
 \Vmyfn{INST}{bad} is false:
 \begin{gather}
-\label{eq:th-non-trivial-non-unary-tree-size-100}
+\label{eq:th-non-trivial-non-unary-tree-size-110}
     \neg \Vmyfn{INST}{bad}
-\\ \label{eq:th-non-trivial-non-unary-tree-size-110}
+\\ \label{eq:th-non-trivial-non-unary-tree-size-120}
     \land\; \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
     \because \text{new free \Vnat{bad}.}
 \end{gather}
-\mypareq{eq:th-non-trivial-non-unary-tree-size-120}{%
-    \Vmyfn{INST}{0} \cuz{}
-        \Eref{th:non-trivial-non-unary-tree-size-090},
-        vacuously.
-}
-\mypareq{eq:th-non-trivial-non-unary-tree-size-130}{%
-    $\var{bad} > 0$ \cuz{}
-        \Eref{eq:th-non-trivial-non-unary-tree-size-100},
-        \Eref{eq:th-non-trivial-non-unary-tree-size-120}.
-}
-\todo{Finish proof.}
-% Noting that
-% \mypareq{th:non-unary-tree-size-100}{%
-%     $0 \le \Vsize{leaves}$ \cuz{} trivial,
-% }
-% for the rest of this proof we can assume that
-% \mypareq{th:non-unary-tree-size-110}{%
-%     $\size{\myfn{V}{\var{tree}}} \ge 1$
-%     \cuz{} AF subcase.
-% }
-% Let \var{nodes} be a set of nodes,
-% $\var{nodes}\subseteq\Vmyfn{V}{t}$.
-% \mypareq{th:non-unary-tree-size-120}{%
-%    Every node in \var{nodes} has an in-degree of at most one
-%    \cuz definition of ``tree''.
-% }
-% Where \var{n} is a set of nodes,
-% let \Vmyfn{DP}{n} be the set of direct parents of \var{n}.
-% A parent node by definition has an out-degree of at least one,
-% and, by assumption for the theorem, no node has an out-degree of
-% one, so that
-% \mypareq{th:non-unary-tree-size-130}{%
-%    Every node in \Vmyfn{DP}{nodes} has an out-degree of at least two.
-% }
-% It follows that every element of \Vmyfn{DP}{nodes}
-% must have two children which it cannot share
-% with any other element of \Vmyfn{DP}{nodes},
-% so that
-% \begin{equation}
-% \label{th:non-unary-tree-size-140}
-%    \size{\Vmyfn{DP}{nodes}} \le \frac{\Vsize{nodes}}{2}
-%    \because \Eref{th:non-unary-tree-size-120},
-%        \Eref{th:non-unary-tree-size-130}.
-% \end{equation}
-% \mypareq{th:non-unary-tree-size-160}{%
-%     $\size{\myfn{Anc}{0,\var{base}}} = \Vsize{base}$
-%     \cuz{} TODO.
-% }
-% \mypareq{th:non-unary-tree-size-170}{%
-%         $\var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{base}}} \le
-%             \size{\myfn{Anc}{\Vdecr{N},\var{base}}} +
-%                 \size{\myfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}}$
-%     \bcuz{} TODO.
-% }
-% \begin{equation}
-% \label{th:non-unary-tree-size-180}
-% \begin{gathered}
-%         \var{N} \ge 1 \implies \size{\myfn{Anc}{\var{N},\var{base}}} \le
-%             \frac{3}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{base}}}
-%     \\ \because \Eref{th:non-unary-tree-size-140},
-%         \Eref{th:non-unary-tree-size-170}.
-% \end{gathered}
-% \end{equation}
-% \begin{equation}
-% \label{th:non-unary-tree-size-190}
-% \begin{gathered}
-%     \var{N} \ge 1 \implies
-%     \\ \subtract{%
-%         \size{\myfn{Anc}{\var{N},\var{base}}}
-%     }{%
-%         \size{\myfn{Anc}{\Vdecr{N},\var{base}}}
-%     }
-%     \le
-%         \frac{1}{2}\times\size{\myfn{Anc}{\Vdecr{N},\var{base}}}
-%     \\ \because \Eref{th:non-unary-tree-size-180}.
-% \end{gathered}
-% \end{equation}
 \myqed
 \end{proof}
 
@@ -2766,6 +2713,7 @@ where \var{l} is the set of leaves in \var{t}.
 \end{theorem}
 
 \begin{proof}
+\todo{This proof needs revisting.}
 From graph theory, we know that
 every node of a tree is on a path from the root to a leaf,
 so that a
