@@ -2629,14 +2629,16 @@ That is,
 \begin{lemma}[Generation Sum Size]
 \todo{Restate this so that it applies to any set of levels?
 Or keep it just sequences?}
+\begin{equation}
 \label{lem:generation-sum-size}
-\[
+\begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \var{ex} : \myfn{gen}{\var{i},\var{base}} }
     } =
-    \sum \set{ 0 \le \Vnat{i} \le \var{ex} : \size{\myfn{gen}{\var{i},\var{base}}} }.
+    \\ \sum \set{ 0 \le \Vnat{i} \le \var{ex} : \size{\myfn{gen}{\var{i},\var{base}}} }.
     \quad \thEnd
-\]
+\end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -2645,8 +2647,29 @@ Or keep it just sequences?}
 \myqed
 \end{proof}
 
+\begin{lemma}[Generation Additivity]
+\label{lem:generation-additivity}
+Let a first generation be the base of a second generation.
+The second generation is equal to a third generation that
+has the same base as the first generation and whose
+level is the sum of the levels of
+the first and second generation.
+That is,
+\label{lem:generation-additivity-050}
+\[
+    \myfn{gen}{\var{x}, \myfn{gen}{\var{y}, \var{base}}}
+    = \myfn{gen}{\var{x}+\var{y},\var{base}}.
+    \quad \thEnd
+\]
+\end{lemma}
+
+\begin{proof}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
 \begin{lemma}[Generation Predecessor Size]
-\label{lem:generation-predecessory-size}
+\label{lem:generation-predecessor-size}
 Every generation is more than twice the size
 of the successor generation with the same base.
 That is,
@@ -2654,8 +2677,8 @@ That is,
 \label{eq:lem-generation-size-050}
 \begin{gathered}
      \forall\; \Vnat{N} : \forall\; \var{base} \in \Vpowerset{nodes} :
-     \\ \myfn{gen}{\Vdecr{N},\var{base}} \ge
-     2 \times \myfn{gen}{\var{N},\var{base}}.
+     \\ \size{\myfn{gen}{\Vdecr{N},\var{base}}} \ge
+     2 \times \size{\myfn{gen}{\var{N},\var{base}}}.
      \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -2749,13 +2772,91 @@ we assume there is a minimal \var{bad} such that
         \Eref{eq:th-non-trivial-non-unary-tree-size-220}.
 }
 \mypareq{eq:th-non-trivial-non-unary-tree-size-240}{%
-    $\sum \set{ 1 \le \Vnat{i} \le \var{bad} : \size{\myfn{gen}{\var{i},\var{base}}} }
-    =
+    $\size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } =
+    \Vsize{base} +
     \sum \set{ 0 \le \Vnat{i} \le \Vdecr{bad} : \size{\myfn{gen}{\var{i}+1,\var{base}}} }$
     \bcuz{} \Eref{eq:th-non-trivial-non-unary-tree-size-230}.
 }
-\todo{Does generation incrementation need to be a theorem?}
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-250}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } =
+    \\ \Vsize{base} +
+    \sum \set{ 0 \le \Vnat{i} \le \Vdecr{bad} :
+        \size{
+            \myfn{gen}{\var{i}, \myfn{gen}{1,\var{base}}} }
+    }
+    \\ \because \longLmref{Generation Additivity}{generation-additivity},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-240}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-260}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } =
+    \\ \Vsize{base} +
+    \size{ \bigcup \set{ 0 \le \Vnat{i} \le \Vdecr{bad} :
+            \myfn{gen}{\var{i}, \myfn{gen}{1,\var{base}} }
+    }}
+    \\ \because \longLmref{Generation Sum Size}{generation-sum-size},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-250}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-270}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } \le
+    \\ \Vsize{base} + \subtract{2\times\size{
+            \myfn{gen}{1,\var{base}} }
+        }{(\cond{(\Vdecr{bad})=0}{0}{1})}
+    \\ \because \Eref{th:non-trivial-non-unary-tree-size-100},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-120},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-260}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-non-trivial-non-unary-tree-size-280}{%
+     $\size{\myfn{gen}{0,\var{base}}} \ge
+     2 \times \size{\myfn{gen}{1,\var{base}}}$
+     \bcuz{}
+         \longLmref{Generation Predecessor Size}{lem:generation-predecessor-size}.
+}
 \myqed
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-290}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } \le
+    \\ \Vsize{base} + \subtract{\size{\myfn{gen}{0,\var{base}} }
+        }{
+            (\cond{(\Vdecr{bad})=0}{0}{1})
+        }
+    \\ \because \Eref{th:non-trivial-non-unary-tree-size-270},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-280}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-290}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } \le
+    \\ \subtract{ 2\times\Vsize{base} }{
+            (\cond{(\Vdecr{bad})=0}{0}{1})
+        }
+    \\ \myparbox{\cuz{}
+        Def of \myfnname{gen} \Eref{eq:def-gen},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-290}.}
+\end{gathered}
+\end{equation}
 \end{proof}
 
 \begin{theorem}[Non-unary Tree Size]
