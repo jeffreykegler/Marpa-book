@@ -2740,7 +2740,7 @@ we assume there is a minimal \var{bad} such that
 \\ \label{eq:th-non-trivial-non-unary-tree-size-120}
     \land\; \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
-    \because \text{new free \Vnat{bad}.}
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:th-non-trivial-non-unary-tree-size-200}{%
     $\var{bad} > 0$
@@ -2822,13 +2822,30 @@ we assume there is a minimal \var{bad} such that
         \Eref{eq:th-non-trivial-non-unary-tree-size-260}.
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-non-trivial-non-unary-tree-size-273}{%
+        $(\cond{(\Vdecr{bad})=0}{0}{1}) \le (\cond{\var{bad}=0}{0}{1})$
+        \bcuz{} \Eref{eq:th-non-trivial-non-unary-tree-size-200}.
+}
+\begin{equation}
+\label{eq:th-non-trivial-non-unary-tree-size-277}
+\begin{gathered}
+    \size{\bigcup
+        \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
+    } \le
+    \\ \Vsize{base} + \subtract{2\times\size{
+            \myfn{gen}{1,\var{base}} }
+        }{(\cond{\var{bad}=0}{0}{1})}
+    \\ \because \Eref{eq:th-non-trivial-non-unary-tree-size-270},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-273},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-260}.
+\end{gathered}
+\end{equation}
 \mypareq{eq:th-non-trivial-non-unary-tree-size-280}{%
      $\size{\myfn{gen}{0,\var{base}}} \ge
      2 \times \size{\myfn{gen}{1,\var{base}}}$
      \bcuz{}
-         \longLmref{Generation Predecessor Size}{lem:generation-predecessor-size}.
+         \longLmref{Generation Predecessor Size}{generation-predecessor-size}.
 }
-\myqed
 \begin{equation}
 \label{eq:th-non-trivial-non-unary-tree-size-290}
 \begin{gathered}
@@ -2837,26 +2854,39 @@ we assume there is a minimal \var{bad} such that
     } \le
     \\ \Vsize{base} + \subtract{\size{\myfn{gen}{0,\var{base}} }
         }{
-            (\cond{(\Vdecr{bad})=0}{0}{1})
+            (\cond{\var{bad}=0}{0}{1})
         }
-    \\ \because \Eref{th:non-trivial-non-unary-tree-size-270},
+    \\ \because \Eref{eq:th-non-trivial-non-unary-tree-size-277},
         \Eref{eq:th-non-trivial-non-unary-tree-size-280}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-non-trivial-non-unary-tree-size-290}
+\label{eq:th-non-trivial-non-unary-tree-size-300}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \var{bad} : \myfn{gen}{\var{i},\var{base}} }
     } \le
     \\ \subtract{ 2\times\Vsize{base} }{
-            (\cond{(\Vdecr{bad})=0}{0}{1})
+            (\cond{\var{bad}=0}{0}{1})
         }
     \\ \myparbox{\cuz{}
         Def of \myfnname{gen} \Eref{eq:def-gen},
         \Eref{eq:th-non-trivial-non-unary-tree-size-290}.}
 \end{gathered}
 \end{equation}
+\mypareq{eq:th-non-trivial-non-unary-tree-size-310}{%
+    \myfn{INST}{\var{bad}} \cuz \Eref{th:non-trivial-non-unary-tree-size-100},
+        \Eref{eq:th-non-trivial-non-unary-tree-size-300}.
+        \linebreak This is contrary to
+    \Eref{eq:th-non-trivial-non-unary-tree-size-110}, which shows the
+    reductio from
+    \Eref{eq:th-non-trivial-non-unary-tree-size-110}--%
+    \Eref{eq:th-non-trivial-non-unary-tree-size-120} to
+    \Eref{eq:th-non-trivial-non-unary-tree-size-310}.
+}
+With \Eref{eq:th-non-trivial-non-unary-tree-size-310}
+we have this proof.
+\myqed
 \end{proof}
 
 \begin{theorem}[Non-unary Tree Size]
