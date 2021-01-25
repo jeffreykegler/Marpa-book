@@ -924,7 +924,7 @@ will usually be a waste of time.}
     LaTeX comment following this TODO.}
 % TODO for each chapter
 % 1.) Change captialization of theorems, lemmas.
-% 2.) \Thend after each theorem, lemma statement.
+% 2.) \thEnd after each theorem, lemma statement.
 % 3.) Convert theorems to lemmas, as appropriate.
 % 4.) Replace subtraction of one with \decr{}.
 
@@ -2232,8 +2232,8 @@ That is,
 \[
 \forall\; \var{base} \in \Vpowerset{nodes} :
 \forall\; \Vnat{N} :
-\myfn{gen}{\var{N},\var{base}} \subseteq
-    \myfn{DP}{\Vdecr{N},\var{base}}.
+\myfn{gen}{\var{N}+1,\var{base}} \subseteq
+    \myfn{DP}{\var{N},\var{base}}.
     \quad \dispEnd
 \]
 \end{lemma}
@@ -2668,27 +2668,6 @@ That is,
 \myqed
 \end{proof}
 
-\begin{lemma}[Generation Predecessor Size]
-\label{lem:generation-predecessor-size}
-Every generation is more than twice the size
-of the successor generation with the same base.
-That is,
-\begin{equation}
-\label{eq:lem-generation-size-050}
-\begin{gathered}
-     \forall\; \Vnat{N} : \forall\; \var{base} \in \Vpowerset{nodes} :
-     \\ \size{\myfn{gen}{\Vdecr{N},\var{base}}} \ge
-     2 \times \size{\myfn{gen}{\var{N},\var{base}}}.
-     \quad \thEnd
-\end{gathered}
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-\todo{Finish this proof.}
-\myqed
-\end{proof}
-
 \section{Non-unary tree size}
 
 \begin{definition}[Non-unary tree]
@@ -2698,6 +2677,78 @@ out-degree of 1.
 In other words, in a non-unary tree, every node is either a leaf or has
 two or more child nodes.
 \end{definition}
+
+\begin{lemma}[Surface--Parents Ratio]
+\label{lem:surface-parents-ratio}
+For any subset of nodes of from a non-unary tree,
+its surface is at least twice the size of
+its set of direct parents.
+That is, if \var{tree} is non-unary,
+\[
+    \forall\; \var{ndset} \in \Vpowerset{nodes} :
+    \size{\myfn{Surface}{\var{ndset}}} >
+        2 \times
+        \size{\myfn{DP}{\var{ndset}}}.
+        \quad \thEnd
+\]
+\end{lemma}
+
+\begin{proof}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\begin{lemma}[Generation Predecessor Size]
+\label{lem:generation-predecessor-size}
+For the nodes of a non-unary tree,
+Every generation of a node set
+is more than twice the size
+of the successor generation with the same base.
+That is, if \var{tree} is non-unary,
+\begin{equation}
+\label{eq:lem-generation-predecessor-size-050}
+\begin{gathered}
+     \forall\; \Vnat{N} : \forall\; \var{base} \in \Vpowerset{nodes} :
+     \\ \size{\myfn{gen}{\var{N},\var{base}}} \ge
+     2 \times \size{\myfn{gen}{\var{N}+1,\var{base}}}.
+     \quad \thEnd
+\end{gathered}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+The proof is direct.
+Let \var{base} be an arbitrary subset of the nodes of
+an arbitrary non-unary tree,
+and let \var{N} be an arbitrary natural number.
+Then
+\mypareq{eq:lem-generation-predecessor-size-100}{%
+    $\size{\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}} \ge
+        2 \times
+        \size{\myfn{DP}{\myfn{Anc}{\var{N},\var{base}}}}$
+    \bcuz{} \longLmref{Surface--Parents ratio}{surface-parents-ratio}.
+}
+\mypareq{eq:lem-generation-predecessor-size-110}{%
+    $\myfn{gen}{\var{N}+1,\var{base}} \subseteq
+        \myfn{DP}{\var{N},\var{base}}$
+    \bcuz{} \longLmref{Direct Parent Generation Containment}
+        {direct-parent-generation-containment}.
+}
+\mypareq{eq:lem-generation-predecessor-size-120}{%
+    $\size{\myfn{DP}{\var{N},\var{base}}} \ge
+        \size{\myfn{gen}{\var{N}+1,\var{base}}}$
+    \bcuz{} \Eref{eq:lem-generation-predecessor-size-110}.
+}
+\mypareq{eq:lem-generation-predecessor-size-130}{%
+    $\size{\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}} \ge
+        2 \times
+        \size{\myfn{gen}{\myfn{Anc}{\var{N}+1,\var{base}}}}$
+    \bcuz{} \Eref{eq:lem-generation-predecessor-size-100},
+        \Eref{eq:lem-generation-predecessor-size-120}.
+}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
 
 \begin{theorem}[Non-trivial Non-unary Tree Size]
 \label{th:non-trivial-non-unary-tree-size}
