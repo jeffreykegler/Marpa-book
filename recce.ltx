@@ -2271,7 +2271,7 @@ $\myfn{gen}{\var{N}+1,\var{base}} =
     \bcuz{} \Eref{lem:direct-parent-generation-containment-110},
         \Eref{lem:direct-parent-generation-containment-120}.
 }
-The theorem is the universal generalization of 
+The theorem is the universal generalization of
 \Eref{lem:direct-parent-generation-containment-130} for \var{N}
 and \var{base}.
 \myqed
@@ -2281,9 +2281,68 @@ and \var{base}.
 \label{lem:generation-disjointness}
 Every pair of generations with different levels
 and the same base is disjoint.
-\todo{State and prove this theorem}
-\dispEnd
+That is,
+\begin{equation}
+\nonumber
+\begin{gathered}
+    \forall\;\Vnat{a} :
+    \forall\;\Vnat{b} :
+    \forall\;\var{base}\in\Vpowerset{base} :
+    \\ \var{a} \ne \var{b} \implies
+    \myfn{gen}{\var{a},\var{base}} \cap \myfn{gen}{\var{b},\var{base}} = \emptyset.
+    \quad \thEnd
+\end{gathered}
+\end{equation}
 \end{lemma}
+
+\begin{proof}
+The proof is by reductio.
+\begin{gather}
+\label{eq:lem-generation-disjointness-100}
+    \var{lo} \ne \var{hi}
+\\ \label{eq:lem-generation-disjointness-110}
+     \land\; \myfn{gen}{\var{lo},\var{base}} \cap \myfn{gen}{\var{hi},\var{base}} \ne \emptyset.
+\\ \nonumber
+    \because \text{AF reductio.
+        New free \Vnat{lo}, \Vnat{hi}.
+        New free $\var{base} \in \Vpowerset{nodes}$.}
+\end{gather}
+We need to choose one of the two variables, \var{lo} and \var{hi},
+to be first in numeric order.
+Their uses so far have been symmetric, so that we may assume
+\mypareq{eq:lem-generation-disjointness-120}{%
+     $\var{lo} < \var{hi}$ \cuz \text{WLOG}.
+}
+\mypareq{eq:lem-generation-disjointness-150}{%
+    $\exists\; \var{nd} : \var{nd} \in \ \myfn{gen}{\var{lo},\var{base}}
+        \land \var{nd} \in \ \myfn{gen}{\var{hi},\var{base}}$
+    \bcuz{} \Eref{eq:lem-generation-disjointness-110}.
+}
+\begin{gather}
+\label{eq:lem-generation-disjointness-160}
+    \var{nd} \in \ \myfn{gen}{\var{lo},\var{base}}
+\\ \label{eq:lem-generation-disjointness-170}
+        \land\; \var{nd} \in \ \myfn{gen}{\var{hi},\var{base}}
+\\ \nonumber
+    \text{\cuz{} \Eref{eq:lem-generation-disjointness-150}, EI of \var{nd}.}
+\end{gather}
+\mypareq{eq:lem-generation-disjointness-180}{%
+    $\var{nd} \in \ \myfn{Anc}{\var{lo},\var{base}}$
+        \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+            \Eref{eq:lem-generation-disjointness-160}.
+}
+\mypareq{eq:lem-generation-disjointness-190}{%
+     $\var{lo} \le \Vdecr{hi}$ \cuz{} \Eref{eq:lem-generation-disjointness-120}.
+}
+\mypareq{eq:lem-generation-disjointness-200}{%
+    $\var{nd} \in \ \myfn{Anc}{\Vdecr{hi},\var{base}}$
+    \bcuz{} \longLmref{Ancestry monotonicity}{ancestry-monotonicity},
+            \Eref{eq:lem-generation-disjointness-180},
+            \Eref{eq:lem-generation-disjointness-190}.
+}
+\todo{Prove this theorem}
+\myqed
+\end{proof}
 
 \begin{lemma}[Generation Coverage]
 \label{lem:generation-coverage}
