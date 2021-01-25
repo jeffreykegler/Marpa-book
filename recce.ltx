@@ -2229,29 +2229,51 @@ The generation for a level and base is a subset
 of the direct parents of the kernel of the ancestry with that
 level and base.
 That is,
-\[
+\begin{equation}
+\begin{gathered}
 \forall\; \var{base} \in \Vpowerset{nodes} :
-\forall\; \Vnat{N} :
-\myfn{gen}{\var{N}+1,\var{base}} \subseteq
+    \forall\; \Vnat{N} :
+\\ \myfn{gen}{\var{N}+1,\var{base}} \subseteq
     \myfn{DP}{\var{N},\var{base}}.
-    \quad \dispEnd
-\]
+    \quad \thEnd
+\end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
-\todo{Introduce vars}
+Let \var{N} be an arbitrary natural number,
+and let \var{base} be an arbitrary subset of \var{nodes}.
 \mypareq{lem:direct-parent-generation-containment-100}{%
 $\myfn{gen}{\var{N}+1,\var{base}} =
-    \myfn{Anc}{\var{N}+1,\var{base}} - \myfn{Anc}{\var{N},\var{base}}$
+    \subtract{\myfn{Anc}{\var{N}+1,\var{base}} }{ \myfn{Anc}{\var{N},\var{base}}}$
         \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \mypareq{lem:direct-parent-generation-containment-110}{%
-    $\myfn{Anc}{\var{N}+1,\var{base}} =
-        \myfn{Anc}{\var{N},\var{base}}
-            \cup\; \bigfn{DP}{\myfn{Anc}{\var{N},\var{base}}}$
-    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc}.
+    $\myfn{gen}{\var{N}+1,\var{base}} =
+        \subtract{\left( \bigfn{Anc}{\var{N},\var{base}}
+            \cup\; \bigfn{DP}{\myfn{Anc}{\var{N},\var{base}}}
+        \right) }{
+            \bigfn{Anc}{\var{N},\var{base}}
+        }$
+    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+        \Eref{lem:direct-parent-generation-containment-100}.
 }
-\todo{Finish this proof}
+\mypareq{lem:direct-parent-generation-containment-120}{%
+    $\forall\; \var{A} \in \Vpowerset{nodes} :
+    \forall\; \var{B} \in \Vpowerset{nodes} :$
+    \linebreak $\left( \subtract{(\var{A}\cup\var{B})}{\var{A}} \right)
+        \subseteq \var{B}$
+    \bcuz{} fact of set theory.
+}
+\mypareq{lem:direct-parent-generation-containment-130}{%
+    $\myfn{gen}{\var{N}+1,\var{base}} \subseteq
+            \bigfn{DP}{\var{N},\var{base}}$
+    \bcuz{} \Eref{lem:direct-parent-generation-containment-110},
+        \Eref{lem:direct-parent-generation-containment-120}.
+}
+The theorem is the universal generalization of 
+\Eref{lem:direct-parent-generation-containment-130} for \var{N}
+and \var{base}.
 \myqed
 \end{proof}
 
