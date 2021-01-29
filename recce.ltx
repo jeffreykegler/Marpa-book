@@ -1440,10 +1440,9 @@ $\powerset{\var{A}}$ is the powerset of the set \var{A}.
 The abbreviation ``iff'' is used for ``if and only if''.
 
 In keeping with our avoidance of sub- and superscripts,
-our preferred notation for the union of the set \var{S}
-is $\bigcup \var{S}$.
-By analogy, we write $\sum \var{S}$ to indicate the sum
-of the elements of \var{S}.
+our preferred notations
+are $\bigcup \var{S}$ for the union of the elements of the set \var{S},
+and $\bigcap \var{S}$ for the intersection of the elements of the set \var{S}.
 
 Logical quantifiers are always guarded.
 The guard set may be specified explicitly
@@ -1471,6 +1470,45 @@ then \var{j} is the quantified variable in
 \[
 \forall \; \var{lo} \le \Vnat{j} \le \var{hi} : \myfn{P}{\var{j}}.
 \]
+
+By analogy with our notation for set union and intersection,
+we write $\sum \var{T}$ to indicate the sum
+of the elements of the tuple \var{T}.
+For writing sums, we often use a tuple constructor,
+$\tuple{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
+where
+\Vmyfn{cond}{ix} is a guard expression,
+and
+\Vmyfn{P}{ix} is an expression which represents the
+value of the \var{ix}'th element of tuple.
+For example, where naturals \var{lo}
+and \var{hi}, and the function \var{f},
+are bound in context,
+\[
+    \sum \tuple{ \var{lo} \le \var{ix} \le \var{hi} : \Vmyfn{f}{ix} }
+    = \Vmyfn{f}{lo} + 
+     \Vmyfn{f}{\var{lo}+1} + \ldots + \Vmyfn{f}{hi},
+\]
+\[
+    \text{and } \sum \tuple{ \var{lo} \le \var{ix} : \Vmyfn{f}{ix} }
+    = \Vmyfn{f}{lo} + \Vmyfn{f}{\var{lo}+1} + \ldots
+\]
+Where the countable set \var{set}
+and the function \var{f} are bound in context,
+then we may write
+\[
+    \tuple{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
+\]
+to represent a tuple
+that contains \Vmyfn{f}{x} for every $\var{x} \in \var{set}$,
+and that follows some well-ordering of \var{set}.
+Accordingly,
+\[
+    \sum \tuple{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
+\]
+would be the sum,
+for all the elements $\var{x} \in \var{set}$,
+of the values \Vmyfn{f}{x}.
 
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
@@ -2791,63 +2829,77 @@ That is, if \var{tree} is non-unary,
 \end{lemma}
 
 \begin{proof}
-The proof is by minimal counter-example.
+The proof is direct.
 Let
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-150}
-\begin{gathered}
-    \Vmyfn{INST}{ex} \defined
-        \forall\; \var{ndset} \in \Vpowerset{nodes} :
-    \\ \var{ex} = \size{\myfn{DP}{\var{ndset}}}
-    \land \size{\myfn{Surface}{\var{ndset}}} \ge
-        2 \times \var{ex}
-    \\ \because \text{\Eref{eq:lem-surface-parents-ratio-050} with parameter \var{ex}.}
-\end{gathered}
+    \Vmyfn{children}{parent} \defined
+        \set{
+            \begin{gathered}
+            \var{child} \in \var{nodes} : 
+            \\  \tuple{\var{parent},\var{child}} \in \var{edges}
+            \end{gathered}
+        }
 \end{equation}
-We assume there is a minimal \var{bad} such that
-\Vmyfn{INST}{bad} is false:
-\begin{gather}
-\label{eq:lem-surface-parents-ratio-160}
-    \neg \Vmyfn{INST}{bad}
-\\ \label{eq:lem-surface-parents-ratio-165}
-    \land\; \forall\; \Vnat{i} < \var{bad} : \Vmyfn{INST}{i}
-\\ \nonumber
-    \because \text{new free \var{bad}.}
-\end{gather}
-Every direct parent node of \var{ndset} must have at least one
+By the definition of direct parent,
+every direct parent node of \var{ndset} must have at least one
 child:
-\begin{equation}
-\label{eq:lem-surface-parents-ratio-170}
-\begin{gathered}
-    \size{
-        \set{ \begin{gathered}
-            \var{child} \in \var{nodes} :
-            \\ \tuple{\var{parent},\var{child}} \in \var{edges}
-            \\ \land\; \var{parent} \in \myfn{DP}{\var{ndset}}
-        \end{gathered} }
-    } \ge 1
-    \\ \because \text{Def of direct parent \Eref{eq:def-dp}.}
-\end{gathered}
-\end{equation}
+\mypareq{eq:lem-surface-parents-ratio-170}{%
+    $\forall\; \var{parent} \in \Vmyfn{DP}{ndset} :
+                 \size{\Vmyfn{children}{parent}} \ge 1$
+    \bcuz{} \Eref{eq:def-dp}.
+}
 In fact, since by \Eref{eq:lem-surface-parents-ratio-170}
 none of the direct parents of \var{ndset} are leaf nodes,
 and since \var{tree} is a non-unary tree,
 every direct parent node of \var{ndset} must have at least two
 children:
-\begin{equation}
-\label{eq:lem-surface-parents-ratio-180}
-\begin{gathered}
-    \size{
-        \set{ \begin{gathered}
-            \var{child} \in \var{nodes} :
-            \\ \tuple{\var{parent},\var{child}} \in \var{edges}
-            \\ \land\; \var{parent} \in \myfn{DP}{\var{ndset}}
-        \end{gathered} }
-    } \ge 2
-    \\ \because \longDfref{Non-unary Tree}{def:non-unary-tree},
+\mypareq{eq:lem-surface-parents-ratio-180}{%
+    $\forall\; \var{parent} \in \Vmyfn{DP}{ndset} :
+                 \size{\Vmyfn{children}{parent}} \ge 2$
+    \bcuz{} \longDfref{Non-unary Tree}{def:non-unary-tree},
             \Eref{eq:lem-surface-parents-ratio-170}.
+}
+Recall from the definition of a tree that
+every node has at most one parent:
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-190}
+\begin{gathered}
+    \forall\; \var{parent1} \in \var{nodes} :
+    \forall\; \var{parent2} \in \var{nodes} :
+    \forall\; \var{child} \in \var{nodes} :
+    \\ \tuple{\var{parent1},\var{child}} \in \var{edges}
+    \land \tuple{\var{parent2},\var{child}} \in \var{edges}
+    \\ \implies \var{parent1} = \var{parent2}
+    \\ \because \text{Def of tree, graph theory.}
 \end{gathered}
 \end{equation}
+Therefore every parent's set of children is disjoint
+from every other parent's set of children:
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-200}
+\begin{gathered}
+    \forall\; \var{parent1} \in \var{nodes} :
+    \forall\; \var{parent2} \in \var{nodes} :
+    \\ \Vmyfn{children}{parent1}
+    \cap \Vmyfn{children}{parent1} = \emptyset
+    \\ \because \Eref{eq:lem-surface-parents-ratio-190}.
+\end{gathered}
+\end{equation}
+It follows that, for any subset of nodes \var{ndset},
+the sum of the cardinalities of the sets of
+children of the elements of \var{ndset}
+is the same as the cardinality of union of the sets of
+children of the elements of \var{ndset}:
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-210}
+\begin{gathered}
+\sum_{\var{parent} \in \var{ndset} } \size{\Vmyfn{children}{parent}}
+\\ =\; \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \var{ndset} }}.
+\\ \because \Eref{eq:lem-surface-parents-ratio-200}.
+\end{gathered}
+\end{equation}
+\todo{Fix the above.}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
