@@ -1913,6 +1913,7 @@ A tree is \dfn{trivial} iff it has zero nodes.
 A tree is \dfn{non-trivial} iff it is not trivial.
 \dispEnd
 \end{definition}
+\todo{Do I use ``trivial'' tree definition?}
 
 Definition \Dfref{def:tree} restates the standard definition,
 with a clarification.
@@ -1922,17 +1923,17 @@ we follow those who do.
 
 We now proceed to define
 ``non-unary trees'',
-and to deduce their
-properties that we will find useful.
+and to deduce such of their
+properties as will be useful for us.
 This chapter is a new context scope,
 which contains
 \begin{equation}
 \label{eq:non-unary-chap-context-tree}
 \var{tree} = \tuple{\var{nodes},\var{edges}}.
 \end{equation}
-\var{tree} is a finite arbitary ``context tree''.
 
 In \Eref{eq:non-unary-chap-context-tree},
+\var{tree} is a finite arbitary ``context tree'',
 \var{nodes} is a set of ``nodes'',
 and $\var{edges} \in \var{nodes}\times\var{nodes}$
 is a set of ``edges''.
@@ -1967,15 +1968,17 @@ Note that by \Eref{eq:def-paths},
 every sequence of nodes of length 1 is a path, vacuously.
 
 Where \var{nds} is a set of nodes,
-let \deffn{DP}{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}
-be the set of direct parents of \var{nds}, so that
+let \deffn{NewParents}{\powerset{\var{nodes}}}{\powerset{\var{nodes}}}
+be the set of the direct parents of \var{nds} that are not already in \var{nds},
+so that
 \begin{equation}
-\label{eq:def-dp}
-    \myfn{DP}{\var{ndset}} = \set{
+\label{eq:def-new-parents}
+    \myfn{NewParents}{\var{ndset}} = \set{
         \begin{gathered}
             \var{parent} \in \var{nodes} :
-            \\ \exists\; \var{child} \in \var{ndset} :
-                    \tuple{\var{parent},\var{child}} \in \var{edges}
+                \exists\; \var{child} \in \var{ndset} :
+            \\ \tuple{\var{parent},\var{child}} \in \var{edges}
+            \\ \land\; \var{parents} \notin \var{ndset}
         \end{gathered}
     }.
 \end{equation}
@@ -1988,7 +1991,7 @@ be such that
     \left(\begin{gathered}
     \var{N}=0 \condOp \var{base} :
     \\ \myfn{Anc}{\Vdecr{N},\var{base}}
-            \cup\; \bigfn{DP}{\myfn{Anc}{\Vdecr{N},\var{base}}}
+            \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \end{gathered}\right).
 \end{equation}
 \mypareq{eq:def-n-level-ancestry}{%
@@ -2897,12 +2900,12 @@ children of the elements of \var{ndset}:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-210}
 \begin{gathered}
-\size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \var{ndset} }}.
+\forall\; \var{ndset} \in \Vpowerset{nodes} :
+\\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \var{ndset} }}.
 \\ =\; \sum \tuple{\var{parent} \in \var{ndset} : \size{\Vmyfn{children}{parent}} }
 \\ \because \Eref{eq:lem-surface-parents-ratio-200}.
 \end{gathered}
 \end{equation}
-\todo{Fix the above.}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
