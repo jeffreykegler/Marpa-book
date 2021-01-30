@@ -1991,7 +1991,7 @@ be such that
     \left(\begin{gathered}
     \var{N}=0 \condOp \var{base} :
     \\ \myfn{Anc}{\Vdecr{N},\var{base}}
-            \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\var{base}}}
+    \\ \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \end{gathered}\right).
 \end{equation}
 \mypareq{eq:def-n-level-ancestry}{%
@@ -2242,11 +2242,28 @@ That is,
 
 \section{Tree generations}
 
-\todo{define ``kernel''}
+For the purpose of this chapter, we define the ``predecessor'' \var{pred}
+of an ancestry \var{succ} such that \var{pred} is the ancestry with the same base
+as \var{succ},
+but whose level is the predecessor of the level of \var{a2}.
+The predecessor of a level 0 ancestry is the empty set.
+An ancestry \var{succ} is the ``successor'' of another ancestry \var{pred}
+iff \var{pred} is the predecessor ancestry of \var{succ}.
+Symbolically, where $\var{N} \in \naturals$ and $\var{base} \in \Vpowerset{nodes}$,
+\begin{equation}
+\begin{gathered}
+    \\ \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\var{base}}} \defined
+    (\cond{\var{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\var{base}}})
+    \\ \text{and }
+        \myfn{Successor}{\myfn{Anc}{\var{N},\var{base}}} \defined \myfn{Anc}{\var{N}+1,\var{base}}.
+\end{gathered}
+\end{equation}
+
 Now consider a ``generation'', the set of nodes
 added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
 Let \deffn{gen}{\naturals\times\Vpowerset{A}}{\Vpowerset{A}}
-be the function whose value is the \var{N}'th generation of \var{tree},
+be the function whose value is the \var{N}'th generation of \var{tree}
+from \var{base},
 such that
 \begin{equation}
 \label{eq:def-gen}
@@ -2264,57 +2281,23 @@ such that
     Or eliminate ``proper'' ancestries?
 }
 
-\begin{lemma}[Direct Parent Generation Containment]
-\label{lem:direct-parent-generation-containment}
-The generation for a level and base is a subset
-of the direct parents of the kernel of the ancestry with that
-level and base.
+\begin{lemma}[Generation New Parent Equivalence]
+\label{lem:generation-new-parent-equivalence}
+The generation for an ancestry is equivalent to
+the new parents of the predecessor of that ancestry.
 That is,
 \begin{equation}
 \begin{gathered}
 \forall\; \var{base} \in \Vpowerset{nodes} :
     \forall\; \Vnat{N} :
-\\ \myfn{gen}{\var{N}+1,\var{base}} \subseteq
-    \myfn{DP}{\var{N},\var{base}}.
+\\ \myfn{gen}{\var{N}+1,\var{base}} =
+    \myfn{New-Parent}{\var{N},\var{base}}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-Let \var{N} be an arbitrary natural number,
-and let \var{base} be an arbitrary subset of \var{nodes}.
-\mypareq{lem:direct-parent-generation-containment-100}{%
-$\myfn{gen}{\var{N}+1,\var{base}} =
-    \subtract{\myfn{Anc}{\var{N}+1,\var{base}} }{ \myfn{Anc}{\var{N},\var{base}}}$
-        \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen}.
-}
-\mypareq{lem:direct-parent-generation-containment-110}{%
-    $\myfn{gen}{\var{N}+1,\var{base}} =
-        \subtract{\left( \bigfn{Anc}{\var{N},\var{base}}
-            \cup\; \bigfn{DP}{\myfn{Anc}{\var{N},\var{base}}}
-        \right) }{
-            \bigfn{Anc}{\var{N},\var{base}}
-        }$
-    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
-        \Eref{lem:direct-parent-generation-containment-100}.
-}
-\mypareq{lem:direct-parent-generation-containment-120}{%
-    $\forall\; \var{A} \in \Vpowerset{nodes} :
-    \forall\; \var{B} \in \Vpowerset{nodes} :$
-    \linebreak $\left( \subtract{(\var{A}\cup\var{B})}{\var{A}} \right)
-        \subseteq \var{B}$
-    \bcuz{} fact of set theory.
-}
-\mypareq{lem:direct-parent-generation-containment-130}{%
-    $\myfn{gen}{\var{N}+1,\var{base}} \subseteq
-            \bigfn{DP}{\var{N},\var{base}}$
-    \bcuz{} \Eref{lem:direct-parent-generation-containment-110},
-        \Eref{lem:direct-parent-generation-containment-120}.
-}
-The theorem is the universal generalization of
-\Eref{lem:direct-parent-generation-containment-130} for \var{N}
-and \var{base}.
 \myqed
 \end{proof}
 
@@ -2533,55 +2516,50 @@ is never an element of the surface.
 
 \begin{lemma}[Surface Disjointness]
 \label{lem:surface-disjointness}
-If the level of an ancestry is greater than zero,
-then its kernel and its surface are disjoint.
-For the purpose of this lemma,
-the ``kernel'' of an \var{N}-level ancestry
-means
-the ancestry of \Vdecr{N} level with same base.
+The predecessor and the surface of an ancestry are disjoint.
 Restated as a formula,
 \begin{gather}
 \label{eq:lem-surface-disjointness-040}
     \forall\;\var{base} \in \Vpowerset{nodes} :
         \forall\;\Vnat{N} :
-\\ \label{eq:lem-surface-disjointness-050}
-    \var{N} \ge 1
-\\ \nonumber \implies
 \\ \label{eq:lem-surface-disjointness-060}
     \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
-        \cap \myfn{Anc}{\Vdecr{N},\var{base}} = \emptyset.
+        \cap \myfn{Predecessor}{\myfn{Anc}{\var{N},\var{base}}} = \emptyset.
         \quad \dispEnd
 \end{gather}
 \end{lemma}
 
 \begin{proof}
-The proof strategy is to first assume the hypothesis
-\Eref{eq:lem-surface-disjointness-050}
-to show the consequent
-\Eref{eq:lem-surface-disjointness-060},
-then to use universal generalization
-to show the theorem.
-\mypareq{eq:lem-surface-disjointness-080}{%
+\todo{remove references to ``kernel''}
+\todo{Redo to deal with definition of ``predecessor'' for level 0
+ancestry.}
+The proof is by reductio.
+\mypareq{eq:lem-surface-disjointness-070}{%
    $\var{N} \in \naturals \land \var{base} \in \Vpowerset{nodes}$.
    New free arbitrary \var{N}, \var{base}.
 }
-\mypareq{eq:lem-surface-disjointness-090}{%
-    $\Vnat{N} \ge 1$ \cuz{}
-    \Eref{eq:lem-surface-disjointness-050},
-    AF implication.
-}
-The consequent of the implication is shown by reductio.
+For convenience,
+\begin{gather}
+\label{eq:lem-surface-disjointness-080}
+    \var{predAnc} = \in \myfn{Surface}{\myfn{Anc}{\Vdecr{N},\var{base}}}
+\\ \label{eq:lem-surface-disjointness-090}
+    \var{thisAnc} = \in \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+\\ \nonumber
+    \because \text{New $\var{predAnc} \in \Vpowerset{nodes}$,
+        $\var{thisAnc} \in \Vpowerset{nodes}$,
+        for convenience.}
+\end{gather}
 For the reductio,
 we assume that there is a node which is an element of
-both the surface and the kernel:
+both the surface and the predecessor:
 \begin{gather}
 \label{eq:lem-surface-disjointness-100}
-    \var{nd} \in \myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}
+    \var{nd} \in \myfn{Surface}{\var{thisAnc}}
 \\ \label{eq:lem-surface-disjointness-110}
-    \land\; \var{nd} \in \myfn{Anc}{\Vdecr{N},\var{base}}
+    \land\; \var{nd} \in \var{predAnc}
 \\ \nonumber
     \myparbox{\cuz{}
-        \Eref{eq:lem-surface-disjointness-090}, AF reductio.
+        AF reductio.
         New free $\var{nd} \in \var{nodes}$.
     }
 \end{gather}
@@ -2668,7 +2646,7 @@ from which we conclude the reductio, so that
             \Eref{eq:lem-surface-disjointness-290}.
 }
 Recall that \var{N} and \var{base} were chosen abitrarily
-\Eref{eq:lem-surface-disjointness-080}.
+\Eref{eq:lem-surface-disjointness-070}.
 The theorem is the universal generalization of
 \var{N} and \var{base} in \Eref{eq:lem-surface-disjointness-300}.
 \myqed
@@ -2826,7 +2804,7 @@ That is, if \var{tree} is non-unary,
     \forall\; \var{ndset} \in \Vpowerset{nodes} :
     \size{\myfn{Surface}{\var{ndset}}} \ge
         2 \times
-        \size{\myfn{DP}{\var{ndset}}}.
+        \size{\myfn{New-Parents}{\var{ndset}}}.
         \quad \thEnd
 \end{equation}
 \end{lemma}
@@ -2844,13 +2822,13 @@ Let
             \end{gathered}
         }
 \end{equation}
-By the definition of direct parent,
-every direct parent node of \var{ndset} must have at least one
-child:
+By the definition,
+every node in \Vmyfn{New-Parents}{ndset} must have at least one
+childn:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
-    $\forall\; \var{parent} \in \Vmyfn{DP}{ndset} :
+    $\forall\; \var{parent} \in \Vmyfn{New-Parents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} \Eref{eq:def-dp}.
+    \bcuz{} \Eref{eq:def-new-parents}.
 }
 In fact, since by \Eref{eq:lem-surface-parents-ratio-170}
 none of the direct parents of \var{ndset} are leaf nodes,
@@ -2858,7 +2836,7 @@ and since \var{tree} is a non-unary tree,
 every direct parent node of \var{ndset} must have at least two
 children:
 \mypareq{eq:lem-surface-parents-ratio-180}{%
-    $\forall\; \var{parent} \in \Vmyfn{DP}{ndset} :
+    $\forall\; \var{parent} \in \Vmyfn{New-Parents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 2$
     \bcuz{} \longDfref{Non-unary Tree}{def:non-unary-tree},
             \Eref{eq:lem-surface-parents-ratio-170}.
@@ -2937,20 +2915,21 @@ Then
 \mypareq{eq:lem-generation-predecessor-size-100}{%
     $\size{\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}} \ge
         2 \times
-        \size{\myfn{DP}{\myfn{Anc}{\var{N},\var{base}}}}$
+        \size{\myfn{New-Parents}{\myfn{Anc}{\var{N},\var{base}}}}$
     \bcuz{} \longLmref{Surface--Parents ratio}{surface-parents-ratio}.
 }
 \mypareq{eq:lem-generation-predecessor-size-110}{%
-    $\myfn{gen}{\var{N}+1,\var{base}} \subseteq
-        \myfn{DP}{\var{N},\var{base}}$
-    \bcuz{} \longLmref{Direct Parent Generation Containment}
-        {direct-parent-generation-containment}.
+    $\myfn{gen}{\var{N}+1,\var{base}} =
+        \myfn{New-Parent}{\var{N},\var{base}}$
+    \bcuz{} \longLmref{Generation New Parent Equivalence}
+        {generation-new-parent-equivalence}.
 }
 \mypareq{eq:lem-generation-predecessor-size-120}{%
-    $\size{\myfn{DP}{\var{N},\var{base}}} \ge
+    $\size{\myfn{New-Parent}{\var{N},\var{base}}} =
         \size{\myfn{gen}{\var{N}+1,\var{base}}}$
     \bcuz{} \Eref{eq:lem-generation-predecessor-size-110}.
 }
+\todo{Fix after here, eliminate DP()}
 \mypareq{eq:lem-generation-predecessor-size-130}{%
     $\size{\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}} \ge
         2 \times
