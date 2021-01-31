@@ -288,12 +288,13 @@
 
 \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
 \newcommand{\Vdecr}[1]{\decr{\var{#1}}}
-\newcommand{\seq}[1]{{\left[ #1 \right]} }
+\newcommand{\Tseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]}}
+\newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
@@ -311,7 +312,7 @@
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\var{#1}_{\var{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\var{#1}_{\set{\var{#2}}}}}
-\newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{\seq{\var{#2}}}}}
+\newcommand{\Tvarseq}[2]{\ensuremath{\var{#1}_{\Tseq{\var{#2}}}}}
 
 \newcommand{\eim}[1]{\ensuremath{#1_\type{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\type{ES}}}
@@ -1376,7 +1377,7 @@ $\naturals$ is a type.
 \hline
 $\var{X}_\var{T}$ & The variable \var{X} of type \type{T} \\
 $\var{agg-one}_\set{\var{T}}$ & The variable \var{set-one} of type ``set of \type{T}'' \\
-$\var{agg-one}_\seq{\var{T}}$ & The variable \var{seq-one} of type ``sequence of \type{T}'' \\
+$\var{agg-one}_\Tseq{\var{T}}$ & The variable \var{seq-one} of type ``sequence of \type{T}'' \\
 \type{SYM} & The type for a symbol \\
 \type{STR} & The type for a string \\
 \type{EIM} & The type for an Earley item \\
@@ -1471,40 +1472,42 @@ then \var{j} is the quantified variable in
 \forall \; \var{lo} \le \Vnat{j} \le \var{hi} : \myfn{P}{\var{j}}.
 \]
 
+\todo{Move stuff about sequences to one place}
+\todo{Mention tuple vs. sequence distinction}
 By analogy with our notation for set union and intersection,
-we write $\sum \var{T}$ to indicate the sum
-of the elements of the tuple \var{T}.
-For writing sums, we often use a tuple constructor,
-$\tuple{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
+we write $\sum \var{seq}$ to indicate the sum
+of the elements of the sequence \var{seq}.
+For writing sums, we often use a sequence constructor,
+$\seq{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
 where
 \Vmyfn{cond}{ix} is a guard expression,
 and
 \Vmyfn{P}{ix} is an expression which represents the
-value of the \var{ix}'th element of tuple.
+value of the \var{ix}'th element of a sequence or a tuple.
 For example, where naturals \var{lo}
 and \var{hi}, and the function \var{f},
 are bound in context,
 \[
-    \sum \tuple{ \var{lo} \le \var{ix} \le \var{hi} : \Vmyfn{f}{ix} }
+    \sum \seq{ \var{lo} \le \var{ix} \le \var{hi} : \Vmyfn{f}{ix} }
     = \Vmyfn{f}{lo} + 
      \Vmyfn{f}{\var{lo}+1} + \ldots + \Vmyfn{f}{hi},
 \]
 \[
-    \text{and } \sum \tuple{ \var{lo} \le \var{ix} : \Vmyfn{f}{ix} }
+    \text{and } \sum \seq{ \var{lo} \le \var{ix} : \Vmyfn{f}{ix} }
     = \Vmyfn{f}{lo} + \Vmyfn{f}{\var{lo}+1} + \ldots
 \]
 Where the countable set \var{set}
 and the function \var{f} are bound in context,
 then we may write
 \[
-    \tuple{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
+    \seq{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
 \]
-to represent a tuple
+to represent a sequence
 that contains \Vmyfn{f}{x} for every $\var{x} \in \var{set}$,
 and that follows some well-ordering of \var{set}.
 Accordingly,
 \[
-    \sum \tuple{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
+    \sum \seq{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
 \]
 would be the sum,
 for all the elements $\var{x} \in \var{set}$,
@@ -1994,6 +1997,41 @@ be such that
     \\ \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\var{base}}}
     \end{gathered}\right).
 \end{equation}
+
+An ancestry \var{pred}
+is the ``predecessor''
+of an ancestry \var{succ} iff \var{pred} is an ancestry with the same base
+as \var{succ},
+and the level of \var{pred} is the predecessor of the level of \var{succ}.
+The predecessor of a level 0 ancestry is the empty set.
+An ancestry \var{succ} is the ``successor'' of another ancestry \var{pred}
+iff \var{pred} is the predecessor ancestry of \var{succ}.
+Symbolically, where $\var{N} \in \naturals$ and $\var{base} \in \Vpowerset{nodes}$,
+\begin{equation}
+\begin{gathered}
+    \\ \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\var{base}}} \defined
+    (\cond{\var{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\var{base}}})
+    \\ \text{and }
+        \myfn{Successor}{\myfn{Anc}{\var{N},\var{base}}} \defined \myfn{Anc}{\var{N}+1,\var{base}}.
+\end{gathered}
+\end{equation}
+
+\begin{lemma}[Predecessor Parent Disjointness]
+\label{lem:predecessor-parent-disjointness}
+The predecessor and the new parents of an ancestry are disjoint.
+That is,
+\[
+    \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\var{base}}} \cap
+    \bigfn{NewParents}{\myfn{Anc}{\var{N},\var{base}}} = \emptyset.
+    \quad \thEnd
+\]
+\end{lemma}
+
+\begin{proof}
+\todo{Prove this}
+\myqed
+\end{proof}
+
 \mypareq{eq:def-n-level-ancestry}{%
     We say that a set \var{A} is an ``\var{N}-level ancestry with base \var{b}''
     iff $\var{A}=\myfn{Anc}{\var{N},\var{b}}$.
@@ -2242,23 +2280,6 @@ That is,
 
 \section{Tree generations}
 
-For the purpose of this chapter, we define the ``predecessor'' \var{pred}
-of an ancestry \var{succ} such that \var{pred} is the ancestry with the same base
-as \var{succ},
-but whose level is the predecessor of the level of \var{a2}.
-The predecessor of a level 0 ancestry is the empty set.
-An ancestry \var{succ} is the ``successor'' of another ancestry \var{pred}
-iff \var{pred} is the predecessor ancestry of \var{succ}.
-Symbolically, where $\var{N} \in \naturals$ and $\var{base} \in \Vpowerset{nodes}$,
-\begin{equation}
-\begin{gathered}
-    \\ \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\var{base}}} \defined
-    (\cond{\var{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\var{base}}})
-    \\ \text{and }
-        \myfn{Successor}{\myfn{Anc}{\var{N},\var{base}}} \defined \myfn{Anc}{\var{N}+1,\var{base}}.
-\end{gathered}
-\end{equation}
-
 Now consider a ``generation'', the set of nodes
 added to the set of ancestors of \var{leaves} at ancestry level \var{N}.
 Let \deffn{gen}{\naturals\times\Vpowerset{A}}{\Vpowerset{A}}
@@ -2291,7 +2312,7 @@ That is,
 \forall\; \var{base} \in \Vpowerset{nodes} :
     \forall\; \Vnat{N} :
 \\ \myfn{gen}{\var{N}+1,\var{base}} =
-    \myfn{New-Parent}{\var{N},\var{base}}.
+    \myfn{NewParents}{\var{N},\var{base}}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -2760,7 +2781,7 @@ That is, if \var{tree} is non-unary,
     \forall\; \var{ndset} \in \Vpowerset{nodes} :
     \size{\myfn{Surface}{\var{ndset}}} \ge
         2 \times
-        \size{\myfn{New-Parents}{\var{ndset}}}.
+        \size{\myfn{NewParents}{\var{ndset}}}.
         \quad \thEnd
 \end{equation}
 \end{lemma}
@@ -2779,10 +2800,10 @@ Let
         }
 \end{equation}
 By the definition,
-every node in \Vmyfn{New-Parents}{ndset} must have at least one
+every node in \Vmyfn{NewParents}{ndset} must have at least one
 childn:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
-    $\forall\; \var{parent} \in \Vmyfn{New-Parents}{ndset} :
+    $\forall\; \var{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
     \bcuz{} \Eref{eq:def-new-parents}.
 }
@@ -2792,7 +2813,7 @@ and since \var{tree} is a non-unary tree,
 every direct parent node of \var{ndset} must have at least two
 children:
 \mypareq{eq:lem-surface-parents-ratio-180}{%
-    $\forall\; \var{parent} \in \Vmyfn{New-Parents}{ndset} :
+    $\forall\; \var{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 2$
     \bcuz{} \longDfref{Non-unary Tree}{def:non-unary-tree},
             \Eref{eq:lem-surface-parents-ratio-170}.
@@ -2871,17 +2892,17 @@ Then
 \mypareq{eq:lem-generation-predecessor-size-100}{%
     $\size{\myfn{Surface}{\myfn{Anc}{\var{N},\var{base}}}} \ge
         2 \times
-        \size{\myfn{New-Parents}{\myfn{Anc}{\var{N},\var{base}}}}$
+        \size{\myfn{NewParents}{\myfn{Anc}{\var{N},\var{base}}}}$
     \bcuz{} \longLmref{Surface--Parents ratio}{surface-parents-ratio}.
 }
 \mypareq{eq:lem-generation-predecessor-size-110}{%
     $\myfn{gen}{\var{N}+1,\var{base}} =
-        \myfn{New-Parent}{\var{N},\var{base}}$
+        \myfn{NewParents}{\var{N},\var{base}}$
     \bcuz{} \longLmref{Generation New Parent Equivalence}
         {generation-new-parent-equivalence}.
 }
 \mypareq{eq:lem-generation-predecessor-size-120}{%
-    $\size{\myfn{New-Parent}{\var{N},\var{base}}} =
+    $\size{\myfn{NewParents}{\var{N},\var{base}}} =
         \size{\myfn{gen}{\var{N}+1,\var{base}}}$
     \bcuz{} \Eref{eq:lem-generation-predecessor-size-110}.
 }
