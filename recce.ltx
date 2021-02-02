@@ -1100,26 +1100,64 @@ we will break it down no further.\footnote{%
   \cite{Marpa-R2}.%
 }
 
+\Earley{} will refer to the Earley's original
+recognizer\cite{Earley1970}
+with zero characters of lookahead.
+\Leo{} will refer to Leo's revision of \Earley{}
+as described in~\cite{Leo1991}.
+\Marpa{} will refer to the recognizer described in
+this book, and implemented in
+\Rtwo~\cite{Marpa-R2}.
+
 In this book,
 a \dfn{function} is never an algorithm ---
 it always refers to the set theoretic notion.
 Algorithms are also referred to as \dfn{procedures}.
+The procedures which are major building blocks
+of \Marpa{} will be called \dfn{ops}.
+A second level of \Marpa{} building blocks will
+be called \dfn{sub-ops}.
+
+The building blocks of \Earley{} will be
+called \dfn{operations}.
+This overloads a term with a mathematical meaning
+but we feel that being able to follow Jay Earley's terminology in \cite{Earley1970}
+outweighs the risk of confusion.
 
 \section{Presentation of the deductive logic}
 
-The mathematical expressions in this book can be reduced to
+\todo{Check uses of phrases 'notation' and 'in notation'.
+    Replace with 'symbolically'?}
+In principle,
+the mathematical expressions in this book can be reduced to
 the basic operations of set theory (${\in}$ and ${\subseteq}$)
 and logic.
 Expressions in this book may be written \dfn{verbally} or
-in \dfn{notation}.
-We say that an expression is written ``verbally'' if it uses words
+\dfn{symbolically}.
+We say that a mathematical expression is verbal,
+or that it is written ``verbally'',
+if it uses words
 of the English language.
-We say that an expression is ``in notation'' if it uses mathematical
-symbols.
-An expression in notation is called a \dfn{formula}.
-For example, the expression ``six times seven equals forty-two'' is written
-verbally --- its equivalent as a formula is $6\times7=42$.
-Expressions may mix words and formulas.
+We say that a mathematical expression is ``symbolic'',
+or that it is written ``symbolically'',
+if it uses mathematical symbols.
+An symbolic expression is also called a \dfn{formula}.
+For example, the expression ``six times seven equals forty-two'' is verbal
+--- its symbolic equivalent is $6\times7=42$.
+
+Mathematical expressions may be mixed,
+that is, they may contain both symbolic and verbal subexpressions.
+The symbol or verbal character of a expression is that of its outermost
+subexpression.
+
+A mathematical expression is usually referred to simply as
+an ``expression''.
+The word ``equation'' usually refers to a displayed mathematical
+expression.
+This can be misleading, because the expression is usually not
+a ``equation'' in the traditional sense,
+but this usage is deeply embedded in the modern literature on mathematical
+typography.
 
 In this book, the word \dfn{sentence}
 refers to an expression with a boolean value,
@@ -1136,7 +1174,7 @@ and
 {\it p} is a page reference.
 Reference types are
 ``a'' (algorithm),
-``e'' (expression),
+``e'' (equation),
 ``S'' (section)
 ``L'' (a location within a section,
 where {\it n} is the section number),
@@ -1414,17 +1452,17 @@ will usually be a waste of time.}
 In this chapter we begin the deductive exposition,
 dealing with matters from preceding disciplines.
 Preceding disciplines to our discussion are
-set theory,
-logic,
-procedures and algorithms,
-graph theory,
-the analysis of algorithms
+set theory;
+logic;
+procedures and algorithms;
+graph theory;
+the analysis of algorithms;
 and parsing theory.
-This section includes considerations
-which are non-standard;
-which have conflicting or ambiguous standards;
-which differ from Halmos 1960~\cite{Halmos1960};
-or which go beyond the basics of the preceding discipline.
+We include considerations in this section
+if they are non-standard,
+if they are the subject of conflicting or ambiguous standards;
+if they differ from Halmos 1960~\cite{Halmos1960};
+and if they are outside the basics of our preceding disciplines.
 
 Functions are total unless stated otherwise.
 An onto function is a surjection.
@@ -1436,14 +1474,148 @@ $\var{A} \subset \var{B}$ means that \var{A} is a proper subset of \var{B}.
 $\Dom{\var{f}}$ is the domain of \var{f},
 $\Cod{\var{f}}$ is the codomain of \var{f},
 and $\Ran{\var{f}}$ is the range of \var{f}.
+We write
+\[
+\deffn{f}{\var{X}}{\var{Y}}
+\]
+to say that \var{f}
+is a function with domain \var{X}
+and codomain \var{Y}.
+
+In this book, the natural numbers begin with 0,
+and that set of natural numbers is written \naturals{}.
 $\powerset{\var{A}}$ is the powerset of the set \var{A}.
-\naturals{} is the set of non-negative integers.
 The abbreviation ``iff'' is used for ``if and only if''.
+
+Where \var{seq} is a sequence,
+the first element of \var{seq} is \Velement{seq}{0}.%
+\footnote{%
+   Our use of \VVelement{S}{i} instead of the more traditional
+   $\var{S}_\var{i}$ is one of the choices that we
+   made hoping to save
+   eyesight as well as reading time.
+   We are particularly motivated by our memory of
+   a paper in which the traditional notation
+   required a subscript to a subscript, and
+   turned the statement of one of the paper's
+   major results
+   into an exercise,
+   the solution to which required the reader
+   to divine whether one of the symbols represented
+   the numeral 1 or the letter l.
+}
+Where \var{seq} is a finite sequence,
+and the last element is \Velement{seq}{\Vlastix{seq}}.
+Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
+
+A sequence is a function whose domain is an initial segment of \naturals.
+If \var{seq} is a sequence,
+\Dom{\var{seq}} is the set of valid indexes of \var{seq}
+and \Ran{\var{seq}} is the set of valid elements of \var{seq}.
+
+We will write
+$\var{s}[\var{a} \ldots \var{z}]$
+for the subsequence
+\[
+    \var{s}[\var{a}], \;\;
+    \var{s}[\var{a}+1], \;\;
+    \ldots \;\;
+    \var{s}[\var{z}].
+\]
+We require of the subsequence indices that
+$\var{z} \in \Dom{\var{seq}}$,
+except in one special case.
+If
+$\var{z} < \var{a}$ then
+the values of \var{a} and \var{z} may be negative integers,
+and $\var{s}[\var{a} \ldots \var{z}]$
+is the empty sequence.
+We often write the empty sequence as $\epsilon$,
+so that
+\[
+\begin{gathered}
+    \var{z} < \var{a} \implies \Velement{s}{\var{a} \ldots \var{z}} = \epsilon
+    \\ \text{and } \Velement{s}{0 \ldots {-1}}
+        = \Velement{s}{~}
+        = \epsilon.
+\end{gathered}
+\]
+
+\begin{definition}[Prefix]
+\label{def:prefix}
+Let \var{x} and \var{y} be sequences.
+\begin{gather*}
+\Pfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{0\ldots \var{j}}.
+\\
+\PrPfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} < \Vlastix{y}
+\land \var{x} = \Velement{y}{0\ldots \var{j}}.
+\end{gather*}
+We say
+that \var{x} is a \dfn{prefix} of \var{y} if \Pfx{\var{x}, \var{y}};
+and that \var{x} is a \dfn{proper prefix} of \var{y} if \PrPfx{\var{x}, \var{y}}.
+\dispEnd
+\end{definition}
+
+\begin{definition}[Suffix]
+\label{def:suffix}
+\begin{gather*}
+\Sfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
+\\
+\PrSfx{\var{x},\var{y}} \defined
+\exists \; \Vnat{j} : 0 < \var{j} \le \Vlastix{y}
+\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
+\end{gather*}
+We say
+that \var{x} is a \dfn{suffix} of \var{y} if \Sfx{\var{x}, \var{y}};
+and that \var{x} is a \dfn{proper suffix} of \var{y} if \PrSfx{\var{x}, \var{y}}.
+\dispEnd
+\end{definition}
+
+To express sequences, we often use a sequence constructor
+of the form
+$\seq{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
+where
+\Vmyfn{cond}{ix} is a guard expression,
+and
+\Vmyfn{P}{ix} is an expression which represents the
+value of the \var{ix}'th element of a sequence.
+For example, where naturals \var{lo}
+and \var{hi} and the function \var{f}
+are bound in context,
+\[
+    \sum \seq{ \var{lo} \le \var{ix} \le \var{hi} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{lo},
+     \Vmyfn{f}{\var{lo}+1}, \ldots  \Vmyfn{f}{hi}},
+\]
+\[
+    \text{and } \sum \seq{ \var{lo} \le \var{ix} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{lo}, \Vmyfn{f}{\var{lo}+1}, \ldots }.
+\]
+
+We write tuples using square brackets,
+and refer to the first element of
+a tuple \var{t} as \Velement{t}{0},
+its last element as \Velement{t}{\Vlastix{x}},
+etc.,
+so that our notation does not always distinguish a tuple from
+a sequence.
+Often it is clear as a matter of the basic definitions of set
+theory which is intended.
+Where confusion seems possible,
+we make our intention clear in the
+text.
 
 In keeping with our avoidance of sub- and superscripts,
 our preferred notations
 are $\bigcup \var{S}$ for the union of the elements of the set \var{S},
 and $\bigcap \var{S}$ for the intersection of the elements of the set \var{S}.
+By analogy, we write
+$\sum \var{S}$ for the sum of the elements of the set \var{S}.
 
 Logical quantifiers are always guarded.
 The guard set may be specified explicitly
@@ -1472,46 +1644,13 @@ then \var{j} is the quantified variable in
 \forall \; \var{lo} \le \Vnat{j} \le \var{hi} : \myfn{P}{\var{j}}.
 \]
 
-\todo{Move stuff about sequences to one place}
-\todo{Mention tuple vs. sequence distinction}
-By analogy with our notation for set union and intersection,
-we write $\sum \var{seq}$ to indicate the sum
+Recall that our notation for the sum of a set \var{S}
+was $\sum \var{S}$.
+We extend this notation to sequences,
+so that we write $\sum \var{seq}$ to indicate the sum
 of the elements of the sequence \var{seq}.
-For writing sums, we often use a sequence constructor,
-$\seq{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
-where
-\Vmyfn{cond}{ix} is a guard expression,
-and
-\Vmyfn{P}{ix} is an expression which represents the
-value of the \var{ix}'th element of a sequence or a tuple.
-For example, where naturals \var{lo}
-and \var{hi}, and the function \var{f},
-are bound in context,
-\[
-    \sum \seq{ \var{lo} \le \var{ix} \le \var{hi} : \Vmyfn{f}{ix} }
-    = \Vmyfn{f}{lo} + 
-     \Vmyfn{f}{\var{lo}+1} + \ldots + \Vmyfn{f}{hi},
-\]
-\[
-    \text{and } \sum \seq{ \var{lo} \le \var{ix} : \Vmyfn{f}{ix} }
-    = \Vmyfn{f}{lo} + \Vmyfn{f}{\var{lo}+1} + \ldots
-\]
-Where the countable set \var{set}
-and the function \var{f} are bound in context,
-then we may write
-\[
-    \seq{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
-\]
-to represent a sequence
-that contains \Vmyfn{f}{x} for every $\var{x} \in \var{set}$,
-and that follows some well-ordering of \var{set}.
-Accordingly,
-\[
-    \sum \seq{ \var{x} \in \var{set} : \Vmyfn{f}{x} }
-\]
-would be the sum,
-for all the elements $\var{x} \in \var{set}$,
-of the values \Vmyfn{f}{x}.
+To represent the sequence to be summed,
+we often use a sequence constructor.
 
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
@@ -1531,14 +1670,6 @@ is the unique \var{x} in the set \var{A} such that
 \Eref{eq:def-riota}
 is defined iff
 $\existsUniq \var{x} \in \var{A} : \myfn{P}{\var{x}}$.
-
-We write \deffn{f}{\var{X}}{\var{Y}}
-to say that \var{f}
-is a function with domain \var{X}
-and codomain \var{Y}.
-In our naive set theory, a sequence of \var{Y}'s is identical to a function from
-a subset of the naturals to \var{Y},
-and our notation will often make use of this fact.
 
 Traditionally mathematical operations,
 even logical operations,
@@ -1608,25 +1739,6 @@ or via the boolean function they induce.
 For example we might discuss
 \Eref{eq:relation-example} via the boolean binary function
 \myfn{R}{\var{x}, \var{y}}.
-
-\Earley{} will refer to the Earley's original
-recognizer\cite{Earley1970}
-with zero characters of lookahead.
-\Leo{} will refer to Leo's revision of \Earley{}
-as described in~\cite{Leo1991}.
-\Marpa{} will refer to the recognizer described in
-this book, and implemented in
-\Rtwo~\cite{Marpa-R2}.
-
-The procedures which are major building blocks
-of \Marpa{} will be called \dfn{ops}.
-A second level of \Marpa{} building blocks will
-be called \dfn{sub-ops}.
-The building blocks of \Earley{} will be
-called \dfn{operations}.
-This overloads a term with a mathematical meaning
-but we feel that being able to follow Jay Earley's terminology in \cite{Earley1970}
-outweighs the risk of confusion.
 
 Recall
 that we overload the Cartesian product operator
@@ -1758,91 +1870,6 @@ indicates that \var{set} is countably infinite.%
     we see no need to have two different notations
     for the same set.%
 }
-
-Where \var{seq} is a sequence,
-the first element of \var{seq} is \Velement{seq}{0}.%
-\footnote{%
-   Our use of \VVelement{S}{i} instead of the more traditional
-   $\var{S}_\var{i}$ is one of the choices that we
-   made hoping to save
-   eyesight as well as reading time.
-   We are particularly motivated by our memory of
-   a paper in which the traditional notation
-   required a subscript to a subscript, and
-   turned the statement of one of the paper's
-   major results
-   into an exercise,
-   the solution to which required the reader
-   to divine whether one of the symbols represented
-   the numeral 1 or the letter l.
-}
-Where \var{seq} is a finite sequence,
-and the last element is \Velement{seq}{\Vlastix{seq}}.
-Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
-
-We write \Dom{\var{fn}} for the domain of a function \var{fn},
-\Cod{\var{fn}} for the codomain of a function \var{fn},
-and \Ran{\var{fn}} for the range of \var{fn}.
-A sequence is a function whose domain is a set of 0-based consecutive non-negative
-integers so that, where \var{seq} is a sequence,
-\Dom{\var{seq}} is the set of valid indexes of \var{seq}
-and \Ran{\var{seq}} is the set of valid elements of \var{seq}.
-
-We will write
-$\var{s}[\var{a} \ldots \var{z}]$
-for the subsequence
-\[
-    \var{s}[\var{a}], \;\;
-    \var{s}[\var{a}+1], \;\;
-    \ldots \;\;
-    \var{s}[\var{z}].
-\]
-We require of the subsequence indices that
-$\var{z} \in \Dom{\var{seq}}$,
-except in one special case.
-If
-$\var{z} < \var{a}$ then
-the values of \var{i} and \var{j} may be negative,
-and $\var{s}[\var{a} \ldots \var{z}]$
-is the empty sequence, which we may write as $\epsilon$:
-\[
-\var{z} < \var{a} \implies \var{s}[\var{a} \ldots \var{z}] = \epsilon.
-\]
-
-\begin{definition}[Prefix]
-\label{def:prefix}
-Let \var{x} and \var{y} be sequences.
-\begin{gather*}
-\Pfx{\var{x},\var{y}} \defined
-\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
-\land \var{x} = \Velement{y}{0\ldots \var{j}}.
-\\
-\PrPfx{\var{x},\var{y}} \defined
-\exists \; \Vnat{j} : \var{j} < \Vlastix{y}
-\land \var{x} = \Velement{y}{0\ldots \var{j}}.
-\end{gather*}
-We say
-that \var{x} is a \dfn{prefix} of \var{y} if \Pfx{\var{x}, \var{y}};
-and that \var{x} is a \dfn{proper prefix} of \var{y} if \PrPfx{\var{x}, \var{y}}.
-\dispEnd
-\end{definition}
-
-\begin{definition}[Suffix]
-\label{def:suffix}
-\begin{gather*}
-\Sfx{\var{x},\var{y}} \defined
-\exists \; \Vnat{j} : \var{j} \le \Vlastix{y}
-\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
-\\
-\PrSfx{\var{x},\var{y}} \defined
-\exists \; \Vnat{j} : 0 < \var{j} \le \Vlastix{y}
-\land \var{x} = \Velement{y}{\var{j}\ldots \Vlastix{y}}.
-\end{gather*}
-We say
-that \var{x} is a \dfn{suffix} of \var{y} if \Sfx{\var{x}, \var{y}};
-and that \var{x} is a \dfn{proper suffix} of \var{y} if \PrSfx{\var{x}, \var{y}}.
-\dispEnd
-\end{definition}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -2820,17 +2847,20 @@ its set of direct parents.
 That is, if \var{tree} is non-unary,
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-050}
+\begin{gathered}
     \forall\; \var{ndset} \in \Vpowerset{nodes} :
-    \size{\myfn{Surface}{\var{ndset}}} \ge
+    \\ \size{\myfn{Surface}{\var{ndset}}} \ge
         2 \times
         \size{\myfn{NewParents}{\var{ndset}}}.
         \quad \thEnd
+\end{gathered}
 \end{equation}
 \end{lemma}
 
 \begin{proof}
 The proof is direct.
-Let
+For the purposes of this proof,
+let
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-150}
     \Vmyfn{children}{parent} \defined
@@ -2841,17 +2871,15 @@ Let
             \end{gathered}
         }
 \end{equation}
-By the definition,
+By definition,
 every node in \Vmyfn{NewParents}{ndset} must have at least one
-childn:
+child:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
     $\forall\; \var{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} \Eref{eq:def-new-parents}.
+    \bcuz{} Def of \myfnname{NewParents} \Eref{eq:def-new-parents}.
 }
-In fact, since by \Eref{eq:lem-surface-parents-ratio-170}
-none of the direct parents of \var{ndset} are leaf nodes,
-and since \var{tree} is a non-unary tree,
+In fact, since \var{tree} is a non-unary tree,
 every direct parent node of \var{ndset} must have at least two
 children:
 \mypareq{eq:lem-surface-parents-ratio-180}{%
@@ -2883,7 +2911,8 @@ from every other parent's set of children:
     \forall\; \var{parent2} \in \var{nodes} :
     \\ \Vmyfn{children}{parent1}
     \cap \Vmyfn{children}{parent1} = \emptyset
-    \\ \because \Eref{eq:lem-surface-parents-ratio-190}.
+    \\ \because \Eref{eq:lem-surface-parents-ratio-150},
+        \Eref{eq:lem-surface-parents-ratio-190}.
 \end{gathered}
 \end{equation}
 It follows that, for any subset of nodes \var{ndset},
@@ -2892,13 +2921,11 @@ children of the elements of \var{ndset}
 is the same as
 the sum of the cardinalities of the sets of
 children of the elements of \var{ndset}:
-is the same as the cardinality of the union of the sets of
-children of the elements of \var{ndset}:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-210}
 \begin{gathered}
 \forall\; \var{ndset} \in \Vpowerset{nodes} :
-\\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \var{ndset} }}.
+\\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \var{ndset} }}
 \\ =\; \sum \tuple{\var{parent} \in \var{ndset} : \size{\Vmyfn{children}{parent}} }
 \\ \because \Eref{eq:lem-surface-parents-ratio-200}.
 \end{gathered}
