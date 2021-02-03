@@ -258,7 +258,8 @@
 \newcommand{\condOp}{\mathbin{?}}
 \newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
 
-\newcommand{\var}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\V}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\var}[1]{\V{#1}}
 \newcommand{\varprime}[2]{\ensuremath{\texttt{#1}#2}}
 \newcommand{\boldvar}[1]{\ensuremath{\textbf{#1}}}
 
@@ -2839,6 +2840,28 @@ In other words, in a non-unary tree, every node is either a leaf or has
 two or more child nodes.
 \end{definition}
 
+\begin{lemma}[Surface New Parents Inclusion]
+\label{lem:surface-new-parents-inclusion}
+For all subsets of the nodes of tree,
+every element that is a child of a new parent of that subset
+is also an element of the surface of that subset.
+That is,
+\begin{equation}
+\label{eq:surface-new-parents-inclusion-050}
+\begin{gathered}
+\forall\; \V{ndset} \in \Vpowerset{nodes} :
+\forall\; \V{child} \in \V{ndset} :
+    \\ \tuple{\V{parent},\V{child}} \in \V{edges} \land \var{parent} \in \Vmyfn{NewParents}{ndset}
+    \\ \implies\; \V{child} \in \Vmyfn{Surface}{ndset}.
+\end{gathered}
+\end{equation}
+\end{lemma}
+
+\begin{proof}
+\todo{Prove this}
+\myqed
+\end{proof}
+
 \begin{lemma}[Surface--Parents Ratio]
 \label{lem:surface-parents-ratio}
 For any subset of nodes of from a non-unary tree,
@@ -2871,6 +2894,7 @@ let
             \end{gathered}
         }
 \end{equation}
+
 By definition,
 every node in \Vmyfn{NewParents}{ndset} must have at least one
 child:
@@ -2878,6 +2902,7 @@ child:
     $\forall\; \var{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
     \bcuz{} Def of \myfnname{NewParents} \Eref{eq:def-new-parents}.
+    New free $\var{ndset} \in \Vpowerset{nodes}$.
 }
 In fact, since \var{tree} is a non-unary tree,
 every direct parent node of \var{ndset} must have at least two
@@ -2933,7 +2958,7 @@ children of the elements of \var{ndset1}:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-220}
 \begin{gathered}
-\\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \Vmyfn{NewParents}{ndset} }}
+\size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \Vmyfn{NewParents}{ndset} }}
 \\ =\; \sum \tuple{\var{parent} \in \Vmyfn{NewParents}{ndset} : \size{\Vmyfn{children}{parent}} }
 \\ \myparbox{\cuz{}
     \Eref{eq:lem-surface-parents-ratio-210}, UI with \Vmyfn{NewParents}{ndset}.}
@@ -2942,13 +2967,50 @@ children of the elements of \var{ndset1}:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-230}
 \begin{gathered}
-\\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \Vmyfn{NewParents}{ndset} }}
+\size{\bigcup \set{ \Vmyfn{children}{parent} : \var{parent} \in \Vmyfn{NewParents}{ndset} }}
 \\ \ge\; 2 \times \size{\Vmyfn{NewParents}{ndset}}
 \\ \because \Eref{eq:lem-surface-parents-ratio-180},
         \Eref{eq:lem-surface-parents-ratio-220}.
 \end{gathered}
 \end{equation}
-\todo{Finish this proof.}
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-240}
+\begin{gathered}
+\size{\set{
+    \begin{gathered}
+        \V{child} \in \V{nodes} :
+        \\ \tuple{\V{parent},\V{child}} \in \V{edges} \land \var{parent} \in \Vmyfn{NewParents}{ndset}
+    \end{gathered} }}
+\\ \ge\; 2 \times \size{\Vmyfn{NewParents}{ndset}}
+\\ \because \Eref{eq:lem-surface-parents-ratio-150},
+        \Eref{eq:lem-surface-parents-ratio-230}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-250}
+\begin{gathered}
+\set{
+    \begin{gathered}
+        \V{child} \in \V{nodes} :
+        \\ \tuple{\V{parent},\V{child}} \in \V{edges}
+        \\ \land\; \var{parent} \in \Vmyfn{NewParents}{ndset}
+    \end{gathered} }
+\\ \subseteq\; \Vmyfn{Surface}{ndset}
+\\ \because \longLmref{Surface New Parents Inclusion}{surface-new-parents-inclusion},
+        \Eref{eq:lem-surface-parents-ratio-240}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-surface-parents-ratio-260}
+\begin{gathered}
+\size{\Vmyfn{Surface}{ndset}} \ge 2 \times \size{\Vmyfn{NewParents}{ndset}}
+\\ \because \Eref{eq:lem-surface-parents-ratio-240},
+        \Eref{eq:lem-surface-parents-ratio-250}.
+\end{gathered}
+\end{equation}
+The theorem is the universal generalization of
+\Eref{eq:lem-surface-parents-ratio-260} over \V{ndset}.
+\todo{Check this proof.}
 \myqed
 \end{proof}
 
