@@ -90,10 +90,11 @@
 % The "page:" metatag is for labels intended as the target of
 % page references.
 
-% The auto-placement of qed's fails a lot and manual
-% replacement with \qedhere often fails as well.  I go with
-% 100% manual placement, which turns out to be no more trouble,
-% and which allows me to guarantee the QED's wind up where I
+% The auto-placement of qed's fails a lot.
+% Semi-manual replacement using \qedhere often fails as well.
+% I went with % 100% manual placement,
+% which in fact is not any more trouble,
+% and which is the only way to guarantee the QED's wind up where I
 % want them.
 \renewcommand{\qedsymbol}{}
 \newcommand{\myqed}{%
@@ -179,7 +180,13 @@
   \else$\bigcirc$
   \fi%
 }
-\newcommand{\thEnd}{\dispEnd}
+
+\newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
+\newcommand{\thEnd}{%
+  \ifmmode\rotatedSquare
+  \else$\rotatedSquare$
+  \fi%
+}
 \newcommand{\cuz}{
   \ifmmode
     \because
@@ -1954,41 +1961,55 @@ we follow those who do.
 
 We now proceed to define
 ``non-unary trees'',
-and to deduce such of their
-properties as will be useful for us.
+and to deduce some of their
+properties which will be useful.
+For the purpose of this chapter we introduce
+the opaque type \type{NOD}.
+Intuitively, a value of type \type{NOD} is a ``node''.
+The set of values of
+\type{NOD} is non-empty, but otherwise arbitrary.
+
+% Macros for this chapter only
+\newcommand{\nod}[1]{\ensuremath{#1_\type{NOD}}}
+\newcommand{\Vnod}[1]{\nod{\V{#1}}}
+\newcommand{\Vnodset}[1]{\Tvarset{#1}{NOD}}
+
 This chapter is a new context scope,
 which contains
 \begin{equation}
 \label{eq:non-unary-chap-context-tree}
-\V{tree} = \tuple{\V{nodes},\V{edges}}.
+\V{tree} = \tuple{\Vnodset{nodes},\V{edges}}.
 \end{equation}
 
 In \Eref{eq:non-unary-chap-context-tree},
 \V{tree} is a finite arbitary ``context tree'',
-\V{nodes} is a set of ``nodes'',
-and $\V{edges} \in \V{nodes}\times\V{nodes}$
+\Vnodset{nodes} is a set of ``nodes'',
+and $\V{edges} \in \Vnodset{nodes}\times\Vnodset{nodes}$
 is a set of ``edges''.
+\todo{Should \Vnodset{nodes} be allowed to empty?}
 Recall that a ``leaf'' is a node with an out-degree of 0.
 In this context scope,
-\V{leaves} will be the set of leaves in \V{tree}.
+$\Vnodset{leaves} \subseteq \V{nodes}$
+will be the set of leaves in \V{tree}.
 
 \section{Tree ancestries}
 
 \todo{Will I use \myfn{Paths}{}?}
 Let \V{Paths} be the set of finite sequences of nodes
-such that each element is the direct parent of the next.
+such that each element is the direct parent of the previous one,
+if it exists.
 That is,
 \begin{equation}
 \label{eq:def-paths}
 \V{Paths} \defined \set{
     \begin{gathered}
-        \V{path} \in \naturals\times\V{nodes} :
+        \V{path} \in \naturals\times\Vnodset{nodes} :
             \exists\; \Vnat{length} :
         \\ \deffn{path}{\V{length}}{\V{nodes}}
         \\ \land\;
         \left( \begin{gathered}
             \V{ix} < \V{length}
-            \\ \implies \tuple{\VVelement{path}{ix},\Velement{path}{\V{ix}+1}} \in \V{edges}
+            \\ \implies \tuple{ \Velement{path}{\V{ix}+1}, \VVelement{path}{ix} } \in \V{edges}
         \end{gathered} \right)
     \end{gathered}
     }.
@@ -1998,27 +2019,31 @@ A ``leaf path'' is a path whose last value is a leaf.
 Note that by \Eref{eq:def-paths},
 every sequence of nodes of length 1 is a path, vacuously.
 
-Where \V{nds} is a set of nodes,
-let \deffn{NewParents}{\powerset{\V{nodes}}}{\powerset{\V{nodes}}}
-be the set of the direct parents of \V{nds} that are not already in \V{nds},
+Let the ``new parents'' function,
+\[
+    \deffn{NewParents}{\powerset{\powerset{\Vnodset{nodes}}}}{\powerset{\powerset{\V{nodes}}}}
+\]
+be the set of the direct parents of a node set that are not already in that node set,
 so that
 \begin{equation}
 \label{eq:def-new-parents}
-    \myfn{NewParents}{\V{ndset}} = \set{
+    \myfn{NewParents}{\Vnodset{nds}} = \set{
         \begin{gathered}
-            \V{parent} \in \V{nodes} :
-                \exists\; \V{child} \in \V{ndset} :
+            \Vnod{parent} : \exists\; \Vnod{child} :
             \\ \tuple{\V{parent},\V{child}} \in \V{edges}
-            \\ \land\; \V{parent} \notin \V{ndset}
+            \\ \land\; \V{parent} \notin \V{nds}
         \end{gathered}
     }.
 \end{equation}
 Let the ``ancestry'' function,
-\deffn{Anc}{\naturals\times\powerset{\V{nodes}}}{\powerset{\V{nodes}}},
+\[
+    \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
+        {\powerset{\powerset{\V{nodes}}}}
+\]
 be such that
 \begin{equation}
 \label{eq:def-anc}
-    \myfn{Anc}{\V{N},\V{base}} =
+    \myfn{Anc}{\Vnat{N},\Vnodset{base}} =
     \left(\begin{gathered}
     \V{N}=0 \condOp \V{base} :
     \\ \myfn{Anc}{\Vdecr{N},\V{base}}
@@ -2026,30 +2051,28 @@ be such that
     \end{gathered}\right).
 \end{equation}
 
-An ancestry \V{pred}
+An ancestry \Vnodset{pred}
 is the ``predecessor''
-of an ancestry \V{succ} iff \V{pred} is an ancestry with the same base
+of an ancestry \Vnodset{succ} iff \V{pred} is an ancestry with the same base
 as \V{succ},
 and the level of \V{pred} is the predecessor of the level of \V{succ}.
 The predecessor of a level 0 ancestry is the empty set.
-An ancestry \V{succ} is the ``successor'' of another ancestry \V{pred}
+An ancestry \Vnodset{succ} is the ``successor'' of another ancestry \Vnodset{pred}
 iff \V{pred} is the predecessor ancestry of \V{succ}.
-Symbolically, where $\V{N} \in \naturals$ and $\V{base} \in \Vpowerset{nodes}$,
-\begin{equation}
-\begin{gathered}
-    \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\V{base}}} \defined
+Symbolically,
+\begin{gather}
+    \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\Vnodset{base}}} \defined
     (\cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}})
     \\ \text{and }
         \myfn{Successor}{\myfn{Anc}{\V{N},\V{base}}} \defined \myfn{Anc}{\V{N}+1,\V{base}}.
-\end{gathered}
-\end{equation}
+\end{gather}
 
 \begin{lemma}[Predecessor Parent Disjointness]
 \label{lem:predecessor-parent-disjointness}
 An ancestry and its new parents are disjoint.
 That is,
 \[
-    \myfn{Anc}{\Vnat{N},\V{base}} \cap
+    \myfn{Anc}{\Vnat{N},\Vnodset{base}} \cap
     \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset.
     \quad \thEnd
 \]
@@ -2061,7 +2084,7 @@ That is,
 \end{proof}
 
 \mypareq{eq:def-n-level-ancestry}{%
-    We say that a set \V{A} is an ``\V{N}-level ancestry with base \V{b}''
+    We say that \Vnodset{A} is an ``\Vnat{N}-level ancestry with base \Vnodset{b}''
     iff $\V{A}=\myfn{Anc}{\V{N},\V{b}}$.
 }
 % Delete this?
@@ -2072,37 +2095,18 @@ That is,
 %    where $\V{A}=\myfn{Anc}{\V{N},\V{b}}$.
 %}
 \mypareq{eq:def-ancestry}{%
-    % Delete this?
-    % Where \V{X} is a node or a set of nodes,
-    We say that a set \V{A} is an ``ancestry'' of \V{X}
-    \linebreak iff \V{A} is an \V{N}-level ancestry of \V{X} for
+    We say that \Vnodset{A} is an ``ancestry'' of \Vnodset{nds}
+    \linebreak iff \Vnodset{A} is an \Vnat{N}-level ancestry of \Vnodset{nds} for
     some \Vnat{N}.
 }
-\mypareq{eq:def-proper-n-level-ancestry}{%
-    % Delete this?
-    % Where \V{X} is a node or a set of nodes,
-    We say the \V{A}
-    is a ``proper \V{N}-level ancestry'' of \V{X}
-    \linebreak iff \V{A} is an \V{N}-level ancestry of \V{X}
-    \linebreak and
-    $\V{N}=0 \lor \myfn{Anc}{\Vdecr{N},\V{b}} \ne \V{A}$.
-}
-\mypareq{eq:def-proper-ancestry}{%
-    % Delete this?
-    % Where \V{X} is a node or a set of nodes,
-    We say that a set \V{A} is a ``proper ancestry'' of \V{X}
-    \linebreak iff \V{A} is a proper \V{N}-level ancestry of \V{X} for
-    some \V{N}.
-}
-We write \myfn{Proper}{\V{A}}
-to say that \V{A} is a proper ancestry.
 \todo{Do I need ``proper'' for ancestries?}
+\todo{Do I need to define ancestries of individual nodes?}
 
 \begin{lemma}[Leaf path finiteness]
 \label{lem:leaf-path-finiteness}
 For every path \V{p} of \V{tree},
 $\Vsize{p} \le \Vsize{nodes}$.
-\dispEnd
+\thEnd
 \end{lemma}
 
 \begin{proof}
@@ -2123,12 +2127,10 @@ all the ancestries of \V{tree}
 that have the same base
 and are at the same or a lower level.
 That is,
-if \V{base} is an arbitary subset of \V{nodes},
-then
 \mypareq{eq:lem-ancestry-monotonicity-050}{%
     $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \V{N} :
-        \myfn{Anc}{\V{i},\V{base}} \subseteq \myfn{Anc}{\Vnat{N},\V{base}}$.
-        \dispEnd
+        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\Vnat{N},\V{base}}$.
+        \thEnd
 }
 \end{lemma}
 
@@ -2138,10 +2140,11 @@ The proof is by induction on the level of the ancestry.
 The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
 is the universal instantiation of \Eref{eq:lem-ancestry-monotonicity-050} with
 the induction variable \V{indx}.
-For the basis, it is a fact of set theory that
+
+For the basis,
 \mypareq{eq:lem-ancestry-monotonicity-103}{%
         $\myfn{Anc}{0,\V{base}} \subseteq \myfn{Anc}{0,\V{base}}$
-        \cuz{} trivial.
+        \cuz{} Fact of set theory.
 }
 \mypareq{eq:lem-ancestry-monotonicity-105}{%
     $\forall\; \Vnat{i} \le 0 :
@@ -2151,6 +2154,7 @@ For the basis, it is a fact of set theory that
         the UI of \Eref{eq:lem-ancestry-monotonicity-050} with 0.
 }
 \renewcommand{\basis}{eq:lem-ancestry-monotonicity-105}
+
 For the step, we assume \myfn{INDH}{\V{n}}
 to show \myfn{INDH}{\V{n}+1}.
 \mypareq{eq:lem-ancestry-monotonicity-150}{%
