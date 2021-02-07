@@ -2377,7 +2377,7 @@ That is,
 \myqed
 \end{proof}
 
-\begin{lemma}[Generation Disjointedness]
+\begin{lemma}[Generation Disjointness]
 \label{lem:generation-disjointness}
 Every pair of generations with different levels
 and the same base is disjoint.
@@ -2435,12 +2435,50 @@ Their uses so far have been symmetric, so that we may assume
      $\V{lo} \le \Vdecr{hi}$ \cuz{} \Eref{eq:lem-generation-disjointness-120}.
 }
 \mypareq{eq:lem-generation-disjointness-200}{%
-    $\V{nd} \in \ \myfn{Anc}{\Vdecr{hi},\V{base}}$
+    $\V{nd} \in \myfn{Anc}{\Vdecr{hi},\V{base}}$
     \bcuz{} \longLmref{Ancestry monotonicity}{ancestry-monotonicity},
             \Eref{eq:lem-generation-disjointness-180},
             \Eref{eq:lem-generation-disjointness-190}.
 }
-\todo{Prove this theorem}
+\mypareq{eq:lem-generation-disjointness-210}{%
+    $\myfn{Anc}{\Vdecr{hi},\Vnodset{base}} \cap
+    \bigfn{NewParents}{\myfn{Anc}{\Vdecr{hi},\V{base}}} = \emptyset$
+    \bcuz{} \longLmref{Predecessor--Parent Disjointness}{predecessor-parent-disjointness}.
+}
+\mypareq{eq:lem-generation-disjointness-220}{%
+    $\V{nd} \notin \myfn{NewParents}{\Vdecr{hi},\V{base}}$
+       \cuz{} \Eref{eq:lem-generation-disjointness-200},
+            \Eref{eq:lem-generation-disjointness-210}.
+}
+\mypareq{eq:lem-generation-disjointness-230}{%
+    $\V{nd} \notin \myfn{gen}{\var{hi},\V{base}}$
+        \bcuz{} \longLmref{Generation--New-Parent Equivalence}
+            {generation-new-parent-equivalence},
+        \Eref{eq:lem-generation-disjointness-220}.
+}
+Equation \Eref{eq:lem-generation-disjointness-230} is contrary to
+\Eref{eq:lem-generation-disjointness-170},
+which shows the
+reductio.
+\mypareq{eq:lem-generation-disjointness-240}{%
+    $\neg (\V{lo} \ne \V{hi}
+     \land \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} \ne \emptyset)$
+    \bcuz{} Reductio from \Eref{eq:lem-generation-disjointness-100}--%
+    \Eref{eq:lem-generation-disjointness-110} to
+    \Eref{eq:lem-generation-disjointness-230}.
+}
+\mypareq{eq:lem-generation-disjointness-250}{%
+    $\V{lo} = \V{hi}
+     \lor \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} = \emptyset$
+     \cuz{} \Eref{eq:lem-generation-disjointness-240}.
+}
+\mypareq{eq:lem-generation-disjointness-260}{%
+    $\V{lo} \ne \V{hi}
+     \implies \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} = \emptyset$
+     \cuz{} \Eref{eq:lem-generation-disjointness-250}.
+}
+The theorem is the universal generalization of \Eref{eq:lem-generation-disjointness-260}
+for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 \myqed
 \end{proof}
 
