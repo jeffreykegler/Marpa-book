@@ -2540,64 +2540,44 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
         \bcuz{} \Eref{eq:lem-generation-coverage-150},
             \Eref{eq:lem-generation-coverage-160}.
 }
-\mypareq{eq:lem-generation-coverage-205}{%
-    $\myfn{Anc}{\Vdecr{bad},\V{base}} \subseteq
-    \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} \Lmref{ancestry-monotonicity}
-        \Eref{eq:lem-generation-coverage-190}.
-}
-\begin{equation}
-\label{eq:lem-generation-coverage-207}
-\begin{gathered}
-    \forall\; \V{whole} \in \powerset{\V{nodes}} :
-    \forall\; \V{part} \in \powerset{\V{nodes}} :
-    \\ \V{part} \subseteq \V{whole} \implies
-        \V{whole} =
-        \V{part} \cup (\subtract{\V{whole}}{\V{part}})
-        \\ \because \text{set theory tautology.}
-\end{gathered}
-\end{equation}
 \mypareq{eq:lem-generation-coverage-210}{%
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
-    \cup (\subtract{\myfn{Anc}{\V{bad},\V{base}}}
-        {\myfn{Anc}{\Vdecr{bad},\V{base}}})$
-    \bcuz{} \Eref{eq:lem-generation-coverage-190},
-        \Eref{eq:lem-generation-coverage-205},
-        \Eref{eq:lem-generation-coverage-207}.
+    \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
+        \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+        \Eref{eq:lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
     $\myfn{Anc}{\V{bad},\V{base}} =
-    \myfn{Anc}{\Vdecr{bad},\V{base}} \cup
-        \myfn{gen}{\V{bad},\V{base}}$
-        \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
-            \Eref{eq:lem-generation-coverage-190},
-            \Eref{eq:lem-generation-coverage-210}.
+    \myfn{Anc}{\Vdecr{bad},\V{base}}
+    \cup \bigfn{gen}{\myfn{Anc}{\var{bad},\V{base}}}$
+        \bcuz{} \longLmref{Generation--New-Parent Equivalence}
+            {generation-new-parent-equivalence},
+        \Eref{eq:lem-generation-coverage-210}.
 }
 \mypareq{eq:lem-generation-coverage-230}{%
-    $\myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{gen}{\V{bad},\V{base}}$
-    \linebreak $\ne\; \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}}}$
-    \linebreak \cuz{} \Eref{eq:lem-generation-coverage-200},
-        \Eref{eq:lem-generation-coverage-220}.
+    $\myfn{Anc}{\Vdecr{bad},\V{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{gen}{\V{i},\V{base}}}$
+    \bcuz{} \Eref{eq:lem-generation-coverage-150},
+        \Eref{eq:lem-generation-coverage-165}.
 }
 \mypareq{eq:lem-generation-coverage-240}{%
-      $\myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{gen}{\V{bad},\V{base}}$
-      \linebreak
-          $\ne \myfn{gen}{\V{bad},\V{base}} \cup \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} :
-              \myfn{gen}{\V{i},\V{base}}}$
-      \linebreak \cuz{} \Eref{eq:lem-generation-coverage-230}, logical tautology.
+    $\myfn{Anc}{\V{bad},\V{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}}}$
+    \bcuz{} \Eref{eq:lem-generation-coverage-220},
+        \Eref{eq:lem-generation-coverage-230}.
 }
-\todo{This is wrong, fix it.  We need disjunction of the generations for the tautology.}
-\mypareq{eq:lem-generation-coverage-260}{%
-      $\myfn{Anc}{\Vdecr{bad},\V{base}} \ne \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} :
-              \myfn{gen}{\V{i},\V{base}}}$
-      \linebreak \cuz{} \Eref{eq:lem-generation-coverage-240}, set theory tautology.
+\mypareq{eq:lem-generation-coverage-240}{%
+    $\myfn{INST}{\V{bad},\V{base}}$
+    \cuz{} \Eref{eq:lem-generation-coverage-165},
+        \Eref{eq:lem-generation-coverage-240}.
 }
-Equation \Eref{eq:lem-generation-coverage-260} is contrary
-to \Eref{eq:lem-generation-coverage-165}, which shows the reductio.
-From this reductio we conclude the absence
-of a minimal counter-example to the statement of the theorem,
-which is what we needed for this proof.
+\todo{Finish this proof}
+Equation \Eref{eq:lem-generation-coverage-240} is contrary
+to \Eref{eq:lem-generation-coverage-160}, which shows the reductio.
+This reductio shows the absence
+of a minimal counter-example,
+which in turn shows the theorem.
 \myqed
 \end{proof}
 
