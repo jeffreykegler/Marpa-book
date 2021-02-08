@@ -2061,9 +2061,11 @@ An ancestry \Vnodset{succ} is the ``successor'' of another ancestry \Vnodset{pre
 iff \V{pred} is the predecessor ancestry of \V{succ}.
 Symbolically,
 \begin{gather}
+    \label{eq:def-ancestry-predecessor}
     \myfn{Predecessor}{\myfn{Anc}{\Vnat{N},\Vnodset{base}}} \defined
     (\cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}})
-    \\ \text{and }
+    \\ \label{eq:def-ancestry-successor}
+    \text{and }
         \myfn{Successor}{\myfn{Anc}{\V{N},\V{base}}} \defined \myfn{Anc}{\V{N}+1,\V{base}}.
 \end{gather}
 
@@ -2614,44 +2616,82 @@ is never an element of the surface.
 \label{lem:surface-disjointness}
 The predecessor and the surface of an ancestry are disjoint.
 That is,
-\begin{gather}
-\label{eq:lem-surface-disjointness-040}
+\begin{equation}
+\label{eq:lem-surface-disjointness-050}
+\begin{gathered}
     \forall\;\V{base} \in \Vpowerset{nodes} :
         \forall\;\Vnat{N} :
-\\ \label{eq:lem-surface-disjointness-060}
-    \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
+    \\ \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
         \cap \myfn{Predecessor}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset.
         \quad \dispEnd
-\end{gather}
+\end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
-\todo{remove references to ``kernel''}
-\todo{Redo to deal with definition of ``predecessor'' for level 0
-ancestry.}
-The proof is by reductio.
-\mypareq{eq:lem-surface-disjointness-070}{%
-   $\V{N} \in \naturals \land \V{base} \in \Vpowerset{nodes}$.
-   New free arbitrary \V{N}, \V{base}.
-}
-First, we define two variables for convenience:
+The proof is by minimal counter-example.
+Where
+\begin{equation}
+\label{eq:lem-surface-disjointness-100}
+\begin{gathered}
+    \Vmyfn{INST}{ex} \defined
+    \myfn{Surface}{\myfn{Anc}{\V{ex},\Vnodset{base}}}
+        \cap \myfn{Predecessor}{\myfn{Anc}{\V{ex},\V{base}}} = \emptyset
+    \\ \text{\cuz{} \Eref{eq:lem-surface-disjointness-050}
+         with \Vnat{ex} for \V{N}.
+         New free \V{base}.}
+\end{gathered}
+\end{equation}
+we assume there is a minimal \V{bad} such that
+\Vmyfn{INST}{bad} is false:
 \begin{gather}
-\label{eq:lem-surface-disjointness-080}
+\label{eq:lem-surface-disjointness-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-surface-disjointness-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+
+\mypareq{eq:lem-surface-disjointness-130}{%
+    $\myfn{Predecessor}{\myfn{Anc}{0,\V{base}}} = \emptyset$
+    \bcuz{} Def of ancestry predecessor \Eref{eq:def-ancestry-predecessor}.
+}
+\mypareq{eq:lem-surface-disjointness-140}{%
+    $\myfn{Surface}{\myfn{Anc}{0,\V{base}}}
+        \cap \myfn{Predecessor}{\myfn{Anc}{0,\V{base}}} = \emptyset$
+    \cuz{} \Eref{eq:lem-surface-disjointness-130}.
+}
+\mypareq{eq:lem-surface-disjointness-150}{%
+    $\myfn{INST}{0}$ \cuz{} \Eref{eq:lem-surface-disjointness-100},
+        \Eref{eq:lem-surface-disjointness-140}.
+}
+\mypareq{eq:lem-surface-disjointness-160}{%
+    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-surface-disjointness-150}.
+}
+
+
+At this point, we define two variables for convenience:
+\begin{gather}
+\label{eq:lem-surface-disjointness-180}
     \V{predAnc} = \myfn{Anc}{\Vdecr{N},\V{base}}
-\\ \label{eq:lem-surface-disjointness-090}
+\\ \label{eq:lem-surface-disjointness-190}
     \V{thisAnc} = \myfn{Anc}{\V{N},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{}
         New free $\V{predAnc} \in \Vpowerset{nodes}$,
         new free $\V{thisAnc} \in \Vpowerset{nodes}$.}
 \end{gather}
+
+\todo{Fix from here}
+
 For the reductio,
 we assume that there is a node which is an element of
 both surface and predecessor:
 \begin{gather}
-\label{eq:lem-surface-disjointness-100}
+\label{eq:lem-surface-disjointness-200}
     \V{nd} \in \myfn{Surface}{\V{thisAnc}}
-\\ \label{eq:lem-surface-disjointness-110}
+\\ \label{eq:lem-surface-disjointness-210}
     \land\; \V{nd} \in \V{predAnc}
 \\ \nonumber
     \myparbox{\cuz{}
@@ -2660,9 +2700,9 @@ both surface and predecessor:
     }
 \end{gather}
 \begin{gather}
-\label{eq:lem-surface-disjointness-120}
+\label{eq:lem-surface-disjointness-220}
     \V{nd} \in \V{thisAnc}
-\\ \label{eq:lem-surface-disjointness-130}
+\\ \label{eq:lem-surface-disjointness-230}
     \land\;
     \left( \begin{gathered}
             \exists\; \V{parent} \in \V{nodes} :
@@ -2671,79 +2711,76 @@ both surface and predecessor:
     \end{gathered} \right)
     \\ \nonumber
         \myparbox{\cuz{} Def of ``surface'' \Eref{eq:def-surface},
-        \Eref{eq:lem-surface-disjointness-100}.}
+        \Eref{eq:lem-surface-disjointness-200}.}
 \end{gather}
 \begin{gather}
-\label{eq:lem-surface-disjointness-140}
+\label{eq:lem-surface-disjointness-240}
     \tuple{\V{parent},\V{nd}} \in \V{edges}
-\\ \label{eq:lem-surface-disjointness-150}
+\\ \label{eq:lem-surface-disjointness-250}
         \land\; \V{parent} \notin \V{thisAnc}
 \\ \nonumber
-    \myparbox{\cuz{} EI of \Eref{eq:lem-surface-disjointness-130}.
+    \myparbox{\cuz{} EI of \Eref{eq:lem-surface-disjointness-230}.
         New free $\V{parent} \in \V{nodes}$.}
 \end{gather}
-\mypareq{eq:lem-surface-disjointness-160}{%
+\mypareq{eq:lem-surface-disjointness-260}{%
     $\V{thisAnc} = \V{predAnc} \cup \Vmyfn{NewParents}{predAnc}$
     \bcuz{} definition of \myfn{Anc}{} \Eref{eq:def-anc},
-        \Eref{eq:lem-surface-disjointness-080},
-        \Eref{eq:lem-surface-disjointness-090}.
+        \Eref{eq:lem-surface-disjointness-180},
+        \Eref{eq:lem-surface-disjointness-190}.
 }
-\mypareq{eq:lem-surface-disjointness-170}{%
+\mypareq{eq:lem-surface-disjointness-270}{%
      $\V{parent} \in \V{predAnc} \implies
      \V{parent} \in \V{thisAnc}$
-     \bcuz{} \Eref{eq:lem-surface-disjointness-080},
-        \Eref{eq:lem-surface-disjointness-090},
-        \Eref{eq:lem-surface-disjointness-160}.
+     \bcuz{} \Eref{eq:lem-surface-disjointness-180},
+        \Eref{eq:lem-surface-disjointness-190},
+        \Eref{eq:lem-surface-disjointness-260}.
 }
-\mypareq{eq:lem-surface-disjointness-180}{%
+\mypareq{eq:lem-surface-disjointness-280}{%
      $\V{parent} \notin \V{predAnc}$
-     \bcuz{} \Eref{eq:lem-surface-disjointness-150},
-         \Eref{eq:lem-surface-disjointness-170}.
+     \bcuz{} \Eref{eq:lem-surface-disjointness-250},
+         \Eref{eq:lem-surface-disjointness-270}.
 }
-\mypareq{eq:lem-surface-disjointness-190}{
+\mypareq{eq:lem-surface-disjointness-290}{
     $\V{nd} \in \V{predAnc} :
     \land \tuple{\V{parent},\V{nd}} \in \V{edges}
     \land\; \V{parent} \notin \V{predAnc}$
-    \bcuz{} \Eref{eq:lem-surface-disjointness-110},
-        \Eref{eq:lem-surface-disjointness-140},
-        \Eref{eq:lem-surface-disjointness-180}.
+    \bcuz{} \Eref{eq:lem-surface-disjointness-210},
+        \Eref{eq:lem-surface-disjointness-240},
+        \Eref{eq:lem-surface-disjointness-280}.
 }
-\mypareq{eq:lem-surface-disjointness-200}{%
+\mypareq{eq:lem-surface-disjointness-300}{%
     $\V{parent} \in \Vmyfn{NewParents}{predAnc}$
     \bcuz{} Def of \myfnname{NewParents} \Eref{eq:def-new-parents}.
-        \Eref{eq:lem-surface-disjointness-190}.
+        \Eref{eq:lem-surface-disjointness-290}.
 }
-\mypareq{eq:lem-surface-disjointness-210}{%
+\mypareq{eq:lem-surface-disjointness-310}{%
     $\V{parent} \in \V{thisAnc}$ \cuz{}
         Def of \myfnname{Anc} \Eref{eq:def-anc},
-        \Eref{eq:lem-surface-disjointness-200}.
+        \Eref{eq:lem-surface-disjointness-300}.
 }
-Equation \Eref{eq:lem-surface-disjointness-210}
+Equation \Eref{eq:lem-surface-disjointness-310}
 is contrary to
-\Eref{eq:lem-surface-disjointness-150}
+\Eref{eq:lem-surface-disjointness-250}
 and shows the reductio
-starting at \Eref{eq:lem-surface-disjointness-100}.
-to
-\mypareq{eq:lem-surface-disjointness-220}{%
+starting at \Eref{eq:lem-surface-disjointness-200}.
+\mypareq{eq:lem-surface-disjointness-320}{%
     $\Vmyfn{Surface}{thisAnc} \cap \Vmyfn{Predecessor}{thisAnc} = \emptyset$
     \bcuz{} reductio from
-        \Eref{eq:lem-surface-disjointness-100}--\Eref{eq:lem-surface-disjointness-110}
-        to \Eref{eq:lem-surface-disjointness-210}.
+        \Eref{eq:lem-surface-disjointness-200}--\Eref{eq:lem-surface-disjointness-210}
+        to \Eref{eq:lem-surface-disjointness-310}.
 }
-\mypareq{eq:lem-surface-disjointness-230}{%
+\mypareq{eq:lem-surface-disjointness-330}{%
     $\Vmyfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
         \cap \Vmyfn{Predecessor}{\myfn{Anc}{\V{N},\V{base}}}
     = \emptyset$
-    \bcuz{} \Eref{eq:lem-surface-disjointness-090},
-        \Eref{eq:lem-surface-disjointness-220}.
+    \bcuz{} \Eref{eq:lem-surface-disjointness-190},
+        \Eref{eq:lem-surface-disjointness-320}.
 }
 Recall that \V{N} and \V{base} were chosen abitrarily
-\Eref{eq:lem-surface-disjointness-070}.
 The theorem is the universal generalization of
-\V{N} and \V{base} in TODO.
-\Eref{eq:lem-surface-disjointness-230}.
+\V{N} and \V{base} in
+\Eref{eq:lem-surface-disjointness-330}.
 \myqed
-\todo{Check this proof}
 \end{proof}
 
 \begin{lemma}[Generation Surface Containment]
