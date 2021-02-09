@@ -2022,13 +2022,14 @@ Let the ``new parents'' function,
 \]
 be the set of the direct parents of a node set that are not already in that node set,
 so that
+\todo{Check uses of \myfn{NewParents}{} against revised definition}
 \begin{equation}
 \label{eq:def-new-parents}
     \myfn{NewParents}{\Vnodset{nds}} = \set{
         \begin{gathered}
             \Vnod{parent} : \exists\; \Vnod{child} :
-            \\ \tuple{\V{parent},\V{child}} \in \V{edges}
-            \\ \land\; \V{parent} \notin \V{nds}
+            \\ \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
+            \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
         \end{gathered}
     }.
 \end{equation}
@@ -2667,14 +2668,6 @@ we assume there is a minimal \V{bad} such that
 \mypareq{eq:lem-surface-disjointness-160}{%
     $\V{bad} > 0$ \cuz{} \Eref{eq:lem-surface-disjointness-150}.
 }
-% Do I want or need these?
-% \mypareq{eq:lem-surface-disjointness-180}{%
-%     $\Vnodset{predAnc} = \myfn{Anc}{\Vdecr{bad},\V{base}}$
-%     \bcuz{} \Eref{eq:lem-surface-disjointness-160}.
-%         New free \Vnodset{predAnc}.}
-% \mypareq{eq:lem-surface-disjointness-190}{%
-%     $\Vnodset{thisAnc} = \myfn{Anc}{\V{bad},\V{base}}$
-%     \bcuz{} new free \Vnodset{thisAnc}.}
 \begin{gather}
 \label{eq:lem-surface-disjointness-200}
     \V{nd} \in \myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}}
@@ -2708,68 +2701,62 @@ we assume there is a minimal \V{bad} such that
     \myparbox{\cuz{} EI of \Eref{eq:lem-surface-disjointness-230}.
         New free $\V{parent} \in \V{nodes}$.}
 \end{gather}
-
-\todo{Fix from here}
-
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
     \bcuz{} definition of \myfn{Anc}{} \Eref{eq:def-anc},
-        \Eref{eq:lem-surface-disjointness-180},
-        \Eref{eq:lem-surface-disjointness-190}.
+        \Eref{eq:lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
      $\V{parent} \in \myfn{Anc}{\Vdecr{bad},\V{base}} \implies
      \V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$
-     \bcuz{} \Eref{eq:lem-surface-disjointness-180},
-        \Eref{eq:lem-surface-disjointness-190},
-        \Eref{eq:lem-surface-disjointness-260}.
+     \bcuz{} \Eref{eq:lem-surface-disjointness-260}.
 }
 \mypareq{eq:lem-surface-disjointness-280}{%
      $\V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
      \bcuz{} \Eref{eq:lem-surface-disjointness-250},
          \Eref{eq:lem-surface-disjointness-270}.
 }
-\mypareq{eq:lem-surface-disjointness-290}{
-    $\V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}} :
-    \land \tuple{\V{parent},\V{nd}} \in \V{edges}
-    \land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
+\mypareq{eq:lem-surface-disjointness-290}{%
+    $\V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    \linebreak $\land\; \tuple{\V{parent},\V{nd}} \in \V{edges}$
     \bcuz{} \Eref{eq:lem-surface-disjointness-210},
         \Eref{eq:lem-surface-disjointness-240},
         \Eref{eq:lem-surface-disjointness-280}.
 }
 \mypareq{eq:lem-surface-disjointness-300}{%
-    $\V{parent} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} Def of \myfnname{NewParents} \Eref{eq:def-new-parents}.
-        \Eref{eq:lem-surface-disjointness-290}.
+    $\exists\; \Vnod{child} : \V{child} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    \linebreak $\land\; \tuple{\V{parent},\V{child}} \in \V{edges}$
+    \bcuz{} EI of \Eref{eq:lem-surface-disjointness-290} with \Vnod{child}
+        for \Vnod{nd}.
 }
-\mypareq{eq:lem-surface-disjointness-310}{%
+\mypareq{eq:lem-surface-disjointness-320}{%
+    $\Vnod{parent} \in \myfn{NewParents}{\Vdecr{bad},\V{base}}$
+    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents}.
+}
+\mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
         Def of \myfnname{Anc} \Eref{eq:def-anc},
-        \Eref{eq:lem-surface-disjointness-300}.
+        \Eref{eq:lem-surface-disjointness-320}.
 }
-Equation \Eref{eq:lem-surface-disjointness-310}
+Equation \Eref{eq:lem-surface-disjointness-330}
 is contrary to
 \Eref{eq:lem-surface-disjointness-250}
 and shows the reductio
 starting at \Eref{eq:lem-surface-disjointness-200}.
-\mypareq{eq:lem-surface-disjointness-320}{%
-    $\Vmyfn{Surface}{thisAnc} \cap \myfn{PredecessorAnc}{\V{bad},\V{base}} = \emptyset$
+\mypareq{eq:lem-surface-disjointness-340}{%
+    $\Vmyfn{Surface}{\V{bad},\V{base}} \cap \myfn{Anc}{\Vdecr{bad},\V{base}} = \emptyset$
     \bcuz{} reductio from
         \Eref{eq:lem-surface-disjointness-200}--\Eref{eq:lem-surface-disjointness-210}
-        to \Eref{eq:lem-surface-disjointness-310}.
-}
-\mypareq{eq:lem-surface-disjointness-330}{%
-    $\Vmyfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
-        \cap \Vmyfn{PredecessorAnc}{\V{N},\V{base}}
-    = \emptyset$
-    \bcuz{} \Eref{eq:lem-surface-disjointness-190},
-        \Eref{eq:lem-surface-disjointness-320}.
+        to \Eref{eq:lem-surface-disjointness-330}.
 }
 Recall that \V{N} and \V{base} were chosen abitrarily
 The theorem is the universal generalization of
 \V{N} and \V{base} in
-\Eref{eq:lem-surface-disjointness-330}.
+\Eref{eq:lem-surface-disjointness-320}.
+\todo{Recheck this proof}
 \myqed
 \end{proof}
 
