@@ -41,6 +41,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
+\usepackage{wasysym}
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage[final]{hyperref} % ignore draft status
@@ -175,12 +176,9 @@
 \newcommand{\Velement}[2]{\element{\V{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
 \newcommand{\VlastElement}[1]{\Velement{#1}{\#\V{#1}}}
-\newcommand{\dispEnd}{
-  \ifmmode\bigcirc
-  \else$\bigcirc$
-  \fi%
-}
 
+\newcommand{\dispEnd}{\Circle}
+\newcommand{\defEnd}{\Circle}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
 \newcommand{\thEnd}{%
   \ifmmode\rotatedSquare
@@ -1218,7 +1216,7 @@ For emphasis,
 or for convenient reference,
 definitions may be
 in numbered sections.
-The end of a definitions section is indicated with a circle (\dispEnd).
+The end of a definitions section is indicated with a circle (\defEnd).
 Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
 For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
 the same thing.
@@ -1564,7 +1562,7 @@ Let \V{x} and \V{y} be sequences.
 We say
 that \V{x} is a \dfn{prefix} of \V{y} if \Pfx{\V{x}, \V{y}};
 and that \V{x} is a \dfn{proper prefix} of \V{y} if \PrPfx{\V{x}, \V{y}}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Suffix]
@@ -1581,7 +1579,7 @@ and that \V{x} is a \dfn{proper prefix} of \V{y} if \PrPfx{\V{x}, \V{y}}.
 We say
 that \V{x} is a \dfn{suffix} of \V{y} if \Sfx{\V{x}, \V{y}};
 and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
-\dispEnd
+\defEnd
 \end{definition}
 
 To express sequences, we often use a sequence constructor
@@ -1947,7 +1945,7 @@ directed acyclic graphs (DAGs).
 \label{def:tree}
 A \dfn{tree} is a finite DAG,
 that is, a DAG with a non-empty finite set of nodes.
-\dispEnd
+\defEnd
 \end{definition}
 
 Definition \Dfref{def:tree} restates the standard definition,
@@ -2226,7 +2224,7 @@ Then
     $\forall\; \Vnat{N} :
         \myfn{Anc}{\Vnat{N},\V{base}} =
     \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \myfn{Anc}{\V{i},\V{base}}}$.
-    \dispEnd
+    \thEnd
 }
 \end{lemma}
 
@@ -2328,7 +2326,7 @@ A path triple is also an ancestry triple.
 That is,
 \[
     \myfn{Path3}{\V{nd},\V{N},\V{base}} \iff
-        \myfn{PAnc3}{\V{nd},\V{N},\V{base}}.  \dispEnd
+        \myfn{PAnc3}{\V{nd},\V{N},\V{base}}.  \thEnd
 \]
 \end{lemma}
 
@@ -2493,7 +2491,7 @@ then
     $\forall\; \Vnat{N} :
     \myfn{Anc}{\V{N},\V{base}} =
     \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \myfn{gen}{\V{i},\V{base}}}$.
-    \dispEnd
+    \thEnd
 }
 \end{lemma}
 
@@ -2621,7 +2619,7 @@ That is,
         \forall\;\Vnat{N} :
     \\ \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
         \cap \myfn{PredecessorAnc}{\V{N},\V{base}} = \emptyset.
-        \quad \dispEnd
+        \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{lemma}
@@ -2766,7 +2764,7 @@ The surface of the N-level ancestry of a base is a subset
 of the N-level generation of that same base.  That is,
 \[
 \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq \myfn{gen}{\V{N},\V{base}}.
-\dispEnd
+\thEnd
 \]
 \end{lemma}
 
@@ -3424,7 +3422,7 @@ of \Vrule{r}.
 The LHS and RHS of \Vrule{r} may also be
 referred to as
 $\LHS{\V{r}}$ and $\RHS{\V{r}}$, respectively.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context grammar]
@@ -3436,7 +3434,7 @@ all statements are in context of the \dfn{context grammar}.
 A context grammar is always in scope.
 The global-scope context grammar, until redefined,
 is \Vcfg{g}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Rule size]
@@ -3484,7 +3482,7 @@ Unless otherwise stated,
 \item a variable of \type{STR} is assumed to be an element of $\Vocab{\V{cg}}^\ast$; and
 \item a variable of \type{RULE} is assumed to be an element of \Rules{\V{cg}}.
 \end{itemize}
-\dispEnd
+\defEnd
 \end{definition}
 
 As examples of
@@ -3647,7 +3645,7 @@ iff
 A \dfn{partial parse} is often called, simply, a \dfn{parse}.
 Note that, by this definition,
 a full parse is a special case of a partial parse.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context scopes]
@@ -3659,7 +3657,7 @@ will be a \dfn{context scope}.
 Unless otherwise stated,
 the \dfn{context} of these scopes
 will contain the partial parse $[\Vcfg{g}, \Vstr{w}]$.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context input]
@@ -3667,7 +3665,7 @@ From this point on, unless otherwise stated,
 the \dfn{context input} is the input of the context parse.
 Often, the context contains the partial parse $[\Vcfg{g}, \Vstr{w}]$,
 so that the \dfn{context input} is \Vstr{w}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context grammar redefined]
@@ -3675,7 +3673,7 @@ From this point on, unless otherwise stated,
 the \dfn{context grammar} is the grammar of the context parse.
 Often, the context contains the partial parse $[\Vcfg{g}, \Vstr{w}]$,
 so that the \dfn{context grammar} is \Vcfg{g}.
-\dispEnd
+\defEnd
 \end{definition}
 
 We say that symbol \Vsym{x} is \dfn{nullable} iff
@@ -3727,7 +3725,7 @@ and a pointer to the token value,
 which is a value of arbitrary type.\footnote{
 In C language,
 these can be implemented as so-called ``void pointers''.}
-\dispEnd
+\defEnd
 \end{definition}
 
 Where an input location, \Vloc{j},
@@ -3768,7 +3766,7 @@ for some $\Vterm{lookahead} \in \Term{\V{g}}^\ast$,
 \end{aligned}
 \\
 \Vrule{r} = \V{lhs} \de \Vstr{rhs}, \;\; \text{and} \\
-\V{i} = \size{\Vstr{stack}\Vstr{rhs}}. \quad \dispEnd
+\V{i} = \size{\Vstr{stack}\Vstr{rhs}}. \quad \defEnd
 \end{gather}
 \end{definition}
 
@@ -3825,7 +3823,7 @@ we have
 \Vstr{history2} = \Vstr{history1},
 \\ \Vsym{lhs2} = \Vsym{lhs1}\text{, and}
 \\ \Vstr{lookahead3} = \Vstr{lookahead2}.
-    \quad \dispEnd
+    \quad \defEnd
 \end{gather*}
 \end{definition}
 
@@ -4437,7 +4435,7 @@ instances,
 \V{node1} = [ \Vsym{s}, \Vloc{start}, \V{length}, \V{depth} ] \\
 \land \;\; \V{node2} = [ \Vsym{s}, \Vloc{start}, \V{length}, \V{depth} ]
 \end{gathered}
-\right) \quad \dispEnd
+\right) \quad \defEnd
 \end{aligned}
 \end{equation*}
 \end{definition}
@@ -4479,7 +4477,7 @@ in \V{Btree} and \V{Etree}:
 A rewrite is \dfn{semantics-safe}, iff
 \V{Instance-matches}
 is a one-to-one correspondence
-(bijection). \dispEnd{}
+(bijection). \defEnd{}
 \end{definition}
 
 \chapter{\Marpa{} internal grammars}
@@ -4497,7 +4495,7 @@ will usually be a waste of time.}
 A Marpa internal grammar (type \type{INT}) is
 a Marpa external grammar which is augmented,
 and which has no nullable symbols.
-\dispEnd
+\defEnd
 \end{definition}
 
 The notations for CFG's \Chref{chap:CFGs}
@@ -4546,7 +4544,7 @@ is \dfn{right-recursive},
 and that the symbol $\Vsym{rr}$
 is \dfn{right-recursive},
 \begin{equation*}
-\RightRecursive{\Vsym{rr}}. \quad \dispEnd
+\RightRecursive{\Vsym{rr}}. \quad \defEnd
 \end{equation*}
 \end{definition}
 \Dfref{def:rr} implies that, for any rule \V{r}, $\V{r} \in \Rules{\V{g}}$,
@@ -4561,7 +4559,7 @@ we have
 Let \Vint{g} be a \Marpa{} internal grammar.
 If \Vrule{r} is a rule used in a step of a right recursive derivation,
 then \Vrule{r} is right recursive.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -4639,7 +4637,7 @@ the partial parse $[\Vint{g}, \Vstr{w}]$.
 The difference between this and \Dfref{def:context-scope}
 is that the grammar of the context parse is now
 a \Marpa{} internal grammar.
-\dispEnd
+\defEnd
 \end{definition}
 
 Since this book is intended to describe \Marpa{},
@@ -4764,7 +4762,7 @@ is a \dfn{penult} if it is such that $\Penult{\V{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
 \begin{equation*}
 \Vdr{initial} = [\Vsym{accept} \de \mydot \Vsym{start} ].
-\quad \dispEnd
+\quad \defEnd
 \end{equation*}
 \end{definition}
 \begin{definition}[Prediction]
@@ -4776,7 +4774,7 @@ with a dot position of zero,
 for example,
 \begin{equation*}
 \Vdr{predicted} = [\Vsym{A} \de \mydot \Vstr{rhs} ].
-\quad \dispEnd
+\quad \defEnd
 \end{equation*}
 \end{definition}
 \begin{definition}[Completion]
@@ -4792,7 +4790,7 @@ for example,
 A dotted rule which is not a completion is called an
 \dfn{incomplete rule},
 or an \dfn{incompletion}.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 \begin{definition}[Confirmation]
 \label{def:confirmation}
@@ -4802,13 +4800,13 @@ is a dotted rule
 with a dot position greater than zero.
 A dotted rule is \dfn{unconfirmed} iff
 it is not confirmed.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 \begin{definition}[Medial]
 \label{def:medial}
 A rule which is both an incompletion and a confirmation
 is called a \dfn{medial rule}, or \dfn{medial}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[EIM]
@@ -4819,7 +4817,7 @@ A Earley item (type \type{EIM}) is a triple
     [\Vdr{dotted}, \Vorig{i}, \Vcurr{j}]
 \end{equation}
 of dotted rule, origin and current location.
-\dispEnd
+\defEnd
 \end{definition}
 
 The origin is the location where recognition of the rule
@@ -4928,12 +4926,12 @@ iff
 \end{equation*}
 The boolean function \Valid{\Veim{x}} is true iff \Veim{x}
 is valid.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Symbol of an \type{EIM}]
 \begin{equation*}
-\Symbol{\Veim{eim}} \defined \LHS{\V{eim}}. \quad \dispEnd
+\Symbol{\Veim{eim}} \defined \LHS{\V{eim}}. \quad \defEnd
 \end{equation*}
 \end{definition}
 
@@ -4943,7 +4941,7 @@ If \Veim{x} is a valid \type{EIM},
 then $\Origin{\V{x}} + \size{\RHS{\V{x}}} = \Current{\V{x}}$.
 Also,
 the origin of \Veim{x} is at or before its current location.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -5021,7 +5019,7 @@ The match of an \type{EIM} with a location,
 \Matches{\Veim{left},\Vloc{j}} \defined \\
          \Postdot{\V{left}} = \Symbol{\Vloc{j}} \\
 \land \; \Current{\V{left}} = \Origin{\Vloc{j}}.
-\quad \dispEnd
+\quad \defEnd
 \end{gathered}
 \end{equation*}
 \end{definition}
@@ -5033,7 +5031,7 @@ The match of an \type{EIM} with a location,
 \begin{gathered}
 \Matches{\Veim{left},\Veim{right}} \\
 \implies \Current{\V{left}} \le \Current{\V{right}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -5080,7 +5078,7 @@ Then
       \right],
       \Vloc{i}
   \right] @\Vloc{k}.
-  \quad \dispEnd
+  \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{lemma}
@@ -5194,7 +5192,7 @@ Then
       \right],
       \Vloc{i}
   \right] @\Vloc{k}.
-      \quad \dispEnd
+      \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -5268,7 +5266,7 @@ Then
       \right],
       \Vloc{i}
   \right] @(\V{j}+1).
-  \quad \dispEnd
+  \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -5302,7 +5300,7 @@ An Earley set
 is as a set of \dfn{parse items}.
 That is,
 \[
-\type{ES} = \powerset{\type{PIM}}. \quad \dispEnd
+\type{ES} = \powerset{\type{PIM}}. \quad \defEnd
 \]
 \end{definition}
 
@@ -5329,7 +5327,7 @@ an \dfn{add} of \V{pim} to \V{before}.
 An adjoin of \V{pim} to \V{before} that leaves
 $\V{after} = \V{before}$ is also called
 a \dfn{proper adjoin} of \V{pim} to \V{before}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[ES validity]
@@ -5342,7 +5340,7 @@ a \dfn{proper adjoin} of \V{pim} to \V{before}.
 \end{equation}
 If \Valid{\Ves{x}}, we say that \V{x}
 is \dfn{valid}.
-\dispEnd
+\defEnd
 \end{definition}
 
 Note that in \Dfref{def:es-validity}, we have yet to
@@ -5357,7 +5355,7 @@ That is,
 \[
     \type{ET} = \set{ \V{et} \in \naturals\times\type{ES} :
         \exists\; \V{length} \in \naturals :
-        (\deffn{et}{\V{length}}{\type{ES}})}. \quad \dispEnd
+        (\deffn{et}{\V{length}}{\type{ES}})}. \quad \defEnd
 \]
 \end{definition}
 
@@ -5406,7 +5404,7 @@ or \dfn{context table},
    as encoding the state of the parse at \V{j},
    so that ``S'' stands for ``state set''.
 }
-\dispEnd
+\defEnd
 \end{itemize}
 \end{definition}
 
@@ -5419,7 +5417,7 @@ where \Vet{cxt} is the context table,
     \exists \; \Vloc{i} \in \Dom{\Vet{cxt}}: \VVelement{cxt}{i} = \V{es}.
 \]
 Typically, \V{cxt} is \V{S}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[ES current location]
@@ -5438,7 +5436,7 @@ The validity of \V{table} guarantees the uniqueness of \V{i} in
 any valid \Ves{es}.
 We say that \Current{\Ves{es}} is the
 \dfn{current location} of \V{es}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[ET--EIM current location]
@@ -5449,7 +5447,7 @@ in a valid table.  Then
     \begin{gathered}
     \forall \; \Veim{eim} \in \Current{\VVelement{tab}{j}} :
     \\ \Current{\Veim{eim}} = \Current{\VVelement{tab}{j}} = \V{j}.
-    \quad \dispEnd
+    \quad \thEnd
     \end{gathered}
 \]
 \end{theorem}
@@ -5467,7 +5465,7 @@ and the definition of ES current location
 Let \Ves{es} be an Earley set.  Then
 \[
     \forall \; \Veim{eim} \in \Current{\V{es}} : \Current{\Veim{eim}} = \Current{\V{es}}.
-    \quad \dispEnd
+    \quad \thEnd
 \]
 \end{theorem}
 
@@ -5495,7 +5493,7 @@ $\es{(\Vloc{j})}$ instead of $\Vet{cxt}[\Vloc{j}]$.
 In fact, when our intent is clear,
 we will carry the abuse a bit further,
 and abbreviate $\es{(\Vloc{j})}$ to \VVelement{S}{j}.
-\dispEnd
+\defEnd
 \end{definition}
 
 We will require an idea of direction
@@ -5507,7 +5505,7 @@ A sequence of locations within a Earley table is \dfn{left-to-right}
 if it is non-decreasing.
 A sequence of locations within a Earley table is \dfn{right-to-left}
 if it is non-increasing.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Input acceptance]
@@ -5520,7 +5518,7 @@ The Earley table \V{table}
 \begin{gather*}
 \tuple{\Vdr{accept}, 0} \in \Vet{table}\left[ \Vsize{\Vterm{inp}} \right]
 \\ \land \; \LHS{\Vdr{accept}} = \Accept{\Vint{g}}.
-    \quad \dispEnd
+    \quad \defEnd
 \end{gather*}
 \end{definition}
 
@@ -5538,7 +5536,7 @@ Let \Veim{pred} be a prediction in Earley set \Ves{es}.
 Then
 \[
 \Origin{\Veim{pred}} = \Current{\Veim{pred}} = \Current{\V{es}}.
-\quad \dispEnd
+\quad \thEnd
 \]
 \end{theorem}
 
