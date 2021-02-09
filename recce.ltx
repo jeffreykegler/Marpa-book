@@ -2626,7 +2626,7 @@ That is,
 
 \begin{proof}
 The proof is by minimal counter-example.
-Where
+Let
 \begin{equation}
 \label{eq:lem-surface-disjointness-100}
 \begin{gathered}
@@ -2636,12 +2636,11 @@ Where
         \\ \cap\; \myfn{PredecessorAnc}{\V{ex},\V{base}}
     \end{gathered} \right) = \emptyset
     \\ \text{\cuz{} \Eref{eq:lem-surface-disjointness-050}
-         with \Vnat{ex} for \V{N}.
-         New free \V{base}.}
+         with \Vnat{ex} for \Vnat{N}.
+         New free \Vnodset{base}.}
 \end{gathered}
 \end{equation}
-we assume there is a minimal \V{bad} such that
-\Vmyfn{INST}{bad} is false:
+We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{gather}
 \label{eq:lem-surface-disjointness-110}
     \neg \Vmyfn{INST}{bad}
@@ -2664,7 +2663,8 @@ we assume there is a minimal \V{bad} such that
         \Eref{eq:lem-surface-disjointness-140}.
 }
 \mypareq{eq:lem-surface-disjointness-160}{%
-    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-surface-disjointness-150}.
+    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-surface-disjointness-110},
+        \Eref{eq:lem-surface-disjointness-150}.
 }
 \begin{gather}
 \label{eq:lem-surface-disjointness-200}
@@ -2681,7 +2681,7 @@ we assume there is a minimal \V{bad} such that
 \label{eq:lem-surface-disjointness-220}
     \V{nd} \in \myfn{Anc}{\V{bad},\V{base}}
 \\ \label{eq:lem-surface-disjointness-230}
-    \land\; \exists\; \V{parent} \in \V{nodes} :
+    \land\; \exists\; \Vnod{parent} :
     \left( \begin{gathered}
         \tuple{\V{parent},\V{nd}} \in \V{edges}
         \\ \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
@@ -2692,12 +2692,12 @@ we assume there is a minimal \V{bad} such that
 \end{gather}
 \begin{gather}
 \label{eq:lem-surface-disjointness-240}
-    \tuple{\V{parent},\V{nd}} \in \V{edges}
+    \tuple{\Vnod{parent},\V{nd}} \in \V{edges}
 \\ \label{eq:lem-surface-disjointness-250}
         \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{} EI of \Eref{eq:lem-surface-disjointness-230}.
-        New free $\V{parent} \in \V{nodes}$.}
+        New free \Vnod{parent}.}
 \end{gather}
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
@@ -2732,7 +2732,8 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
     $\Vnod{parent} \in \myfn{NewParents}{\Vdecr{bad},\V{base}}$
-    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents}.
+    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+        \Eref{eq:lem-surface-disjointness-300}.
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
@@ -2742,19 +2743,11 @@ we assume there is a minimal \V{bad} such that
 Equation \Eref{eq:lem-surface-disjointness-330}
 is contrary to
 \Eref{eq:lem-surface-disjointness-250}
-and shows the reductio
-starting at \Eref{eq:lem-surface-disjointness-200}.
-\mypareq{eq:lem-surface-disjointness-340}{%
-    $\Vmyfn{Surface}{\V{bad},\V{base}} \cap \myfn{Anc}{\Vdecr{bad},\V{base}} = \emptyset$
-    \bcuz{} reductio from
-        \Eref{eq:lem-surface-disjointness-200}--\Eref{eq:lem-surface-disjointness-210}
-        to \Eref{eq:lem-surface-disjointness-330}.
-}
-Recall that \V{N} and \V{base} were chosen abitrarily
-The theorem is the universal generalization of
-\V{N} and \V{base} in
-\Eref{eq:lem-surface-disjointness-320}.
-\todo{Recheck this proof}
+and shows the reductio from
+\Eref{eq:lem-surface-disjointness-110}--\Eref{eq:lem-surface-disjointness-120}
+to \Eref{eq:lem-surface-disjointness-330}.
+From the reductio, we conclude the absence of
+a minimal counter-example, and the theorem.
 \myqed
 \end{proof}
 
@@ -2764,7 +2757,7 @@ The surface of the N-level ancestry of a base is a subset
 of the N-level generation of that same base.  That is,
 \[
 \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq \myfn{gen}{\V{N},\V{base}}.
-\thEnd
+\quad \thEnd
 \]
 \end{lemma}
 
@@ -2813,12 +2806,19 @@ We now consider the other subcase
         \bcuz{} \longLmref{Surface Disjointness}{surface-disjointness},
             \Eref{eq:lem-generation-surface-containment-150}.
 }
+\mypareq{eq:lem-generation-surface-containment-175}{%
+    $\forall\; \Vnodset{small} : \forall\; \Vnodset{big} : \forall\; \Vnodset{other} :$
+    \linebreak $\var{small} \subseteq \var{big} \land \var{small} \cap \V{other} = \emptyset$
+    \linebreak $\implies \var{small} \subseteq \subtract{\var{big}}{\V{other}}$
+    \bcuz Fact of set theory.
+}
 \mypareq{eq:lem-generation-surface-containment-180}{%
     $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq
         \subtract{\myfn{Anc}{\V{N},\V{base}}}
         {\myfn{Anc}{\Vdecr{N},\V{base}}}$
     \bcuz{} \Eref{eq:lem-generation-surface-containment-160},
-        \Eref{eq:lem-generation-surface-containment-170}.
+        \Eref{eq:lem-generation-surface-containment-170},
+        \Eref{eq:lem-generation-surface-containment-175}.
 }
 \mypareq{eq:lem-generation-surface-containment-190}{%
     $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq
