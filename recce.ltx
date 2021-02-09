@@ -41,7 +41,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
-\usepackage{wasysym}
+\usepackage{wasysym} % Used for \Circle
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage[final]{hyperref} % ignore draft status
@@ -177,8 +177,8 @@
 \newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
 \newcommand{\VlastElement}[1]{\Velement{#1}{\#\V{#1}}}
 
-\newcommand{\dispEnd}{\Circle}
 \newcommand{\defEnd}{\Circle}
+\newcommand{\obsEnd}{\Circle}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
 \newcommand{\thEnd}{%
   \ifmmode\rotatedSquare
@@ -5662,7 +5662,7 @@ the elements of \V{eims}:
 Then
 \[
     \size{\Veimset{eims}} = \bigorder{\size{\Veimset{origs}}}.
-    \quad \dispEnd
+    \quad \thEnd
 \]
 \end{theorem}
 
@@ -5713,7 +5713,7 @@ so that
 For every rule \Vrule{r},
 there is at most one prediction \Veim{pred} in an \type{ES}
 such $\Rule{\V{pred}} = \V{r}$.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -5763,7 +5763,7 @@ which shows the reductio and the theorem.
 \label{th:es-prediction-count}
 The count of valid predictions in an Earley set is
 at most $\size{\Rules{\Vint{g}}} = \Oc{}$.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -5781,7 +5781,7 @@ the Prediction Rule Non-duplication Theorem
 \begin{theorem}[ES \type{EIM} count]
 \label{th:es-eim-count}
 The count of valid \type{EIM}s in the Earley set at \Vloc{j} is \order{\V{j}}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -6042,7 +6042,7 @@ and
 \Transition{\Vlim{x}} & \defined \Vsym{transition}, \\
 \Origin{\Vlim{x}} & \defined \Vorig{top} \text{, and} \\
     \Current{\Vlim{x}} & \defined \Vcurr{j}.
-       \quad \dispEnd
+       \quad \defEnd
 \end{align}
 \end{definition}
 
@@ -6059,7 +6059,7 @@ of \V{pim} is
 In either case, the transition symbol
 of \V{pim}
 may be written
-\Transition{\V{pim}}. \dispEnd
+\Transition{\V{pim}}. \defEnd
 \end{definition}
 
 \begin{definition}[Current location of a \type{PIM}]
@@ -6075,7 +6075,7 @@ of \V{pim} is
 In either case, the current location
 of \Vpim{pim}
 may be written
-\Current{\V{pim}}. \dispEnd
+\Current{\V{pim}}. \defEnd
 \end{definition}
 
 \begin{definition}[Leo unique]
@@ -6107,7 +6107,7 @@ an \type{EIM} \Veim{uniq}
 is \dfn{Leo unique} in \VVelement{S}{j}
 iff
 $\Veim{uniq} \in \LeoUnique{\VVelement{S}{j}}$.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 
 \begin{definition}[Leo Eligible]
@@ -6133,7 +6133,7 @@ an \type{EIM} \Veim{eligible}
 is \dfn{Leo eligible}
 iff
 \myfn{Is-Leo-Eligible}{\V{eligible}}.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 
 \begin{theorem}[Leo eligible location]
@@ -6141,7 +6141,7 @@ iff
 \[
 \myfn{Is-Leo-Eligible}{\Veim{x}} \iff
 \Veim{x} \in \LeoEligible{\Current{\V{x}}}.
-\quad \dispEnd
+\quad \thEnd
 \]
 \end{theorem}
 
@@ -6244,7 +6244,7 @@ Every Leo eligible \type{EIM} is a penult.  That is,
 \label{th:leo-eligible-penult}
 \[
   \myfn{Is-Leo-Eligible}{\Veim{x}} \implies \Penult{\V{x}}.
-  \quad \dispEnd
+  \quad \thEnd
 \]
 \end{theorem}
 
@@ -6314,7 +6314,7 @@ then
 \begin{gather}
   \label{eq:th-leo-eligible-postdot-uniqueness-08}
   \V{x} = \V{y}.
-  \quad \dispEnd
+  \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -6393,7 +6393,7 @@ That is,
    }
 }
 \le \size{\Vocab{\Vint{g}}}.
-\quad \dispEnd
+\quad \thEnd
 \end{gathered}
 \]
 \end{theorem}
@@ -6427,7 +6427,7 @@ We say that \Veim{next} is the \dfn{next Leo eligible \type{EIM}},
 or \dfn{next eligible \type{EIM}}, of \Veim{prev}.
 We say that \Veim{prev} is the \dfn{previous Leo eligible \type{EIM}},
 or \dfn{previous eligible \type{EIM}}, of \Veim{next}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[Next eligible connection]
@@ -6439,7 +6439,7 @@ or \dfn{previous eligible \type{EIM}}, of \Veim{next}.
     \Postdot{\V{next}} = \Symbol{\V{prev}} \\
     \land \; \Current{\V{next}} = \Origin{\V{prev}}
     \end{gathered} \right).
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather*}
 \end{theorem}
 
@@ -6457,7 +6457,7 @@ is non-increasing.  That is,
 \begin{gather*}
     \myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
     \implies \Current{\V{next}} \le \Current{\V{prev}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather*}
 \end{theorem}
 
@@ -6479,7 +6479,7 @@ and
     \nonumber \implies \\
     \label{eq:th-next-eligible-uniqueness-06}
     \V{next1} = \V{next2}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -6563,7 +6563,7 @@ previous \type{EIM} in the sequence.  That is,
 If \V{les} is an \type{LES},
 we say that \Velement{les}{0} is the \dfn{base} of \V{les},
 and that \Velement{les}{\Vlastix{les}} is the \dfn{top} of \V{les}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[Next Leo eligible rule]
@@ -6585,7 +6585,7 @@ then
 \land \; \Symbol{\V{middle}} = \Vsym{lhs} \\
 \label{eq:th-next-eligible-rule-06c}
 \land \; \Symbol{\V{prev}} = \Vsym{rhs}.
-\quad \dispEnd
+\quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -6721,7 +6721,7 @@ That is,
 \implies
 \\ \label{eq:th-les-subsequence-08}
 \V{subseq} \in \type{LES}.
-\quad \dispEnd
+\quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -6824,7 +6824,7 @@ iff
     \land \; \myfn{Is-Leo-Eligible}{\V{next}}
 \\ \label{eq:th-les-extension-07}
     \land \; \myfn{Next-Eligible}{\V{next},\Velement{les}{\Vlastix{les}}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -6965,7 +6965,7 @@ then
 \[
 \Current{\Velement{les}{\V{i}+1}} \le
 \Current{\VVelement{les}{i}}.
-\quad \dispEnd
+\quad \thEnd
 \]
 \end{theorem}
 
@@ -6990,7 +6990,7 @@ That is,
 \forall \; \Vnat{lo} \le \V{hi} :
 \\ \Current{\VVelement{les}{hi}} \le
 \Current{\VVelement{les}{lo}}.
-\quad \dispEnd
+\quad \thEnd
 \end{gathered}
 \]
 \end{theorem}
@@ -7202,7 +7202,7 @@ then
 \label{eq:th-current-location-run-08}
 \forall \; \V{i} \in \set{ \V{ii} : \V{start} \le \V{ii} \le \V{end}} :
     \Current{\VVelement{les}{i}} = \V{loc}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{equation}
 \end{theorem}
 
@@ -7287,7 +7287,7 @@ then
     \label{eq:th-les-unit-derivation-08}
     \Symbol{\Velement{les}{\Vlastix{les}\subtractOp 1}} \deplus
     \Symbol{\Velement{les}{0}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{equation}
 \end{theorem}
 
@@ -7588,7 +7588,7 @@ Also, every \type{LES} is finite:
 \begin{equation}
 \label{eq:th-les-finiteness-06}
 \forall \; \V{les} \in \type{LES} : \V{les} \in \naturals.
-\quad \dispEnd
+\quad \thEnd
 \end{equation}
 \end{theorem}
 
@@ -7898,7 +7898,7 @@ That is,
 \\ \nonumber \iff
 \\ \label{eq:th-les-uniqueness-08}
    \var{les1} = \var{les2}.
-   \quad \dispEnd
+   \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -8014,7 +8014,7 @@ That is,
 \\ \nonumber \iff
 \\ \label{eq:th-les-prefix-08}
    \PrPfx{\var{les1},\var{les2}}.
-   \quad \dispEnd
+   \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -8104,7 +8104,7 @@ such that
     \myfn{Lt}{\Vles{x},\Vles{y}} \iff \PrPfx{\var{les1},\var{les2}}\text{, and}
     \\ \label{eq:th-les-trichotomy-09c}
     \myfn{Gt}{\Vles{x},\Vles{y}} \iff \PrPfx{\var{les2},\var{les1}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -8253,7 +8253,7 @@ and we say that \mylim{\ell} is \dfn{valid} if \Valid{\ell}.
 If $\mylim{\ell} \in \myfn{lims}{\Veim{src}}$,
 we say that \type{EIM} \var{src} is the \dfn{source} of $\ell$,
 and that the \type{LIM} $\ell$ is the \dfn{LIM} of \Veim{src}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Leo source \type{EIM}]
@@ -8264,7 +8264,7 @@ and that the \type{LIM} $\ell$ is the \dfn{LIM} of \Veim{src}.
 We say that \var{src} is
 a \dfn{Leo source \type{EIM}}, or a \dfn{source \type{EIM}},
 if \myfn{Is-source}{\Veim{src}}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[Leo source function]
@@ -8281,7 +8281,7 @@ The function
     \text{such that } \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
 \end{gather}
 exists and is a surjection.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -8444,7 +8444,7 @@ That is,
 \forall \; \var{src} \in \type{EIM} :
 \forall \; \ell \in \myfn{lims}{\var{src}} :
     \Current{\ell} = \Current{\var{src}}.
-    \quad \dispEnd
+    \quad \thEnd
 \]
 \end{theorem}
 
@@ -8477,7 +8477,7 @@ That is,
         \var{les} \in \type{LES} :
         \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{Is-source}{\VVelement{les}{i}}
     \end{gathered}
-}.  \quad \dispEnd
+}.  \quad \defEnd
 \end{equation}
 \end{definition}
 
@@ -8488,7 +8488,7 @@ That is,
 \[
 \begin{gathered}
     \forall \; \Vlss{lss} : \existsUniq \; \Vles{les} : \var{lss} = \var{les}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gathered}
 \]
 \end{theorem}
@@ -8522,7 +8522,7 @@ The theorem follows from
 \label{def:underlying-les}
 If $\Vles{les} = \Vlss{lss}$ we say that
 \var{les} is the \dfn{underlying LES} of \Vlss{lss}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[Source \type{EIM} containment]
@@ -8532,7 +8532,7 @@ That is,
 \[
 \forall \; \Veim{eim} : \myfn{Is-source}{\var{eim}} \implies
     \exists \; \Vlss{lss} : \var{eim} = \Velement{lss}{0}.
-    \quad \dispEnd
+    \quad \thEnd
 \]
 \end{theorem}
 
@@ -8641,14 +8641,14 @@ A \dfn{maximal LSS} is an \type{LSS} which is not the proper prefix
 of another \type{LSS}.
 We use the notation \Maximal{\Vlss{lss}}
 to say that \var{lss} is maximal.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[LSS uniqueness]
 \label{th:lss-uniqueness}
 If two \type{LSS}'s of the same length have the same base element,
 then they are identical.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -8711,7 +8711,7 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-lss-subsequence-08}
-\var{subseq} \in \type{LSS}. \quad \dispEnd
+\var{subseq} \in \type{LSS}. \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -8768,7 +8768,7 @@ iff
         $\myfn{Is-source}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
-        \dispEnd
+        \thEnd
 }
 \end{theorem}
 
@@ -8839,7 +8839,7 @@ iff
         $\exists \; \Veim{next} : \myfn{Is-source}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
-        \dispEnd
+        \thEnd
 }
 \end{theorem}
 
@@ -8901,7 +8901,7 @@ iff
         $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
-        \dispEnd
+        \thEnd
 }
 \end{theorem}
 
@@ -8953,7 +8953,7 @@ That is,
 \\ \nonumber \iff
 \\ \label{eq:th-lss-prefix-08}
    \PrPfx{\var{lss1},\var{lss2}}.
-   \quad \dispEnd
+   \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -9045,7 +9045,7 @@ such that
     \myfn{Lt}{\Vlss{x},\Vlss{y}} \iff \PrPfx{\var{lss1},\var{lss2}}\text{, and}
     \\ \label{eq:th-lss-trichotomy-09c}
     \myfn{Gt}{\Vlss{x},\Vlss{y}} \iff \PrPfx{\var{lss2},\var{lss1}}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather}
 \end{theorem}
 
@@ -9149,7 +9149,7 @@ The theorem follows from
 \begin{theorem}[Maximal LSS non-duplication]
 \label{th:maximal-lss-non-duplication}
 An \type{EIM} is the base of at most one maximal \type{LSS}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -9207,7 +9207,7 @@ maximal \type{LSS}.  That is,
 \mypareq{eq:th-maximal-lss-existence-02}{
     $\myfn{Is-source}{\var{eim}} \implies
     \exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
-    \dispEnd
+    \thEnd
 }
 \end{theorem}
 
@@ -9394,7 +9394,7 @@ which is what we needed for the theorem.
 \begin{theorem}[Maximal LSS uniqueness]
 \label{th:maximal-lss-uniqueness}
 For every Leo source \type{EIM}, there is exactly one maximal \type{LSS}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -9417,7 +9417,7 @@ That is,
 \\ \Maximal{\var{max}} \land \Velement{max}{0} = \Velement{lss}{0}
 \\ \land \;
     (\var{lss} = \var{max} \lor \PrPfx{\var{lss}, \var{max}}).
-    \quad \dispEnd
+    \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -9534,7 +9534,7 @@ then
    $\forall \; \Vlss{lss} :
        \Velement{lss}{\Vlastix{lss}} = \Velement{max}{\Vlastix{max}}
        \implies \Maximal{\var{lss}}.$
-       \dispEnd
+       \thEnd
 }
 \end{theorem}
 
@@ -9598,7 +9598,7 @@ and with it, we have the theorem.
 \label{th:maximal-lss-lims-termination}
 \mypareq{eq:th-maximal-lss-lims-termination-02}{%
     $\Maximal{\Vlss{max}} \iff \size{ \myfn{next-lims}{\Vlastix{max}} } = 0$.
-    \dispEnd
+    \thEnd
 }
 \end{theorem}
 
@@ -9682,7 +9682,7 @@ That is,
 } :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
 \land \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
-   \quad \dispEnd
+   \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -10033,7 +10033,7 @@ Every \type{EIM} has at most one valid \type{LIM}.
 That is,
 \[
 \forall \; \Veim{eim} : \Valid{\var{eim}} \implies \size{\myfn{lims}{\var{eim}}} \le 1.
-   \quad \dispEnd
+   \quad \thEnd
 \]
 \end{theorem}
 
@@ -10189,7 +10189,7 @@ and the theorem.
 \label{th:source-fn-injection}
 The \myfnname{Source} function exists,
 and is a total bijection.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -10289,7 +10289,7 @@ The function
     such that $\Lim{\Veim{src}} \defined \riota \mylim{\ell} : \ell \in \myfn{lims}{\var{src}}$,
 }
 exists and is a bijection.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -10314,7 +10314,7 @@ we overload \var{Matches} as follows:
          \Postdot{\var{cuz}} = \Lambda \\
 \land \; \Transition{\ell} = \Symbol{\var{cuz}} \\
 \land \; \Current{\ell} = \Origin{\var{cuz}}.
-  \quad \dispEnd
+  \quad \defEnd
 \end{gathered}
 \end{equation*}
 \end{definition}
@@ -10328,7 +10328,7 @@ That is,
 \forall \; \Vloc{j} \in \Dom{\Vet{S}} :
 \size{\set{\mylim{\ell} : \Current{\ell} = \var{j}}} \le
 \size{\Vocab{\var{g}}}.
-\quad \dispEnd
+\quad \thEnd
 \]
 \end{theorem}
 
@@ -10462,7 +10462,7 @@ a singleton.
 That is,
 \[
     \size{\myfn{next-lims}{\var{eim}}} \le 1.
-    \quad \dispEnd
+    \quad \thEnd
 \]
 \end{theorem}
 
@@ -10520,7 +10520,7 @@ be a function such that
 \end{aligned}
 \end{equation}
 Then \myfnname{LIM-Predecessor} exists.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -10544,7 +10544,7 @@ and
     \begin{gathered}
     \LIMPredecessor{\Veim{eim}} = \ell \land \ell \in \type{LIM}
     \\ \iff \Transition{\ell} = \Symbol{\var{eim}} \land\; \Current{\ell} = \Origin{\var{eim}}.
-        \quad \dispEnd
+        \quad \thEnd
     \end{gathered}
 \]
 \end{theorem}
@@ -10633,7 +10633,7 @@ we have the theorem.
 \begin{gather*}
     \LIMPredecessor{\Veim{prev}} \ne \Lambda
     \\ \implies \Current{\LIMPredecessor{\var{prev}}} \le
-        \Current{\var{prev}}. \quad \dispEnd
+        \Current{\var{prev}}. \quad \thEnd
 \end{gather*}
 \end{theorem}
 
@@ -10826,7 +10826,7 @@ We will assume that the implementation allows \Oc{} space globally.
 We do not call any of our pseudocode procedures recursively,
 so that the \Oc{} global space can include a ``stack''
 which allows \Oc{} space for every call of a pseudocode procedure.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Caller and callee]
@@ -10834,7 +10834,7 @@ In a context where pseudocode procedure \var{P1} invokes (or ``calls'')
 pseudocode procedure \var{P2},
 \var{P1} is the \dfn{caller} and
 \var{P2} is the \dfn{callee}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Housekeeping and body execution resource]
@@ -10852,7 +10852,7 @@ which, except in the case of the top-level pseudocode procedure,
 is incurred by the caller of \var{P}.
 Body execution of \var{P} may consume arbitrary resource,
 which is incurred by \var{P}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \todo{Account for top-level housekeeping}
@@ -10871,7 +10871,7 @@ may safely ignore the time incurred by a pseudocode procedure.
 \label{th:procedure-overhead-discard}
 \Oc{} time incurred by a
 pseudocode procedure may be ignored.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -10910,7 +10910,7 @@ and will then follow with a toy example.
 The number of \dfn{invocations} of a line
 is the number of executions of
 that line's logic.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Loop invocation]
@@ -10927,7 +10927,7 @@ The first line of a loop is invoked
 \item once for every successful test of the test condition of the loop; and
 \item exactly once for an unsucessful, and therefore final, test
 of the test condition of the loop.
-\dispEnd
+\defEnd
 \end{itemize}
 \end{definition}
 
@@ -11041,7 +11041,7 @@ then line \var{L2} is executed
 at most the same number of times as line \var{L1}.
 We notate this observation in the form
 ``line L1 Cond''.
-\dispEnd
+\defEnd
 \end{definition}
 
 \section{Complexity table conventions}
@@ -11081,7 +11081,7 @@ less obvious aspects of the data structures for each \type{PIM}.
 \begin{theorem}[PIM link pairs element]
 \label{th:pim-link-pairs-element}
 \todo{Account for linked list of direct ancestors}
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11093,7 +11093,7 @@ less obvious aspects of the data structures for each \type{PIM}.
 The space incurred by linked lists
 of the \var{transitions} array
 may be ignored.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11133,7 +11133,7 @@ Given access to a \type{PIM} \var{pim},
 a new link pair may be written in \Oc{}
 time,
 and its space requirement may be ignored.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11159,7 +11159,7 @@ A symbol may be looked up by ID
 in \Oc{} time and zero space.
 Also, the entire list of symbols may be traversed
 in \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11187,7 +11187,7 @@ A rule may be looked up by ID
 in \Oc{} time and zero space.
 Also, the entire list of rules may be traversed
 in \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11210,7 +11210,7 @@ All of these operations are accesses and none consume space.
 \label{th:dotted-rule-id-complexity}
 The function \ID{\Vdr{x}} maps each dotted rule to
 an ID in \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11255,7 +11255,7 @@ The resource incurred
 by allocating an empty Earley set is
 charged as \Oc{} time,
 \Oc{} trimmed space and zero link space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11269,7 +11269,7 @@ incurs \Oc{} time and \Oc{} space.
 The resource incurred by adding a new
 \type{PIM} to an Earley set incurs
 \Oc{} time and \Oc{} space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11286,7 +11286,7 @@ this clearly can be done in \Oc{} time and \Oc{} space.
 Adding a link pair
 to an existing \type{EIM} (a dup)
 incurs \Oc{} time and \Oc{} space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11304,7 +11304,7 @@ Traversal of \var{eset}
 incurs \Oc{} time and zero space for each \type{PIM}
 in \var{eset},
 plus \Oc{} time and zero space for the final test.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11328,7 +11328,7 @@ Let \var{es} be an \type{ES} with
 Then that resource for \var{es}
 may also be accounted for as $\var{x}+\var{y}$
 resource charged to each \type{EIM} of \var{es}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11378,7 +11378,7 @@ charged to any of its \type{PIM}s.
 Then that resource for \var{es}
 may also be accounted for as $2\times\var{x}$
 resource charged to each \type{EIM} in \var{es}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11395,7 +11395,7 @@ Traversal of \var{es}
 may be charged as \Oc{} time and zero space for each \type{EIM}
 in \var{es},
 plus \Oc{} time and zero space for the final test.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11429,7 +11429,7 @@ and accessing an \type{ES}
 as an element of an Earley table
 (that is, in the form \Velement{S}{\Vloc{j}})
 incurs \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11502,7 +11502,7 @@ takes place as part of the initial overhead of
 parsing.
 It incurs \Oc{} time and \Oc{} space,
 which may be charged to the parse.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11535,7 +11535,7 @@ if
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we simply say that \var{dotZeroUsed} is \dfn{correct}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[\var{dotZeroUsed} Access]
@@ -11543,7 +11543,7 @@ we simply say that \var{dotZeroUsed} is \dfn{correct}.
 Clearing \var{dotZeroUsed} requires \Oc{} time
 and zero space.
 Bit accesses and writes take \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11565,7 +11565,7 @@ bit writes, and clearing of the bitmap.
 From this point on,
 and unless stated otherwise,
 every context scope contains its own \var{dotZeroUsed} bitmap.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[\var{dotZeroUsed} Binding Assumption]
@@ -11574,7 +11574,7 @@ The binding assumption for \var{dotZeroUsed}
 is that \var{dotZeroUsed} is correct for the context
 Earley table.
 (Frequently, the context Earley table is \var{S}.)
-\dispEnd
+\defEnd
 \end{definition}
 
 \section{\var{seen} PSL}
@@ -11600,7 +11600,7 @@ and $\Lambda$ otherwise.
 \label{th:seen-psl-initialization}
 In each Earley set,
 initialization of \var{seen} consumes \Oc{} time.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11615,7 +11615,7 @@ and \Oc{} space.
 Each call of \Seen{} and \SetSeen{} consumes
 consumes \Oc{} time
 and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11638,7 +11638,7 @@ if
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we simply say that \myfn{Seen}{} is \dfn{valid}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context \var{seen} Function]
@@ -11646,7 +11646,7 @@ we simply say that \myfn{Seen}{} is \dfn{valid}.
 From this point on,
 and unless stated otherwise,
 every context scope contains its own \myfn{Seen}{} function.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[\myfn{Seen}{} Binding Assumption]
@@ -11655,7 +11655,7 @@ The binding assumption for \myfn{Seen}{}
 is that \myfn{Seen}{} is correct for the context
 Earley table.
 (Frequently, the context Earley table is \var{S}.)
-\dispEnd
+\defEnd
 \end{definition}
 
 \section{The \var{transitions} Array of Arrays}
@@ -11686,7 +11686,7 @@ occur only when that element is initialized.
 In other words,
 after the first read of \VVelement{transitions}{j},
 the contents of \VVelement{transitions}{j} will not change.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[\type{LIM} Transition First]
@@ -11694,7 +11694,7 @@ the contents of \VVelement{transitions}{j} will not change.
 The sequence of \type{PIM}s in an element of
 of the \var{transitions} array of arrays
 has its \type{LIM}s first.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11716,7 +11716,7 @@ That is,
 \begin{gather*}
 \forall\; \Vsym{t} : \forall\; \var{j} \in \Dom{\var{S}} :
 \\ \size{\transitions{\Vloc{j}}{\Vsym{t}}} = \order{\Vloc{j}}.
-\quad \dispEnd
+\quad \thEnd
 \end{gather*}
 \end{theorem}
 
@@ -11739,7 +11739,7 @@ and the ES \type{LIM} Count Theorem \Thref{es-lim-count}.
 A call of the form
 \transitions{\Vloc{j}}{\Vsym{t}}
 consumes \Oc{} time, and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11779,7 +11779,7 @@ we say that \var{transitions} is \dfn{valid for} \var{table}.
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we say that \var{transitions} is \dfn{valid}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[\var{transitions} completeness]
@@ -11804,7 +11804,7 @@ we say that \var{transitions} is \dfn{complete for} \Vet{table}.
 Where \Vet{table} is understood in context
 (usually because it is the context Earley table),
 we simply say that \var{transitions} is \dfn{complete}.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[\var{transitions} correctness]
@@ -11816,7 +11816,7 @@ We say that \var{transitions} is \dfn{correct for} \var{X}
 if \var{transitions} is valid and complete for \var{X}.
 We say that \var{transitions} is \dfn{correct}
 if \var{transitions} is valid and complete.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[Context \var{transitions}]
@@ -11825,7 +11825,7 @@ From this point on,
 and unless stated otherwise,
 every context scope contains its own
 \var{transitions} function.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{definition}[\var{transitions} binding assumption]
@@ -11834,7 +11834,7 @@ The binding assumption for \var{transitions}
 is that \var{transitions} is valid for the context
 Earley table.
 (Frequently, the context Earley table is \var{S}.)
-\dispEnd
+\defEnd
 \end{definition}
 
 \section{\type{LSS} Traversal}
@@ -11845,7 +11845,7 @@ Earley table.
 \todo{Do I need this?}
 A call of the \myfn{LIM}{} function incurs \Oc{}
 time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11876,7 +11876,7 @@ and the space incurred is $0+0=0$.
 \label{th:lim-predecessor-complexity}
 A call of the \LIMPredecessor{} function
 incurs \Oc{} time and zero space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -11993,7 +11993,7 @@ $\Vsize{work} = \size{\Vocab{\var{g}}}$.
 \begin{theorem}[\var{cnt} size]
 \label{th:cnt-size}
 In \Aref{alg:bookkeeper-op}, $\var{cnt} = \Oc{}$.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12194,7 +12194,7 @@ can be accounted for by charging
 \Oc{} time
 to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12285,7 +12285,7 @@ The space that each \op{Bookkeeper} op incurs
 may be accounted for by charging
 \Oc{} space to \VVelement{S}{j}
 of \AFref{alg:bookkeeper-op}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12329,7 +12329,7 @@ the \op{Initializer} op may be ignored.
 Space incurred by the \op{Initializer} op may be
 accounted for as \Oc{} space charged
 to the start \type{EIM}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12354,7 +12354,7 @@ even conceptually.
 And \Marpa{} does not track link pairs for
 predictions
 \Obref{obs:prediction-ancestry}.
-\dispEnd{}
+\obsEnd{}
 \end{observation}
 
 \begin{observation}[\Earley{}'s Earley set 0]
@@ -12362,7 +12362,7 @@ predictions
 \Marpa{}'s % \linebreak
 \op{Ini\-tial\-iza\-tion} op has the same effect as the construction
 of Earley set 0 by \Earley{}.
-\dispEnd{}
+\obsEnd{}
 \end{observation}
 
 \section{Predicter op}
@@ -12427,7 +12427,7 @@ refer to the \var{Predict1} Algorithm \AFref{alg:predict1}.}
 \begin{theorem}[\proc{Predict1} Time]
 \label{th:predict1-time}
 The time incurred by \proc{Predict1} may be ignored.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12483,7 +12483,7 @@ If \var{dotZeroUsed} is consistent for
 then the space incurred by \myfn{Predict1}{\var{prediction}}
 may be charged as \Oc{} space to the \type{ES}
 \VVelement{S}{\Current{\var{prediction}}}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12682,7 +12682,7 @@ can be accounted for by charging
 \Oc{} time to each \type{EIM} of \VVelement{S}{j},
 where \VVelement{S}{j} is the argument of the
 \op{Predicter} call.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12727,7 +12727,7 @@ and the Procedure Overhead Time Discard Theorem
 \begin{theorem}[\var{Predicter} Space Complexity]
 \label{th:predicter-space}
 Calls of \op{Predicter} incur no space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -12748,7 +12748,7 @@ will clearly run no worse than
 The \Marpa{} implementation does not track
 link pairs
 for predictions.
-\dispEnd{}
+\obsEnd{}
 \end{observation}
 
 Tracking link pairs for a prediction would be cumbersome,
@@ -13024,7 +13024,7 @@ By charging \Oc{} time to \Veim{trial}, when \var{trial} is added to the current
 \item
 By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is a duplicate of an EIM
-already in the current ES. \dispEnd
+already in the current ES. \thEnd
 \end{itemize}
 \end{theorem}
 
@@ -13132,7 +13132,7 @@ for calls where \Veim{trial} is a new EIM; and
 \item
 charging \Oc{} space to \Veim{trial}
 for calls where \var{trial} is a duplicate
-of an EIM already in the current ES. \dispEnd
+of an EIM already in the current ES. \thEnd
 \end{itemize}
 \end{theorem}
 
@@ -13147,7 +13147,7 @@ the \op{Scanner} Space Worksheet
 \label{obs:earley-scanner-op}
 \Marpa{}'s scanner op has the same effect as the ``Scanner''
 operation of \Earley{}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \section{Reducer op}
@@ -13365,7 +13365,7 @@ By charging \Oc{} time to
 \item \label{item:th-earley-reducer-time-2}
 By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is a duplicate of an EIM
-already in the current ES. \dispEnd
+already in the current ES. \thEnd
 \end{itemize}
 \end{theorem}
 
@@ -13467,7 +13467,7 @@ and \Oc{} space to
 \Veim{trial}
 for every calls where \var{trial} is a duplicate
 of an EIM already in the current ES.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -13520,7 +13520,7 @@ A call of \op{Leo-reducer} is a \dfn{new pass}
 if it adds a new EIM to an ES.
 A call of \op{Leo-reducer} is a \dfn{dup pass}
 if it adjoins a duplicate EIM to an ES.
-\dispEnd
+\defEnd
 \end{definition}
 
 \begin{theorem}[\op{Leo-reducer} passes]
@@ -13528,7 +13528,7 @@ if it adjoins a duplicate EIM to an ES.
 Every call of\ifhack{\\}{}
 \op{Leo-reducer} is either
 a new or a dup pass, but never both.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -13700,7 +13700,7 @@ By charging \Oc{} time to
 By charging \Oc{} time to
 \Veim{trial}, when \var{trial} is a duplicate of an EIM
 already in the current ES.
-\dispEnd
+\thEnd
 \end{itemize}
 \end{theorem}
 
@@ -13797,7 +13797,7 @@ for calls where \Veim{trial} is a new EIM; and
 charging \Oc{} space to \Veim{trial}
 for calls where \var{trial} is a duplicate
 of an EIM already in the current ES.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -13940,7 +13940,7 @@ may be accounted for by charging
 \Oc{} time
 to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:reducer-op}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14005,7 +14005,7 @@ refer to the \op{Reducer} Algorithm \Aref{alg:reducer-op}.}
 \begin{theorem}[\op{Reducer} Space]
 \label{th:reducer-space}
 The \op{Reducer} incurs no space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14018,7 +14018,7 @@ This theorem follows immediately from
 \label{th:reducer-ancestry-tracking}
     The \Marpa{} implementation records a link pair for every
     adjoin of an \type{EIM} generated by \op{Reducer}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14039,7 +14039,7 @@ line \ref{line:leo-reducer-op-10} of
 The cause of the link pair for an
 adjoin of an \type{EIM} generated by \op{Reducer}
 will always be a completed \type{EIM}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14057,7 +14057,7 @@ and line \ref{line:earley-reducer-op-4} of
 The predecessor of the link pair for an
 adjoin of an \type{EIM} generated by \op{Reducer}
 will always be an incomplete \type{EIM}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14086,7 +14086,7 @@ The predecessor of the link pair for an
 adjoin of an \type{LIM} generated by \op{Reducer}
 will be either a \type{LIM},
 or $\Lambda$.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14130,7 +14130,7 @@ if there never is a \type{LIM} in \Vpimset{matches} on
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}.
 In this case,
 we never execute \op{Leo-reducer}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \begin{observation}[Summary of \Earley{} Completer Operation]
@@ -14161,7 +14161,7 @@ $\left[ \Next{\DR{\var{pred}}}, \Origin{\var{pred}} \right]@\Vloc{current}$
 into the Earley table with the link pair
 \begin{equation}
 \label{eq:earley-completer-summary-5}
-[ \var{pred}, \var{cause} ]. \quad \dispEnd
+[ \var{pred}, \var{cause} ]. \quad \obsEnd
 \end{equation}
 \end{observation}
 
@@ -14213,7 +14213,7 @@ Traversal of the Leo eligible items in \var{eset}
 can be charged as \Oc{} time and zero space for each \type{EIM}
 in \var{eset},
 plus \Oc{} time and zero space for the final test.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14479,7 +14479,7 @@ can be accounted for by charging
 \Oc{} time
 to each \type{EIM}
 in \VVelement{S}{j} of \Aref{alg:bookkeeper-op}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14549,7 +14549,7 @@ and the Procedure Overhead Discard Theorem \Thref{procedure-overhead-discard}.
 The space that each \op{Memoizer} op incurs may
 be accounted for by
 charging \Oc{} space to an arbitrary \type{EIM}.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14571,7 +14571,7 @@ exists.
 We say that
 \PreviousLink{\ell} is
 the \dfn{previous link} of $\ell$.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14591,14 +14591,14 @@ The ancestry of a \type{LIM} is a single link pair.
 In the link pair for a \type{LIM} $\ell$,
 the ``cause'' is \Source{\ell}
 and the ``predecessor'' is \PreviousLink{\ell}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \begin{theorem}[\type{LIM} Link Pair Uniqueness]
 The ancestry of
 every \type{LIM} contains exactly one
 link pair.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -14612,7 +14612,7 @@ and the observation on \type{LIM} ancestry \Obref{obs:lim-ancestry}.
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-op}
 \Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
-\dispEnd{}
+\obsEnd{}
 \end{observation}
 
 \section{Top level of \Marpa{}}
@@ -14664,7 +14664,7 @@ This can be seen from
 \Obref{obs:earley-predicter-op},
 and
 \Obref{obs:earley-memoizer-op}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \chapter{Low-level complexity summary}
@@ -14892,7 +14892,7 @@ This observation follows from
 \Aref{alg:reducer-op},
 \Aref{alg:predicter-op}, and
 \Aref{alg:memoizer-op}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by type of result]
@@ -14910,7 +14910,7 @@ This follows from
 \Obref{obs:earley-predicter-op},
 \Obref{obs:earley-memoizer-op}, and
 \Obref{obs:marpa-op-by-result}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \begin{observation}[\Marpa{} operation by direct ancestor]
@@ -14925,7 +14925,7 @@ This observation follows from
 \Aref{alg:reducer-op},
 \Aref{alg:predicter-op}, and
 \Aref{alg:memoizer-op}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \begin{observation}[\Earley{} operation by direct ancestor]
@@ -14940,7 +14940,7 @@ This observation follows from
 \Obref{obs:earley-completer-op},
 \Obref{obs:earley-predicter-op} and
 \Obref{obs:earley-memoizer-op}.
-\dispEnd
+\obsEnd
 \end{observation}
 
 \chapter{Ambiguity}
@@ -15044,7 +15044,7 @@ If there is a horizontal ambiguity for a parse \var{p},
 then
 \var{p} is a horizontally ambiguous parse.
 A grammar is \dfn{horizontally ambiguous} if and only if it has a
-horizontally ambiguous parse. \dispEnd{}
+horizontally ambiguous parse. \defEnd{}
 \end{definition}
 
 Note that if $\Vstr{rhs1} = \epsilon$, that
@@ -15224,13 +15224,13 @@ of the vertical ambiguity,
 \Vloc{orig} is its \dfn{origin}, and
 \Vloc{dot} is its \dfn{dot position}.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse. \dispEnd{}
+vertically ambiguous parse.
 
 If there is a vertical ambiguity for a parse \var{p},
 then
 \var{p} is a vertically ambiguous parse.
 A grammar is \dfn{vertically ambiguous} if and only if it has a
-vertically ambiguous parse. \dispEnd{}
+vertically ambiguous parse. \defEnd{}
 \end{definition}
 
 \begin{theorem}[Grammar of vertically ambiguous parse is ambiguous]
@@ -15409,7 +15409,7 @@ and the \type{EIM} is
 \dfn{horizontally ambiguous} if
 \begin{equation}
 \label{eq:ambig-eim-03}
-\Vloc{overlap1} \neq \Vloc{overlap2}. \quad \dispEnd
+\Vloc{overlap1} \neq \Vloc{overlap2}. \quad \defEnd
 \end{equation}
 \end{definition}
 
@@ -16159,7 +16159,7 @@ contained in another chain.
 A chain is \dfn{partial} if it is contained in another chain.
 Note that a maximal chain is a special case of a partial chain.
 Chains are maximal unless stated otherwise.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 
 \begin{theorem}[LEO Chain containment]
@@ -16441,7 +16441,7 @@ if and only if
 We say that \Veim{base} \dfn{matches} a Leo chain,
 call it \Vlimset{chain},
 if and only if \Veim{base} matches $\var{chain}[0]$.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 
 \begin{definition}[Leo edge]
@@ -16482,7 +16482,7 @@ An \dfn{lower element} of an edge is a bottom or an inside element.
 An edge is \dfn{maximal} if its Leo chain is maximal.
 An edge is \dfn{partial} if its Leo chain is partial.
 An edge is maximal, unless stated otherwise.
-\dispEnd{}
+\defEnd{}
 \end{definition}
 
 \begin{theorem}[Leo edge length]
@@ -17758,7 +17758,7 @@ Then
 \;\; \text{and} \\
 \label{eq:handle-unique-15d}
 \Vterm{postA} = \Vterm{postB}.
-    \quad \dispEnd
+    \quad \thEnd
 \end{gather}
 \end{lemma}
 
@@ -18690,7 +18690,7 @@ will usually be a waste of time.}
 \begin{theorem}[\Marpa{} unambiguous time and space is quadratic]
 For every unambiguous grammar,
 \Marpa{} runs in $\order{n^2}$ time and space.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -18701,7 +18701,7 @@ For every unambiguous grammar,
 \begin{theorem}[\Marpa{} context-free time is cubic]
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ time.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -18714,7 +18714,7 @@ For every context-free grammar,
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ space,
 including the space for tracking links.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -18742,7 +18742,7 @@ the same space bound for CFG's as \Earley{}.
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^2}$ space,
 if it does not track links.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
@@ -18766,7 +18766,7 @@ for which links are necessary.
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^3}$ space,
 including the space for tracking links.
-\dispEnd
+\thEnd
 \end{theorem}
 
 \begin{proof}
