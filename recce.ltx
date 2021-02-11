@@ -2068,7 +2068,6 @@ The context tree is
 \label{eq:non-unary-chap-context-tree}
 \V{tree} = \tuple{\Vnodset{nodes},\V{edges}}.
 \end{equation}
-In \Eref{eq:non-unary-chap-context-tree},
 In this context scope,
 $\Vnodset{leaves} \subseteq \V{nodes}$
 will be the set of leaves in \V{tree}.
@@ -2338,30 +2337,53 @@ between paths and ancestries.
 To do this, it will be convenient to speak of
 ``path triples'' and ``ancestry triples''.
 The path triple
-$\myfn{Path3}{\V{nd},\V{N},\V{base}}$
-states that node \V{nd} is one end of a path \V{N} nodes
-long and with one of the set of nodes \V{base} at the other end, so that
+$\myfn{Path3}{\Vnod{nd},\Vnat{N},\Vnodset{base}}$
+states that \Vnod{nd} is the start of a path at most \Vnat{N} nodes
+long and with of \Vnodset{base} at the other end, so that
 \begin{equation}
-\begin{gathered}
-\myfn{Path3}{\V{nd},\V{N},\V{base}} \defined \exists\; \V{path} \in \V{Paths} :
+\myfn{Path3}{\V{nd},\V{N},\V{base}} \defined
+    \left( \begin{gathered}
+    \exists\; \V{path} \in \naturals\times\V{nodes} :
     \\ \Velement{path}{0} = \V{nd}
-        \land \Velement{path}{\Vlastix{path}} = \V{b}
-        \land \V{b} \in \V{base}
-        \land \Vsize{path} = \V{N}.
-\end{gathered}
+    \\ \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
+    \\ \land\; \Vsize{path} \le \V{N}
+    \end{gathered} \right).
 \end{equation}
 The ancestry triple
-$\myfn{PAnc3}{\V{nd},\V{N},\V{b}}$
-states that \V{nd} is in an \V{N}-level ancestry with
-base \V{b}, so that
+$\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$
+states that \Vnod{nd} is in an
+ancestry with
+base \Vnodset{b} and level at most \Vnat{N},
+so that
 \begin{equation}
-\begin{gathered}
-\myfn{PAnc3}{\V{nd},\V{N},\V{base}} \defined
-    \exists\; \V{A} :
-    \\ \V{A} = \myfn{Anc}{\V{N},\V{base}}
-    \land \V{nd} \in \V{A} \land \Vmyfn{Proper}{A}.
-\end{gathered}
+\myfn{Anc3}{\V{nd},\V{N},\V{base}} \defined
+    \left( \begin{gathered}
+        \V{nd} \in \myfn{Anc}{\V{level},\V{base}}
+        \\ \land\; \V{level} \le \V{N}
+    \end{gathered} \right).
 \end{equation}
+
+\begin{lemma}[Path by Triples]
+\label{lem:path-by-triples}
+\todo{State this theorem}
+\thEnd
+\end{lemma}
+
+\begin{proof}
+\todo{Prove this}
+\myqed
+\end{proof}
+
+\begin{lemma}[Ancestry by Triples]
+\label{lem:ancestry-by-triples}
+\todo{State this theorem}
+\thEnd
+\end{lemma}
+
+\begin{proof}
+\todo{Prove this}
+\myqed
+\end{proof}
 
 \begin{lemma}[Path--Ancestry Equivalence]
 \label{lem:path-ancestry-equivalence}
@@ -2369,7 +2391,7 @@ A path triple is also an ancestry triple.
 That is,
 \[
     \myfn{Path3}{\V{nd},\V{N},\V{base}} \iff
-        \myfn{PAnc3}{\V{nd},\V{N},\V{base}}.  \thEnd
+        \myfn{Anc3}{\V{nd},\V{N},\V{base}}.  \thEnd
 \]
 \end{lemma}
 
