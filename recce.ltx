@@ -1837,16 +1837,17 @@ Unary operators have tightest precedence and are omitted.
 {${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
 \hline
 %
-{$\V{a}:\V{b}$}    & \cellboxr{``\V{a} such that \V{b}''} \\
-\hline
-{$\cond{c}{\V{v1}}{\V{v2}}$} & \cellboxr{%
+% {$\V{a}:\V{b}$}    & \cellboxr{``\V{a} such that \V{b}''} \\
+% \hline
+{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
     Ternary conditional operator:\\
-    ``\V{v1} if \V{c}, otherwise \V{b}''} \\
+    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
     \hline
 {$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
 \hline
-{$\rule[-2.5ex]{0em}{0in}{\defined}$}
-& \cellboxr{Definition} \\
+\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
+&
+\raisebox{.7ex}{Definition} \\
 \hline
 {$\because$} & \cellboxr{Hint separator} \\
 \hline
@@ -1934,36 +1935,99 @@ When used in a comparison,
 $\Lambda$ compares equal to itself
 and unequal to any other value.
 
-\chapter{Non-unary Trees}
-\label{chap:non-unary-trees}
-
-\todo{Put tree definition in preceding chapter.}
 Recall that one of our preceding disciplines was graph theory.
-Parsing theory makes extensive use of
-directed acyclic graphs (DAGs).
+Terminology varies among the authorities.
+For clarity, we state our choices\begin{footnote}%
+The definitions
+that we have followed most closely are
+those of \cite{HU1979}.
+\end{footnote}
+here:
 
-\begin{definition}[Tree]
-\label{def:tree}
-A \dfn{tree} is a finite DAG,
-that is, a DAG with a non-empty finite set of nodes.
+\begin{definition}[Directed graph]
+\label{def:directed-graph}
+A \dfn{directed graph} is a pair
+$\tuple{\V{V}, \V{E}}$,
+where \V{V} is a finite set of \dfn{vertices},
+and $\V{E} \in \V{V}\times\V{V}$ is a set of
+\dfn{edges}.
 \defEnd
 \end{definition}
 
-Definition \Dfref{def:tree} restates the standard definition,
-with a clarification.
-Not all authorities require that a tree be non-empty and finite.
-In this paper,
-we follow those who do.
+\begin{definition}[Path]
+\label{def:path}
+We say that a finite sequence of vertices is a \dfn{path}
+of a directed graph
+iff each successive pair of  vertices is one
+of the edges of the directed graph.
+That is,
+where $\V{G} = \tuple{\V{V}, \V{E}}$
+is a directed path,
+\V{pth} is a \dfn{path} iff
+\begin{equation}
+\label{eq:def-paths}
+    \begin{gathered}
+        \exists\; \Vnat{length} :
+        \\ \deffn{pth}{\V{length}}{\V{V}}
+        \\ \land\;
+            \forall\; \Vnat{ix} < \V{length} :
+                \tuple{ \Velement{path}{\V{ix}+1}, \VVelement{path}{ix} } \in \V{E}
+    \end{gathered}.
+\end{equation}
+If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
+By \Eref{eq:def-paths},
+every sequence of nodes of length 1 is a path, vacuously.
+\defEnd
+\end{definition}
 
-We now proceed to define
-``non-unary trees'',
-and to deduce some of their
-properties which will be useful.
+\begin{definition}[Parents]
+\label{def:parents}
+Where $\V{G} = \tuple{\V{V}, \V{E}}$
+is a directed graph,
+\begin{itemize}
+\item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
+\item \V{child} is the \dfn{child} of \V{parent} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
+\item The \dfn{in-degree} of a vertex is the count of its parents.
+\item The \dfn{out-degree} of a vertex is the count of its children.
+    \defEnd
+\end{itemize}
+\end{definition}
+
+\begin{definition}[Tree]
+\label{def:tree}
+A \V{tree} is a directed graph,
+$\V{G} = \tuple{\V{V}, \V{E}}$
+such that
+\begin{itemize}
+\item Exactly one vertex of \V{G}, called the \V{root},
+    has an in-degree of zero.
+    In other words, \V{G} has a distinguished vertex,
+    called its root, which has no parents.
+\item There is exactly one path from the root to every vertex of
+    the tree.  (Note that there is a trivial path from the root
+    to itself.)
+\item Every vertex, other than the root, has an in-degree of
+    one.
+    In other words, every non-root vertex of \V{G} has exactly
+    one parent.
+\item The children of every vertex are ordered left-to-right.
+\end{itemize}
+When a directed graph is a tree, its vertices are more
+often called \dfn{nodes}.
+A \dfn{leaf} of a tree is a node with an out-degree of zero ---
+in other words, a leaf is a node with no children.
+A \dfn{leaf path} is a path whose last value is a leaf.
+    \defEnd
+\end{definition}
+
+\chapter{Non-unary Trees}
+\label{chap:non-unary-trees}
+
 For the purpose of this chapter we introduce
 the opaque type \type{NOD}.
 Intuitively, a value of type \type{NOD} is a ``node''.
 The set of values of
-\type{NOD} is non-empty, but otherwise arbitrary.
+\type{NOD} must be non-empty, but otherwise arbitrary.
 
 % Macros for this chapter only
 \newcommand{\nod}[1]{\ensuremath{#1_\type{NOD}}}
@@ -1971,49 +2035,19 @@ The set of values of
 \newcommand{\Vnodset}[1]{\Tvarset{#1}{NOD}}
 
 This chapter is a new context scope,
-which contains
+which contains an arbitrary tree called
+the ``context tree''.
+The context tree is
 \begin{equation}
 \label{eq:non-unary-chap-context-tree}
 \V{tree} = \tuple{\Vnodset{nodes},\V{edges}}.
 \end{equation}
-
 In \Eref{eq:non-unary-chap-context-tree},
-\V{tree} is a finite arbitary ``context tree'',
-\Vnodset{nodes} is a set of ``nodes'',
-and $\V{edges} \in \Vnodset{nodes}\times\Vnodset{nodes}$
-is a set of ``edges''.
-\todo{Should \Vnodset{nodes} be allowed to empty?}
-Recall that a ``leaf'' is a node with an out-degree of 0.
 In this context scope,
 $\Vnodset{leaves} \subseteq \V{nodes}$
 will be the set of leaves in \V{tree}.
 
 \section{Tree ancestries}
-
-\todo{Will I use \myfn{Paths}{}?}
-Let \V{Paths} be the set of finite sequences of nodes
-such that each element is the direct parent of the previous one,
-if it exists.
-That is,
-\begin{equation}
-\label{eq:def-paths}
-\V{Paths} \defined \set{
-    \begin{gathered}
-        \V{path} \in \naturals\times\Vnodset{nodes} :
-            \exists\; \Vnat{length} :
-        \\ \deffn{path}{\V{length}}{\V{nodes}}
-        \\ \land\;
-        \left( \begin{gathered}
-            \V{ix} < \V{length}
-            \\ \implies \tuple{ \Velement{path}{\V{ix}+1}, \VVelement{path}{ix} } \in \V{edges}
-        \end{gathered} \right)
-    \end{gathered}
-    }.
-\end{equation}
-A ``path'' is an element of \V{Paths}.
-A ``leaf path'' is a path whose last value is a leaf.
-Note that by \Eref{eq:def-paths},
-every sequence of nodes of length 1 is a path, vacuously.
 
 Let the ``new parents'' function,
 \[
@@ -19079,6 +19113,12 @@ Paul~R.~Halmos
 Michael~A.~Harrison.
 \newblock {\em Introduction to Formal Language Theory}.
 \newblock Addison-Wesley, 1978.
+
+\bibitem{HU1979}
+John E.~Hopcroft and Jeffrey D.~Ullman.
+\newblock{\em Introduction to Automata Theory,
+    Language and Computation}.
+\newblock Addison-Wesley, 1979.
 
 \bibitem{Irons}
 Edgar~T.~Irons.
