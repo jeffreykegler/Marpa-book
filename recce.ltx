@@ -2965,23 +2965,93 @@ two or more child nodes.
 \begin{lemma}[Surface New Parents Inclusion]
 \label{lem:surface-new-parents-inclusion}
 For all subsets of the nodes of tree,
-every element that is a child of a new parent of that subset
-is also an element of the surface of that subset.
+every child of a new parent of that subset
+is an element of the surface.
 That is,
-\begin{equation}
+\begin{gather}
 \label{eq:surface-new-parents-inclusion-050}
-\begin{gathered}
-\forall\; \V{ndset} \in \Vpowerset{nodes} :
-\forall\; \V{child} \in \V{ndset} :
-    \\ \tuple{\V{parent},\V{child}} \in \V{edges} \land \V{parent} \in \Vmyfn{NewParents}{ndset}
-    \\ \implies\; \V{child} \in \Vmyfn{Surface}{ndset}.
-\end{gathered}
-\end{equation}
+    \forall\; \Vnodset{ndset} : \forall\; \Vnod{parent} : \forall\; \Vnod{child} :
+    \\ \label{eq:surface-new-parents-inclusion-060}
+        \tuple{\V{parent},\V{child}} \in \V{edges} \land \V{parent} \in \Vmyfn{NewParents}{ndset}
+    \\ \label{eq:surface-new-parents-inclusion-070}
+        \implies\; \V{child} \in \Vmyfn{Surface}{ndset}.
+\end{gather}
 \end{lemma}
 
 \begin{proof}
-\todo{Prove this}
-\myqed
+The proof strategy is direct.
+The hypothesis \Eref{eq:surface-new-parents-inclusion-060}
+of the implication is assumed,
+to show the implication's consequent \Eref{eq:surface-new-parents-inclusion-070}.
+The theorem is then obtained using universal generalization.
+
+\begin{gather}
+\label{eq:surface-new-parents-inclusion-120}
+\tuple{\Vnod{parent},\Vnod{child}} \in \V{edges}
+\\ \label{eq:surface-new-parents-inclusion-130}
+    \land\; \V{parent} \in \Vmyfn{NewParents}{nds}
+\\ \nonumber \myparbox{\cuz{}
+    Hypothesis of \Eref{eq:surface-new-parents-inclusion-060},
+        AF implication.
+        New free \Vnod{parent}, new free \Vnod{child},
+        new free \Vnodset{nds}.}
+\end{gather}
+\begin{equation}
+\label{eq:surface-new-parents-inclusion-150}
+\begin{gathered}
+    \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
+    \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
+    \\ \myparbox{\cuz{}
+        Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+        \Eref{eq:surface-new-parents-inclusion-130}.}
+\end{gathered}
+\end{equation}
+\begin{gather}
+\label{eq:surface-new-parents-inclusion-170}
+    \V{child} \in \V{nds}
+\\ \label{eq:surface-new-parents-inclusion-180}
+    \land\; \V{parent} \notin \V{nds}
+\\ \label{eq:surface-new-parents-inclusion-190}
+    \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
+\\ \nonumber
+    \myparbox{\cuz{}
+        EI of \Vnod{child}
+        bound in \Eref{eq:surface-new-parents-inclusion-150}
+        with existing \Vnod{child}.}
+\end{gather}
+\mypareq{eq:surface-new-parents-inclusion-200}{%
+    $\exists\; \Vnod{parent} : \V{parent} \notin \V{nds}
+    \land \tuple{\V{parent},\V{child}} \in \V{edges}$
+    \bcuz{}
+        EG of \Vnod{parent}
+        in \Eref{eq:surface-new-parents-inclusion-180} and
+        \Eref{eq:surface-new-parents-inclusion-190}.}
+\mypareq{eq:surface-new-parents-inclusion-210}{%
+    $\V{child} \in \Vmyfn{Surface}{nds}$
+    \bcuz{} Def of \myfnname{Surface} \Eref{eq:def-surface},
+        \Eref{eq:surface-new-parents-inclusion-170},
+        \Eref{eq:surface-new-parents-inclusion-200}.
+}
+\begin{equation}
+\label{eq:surface-new-parents-inclusion-220}
+\begin{gathered}
+        \tuple{\V{parent},\V{child}} \in \V{edges} \land \V{parent} \in \Vmyfn{NewParents}{nds}
+    \\ \implies\; \V{child} \in \Vmyfn{Surface}{nds}
+    \\ \myparbox{\cuz{}
+                Implication from \Eref{eq:surface-new-parents-inclusion-120}--%
+                    \Eref{eq:surface-new-parents-inclusion-130}
+                to \Eref{eq:surface-new-parents-inclusion-210}.}
+\end{gathered}
+\end{equation}
+The theorem then follows from
+\begin{itemize}
+\item the UG of \Vnod{child} in \Eref{eq:surface-new-parents-inclusion-220}
+    to bound \Vnod{child};
+\item the UG of \Vnod{parent} in \Eref{eq:surface-new-parents-inclusion-220}
+    to bound \Vnod{parent}; and
+\item the UG of \Vnodset{nds} in \Eref{eq:surface-new-parents-inclusion-220}
+    to bound \Vnodset{ndset}.  \myqed
+\end{itemize}
 \end{proof}
 
 \begin{lemma}[Surface--Parents Ratio]
