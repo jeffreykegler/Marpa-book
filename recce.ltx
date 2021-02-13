@@ -1455,9 +1455,10 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-In this chapter we begin the deductive exposition,
-dealing with matters from preceding disciplines.
-Preceding disciplines to our discussion are
+In this, the first chapter
+of the deductive exposition,
+we deal with matters from preceding disciplines.
+Our preceding disciplines are
 set theory;
 logic;
 procedures and algorithms;
@@ -1681,59 +1682,6 @@ is the unique \V{x} in the set \V{A} such that
 is defined iff
 $\existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}$.
 
-Traditionally mathematical operations,
-even logical operations,
-imply no order of evaluation.
-This is inconvenient for our purposes because
-it means that,
-in cases where an sub-expression is ill-defined,
-the whole expression is also ill-defined.
-One workaround is to special-case potential ill-definedness,
-wherever it occurs,
-but this is awkward and verbose.
-
-Instead, for the purpose of assessing well-definedness,
-we treat logical expressions as if we ``evaluated''
-them from left to right.
-Once, in this ``evaluation'',
-we know what the value of the whole expression would be,
-on the assumption that there is a well-defined boolean value,
-we ``evaluate'' no further,
-ignoring even ill-defined sub-expressions.
-In this book, the expressions that
-traditional, order-free, evaluation
-would consider ill-defined
-typically are iota operators
-or sequence values with out-of-bounds indexes.
-
-In the following examples, let \V{arr} be the sequence
-of length 1 such that $\Velement{arr}{0} = 1749$.
-Consider as an example
-\begin{equation}
-\label{eq:order-of-evaluation-100}
-    \forall\; \Vnat{x} : \V{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
-\end{equation}
-Using traditional order-free evaluation,
-\Eref{eq:order-of-evaluation-100} is not well-defined,
-because if $\V{x}=1$, then $\V{x} \notin \Dom{\V{arr}}$.
-In this book, however,
-\Eref{eq:order-of-evaluation-100} is well-defined and true,
-because if the left hand side of a logical ``or'' is true,
-we ignore its right hand side, even if it is ill-defined.
-As another example, in this book,
-\[
-    \forall\; \Vnat{x} : \V{x} = 0 \land \VVelement{arr}{x} \le 42
-\]
-is considered to be well-defined and false,
-because
-if the left hand side of a logical ``and'' is false,
-we ignore the right hand side.
-Similarly, we consider the equation
-\[
-    \forall\; \Vnat{x} : \V{x} = 0 \implies \VVelement{arr}{x} \ge 42
-\]
-to be well-defined and true.
-
 To avoid ambiguity, especially with multi-character variables,
 we avoid representing relations in the form
 \begin{equation}
@@ -1939,14 +1887,80 @@ When used in a comparison,
 $\Lambda$ compares equal to itself
 and unequal to any other value.
 
-Recall that one of our preceding disciplines was graph theory.
-Terminology varies among the authorities.
-For clarity, we state our choices\begin{footnote}%
+\section{Order of evaluation}
+
+An mathematical expression is only well-formed
+if all of it is well-formed.
+All the expressions in this book are
+(we hope)
+well-formed.
+
+Traditionally,
+assessing whether a mathematical expression is
+well-defined is done in the same fashion as assessing
+whether it is well-formed:
+A mathematical expression is considered well-defined
+only if every part of it is well-defined.
+
+In keeping with this,
+logical operations typically
+imply no order of evaluation ---
+there is no definition of the order in which the subexpressions
+are assessed for their value,
+or their well-definedness.
+
+One workaround is to special-case potential ill-definedness,
+wherever it occurs,
+but this is awkward and verbose.
+It is often more convenient, and clearer,
+to present the math using an expression
+that contains potentially ill-defined subexpressions.
+In this book, potentially ill-defined subexpressions.
+include iota operators
+and sequence values with out-of-bounds indexes.
+
+For the purpose of assessing well-definedness,
+we treat logical expressions as if we evaluated
+them from left to right.
+Once we know what the value of the whole expression would be,
+on the assumption that there is a well-defined boolean value,
+we evaluate no further,
+ignoring even ill-defined sub-expressions.
+
+In the following examples, let \V{arr} be the sequence
+of length 1 such that $\Velement{arr}{0} = 1749$.
+Consider as an example
+\begin{equation}
+\label{eq:order-of-evaluation-100}
+    \forall\; \Vnat{x} : \V{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
+\end{equation}
+Using traditional order-free evaluation,
+\Eref{eq:order-of-evaluation-100} is not well-defined,
+because if $\V{x}=1$, then $\V{x} \notin \Dom{\V{arr}}$.
+In this book, however,
+\Eref{eq:order-of-evaluation-100} is well-defined and true,
+because if the left hand side of a logical ``or'' is true,
+we ignore its right hand side, even if it is ill-defined.
+As another example, in this book,
+\[
+    \forall\; \Vnat{x} : \V{x} = 0 \land \VVelement{arr}{x} \le 42
+\]
+is considered to be well-defined and false,
+because
+if the left hand side of a logical ``and'' is false,
+we ignore the right hand side.
+Similarly, we consider the equation
+\[
+    \forall\; \Vnat{x} : \V{x} = 0 \implies \VVelement{arr}{x} \ge 42
+\]
+to be well-defined and true.
+
+\section{Graph theory}
+
+Among the graph theory authorities,
 The definitions
 that we have followed most closely are
 those of \cite{HU1979}.
-\end{footnote}
-here:
 
 \begin{definition}[Directed graph]
 \label{def:directed-graph}
@@ -2387,8 +2401,12 @@ so that
 
 \begin{lemma}[Path by Triples]
 \label{lem:path-by-triples}
-\todo{State this theorem}
-\thEnd
+\begin{equation}
+\label{eq:lem-path-by-triples-100}
+\myfn{Anc3}{\V{nd},\V{N},\V{base}} \implies
+\myfn{Path3}{\V{nd},\V{N},\V{base}}.
+\quad \thEnd
+\end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -2398,8 +2416,12 @@ so that
 
 \begin{lemma}[Ancestry by Triples]
 \label{lem:ancestry-by-triples}
-\todo{State this theorem}
-\thEnd
+\begin{equation}
+\label{eq:lem-ancestry-by-triples-100}
+\myfn{Path3}{\V{nd},\V{N},\V{base}}
+    \implies \myfn{Anc3}{\V{nd},\V{N},\V{base}}.
+\quad \thEnd
+\end{equation}
 \end{lemma}
 
 \begin{proof}
