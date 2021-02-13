@@ -1969,20 +1969,33 @@ where $\V{G} = \tuple{\V{V}, \V{E}}$
 is a directed path,
 \V{pth} is a \dfn{path} iff
 \begin{equation}
-\label{eq:def-paths}
+\label{eq:def-path}
     \begin{gathered}
+        \V{pth} \in \powerset{\naturals\times\V{V}}
+        \land
+        \left( \begin{gathered}
         \exists\; \Vnat{length} :
-        \\ \deffn{pth}{\V{length}}{\V{V}}
-        \\ \land\;
+        \\ \Dom{\V{pth}} = {\V{length}}
+        \\ \land
+            \left( \begin{gathered}
             \forall\; \Vnat{ix} < \V{length} :
-                \tuple{ \Velement{path}{\V{ix}+1}, \VVelement{path}{ix} } \in \V{E}
+            \\ \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{E}
+            \end{gathered} \right)
+        \end{gathered} \right)
     \end{gathered}.
 \end{equation}
 If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
-By \Eref{eq:def-paths},
-every sequence of nodes of length 1 is a path, vacuously.
 \defEnd
 \end{definition}
+
+Note that, by \Eref{eq:def-path},
+every sequence of nodes of length 1 is a path, vacuously.
+Also note that, in this book, we index the path in reverse
+order of the directed graph.
+When we deal with trees,
+we will find it convenient to index the path
+so that leaves is always at the beginning of a paths and the root
+is always at the end.
 
 \begin{definition}[Parents]
 \label{def:parents}
@@ -2334,14 +2347,28 @@ We now want to explore the relationship
 between paths and ancestries.
 To do this, it will be convenient to speak of
 ``path triples'' and ``ancestry triples''.
+For the purposes of this chapter,
+let $\V{Paths}$ be the set of paths in \V{tree}, so that
+\begin{equation}
+\label{eq:def-paths}
+    \V{Paths} \defined
+    \set{ \begin{gathered}
+        \V{pth} \in \naturals\times\V{nodes} :
+        \\ \exists\; \Vnat{length} : \Dom{\V{pth}} = \V{length}
+        \\ \land\; \forall\; \Vnat{ix} < \V{length} :
+                \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{edges}
+    \end{gathered} }.
+\end{equation}
 The path triple
 $\myfn{Path3}{\Vnod{nd},\Vnat{N},\Vnodset{base}}$
-states that \Vnod{nd} is the start of a path at most \Vnat{N} nodes
-long and with of \Vnodset{base} at the other end, so that
+states that \Vnod{nd} is
+a path at most \Vnat{N} nodes
+whose first value is \Vnod{nd} and
+whose last value is an element of \Vnodset{base}, so that
 \begin{equation}
 \myfn{Path3}{\V{nd},\V{N},\V{base}} \defined
     \left( \begin{gathered}
-    \exists\; \V{path} \in \naturals\times\V{nodes} :
+    \exists\; \V{path} \in \V{Paths} :
     \\ \Velement{path}{0} = \V{nd}
     \\ \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
     \\ \land\; \Vsize{path} \le \V{N}
@@ -2351,14 +2378,11 @@ The ancestry triple
 $\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$
 states that \Vnod{nd} is in an
 ancestry with
-base \Vnodset{b} and level at most \Vnat{N},
+base \Vnodset{b} and level \Vnat{N},
 so that
 \begin{equation}
 \myfn{Anc3}{\V{nd},\V{N},\V{base}} \defined
-    \left( \begin{gathered}
-        \V{nd} \in \myfn{Anc}{\V{level},\V{base}}
-        \\ \land\; \V{level} \le \V{N}
-    \end{gathered} \right).
+        \V{nd} \in \myfn{Anc}{\V{N},\V{base}}.
 \end{equation}
 
 \begin{lemma}[Path by Triples]
@@ -3081,7 +3105,7 @@ let
     \Vmyfn{children}{parent} \defined
         \set{
             \begin{gathered}
-            \V{child} \in \V{nodes} : 
+            \V{child} \in \V{nodes} :
             \\  \tuple{\V{parent},\V{child}} \in \V{edges}
             \end{gathered}
         }
