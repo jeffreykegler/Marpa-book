@@ -2380,6 +2380,7 @@ a path at most \Vnat{N} nodes
 whose first value is \Vnod{nd} and
 whose last value is an element of \Vnodset{base}, so that
 \begin{equation}
+\label{eq:def-path3}
 \myfn{Path3}{\V{nd},\V{N},\V{base}} \defined
     \left( \begin{gathered}
     \exists\; \V{path} \in \V{Paths} :
@@ -2388,6 +2389,13 @@ whose last value is an element of \Vnodset{base}, so that
     \\ \land\; \Vsize{path} \le \V{N}
     \end{gathered} \right).
 \end{equation}
+We say
+that \Vnod{nd} is the \dfn{node},
+that \Vnat{N} is the \dfn{level},
+and that \Vnodset{b} is the \dfn{base},
+of the path triple
+$\myfn{Path3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$.
+
 The ancestry triple
 $\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$
 states that \Vnod{nd} is in an
@@ -2395,14 +2403,21 @@ ancestry with
 base \Vnodset{b} and level \Vnat{N},
 so that
 \begin{equation}
+\label{eq:def-anc3}
 \myfn{Anc3}{\V{nd},\V{N},\V{base}} \defined
         \V{nd} \in \myfn{Anc}{\V{N},\V{base}}.
 \end{equation}
+We say
+that \Vnod{nd} is the \dfn{node},
+that \Vnat{N} is the \dfn{level},
+and that \Vnodset{b} is the \dfn{base},
+of the ancestry triple
+$\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$.
 
 \begin{lemma}[Path by Triples]
 \label{lem:path-by-triples}
 \begin{equation}
-\label{eq:lem-path-by-triples-100}
+\label{eq:lem-path-by-triples-050}
 \myfn{Anc3}{\V{nd},\V{N},\V{base}} \implies
 \myfn{Path3}{\V{nd},\V{N},\V{base}}.
 \quad \thEnd
@@ -2410,6 +2425,54 @@ so that
 \end{lemma}
 
 \begin{proof}
+The proof is by minimal counterexample.
+Where
+\mypareq{eq:lem-path-by-triples-150}{%
+    $\Vmyfn{INST}{ex} \defined
+        \myfn{Anc3}{\V{nd},\V{N},\V{base}} \land \neg
+        \myfn{Path3}{\V{nd},\V{N},\V{base}}$
+    \cuz{} UI of \V{N} in
+        \Eref{eq:lem-path-by-triples-050} with \V{ex}.
+}
+we assume there is a minimal \V{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:lem-path-by-triples-160}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-path-by-triples-165}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \because \text{AF reduction.  New free \V{bad}.}
+\end{gather}
+By definition, a node is in a level 0 ancestry triple
+iff it is an element of the its base:
+\mypareq{eq:lem-path-by-triples-170}{%
+    $\forall\; \Vnod{nd} : \myfn{Anc3}{\V{nd},0,\V{base}} \iff \V{nd} \in \V{base}$
+    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+        Def of \myfnname{Anc3} \Eref{eq:def-anc3}.
+}
+And, since every element of \V{base}, call it \V{baseNode} induces the path of length 1
+\tuple{\V{baseNode}}, we have
+\mypareq{eq:lem-path-by-triples-180}{%
+    $\forall\; \Vnod{nd} : \V{nd} \in \V{base} \implies \myfn{Path3}{\V{nd},0,\V{base}}$
+    \bcuz{} Def of \myfnname{Path3} \Eref{eq:def-path}.
+}
+Also, by definition, every node in a level 0 path triple in an element of the triple's
+base:
+\mypareq{eq:lem-path-by-triples-190}{%
+    $\forall\; \Vnod{nd} : \myfn{Path3}{\V{nd},0,\V{base}}
+        \implies \V{nd} \in \V{base}$
+    \bcuz{} Def of \myfnname{Path3} \Eref{eq:def-path}.
+}
+\mypareq{eq:lem-path-by-triples-280}{%
+    \Vmyfn{INST}{0} \cuz{} \Eref{eq:lem-path-by-triples-150},
+        \Eref{eq:lem-path-by-triples-170}.
+}
+\mypareq{eq:lem-path-by-triples-290}{%
+    $\V{bad} > 0$ \cuz{}
+        \Eref{eq:lem-path-by-triples-160},
+        \Eref{eq:lem-path-by-triples-280}.
+}
 \todo{Prove this}
 \myqed
 \end{proof}
