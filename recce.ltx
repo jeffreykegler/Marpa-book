@@ -1045,24 +1045,9 @@ consistent with that of
 Halmos.\footnote{%
 See Halmos 1960~\cite{Halmos1960}.
 Halmos assumes the Axiom of Choice,
-but this book makes no use of it.
+but this book makes no direct use of it.
 }
 Particularly, all of our mathematical objects are sets.
-
-We follow Halmos~\cite{Halmos1960}
-strictly when it comes to the presentation
-of induction.
-An induction
-consists of defining a set and showing that set is equivalent
-to the natural numbers.
-Therefore, every induction is a statement about the natural numbers.
-The set is defined by a condition, using the Axiom of Specification.
-As one consequence,
-the basis of our inductions is always zero.
-Other forms of mathematical induction can be mapped
-to the natural numbers and,
-when we need them,
-we perform that mapping.
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -1252,11 +1237,12 @@ from the body of the equation by a ``because'' symbol (``$\because$'').
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 ``Def'' abbreviates ``definition''.
+``iff'' abbreviates ``if and only if''.
+``WLOG'' abbreviates ``without loss of generality''.
 ``EI'' abbreviates ``existential instantiation''.
 ``EG'' abbreviates ``existential generalization''.
 ``UI'' abbreviates ``universal instantiation''.
-``EG'' abbreviates ``universal generalization''.
-``WLOG'' abbreviates ``assumed without loss of generality''.
+``UG'' abbreviates ``universal generalization''.
 
 The statement of a definition implies that it is consistent,
 and that, if the definition is of a mathematical object,
@@ -1494,9 +1480,21 @@ is a function with domain \V{X}
 and codomain \V{Y}.
 
 In this book, the natural numbers begin with 0,
-and that set of natural numbers is written \naturals{}.
-$\powerset{\V{A}}$ is the powerset of the set \V{A}.
-The abbreviation ``iff'' is used for ``if and only if''.
+and that set of natural numbers is written \naturals{},
+whether it is used as a cardinal or an ordinal.
+The notation $\Vsize{set} = \naturals$
+indicates that \V{set} is countably infinite.
+\powerset{\V{A}} is the powerset of the set \V{A}.
+
+We use the von Neumann convention,
+according to which every natural number is the set of
+all preceding natural numbers
+so that, for example, $0 = \emptyset$
+and $3 = \set{0,1,2}$.
+We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
+The von Neumann convention extends to \naturals,
+so that $\V{i} \in \naturals$ is a way of saying that \V{i}
+is any natural number.
 
 Where \V{seq} is a sequence,
 the first element of \V{seq} is \Velement{seq}{0}.%
@@ -1674,13 +1672,13 @@ We use Russell's iota operator,
 so that
 \begin{equation}
 \label{eq:def-riota}
-\riota \V{x} \in \V{A} : \myfn{P}{x}
+\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
 \end{equation}
 is the unique \V{x} in the set \V{A} such that
-\myfn{P}{x} is true.
+\Vmyfn{P}{x} is true.
 \Eref{eq:def-riota}
-is defined iff
-$\existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}$.
+is well-defined iff
+$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
 
 To avoid ambiguity, especially with multi-character variables,
 we avoid representing relations in the form
@@ -1814,21 +1812,6 @@ in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
 Otherwise tradition is followed: bracketing symbols override precedence,
 and where an operator is written out in verbal form (``iff'') it has looser
 precedence than one written in math symbols $\iff$.
-
-In this book, we will only need to describe countable cardinalities.
-\Vsize{set} is the cardinality of the set \V{set}.
-The notation $\Vsize{set} \in \naturals$
-indicates that \V{set} is finite.
-The notation $\Vsize{set} = \naturals$
-indicates that \V{set} is countably infinite.%
-\footnote{
-    In this case, $\naturals$ is used as a cardinal,
-    and many texts would indicate this by writing it $\aleph_0$.
-    But $\naturals = \aleph_0$ and,
-    since we will not mention any other transfinite cardinals,
-    we see no need to have two different notations
-    for the same set.%
-}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -1980,7 +1963,7 @@ iff each successive pair of  vertices is one
 of the edges of the directed graph.
 That is,
 where $\V{G} = \tuple{\V{V}, \V{E}}$
-is a directed path,
+is a directed graph,
 \V{pth} is a \dfn{path} iff
 \begin{equation}
 \label{eq:def-path}
@@ -1988,11 +1971,11 @@ is a directed path,
         \V{pth} \in \powerset{\naturals\times\V{V}}
         \land
         \left( \begin{gathered}
-        \exists\; \Vnat{length} :
+        \exists\; \Vnat{length} > 0 :
         \\ \Dom{\V{pth}} = {\V{length}}
         \\ \land
             \left( \begin{gathered}
-            \forall\; \Vnat{ix} < \V{length} :
+            \forall\; \Vnat{ix} \in \Vdecr{length} :
             \\ \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{E}
             \end{gathered} \right)
         \end{gathered} \right)
@@ -2086,6 +2069,7 @@ The set of values of
 \newcommand{\nod}[1]{\ensuremath{#1_\type{NOD}}}
 \newcommand{\Vnod}[1]{\nod{\V{#1}}}
 \newcommand{\Vnodset}[1]{\Tvarset{#1}{NOD}}
+\newcommand{\Vnodseq}[1]{\Tvarseq{#1}{NOD}}
 
 This chapter is a new context scope,
 which contains an arbitrary tree called
@@ -2367,7 +2351,7 @@ let $\V{Paths}$ be the set of paths in \V{tree}, so that
 \label{eq:def-paths}
     \V{Paths} \defined
     \set{ \begin{gathered}
-        \V{pth} \in \naturals\times\V{nodes} :
+        \Vnodseq{pth} :
         \\ \exists\; \Vnat{length} : \Dom{\V{pth}} = \V{length}
         \\ \land\; \forall\; \Vnat{ix} < \V{length} :
                 \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{edges}
@@ -2444,26 +2428,36 @@ we assume there is a minimal \V{bad} such that
 \\ \nonumber
     \because \text{AF reduction.  New free \V{bad}.}
 \end{gather}
-By definition, a node is in a level 0 ancestry triple
-iff it is an element of the its base:
+We first note that, where base is an arbitrary set of nodes,
+each of its elements induces a sequence of length 1.
 \mypareq{eq:lem-path-by-triples-170}{%
-    $\forall\; \Vnod{nd} : \myfn{Anc3}{\V{nd},0,\V{base}} \iff \V{nd} \in \V{base}$
-    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
-        Def of \myfnname{Anc3} \Eref{eq:def-anc3}.
+    $\forall\; \Vnod{nd} \in \Vnodset{base}: \exists\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}}$
+    \bcuz{} New free \Vnodset{base}.
 }
-And, since every element of \V{base}, call it \V{baseNode} induces the path of length 1
-\tuple{\V{baseNode}}, we have
 \mypareq{eq:lem-path-by-triples-180}{%
-    $\forall\; \Vnod{nd} : \V{nd} \in \V{base} \implies \myfn{Path3}{\V{nd},0,\V{base}}$
-    \bcuz{} Def of \myfnname{Path3} \Eref{eq:def-path}.
+    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies
+        \Velement{seq}{0} = \V{nd}
+        \land\; \Velement{seq}{\Vlastix{seq}} \in \V{base}
+        \land\; \Vsize{seq} \le 1$.
 }
-Also, by definition, every node in a level 0 path triple in an element of the triple's
-base:
+Any sequence of length 1 is also a path:
 \mypareq{eq:lem-path-by-triples-190}{%
-    $\forall\; \Vnod{nd} : \myfn{Path3}{\V{nd},0,\V{base}}
-        \implies \V{nd} \in \V{base}$
-    \bcuz{} Def of \myfnname{Path3} \Eref{eq:def-path}.
+    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies \V{seq} \in \V{Paths}$
+    \bcuz{} Def of \V{Paths} \Eref{eq:def-paths},
+        in part trivially and in part vacuously.
 }
+\mypareq{eq:lem-path-by-triples-200}{%
+    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies
+    \exists\; \V{path} \in \V{Paths} :
+    \Velement{path}{0} = \V{nd}
+    \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
+    \land\; \Vsize{path} \le \V{N}$
+}
+\mypareq{eq:lem-path-by-triples-210}{%
+    $\forall\; \Vnod{nd} \in \Vnodset{base}: \myfn{Path3}{\V{nd},\V{N},\V{base}}$
+    \bcuz{} \Eref{eq:lem-path-by-triples-210}.
+}
+
 \mypareq{eq:lem-path-by-triples-280}{%
     \Vmyfn{INST}{0} \cuz{} \Eref{eq:lem-path-by-triples-150},
         \Eref{eq:lem-path-by-triples-170}.
