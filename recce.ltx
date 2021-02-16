@@ -1977,7 +1977,7 @@ where
             \\ \land\;
             \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vdecr{length} :
-                \\ \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{E}
+                \\ \tuple{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
             \end{gathered} \right)
         \end{gathered}
     \end{gathered} }.
@@ -1986,15 +1986,8 @@ where
 If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
 \defEnd
 \end{definition}
-
 Note that, by \Eref{eq:def-path},
 every sequence of nodes of length 1 is a path, vacuously.
-Also note that, in this book, we index the path in reverse
-order of the directed graph.
-When we deal with trees,
-we will find it convenient to index the path
-so that leaves is always at the beginning of a paths and the root
-is always at the end.
 
 \begin{definition}[Parents]
 \label{def:parents}
@@ -2058,6 +2051,40 @@ The theorem follows.
 \myqed
 \end{proof}
 
+\begin{theorem}[Tree Non-empty]
+\label{lem:tree-non-empty}
+Every tree has at least one node.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+\todo{Finish this proof}
+\myqed
+\end{proof}
+
+\begin{theorem}[Leaf path]
+\label{lem:tree-leaf-path}
+Every node in a tree is the start of at
+least one leaf path.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+\todo{Finish this proof}
+\myqed
+\end{proof}
+
+\begin{theorem}[Tree Leaf Existence]
+\label{lem:tree-leaf-existence}
+\todo{Finish this statement of theorem}
+\thEnd
+\end{theorem}
+
+\begin{proof}
+\todo{Finish this proof}
+\myqed
+\end{proof}
+
 \chapter{Non-unary Trees}
 \label{chap:non-unary-trees}
 
@@ -2089,7 +2116,7 @@ will be the set of leaves in \V{tree}.
 
 Let the ``new parents'' function,
 \[
-    \deffn{NewParents}{\powerset{\powerset{\Vnodset{nodes}}}}{\powerset{\powerset{\V{nodes}}}}
+    \deffn{NewParents}{\powerset{\Vnodset{nodes}}}{\powerset{\Vnodset{nodes}}}
 \]
 be the set of the direct parents of a node set that are not already in that node set,
 so that
@@ -2099,14 +2126,14 @@ so that
         \begin{gathered}
             \Vnod{parent} : \exists\; \Vnod{child} :
             \\ \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
-            \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
+            \\ \land\; \tuple{\V{parent}, \V{child}} \in \V{edges}
         \end{gathered}
     }.
 \end{equation}
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
-        {\powerset{\powerset{\V{nodes}}}}
+        {\powerset{\V{nodes}}}
 \]
 be such that
 \begin{equation}
@@ -2347,18 +2374,6 @@ We now want to explore the relationship
 between paths and ancestries.
 To do this, it will be convenient to speak of
 ``path triples'' and ``ancestry triples''.
-For the purposes of this chapter,
-let $\V{Paths}$ be the set of paths in \V{tree}, so that
-\begin{equation}
-\label{eq:def-paths}
-    \V{Paths} \defined
-    \set{ \begin{gathered}
-        \Vnodseq{pth} :
-        \\ \exists\; \Vnat{length} : \Dom{\V{pth}} = \V{length}
-        \\ \land\; \forall\; \Vnat{ix} < \V{length} :
-                \tuple{ \Velement{pth}{\V{ix}+1}, \VVelement{pth}{ix} } \in \V{edges}
-    \end{gathered} }.
-\end{equation}
 The path triple
 $\myfn{Path3}{\Vnod{nd},\Vnat{N},\Vnodset{base}}$
 states that \Vnod{nd} is
@@ -2369,9 +2384,9 @@ whose last value is an element of \Vnodset{base}, so that
 \label{eq:def-path3}
 \myfn{Path3}{\V{nd},\V{N},\V{base}} \defined
     \left( \begin{gathered}
-    \exists\; \V{path} \in \V{Paths} :
-    \\ \Velement{path}{0} = \V{nd}
-    \\ \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
+    \exists\; \V{path} \in \Vmyfn{path}{tree} :
+    \\ \Velement{path}{0} \in \V{base}
+    \\ \land\; \Velement{path}{\Vlastix{path}} = \V{nd}
     \\ \land\; \Vsize{path} \le \V{N}
     \end{gathered} \right).
 \end{equation}
@@ -2444,8 +2459,8 @@ each of its elements induces a sequence of length 1.
 }
 Any sequence of length 1 is also a path:
 \mypareq{eq:lem-path-by-triples-190}{%
-    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies \V{seq} \in \V{Paths}$
-    \bcuz{} Def of \V{Paths} \Eref{eq:def-paths},
+    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies \V{seq} \in \Vmyfn{path}{tree}$
+    \bcuz{} Def of \V{Paths} \Eref{eq:def-path},
         in part trivially and in part vacuously.
 }
 \mypareq{eq:lem-path-by-triples-200}{%
