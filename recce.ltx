@@ -1941,7 +1941,7 @@ to be well-defined and true.
 \section{Graph theory}
 
 Among the graph theory authorities,
-The definitions
+the definitions
 that we have followed most closely are
 those of \cite{HU1979}.
 
@@ -2029,8 +2029,8 @@ A \dfn{leaf path} is a path whose last value is a leaf.
     \defEnd
 \end{definition}
 
-\begin{theorem}[Tree path finiteness]
-\label{lem:tree-path-finiteness}
+\begin{theorem}[Tree path maximum]
+\label{lem:tree-path-maximum}
 The length of a path in a tree is at most
 the number of nodes in the tree.
 \thEnd
@@ -2045,14 +2045,14 @@ contains a cycle,
 so that no value occurs twice in \V{path} ---
 every value of a path sequence must be distinct.
 The values of \V{path} are nodes of \V{tree},
-there can be at most one distinct value of \V{path}
+so there can be at most one distinct value of \V{path}
 for each node of \V{tree}.
 The theorem follows.
 \myqed
 \end{proof}
 
 \begin{theorem}[Tree Non-empty]
-\label{lem:tree-non-empty}
+\label{th:tree-non-empty}
 Every tree has at least one node.
 \thEnd
 \end{theorem}
@@ -2064,30 +2064,122 @@ it must have a root node.
 \end{proof}
 
 \begin{theorem}[Leaf path]
-\label{lem:tree-leaf-path}
+\label{th:tree-leaf-path}
 Every node in a tree is the start of at
 least one leaf path.
 \thEnd
 \end{theorem}
 
 \begin{proof}
-Every node is the start of a path,
-even if only the trivial path of length 1
-that consists only of the start node.
-By \Lmref{tree-path-finiteness},
-that path is finite in length.
-\todo{Finish this proof}
+Let $\V{tree} = \tuple{ \V{nodes}, \V{edges}}$
+be a tree, and let \V{leaves} be the set of leaves in \V{tree}.
+\mypareq{th:tree-leaf-path-100}{%
+     $\tuple{\V{nd}} \in \Vmyfn{path}{tree}$
+     \bcuz New arbitrary $\V{nd} \in \V{nodes}.$
+}
+\mypareq{th:tree-leaf-path-110}{%
+    $\V{pathset} = \set{ \V{p} \in \Vmyfn{path}{tree} : \Velement{p}{0} = \V{nd} }$
+    \bcuz{} New \V{pathset} for convenience.
+}
+\mypareq{th:tree-leaf-path-120}{%
+    $\V{pathset} \neq \emptyset$
+    \cuz{} \Eref{th:tree-leaf-path-100}, \Eref{th:tree-leaf-path-110}.
+}
+Let \V{maxPathset} be the subset of
+longest paths from \V{pathset}:
+\begin{equation}
+\label{th:tree-leaf-path-150}
+\begin{gathered}
+    \V{maxPathset} = \set{ \begin{gathered}
+        \V{longest} \in \V{pathset} :
+        \\ \forall\; \V{p} \in \V{pathset} : \Vsize{longest} \ge \Vsize{p}
+    \end{gathered} }
+    \\ \myparbox{\cuz{}
+        New \V{maxPathset} for convenience.}
+\end{gathered}
+\end{equation}
+\mypareq{th:tree-leaf-path-160}{%
+    $\forall\; \V{path} \in \V{pathset} : \Vsize{path} \in \naturals$
+    \bcuz{} \longLmref{Tree path maximum}{tree-path-maximum}.
+}
+\mypareq{th:tree-leaf-path-170}{%
+    $\V{maxPathset} \neq \emptyset$
+    \cuz{} \Eref{th:tree-leaf-path-120},
+        \Eref{th:tree-leaf-path-150}, \Eref{th:tree-leaf-path-160}.
+}
+\mypareq{th:tree-leaf-path-180}{%
+    $\exists\; \V{longest1} \in \V{maxPathset}$ \cuz{} \Eref{th:tree-leaf-path-170}.
+}
+\mypareq{th:tree-leaf-path-185}{%
+    $\V{longest1} \in \V{maxPathset}$ \cuz{} EI of
+       bound in \Eref{th:tree-leaf-path-185} with
+       new \V{longest1}.}
+Using a reductio,
+Using a reductio,
+we now show that
+\V{longest1} is a leaf path.
+Assume, for the reductio,
+that \V{longest1} is not a leaf path.
+\mypareq{th:tree-leaf-path-190}{%
+    $\Velement{longest1}{\Vlastix{longest1}} \notin \V{leaves}$
+    \bcuz{} AF reductio, \longDfref{Leaf path}{def:tree}.}
+\mypareq{th:tree-leaf-path-200}{%
+    $\tuple{ \Velement{longest1}{\Vlastix{longest1}}, \V{oneMore} } \in \V{edges}$
+    \bcuz{} \Eref{th:tree-leaf-path-190},
+        \longDfref{Leaf}{def:tree}.
+    New $\V{child} \in \V{nodes}$.}
+\begin{gather}
+    \label{th:tree-leaf-path-210}
+    \V{evenLonger} = \tuple{
+        \begin{gathered}
+            \Velement{longest}{0} \ldots \Velement{longest1}{\Vlastix{longest1}},
+            \\ \V{oneMore}
+        \end{gathered} }
+    \\ \land\; \V{evenLonger} \in \Vmyfn{path}{tree}.
+    \\ \nonumber \myparbox{\cuz{} \longDfref{Path}{def:path},
+        \Eref{th:tree-leaf-path-200}.}
+\end{gather}
+\mypareq{th:tree-leaf-path-220}{%
+    $\Velement{evenLonger}{0} = \Velement{longest}{0} = \V{nd}$
+    \bcuz{} \Eref{th:tree-leaf-path-110},
+        \Eref{th:tree-leaf-path-150}, \Eref{th:tree-leaf-path-210}.
+}
+\mypareq{th:tree-leaf-path-230}{%
+    $\V{evenLonger} \in \V{pathset}$
+        \cuz{} \Eref{th:tree-leaf-path-220}.
+}
+\mypareq{th:tree-leaf-path-240}{%
+    $\Vsize{evenLonger} > \V{longest}$
+        \cuz{} \Eref{th:tree-leaf-path-210}.
+}
+\mypareq{th:tree-leaf-path-250}{%
+    $\Vsize{evenLonger} \le \V{longest}$
+    \cuz{} \Eref{th:tree-leaf-path-150}
+        \Eref{th:tree-leaf-path-185}.
+}
+Equation \Eref{th:tree-leaf-path-240} contradicts
+\Eref{th:tree-leaf-path-250}, which shows the reductio
+from \Eref{th:tree-leaf-path-190} to
+\Eref{th:tree-leaf-path-250}.
+From the reductio we conclude that \V{longest1} is a leaf
+path starting at \V{nd}.
+Since our choices of \V{tree} and \V{nd} were arbitrary,
+we conclude that every node of a tree is the start of a leaf
+path.
 \myqed
 \end{proof}
 
 \begin{theorem}[Tree Leaf Existence]
-\label{lem:tree-leaf-existence}
-\todo{Finish this statement of theorem}
+\label{th:tree-leaf-existence}
+Every tree has at least one leaf node.
 \thEnd
 \end{theorem}
 
 \begin{proof}
-\todo{Finish this proof}
+It follows from \Thref{tree-non-empty}
+and \Thref{tree-leaf-path},
+that every tree contains at least one leaf path.
+By definition, a leaf path contains a leaf node.
 \myqed
 \end{proof}
 
