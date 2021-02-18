@@ -2093,96 +2093,79 @@ least one leaf path.
 \begin{proof}
 Let $\V{tree} = \tuple{ \V{nodes}, \V{edges}}$
 be a tree, and let \V{leaves} be the set of leaves in \V{tree}.
-\mypareq{th:tree-leaf-path-100}{%
+\mypareq{eq:th-tree-leaf-path-100}{%
      $\tuple{\V{nd}} \in \Vmyfn{path}{tree}$
      \bcuz New arbitrary $\V{nd} \in \V{nodes}.$
 }
-\mypareq{th:tree-leaf-path-110}{%
+\mypareq{eq:th-tree-leaf-path-110}{%
     $\V{pathset} = \set{ \V{p} \in \Vmyfn{path}{tree} : \Velement{p}{0} = \V{nd} }$
     \bcuz{} New \V{pathset} for convenience.
 }
-\mypareq{th:tree-leaf-path-120}{%
+\mypareq{eq:th-tree-leaf-path-115}{%
+    $\Vsize{pathset} \in \naturals$
+    \bcuz{} \longThref{Tree path set finiteness}{tree-pathset-finiteness},
+        \Eref{eq:th-tree-leaf-path-110}.
+}
+\mypareq{eq:th-tree-leaf-path-120}{%
     $\V{pathset} \neq \emptyset$
-    \cuz{} \Eref{th:tree-leaf-path-100}, \Eref{th:tree-leaf-path-110}.
+    \cuz{} \Eref{eq:th-tree-leaf-path-100}, \Eref{eq:th-tree-leaf-path-110}.
 }
-\todo{Change the following.  Use Tree Path Set Finiteness.}
-Let \V{maxPathset} be the subset of
-longest paths from \V{pathset}:
-\begin{equation}
-\label{th:tree-leaf-path-150}
-\begin{gathered}
-    \V{maxPathset} = \set{ \begin{gathered}
-        \V{longest} \in \V{pathset} :
-        \\ \forall\; \V{p} \in \V{pathset} : \Vsize{longest} \ge \Vsize{p}
-    \end{gathered} }
-    \\ \myparbox{\cuz{}
-        New \V{maxPathset} for convenience.}
-\end{gathered}
-\end{equation}
-\mypareq{th:tree-leaf-path-160}{%
-    $\forall\; \V{path} \in \V{pathset} : \Vsize{path} \in \naturals$
-    \bcuz{} \longLmref{Tree path maximum}{tree-path-maximum}.
+Let $\preccurlyeq$ be the partial order induced in \V{pathset} by
+$\V{a} \prec \V{b} \defined \Vsize{a} < \Vsize{b}$.
+Because \V{pathset} is non-empty and finite,
+there is at least one maximal element in it:
+\mypareq{eq:th-tree-leaf-path-130}{%
+    $\exists\; \V{max} \in \V{pathset} : \forall\; \V{a} \in \V{pathset} : \neg ( \V{max} \prec \V{a})$
+    \bcuz{} \Eref{eq:th-tree-leaf-path-115}, \Eref{eq:th-tree-leaf-path-120}.
 }
-\mypareq{th:tree-leaf-path-170}{%
-    $\V{maxPathset} \neq \emptyset$
-    \cuz{} \Eref{th:tree-leaf-path-120},
-        \Eref{th:tree-leaf-path-150}, \Eref{th:tree-leaf-path-160}.
-}
-\mypareq{th:tree-leaf-path-180}{%
-    $\exists\; \V{longest1} \in \V{maxPathset}$ \cuz{} \Eref{th:tree-leaf-path-170}.
-}
-\mypareq{th:tree-leaf-path-185}{%
-    $\V{longest1} \in \V{maxPathset}$ \cuz{} EI of
-       bound in \Eref{th:tree-leaf-path-185} with
-       new \V{longest1}.}
-Using a reductio,
+\mypareq{eq:th-tree-leaf-path-185}{%
+    $\forall\; \V{a} \in \V{pathset} : \neg ( \V{max1} \prec \V{a})$
+    \cuz{} EI of bound \V{max} in \Eref{eq:th-tree-leaf-path-185} with
+       new \V{max1}.}
+\todo{Change from here.}
 Using a reductio,
 we now show that
-\V{longest1} is a leaf path.
+\V{max1} is a leaf path.
 Assume, for the reductio,
-that \V{longest1} is not a leaf path.
-\mypareq{th:tree-leaf-path-190}{%
-    $\Velement{longest1}{\Vlastix{longest1}} \notin \V{leaves}$
+that \V{max1} is not a leaf path.
+\mypareq{eq:th-tree-leaf-path-190}{%
+    $\Velement{max1}{\Vlastix{max1}} \notin \V{leaves}$
     \bcuz{} AF reductio, \longDfref{Leaf path}{def:tree}.}
-\mypareq{th:tree-leaf-path-200}{%
-    $\tuple{ \Velement{longest1}{\Vlastix{longest1}}, \V{oneMore} } \in \V{edges}$
-    \bcuz{} \Eref{th:tree-leaf-path-190},
-        \longDfref{Leaf}{def:tree}.
-    New $\V{child} \in \V{nodes}$.}
 \begin{gather}
-    \label{th:tree-leaf-path-210}
+    \label{eq:th-tree-leaf-path-210}
     \V{evenLonger} = \tuple{
         \begin{gathered}
-            \Velement{longest}{0} \ldots \Velement{longest1}{\Vlastix{longest1}},
+            \Velement{max1}{0} \ldots \Velement{max1}{\Vlastix{max1}},
             \\ \V{oneMore}
         \end{gathered} }
     \\ \land\; \V{evenLonger} \in \Vmyfn{path}{tree}.
     \\ \nonumber \myparbox{\cuz{} \longDfref{Path}{def:path},
-        \Eref{th:tree-leaf-path-200}.}
+        \Eref{eq:th-tree-leaf-path-190}.
+        New $\V{oneMore} \in \V{nodes}$.}
 \end{gather}
-\mypareq{th:tree-leaf-path-220}{%
-    $\Velement{evenLonger}{0} = \Velement{longest}{0} = \V{nd}$
-    \bcuz{} \Eref{th:tree-leaf-path-110},
-        \Eref{th:tree-leaf-path-150}, \Eref{th:tree-leaf-path-210}.
+\mypareq{eq:th-tree-leaf-path-220}{%
+    $\Velement{evenLonger}{0} = \Velement{max1}{0} = \V{nd}$
+    \bcuz{} \Eref{eq:th-tree-leaf-path-110},
+        \Eref{eq:th-tree-leaf-path-150}, \Eref{eq:th-tree-leaf-path-210}.
 }
-\mypareq{th:tree-leaf-path-230}{%
+\mypareq{eq:th-tree-leaf-path-230}{%
     $\V{evenLonger} \in \V{pathset}$
-        \cuz{} \Eref{th:tree-leaf-path-220}.
+        \cuz{} \Eref{eq:th-tree-leaf-path-220}.
 }
-\mypareq{th:tree-leaf-path-240}{%
-    $\Vsize{evenLonger} > \V{longest}$
-        \cuz{} \Eref{th:tree-leaf-path-210}.
+\mypareq{eq:th-tree-leaf-path-240}{%
+    $\V{max} \prec \V{evenLonger}$
+        \cuz{} \Eref{eq:th-tree-leaf-path-210}.
 }
-\mypareq{th:tree-leaf-path-250}{%
-    $\Vsize{evenLonger} \le \V{longest}$
-    \cuz{} \Eref{th:tree-leaf-path-150}
-        \Eref{th:tree-leaf-path-185}.
+\mypareq{eq:th-tree-leaf-path-250}{%
+    $\neg\; ( \V{max} \prec \V{evenLonger} )$
+    \bcuz{} UI of bound \V{a} in \Eref{eq:th-tree-leaf-path-185}
+        with \V{evenLonger}.
 }
-Equation \Eref{th:tree-leaf-path-240} contradicts
-\Eref{th:tree-leaf-path-250}, which shows the reductio
-from \Eref{th:tree-leaf-path-190} to
-\Eref{th:tree-leaf-path-250}.
-From the reductio we conclude that \V{longest1} is a leaf
+Equation \Eref{eq:th-tree-leaf-path-240} contradicts
+\Eref{eq:th-tree-leaf-path-250}, which shows the reductio
+from \Eref{eq:th-tree-leaf-path-190} to
+\Eref{eq:th-tree-leaf-path-250}.
+From the reductio we conclude that \V{max1} is a leaf
 path starting at \V{nd}.
 Since our choices of \V{tree} and \V{nd} were arbitrary,
 we conclude that every node of a tree is the start of a leaf
