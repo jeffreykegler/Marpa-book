@@ -2131,7 +2131,6 @@ there is at least one maximal element in it:
        EI of bound \V{max} in \Eref{eq:th-tree-leaf-path-130} with
        new \V{max1}.}
 \end{gather}
-\todo{Change from here.}
 Using a reductio,
 we now show that
 \V{max1} is a leaf path.
@@ -2160,7 +2159,7 @@ that \V{max1} is not a leaf path.
 \mypareq{eq:th-tree-leaf-path-220}{%
     $\Velement{evenLonger}{0} = \Velement{max1}{0} = \V{nd}$
     \bcuz{} \Eref{eq:th-tree-leaf-path-110},
-        \Eref{eq:th-tree-leaf-path-150}, \Eref{eq:th-tree-leaf-path-205}.
+        \Eref{eq:th-tree-leaf-path-150}, \Eref{eq:th-tree-leaf-path-210}.
 }
 \mypareq{eq:th-tree-leaf-path-230}{%
     $\V{evenLonger} \in \V{pathset}$
@@ -2535,6 +2534,7 @@ $\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$.
 
 \begin{lemma}[Path by Triples]
 \label{lem:path-by-triples}
+\todo{Do I need this lemma?}
 \begin{equation}
 \label{eq:lem-path-by-triples-050}
 \myfn{Anc3}{\V{nd},\V{N},\V{base}} \implies
@@ -2606,13 +2606,26 @@ Any sequence of length 1 is also a path:
 \myqed
 \end{proof}
 
-\begin{lemma}[Ancestry by Triples]
-\label{lem:ancestry-by-triples}
+\begin{lemma}[Ancestry from path]
+\label{lem:ancestry-from-path}
+If a path
+ends in some element of a nodeset,
+then the start of the path is in the ancestry
+whose base is that nodeset,
+and whose level is one less than the path length.
+That is,
 \begin{equation}
 \label{eq:lem-ancestry-by-triples-100}
-\myfn{Path3}{\V{nd},\V{N},\V{base}}
-    \implies \myfn{Anc3}{\V{nd},\V{N},\V{base}}.
-\quad \thEnd
+\begin{gathered}
+\forall\; \Vnod{nd} :
+    \forall\; \Vnodset{base} :
+    \forall\; \Vnat{N} :
+    \forall\; \V{path} \in \Vmyfn{path}{tree} :
+    \\ \Vsize{path} \le \V{N}
+        \land \Velement{path}{\Vlastix{path}} \in \V{base}
+    \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{N}, \V{base}}.
+        \quad \thEnd
+\end{gathered}
 \end{equation}
 \end{lemma}
 
@@ -2620,16 +2633,6 @@ Any sequence of length 1 is also a path:
 \todo{Prove this}
 \myqed
 \end{proof}
-
-\begin{lemma}[Path--Ancestry Equivalence]
-\label{lem:path-ancestry-equivalence}
-A path triple is also an ancestry triple.
-That is,
-\[
-    \myfn{Path3}{\V{nd},\V{N},\V{base}} \iff
-        \myfn{Anc3}{\V{nd},\V{N},\V{base}}.  \thEnd
-\]
-\end{lemma}
 
 \section{Tree generations}
 
