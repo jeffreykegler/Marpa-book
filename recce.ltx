@@ -2489,6 +2489,7 @@ we have the induction and this proof.
 
 We now want to explore the relationship
 between paths and ancestries.
+\todo{Do I need the triples?}
 To do this, it will be convenient to speak of
 ``path triples'' and ``ancestry triples''.
 The path triple
@@ -2514,123 +2515,109 @@ and that \Vnodset{b} is the \dfn{base},
 of the path triple
 $\myfn{Path3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$.
 
-The ancestry triple
-$\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$
-states that \Vnod{nd} is in an
-ancestry with
-base \Vnodset{b} and level \Vnat{N},
-so that
-\begin{equation}
-\label{eq:def-anc3}
-\myfn{Anc3}{\V{nd},\V{N},\V{base}} \defined
-        \V{nd} \in \myfn{Anc}{\V{N},\V{base}}.
-\end{equation}
-We say
-that \Vnod{nd} is the \dfn{node},
-that \Vnat{N} is the \dfn{level},
-and that \Vnodset{b} is the \dfn{base},
-of the ancestry triple
-$\myfn{Anc3}{\Vnod{nd},\Vnat{N},\Vnodset{b}}$.
-
-\begin{lemma}[Path by Triples]
-\label{lem:path-by-triples}
-\todo{Do I need this lemma?}
-\begin{equation}
-\label{eq:lem-path-by-triples-050}
-\myfn{Anc3}{\V{nd},\V{N},\V{base}} \implies
-\myfn{Path3}{\V{nd},\V{N},\V{base}}.
-\quad \thEnd
-\end{equation}
-\end{lemma}
-
-\begin{proof}
-The proof is by minimal counterexample.
-Where
-\mypareq{eq:lem-path-by-triples-150}{%
-    $\Vmyfn{INST}{ex} \defined
-        \myfn{Anc3}{\V{nd},\V{N},\V{base}} \land \neg
-        \myfn{Path3}{\V{nd},\V{N},\V{base}}$
-    \cuz{} UI of \V{N} in
-        \Eref{eq:lem-path-by-triples-050} with \V{ex}.
-}
-we assume there is a minimal \V{bad} such that
-\Vmyfn{INST}{bad} is false:
-\begin{gather}
-\label{eq:lem-path-by-triples-160}
-    \neg \Vmyfn{INST}{bad}
-\\ \label{eq:lem-path-by-triples-165}
-    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
-\\ \nonumber
-    \because \text{AF reduction.  New free \V{bad}.}
-\end{gather}
-We first note that, where base is an arbitrary set of nodes,
-each of its elements induces a sequence of length 1.
-\mypareq{eq:lem-path-by-triples-170}{%
-    $\forall\; \Vnod{nd} \in \Vnodset{base}: \exists\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}}$
-    \bcuz{} New free \Vnodset{base}.
-}
-\mypareq{eq:lem-path-by-triples-180}{%
-    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies
-        \Velement{seq}{0} = \V{nd}
-        \land\; \Velement{seq}{\Vlastix{seq}} \in \V{base}
-        \land\; \Vsize{seq} \le 1$.
-}
-Any sequence of length 1 is also a path:
-\mypareq{eq:lem-path-by-triples-190}{%
-    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies \V{seq} \in \Vmyfn{path}{tree}$
-    \bcuz{} Def of \V{Paths} \Eref{eq:def-path},
-        in part trivially and in part vacuously.
-}
-\mypareq{eq:lem-path-by-triples-200}{%
-    $\forall\; \Vnodseq{seq} : \V{seq} = \set{\tuple{0,\V{nd}}} \implies
-    \exists\; \V{path} \in \V{Paths} :
-    \Velement{path}{0} = \V{nd}
-    \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
-    \land\; \Vsize{path} \le \V{N}$
-}
-\mypareq{eq:lem-path-by-triples-210}{%
-    $\forall\; \Vnod{nd} \in \Vnodset{base}: \myfn{Path3}{\V{nd},\V{N},\V{base}}$
-    \bcuz{} \Eref{eq:lem-path-by-triples-210}.
-}
-
-\mypareq{eq:lem-path-by-triples-280}{%
-    \Vmyfn{INST}{0} \cuz{} \Eref{eq:lem-path-by-triples-150},
-        \Eref{eq:lem-path-by-triples-170}.
-}
-\mypareq{eq:lem-path-by-triples-290}{%
-    $\V{bad} > 0$ \cuz{}
-        \Eref{eq:lem-path-by-triples-160},
-        \Eref{eq:lem-path-by-triples-280}.
-}
-\todo{Prove this}
-\myqed
-\end{proof}
-
 \begin{lemma}[Ancestry from path]
 \label{lem:ancestry-from-path}
 If a path
 ends in some element of a nodeset,
 then the start of the path is in the ancestry
 whose base is that nodeset,
-and whose level is one less than the path length.
+and whose level is at least the last index of the path.
 That is,
 \begin{equation}
-\label{eq:lem-ancestry-by-triples-100}
+\label{eq:lem-ancestry-by-triples-050}
 \begin{gathered}
-\forall\; \Vnod{nd} :
-    \forall\; \Vnodset{base} :
-    \forall\; \Vnat{N} :
-    \forall\; \V{path} \in \Vmyfn{path}{tree} :
-    \\ \Vsize{path} \le \V{N}
-        \land \Velement{path}{\Vlastix{path}} \in \V{base}
-    \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{N}, \V{base}}.
-        \quad \thEnd
+\forall\; \Vnodset{base} :
+\forall\; \Vnat{N} :
+\forall\; \V{path} \in \Vmyfn{path}{tree} :
+\\ \Vlastix{path} \le \V{N}
+    \land \Velement{path}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{N}, \V{base}}.
+    \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{lemma}
 
 \begin{proof}
-\todo{Prove this}
+The proof is by minimal counterexample.
+Let $\V{path} \in \Vmyfn{path}{tree}$ be an arbitrary path
+and let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
+Where
+\begin{equation}
+\label{eq:lem-ancestry-by-triples-150}
+\begin{gathered}
+\Vmyfn{INST}{ex} \defined
+\\ \Vlastix{path} \le \V{ex}
+    \land \Velement{path}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{ex}, \V{base}}.
+\\ \myparbox{\cuz{}
+        UI of \Eref{eq:lem-ancestry-by-triples-050} with \V{ex}.}
+\end{gathered}
+\end{equation}
+we assume there is a minimal \V{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:lem-ancestry-by-triples-160}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-ancestry-by-triples-165}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \because \text{AF reduction.  New free \V{bad}.}
+\end{gather}
+We first examine the subcase $\V{bad} = 0$.
+For clarity, we will introduce a new path variable, \V{path0},
+for this purpose.
+\begin{gather}
+\label{eq:lem-ancestry-by-triples-170}
+    \Vlastix{path0} = 0
+\\ \label{eq:lem-ancestry-by-triples-175}
+    \land\; \Velement{path0}{\Vlastix{path0}} \in \V{base}
+\\ \nonumber
+    \because \text{AF implication.  New free \V{path0}.}
+\end{gather}
+\mypareq{eq:lem-ancestry-by-triples-180}{%
+    $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
+    \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+}
+\mypareq{eq:lem-ancestry-by-triples-190}{%
+    $\Velement{path0}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
+    \bcuz{} \Eref{eq:lem-ancestry-by-triples-170},
+        \Eref{eq:lem-ancestry-by-triples-175}, \Eref{eq:lem-ancestry-by-triples-180}.
+}
+\begin{equation}
+\label{eq:lem-ancestry-by-triples-200}
+\begin{gathered}
+\Vlastix{path0} \le 0
+    \land \Velement{path0}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{path0}{0} \in \myfn{Anc}{0, \V{base}}.
+\\ \myparbox{\cuz{}
+        Implication from \Eref{eq:lem-ancestry-by-triples-170}--%
+            \Eref{eq:lem-ancestry-by-triples-170}
+            to \Eref{eq:lem-ancestry-by-triples-190}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-ancestry-by-triples-210}
+\begin{gathered}
+\forall\; \V{path} \in \Vmyfn{path}{tree}
+\\ \Vlastix{path} \le 0
+    \land \Velement{path}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{path}{0} \in \myfn{Anc}{0, \V{base}}.
+\\ \myparbox{\cuz{}
+    UG of \V{path0} in \Eref{eq:lem-ancestry-by-triples-200}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:lem-ancestry-by-triples-280}{%
+    \Vmyfn{INST}{0}
+    \bcuz{} UI of bound \V{path} in \Eref{eq:lem-ancestry-by-triples-210}
+        with \V{path},
+        then \Eref{eq:lem-ancestry-by-triples-150}.
+}
+\mypareq{eq:lem-ancestry-by-triples-290}{%
+    $\V{bad} > 0$ \cuz{}
+        \Eref{eq:lem-ancestry-by-triples-160},
+        \Eref{eq:lem-ancestry-by-triples-280}.
+}
+\todo{Finish proving this}
 \myqed
 \end{proof}
 
