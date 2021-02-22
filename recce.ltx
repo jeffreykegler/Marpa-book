@@ -2579,11 +2579,13 @@ for this purpose.
     \Vmyfn{INST}{0}
     \cuz{} \Eref{eq:ancestry-from-path-150}.
 }
+We can now elimate the subcase $\V{bad} = 0$:
 \mypareq{eq:ancestry-from-path-290}{%
     $\V{bad} > 0$ \cuz{}
         \Eref{eq:ancestry-from-path-160},
         \Eref{eq:ancestry-from-path-280}.
 }
+We now proceed to look at the other possible values for \V{bad}.
 \begin{gather}
 \label{eq:ancestry-from-path-310}
     \Vlastix{path} \le \V{bad}
@@ -2633,10 +2635,21 @@ for this purpose.
     $\Vlastix{path} > \Vdecr{bad}$
         \cuz{} \Eref{eq:ancestry-from-path-320},
             \Eref{eq:ancestry-from-path-330}, \Eref{eq:ancestry-from-path-370}.}
+We conclude that, if there is a counter-example,
+its path and ancestry are such that
+the last index of the path and the level of the ancestry
+``fit'' exactly:
 \mypareq{eq:ancestry-from-path-390}{%
     $\Vlastix{path} = \V{bad}$
         \cuz{} \Eref{eq:ancestry-from-path-310},
             \Eref{eq:ancestry-from-path-380}.}
+Recall that if \V{bad} is a minimal counter-example,
+then \Vdecr{bad} is not a counter-example:
+\mypareq{eq:ancestry-from-path-395}{%
+    \Vmyfn{INST}{\Vdecr{bad}}
+    \cuz \Eref{eq:ancestry-from-path-165},
+        \Eref{eq:ancestry-from-path-290}.
+}
 \begin{equation}
 \label{eq:ancestry-from-path-400}
 \begin{gathered}
@@ -2644,36 +2657,37 @@ for this purpose.
 \\ \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
-\\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-050},
-        \Eref{eq:ancestry-from-path-165}.}
+\\ \myparbox{\cuz{} Expansion of 
+    \Eref{eq:ancestry-from-path-395} using \Eref{eq:ancestry-from-path-165}.}
 \end{gathered}
 \end{equation}
+Now it will be helpful to consider a suffix of \V{path}.
 \begin{gather}
 \label{eq:ancestry-from-path-410}
-    \left( \V{subpath} \defined \tuple{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
+    \left( \V{suffix} \defined \tuple{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
         \right)
 \\ \label{eq:ancestry-from-path-412}
-    \land\; \V{subpath} \in \Vmyfn{path}{tree}
+    \land\; \V{suffix} \in \Vmyfn{path}{tree}
 \\ \nonumber
     \myparbox{\cuz{} \longDfref{Path}{def:path},
-    \Eref{eq:ancestry-from-path-290}, new \V{subpath} for convenience.}
+    \Eref{eq:ancestry-from-path-290}, new \V{suffix} for convenience.}
 \end{gather}
 \mypareq{eq:ancestry-from-path-420}{%
-    $\Vlastix{subpath} = \subtract{\Vlastix{path}}{1}$
+    $\Vlastix{suffix} = \subtract{\Vlastix{path}}{1}$
     \cuz{} \Eref{eq:ancestry-from-path-410}.}
 \mypareq{eq:ancestry-from-path-430}{%
-    $\Vlastix{subpath} = \Vdecr{bad}$
+    $\Vlastix{suffix} = \Vdecr{bad}$
     \cuz{} \Eref{eq:ancestry-from-path-390},
         \Eref{eq:ancestry-from-path-420}.}
 \mypareq{eq:ancestry-from-path-440}{%
-    $\Velement{subpath}{\Vlastix{subpath}} = \Velement{path}{\Vlastix{path}}$
+    $\Velement{suffix}{\Vlastix{suffix}} = \Velement{path}{\Vlastix{path}}$
     \cuz{} \Eref{eq:ancestry-from-path-410}.}
 \mypareq{eq:ancestry-from-path-450}{%
-    $\Velement{subpath}{\Vlastix{subpath}} \in \V{base}$
+    $\Velement{suffix}{\Vlastix{suffix}} \in \V{base}$
     \cuz{} \Eref{eq:ancestry-from-path-320},
         \Eref{eq:ancestry-from-path-440}.}
 \mypareq{eq:ancestry-from-path-460}{%
-    $\Velement{subpath}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}$
+    $\Velement{suffix}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}$
     \bcuz{} \Eref{eq:ancestry-from-path-400},
         \Eref{eq:ancestry-from-path-412}, \Eref{eq:ancestry-from-path-430},
         \Eref{eq:ancestry-from-path-450}.}
@@ -2683,11 +2697,11 @@ for this purpose.
         \Eref{eq:ancestry-from-path-290}.
 }
 \mypareq{eq:ancestry-from-path-480}{%
-    $\Velement{path}{1} = \Velement{subpath}{0}$
+    $\Velement{path}{1} = \Velement{suffix}{0}$
         \cuz{} \Eref{eq:ancestry-from-path-410}.
 }
 \mypareq{eq:ancestry-from-path-490}{%
-    $\tuple{ \Velement{path}{0}, \Velement{subpath}{0} } \in \V{edges}$
+    $\tuple{ \Velement{path}{0}, \Velement{suffix}{0} } \in \V{edges}$
     \cuz{} \Eref{eq:ancestry-from-path-470},
         \Eref{eq:ancestry-from-path-480}.}
 \begin{equation}
@@ -2698,7 +2712,7 @@ for this purpose.
     \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{edges}
     \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-340},
-        EG of \Velement{subpath}{0} in \Eref{eq:ancestry-from-path-460} and
+        EG of \Velement{suffix}{0} in \Eref{eq:ancestry-from-path-460} and
             \Eref{eq:ancestry-from-path-490}.}
 \end{gathered}
 \end{equation}
