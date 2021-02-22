@@ -2535,31 +2535,31 @@ we assume there is a minimal \V{bad} such that
     \because \text{AF reductio.  New free \V{bad}.}
 \end{gather}
 We first examine the subcase $\V{bad} = 0$,
-introducing a new variable, \V{path0},
+introducing a new variable, \V{pathB},
 for this purpose.
 \begin{gather}
 \label{eq:ancestry-from-path-170}
-    \Vlastix{path0} = 0
+    \Vlastix{pathB} = 0
 \\ \label{eq:ancestry-from-path-175}
-    \land\; \Velement{path0}{\Vlastix{path0}} \in \V{base}
+    \land\; \Velement{pathB}{\Vlastix{pathB}} \in \V{base}
 \\ \nonumber
-    \because \text{AF subcase.  New free \V{path0}.}
+    \because \text{AF subcase.  New free \V{pathB}.}
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
     \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
 }
 \mypareq{eq:ancestry-from-path-190}{%
-    $\Velement{path0}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
+    $\Velement{pathB}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
     \bcuz{} \Eref{eq:ancestry-from-path-170},
         \Eref{eq:ancestry-from-path-175}, \Eref{eq:ancestry-from-path-180}.
 }
 \begin{equation}
 \label{eq:ancestry-from-path-200}
 \begin{gathered}
-\Vlastix{path0} \le 0
-    \land \Velement{path0}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path0}{0} \in \myfn{Anc}{0, \V{base}}.
+\Vlastix{pathB} \le 0
+    \land \Velement{pathB}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{pathB}{0} \in \myfn{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
         Implication from \Eref{eq:ancestry-from-path-170}--%
             \Eref{eq:ancestry-from-path-175}
@@ -2574,7 +2574,7 @@ for this purpose.
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
-    UG of \V{path0} in \Eref{eq:ancestry-from-path-200}.}
+    UG of \V{pathB} in \Eref{eq:ancestry-from-path-200}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:ancestry-from-path-280}{%
@@ -2677,7 +2677,40 @@ for this purpose.
     \bcuz{} \Eref{eq:ancestry-from-path-400},
         \Eref{eq:ancestry-from-path-412}, \Eref{eq:ancestry-from-path-430},
         \Eref{eq:ancestry-from-path-450}.}
-\todo{Finish proving this}
+\mypareq{eq:ancestry-from-path-470}{%
+    $\tuple{ \Velement{path}{0}, \Velement{path}{1} } \in \V{edges}$
+    \cuz{} \longDfref{Path}{def:path},
+        \Eref{eq:ancestry-from-path-290}.
+}
+\mypareq{eq:ancestry-from-path-480}{%
+    $\Velement{path}{1} = \Velement{subpath}{0}$
+        \cuz{} \Eref{eq:ancestry-from-path-410}.
+}
+\mypareq{eq:ancestry-from-path-490}{%
+    $\tuple{ \Velement{path}{0}, \Velement{subpath}{0} } \in \V{edges}$
+    \cuz{} \Eref{eq:ancestry-from-path-470},
+        \Eref{eq:ancestry-from-path-480}.}
+\begin{equation}
+\label{eq:ancestry-from-path-500}
+\begin{gathered}
+    \exists\; \Vnod{child} :
+    \\ \V{child} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
+    \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
+    \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{edges}
+    \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-350},
+        EG of \Velement{subpath}{0} in \Eref{eq:ancestry-from-path-460} and
+            \Eref{eq:ancestry-from-path-490}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:ancestry-from-path-510}{%
+    $\Velement{path}{0} \in \myfn{NewParents}{\Vdecr{bad}, \V{base}}$
+    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+        \Eref{eq:ancestry-from-path-500}.
+}
+Equation \Eref{eq:ancestry-from-path-510} is contrary to
+\Eref{eq:ancestry-from-path-350}, which shows the reductio.
+From the reductio, we conclude that there is no minimal counter-example to the theorem
+and the theorem follows.
 \myqed
 \end{proof}
 
