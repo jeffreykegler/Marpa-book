@@ -2489,10 +2489,8 @@ we have the induction and this proof.
 
 \begin{lemma}[Ancestry from path]
 \label{lem:ancestry-from-path}
-If a path
-ends in some element of a nodeset,
-then the start of the path is in the ancestry
-whose base is that nodeset,
+The start of a path is in every ancestry
+whose base contains the last value of the path
 and whose level is at least the last index of the path.
 That is,
 \begin{equation}
@@ -2535,31 +2533,31 @@ we assume there is a minimal \V{bad} such that
     \because \text{AF reductio.  New free \V{bad}.}
 \end{gather}
 We first examine the subcase $\V{bad} = 0$,
-introducing a new variable, \V{pathB},
+introducing a new variable, \V{pathZero},
 for this purpose.
 \begin{gather}
 \label{eq:ancestry-from-path-170}
-    \Vlastix{pathB} = 0
+    \Vlastix{pathZero} = 0
 \\ \label{eq:ancestry-from-path-175}
-    \land\; \Velement{pathB}{\Vlastix{pathB}} \in \V{base}
+    \land\; \Velement{pathZero}{\Vlastix{pathZero}} \in \V{base}
 \\ \nonumber
-    \because \text{AF subcase.  New free \V{pathB}.}
+    \because \text{AF subcase.  New free \V{pathZero}.}
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
     \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
 }
 \mypareq{eq:ancestry-from-path-190}{%
-    $\Velement{pathB}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
+    $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
     \bcuz{} \Eref{eq:ancestry-from-path-170},
         \Eref{eq:ancestry-from-path-175}, \Eref{eq:ancestry-from-path-180}.
 }
 \begin{equation}
 \label{eq:ancestry-from-path-200}
 \begin{gathered}
-\Vlastix{pathB} \le 0
-    \land \Velement{pathB}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{pathB}{0} \in \myfn{Anc}{0, \V{base}}.
+\Vlastix{pathZero} \le 0
+    \land \Velement{pathZero}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{pathZero}{0} \in \myfn{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
         Implication from \Eref{eq:ancestry-from-path-170}--%
             \Eref{eq:ancestry-from-path-175}
@@ -2574,7 +2572,7 @@ for this purpose.
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
-    UG of \V{pathB} in \Eref{eq:ancestry-from-path-200}.}
+    UG of \V{pathZero} in \Eref{eq:ancestry-from-path-200}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:ancestry-from-path-280}{%
@@ -2616,8 +2614,8 @@ for this purpose.
 \\ \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
-\\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-150},
-            \Eref{eq:ancestry-from-path-160}.}
+\\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-160},
+    EI of \V{ex} in \Eref{eq:ancestry-from-path-150} with $(\Vdecr{bad})$.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -2626,7 +2624,9 @@ for this purpose.
 \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
-\\ \myparbox{\cuz{} UI of bound \V{path} in \Eref{eq:ancestry-from-path-360}.}
+\\ \myparbox{\cuz{} UI of bound \V{path} in \Eref{eq:ancestry-from-path-360}
+    with \V{path} from
+    \Eref{eq:ancestry-from-path-310}--\Eref{eq:ancestry-from-path-330}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:ancestry-from-path-380}{%
@@ -2697,7 +2697,7 @@ for this purpose.
     \\ \V{child} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{edges}
-    \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-350},
+    \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-340},
         EG of \Velement{subpath}{0} in \Eref{eq:ancestry-from-path-460} and
             \Eref{eq:ancestry-from-path-490}.}
 \end{gathered}
