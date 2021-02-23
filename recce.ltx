@@ -1,7 +1,7 @@
 % Copyright 2013 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
-\documentclass[draft,12pt]{amsbook}
+\documentclass[draft,openany,12pt]{amsbook}
 \usepackage{calc} % calc is required by todonotes
 \usepackage{ifdraft}
 \usepackage[obeyDraft]{todonotes}
@@ -37,6 +37,24 @@
 
 \emergencystretch=3em
 
+\usepackage{amsmidx}
+% for escaping in index commands ...
+%    the quote sign does not seem to work in amsmidx
+\newcommand{\Pipe}{\char‘\|}
+\makeindex{recce-general}
+% \makeindex{recce-algorithms}
+% \makeindex{recce-figures}
+% \makeindex{recce-theorems}
+% \makeindex{recce-definitions}
+\makeindex{recce-notation}
+\makeindex{recce-lemmas}
+
+% This is used to find the font size if need be.
+% Its uses are usually commented out.
+\makeatletter
+\newcommand\thefontsize[1]{{#1 The current font size is: \f@size pt\par}}
+\makeatother
+
 \usepackage{epigraph}
 \usepackage{algorithm}
 \usepackage{algpseudocode}
@@ -49,10 +67,12 @@
 
 \usepackage{ragged2e}
 \usepackage{placeins}
+
 \usepackage{thmtools}
 \usepackage{multirow}
 \renewcommand{\listtheoremname}{List of Displayed Statements}
 % \usepackage[notcite,notref]{showkeys}
+
 \allowdisplaybreaks[3]
 
 \makeatletter
@@ -515,6 +535,13 @@
 \newcommand{\lcomment}[1]{\hspace\algorithmicindent$\triangleright$ #1}
 
 \theoremstyle{definition}
+\newtheorem{rawLemma}{Lemma}[chapter]
+\newenvironment{lem}[1]{%
+   \begin{rawLemma}[#1]%
+   \index{recce-lemmas}{Lemma \therawLemma ``#1''}
+}{%
+   \end{rawLemma}
+}
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
 \newtheorem{definition}[theorem]{Definition}
@@ -2281,7 +2308,7 @@ Symbolically,
         \myfn{SuccessorAnc}{\V{N},\V{base}} \defined \myfn{Anc}{\V{N}+1,\V{base}}.
 \end{gather}
 
-\begin{lemma}[Predecessor Parent Disjointness]
+\begin{lem}{Predecessor Parent Disjointness}
 \label{lem:predecessor-parent-disjointness}
 An ancestry and its new parents are disjoint.
 That is,
@@ -2290,7 +2317,7 @@ That is,
     \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset.
     \quad \thEnd
 \]
-\end{lemma}
+\end{lem}
 
 \begin{proof}
 \todo{Prove this}
@@ -2316,7 +2343,7 @@ That is,
 \todo{Do I need ``proper'' for ancestries?}
 \todo{Do I need to define ancestries of individual nodes?}
 
-\begin{lemma}[Ancestry Monotonicity]
+\begin{lem}{Ancestry Monotonicity}
 \label{lem:ancestry-monotonicity}
 Every ancestry of \V{tree} contains
 all the ancestries of \V{tree}
@@ -2328,7 +2355,7 @@ That is,
         \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\Vnat{N},\V{base}}$.
         \thEnd
 }
-\end{lemma}
+\end{lem}
 
 \begin{proof}
 The proof is by minimal counterexample.
@@ -2509,7 +2536,7 @@ That is,
 
 \begin{proof}
 The proof is by minimal counterexample.
-Let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
+Let $\V{base} \in \Vpowerset{nodes}$ is an arbitrary nodeset.
 Where
 \begin{equation}
 \label{eq:ancestry-from-path-150}
@@ -3240,6 +3267,8 @@ That is,
 \end{lemma}
 
 \begin{proof}
+By TODO and TODO,
+every node of a tree is on a leaf path of length at most \Vsize{nodes}.
 \todo{Finish this proof.}
 \myqed
 \end{proof}
@@ -19632,6 +19661,18 @@ show={theorem,observation,definition}]
     \phantomsection
     \listoftodos
 }{}
+
+\clearpage
+\def\indexname{List of Lemmas}
+\printindex{recce-lemmas}
+
+\clearpage
+\def\indexname{Index of Notation}
+\printindex{recce-notation}
+
+\clearpage
+\def\indexname{General Index}
+\printindex{recce-general}
 
 \clearpage
 \tableofcontents
