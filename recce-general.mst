@@ -1,0 +1,30 @@
+preamble "
+\\begingroup
+\\makeatletter
+\\def\\myindexchap#1{\\global\\topskip 7.5pc\\relax
+  [{\\fontsize{\\@xivpt}{18}\\bfseries\\centering
+    \\vskip\\topskip\\hbox{}\\vskip-\\baselineskip% adjust top space
+    #1\\par
+   \\global\\topskip 34\\p@\\relax
+     \\begingroup \\normalsize
+       \\skip@\\topskip \\advance\\skip@ -\\baselineskip
+       \\vskip\\skip@
+     \\endgroup
+     \\global\\topskip 24\\p@\\relax
+  }]%
+}
+  \\columnseprule\\z@ \\columnsep 35\\p@
+  \\let\\@makeschapterhead\\myindexchap
+  \\@xp\\chapter\\@xp*\\@xp{%
+General Index%
+}%
+  \\thispagestyle{plain}%
+  \\let\\item\\@idxitem
+  \\parindent\\z@  \\parskip\\z@\\@plus.3\\p@\\relax
+  \\raggedright
+  \\hyphenpenalty\\@M
+  \\footnotesize
+\\makeatother
+"
+
+postamble "\\endgroup\n\\onecolumn\n"

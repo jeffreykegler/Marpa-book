@@ -48,7 +48,7 @@ recce.pdf: recce.ltx
 recce-indexes:
 	for ix in general lemmas notation; do \
 	  if ! test -f recce-$$ix.idx ; then touch recce-$$ix.idx; fi; \
-	  $(MAKEINDEX) -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
+	  $(MAKEINDEX) -s recce-$$ix.mst -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
 	done
 
 finite.pdf: finite.ltx
