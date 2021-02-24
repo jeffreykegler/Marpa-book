@@ -619,7 +619,8 @@ But, despite an encouraging academic literature,
 no such tool had existed for context-free parsing.
 
 The first stable version of \Marpa{} was uploaded to
-a public archive on Solstice Day 2011.
+a public archive on Solstice Day 2011.%
+\index{recce-general}{Solstice Day 2011}.
 This book
 describes the algorithm used
 in the most recent version of \Marpa{},
@@ -713,7 +714,8 @@ practical interest seems to be non-existent.
 For more detail, see \Chref{chap:EXTs}.
 }
 Worst case time bounds are never worse than
-those of Earley~\cite{Earley1970},
+those of Earley~\cite{Earley1970},%
+\index{recce-general}{Earley, Jay}
 that is, never worse than $\order{\V{n}^3}$.
 
 \section{Linear time for practical grammars}
@@ -1085,9 +1087,11 @@ and will be essential for our complexity analysis.
 
 The algorithmic notions are, in concept,
 ultimately reducible to sequences of the primitive operations
-of a random access machine (RAM), like the one described by Earley
+of a random access machine (RAM), like the one described by Earley%
+\index{recce-general}{Earley, Jay}
 but with two addition understandings.%
-\footnote{Jay Earley
+\footnote{Jay Earley%
+  \index{recce-general}{Earley, Jay}
   describes his random access machine model in
   \cite[p. 61]{Earley1970}.
 }
@@ -1097,7 +1101,9 @@ where \V{c} is a constant and \V{n} is the size of the problem under
 discussion.
 Second, the primitive operations of our RAM
 are understood to be those typical of a modern computer.%
-\footnote{Jay Earley's primitive operations only included addition --
+\footnote{Jay Earley's%
+\index{recce-general}{Earley, Jay}
+primitive operations only included addition --
   his algorithm and his data structure (linked lists) did not need multiplication.
   Our changes bring us in line with the more modern
   approach of Cormen et al. 2009~\cite[p. 23--24]{Cormen2009}.
@@ -1118,7 +1124,9 @@ we will break it down no further.\footnote{%
   \cite{Marpa-R2}.%
 }
 
-\Earley{} will refer to the Earley's original
+\Earley{} will refer to the Earley's%
+\index{recce-general}{Earley, Jay}
+original
 recognizer\cite{Earley1970}
 with zero characters of lookahead.
 \Leo{} will refer to Leo's revision of \Earley{}
@@ -1139,7 +1147,9 @@ be called \dfn{sub-ops}.
 The building blocks of \Earley{} will be
 called \dfn{operations}.
 This overloads a term with a mathematical meaning
-but we feel that being able to follow Jay Earley's terminology in \cite{Earley1970}
+but we feel that being able to follow Jay Earley's%
+\index{recce-general}{Earley, Jay}
+terminology in \cite{Earley1970}
 outweighs the risk of confusion.
 
 \section{Presentation of the deductive logic}
@@ -2060,7 +2070,15 @@ A \dfn{leaf path} is a path whose last value is a leaf.
 \label{lem:tree-path-maximum}
 The length of a path in a tree is at most
 the number of nodes in the tree.
-\thEnd
+That is,
+\begin{equation}
+\nonumber
+\begin{gathered}
+    \text{if $\V{tree} = \tuple{ \V{nodes}, \V{edges} }$ is a tree, then}
+    \\ \forall\; \V{path} \in \Vmyfn{path}{tree} :
+        \Vsize{path} \le \V{nodes}. \quad \thEnd
+\end{gathered}
+\end{equation}
 \end{theorem}
 
 \begin{proof}
@@ -2096,6 +2114,7 @@ The count of paths for any tree is finite.
 That is, if \V{tree} is a tree,
 \[
      \size{\Vmyfn{path}{tree}} \in \naturals.
+     \quad \thEnd
 \]
 \end{theorem}
 
@@ -3257,19 +3276,53 @@ We now consider the other subcase
 \begin{lem}{Generation Union Tree Containment}
 \label{lem:generation-union-tree-containment}
 The union of all generations of the leaves
+whose level is less than the node count
 is the set of nodes
 in \V{tree}.
 That is,
-\[
-\V{nodes} = \bigcup \set{ \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} :
-    \V{g} = \myfn{gen}{\V{N},\V{leaves}}}. \quad \thEnd
-\]
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-050}
+\V{nodes} = \bigcup \set{
+    \begin{gathered}
+        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+            \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
+    \end{gathered}}. \quad \thEnd
+\end{equation}
 \end{lem}
 
 \begin{proof}
-By the Leaf Path Finiteness Theorem \Thref{lem:tree-path-maximum},
-and the Tree Leaf Path Theorem \Thref{th:tree-leaf-path},
+It is obvious from 
+\Eref{eq:lem-generation-union-tree-containment-050}
+that
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-110}
+\left( \bigcup \set{
+    \begin{gathered}
+        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+            \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
+    \end{gathered}}
+\right) \subseteq \V{nodes}.
+\end{equation}
+It remains to show that
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-110}
+\begin{gathered}
+\forall\; \V{nd} \in \V{nodes} :
+\\ \V{nd} \in \left ( \bigcup \set{
+    \begin{gathered}
+        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+            \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
+    \end{gathered}}
+\right).
+\end{gathered}
+\end{equation}
+
+By the Leaf Path Finiteness Theorem \Lmref{tree-path-maximum},
+and the Tree Leaf Path Theorem \Thref{tree-leaf-path},
 every node of a tree is the start of a leaf path of length at most \Vsize{nodes}.
+By the ``Ancestry from Path'' Lemma \Lmref{ancestry-from-path},
+the start of a leaf path whose last index is at most \decr{\Vsize{nodes}}
+must be in \Vmyfn{Anc}{ \decr{\Vsize{nodes}}, \V{leaves} }.
 \todo{Finish this proof.}
 \myqed
 \end{proof}
@@ -4575,7 +4628,9 @@ grammars with nullable and nulling symbols
 and empty rules.
 But difficulties in handling these correctly
 have bedeviled previous attempts
-at Earley parsing.
+at Earley%
+\index{recce-general}{Earley, Jay}
+parsing.
 
 Marpa follows Aycock and Horspool\cite{AH2002} in using
 grammar rewrites to handle these issues.
@@ -4602,7 +4657,9 @@ to an internal grammar.
 
 Grammar rewriting was not the focus
 of \cite{AH2002} ---
-instead that paper centered on revising Earley's algorithm
+instead that paper centered on revising Earley's%
+\index{recce-general}{Earley, Jay}
+algorithm
 to use LR(0) states.
 The first version of \Marpa{}\cite{Kegler2019}
 used the LR(0) states of \cite{AH2002},
@@ -5318,7 +5375,9 @@ of dotted rule, origin and current location.
 
 The origin is the location where recognition of the rule
 started.
-In the Earley parsing literature,
+In the Earley%
+\index{recce-general}{Earley, Jay}
+parsing literature,
 the origin is often called the ``parent''.
 For convenience, the types \type{ORIG} and \type{CURR} will be synonyms
 for \type{LOC}, so that
