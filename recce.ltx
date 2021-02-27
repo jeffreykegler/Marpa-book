@@ -3300,27 +3300,79 @@ It follows directly from the statement of the theorem that
    $\V{genUnion} \subseteq \V{nodes}$
     \cuz{} \Eref{eq:lem-generation-union-tree-containment-050}.
 }
-We have yet to prove that
+It remains to prove that
 \mypareq{eq:lem-generation-union-tree-containment-120}{%
     $\forall\; \V{nd} \in \V{nodes} : \V{nd} \in \V{genUnion}$
     \cuz{} To show.
 }
-
 \begin{equation}
-\label{eq:lem-generation-union-tree-containment-120}
+\label{eq:lem-generation-union-tree-containment-130}
 \begin{gathered}
 \forall\; \V{nd} \in \V{nodes} :
-\exists \V{lpath} \in \Vmyfn{paths}{tree} :
+\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
 \\ \Velement{lpath}{0} = \V{nd}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}.
 \\ \because \longThref{Tree Leaf Path Theorem}{tree-leaf-path}.
 \end{gathered}
 \end{equation}
-By the Leaf Path Finiteness Theorem \Lmref{tree-path-maximum},
-every node of a tree is the start of a leaf path of length at most \Vsize{nodes}.
-By the ``Ancestry from Path'' Lemma \Lmref{ancestry-from-path},
-the start of a leaf path whose last index is at most \decr{\Vsize{nodes}}
-must be in \Vmyfn{Anc}{ \decr{\Vsize{nodes}}, \V{leaves} }.
+Let \Vnod{nd} be an arbitrary node.
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-140}
+\begin{gathered}
+\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
+\\ \Velement{lpath}{0} = \V{nd}
+\\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}
+\\ \myparbox{\cuz{}
+    UI of \Eref{eq:lem-generation-union-tree-containment-130}
+    with new free \V{nd}.}
+\end{gathered}
+\end{equation}
+\begin{gather}
+\label{eq:lem-generation-union-tree-containment-150}
+\V{lpath} \in \Vmyfn{paths}{tree} :
+\\ \label{eq:lem-generation-union-tree-containment-160}
+    \land\; \Velement{lpath}{0} = \V{nd} :
+\\ \label{eq:lem-generation-union-tree-containment-170}
+    \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}
+\\ \nonumber
+    \myparbox{\cuz{}
+        EI of bound \V{lpath}
+        in \Eref{eq:lem-generation-union-tree-containment-140}
+        with new free \V{lpath}.}
+\end{gather}
+By the Leaf Path Finiteness Lemma,
+every node of a tree is the start of a leaf path of length at most \Vsize{nodes}, so
+that
+\mypareq{eq:lem-generation-union-tree-containment-180}{%
+    $\Vsize{lpath} \le \Vsize{nodes}$
+    \cuz{} \Lmref{tree-path-maximum}.
+}
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-300}
+\begin{gathered}
+\forall\; \Vnat{N} :
+\forall\; \V{path} \in \Vmyfn{path}{tree} :
+\forall\; \Vnodset{base} :
+\\ \Vlastix{path} \le \V{N}
+    \land \Velement{path}{\Vlastix{path}} \in \V{base}
+\\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{N}, \V{base}}
+\\ \because \longLmref{Ancestry from Path}{ancestry-from-path}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-310}
+\begin{gathered}
+\V{lpath} \in \Vmyfn{path}{tree}
+\\ \land\; \Vlastix{lpath} < \Vsize{nodes}
+\\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \Vnodset{leaves}
+\\ \implies \Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}
+\\ \myparbox{\cuz{}
+    UI in \Eref{eq:lem-generation-union-tree-containment-300}
+    of bound \Vnat{N} with \decr{\Vsize{nodes}},
+    \linebreak of bound \V{path} with \V{lpath}, and
+    \linebreak of bound \Vnodset{base} with \Vnodset{leaves}.}
+\end{gathered}
+\end{equation}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
