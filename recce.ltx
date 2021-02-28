@@ -60,6 +60,7 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb}
 \usepackage{wasysym} % Used for \Circle
+\usepackage{stmaryrd} % Used for \llbracket, \rrbracket
 \usepackage{mathtools}
 \usepackage{url}
 \usepackage[final]{hyperref} % ignore draft status
@@ -319,7 +320,8 @@
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
-\newcommand{\tuple}[1]{\ensuremath{\left[ #1 \right]}}
+\newcommand{\tuple}[1]{\ensuremath{\left\llbracket #1 \right\rrbracket}}
+\newcommand{\family}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
@@ -1619,14 +1621,36 @@ and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
 \defEnd
 \end{definition}
 
+\begin{definition}[Family Constructor]
+\label{def:family-constructor}
+To describe families,
+we sometimes use a family constructor of the form
+\begin{equation}
+\label{eq:def-family-constructor-050}
+    \family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
+\end{equation}
+If \V{fam} is the family described by
+\Eref{eq:def-family-constructor-050},
+then $\V{S}=\Dom{fam}$ is the index set,
+and the value of \Velement{fam}{i} is
+\Vmyfn{P}{i} for every \V{i} in the set
+\V{S}.
+\defEnd
+\end{definition}
+
+\begin{definition}[Sequence Constructor]
+\label{def:sequence-constructor}
 To express sequences, we often use a sequence constructor
 of the form
-$\seq{ \Vmyfn{cond}{ix} : \Vmyfn{P}{ix} }$,
+$\seq{ \Vmyfn{cond}{\Vnat{ix}} : \Vmyfn{P}{ix} }$,
 where
-\Vmyfn{cond}{ix} is a guard expression,
-and
+\Vmyfn{cond}{ix} is a boolean expression
+describing the index set
 \Vmyfn{P}{ix} is an expression which represents the
 value of the \V{ix}'th element of a sequence.
+\defEnd
+\end{definition}
+
 For example, where naturals \V{lo}
 and \V{hi} and the function \V{f}
 are bound in context,
@@ -1640,18 +1664,22 @@ are bound in context,
     = \seq{ \Vmyfn{f}{lo}, \Vmyfn{f}{\V{lo}+1}, \ldots }.
 \]
 
-We write tuples using square brackets,
-and refer to the first element of
-a tuple \V{t} as \Velement{t}{0},
-its last element as \Velement{t}{\Vlastix{x}},
-etc.,
-so that our notation does not always distinguish a tuple from
-a sequence.
-Often it is clear as a matter of the basic definitions of set
-theory which is intended.
-Where confusion seems possible,
-we make our intention clear in the
-text.
+We write tuples using double square brackets.
+For example,
+\mypareq{eq:tuple-example}{%
+    \tuple{ 42, 1729 }
+}
+is a duple.
+We may refer to tuple element by numeric indices,
+so that the first element of
+\Eref{eq:tuple-example}
+is $\Velement{t}{0}=42$,
+and the last element of
+\Eref{eq:tuple-example}
+is $\Velement{t}{\Vlastix{x}}=1729$.
+Numeric indices can be hard to remember,
+and when a tuple is of a specific kind (for example, a grammar),
+we often define a mnemonic for each element of a tuple.
 
 In keeping with our avoidance of sub- and superscripts,
 our preferred notations
@@ -1687,13 +1715,20 @@ then \V{j} is the quantified variable in
 \forall \; \V{lo} \le \Vnat{j} \le \V{hi} : \myfn{P}{\V{j}}.
 \]
 
-Recall that our notation for the sum of a set \V{S}
-was $\sum \V{S}$.
-We extend this notation to sequences,
-so that we write $\sum \V{seq}$ to indicate the sum
-of the elements of the sequence \V{seq}.
-To represent the sequence to be summed,
-we often use a sequence constructor.
+Where we have defined a unary operation on a set,
+as for example,
+$\sum \V{S}$ for the sum of a set \V{S},
+we also extend the notation to families.
+The unary set operation then applies to the range of the family,
+so that, if \V{fam} is family,
+$\sum \V{fam} = \sum \Ran{\V{fam}}$.
+Often the family is a sequence,
+so that $\sum \seq{0, \ldots \Vnat{n}}$ would indicate the sum
+of the first $\V{n}+1$ natural numbers.
+we often use a sequence constructor,
+to represent the sequence to be summed,
+and often use a family constructor
+to represent the family to be summed.
 
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
@@ -2011,7 +2046,7 @@ where
             \\ \land\;
             \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vdecr{length} :
-                \\ \tuple{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
+                \\ \family{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
             \end{gathered} \right)
         \end{gathered}
     \end{gathered} }.
@@ -2190,7 +2225,7 @@ that \V{max1} is not a leaf path.
     \bcuz{} EI of bound \V{oneMore} in \Eref{eq:th-tree-leaf-path-190}
     with new free \V{oneMore}.}
 \mypareq{eq:th-tree-leaf-path-210}{%
-    $\V{evenLonger} \defined \tuple{
+    $\V{evenLonger} \defined \family{
             \Velement{max1}{0} \ldots \Velement{max1}{\Vlastix{max1}},
             \V{oneMore} }$
     \bcuz{} New \V{evenLonger} for convenience.}
@@ -2707,7 +2742,7 @@ then \Vdecr{bad} is not a counter-example:
 Now it will be helpful to consider a suffix of \V{path}.
 \begin{gather}
 \label{eq:ancestry-from-path-410}
-    \left( \V{suffix} \defined \tuple{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
+    \left( \V{suffix} \defined \family{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
         \right)
 \\ \label{eq:ancestry-from-path-412}
     \land\; \V{suffix} \in \Vmyfn{path}{tree}
@@ -3408,7 +3443,7 @@ then
 \begin{equation}
 \label{lem:generation-sum-size}
     \size{\bigcup \Vnodset{genset} } =
-    \sum \tuple{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
+    \sum \family{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
     \quad \thEnd
 \end{equation}
 \end{lem}
@@ -3632,7 +3667,7 @@ is equal to the sum of their cardinalities:
 \begin{gathered}
 \forall\; \Vnodset{ndset1} :
 \\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \V{parent} \in \V{ndset1} }}
-\\ =\; \sum \tuple{\V{parent} \in \V{ndset1} : \size{\Vmyfn{children}{parent}} }
+\\ =\; \sum \family{\V{parent} \in \V{ndset1} : \size{\Vmyfn{children}{parent}} }
 \\ \because \Eref{eq:lem-surface-parents-ratio-200}.
 \end{gathered}
 \end{equation}
@@ -3640,7 +3675,7 @@ is equal to the sum of their cardinalities:
 \label{eq:lem-surface-parents-ratio-220}
 \begin{gathered}
 \size{\bigcup \set{ \Vmyfn{children}{parent} : \V{parent} \in \Vmyfn{NewParents}{ndset} }}
-\\ =\; \sum \tuple{\V{parent} \in \Vmyfn{NewParents}{ndset} : \size{\Vmyfn{children}{parent}} }
+\\ =\; \sum \family{\V{parent} \in \Vmyfn{NewParents}{ndset} : \size{\Vmyfn{children}{parent}} }
 \\ \myparbox{\cuz{}
     \Eref{eq:lem-surface-parents-ratio-210}, UI with \Vmyfn{NewParents}{ndset}.}
 \end{gathered}
@@ -7344,7 +7379,7 @@ That is,
 \\ \label{eq:th-les-subsequence-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-les-subsequence-06}
-\land \; \V{subseq} = \tuple{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
+\land \; \V{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \\ \nonumber
 \implies
 \\ \label{eq:th-les-subsequence-08}
@@ -7439,7 +7474,7 @@ Let \V{les} be an \type{EIM} sequence,
 and let \V{next} be an \type{EIM}.
 Then
 \mypareq{eq:th-les-extension-02}{%
-   $\tuple{\Velement{\V{les}}{0}\ldots
+   $\family{\Velement{\V{les}}{0}\ldots
        \Velement{les}{\Vlastix{les}}, \V{next}} \in \type{LES}$
 }
 iff
@@ -7951,7 +7986,7 @@ showing it directly.
     new \Vles{lesB}.
 }
 \mypareq{eq:th-les-unit-derivation-12}{%
-    $\Vles{lesB} = \tuple{\Veim{prev}, \Veim{middle}, \Veim{next}}$
+    $\Vles{lesB} = \family{\Veim{prev}, \Veim{middle}, \Veim{next}}$
     \cuz{} \Eref{eq:th-les-unit-derivation-11},
     new \Veim{prev}, \Veim{middle}, \Veim{next}
     for convenience.
@@ -8064,7 +8099,7 @@ to show \myfn{INDH}{\V{n}+1}.
      new \V{locP} for convenience.
 }
 \mypareq{eq:th-les-unit-derivation-38}{%
-    $\Vles{pre} = \tuple{\Velement{lesP}{0} \ldots \Velement{lesP}{\V{n}+2}}$
+    $\Vles{pre} = \family{\Velement{lesP}{0} \ldots \Velement{lesP}{\V{n}+2}}$
     \linebreak \cuz{} \longThref{LES subsequence}{les-subsequence},
     \Eref{eq:th-les-unit-derivation-32};
     new \Vles{pre} for convenience.
@@ -8546,8 +8581,8 @@ We show the first subcase directly.
         \Eref{eq:th-les-uniqueness-10-12}.
 }
 \mypareq{eq:th-les-uniqueness-10-16}{%
-   $\var{les1} = \tuple{\Velement{les1}{0}}
-       = \tuple{\Velement{les2}{0}} = \var{les2}$
+   $\var{les1} = \family{\Velement{les1}{0}}
+       = \family{\Velement{les2}{0}} = \var{les2}$
    \linebreak \cuz{} \Eref{eq:th-les-uniqueness-06},
         \Eref{eq:th-les-uniqueness-10-12},
         \Eref{eq:th-les-uniqueness-10-14}.
@@ -9192,7 +9227,7 @@ The theorem will follow immediately by existential generalization.
 }
 Our example of an \type{LSS} containing \var{eim} as its base element is
 \mypareq{eq:th-source-eim-containment-12}{%
-   $\var{example} = \tuple{\var{eim}}$ \cuz{} AF construction.
+   $\var{example} = \family{\var{eim}}$ \cuz{} AF construction.
 }
 \mypareq{eq:th-source-eim-containment-13}{%
     $\Velement{example}{0} = \var{eim}$ \cuz{}
@@ -9334,7 +9369,7 @@ That is, if
 \\ \label{eq:th-lss-subsequence-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-lss-subsequence-06}
-\land \; \var{subseq} = \tuple{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
+\land \; \var{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \end{gather}
 then
 \begin{gather}
@@ -9388,7 +9423,7 @@ Let \var{lss} be an \type{LSS},
 and let \var{next} be an \type{EIM}.
 Then
 \mypareq{eq:th-lss-extension-02}{%
-   $\tuple{\Velement{\var{lss}}{0}\ldots
+   $\family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}$
 }
 iff
@@ -9425,7 +9460,7 @@ the antecedant to show the consequent.
         \Eref{eq:th-lss-extension-14}.
 }
 \mypareq{eq:th-lss-extension-18}{%
-   $\var{extended} = \tuple{\Velement{\var{lss}}{0}\ldots
+   $\var{extended} = \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}}$,
        new \var{extended} for convenience.
 }
@@ -9459,7 +9494,7 @@ and with both directions we have the theorem.
 Let \var{lss} be an \type{LSS}.
 Then
 \mypareq{eq:th-lss-generalized-extension-02}{%
-   $\exists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
+   $\exists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}$
 }
 iff
@@ -9477,7 +9512,7 @@ to show the consequent.
 \begin{equation}
 \label{eq:th-lss-generalized-extension-10}
 \begin{gathered}
-   \tuple{\Velement{\var{lss}}{0}\ldots
+   \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \Veim{next}} \in \type{LSS}
    \\ \myparbox{\cuz{}
        antecedant \Eref{eq:th-lss-generalized-extension-02} of forward
@@ -9540,7 +9575,7 @@ We prove the mutual implication directly.
 \begin{gathered}
    \Maximal{\var{lss}} \iff
    \\
-   \nexists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
+   \nexists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS}
        \\ \because \longDfref{Maximal LSS}{def:maximal-lss}.
 \end{gathered}
@@ -9548,7 +9583,7 @@ We prove the mutual implication directly.
 \begin{equation}
 \label{eq:th-maximal-lss-termination-12}
 \begin{gathered}
-   \left( \nexists \; \Veim{next} : \tuple{\Velement{\var{lss}}{0}\ldots
+   \left( \nexists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \type{LSS} \right)
         \\ \iff \nexists \; \Veim{next} :
         \\ \myfn{Is-source}{\var{next}}
@@ -10549,7 +10584,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{gathered}
     \myfn{lims}{\Velement{max}{0}} =
     \\ \left\lbrace \begin{gathered}
-        \tuple{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
+        \family{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
         \\ \Valid{\Velement{max}{0}} \land \myfn{Is-Leo-Eligible}{\Velement{max}{0}}
         \\ \land \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}}
         \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
