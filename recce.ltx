@@ -646,11 +646,11 @@ subject to deletion.
 
 \todo{Extend summary of chapters at end}
 
-% Section \Chref{chap:math-preamble}
-% contains the preliminaries to the deductive
-% reasoning, including
+% Section \Chref{chap:math-conventions}
+% describes our conventions for presenting
+% the mathematics, and includes
 % remarks on methodology and presentation.
-% Section \Chref{chap:preliminary-math}
+% Section \Chref{chap:preceding-disciplines}
 % contains definitions which are ``general'',
 % that is, for the mathematics which we use as
 % a basis for our parsing discussions.
@@ -948,10 +948,10 @@ to get exactly the language that the precedenced rule specifies.
 The user of the yacc equivalent must hope their
 syntax falls within the limits of LALR.
 
-\chapter{Preamble to the Mathematics}
-\label{chap:math-preamble}
+\chapter{Mathematical conventions}
+\label{chap:math-conventions}
 
-\todo[prepend, caption={``Preamble'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``Conventions'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -1044,7 +1044,7 @@ This makes implicit operations inconvenient so that,
 with one exception,
 operations are never implicit.
 The exception is the concatenation of strings and symbols ---
-as will be explained in \Chref{chap:preliminary-math},
+as will be explained in \Chref{chap:preceding-math},
 these have a special notation which makes implicit operations
 unambiguous.
 
@@ -1065,7 +1065,7 @@ from programming languages:
 \subtract{\V{x}}{1}.
 Full details of
 our notation for operations is in
-\Chref{chap:preliminary-math}.
+\Chref{chap:preceding-math}.
 
 \section{Base theories}
 
@@ -1467,10 +1467,10 @@ $\V{i}_\type{\naturals}$ & Variable \V{i}, a non-negative integer \\
 
 \FloatBarrier
 
-\chapter{Preliminary mathematics}
-\label{chap:preliminary-math}
+\chapter{Preceding Disciplines}
+\label{chap:preceding-math}
 
-\todo[prepend, caption={``Preliminary Math'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``Preceding Disciplines'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -1532,23 +1532,6 @@ The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
-\begin{definition}[Family Constructor]
-\label{def:family-constructor}
-To describe families,
-we sometimes use a family constructor of the form
-\begin{equation}
-\label{eq:def-family-constructor-050}
-    \family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
-\end{equation}
-If \V{fam} is the family described by
-\Eref{eq:def-family-constructor-050},
-then $\V{S}=\Dom{fam}$ is the index set,
-and the value of \Velement{fam}{i} is
-\Vmyfn{P}{i} for every \V{i} in the set
-\V{S}.
-\defEnd
-\end{definition}
-
 We write tuples using double square brackets.
 For example,
 \mypareq{eq:tuple-example}{%
@@ -1572,67 +1555,6 @@ are $\bigcup \V{S}$ for the union of the elements of the set \V{S},
 and $\bigcap \V{S}$ for the intersection of the elements of the set \V{S}.
 By analogy, we write
 $\sum \V{S}$ for the sum of the elements of the set \V{S}.
-
-Logical quantifiers are always guarded.
-The guard set may be specified explicitly
-or through the quantified variable's type,
-as described below.
-
-Where the guard set is obviously \naturals{},
-the specification may be abbreviated so that, for example,
-\[
-\forall \; \V{j} \in \set{ \V{i} \in \naturals : \V{i} \le 42 } :
-    \myfn{P}{\V{j}}
-\]
-may be written as
-\[
-\forall \; \V{j} \le 42 : \myfn{P}{\V{j}}.
-\]
-A guard expression which quantifies over the naturals
-may contain more than one variable.
-In this case
-the quantified variable is always the first free variable in
-the guard expression.
-For example, if \Vnat{lo} and \Vnat{hi} are bound in context,
-and \Vnat{j} is a new, free variable,
-then \V{j} is the quantified variable in
-\[
-\forall \; \V{lo} \le \Vnat{j} \le \V{hi} : \myfn{P}{\V{j}}.
-\]
-
-Where we have defined a unary operation on a set,
-as for example,
-$\sum \V{S}$ for the sum of a set \V{S},
-we also extend the notation to families.
-The unary set operation then applies to the range of the family,
-so that, if \V{fam} is family,
-$\sum \V{fam} = \sum \Ran{\V{fam}}$.
-Often the family is a sequence,
-so that $\sum \seq{0, \ldots \Vnat{n}}$ would indicate the sum
-of the first $\V{n}+1$ natural numbers.
-we often use a sequence constructor,
-to represent the sequence to be summed,
-and often use a family constructor
-to represent the family to be summed.
-
-We use $\existsUniq$ as a uniqueness quantification operator,
-so that
-\[
-    \existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}
-\]
-is equivalent to
-$$\exists \; \V{x} \in \V{A} : \myfn{P}{\V{x}} \land \forall \; \V{y} : \myfn{P}{\V{y}} \implies \V{y}=\V{x}.$$
-We use Russell's iota operator,
-so that
-\begin{equation}
-\label{eq:def-riota}
-\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
-\end{equation}
-is the unique \V{x} in the set \V{A} such that
-\Vmyfn{P}{x} is true.
-\Eref{eq:def-riota}
-is well-defined iff
-$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
 
 To avoid ambiguity, especially with multi-character variables,
 we avoid representing relations in the form
@@ -1689,74 +1611,83 @@ We therefore represent the floor of a number
 as a function:
 $\myfn{floor}{\V{a}}$.
 
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[p]
-\caption{
-    \label{tab:op-precedence}
-    Operator precedence cheatsheet}
-Precedence is from tightest to loosest, \\
-so that the loosest precedence is last. \\
-Unary operators have tightest precedence and are omitted.
-\\[1.5ex]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\times$} & \cellboxr{Multiplication} \\
-\hline
-{$+$} {$\subtractOp$} & \cellboxr{Addition, subtraction} \\
-\hline
-   {$\le$} {$<$}
-   {$\ge$} {$>$}
-   & \cellboxr{Equality, comparison} \\
-   \hline
-{$\cat$} & \cellboxr{Concatenation, for example $\V{a}\cat \V{b}$} \\
-\hline
-{$\cup$ $\cap$ $\subtractOp$} & \cellboxr{Set union, intersection, difference} \\
-\hline
-{$\times$} & \cellboxr{Cartesian product (for sets)} \\
-\hline
-{$\subset$} {$\subseteq$}
-    {$\supset$} {$\supseteq$}
-    & \cellboxr{Set inclusion, set containment} \\
-    \hline
-{$\in$} {$\notin$}
-    & \cellboxr{Set inclusion} \\
-    \hline
-{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
-\hline
-{$\V{f} \mathop{::} \V{dom} \to \V{cod}$} &
-    \cellboxr{True iff \V{f} is function
-        \linebreak from domain \V{dom} to codomain \V{cod}} \\
-\hline
-{$\neg$} & \cellboxr{Logical negation} \\
-\hline
-{$\land$} & \cellboxr{Logical and} \\
-\hline
-{$\lor$} & \cellboxr{Logical or} \\
-\hline
-%
-% We use \implies and \iff, but to get the spacing right
-% in the cell we need to use the symbols directly.
-{${\Longrightarrow}$} & \cellboxr{Implication} \\
-\hline
-{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
-\hline
-%
-% {$\V{a}:\V{b}$}    & \cellboxr{``\V{a} such that \V{b}''} \\
-% \hline
-{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
-    Ternary conditional operator:\\
-    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
-    \hline
-{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
-\hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
-&
-\raisebox{.7ex}{Definition} \\
-\hline
-{$\because$} & \cellboxr{Hint separator} \\
-\hline
-\end{tabular}
-\end{table}
+\section{Quantifiers}
+
+Logical quantifiers are always guarded.
+The guard set may be specified explicitly
+or through the quantified variable's type,
+as described below.
+
+Where the guard set is obviously \naturals{},
+the specification may be abbreviated so that, for example,
+\[
+\forall \; \V{j} \in \set{ \V{i} \in \naturals : \V{i} \le 42 } :
+    \myfn{P}{\V{j}}
+\]
+may be written as
+\[
+\forall \; \V{j} \le 42 : \myfn{P}{\V{j}}.
+\]
+A guard expression which quantifies over the naturals
+may contain more than one variable.
+In this case
+the quantified variable is always the first free variable in
+the guard expression.
+For example, if \Vnat{lo} and \Vnat{hi} are bound in context,
+and \Vnat{j} is a new, free variable,
+then \V{j} is the quantified variable in
+\[
+\forall \; \V{lo} \le \Vnat{j} \le \V{hi} : \myfn{P}{\V{j}}.
+\]
+
+We use $\existsUniq$ as a uniqueness quantification operator,
+so that
+\[
+    \existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}
+\]
+is equivalent to
+$$\exists \; \V{x} \in \V{A} : \myfn{P}{\V{x}} \land \forall \; \V{y} : \myfn{P}{\V{y}} \implies \V{y}=\V{x}.$$
+We use Russell's iota operator,
+so that
+\begin{equation}
+\label{eq:def-riota}
+\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
+\end{equation}
+is the unique \V{x} in the set \V{A} such that
+\Vmyfn{P}{x} is true.
+\Eref{eq:def-riota}
+is well-defined iff
+$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
+
+\section{Families}
+
+\begin{definition}[Family Constructor]
+\label{def:family-constructor}
+To describe families,
+we sometimes use a family constructor of the form
+\begin{equation}
+\label{eq:def-family-constructor-050}
+    \family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
+\end{equation}
+If \V{fam} is the family described by
+\Eref{eq:def-family-constructor-050},
+then $\V{S}=\Dom{fam}$ is the index set,
+and the value of \Velement{fam}{i} is
+\Vmyfn{P}{i} for every \V{i} in the set
+\V{S}.
+\defEnd
+\end{definition}
+
+We have defined a unary operation on a set,
+for example,
+$\sum \V{S}$ is the sum of a set \V{S}.
+We extend the unary operations to families,
+applying the unary set operation to the range of the family.
+For example, if \V{fam} is a family,
+$\sum \V{fam} = \sum \Ran{\V{fam}}$.
+we often use a family constructor
+to represent the family to which a unary family operator 
+applies.
 
 \section{Sequences}
 
@@ -1807,10 +1738,14 @@ Where \V{seq} is a finite sequence,
 and the last element is \Velement{seq}{\Vlastix{seq}}.
 Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
 
-A sequence is a function whose domain is an initial segment of \naturals.
+A sequence is a family (and therefore a function)
+whose domain is an initial segment of \naturals.
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}
 and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
+When we apply a unary family operator to a sequence,
+we often use a sequence constructor
+to represent the sequence.
 
 We will write
 $\V{s}[\V{a} \ldots \V{z}]$
@@ -1936,13 +1871,84 @@ and unequal to any other value.
 
 \section{Operator Precedence}
 
-Arity, associativity and precedence follow tradition,
-but precedence presents a difficulty: varying traditions
-need to be merged.
-We state our choice of precedence conventions
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[p]
+\caption{
+    \label{tab:op-precedence}
+    Binary operator precedence}
+Precedence is from tightest to loosest, \\
+so that the loosest precedence is last.
+\\[1.5ex]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\times$} & \cellboxr{Multiplication} \\
+\hline
+{$+$} {$\subtractOp$} & \cellboxr{Addition, subtraction} \\
+\hline
+   {$\le$} {$<$}
+   {$\ge$} {$>$}
+   & \cellboxr{Equality, comparison} \\
+   \hline
+{$\cat$} & \cellboxr{Concatenation, for example $\V{a}\cat \V{b}$} \\
+\hline
+{$\cup$ $\cap$ $\subtractOp$} & \cellboxr{Set union, intersection, difference} \\
+\hline
+{$\times$} & \cellboxr{Cartesian product (for sets)} \\
+\hline
+{$\subset$} {$\subseteq$}
+    {$\supset$} {$\supseteq$}
+    & \cellboxr{Set inclusion, set containment} \\
+    \hline
+{$\in$} {$\notin$}
+    & \cellboxr{Set inclusion} \\
+    \hline
+{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
+\hline
+{$\V{f} \mathop{::} \V{dom} \to \V{cod}$} &
+    \cellboxr{True iff \V{f} is function
+        \linebreak from domain \V{dom} to codomain \V{cod}} \\
+\hline
+{$\neg$} & \cellboxr{Logical negation} \\
+\hline
+{$\land$} & \cellboxr{Logical and} \\
+\hline
+{$\lor$} & \cellboxr{Logical or} \\
+\hline
+%
+% We use \implies and \iff, but to get the spacing right
+% in the cell we need to use the symbols directly.
+{${\Longrightarrow}$} & \cellboxr{Implication} \\
+\hline
+{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
+\hline
+%
+% {$\V{a}:\V{b}$}    & \cellboxr{``\V{a} such that \V{b}''} \\
+% \hline
+{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
+    Ternary conditional operator:\\
+    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
+    \hline
+{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
+\hline
+\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
+&
+\raisebox{.7ex}{Definition} \\
+\hline
+{$\because$} & \cellboxr{Hint separator} \\
+\hline
+\end{tabular}
+\end{table}
+
+Arity, associativity and precedence follow tradition.
+The precedence presents a special difficulty:
+There are varying traditions
+and they need to be merged.
+We state our choice of precedence for binary operations
 in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
-Otherwise tradition is followed: bracketing symbols override precedence,
-and where an operator is written out in verbal form (``iff'') it has looser
+Otherwise tradition is followed:
+Unary operators have tightest precedence and are omitted.
+Bracketing symbols override precedence,
+Where an operator is written out in verbal form (``iff'') it has looser
 precedence than one written in math symbols $\iff$.
 
 \section{Order of evaluation}
