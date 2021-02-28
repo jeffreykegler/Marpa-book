@@ -1532,95 +1532,6 @@ The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
-Where \V{seq} is a sequence,
-the first element of \V{seq} is \Velement{seq}{0}.%
-\footnote{%
-   Our use of \VVelement{S}{i} instead of the more traditional
-   $\V{S}_\V{i}$ is one of the choices that we
-   made hoping to save
-   eyesight as well as reading time.
-   We are particularly motivated by our memory of
-   a paper in which the traditional notation
-   required a subscript to a subscript, and
-   turned the statement of one of the paper's
-   major results
-   into an exercise,
-   the solution to which required the reader
-   to divine whether one of the symbols represented
-   the numeral 1 or the letter l.
-}
-Where \V{seq} is a finite sequence,
-and the last element is \Velement{seq}{\Vlastix{seq}}.
-Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
-
-A sequence is a function whose domain is an initial segment of \naturals.
-If \V{seq} is a sequence,
-\Dom{\V{seq}} is the set of valid indexes of \V{seq}
-and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
-
-We will write
-$\V{s}[\V{a} \ldots \V{z}]$
-for the subsequence
-\[
-    \V{s}[\V{a}], \;\;
-    \V{s}[\V{a}+1], \;\;
-    \ldots \;\;
-    \V{s}[\V{z}].
-\]
-We require of the subsequence indices that
-$\V{z} \in \Dom{\V{seq}}$,
-except in one special case.
-If
-$\V{z} < \V{a}$ then
-the values of \V{a} and \V{z} may be negative integers,
-and $\V{s}[\V{a} \ldots \V{z}]$
-is the empty sequence.
-We often write the empty sequence as $\epsilon$,
-so that
-\[
-\begin{gathered}
-    \V{z} < \V{a} \implies \Velement{s}{\V{a} \ldots \V{z}} = \epsilon
-    \\ \text{and } \Velement{s}{0 \ldots {-1}}
-        = \Velement{s}{~}
-        = \epsilon.
-\end{gathered}
-\]
-
-\begin{definition}[Prefix]
-\label{def:prefix}
-Let \V{x} and \V{y} be sequences.
-\begin{gather*}
-\Pfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{0\ldots \V{j}}.
-\\
-\PrPfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} < \Vlastix{y}
-\land \V{x} = \Velement{y}{0\ldots \V{j}}.
-\end{gather*}
-We say
-that \V{x} is a \dfn{prefix} of \V{y} if \Pfx{\V{x}, \V{y}};
-and that \V{x} is a \dfn{proper prefix} of \V{y} if \PrPfx{\V{x}, \V{y}}.
-\defEnd
-\end{definition}
-
-\begin{definition}[Suffix]
-\label{def:suffix}
-\begin{gather*}
-\Sfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
-\\
-\PrSfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : 0 < \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
-\end{gather*}
-We say
-that \V{x} is a \dfn{suffix} of \V{y} if \Sfx{\V{x}, \V{y}};
-and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
-\defEnd
-\end{definition}
-
 \begin{definition}[Family Constructor]
 \label{def:family-constructor}
 To describe families,
@@ -1637,32 +1548,6 @@ and the value of \Velement{fam}{i} is
 \V{S}.
 \defEnd
 \end{definition}
-
-\begin{definition}[Sequence Constructor]
-\label{def:sequence-constructor}
-To express sequences, we often use a sequence constructor
-of the form
-$\seq{ \Vmyfn{cond}{\Vnat{ix}} : \Vmyfn{P}{ix} }$,
-where
-\Vmyfn{cond}{ix} is a boolean expression
-describing the index set
-\Vmyfn{P}{ix} is an expression which represents the
-value of the \V{ix}'th element of a sequence.
-\defEnd
-\end{definition}
-
-For example, where naturals \V{lo}
-and \V{hi} and the function \V{f}
-are bound in context,
-\[
-    \sum \seq{ \V{lo} \le \V{ix} \le \V{hi} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{lo},
-     \Vmyfn{f}{\V{lo}+1}, \ldots  \Vmyfn{f}{hi}},
-\]
-\[
-    \text{and } \sum \seq{ \V{lo} \le \V{ix} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{lo}, \Vmyfn{f}{\V{lo}+1}, \ldots }.
-\]
 
 We write tuples using double square brackets.
 For example,
@@ -1873,14 +1758,124 @@ Unary operators have tightest precedence and are omitted.
 \end{tabular}
 \end{table}
 
-Arity, associativity and precedence follow tradition,
-but precedence presents a difficulty: varying traditions
-need to be merged.
-We state our choice of precedence conventions
-in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
-Otherwise tradition is followed: bracketing symbols override precedence,
-and where an operator is written out in verbal form (``iff'') it has looser
-precedence than one written in math symbols $\iff$.
+\section{Sequences}
+
+\begin{definition}[Sequence Constructor]
+\label{def:sequence-constructor}
+To express sequences, we often use a sequence constructor
+of the form
+$\seq{ \Vmyfn{cond}{\Vnat{ix}} : \Vmyfn{P}{ix} }$,
+where
+\Vmyfn{cond}{ix} is a boolean expression
+describing the index set
+\Vmyfn{P}{ix} is an expression which represents the
+value of the \V{ix}'th element of a sequence.
+\defEnd
+\end{definition}
+
+For example, where naturals \V{lo}
+and \V{hi} and the function \V{f}
+are bound in context,
+\[
+    \sum \seq{ \V{lo} \le \V{ix} \le \V{hi} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{lo},
+     \Vmyfn{f}{\V{lo}+1}, \ldots  \Vmyfn{f}{hi}},
+\]
+\[
+    \text{and } \sum \seq{ \V{lo} \le \V{ix} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{lo}, \Vmyfn{f}{\V{lo}+1}, \ldots }.
+\]
+
+Where \V{seq} is a sequence,
+the first element of \V{seq} is \Velement{seq}{0}.%
+\footnote{%
+   Our use of \VVelement{S}{i} instead of the more traditional
+   $\V{S}_\V{i}$ is one of the choices that we
+   made hoping to save
+   eyesight as well as reading time.
+   We are particularly motivated by our memory of
+   a paper in which the traditional notation
+   required a subscript to a subscript, and
+   turned the statement of one of the paper's
+   major results
+   into an exercise,
+   the solution to which required the reader
+   to divine whether one of the symbols represented
+   the numeral 1 or the letter l.
+}
+Where \V{seq} is a finite sequence,
+and the last element is \Velement{seq}{\Vlastix{seq}}.
+Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
+
+A sequence is a function whose domain is an initial segment of \naturals.
+If \V{seq} is a sequence,
+\Dom{\V{seq}} is the set of valid indexes of \V{seq}
+and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
+
+We will write
+$\V{s}[\V{a} \ldots \V{z}]$
+for the subsequence
+\[
+    \V{s}[\V{a}], \;\;
+    \V{s}[\V{a}+1], \;\;
+    \ldots \;\;
+    \V{s}[\V{z}].
+\]
+We require of the subsequence indices that
+$\V{z} \in \Dom{\V{seq}}$,
+except in one special case.
+If
+$\V{z} < \V{a}$ then
+the values of \V{a} and \V{z} may be negative integers,
+and $\V{s}[\V{a} \ldots \V{z}]$
+is the empty sequence.
+We often write the empty sequence as $\epsilon$,
+so that
+\[
+\begin{gathered}
+    \V{z} < \V{a} \implies \Velement{s}{\V{a} \ldots \V{z}} = \epsilon
+    \\ \text{and } \Velement{s}{0 \ldots {-1}}
+        = \Velement{s}{~}
+        = \epsilon.
+\end{gathered}
+\]
+
+\begin{definition}[Prefix]
+\label{def:prefix}
+Let \V{x} and \V{y} be sequences.
+\begin{gather*}
+\Pfx{\V{x},\V{y}} \defined
+\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
+\land \V{x} = \Velement{y}{0\ldots \V{j}}.
+\\
+\PrPfx{\V{x},\V{y}} \defined
+\exists \; \Vnat{j} : \V{j} < \Vlastix{y}
+\land \V{x} = \Velement{y}{0\ldots \V{j}}.
+\end{gather*}
+We say
+that \V{x} is a \dfn{prefix} of \V{y} if \Pfx{\V{x}, \V{y}};
+and that \V{x} is a \dfn{proper prefix} of \V{y} if \PrPfx{\V{x}, \V{y}}.
+\defEnd
+\end{definition}
+
+\begin{definition}[Suffix]
+\label{def:suffix}
+\begin{gather*}
+\Sfx{\V{x},\V{y}} \defined
+\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
+\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
+\\
+\PrSfx{\V{x},\V{y}} \defined
+\exists \; \Vnat{j} : 0 < \V{j} \le \Vlastix{y}
+\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
+\end{gather*}
+We say
+that \V{x} is a \dfn{suffix} of \V{y} if \Sfx{\V{x}, \V{y}};
+and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
+\defEnd
+\end{definition}
+
+\section{Strings}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
 Symbols are of type \type{SYM}.
@@ -1938,6 +1933,17 @@ and comparison.
 When used in a comparison,
 $\Lambda$ compares equal to itself
 and unequal to any other value.
+
+\section{Operator Precedence}
+
+Arity, associativity and precedence follow tradition,
+but precedence presents a difficulty: varying traditions
+need to be merged.
+We state our choice of precedence conventions
+in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
+Otherwise tradition is followed: bracketing symbols override precedence,
+and where an operator is written out in verbal form (``iff'') it has looser
+precedence than one written in math symbols $\iff$.
 
 \section{Order of evaluation}
 
