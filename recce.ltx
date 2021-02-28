@@ -3391,23 +3391,33 @@ and \Eref{eq:lem-generation-union-tree-containment-120}.
 \end{proof}
 
 \begin{lem}{Generation Sum Size}
-\todo{Restate this so that it applies to any set of levels?
-Or keep it just sequences?}
+If a set of generations share the same base,
+the the sum of their sizes is equal to
+the size of their union.
+That is if \V{genset} is a set of generations such that
+\[
+    \V{genset} =
+        \set{ \begin{gathered}
+            \Vnodset{nds} \in \Vpowerset{nodes} :
+            \\ \V{nds} = \myfn{gen}{\V{i},\V{base}}
+                \land \Vnat{i} \in \powerset{\naturals}
+        \end{gathered} }
+\]
+then
+\todo{Define summation over a multiset}
 \begin{equation}
 \label{lem:generation-sum-size}
-\begin{gathered}
-    \size{\bigcup
-        \set{ 0 \le \Vnat{i} \le \V{ex} : \myfn{gen}{\V{i},\V{base}} }
-    } =
-    \\ \sum \set{ 0 \le \Vnat{i} \le \V{ex} : \size{\myfn{gen}{\V{i},\V{base}}} }.
+    \size{\bigcup \Vnodset{genset} } =
+    \sum \tuple{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
     \quad \thEnd
-\end{gathered}
 \end{equation}
 \end{lem}
 
 \begin{proof}
-% [ Use \Lmref{lem:generation-disjointness}. ]
-\todo{Finish this proof.}
+We know from set theory that the sum of the sizes of a collection
+of disjoint sets is equal to the size of the union of those sets.
+By \Lmref{generation-disjointness}, the generations are disjoint.
+The theorem follows from these two facts.
 \myqed
 \end{proof}
 
