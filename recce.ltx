@@ -2435,20 +2435,11 @@ That is,
     We say that \Vnodset{A} is an ``\Vnat{N}-level ancestry with base \Vnodset{b}''
     iff $\V{A}=\myfn{Anc}{\V{N},\V{b}}$.
 }
-% Delete this?
-%\mypareq{eq:def-n-level-node-ancestry}{%
-%    We say that \V{A}
-%    is an ``\V{N}-level ancestry'' of a node \V{nd}
-%    \linebreak iff $\V{nd}\in\V{b}$
-%    where $\V{A}=\myfn{Anc}{\V{N},\V{b}}$.
-%}
 \mypareq{eq:def-ancestry}{%
     We say that \Vnodset{A} is an ``ancestry'' of \Vnodset{nds}
     \linebreak iff \Vnodset{A} is an \Vnat{N}-level ancestry of \Vnodset{nds} for
     some \Vnat{N}.
 }
-\todo{Do I need ``proper'' for ancestries?}
-\todo{Do I need to define ancestries of individual nodes?}
 
 \begin{lem}{Ancestry Monotonicity}
 \label{lem:ancestry-monotonicity}
@@ -2881,10 +2872,6 @@ such that
     \end{gathered}
     }.
 \end{equation}
-
-\todo{Define ``proper'' generation?
-    Or eliminate ``proper'' ancestries?
-}
 
 \begin{lem}{Generation New Parent Equivalence}
 \label{lem:generation-new-parent-equivalence}
@@ -3495,7 +3482,6 @@ That is if \V{genset} is a set of generations such that
         \end{gathered} }
 \]
 then
-\todo{Define summation over a multiset}
 \begin{equation}
 \label{lem:generation-sum-size}
     \size{\bigcup \Vnodset{genset} } =
@@ -3520,15 +3506,42 @@ has the same base as the first generation and whose
 level is the sum of the levels of
 the first and second generation.
 That is,
-\label{lem:generation-additivity-050}
-\[
+\begin{equation}
+\label{eq:lem-generation-additivity-050}
     \myfn{gen}{\V{x}, \myfn{gen}{\V{y}, \V{base}}}
     = \myfn{gen}{\V{x}+\V{y},\V{base}}.
     \quad \thEnd
-\]
+\end{equation}
 \end{lem}
 
 \begin{proof}
+The proof is by minimal counter-example.
+Let
+\begin{equation}
+\label{eq:lem-generation-additivity-100}
+\begin{gathered}
+    \Vmyfn{INST}{ex} \defined
+    \\ \myfn{gen}{\V{x}, \myfn{gen}{\V{ex}, \V{base}}}
+        = \myfn{gen}{\V{x}+\V{ex},\V{base}}.
+    \\ \text{\cuz{} \Eref{eq:lem-generation-additivity-050}
+         with \Vnat{ex} for \Vnat{y}.
+         New free \Vnodset{base}.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
+\begin{gather}
+\label{eq:lem-generation-additivity-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-generation-additivity-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\todo{Fill in here}
+\mypareq{eq:lem-generation-additivity-160}{%
+    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-generation-additivity-110},
+        TODO!!!
+}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
