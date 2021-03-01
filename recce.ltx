@@ -1613,31 +1613,70 @@ $\myfn{floor}{\V{a}}$.
 
 \section{Quantifiers}
 
-Logical quantifiers are always guarded.
-The guard set may be specified explicitly
-or through the quantified variable's type,
-as described below.
+We do not have a universal, so tht
+logical quantification is always with regard to a
+set that is the ``domain of quantification''.
+The domain of quantification set may be specified explicitly
+or through the quantified variable's type.
 
-Where the guard set is obviously \naturals{},
-the specification may be abbreviated so that, for example,
+In the expression
+\begin{equation}
+\label{eq:quantification-by-type-020}
+     \forall\; \Tvar{i}{T} : \Vmyfn{f}{i},
+\end{equation}
+the domain of quantification
+is the type (and therefore set) \type{T}.
+As one example, in the expression
+\begin{equation}
+\label{eq:quantification-by-type-030}
+     \forall\; \Vnat{i} : \Vmyfn{f}{i},
+\end{equation}
+the domain of quanification is the natural numbers.
+\Eref{eq:quantification-by-type-030}
+is equivalent to
+\begin{equation}
+\label{eq:quantification-by-type-040}
+     \forall\; \V{i} \in \naturals : \Vmyfn{f}{i}.
+\end{equation}
+
+A quantified expression consists of,
+in order,
+a quantifer,
+a guard expression (or ``guard''),
+a colon,
+and a predicate.
+For example,
+in \Eref{eq:quantification-by-type-040},
+$\forall$ is the quantifier,
+$\V{i} \in \naturals$ is the ``guard expression'',
+and ``\Vmyfn{f}{i}'' is the predicate.
+The index of quantification (or ``index'')
+in \Eref{eq:quantification-by-type-040} is \V{i},
+and its domain of quantification is \naturals.
+
+The domain of quantification often is the natural numbers,
+or some proper subset thereof.
+When this is the case a boolean expression may be used to
+indicate the domain of quantification, for example
+\begin{equation}
+\label{eq:quantification-by-boolean}
+    \forall \; \V{j} \le 42 : \Vmyfn{f}{j}.
+\end{equation}
+\Eref{eq:quantification-by-boolean} is equivalent to
 \[
-\forall \; \V{j} \in \set{ \V{i} \in \naturals : \V{i} \le 42 } :
+\forall \; \V{j} \in \set{ \Vnat{i} : \V{i} \le 42 } :
     \myfn{P}{\V{j}}
 \]
-may be written as
+
+The index variable is always the first variable in the guard
+expression.
+Sometimes, it may be awkward to write a boolean guard expression
+so that the index variable occurs first.
+In this case, we write the guard expression as the index
+variable, then the boolean expression, separated by a comma.
+For example,
 \[
-\forall \; \V{j} \le 42 : \myfn{P}{\V{j}}.
-\]
-A guard expression which quantifies over the naturals
-may contain more than one variable.
-In this case
-the quantified variable is always the first free variable in
-the guard expression.
-For example, if \Vnat{lo} and \Vnat{hi} are bound in context,
-and \Vnat{j} is a new, free variable,
-then \V{j} is the quantified variable in
-\[
-\forall \; \V{lo} \le \Vnat{j} \le \V{hi} : \myfn{P}{\V{j}}.
+\forall \; \Vnat{j}, \V{lo} \le \Vnat{j} \le \V{hi} : \myfn{P}{\V{j}}.
 \]
 
 We use $\existsUniq$ as a uniqueness quantification operator,
