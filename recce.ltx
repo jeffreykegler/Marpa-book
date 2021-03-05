@@ -964,6 +964,7 @@ will usually be a waste of time.}
 % 1.) Change captialization of theorems, lemmas.
 % 2.) \thEnd after each theorem, lemma statement.
 % 3.) Convert theorems to lemmas, as appropriate.
+% 3.) Convert definitions to local definitions, as appropriate.
 % 4.) Replace subtraction of one with \decr{}.
 
 \epigraph{%
@@ -1491,11 +1492,14 @@ Basic terms from these disciplines are generally used
 without explanation,
 and basic results are typically treated as ``facts''
 and used without proof.
-We do include considerations from preceding disciplines
-in this section if they are non-standard;
-if they are not basic;
-or if they are the subject of conflicting or ambiguous standards,
-particularly if they differ from Halmos 1960~\cite{Halmos1960}.
+In this section,
+we do include any considerations from preceding disciplines
+\begin{itemize}
+\item if they are non-standard;
+\item if they are not basic;
+\item if they are the subject of conflicting or ambiguous standards; or
+\item if they differ from Halmos 1960~\cite{Halmos1960}.
+\end{itemize}
 
 Functions are total unless stated otherwise.
 An onto function is a surjection.
@@ -2534,6 +2538,73 @@ and the theorem.
 \myqed
 \end{proof}
 
+\begin{lem}{Ancestry Addition}
+\label{lem:ancestry-addition}
+Let a first ancestry be the base of a second ancestry.
+The second ancestry is equal to a third ancestry that
+has the same base as the first ancestry and whose
+level is the sum of the levels of
+the first and second ancestry.
+That is,
+\begin{equation}
+\label{eq:lem-ancestry-addition-050}
+    \myfn{Anc}{\V{x}, \myfn{Anc}{\V{y}, \V{base}}}
+    = \myfn{Anc}{\V{x}+\V{y},\V{base}}.
+    \quad \thEnd
+\end{equation}
+\end{lem}
+
+\begin{proof}
+The proof is by minimal counter-example.
+Let
+\begin{equation}
+\label{eq:lem-ancestry-addition-100}
+\begin{gathered}
+    \Vmyfn{INST}{ex} \defined
+    \\ \myfn{Anc}{\V{ex}, \myfn{Anc}{\V{y}, \V{base}}}
+        = \myfn{Anc}{\V{ex}+\V{y},\V{base}}
+    \\ \text{\cuz{} \Eref{eq:lem-ancestry-addition-050}
+         with \Vnat{ex} for \Vnat{x}.
+         New free \Vnodset{base}.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
+\begin{gather}
+\label{eq:lem-ancestry-addition-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-ancestry-addition-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:lem-ancestry-addition-170}{%
+    $\V{base} = \myfn{Anc}{0,\V{base}}$
+    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc}.
+}
+\begin{equation}
+\label{eq:lem-ancestry-addition-180}
+\begin{gathered}
+    \myfn{Anc}{0, \myfn{Anc}{\V{y}, \V{base}}}
+        = \myfn{Anc}{\V{y},\V{base}}
+        = \myfn{Anc}{0+\V{y},\V{base}}
+    \\ \myparbox{\cuz{} \Eref{eq:lem-ancestry-addition-170}.
+        New free \Vnat{y}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:lem-ancestry-addition-190}{%
+    $\myfn{INST}{0}$ \cuz{}
+        \Eref{eq:lem-ancestry-addition-100},
+        \Eref{eq:lem-ancestry-addition-180}.
+}
+\mypareq{eq:lem-ancestry-addition-200}{%
+    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-ancestry-addition-110},
+        \Eref{eq:lem-ancestry-addition-190}.
+}
+\todo{Finish this proof.}
+\myqed
+\todo{Prove this}
+\end{proof}
+
 \begin{lem}{Ancestry closure}
 \label{lem:ancestry-closure}
 Every ancestry is
@@ -3498,8 +3569,8 @@ The theorem follows from these two facts.
 \myqed
 \end{proof}
 
-\begin{lem}{Generation Additivity}
-\label{lem:generation-additivity}
+\begin{lem}{Generation Addition}
+\label{lem:generation-addition}
 Let a first generation be the base of a second generation.
 The second generation is equal to a third generation that
 has the same base as the first generation and whose
@@ -3507,7 +3578,7 @@ level is the sum of the levels of
 the first and second generation.
 That is,
 \begin{equation}
-\label{eq:lem-generation-additivity-050}
+\label{eq:lem-generation-addition-050}
     \myfn{gen}{\V{x}, \myfn{gen}{\V{y}, \V{base}}}
     = \myfn{gen}{\V{x}+\V{y},\V{base}}.
     \quad \thEnd
@@ -3518,46 +3589,46 @@ That is,
 The proof is by minimal counter-example.
 Let
 \begin{equation}
-\label{eq:lem-generation-additivity-100}
+\label{eq:lem-generation-addition-100}
 \begin{gathered}
     \Vmyfn{INST}{ex} \defined
     \\ \myfn{gen}{\V{x}, \myfn{gen}{\V{ex}, \V{base}}}
         = \myfn{gen}{\V{x}+\V{ex},\V{base}}
-    \\ \text{\cuz{} \Eref{eq:lem-generation-additivity-050}
+    \\ \text{\cuz{} \Eref{eq:lem-generation-addition-050}
          with \Vnat{ex} for \Vnat{y}.
          New free \Vnodset{base}.}
 \end{gathered}
 \end{equation}
 We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{gather}
-\label{eq:lem-generation-additivity-110}
+\label{eq:lem-generation-addition-110}
     \neg \Vmyfn{INST}{bad}
-\\ \label{eq:lem-generation-additivity-120}
+\\ \label{eq:lem-generation-addition-120}
     \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
-\mypareq{eq:lem-generation-additivity-170}{%
+\mypareq{eq:lem-generation-addition-170}{%
     $\V{base} = \myfn{gen}{0,\V{base}}$
     \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \begin{equation}
-\label{eq:lem-generation-additivity-180}
+\label{eq:lem-generation-addition-180}
 \begin{gathered}
     \myfn{gen}{\V{x}, \myfn{gen}{0, \V{base}}}
         = \myfn{gen}{\V{x},\V{base}}
         = \myfn{gen}{\V{x}+0,\V{base}}
-    \\ \myparbox{\cuz{} \Eref{eq:lem-generation-additivity-170}.}
+    \\ \myparbox{\cuz{} \Eref{eq:lem-generation-addition-170}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:lem-generation-additivity-190}{%
+\mypareq{eq:lem-generation-addition-190}{%
     $\myfn{INST}{0}$ \cuz{}
-        \Eref{eq:lem-generation-additivity-100},
-        \Eref{eq:lem-generation-additivity-180}.
+        \Eref{eq:lem-generation-addition-100},
+        \Eref{eq:lem-generation-addition-180}.
 }
-\mypareq{eq:lem-generation-additivity-200}{%
-    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-generation-additivity-110},
-        \Eref{eq:lem-generation-additivity-190}.
+\mypareq{eq:lem-generation-addition-200}{%
+    $\V{bad} > 0$ \cuz{} \Eref{eq:lem-generation-addition-110},
+        \Eref{eq:lem-generation-addition-190}.
 }
 \todo{Finish this proof.}
 \myqed
@@ -3999,7 +4070,7 @@ we assume there is a minimal \V{bad} such that
         \size{
             \myfn{gen}{\V{i}, \myfn{gen}{1,\V{base}}} }
     }
-    \\ \because \longLmref{Generation Additivity}{generation-additivity},
+    \\ \because \longLmref{Generation addition}{generation-addition},
         \Eref{eq:th-non-unary-tree-size-240}.
 \end{gathered}
 \end{equation}
