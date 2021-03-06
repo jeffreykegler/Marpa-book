@@ -256,7 +256,10 @@
 }
 
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
-\newcommand{\LDfref}[1]{(\textrm{LDf}\ref{#1}\colonpageref{#1})}
+% maybe use lowercase "df" as tag for local definitions?
+\newcommand{\LDfref}[1]{%
+    (\textrm{Df}\ref{ldef:#1}\colonpageref{ldef:#1})%
+}
 \newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
   \else``#1'' \Dfref{#2}%
@@ -2395,7 +2398,6 @@ Let the ``new parents'' function,
 be the set of the direct parents of a node set that are not already in that node set,
 so that
 \begin{equation}
-\label{eq:def-new-parents}
     \myfn{NewParents}{\Vnodset{nds}} = \set{
         \begin{gathered}
             \Vnod{parent} : \exists\; \Vnod{child} :
@@ -2407,7 +2409,7 @@ so that
 \end{ldef}
 
 \begin{ldef}{Ancestry}
-\label{ldef:ancestry}
+\label{ldef:anc}
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
@@ -2415,21 +2417,25 @@ Let the ``ancestry'' function,
 \]
 be such that
 \begin{equation}
-\label{eq:def-anc}
     \myfn{Anc}{\Vnat{N},\Vnodset{base}} =
     \left(\begin{gathered}
     \V{N}=0 \condOp \V{base} :
     \\ \myfn{Anc}{\Vdecr{N},\V{base}}
     \\ \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}\right).
+        \quad \defEnd
 \end{equation}
+\end{ldef}
 
+\begin{ldef}{Ancestry Predecessor}
+\label{ldef:predecessor-anc}
 An ancestry \Vnodset{pred}
 is the ``predecessor''
 of an ancestry \Vnodset{succ} iff \V{pred} is an ancestry with the same base
 as \V{succ},
 and the level of \V{pred} is the predecessor of the level of \V{succ}.
 The predecessor of a level 0 ancestry is the empty set.
+\todo{Is SuccessorAnc necessary?}
 An ancestry \Vnodset{succ} is the ``successor'' of another ancestry \Vnodset{pred}
 iff \V{pred} is the predecessor ancestry of \V{succ}.
 Symbolically,
@@ -2534,7 +2540,7 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
     $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+    \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
@@ -2605,7 +2611,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\V{base} = \myfn{Anc}{0,\V{base}}$
-        \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc}.
+        \cuz{} longLDfref{\myfnname{Anc}}{anc}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -2766,7 +2772,7 @@ for this purpose.
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
-    \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+    \cuz{} longLDfref{\myfnname{Anc}}{anc}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
     $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
@@ -2828,7 +2834,7 @@ We now proceed to look at the other possible values for \V{bad}.
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{eq:ancestry-from-path-330},
-        Def of \myfnname{Anc} \Eref{eq:def-anc}.}
+        longLDfref{\myfnname{Anc}}{anc}.}
 \end{gather}
 \begin{equation}
 \label{eq:ancestry-from-path-360}
@@ -2939,7 +2945,7 @@ Now it will be helpful to consider a suffix of \V{path}.
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
     $\Velement{path}{0} \in \myfn{NewParents}{\Vdecr{bad}, \V{base}}$
-    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:ancestry-from-path-500}.
 }
 Equation \Eref{eq:ancestry-from-path-510} is contrary to
@@ -3134,7 +3140,7 @@ we assume there is a minimal \V{bad} such that
     $\myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        Def of \myfnname{Anc} \Eref{eq:def-anc},
+        longLDfref{\myfnname{Anc}}{anc},
         Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \mypareq{eq:lem-generation-coverage-180}{%
@@ -3157,7 +3163,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-        \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc},
+        \bcuz{} longLDfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
@@ -3317,7 +3323,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} definition of \myfn{Anc}{} \Eref{eq:def-anc},
+    \bcuz{} longLDfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
@@ -3347,12 +3353,12 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
     $\Vnod{parent} \in \myfn{NewParents}{\Vdecr{bad},\V{base}}$
-    \bcuz{} Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:lem-surface-disjointness-300}.
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
-        Def of \myfnname{Anc} \Eref{eq:def-anc},
+        longLDfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-surface-disjointness-320}.
 }
 Equation \Eref{eq:lem-surface-disjointness-330}
@@ -3398,7 +3404,7 @@ We consider an arbitrary node in the surface:
     $\forall\; \V{base} \in \Vpowerset{nodes} : \myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        Def of \myfnname{Anc} \Eref{eq:def-anc},
+        longLDfref{\myfnname{Anc}}{anc},
         Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \mypareq{eq:lem-generation-surface-containment-140}{%
@@ -3710,7 +3716,7 @@ The theorem is then obtained using universal generalization.
     \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
     \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
     \\ \myparbox{\cuz{}
-        Def of \myfn{NewParents}{} \Eref{eq:def-new-parents},
+        \longLDfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:surface-new-parents-inclusion-130}.}
 \end{gathered}
 \end{equation}
@@ -3801,7 +3807,7 @@ child:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} Def of \myfnname{NewParents} \Eref{eq:def-new-parents}.
+    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
     New free $\V{ndset} \in \Vpowerset{nodes}$.
 }
 In fact, since \V{tree} is a non-unary tree,
