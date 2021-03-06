@@ -71,7 +71,6 @@
 
 \usepackage{thmtools}
 \usepackage{multirow}
-\renewcommand{\listtheoremname}{List of Displayed Statements}
 % \usepackage[notcite,notref]{showkeys}
 
 \allowdisplaybreaks[3]
@@ -165,6 +164,7 @@
 \newcommand{\type}[1]{\ensuremath{\mathtt{#1}}}
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
+\newcommand{\ldefined}{\underset{\text{ldef}}{\equiv}}
 \newcommand{\dfn}[1]{{\bf #1}}
 \newcommand{\op}[2][]{%
   \ifmmode\texttt{#2}(#1)%
@@ -546,7 +546,16 @@
 }
 \newtheorem{theorem}{Theorem}
 \newtheorem{lemma}[theorem]{Lemma}
+
 \newtheorem{definition}[theorem]{Definition}
+\newtheorem{rawLdef}[rawLemma]{Local Definition}
+\newenvironment{ldef}[1]{%
+   \begin{rawLdef}[#1]%
+   \index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
+}{%
+   \end{rawLdef}
+}
+
 \newtheorem{observation}[theorem]{Observation}
 \newtheorem{assumption}[theorem]{Assumption}
 
@@ -2369,6 +2378,8 @@ will be the set of leaves in \V{tree}.
 
 \section{Tree ancestries}
 
+\begin{ldef}{New Parents}
+\label{ldef:new-parents}
 Let the ``new parents'' function,
 \[
     \deffn{NewParents}{\powerset{\Vnodset{nodes}}}{\powerset{\Vnodset{nodes}}}
@@ -2383,8 +2394,12 @@ so that
             \\ \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
             \\ \land\; \tuple{\V{parent}, \V{child}} \in \V{edges}
         \end{gathered}
-    }.
+    }. \quad \defEnd
 \end{equation}
+\end{ldef}
+
+\begin{ldef}{Ancestry}
+\label{ldef:ancestry}
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
@@ -2417,7 +2432,9 @@ Symbolically,
     \\ \label{eq:def-ancestry-successor}
     \text{and }
         \myfn{SuccessorAnc}{\V{N},\V{base}} \defined \myfn{Anc}{\V{N}+1,\V{base}}.
+    \quad \defEnd
 \end{gather}
+\end{ldef}
 
 \begin{lem}{Predecessor Parent Disjointness}
 \label{lem:predecessor-parent-disjointness}
@@ -2565,7 +2582,8 @@ Let
         = \myfn{Anc}{\V{ex}+\V{y},\V{base}}
     \\ \text{\cuz{} \Eref{eq:lem-ancestry-addition-050}
          with \Vnat{ex} for \Vnat{x}.
-         New free \Vnodset{base}.}
+         New free \Vnodset{base};
+         new free \Vnat{y}.}
 \end{gathered}
 \end{equation}
 We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
@@ -2579,7 +2597,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\V{base} = \myfn{Anc}{0,\V{base}}$
-    \bcuz{} Def of \myfnname{Anc} \Eref{eq:def-anc}.
+        \cuz{} Def of \myfnname{Anc} \Eref{eq:def-anc}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -2587,8 +2605,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     \myfn{Anc}{0, \myfn{Anc}{\V{y}, \V{base}}}
         = \myfn{Anc}{\V{y},\V{base}}
         = \myfn{Anc}{0+\V{y},\V{base}}
-    \\ \myparbox{\cuz{} \Eref{eq:lem-ancestry-addition-170}.
-        New free \Vnat{y}.}
+    \\ \myparbox{\cuz{} \Eref{eq:lem-ancestry-addition-170}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:lem-ancestry-addition-190}{%
@@ -19973,6 +19990,7 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \phantomsection
+\renewcommand{\listtheoremname}{Theorems, Definitions and Observations}
 \pdfbookmark[0]{\listtheoremname}{listoftheorems}
 \listoftheorems[ignoreall,
 show={theorem,observation,definition}]
@@ -19987,11 +20005,11 @@ show={theorem,observation,definition}]
     \listoftodos
 }{}
 
-\renewcommand{\listtheoremname}{List of Lemmas}
+\renewcommand{\listtheoremname}{Lemmas and Local Definitions}
 \clearpage
 \phantomsection
-\pdfbookmark[0]{List of Lemmas}{listoflemmas}
-\listoftheorems[ignoreall, show={rawLemma}]
+\pdfbookmark[0]{\listtheoremname}{listoflemmas}
+\listoftheorems[ignoreall, show={rawLemma,rawLdef}]
 
 \clearpage
 % \def\indexname{Index of Notation}
