@@ -2635,8 +2635,10 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \label{eq:lem-ancestry-addition-210}
 \begin{gathered}
     \myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
-    \\ \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
-    \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
+    \\ \left( \begin{gathered}
+        \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
+        \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
+    \end{gathered} \right)
     \\ \because \longLDfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-ancestry-addition-200}.
 \end{gathered}
@@ -2652,6 +2654,24 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
         \Eref{eq:lem-ancestry-addition-120}.}
 \end{gathered}
 \end{equation}
+\begin{equation}
+\label{eq:lem-ancestry-addition-230}
+\begin{gathered}
+    \myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
+    \\ \left( \begin{gathered}
+        \bigfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+        \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}}
+    \end{gathered} \right)
+    \\ \because \Eref{eq:lem-ancestry-addition-210},
+        \Eref{eq:lem-ancestry-addition-220}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:lem-ancestry-addition-240}{%
+    $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
+    \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
+    \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
+        \Eref{eq:lem-ancestry-addition-230}.
+}
 \myqed
 \todo{Finish this proof.}
 \end{proof}
@@ -3026,7 +3046,7 @@ That is,
 \begin{gathered}
     \forall\;\Vnat{a} :
     \forall\;\Vnat{b} :
-    \forall\;\V{base}\in\Vpowerset{base} :
+    \forall\;\V{base}\in\Vpowerset{nodes} :
     \\ \V{a} \ne \V{b} \implies
     \myfn{gen}{\V{a},\V{base}} \cap \myfn{gen}{\V{b},\V{base}} = \emptyset.
     \quad \thEnd
@@ -3048,7 +3068,8 @@ The proof is by reductio.
 \end{gather}
 We need to choose one of the two variables, \V{lo} and \V{hi},
 to be first in numeric order.
-Their uses so far have been symmetric, so that we may assume
+The mentions of \V{hi} and \V{lo} have been symmetric up to this point,
+so that we may assume
 \mypareq{eq:lem-generation-disjointness-120}{%
      $\V{lo} < \V{hi}$ \cuz \text{WLOG}.
 }
