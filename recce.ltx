@@ -3672,11 +3672,12 @@ Let
 \begin{equation}
 \label{eq:lem-generation-addition-100}
 \begin{gathered}
-    \Vmyfn{INST}{ex} \defined
-    \\ \myfn{gen}{\V{x}, \myfn{gen}{\V{ex}, \V{base}}}
-        = \myfn{gen}{\V{x}+\V{ex},\V{base}}
+    \Vmyfn{INST}{ex} \ldefined
+    \\ \myfn{gen}{\V{ex}, \myfn{gen}{\V{y}, \V{base}}}
+        = \myfn{gen}{\V{ex}+\V{y},\V{base}}
     \\ \text{\cuz{} \Eref{eq:lem-generation-addition-050}
-         with \Vnat{ex} for \Vnat{y}.
+         with \Vnat{ex} for \Vnat{x}.
+         New free \Vnat{y}.
          New free \Vnodset{base}.}
 \end{gathered}
 \end{equation}
@@ -3687,7 +3688,8 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \\ \label{eq:lem-generation-addition-120}
     \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
-    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+    \myparbox{\cuz{} AF reductio.
+    New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-generation-addition-170}{%
     $\V{base} = \myfn{gen}{0,\V{base}}$
@@ -3696,9 +3698,9 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{equation}
 \label{eq:lem-generation-addition-180}
 \begin{gathered}
-    \myfn{gen}{\V{x}, \myfn{gen}{0, \V{base}}}
-        = \myfn{gen}{\V{x},\V{base}}
-        = \myfn{gen}{\V{x}+0,\V{base}}
+    \myfn{gen}{0, \myfn{gen}{\V{y}, \V{base}}}
+        = \myfn{gen}{\V{y},\V{base}}
+        = \myfn{gen}{0+\V{y},\V{base}}
     \\ \myparbox{\cuz{} \Eref{eq:lem-generation-addition-170}.}
 \end{gathered}
 \end{equation}
@@ -3709,8 +3711,68 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-generation-addition-200}{%
     $\V{bad} > 0$ \cuz{} \Eref{eq:lem-generation-addition-110},
-        \Eref{eq:lem-generation-addition-190}.
-}
+        \Eref{eq:lem-generation-addition-190}.}
+\todo{Recheck above, fix}
+\mypareq{eq:lem-generation-addition-210}{%
+    \myfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    = \myfn{Anc}{\V{bad}+\V{y},\V{base}}
+    \bcuz{} \longLmref{Ancestry Addition}{ancestry-addition}.}
+\begin{equation}
+\label{eq:lem-generation-addition-220}
+\begin{gathered}
+    \myfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    \\ = \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i}, \myfn{Anc}{\V{y}, \V{base}}}}
+    \\ = \left( \begin{gathered}
+            \myfn{gen}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}} \;\cup
+            \\ \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} :
+                \myfn{gen}{\V{i}, \myfn{Anc}{\V{y}, \V{base}}}}
+        \end{gathered} \right)
+    \\ \because \Eref{eq:lem-generation-addition-200}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-addition-230}
+\begin{gathered}
+    \myfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    \\ = \myfn{gen}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+             \cup \myfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    \\ \because \longLmref{Generation Coverage}{generation-coverage},
+        \Eref{eq:lem-generation-addition-220}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-addition-240}
+\begin{gathered}
+    \myfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    \\ = \myfn{gen}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+             \cup \bigfn{Anc}{ (\Vdecr{bad}) + \V{y}, \V{base}}
+    \\ \because \longLmref{Ancestry Addition}{ancestry-addition},
+        \Eref{eq:lem-generation-addition-230}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-addition-250}
+\begin{gathered}
+    \myfn{Anc}{\V{bad}+\V{y}, \V{base}}
+    \\ = \bigcup \set{ \forall\; \Vnat{i} \le \V{bad}+\V{y} : \myfn{gen}{\V{i}, \V{base}}}
+    \\ = \left( \begin{gathered}
+            \myfn{gen}{\V{bad}+\V{y}, \V{base}} \;\cup
+            \\ \bigcup \set{ \forall\; \Vnat{i} \le (\Vdecr{bad})+\V{y} :
+                \myfn{gen}{\V{i}, \V{base}}}
+        \end{gathered} \right)
+    \\ \because \Eref{eq:lem-generation-addition-200}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-addition-260}
+\begin{gathered}
+    \myfn{Anc}{\V{bad}+\V{y}, \V{base}}
+    \\ = \myfn{gen}{\V{bad}+\V{y}, \V{base}} \cup
+                \myfn{Anc}{(\Vdecr{bad})+\V{y}, \V{base}}
+    \\ \because \longLmref{Generation Coverage}{generation-coverage},
+        \Eref{eq:lem-generation-addition-250}.
+\end{gathered}
+\end{equation}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
