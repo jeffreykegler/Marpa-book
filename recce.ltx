@@ -256,8 +256,8 @@
 }
 
 \newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
-% maybe use lowercase "df" as tag for local definitions?
-\newcommand{\LDfref}[1]{%
+% Lowercase "df" is tag for local definitions.
+\newcommand{\dfref}[1]{%
     (\textrm{Df}\ref{ldef:#1}\colonpageref{ldef:#1})%
 }
 \newcommand{\longDfref}[2]{%
@@ -265,9 +265,9 @@
   \else``#1'' \Dfref{#2}%
   \fi%
 }
-\newcommand{\longLDfref}[2]{%
-  \ifmmode \text{``#1''\LDfref{#2}}%
-  \else``#1'' \LDfref{#2}%
+\newcommand{\longdfref}[2]{%
+  \ifmmode \text{``#1''\dfref{#2}}%
+  \else``#1'' \dfref{#2}%
   \fi%
 }
 
@@ -2435,19 +2435,15 @@ of an ancestry \Vnodset{succ} iff \V{pred} is an ancestry with the same base
 as \V{succ},
 and the level of \V{pred} is the predecessor of the level of \V{succ}.
 The predecessor of a level 0 ancestry is the empty set.
-\todo{Is SuccessorAnc necessary?}
-An ancestry \Vnodset{succ} is the ``successor'' of another ancestry \Vnodset{pred}
-iff \V{pred} is the predecessor ancestry of \V{succ}.
 Symbolically,
-\begin{gather}
+\begin{equation}
     \label{eq:def-ancestry-predecessor}
-    \myfn{PredecessorAnc}{\Vnat{N},\Vnodset{base}} \defined
-    (\cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}})
-    \\ \label{eq:def-ancestry-successor}
-    \text{and }
-        \myfn{SuccessorAnc}{\V{N},\V{base}} \defined \myfn{Anc}{\V{N}+1,\V{base}}.
+\begin{gathered}
+    \myfn{PredecessorAnc}{\Vnat{N},\Vnodset{base}} \ldefined
+    \\ \cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}}.
     \quad \defEnd
-\end{gather}
+\end{gathered}
+\end{equation}
 \end{ldef}
 
 \begin{lem}{Predecessor Parent Disjointness}
@@ -2462,7 +2458,8 @@ That is,
 \end{lem}
 
 \begin{proof}
-\todo{Prove this}
+The theorem follows immediately from the definition of \myfnname{NewParents}
+\dfref{new-parents}.
 \myqed
 \end{proof}
 
@@ -2540,7 +2537,7 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
     $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
@@ -2611,7 +2608,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\forall\; \Vnodset{b} : \V{b} = \myfn{Anc}{0,\V{b}}$
-        \cuz{} \longLDfref{\myfnname{Anc}}{anc}.
+        \cuz{} \longdfref{\myfnname{Anc}}{anc}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -2639,7 +2636,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
         \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
         \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
     \end{gathered} \right)
-    \\ \because \longLDfref{\myfnname{Anc}}{anc},
+    \\ \because \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-ancestry-addition-200}.
 \end{gathered}
 \end{equation}
@@ -2669,7 +2666,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-ancestry-addition-240}{%
     $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
-    \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-ancestry-addition-230}.
 }
 \mypareq{eq:lem-ancestry-addition-250}{%
@@ -2821,7 +2818,7 @@ for this purpose.
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
-    \cuz{} \longLDfref{\myfnname{Anc}}{anc}.
+    \cuz{} \longdfref{\myfnname{Anc}}{anc}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
     $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
@@ -2883,7 +2880,7 @@ We now proceed to look at the other possible values for \V{bad}.
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{eq:ancestry-from-path-330},
-        \longLDfref{\myfnname{Anc}}{anc}.}
+        \longdfref{\myfnname{Anc}}{anc}.}
 \end{gather}
 \begin{equation}
 \label{eq:ancestry-from-path-360}
@@ -2994,7 +2991,7 @@ Now it will be helpful to consider a suffix of \V{path}.
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
     $\Velement{path}{0} \in \myfn{NewParents}{\Vdecr{bad}, \V{base}}$
-    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:ancestry-from-path-500}.
 }
 Equation \Eref{eq:ancestry-from-path-510} is contrary to
@@ -3190,7 +3187,7 @@ we assume there is a minimal \V{bad} such that
     $\myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longLDfref{\myfnname{Anc}}{anc},
+        \longdfref{\myfnname{Anc}}{anc},
         Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \mypareq{eq:lem-generation-coverage-180}{%
@@ -3213,7 +3210,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-        \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
+        \bcuz{} \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
@@ -3373,7 +3370,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longLDfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
@@ -3403,12 +3400,12 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
     $\Vnod{parent} \in \myfn{NewParents}{\Vdecr{bad},\V{base}}$
-    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:lem-surface-disjointness-300}.
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
-        \longLDfref{\myfnname{Anc}}{anc},
+        \longdfref{\myfnname{Anc}}{anc},
         \Eref{eq:lem-surface-disjointness-320}.
 }
 Equation \Eref{eq:lem-surface-disjointness-330}
@@ -3454,7 +3451,7 @@ We consider an arbitrary node in the surface:
     $\forall\; \V{base} \in \Vpowerset{nodes} : \myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longLDfref{\myfnname{Anc}}{anc},
+        \longdfref{\myfnname{Anc}}{anc},
         Def of \myfnname{gen} \Eref{eq:def-gen}.
 }
 \mypareq{eq:lem-generation-surface-containment-140}{%
@@ -3882,7 +3879,7 @@ The theorem is then obtained using universal generalization.
     \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
     \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
     \\ \myparbox{\cuz{}
-        \longLDfref{\myfnname{NewParents}}{new-parents},
+        \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:surface-new-parents-inclusion-130}.}
 \end{gathered}
 \end{equation}
@@ -3973,7 +3970,7 @@ child:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} \longLDfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
     New free $\V{ndset} \in \Vpowerset{nodes}$.
 }
 In fact, since \V{tree} is a non-unary tree,
