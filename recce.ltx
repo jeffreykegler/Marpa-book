@@ -2699,64 +2699,84 @@ Then
 \end{lem}
 
 \begin{proof}
-\todo{Redo as minimal criminal, if this theorem is needed}
-The proof is by induction on the level of the ancestry.
-The induction hypothesis, \myfn{INDH}{\Vnat{indx}},
-is the universal instantiation of \Eref{eq:lem-ancestry-closure-050} with
-the induction variable \V{indx}.
-For the basis, it follows from a basic fact of set theory that
-\mypareq{eq:lem-ancestry-closure-140}{%
+The proof is by minimal counterexample.
+Let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
+Where
+\begin{equation}
+\label{eq:lem-ancestry-closure-150}
+\begin{gathered}
+\Vmyfn{INST}{\Vnat{ex}} \ldefined
+        \myfn{Anc}{\V{ex},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{Anc}{\V{i},\V{base}}}
+\\ \myparbox{\cuz{}
+    UI of \Eref{eq:lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.}
+\end{gathered}
+\end{equation}
+we assume there is a minimal \V{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:lem-ancestry-closure-160}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-ancestry-closure-165}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \because \text{AF reductio.  New free \V{bad}.}
+\end{gather}
+It follows from a basic fact of set theory that
+\mypareq{eq:lem-ancestry-closure-170}{%
         $\myfn{Anc}{0,\V{base}}
 	  = \bigcup \set{ \forall\; \Vnat{i} \le 0 : \myfn{Anc}{\V{i},\V{base}}}$
-        \cuz{} trivial.
-        \linebreak This is \myfn{INDH}{0} and the basis.
-}
-\renewcommand{\basis}{eq:lem-ancestry-closure-150}
-For the step, we assume \myfn{INDH}{\V{n}}
-to show \myfn{INDH}{\V{n}+1}.
-\mypareq{eq:lem-ancestry-closure-150}{%
-        $\myfn{Anc}{\Vnat{n},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{n} : \myfn{Anc}{\V{i},\V{base}}}$
-        \linebreak \cuz{} AF step.
-        This is \myfn{INDH}{\V{n}}.
-}
-\mypareq{eq:lem-ancestry-closure-170}{%
-    $\myfn{Anc}{\V{n},\V{base}} \subseteq \myfn{Anc}{\V{n}+1,\V{base}}$
-        \linebreak \cuz{} \Lmref{ancestry-monotonicity}.
+        \linebreak \cuz{} trivial.  This is \myfn{INST}{0}.
 }
 \mypareq{eq:lem-ancestry-closure-180}{%
-    $\bigcup \set{ \forall\; \Vnat{i} \le \V{n} : \myfn{Anc}{\V{i},\V{base}}}
-      \subseteq \myfn{Anc}{\V{n}+1,\V{base}}$
+    $\V{bad} > 0$ \cuz{}
+    \Eref{eq:lem-ancestry-closure-160},
+    \Eref{eq:lem-ancestry-closure-170}.}
+\mypareq{eq:lem-ancestry-closure-250}{%
+        $\myfn{Anc}{\Vdecr{bad},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}$
         \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-150},
-        \Eref{eq:lem-ancestry-closure-170}.
+            \Eref{eq:lem-ancestry-closure-165}, \Eref{eq:lem-ancestry-closure-180}.
+            This is \myfn{INST}{\Vdecr{bad}}.
 }
-Making a basic fact of set theory relative to the underlying set \powerset{\V{nodes}},
+\mypareq{eq:lem-ancestry-closure-270}{%
+    $\myfn{Anc}{\Vdecr{bad},\V{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+        \linebreak \cuz{} \longLmref{Ancestry Monotonicity}{ancestry-monotonicity},
+            \Eref{eq:lem-ancestry-closure-180}.
+}
+\mypareq{eq:lem-ancestry-closure-280}{%
+    $\bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}
+      \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-250},
+        \Eref{eq:lem-ancestry-closure-270}.
+}
+Making a basic fact of set theory relative to the domain of quantification \powerset{\V{nodes}},
 we obtain
-\mypareq{eq:lem-ancestry-closure-190}{%
+\mypareq{eq:lem-ancestry-closure-290}{%
         $\forall\;\V{whole} \in \powerset{\V{nodes}} :
         \forall\;\V{part} \in \powerset{\V{nodes}} :
 	\linebreak
         \V{part} \subseteq \V{whole} \implies \V{whole} = \V{whole} \cup \V{part}.$
 }
 \mypareq{eq:lem-ancestry-closure-200}{%
-      $\myfn{Anc}{\V{n}+1,\V{base}} =
-      \myfn{Anc}{\V{n}+1,\V{base}} \cup
+      $\myfn{Anc}{\V{bad},\V{base}} =
+      \myfn{Anc}{\V{bad},\V{base}} \cup
         \left(
-            \bigcup \set{ \forall\; \Vnat{i} \le \V{n} : \myfn{Anc}{\V{i},\V{base}}}
+            \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}
         \right)$
-        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-180},
-            \Eref{eq:lem-ancestry-closure-190}.
+        \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-280},
+            \Eref{eq:lem-ancestry-closure-290}.
 }
 \mypareq{eq:lem-ancestry-closure-210}{%
-      $\myfn{Anc}{\V{n}+1,\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{n}+1 : \myfn{Anc}{\V{i},\V{base}}}$
+      $\myfn{Anc}{\V{bad},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{Anc}{\V{i},\V{base}}}$
         \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-200}.
-        This is \myfn{INDH}{\V{n}+1}.
+        This is \Vmyfn{INDH}{bad}.
 }
-With
-\Eref{eq:lem-ancestry-closure-210} we have the step.
-With the step and the basis \Eref{\basis},
-we have the induction and this proof.
+Equation \Eref{eq:lem-ancestry-closure-210} is contrary to
+\Eref{eq:lem-ancestry-closure-160}, which shows the reductio.
+From the reductio, we conclude that there is no minimal counter-example to the theorem,
+and the theorem follows.
 \myqed
 \end{proof}
 
@@ -2782,7 +2802,7 @@ That is,
 
 \begin{proof}
 The proof is by minimal counterexample.
-Let $\V{base} \in \Vpowerset{nodes}$ is an arbitrary nodeset.
+Let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
 Where
 \begin{equation}
 \label{eq:ancestry-from-path-150}
