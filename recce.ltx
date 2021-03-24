@@ -290,7 +290,7 @@
 % so I need to ensure that subtraction is
 % clearly distinguished by the typography
 \newcommand{\subtractOp}{\mathbin{-}}
-\newcommand{\subtract}[2]{\ensuremath{#1\,-\,#2}}
+\newcommand{\subtract}[2]{\ensuremath{#1\,\subtractOp\,#2}}
 
 \newcommand{\condOp}{\mathbin{?}}
 \newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
@@ -2409,7 +2409,7 @@ so that
 \end{ldef}
 
 \begin{ldef}{Ancestry}
-\label{ldef:anc}
+\label{ldef:ancestry}
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
@@ -2537,7 +2537,7 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
     $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
@@ -2608,7 +2608,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\forall\; \Vnodset{b} : \V{b} = \myfn{Anc}{0,\V{b}}$
-        \cuz{} \longdfref{\myfnname{Anc}}{anc}.
+        \cuz{} \longdfref{\myfnname{Anc}}{ancestry}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -2636,7 +2636,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
         \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
         \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
     \end{gathered} \right)
-    \\ \because \longdfref{\myfnname{Anc}}{anc},
+    \\ \because \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-ancestry-addition-200}.
 \end{gathered}
 \end{equation}
@@ -2666,7 +2666,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-ancestry-addition-240}{%
     $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-ancestry-addition-230}.
 }
 \mypareq{eq:lem-ancestry-addition-250}{%
@@ -2838,7 +2838,7 @@ for this purpose.
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
-    \cuz{} \longdfref{\myfnname{Anc}}{anc}.
+    \cuz{} \longdfref{\myfnname{Anc}}{ancestry}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
     $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
@@ -2900,7 +2900,7 @@ We now proceed to look at the other possible values for \V{bad}.
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{eq:ancestry-from-path-330},
-        \longdfref{\myfnname{Anc}}{anc}.}
+        \longdfref{\myfnname{Anc}}{ancestry}.}
 \end{gather}
 \begin{equation}
 \label{eq:ancestry-from-path-360}
@@ -3023,7 +3023,10 @@ and the theorem follows.
 
 \section{Tree generations}
 
-Now consider a ``generation'', the set of nodes
+\begin{ldef}{Generation}
+\label{ldef:generation}
+Now consider a ``generation'':
+the set of nodes
 added to the set of ancestors of \V{leaves} at ancestry level \V{N}.
 Let
 \[
@@ -3033,7 +3036,7 @@ be the function whose value is the \V{N}'th generation of \V{tree}
 from \V{base},
 so that
 \begin{equation}
-\label{eq:def-gen}
+\nonumber
     \Vmyfn{gen}{\V{N},\V{base}} =
     \set{
     \begin{gathered}
@@ -3041,13 +3044,15 @@ so that
         \\ \subtract{\myfn{Anc}{\V{N},\V{base}}}
             {\myfn{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}
-    }.
+    }. \quad \defEnd
 \end{equation}
+\end{ldef}
 
 \begin{lem}{Generation New Parent Equivalence}
 \label{lem:generation-new-parent-equivalence}
-The generation for an ancestry is equivalent to
-the new parents of the predecessor of that ancestry.
+If an ancestry has a predecessor,
+the generation of that ancestry is equivalent to
+the new parents of the predecessor.
 That is,
 \begin{equation}
 \begin{gathered}
@@ -3061,8 +3066,55 @@ That is,
 \end{lem}
 
 \begin{proof}
-\todo{Prove this theorem}
+\mypareq{eq:lem-generation-new-parent-equivalence-100}{%
+    $\Vmyfn{gen}{\V{N}+1,\V{base}} =
+        \subtract{\myfn{Anc}{\V{N}+1,\V{base}}}
+            {\myfn{Anc}{\V{N},\V{base}}}$
+            \linebreak \cuz{} \longdfref{Generation}{generation}.}
+\mypareq{eq:lem-generation-new-parent-equivalence-110}{%
+    $\myfn{Anc}{\Vnat{N}+1,\Vnodset{base}} =
+        \myfn{Anc}{\V{N},\V{base}}
+        \cup \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
+    \linebreak \cuz{} \longdfref{Ancestry}{ancestry}.}
+\begin{equation}
+\label{eq:lem-generation-new-parent-equivalence-120}
+\begin{gathered}
+    \Vmyfn{gen}{\V{N}+1,\V{base}} =
+    \\ \left( \myfn{Anc}{\V{N},\V{base}} \cup
+            \myfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} \right)
+    \\ \subtractOp \, \myfn{Anc}{\V{N},\V{base}}
+    \\ \because \Eref{eq:lem-generation-new-parent-equivalence-100},
+        \Eref{eq:lem-generation-new-parent-equivalence-110}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-generation-new-parent-equivalence-130}
+\begin{gathered}
+     \forall\; \V{part1} \in \Vpowerset{nodes} :
+     \forall\; \V{part2} \in \Vpowerset{nodes} :
+     \\ \forall\; \V{nextGen} \in \Vpowerset{nodes} :
+     \\ \V{part1} \cap \V{part2} = \emptyset
+     \\ \land\; \V{nextGen} = \subtract{(\V{part1} \cup \V{part2})}{\V{part1}}
+     \\ \implies \V{nextGen} = \V{part2}
+     \\ \myparbox{\cuz{} fact of set theory.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:lem-generation-new-parent-equivalence-140}{%
+    $\myfn{Anc}{\Vnat{N},\Vnodset{base}} \cap
+        \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset$
+    \linebreak \cuz{}
+        \longLmref{Predecessor--Parent Disjointness}{predecessor-parent-disjointness}.}
+\mypareq{eq:lem-generation-new-parent-equivalence-150}{%
+    $\Vmyfn{gen}{\V{N}+1,\V{base}} =
+        \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
+        \linebreak \cuz{} \Eref{eq:lem-generation-new-parent-equivalence-120},
+            \Eref{eq:lem-generation-new-parent-equivalence-130},
+            \Eref{eq:lem-generation-new-parent-equivalence-140}.}
+The theorem is the universal generalization of 
+\Eref{eq:lem-generation-new-parent-equivalence-150}
+for \Vnat{N} and \Vnodset{base}.
 \myqed
+\todo{Prove this theorem}
 \end{proof}
 
 \begin{lem}{Generation Disjointness}
@@ -3117,7 +3169,7 @@ so that we may assume
 \end{gather}
 \mypareq{eq:lem-generation-disjointness-180}{%
     $\V{nd} \in \ \myfn{Anc}{\V{lo},\V{base}}$
-        \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+        \bcuz{} Def of \myfnname{gen} \dfref{generation},
             \Eref{eq:lem-generation-disjointness-160}.
 }
 \mypareq{eq:lem-generation-disjointness-190}{%
@@ -3210,8 +3262,8 @@ we assume there is a minimal \V{bad} such that
     $\myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longdfref{\myfnname{Anc}}{anc},
-        Def of \myfnname{gen} \Eref{eq:def-gen}.
+        \longdfref{\myfnname{Anc}}{ancestry},
+        Def of \myfnname{gen} \dfref{generation}.
 }
 \mypareq{eq:lem-generation-coverage-180}{%
     \Vmyfn{INST}{0} \cuz{} \Eref{eq:lem-generation-coverage-150},
@@ -3233,7 +3285,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-        \bcuz{} \longdfref{\myfnname{Anc}}{anc},
+        \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
@@ -3393,7 +3445,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{anc},
+    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
@@ -3428,7 +3480,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
-        \longdfref{\myfnname{Anc}}{anc},
+        \longdfref{\myfnname{Anc}}{ancestry},
         \Eref{eq:lem-surface-disjointness-320}.
 }
 Equation \Eref{eq:lem-surface-disjointness-330}
@@ -3474,8 +3526,8 @@ We consider an arbitrary node in the surface:
     $\forall\; \V{base} \in \Vpowerset{nodes} : \myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longdfref{\myfnname{Anc}}{anc},
-        Def of \myfnname{gen} \Eref{eq:def-gen}.
+        \longdfref{\myfnname{Anc}}{ancestry},
+        Def of \myfnname{gen} \dfref{generation}.
 }
 \mypareq{eq:lem-generation-surface-containment-140}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{gen}{0,\V{base}}$
@@ -3514,7 +3566,7 @@ We now consider the other subcase
 \mypareq{eq:lem-generation-surface-containment-190}{%
     $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq
         \myfn{gen}{\V{N},\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+    \bcuz{} Def of \myfnname{gen} \dfref{generation},
         \Eref{eq:lem-generation-surface-containment-180}.
         \quad \myqed
 }
@@ -3713,7 +3765,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-generation-addition-170}{%
     $\V{base} = \myfn{gen}{0,\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen}.
+    \bcuz{} Def of \myfnname{gen} \dfref{generation}.
 }
 \begin{equation}
 \label{eq:lem-generation-addition-180}
@@ -4218,7 +4270,7 @@ we assume there is a minimal \V{bad} such that
 \end{gather}
 \mypareq{eq:th-non-unary-tree-size-130}{%
     $\myfn{gen}{0,\V{base}} = \V{base}$
-    \cuz{} Def of \myfnname{gen} \Eref{eq:def-gen}.
+    \cuz{} Def of \myfnname{gen} \dfref{generation}.
 }
 \mypareq{eq:th-non-unary-tree-size-140}{%
     $\size{\myfn{gen}{0,\V{base}}} \le 2\times\Vsize{base}$
@@ -4265,7 +4317,7 @@ we assume there is a minimal \V{bad} such that
     } =
     \Vsize{base} +
     \sum \set{ 1 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
-    \bcuz{} Def of \myfnname{gen} \Eref{eq:def-gen},
+    \bcuz{} Def of \myfnname{gen} \dfref{generation},
         \Eref{eq:th-non-unary-tree-size-220}.
 }
 \mypareq{eq:th-non-unary-tree-size-240}{%
@@ -4369,7 +4421,7 @@ we assume there is a minimal \V{bad} such that
             (\cond{\V{bad}=0}{0}{1})
         }
     \\ \myparbox{\cuz{}
-        Def of \myfnname{gen} \Eref{eq:def-gen},
+        Def of \myfnname{gen} \dfref{generation},
         \Eref{eq:th-non-unary-tree-size-290}.}
 \end{gathered}
 \end{equation}
