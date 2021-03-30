@@ -1759,30 +1759,51 @@ applies.
 
 \section{Sequences}
 
+A sequence is a family (and therefore a function)
+whose domain is an initial segment of \naturals.
+If \V{seq} is a sequence,
+\Dom{\V{seq}} is the set of valid indexes of \V{seq}
+and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
+We specify a sequence by specifying its elements explicitly,
+via a sequence constructor,
+or inductively.
+
+An example of a sequence with explicitly specified elements
+is \seq{43, 1729, 1491, 1493 }.
+In explicitly specified sequences, ellipses specify continuation
+in some fashion which is understood in context so that,
+for example,
+\seq{0, 1, 2, \ldots 99 }
+is the sequence of the first 100 natural numbers
+in order, and
+\seq{1, 2, \ldots }
+is the infinite sequence containing, in order,
+all the counting numbers.
+
 \begin{definition}[Sequence Constructor]
 \label{def:sequence-constructor}
-To express sequences, we often use a sequence constructor
-of the form
+A \dfn{sequence constructor}
+takes the form
 $\seq{ \Vmyfn{cond}{\Vnat{ix}} : \Vmyfn{P}{ix} }$,
 where
 \Vmyfn{cond}{ix} is a boolean expression
 describing the index set
-\Vmyfn{P}{ix} is an expression which represents the
+and \Vmyfn{P}{ix} is an expression which represents the
 value of the \V{ix}'th element of a sequence.
 \defEnd
 \end{definition}
 
-For example, where naturals \V{lo}
-and \V{hi} and the function \V{f}
+For example, where 
+\Vnat{hi} and the function \V{f}
 are bound in context,
 \[
-    \sum \seq{ \V{lo} \le \V{ix} \le \V{hi} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{lo},
-     \Vmyfn{f}{\V{lo}+1}, \ldots  \Vmyfn{f}{hi}},
+    \seq{ \V{ix} \le \V{hi} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{0},
+     \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}},
 \]
 \[
-    \text{and } \sum \seq{ \V{lo} \le \V{ix} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{lo}, \Vmyfn{f}{\V{lo}+1}, \ldots }.
+    \text{and } \seq{ \V{42} \le \V{ix} : \Vmyfn{f}{ix} }
+    = \seq{ \Vmyfn{f}{42}, \Vmyfn{f}{43}, \ldots }.
 \]
 
 Where \V{seq} is a sequence,
@@ -1794,26 +1815,43 @@ the first element of \V{seq} is \Velement{seq}{0}.%
    eyesight as well as reading time.
    We are particularly motivated by our memory of
    a paper in which the traditional notation
-   required a subscript to a subscript, and
-   turned the statement of one of the paper's
-   major results
-   into an exercise,
-   the solution to which required the reader
-   to divine whether one of the symbols represented
+   converted the statement of one of the paper's
+   major theorems into an exercise.
+   The notation used a subscript to a subscript, and
+   much depended on whether the second level subscript was
    the numeral 1 or the letter l.
 }
 Where \V{seq} is a finite sequence,
-and the last element is \Velement{seq}{\Vlastix{seq}}.
-Note that this implies that $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
+the last element is \Velement{seq}{\Vlastix{seq}}.
+For a finite sequence,
+$\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
 
-A sequence is a family (and therefore a function)
-whose domain is an initial segment of \naturals.
-If \V{seq} is a sequence,
-\Dom{\V{seq}} is the set of valid indexes of \V{seq}
-and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
 When we apply a unary family operator to a sequence,
 we often use a sequence constructor
-to represent the sequence.
+to represent the sequence,
+so that
+\[
+\sum \seq{\V{ix} \le 99 : \V{ix} }
+\]
+is the sum of the first 100 natural numbers and
+\[
+\prod \seq{100 \le \V{ix} < 200: \V{ix} }
+\]
+is the product of the next 100.
+
+The sequence \V{seq} is
+specified by induction by stating
+an \dfn{initial value} from the codomain of \V{seq},
+and a function on the codomain of \V{seq},
+called the \dfn{successor function}.
+Let $\V{init} \in \Cod{\V{seq}}$ be the initial value,
+and let \deffn{succ}{\Cod{\V{seq}}}{\Cod{\V{seq}}} be the successor function.
+Then \Velement{seq}{0} = \V{init}
+and
+\[
+    \forall \V{ix} \in \Dom{\V{seq}} :
+        \V{ix} > 0 \implies \VVelement{seq}{ix} = \myfn{succ}{\Velement{seq}{\Vdecr{ix}}}.
+\]
 
 We will write
 $\V{s}[\V{a} \ldots \V{z}]$
@@ -1842,6 +1880,19 @@ so that
         = \epsilon.
 \end{gathered}
 \]
+
+\begin{definition}[Sequence Predecessor and Successor]
+\label{def:sequence-predecessor}
+In the context of sequences,
+we overload the terms ``predecessor'' and ``successor''.
+\Velement{seq}{\V{n}+1} is the \dfn{successor}
+of \VVelement{seq}{n} with respect to \V{seq}.
+\Velement{seq}{\Vdecr{n}} is the \dfn{predecessor}
+of \VVelement{seq}{n} with respect to \V{seq}.
+Usually the respective sequence
+is clear in context and left implicit.
+\defEnd
+\end{definition}
 
 \begin{definition}[Prefix]
 \label{def:prefix}
