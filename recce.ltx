@@ -1665,7 +1665,7 @@ is equivalent to
 
 A quantified expression consists of,
 in order,
-a quantifer,
+a quantifier,
 a guard expression (or ``guard''),
 a colon,
 and a predicate.
@@ -1678,28 +1678,33 @@ The index of quantification (or ``index'')
 in \Eref{eq:quantification-by-type-040} is \V{i},
 and its domain of quantification is \naturals.
 
-The domain of quantification often is the natural numbers,
-or some proper subset thereof.
-When this is the case a boolean expression may be used to
-indicate the domain of quantification.
+The domain of quantification often is some subset of the natural numbers,
+for which case a special notation may be used.
+In the special notation for quantifying over the naturals,
+the quantified expression consists of,
+in order,
+a quantifier,
+an index variable specifier,
+a comma,
+a guard,
+a colon,
+and a predicate.
+The index variable specifier is the name of the index variable.
+The guard is a boolean expression which describes the subset
+of the naturals that is used as the domain of quantification.
+The other elements of the quantification are as previously described.
+
 For example
 \begin{equation}
 \label{eq:quantification-by-boolean}
-    \forall \; \V{j} \le 42 : \Vmyfn{f}{j}
+    \forall \; \V{j},\; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}
 \end{equation}
 is equivalent to
 \[
-\forall \; \V{j} \in \set{ \Vnat{i} : \V{i} \le 42 } :
+\forall \; \V{j} \in \set{ \Vnat{i} : 1 \le \V{i} \le 42 } :
     \myfn{P}{\V{j}}.
 \]
-
-The index variable is always the first variable in the guard
-expression.
-When it is awkward to write a boolean guard expression
-so that the index variable occurs first,
-we write the guard expression as the index
-variable, then the boolean expression, separated by a comma.
-For example, in
+An another example, in
 \[
 \forall\; \Vnat{ix},\; \V{lo} \le \V{ix} \le \V{hi} : \myfn{P}{\V{ix}}.
 \]
@@ -1707,6 +1712,17 @@ the guard is ``$\Vnat{ix},\; \V{lo} \le \V{ix} \le \V{hi}$'',
 the index variable is \V{ix},
 and the domain of quantification is
 \set{ \Vnat{j} : \V{lo} \le \V{j} \le \V{hi} }.
+
+In a quantification over the naturals,
+it is usually obvious which variable is
+the index variable.
+In such cases, the index variable specifier and the comma
+separating it from the guard may be omitted.
+For example, \Eref{eq:quantification-by-boolean} would
+usually be written as
+\[
+    \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
+\]
 
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
@@ -1784,21 +1800,27 @@ all the counting numbers.
 \label{def:sequence-constructor}
 A \dfn{sequence constructor}
 takes the form
-$\seq{ \Vmyfn{cond}{\Vnat{ix}} : \Vmyfn{P}{ix} }$,
+$\seq{ \Vnat{ix},\; \Vmyfn{cond}{\V{ix}} : \Vmyfn{P}{ix} }$,
 where
-\Vmyfn{cond}{ix} is a boolean expression
-describing the index set
-and \Vmyfn{P}{ix} is an expression which represents the
-value of the \V{ix}'th element of a sequence.
+``\Vnat{ix}'' represents the index variable specifier,
+``\Vmyfn{cond}{ix}'' represents the guard,
+and ``\Vmyfn{P}{ix}'' represents the predicate.
+The index variable specifier identifies the index variable.
+The guard is a boolean expression which characterizes the index set.
+The predicate is a function whose
+value is the \V{ix}'th element of a sequence.
 \defEnd
 \end{definition}
 
-For example, where
-\Vnat{hi} and the function \V{f}
+In a sequence constructor, it is usually obvious which
+is the index variable,
+and in these cases the index variable specifier may be omitted.
+The following are examples of sequence constructors.
+Where \Vnat{hi} and the function \V{f}
 are bound in context,
 \begin{gather}
 \nonumber
-    \seq{ \Vnat{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
+    \seq{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
     = \seq{ \Vmyfn{f}{0},
      \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}},
 \\ \nonumber
