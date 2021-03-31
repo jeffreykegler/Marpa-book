@@ -1739,8 +1739,8 @@ we sometimes use a family constructor of the form
 \end{equation}
 If \V{fam} is the family described by
 \Eref{eq:def-family-constructor-050},
-then $\V{S}=\Dom{fam}$ is the index set,
-and the value of \Velement{fam}{i} is
+then $\V{S}=\Dom{\V{fam}}$ is the index set,
+and the value of \VVelement{fam}{i} is
 \Vmyfn{P}{i} for every \V{i} in the set
 \V{S}.
 \defEnd
@@ -1796,15 +1796,18 @@ value of the \V{ix}'th element of a sequence.
 For example, where
 \Vnat{hi} and the function \V{f}
 are bound in context,
-\[
-    \seq{ \V{ix} \le \V{hi} : \Vmyfn{f}{ix} }
+\begin{gather}
+\nonumber
+    \seq{ \Vnat{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
     = \seq{ \Vmyfn{f}{0},
      \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}},
-\]
-\[
-    \text{and } \seq{ \V{42} \le \V{ix} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{42}, \Vmyfn{f}{43}, \ldots }.
-\]
+\\ \nonumber
+    \seq{ \Vnat{ix} < 42 : \Vmyfn{f}{ix}+1 }
+    = \seq{ \Vmyfn{f}{1} \ldots \Vmyfn{f}{42} },
+\\ \nonumber
+    \text{and } \seq{ \Vnat{ix} : \Vmyfn{f}{ix}+1 }
+        = \seq{ \Vmyfn{f}{1}, \Vmyfn{f}{2}, \Vmyfn{f}{3}, \ldots }.
+\end{gather}
 
 Where \V{seq} is a sequence,
 the first element of \V{seq} is \Velement{seq}{0}.%
@@ -1831,11 +1834,11 @@ we often use a sequence constructor
 to represent the sequence,
 so that
 \[
-\sum \seq{\V{ix} \le 99 : \V{ix} }
+\sum \seq{\V{ix} < 100 : \V{ix} }
 \]
 is the sum of the first 100 natural numbers and
 \[
-\prod \seq{100 \le \V{ix} < 200: \V{ix} }
+\prod \seq{\V{ix} < 100 : \V{ix}+100 }
 \]
 is the product of the next 100.
 
@@ -2058,17 +2061,22 @@ so that the loosest precedence is last.
 \end{tabular}
 \end{table}
 
-Arity, associativity and precedence follow tradition.
-The precedence presents a special difficulty:
-There are varying traditions
-and they need to be merged.
+Arity and associativity follow tradition.
+Binary precedence presents a special difficulty:
+There are varying traditions which
+need to be merged.
 We state our choice of precedence for binary operations
 in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
-Otherwise tradition is followed:
-Unary operators have tightest precedence and are omitted.
-Bracketing symbols override precedence,
-Where an operator is written out in verbal form (``iff'') it has looser
-precedence than one written in math symbols $\iff$.
+Otherwise precedence follows tradition:
+Unary operators have tightest precedence.
+Bracketing symbols override precedence.
+And where an operator is written out in verbal form it has looser
+precedence than one written in math symbols.
+For example
+\[ \text{iff} \]
+has looser
+precedence than
+\[ \iff. \]
 
 \section{Order of evaluation}
 
