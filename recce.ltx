@@ -2219,15 +2219,11 @@ where
 \begin{gathered}
     \Vmyfn{path}{G} \defined \set{ \begin{gathered}
         \V{pth} \in \powerset{\naturals\times\V{V}} :
-            \exists\; \Vnat{length} > 0 :
-        \\ \begin{gathered}
-            \Dom{\V{pth}} = {\V{length}}
-            \\ \land\;
-            \left( \begin{gathered}
+        \\ \exists\; \Vnat{length} > 0 : (\deffn{pth}{\Vnat{length}}{\V{V}})
+        \\ \land\; \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vdecr{length} :
                 \\ \family{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
             \end{gathered} \right)
-        \end{gathered}
     \end{gathered} }.
 \end{gathered}
 \end{equation}
@@ -2256,7 +2252,25 @@ is an arbitrary graph, then
 \end{theorem}
 
 \begin{proof}
+Let $\V{G} = \tuple{\V{V}, \V{E}}$
+be a graph.
+\begin{gather}
+    \label{eq:th-subpath-100}
+    \V{path} \in \Vmyfn{paths}{G}
+    \\ \label{eq:th-subpath-110}
+        \land\; \V{subpath} = \seq{\VVelement{path}{lo} \ldots \VVelement{path}{hi}}
+    \\ \nonumber
+        \because \text{hypothesis for the theorem.}
+\end{gather}
+\mypareq{eq:th-subpath-120}{%
+    $\Ran{\V{path}} \subseteq \V{V}$ \cuz{} \Eref{eq:th-subpath-100}.}
+\mypareq{eq:th-subpath-130}{%
+    $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$ \cuz{} \Eref{eq:th-subpath-110}.}
+\mypareq{eq:th-subpath-140}{%
+    $\Ran{\V{subpath}} \subseteq \V{V}$ \cuz{}
+        \Eref{eq:th-subpath-120}, \Eref{eq:th-subpath-130}.}
 \todo{Prove this}
+\myqed
 \end{proof}
 
 \begin{definition}[Parents]
