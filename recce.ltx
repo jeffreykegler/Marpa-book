@@ -2243,8 +2243,8 @@ is an arbitrary graph, then
 \[
 \begin{gathered}
 \forall\; \V{seq} \in \Vmyfn{paths}{G} :
-\\ \forall\; \Vnat{lo} \le \Vlastix{seq} :
-    \forall\; \Vnat{hi},\; \Vnat{lo} \le \Vnat{hi} \le \Vlastix{seq} :
+\\ \forall\; \Vnat{lo} \; (\V{lo} \le \Vlastix{seq}) :
+    \forall\; \Vnat{hi} \; (\V{lo} \le \V{hi} \le \Vlastix{seq}) :
 \\ \seq{\VVelement{seq}{lo} \ldots \VVelement{seq}{hi}} \in \Vmyfn{paths}{G}.
     \quad \defEnd
 \end{gathered}
@@ -2253,32 +2253,77 @@ is an arbitrary graph, then
 
 \begin{proof}
 Let $\V{G} = \tuple{\V{V}, \V{E}}$
-be an arbitrary graph.
-\begin{gather}
-    \label{eq:th-subpath-100}
-    \V{path} \in \Vmyfn{paths}{G}
-    \\ \label{eq:th-subpath-110}
-        \land\; \V{subpath} = \seq{\VVelement{path}{lo} \ldots \VVelement{path}{hi}}
-    \\ \nonumber
-        \because \text{hypothesis for the theorem.}
-\end{gather}
+be an arbitrary graph,
+and let \V{path} be an arbitrary path in \V{G}:
+\mypareq{eq:th-subpath-100}{%
+    $\V{path} \in \Vmyfn{paths}{G}$
+    \linebreak \cuz{} hypothesis of theorem.
+    New free $\V{path} \in \powerset{\naturals \times \V{V}}$.}
+Let \Vnat{lo} and \Vnat{hi} be the first and last elements of
+a subpath of \V{path}:
+\mypareq{eq:th-subpath-105}{%
+     $\V{lo} \le \V{hi} \le \Vlastix{path}$
+    \linebreak \cuz{} hypothesis of theorem.
+        New free \Vnat{lo} and \Vnat{hi}.
+}
+Call that subpath \V{subpath}:
+\mypareq{eq:th-subpath-110}{%
+    $\V{subpath} = \seq{\VVelement{path}{lo} \ldots \VVelement{path}{hi}}$
+    \linebreak \cuz{} \Eref{eq:th-subpath-105}.  New \V{subpath} for convenience.
+}
+It follows from set theory that
 \mypareq{eq:th-subpath-120}{%
+    $\Dom{\V{subpath}} = \Vlastix{subpath}$
+    \cuz{} \Eref{eq:th-subpath-110}.
+}
+Proceding, we have
+\mypareq{eq:th-subpath-220}{%
     $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
         \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.}
-\mypareq{eq:th-subpath-130}{%
-    $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$ \cuz{} \Eref{eq:th-subpath-110}.}
-\mypareq{eq:th-subpath-140}{%
+\mypareq{eq:th-subpath-230}{%
+    $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$
+        \cuz{} \Eref{eq:th-subpath-105}, \Eref{eq:th-subpath-110}.}
+\mypareq{eq:th-subpath-240}{%
     $\Ran{\V{subpath}} \subseteq \V{V}$ \cuz{}
-        \Eref{eq:th-subpath-120}, \Eref{eq:th-subpath-130}.}
+        \Eref{eq:th-subpath-220}, \Eref{eq:th-subpath-230}.}
 \begin{equation}
-\label{eq:th-subpath-150}
+\label{eq:th-subpath-250}
 \begin{gathered}
     \forall\; \Vnat{ix} < \Vlastix{path} :
     \\ \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}
     \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.
 \end{gathered}
 \end{equation}
-\todo{Prove this}
+\mypareq{eq:th-subpath-260}{%
+     $\Vlastix{subpath}+\V{lo} \le \Vlastix{path}$
+     \cuz{} \Eref{eq:th-subpath-105}, \Eref{eq:th-subpath-110}.}
+\begin{equation}
+\label{eq:th-subpath-270}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \tuple{ \Velement{path}{\V{ix} + \V{lo}}, \Velement{path}{\V{ix}+\V{lo}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-subpath-250}, \Eref{eq:th-subpath-260}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-subpath-280}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \Velement{path}{\V{ix} + \V{lo}} = \VVelement{subpath}{ix}
+    \\ \because \Eref{eq:th-subpath-110}, \Eref{eq:th-subpath-260}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-subpath-290}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \tuple{ \Velement{subpath}{\V{ix}}, \Velement{subpath}{\V{ix}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-subpath-270}, \Eref{eq:th-subpath-280}.
+\end{gathered}
+\end{equation}
+The consequent of the theorem is \Eref{eq:th-subpath-120},
+\Eref{eq:th-subpath-240}, and \Eref{eq:th-subpath-290}.
+\todo{Check this}
 \myqed
 \end{proof}
 
