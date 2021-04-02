@@ -2212,14 +2212,14 @@ of the edges of the directed graph.
 More specifically,
 \V{pth} is a \dfn{path}
 in the directed graph $\V{G} = \tuple{\V{V}, \V{E}}$,
-iff it is an element of \Vmyfn{path}{G},
+iff it is an element of \Vmyfn{paths}{G},
 where
 \begin{equation}
 \label{eq:def-path}
 \begin{gathered}
-    \Vmyfn{path}{G} \defined \set{ \begin{gathered}
-        \V{pth} \in \powerset{\naturals\times\V{V}} :
-        \\ \exists\; \Vnat{length} > 0 : (\deffn{pth}{\Vnat{length}}{\V{V}})
+    \Vmyfn{paths}{G} \defined \set{ \begin{gathered}
+        \V{pth} \in \powerset{\naturals\times\V{V}} : \exists\; \Vnat{length} > 0 :
+        \\ \Dom{\V{pth}} = \V{length} \land \Ran{\V{pth}} \subseteq \V{V}
         \\ \land\; \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vdecr{length} :
                 \\ \family{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
@@ -2263,12 +2263,21 @@ be a graph.
         \because \text{hypothesis for the theorem.}
 \end{gather}
 \mypareq{eq:th-subpath-120}{%
-    $\Ran{\V{path}} \subseteq \V{V}$ \cuz{} \Eref{eq:th-subpath-100}.}
+    $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
+        \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.}
 \mypareq{eq:th-subpath-130}{%
     $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$ \cuz{} \Eref{eq:th-subpath-110}.}
 \mypareq{eq:th-subpath-140}{%
     $\Ran{\V{subpath}} \subseteq \V{V}$ \cuz{}
         \Eref{eq:th-subpath-120}, \Eref{eq:th-subpath-130}.}
+\begin{equation}
+\label{eq:th-subpath-150}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path} :
+    \\ \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}
+    \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.
+\end{gathered}
+\end{equation}
 \todo{Prove this}
 \myqed
 \end{proof}
