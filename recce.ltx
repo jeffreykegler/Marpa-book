@@ -567,8 +567,9 @@
    \end{rawLdef}
 }
 
+\newtheorem{remark}[theorem]{Remark}
 \newtheorem{observation}[theorem]{Observation}
-\newtheorem{assumption}[theorem]{Assumption}
+% \newtheorem{assumption}[theorem]{Assumption}
 
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
@@ -1682,6 +1683,8 @@ The index of quantification (or ``index'')
 in \Eref{eq:quantification-by-type-040} is \V{i},
 and its domain of quantification is \naturals.
 
+\begin{remark}[Natural Number Domains]
+\label{rem:naturals-domains}
 The domain of quantification often is some subset of the natural numbers,
 for which case a special notation may be used.
 In the special notation for quantifying over the naturals,
@@ -1689,19 +1692,20 @@ the quantified expression consists of,
 in order,
 a quantifier,
 an index variable specifier,
-a comma,
-a guard,
+a guard (inside parentheses),
 a colon,
 and a predicate.
 The index variable specifier is the name of the index variable.
 The guard is a boolean expression which describes the subset
 of the naturals that is used as the domain of quantification.
 The other elements of the quantification are as previously described.
+\defEnd
+\end{remark}
 
 For example
 \begin{equation}
 \label{eq:quantification-by-boolean}
-    \forall \; \V{j},\; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}
+    \forall \; \V{j}\; (1 \le \V{j} \le 42) : \Vmyfn{f}{j}
 \end{equation}
 is equivalent to
 \[
@@ -1710,9 +1714,9 @@ is equivalent to
 \]
 An another example, in
 \[
-\forall\; \Vnat{ix},\; \V{lo} \le \V{ix} \le \V{hi} : \myfn{P}{\V{ix}}.
+\forall\; \Vnat{ix}\; (\V{lo} \le \V{ix} \le \V{hi}) : \myfn{P}{\V{ix}}.
 \]
-the guard is ``$\Vnat{ix},\; \V{lo} \le \V{ix} \le \V{hi}$'',
+the guard is ``$\V{lo} \le \V{ix} \le \V{hi}$'',
 the index variable is \V{ix},
 and the domain of quantification is
 \set{ \Vnat{j} : \V{lo} \le \V{j} \le \V{hi} }.
@@ -1720,8 +1724,9 @@ and the domain of quantification is
 In a quantification over the naturals,
 it is usually obvious which variable is
 the index variable.
-In such cases, the index variable specifier and the comma
-separating it from the guard may be omitted.
+In such cases, the index variable specifier and
+the parentheses
+surrounging the guard may be omitted.
 For example, \Eref{eq:quantification-by-boolean} would
 usually be written as
 \[
@@ -1800,6 +1805,7 @@ in order, and
 is the infinite sequence containing, in order,
 all the counting numbers.
 
+\todo{Rewrite to refer to Remark above}
 \begin{definition}[Sequence Constructor]
 \label{def:sequence-constructor}
 A \dfn{sequence constructor}
@@ -2276,6 +2282,7 @@ It follows from set theory that
     $\Dom{\V{subpath}} = \Vlastix{subpath}$
     \cuz{} \Eref{eq:th-subpath-110}.
 }
+\todo{Spelling?}
 Proceding, we have
 \mypareq{eq:th-subpath-220}{%
     $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
@@ -2323,7 +2330,6 @@ Proceding, we have
 \end{equation}
 The consequent of the theorem is \Eref{eq:th-subpath-120},
 \Eref{eq:th-subpath-240}, and \Eref{eq:th-subpath-290}.
-\todo{Check this}
 \myqed
 \end{proof}
 
@@ -20430,10 +20436,11 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \phantomsection
-\renewcommand{\listtheoremname}{Theorems, Definitions and Observations}
+\renewcommand{\listtheoremname}{Theorems,
+    Definitions, Remarks and Observations}
 \pdfbookmark[0]{\listtheoremname}{listoftheorems}
 \listoftheorems[ignoreall,
-show={theorem,observation,definition}]
+show={theorem,remark,observation,definition}]
 
 \clearpage
 \phantomsection
