@@ -1,4 +1,4 @@
-% Copyright 2013 Jeffrey Kegler
+% Copyright 2021 Jeffrey Kegler
 % This document is licensed under
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
 \documentclass[draft,openany,12pt]{amsbook}
@@ -104,6 +104,7 @@
 % Definition def:
 % Theorem th:
 % Lemma lem:
+% Remark rem:
 % Observation obs:
 % Assumption asm:
 % Page page:
@@ -243,6 +244,7 @@
 % new style, including tag
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{th:#1}\colonpageref{th:#1})}
+\newcommand{\Rmref}[1]{(\textrm{Rm}\ref{rem:#1}\colonpageref{rem:#1})}
 
 \newcommand{\longLmref}[2]{%
   \ifmmode \text{``#1''\Lmref{#2}}%
@@ -252,6 +254,12 @@
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
   \else``#1'' \Thref{#2}%
+  \fi%
+}
+
+\newcommand{\longRmref}[2]{%
+  \ifmmode \text{``#1''\Rmref{#2}}%
+  \else``#1'' \Rmref{#2}%
   \fi%
 }
 
@@ -985,8 +993,9 @@ will usually be a waste of time.}
 % 1.) Change captialization of theorems, lemmas.
 % 2.) \thEnd after each theorem, lemma statement.
 % 3.) Convert theorems to lemmas, as appropriate.
-% 3.) Convert definitions to local definitions, as appropriate.
-% 4.) Replace subtraction of one with \decr{}.
+% 4.) Create remarks, as appropriate.
+% 5.) Convert definitions to local definitions, as appropriate.
+% 6.) Replace subtraction of one with \decr{}.
 
 \epigraph{%
 [Mathematical] statements are generally accompanied by arguments whose
@@ -1223,14 +1232,16 @@ and
 {\it p} is a page reference.
 Reference types are
 ``a'' (algorithm),
+``df'' (local definition),
+``Df'' (definition),
 ``e'' (equation),
-``S'' (section)
 ``L'' (a location within a section,
 where {\it n} is the section number),
-``t'' (table),
-``Df'' (definition),
-% ``Lm'' (lemma),
-``Ob'' (observation), and
+``Lm'' (lemma),
+``Ob'' (observation),
+``Rm'' (remark),
+``S'' (section)
+``t'' (table), and
 ``Th'' (theorem).
 We follow the convention in
 the literature of mathematical typography
@@ -1244,7 +1255,7 @@ For example
 \Eref{eq:restriction1} refers to equation
 \ref{eq:restriction1} on page \pageref{eq:restriction1};
 \Chref{chap:features} refers to
-section \ref{chap:features}
+chapter \ref{chap:features}
 on page \pageref{chap:features};
 and
 \Lref{loc-brick-depth} refers
@@ -1683,12 +1694,10 @@ The index of quantification (or ``index'')
 in \Eref{eq:quantification-by-type-040} is \V{i},
 and its domain of quantification is \naturals.
 
-\begin{remark}[Natural Number Domains]
-\label{rem:naturals-domains}
-The domain of quantification often is some subset of the natural numbers,
-for which case a special notation may be used.
-In the special notation for quantifying over the naturals,
-the quantified expression consists of,
+\begin{remark}[Natural Number Quantification]
+\label{rem:naturals-quantification}
+The domain of quantification often is some subset of the natural numbers.
+A natural number quantified expression consists of,
 in order,
 a quantifier,
 an index variable specifier,
@@ -1805,26 +1814,9 @@ in order, and
 is the infinite sequence containing, in order,
 all the counting numbers.
 
-\todo{Rewrite to refer to Remark above}
-\begin{definition}[Sequence Constructor]
-\label{def:sequence-constructor}
 A \dfn{sequence constructor}
-takes the form
-$\seq{ \Vnat{ix},\; \Vmyfn{cond}{\V{ix}} : \Vmyfn{P}{ix} }$,
-where
-``\Vnat{ix}'' represents the index variable specifier,
-``\Vmyfn{cond}{ix}'' represents the guard,
-and ``\Vmyfn{P}{ix}'' represents the predicate.
-The index variable specifier identifies the index variable.
-The guard is a boolean expression which characterizes the index set.
-The predicate is a function whose
-value is the \V{ix}'th element of a sequence.
-\defEnd
-\end{definition}
-
-In a sequence constructor, it is usually obvious which
-is the index variable,
-and in these cases the index variable specifier may be omitted.
+follows the form already described for
+use in quantification over the natural numbers \Rmref{rem:naturals-quantification}.
 The following are examples of sequence constructors.
 Where \Vnat{hi} and the function \V{f}
 are bound in context,
@@ -2282,8 +2274,7 @@ It follows from set theory that
     $\Dom{\V{subpath}} = \Vlastix{subpath}$
     \cuz{} \Eref{eq:th-subpath-110}.
 }
-\todo{Spelling?}
-Proceding, we have
+Proceeding, we have
 \mypareq{eq:th-subpath-220}{%
     $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
         \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.}
