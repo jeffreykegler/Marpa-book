@@ -135,7 +135,7 @@
 \delimitershortfall=0pt
 \delimiterfactor=1100
 
-% Shorten the distane between equations.  This is not
+% Shorten the distance between equations.  This is not
 % to save space for its own sake, but because
 % we often group equations into series, and these
 % do not look good with too much space.
@@ -201,6 +201,7 @@
 
 \newcommand{\defEnd}{\Circle}
 \newcommand{\obsEnd}{\Circle}
+\newcommand{\rmEnd}{\Circle}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
 \newcommand{\thEnd}{%
   \ifmmode\rotatedSquare
@@ -236,7 +237,7 @@
 \newcommand{\Eref}[1]{(e\ref{#1}\colonpageref{#1})}
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
-\newcommand{\Sref}[1]{(S\ref{#1}:\pageref{#1})} % always include page
+\newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
 \newcommand{\Chref}[1]{(Ch\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
@@ -1002,14 +1003,17 @@ will usually be a waste of time.}
 purpose is to demonstrate their truth.}{Tarski, \cite[p. 3]{Tarski}}
 
 This is the first of the mathematical chapters.
-It contains considerations introductory to the deductive reasoning,
-but outside it.
+It contains considerations that introduce the deductive reasoning
+but are outside of it.
 
 The conventions of the parsing literature were formed
 when its dissemination relied on printed media.
-Mathematical publishing was a zero-sum game in which
-every line printed came at the expense of other mathematics,
-mathematics which might well be lost forever.
+This made
+mathematical publishing a zero-sum game in which
+every line printed came at the expense of other mathematics.
+And the participants knew that
+mathematics that did reach printed form
+might well be lost forever.
 
 To mitigate these losses, mathematicians enforced a
 ruthless brevity on themselves.
@@ -1188,8 +1192,7 @@ outweighs the risk of confusion.
     Replace with 'symbolically'?}
 In principle,
 the mathematical expressions in this book can be reduced to
-the basic operations of set theory (${\in}$ and ${\subseteq}$)
-and logic.
+basic set theory and logic.
 Expressions in this book may be written \dfn{verbally} or
 \dfn{symbolically}.
 We say that a mathematical expression is verbal,
@@ -1201,21 +1204,14 @@ or that it is written ``symbolically'',
 if it uses mathematical symbols.
 An symbolic expression is also called a \dfn{formula}.
 For example, the expression ``six times seven equals forty-two'' is verbal
---- its symbolic equivalent is $6\times7=42$.
+--- its symbolic equivalent is ``$6\times7=42$''.
 
 Mathematical expressions may be mixed,
 that is, they may contain both symbolic and verbal subexpressions.
 The symbol or verbal character of a expression is that of its outermost
 subexpression.
-
 A mathematical expression is usually referred to simply as
 an ``expression''.
-The word ``equation'' usually refers to a displayed mathematical
-expression.
-This can be misleading, because the expression is usually not
-a ``equation'' in the traditional sense,
-but this usage is deeply embedded in the modern literature on mathematical
-typography.
 
 In this book, the word \dfn{sentence}
 refers to an expression with a boolean value,
@@ -1223,6 +1219,58 @@ unless context or explicit statement makes it clear otherwise.
 A sentence is called
 a \dfn{condition} in contexts where we are emphasizing
 its boolean value.
+
+\begin{remark}[Labelables]
+Many sets of considerations
+are displayed in a form where they can be labelled.
+Whether or not they actually have a label,
+these sets of considerations are called \dfn{labelables}.
+For example,
+this remark is an labelable.
+\rmEnd
+\end{remark}
+
+Labelables fall into two major groups:
+global and local.
+If a label is global, it is considered
+to be visible in this
+entire book.
+If a labelable is local, it is treated
+as visible only in part of this book.
+
+The global labelables are theorems, definitions,
+remarks, observations and equations.
+Remarks are outside of the deductive logic,
+often because they describe meta-notions, such
+as matters of notation.
+Observations are parts of the deductive logic
+for which we choose to omit the proof.
+Equations are expressions.
+
+Here the word ``equation''
+is overloaded.
+A labelable equation is usually not
+an ``equation'' in the traditional mathematical sense.\footnote{%
+The overloading of the word ``equation'' is unfortunate,
+but it is a practice that is
+deeply embedded in the modern literature on mathematical
+typography.}
+Equations are often followed by a ``hint''.
+The ``hint'' is a list of considerations,
+such as theorems, definitions
+and other equations,
+intended to justify the assertion of the equation
+in that context.
+The ``hint'' is separated
+from the body of the equation by a ``because'' symbol (``$\because$'').
+
+The local labelables are lemmas,
+and local definitions.
+Local labelables are visible
+either in the current scope
+and in an explicitly stated scope.
+Scopes are described in more detail
+below \Sref{scope-and-type}.
 
 References internal to this book are often of the form
 ({\it Xn:p}),
@@ -1240,16 +1288,9 @@ where {\it n} is the section number),
 ``Lm'' (lemma),
 ``Ob'' (observation),
 ``Rm'' (remark),
-``S'' (section)
+``S'' (section),
 ``t'' (table), and
 ``Th'' (theorem).
-We follow the convention in
-the literature of mathematical typography
-by calling
-any displayed mathematical expression
-an ``equation'',
-even when it is not
-an equation in the strict mathematical sense.
 
 For example
 \Eref{eq:restriction1} refers to equation
@@ -1264,44 +1305,42 @@ inside section \ref{loc-brick-depth}.
 Where the page reference would be to the current page,
 it is omitted.
 
-Definitions occur throughout.
-Verbal defienda are in boldface.
-For emphasis,
-or for convenient reference,
-definitions may be
-in numbered sections.
-The end of a definitions section is indicated with a circle (\defEnd).
-Often one or more shorter verbal phrases are defined as a synonyms of a longer one.
+Definitions are presented not only as labelable definitions,
+and labelable local definitions,
+but also as theorems and
+in non-labelable statements.
+A non-labelable definition is one that occurs outside
+of a labelable.
+The defiendum of a non-labelable definition is in boldface,
+if it is of global scope,
+and in double quotes, if it is of local significance.
+Defienda in labelable definitions and theorems are in
+boldface.
+The end of a labelable definition
+is indicated with a circle (\defEnd).
+
+Often one or more shorter defienda are defined as synonyms of a longer one.
 For example, \Dfref{def:parse} states ``full parse'' and ``parse'' mean
 the same thing.
 Shorter synonyms are intended to be used for brevity,
-and only in cases where they are not expected to cause confusion.
+and are preferred when they are not expected to cause confusion.
 
-Explicit ``Definition'' sections and boldface are reserved
-for definitions that are of significance throughout
-this book.
-In some contexts,
-as for example in stating and proving
-some theorems,
-it is convenient to have definitions
-which are ``local'' ---
-useful only within
-a particular presentation.
-Local definitions are given in double quotes,
-(``definition''),
-and in numbered equations.
+Often a definition requires a proof to be useful.
+For example,
+if no function satisfying a definition exists,
+the function could never be used.
+Proving the existence of a function can be non-trivial.
+In these cases, the definition is stated as a theorem
+and a lemma.
 
-Equations are sometimes stated verbally,
-at least in part.
-Whether stated verbally or symbolically,
-equations are often followed by a ``hint''.
-The ``hint'' is a list of considerations,
-such as theorems, definitions
-and other equations,
-intended to justify the assertion of the equation
-in that context.
-For clarity, the ``hint'' is separated
-from the body of the equation by a ``because'' symbol (``$\because$'').
+A definition may also be stated as part of a theorem if it
+is closely tied in with that theorem,
+in order to avoid unnecessary cross-referencing.
+This is often done for definitions which are of details
+of the \Marpa{} algorithm,
+or which are a matter of tactical choice within a proof strategy,
+such as the details of resource charging in our complexity
+analysis.
 
 ``AF'' abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
@@ -1313,34 +1352,8 @@ For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 ``UI'' abbreviates ``universal instantiation''.
 ``UG'' abbreviates ``universal generalization''.
 
-The statement of a definition implies that it is consistent,
-and that, if the definition is of a mathematical object,
-that that object exists.
-Usually these implications are obviously true,
-but not always.
-When the implications of a definition are not obvious,
-the definition is stated as a theorem,
-and the non-obvious implications are proved.
-
-Specifically, the definition of a function implies that
-a function that satisfies the definition exists.
-If no function satisfying the definition existed,
-the function could not be used,
-which usually would render the definition pointless.
-Proving the existence of a function can be non-trivial,
-and many of the function definitions in this book
-are stated as theorems.
-
-A definition may also be stated as part of a theorem if it
-is closely tied in with that theorem,
-in order to avoid pointless cross-referencing.
-This is often done for definitions which are of details
-of the \Marpa{} algorithm,
-or which are a matter of tactical choice within a proof strategy,
-such as the details of resource charging in our complexity
-analysis.
-
 \section{Scope and types}
+\label{sec:scope-and-type}
 
 \FloatBarrier
 
@@ -5435,11 +5448,11 @@ allow the rules and symbols of the external grammar
 to be reconstructed from a parse using the internal grammar,
 not just at evaluation time,
 but at run-time as well.
-\Sref{sec:augmentation},
-\Sref{sec:eliminating-proper_nullables},
-\Sref{sec:removing-nulling-symbols},
+\Sref{augmentation},
+\Sref{eliminating-proper_nullables},
+\Sref{removing-nulling-symbols},
 and
-\Sref{sec:trivial-grammars}
+\Sref{trivial-grammars}
 describe the rewrites
 applied by \Marpa{}.
 We will state \Marpa{}'s definition
@@ -5582,7 +5595,7 @@ No \Marpa{} internal grammar can be a trivial grammar.
 Trivial grammars are handled as a special case.
 
 \section{Semantics-safe rewriting}
-\label{semantics-safe}
+\label{sec:semantics-safe}
 
 This section describes the restrictions
 that rewrites must follow in order to be semantics-safe.
