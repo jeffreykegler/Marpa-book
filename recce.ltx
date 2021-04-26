@@ -200,6 +200,7 @@
 \newcommand{\VlastElement}[1]{\Velement{#1}{\#\V{#1}}}
 
 \newcommand{\defEnd}{\Circle}
+\newcommand{\ldefEnd}{\Circle}
 \newcommand{\obsEnd}{\Circle}
 \newcommand{\rmEnd}{\Circle}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
@@ -1772,6 +1773,8 @@ is the unique \V{x} in the set \V{A} such that
 is well-defined iff
 $\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
 
+\todo{Lax vs. strict partial orders}
+
 \section{Families}
 
 \begin{definition}[Family Constructor]
@@ -2469,11 +2472,11 @@ is one of the paths of \V{tree}.
     $\V{pathset} \neq \emptyset$
     \cuz{} \Eref{eq:th-tree-leaf-path-100}, \Eref{eq:th-tree-leaf-path-110}.
 }
-Let $\preccurlyeq$ be the weak partial order corresponding
-to the strict partial order
+Let $\prec$
+be the strict partial order
 \mypareq{eq:th-tree-leaf-path-125}{%
     $\V{a} \prec \V{b} \ldefined \set{ \tuple{\V{a},\V{b}} \in \V{pathset} \times \V{pathset} : \Vsize{a} < \Vsize{b}}$
-    \bcuz{} New $\prec$ and $\preccurlyeq$ for convenience.
+    \bcuz{} New $\prec$ for convenience.
 }
 Because \V{pathset} is non-empty and finite,
 there is at least one maximal element in it:
@@ -2569,7 +2572,7 @@ For the purpose of this chapter we introduce
 the opaque type \type{NOD}.
 Intuitively, a value of type \type{NOD} is a ``node''.
 The set of values of
-\type{NOD} must be non-empty, but otherwise arbitrary.
+\type{NOD} must be non-empty, but is otherwise arbitrary.
 
 % Macros for this chapter only
 \newcommand{\nod}[1]{\ensuremath{#1_\type{NOD}}}
@@ -2595,7 +2598,7 @@ will be the set of leaves in \V{tree}.
 \label{ldef:new-parents}
 Let the ``new parents'' function,
 \[
-    \deffn{NewParents}{\powerset{\Vnodset{nodes}}}{\powerset{\Vnodset{nodes}}}
+    \deffn{NewParents}{\powerset{\Vnodset{nodes}}}{\powerset{\Vnodset{nodes}}},
 \]
 be the set of the direct parents of a node set that are not already in that node set,
 so that
@@ -2615,7 +2618,7 @@ so that
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
-        {\powerset{\V{nodes}}}
+        {\powerset{\V{nodes}}},
 \]
 be such that
 \begin{equation}
@@ -2665,15 +2668,15 @@ The theorem follows immediately from the definition of \myfnname{NewParents}
 \myqed
 \end{proof}
 
-\mypareq{eq:def-n-level-ancestry}{%
-    We say that \Vnodset{A} is an ``\Vnat{N}-level ancestry with base \Vnodset{b}''
-    iff $\V{A}=\myfn{Anc}{\V{N},\V{b}}$.
-}
-\mypareq{eq:def-ancestry}{%
-    We say that \Vnodset{A} is an ``ancestry'' of \Vnodset{nds}
-    \linebreak iff \Vnodset{A} is an \Vnat{N}-level ancestry of \Vnodset{nds} for
-    some \Vnat{N}.
-}
+\begin{ldef}{Ancestry of Base}
+\label{ldef:ancestry-of-base}
+We say that \Vnodset{A} is an \dfn{\V{N}-level ancestry of base \Vnodset{b}}
+iff $\V{A}=\myfn{Anc}{\Vnat{N},\V{b}}$.
+We say that \Vnodset{A} is an \dfn{ancestry} of \Vnodset{nds}
+iff \Vnodset{A} is an \V{N}-level ancestry of \Vnodset{nds} for
+some \Vnat{N}.
+\ldefEnd
+\end{ldef}
 
 \begin{lem}{Ancestry Monotonicity}
 \label{lem:ancestry-monotonicity}
