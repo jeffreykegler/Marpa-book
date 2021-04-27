@@ -3076,15 +3076,16 @@ for this purpose.
 \end{equation}
 \mypareq{eq:ancestry-from-path-280}{%
     \Vmyfn{INST}{0}
-    \cuz{} \Eref{eq:ancestry-from-path-150}.
+    \cuz{} \Eref{eq:ancestry-from-path-150},
+        \Eref{eq:ancestry-from-path-210}.
 }
-We can now elimate the subcase $\V{bad} = 0$:
+We can now eliminate the subcase $\V{bad} = 0$:
 \mypareq{eq:ancestry-from-path-290}{%
     $\V{bad} > 0$ \cuz{}
         \Eref{eq:ancestry-from-path-160},
         \Eref{eq:ancestry-from-path-280}.
 }
-We now proceed to look at the other possible values for \V{bad}.
+We proceed to look at the other possible values for \V{bad}.
 \begin{gather}
 \label{eq:ancestry-from-path-310}
     \Vlastix{path} \le \V{bad}
@@ -3101,13 +3102,20 @@ We now proceed to look at the other possible values for \V{bad}.
 \begin{gather}
 \label{eq:ancestry-from-path-340}
     \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
-\\ \label{eq:ancestry-from-path-350}
+\\ \label{eq:ancestry-from-path-345}
     \land\; \Velement{path}{0} \notin
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{eq:ancestry-from-path-330},
         \longdfref{\myfnname{Anc}}{ancestry}.}
 \end{gather}
+Recall that if \V{bad} is a minimal counter-example,
+then \Vdecr{bad} cannot be a counter-example:
+\mypareq{eq:ancestry-from-path-350}{%
+    \Vmyfn{INST}{\Vdecr{bad}}
+    \cuz \Eref{eq:ancestry-from-path-165},
+        \Eref{eq:ancestry-from-path-290}.
+}
 \begin{equation}
 \label{eq:ancestry-from-path-360}
 \begin{gathered}
@@ -3115,8 +3123,8 @@ We now proceed to look at the other possible values for \V{bad}.
 \\ \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
-\\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-160},
-    EI of \V{ex} in \Eref{eq:ancestry-from-path-150} with $(\Vdecr{bad})$.}
+\\ \myparbox{\cuz{} Expansion of
+    \Eref{eq:ancestry-from-path-350} using \Eref{eq:ancestry-from-path-165}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3142,28 +3150,10 @@ the last index of the path and the level of the ancestry
     $\Vlastix{path} = \V{bad}$
         \cuz{} \Eref{eq:ancestry-from-path-310},
             \Eref{eq:ancestry-from-path-380}.}
-Recall that if \V{bad} is a minimal counter-example,
-then \Vdecr{bad} is not a counter-example:
-\mypareq{eq:ancestry-from-path-395}{%
-    \Vmyfn{INST}{\Vdecr{bad}}
-    \cuz \Eref{eq:ancestry-from-path-165},
-        \Eref{eq:ancestry-from-path-290}.
-}
-\begin{equation}
-\label{eq:ancestry-from-path-400}
-\begin{gathered}
-\forall\; \V{path} \in \Vmyfn{path}{tree} :
-\\ \Vlastix{path} \le \Vdecr{bad}
-    \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
-\\ \myparbox{\cuz{} Expansion of
-    \Eref{eq:ancestry-from-path-395} using \Eref{eq:ancestry-from-path-165}.}
-\end{gathered}
-\end{equation}
 Now it will be helpful to consider a suffix of \V{path}.
 \begin{gather}
 \label{eq:ancestry-from-path-410}
-    \left( \V{suffix} \defined \family{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
+    \left( \V{suffix} \ldefined \family{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
         \right)
 \\ \label{eq:ancestry-from-path-412}
     \land\; \V{suffix} \in \Vmyfn{path}{tree}
@@ -3187,8 +3177,9 @@ Now it will be helpful to consider a suffix of \V{path}.
         \Eref{eq:ancestry-from-path-440}.}
 \mypareq{eq:ancestry-from-path-460}{%
     $\Velement{suffix}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}$
-    \bcuz{} \Eref{eq:ancestry-from-path-400},
-        \Eref{eq:ancestry-from-path-412}, \Eref{eq:ancestry-from-path-430},
+    \bcuz{} UI  of \V{path} in \Eref{eq:ancestry-from-path-360}
+             with \V{suffix},
+        \linebreak \Eref{eq:ancestry-from-path-412}, \Eref{eq:ancestry-from-path-430},
         \Eref{eq:ancestry-from-path-450}.}
 \mypareq{eq:ancestry-from-path-470}{%
     $\tuple{ \Velement{path}{0}, \Velement{path}{1} } \in \V{edges}$
@@ -3211,19 +3202,19 @@ Now it will be helpful to consider a suffix of \V{path}.
     \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{edges}
     \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-340},
-        EG of \Velement{suffix}{0} in \Eref{eq:ancestry-from-path-460} and
+        EG of \Velement{suffix}{0} with \V{child} in \Eref{eq:ancestry-from-path-460} and
             \Eref{eq:ancestry-from-path-490}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
-    $\Velement{path}{0} \in \myfn{NewParents}{\Vdecr{bad}, \V{base}}$
+    $\Velement{path}{0} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad}, \V{base}}}$
     \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:ancestry-from-path-500}.
 }
 Equation \Eref{eq:ancestry-from-path-510} is contrary to
-\Eref{eq:ancestry-from-path-350}, which shows the reductio.
-From the reductio, we conclude that there is no minimal counter-example to the theorem
-and the theorem follows.
+\Eref{eq:ancestry-from-path-345}, which shows the reductio.
+From the reductio, we conclude that there is no counter-example
+and the lemma follows.
 \myqed
 \end{proof}
 
