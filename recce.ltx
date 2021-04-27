@@ -3903,6 +3903,7 @@ and \Eref{eq:lem-generation-union-tree-containment-120}.
 \end{proof}
 
 \begin{lem}{Generation Sum Size}
+\label{lem:generation-sum-size}
 If a set of generations share the same base,
 the sum of their sizes is equal to
 the size of their union.
@@ -3917,7 +3918,6 @@ That is if \V{genset} is a set of generations such that
 \]
 then
 \begin{equation}
-\label{lem:generation-sum-size}
     \size{\bigcup \Vnodset{genset} } =
     \sum \family{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
     \quad \thEnd
@@ -4495,7 +4495,7 @@ we assume there is a minimal \V{bad} such that
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le (0) : \myfn{gen}{\V{i},\V{base}} }
     }
-    \\ \le\; \subtract{2\times\Vsize{base}}{(\cond{(0)=0}{0}{1})}
+        \le\; 2\times\Vsize{base}
     \\ \text{\cuz{} \Eref{eq:th-non-unary-tree-size-140}.}
 \end{gathered}
 \end{equation}
@@ -4513,7 +4513,7 @@ we assume there is a minimal \V{bad} such that
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } =
     \sum \set{ 0 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
-    \bcuz{} \Lmref{generation-sum-size}.
+    \bcuz{} \longLmref{Generation Sum Size}{generation-sum-size}.
 }
 \mypareq{eq:th-non-unary-tree-size-220}{%
     $\size{\bigcup
@@ -4576,31 +4576,10 @@ we assume there is a minimal \V{bad} such that
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } \le
-    \\ \Vsize{base} + \subtract{2\times\size{
+    \\ \Vsize{base} + 2\times\size{
             \myfn{gen}{1,\V{base}} }
-        }{ \left(
-            \cond{(\Vdecr{bad})=0}{0}{1}
-        \right) }
     \\ \because \Eref{eq:th-non-unary-tree-size-100},
         \Eref{eq:th-non-unary-tree-size-120},
-        \Eref{eq:th-non-unary-tree-size-260}.
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-non-unary-tree-size-273}{%
-        $(\cond{(\Vdecr{bad})=0}{0}{1}) \le (\cond{\V{bad}=0}{0}{1})$
-        \bcuz{} \Eref{eq:th-non-unary-tree-size-200}.
-}
-\begin{equation}
-\label{eq:th-non-unary-tree-size-277}
-\begin{gathered}
-    \size{\bigcup
-        \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
-    } \le
-    \\ \Vsize{base} + \subtract{2\times\size{
-            \myfn{gen}{1,\V{base}} }
-        }{(\cond{\V{bad}=0}{0}{1})}
-    \\ \because \Eref{eq:th-non-unary-tree-size-270},
-        \Eref{eq:th-non-unary-tree-size-273},
         \Eref{eq:th-non-unary-tree-size-260}.
 \end{gathered}
 \end{equation}
@@ -4616,10 +4595,7 @@ we assume there is a minimal \V{bad} such that
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } \le
-    \\ \Vsize{base} + \subtract{\size{\myfn{gen}{0,\V{base}} }
-        }{
-            (\cond{\V{bad}=0}{0}{1})
-        }
+    \\ \Vsize{base} + \size{\myfn{gen}{0,\V{base}} }
     \\ \because \Eref{eq:th-non-unary-tree-size-277},
         \Eref{eq:th-non-unary-tree-size-280}.
 \end{gathered}
@@ -4630,9 +4606,7 @@ we assume there is a minimal \V{bad} such that
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } \le
-    \\ \subtract{ 2\times\Vsize{base} }{
-            (\cond{\V{bad}=0}{0}{1})
-        }
+        2\times\Vsize{base}
     \\ \myparbox{\cuz{}
         Def of \myfnname{gen} \dfref{generation},
         \Eref{eq:th-non-unary-tree-size-290}.}
@@ -4647,8 +4621,8 @@ Equation \Eref{eq:th-non-unary-tree-size-310} is contrary to
 reductio from
 \Eref{eq:th-non-unary-tree-size-110}--%\Eref{eq:th-non-unary-tree-size-120}
 to \Eref{eq:th-non-unary-tree-size-310}.
-From the reductio we know that there is no minimal counter-example to theorem,
-which shows the theorem.
+From the reductio we know that there is no counter-example,
+which shows the lemma.
 \myqed
 \end{proof}
 
