@@ -3802,6 +3802,7 @@ if
 \end{lem}
 
 \begin{proof}
+\todo{Convert to proof by minimal counter-example}
 It follows directly from the statement of the theorem that
 \mypareq{eq:lem-generation-union-tree-containment-100}{
    $\V{genUnion} \subseteq \V{nodes}$
@@ -3816,7 +3817,7 @@ It remains to prove that
 \label{eq:lem-generation-union-tree-containment-130}
 \begin{gathered}
 \forall\; \V{nd} \in \V{nodes} :
-\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
+\exists\; \V{lpath} \in \Vmyfn{path}{tree} :
 \\ \Velement{lpath}{0} = \V{nd}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}.
 \\ \because \longThref{Tree Leaf Path Theorem}{tree-leaf-path}.
@@ -3826,7 +3827,7 @@ Let \Vnod{nd} be an arbitrary node.
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-140}
 \begin{gathered}
-\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
+\exists\; \V{lpath} \in \Vmyfn{path}{tree} :
 \\ \Velement{lpath}{0} = \V{nd}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}
 \\ \myparbox{\cuz{}
@@ -3836,9 +3837,9 @@ Let \Vnod{nd} be an arbitrary node.
 \end{equation}
 \begin{gather}
 \label{eq:lem-generation-union-tree-containment-150}
-\V{lpath} \in \Vmyfn{paths}{tree} :
+\V{lpath} \in \Vmyfn{path}{tree} :
 \\ \label{eq:lem-generation-union-tree-containment-160}
-    \land\; \Velement{lpath}{0} = \V{nd} :
+    \land\; \Velement{lpath}{0} = \V{nd}
 \\ \label{eq:lem-generation-union-tree-containment-170}
     \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}
 \\ \nonumber
@@ -3887,7 +3888,8 @@ that
         \Eref{eq:lem-generation-union-tree-containment-180}.}
 \mypareq{eq:lem-generation-union-tree-containment-330}{%
     $\Vnod{nd} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}$
-    \cuz{} \Eref{eq:lem-generation-union-tree-containment-160}.}
+    \cuz{} \Eref{eq:lem-generation-union-tree-containment-160},
+        \Eref{eq:lem-generation-union-tree-containment-320}.}
 \mypareq{eq:lem-generation-union-tree-containment-340}{%
     $\Vnod{nd} \in \bigcup \set{ \forall\; \Vnat{i} < \Vsize{nodes} : \myfn{gen}{\V{i},\V{base}}}$
     \bcuz{} \longLmref{Generation Coverage}{generation-coverage}.}
@@ -3895,14 +3897,14 @@ Recall that \V{nd} was an arbitrary element of \V{nodes}
 \Eref{eq:lem-generation-union-tree-containment-140}.
 \Eref{eq:lem-generation-union-tree-containment-120} is the universal generalization
 of \V{nod} in \Eref{eq:lem-generation-union-tree-containment-340}.
-The theorem follows from \Eref{eq:lem-generation-union-tree-containment-100}
+The lemma follows from \Eref{eq:lem-generation-union-tree-containment-100}
 and \Eref{eq:lem-generation-union-tree-containment-120}.
 \myqed
 \end{proof}
 
 \begin{lem}{Generation Sum Size}
 If a set of generations share the same base,
-the the sum of their sizes is equal to
+the sum of their sizes is equal to
 the size of their union.
 That is if \V{genset} is a set of generations such that
 \[
@@ -3926,7 +3928,7 @@ then
 We know from set theory that the sum of the sizes of a collection
 of disjoint sets is equal to the size of the union of those sets.
 By \Lmref{generation-disjointness}, the generations are disjoint.
-The theorem follows from these two facts.
+The lemma follows from these two facts.
 \myqed
 \end{proof}
 
@@ -3961,7 +3963,7 @@ Let
          New free \Vnodset{base}.}
 \end{gathered}
 \end{equation}
-We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
+We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \begin{gather}
 \label{eq:lem-generation-addition-110}
     \neg \Vmyfn{INST}{bad}
@@ -4106,8 +4108,8 @@ we conclude the reductio from
 \Eref{eq:lem-generation-addition-110}--%
 \Eref{eq:lem-generation-addition-120} to
 \Eref{eq:lem-generation-addition-270}.
-From the reductio, we conclude that there is no counter-example to
-the theorem, which shows the theorem.
+From the reductio, we conclude that there is no counter-example,
+which shows the lemma.
 \myqed
 \end{proof}
 
@@ -4115,8 +4117,8 @@ the theorem, which shows the theorem.
 
 \begin{definition}[Non-unary tree]
 \label{def:non-unary-tree}
-A tree is \dfn{non-unary} iff its set of nodes is finite,
-and no node of the tree has an
+A tree is \dfn{non-unary} iff
+no node of the tree has an
 out-degree of 1.
 In other words, in a non-unary tree, every node is either a leaf or has
 two or more child nodes.
@@ -4139,6 +4141,7 @@ That is,
 \end{lem}
 
 \begin{proof}
+\todo{Convert to proof by minimal counter-example}
 The proof strategy is direct.
 The hypothesis \Eref{eq:surface-new-parents-inclusion-060}
 of the implication is assumed,
@@ -4220,6 +4223,7 @@ For any subset of nodes of from a non-unary tree,
 its surface is at least twice the size of
 its set of direct parents.
 That is, if \V{tree} is non-unary,
+then
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-050}
 \begin{gathered}
@@ -4238,7 +4242,7 @@ For the purposes of this proof,
 let
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-150}
-    \Vmyfn{children}{parent} \defined
+    \Vmyfn{children}{parent} \ldefined
         \set{
             \begin{gathered}
             \V{child} \in \V{nodes} :
@@ -4287,7 +4291,7 @@ from every other parent's set of children:
     \forall\; \V{parent1} \in \V{nodes} :
     \forall\; \V{parent2} \in \V{nodes} :
     \\ \Vmyfn{children}{parent1}
-    \cap \Vmyfn{children}{parent1} = \emptyset
+    \cap \Vmyfn{children}{parent2} = \emptyset
     \\ \because \Eref{eq:lem-surface-parents-ratio-150},
         \Eref{eq:lem-surface-parents-ratio-190}.
 \end{gathered}
@@ -4359,7 +4363,7 @@ is equal to the sum of their cardinalities:
         \Eref{eq:lem-surface-parents-ratio-250}.
 \end{gathered}
 \end{equation}
-The theorem is the universal generalization of
+The lemma is the universal generalization of
 \Eref{eq:lem-surface-parents-ratio-260} over \V{ndset}.
 \myqed
 \end{proof}
@@ -4368,7 +4372,7 @@ The theorem is the universal generalization of
 \label{lem:generation-predecessor-size}
 For the nodes of a non-unary tree,
 every generation of a node set
-is more than twice the size
+is at least twice the size
 of the successor generation with the same base.
 That is, if \V{tree} is non-unary,
 \begin{equation}
@@ -4396,12 +4400,12 @@ Then
 }
 \mypareq{eq:lem-generation-predecessor-size-110}{%
     $\myfn{gen}{\V{N}+1,\V{base}} =
-        \myfn{NewParents}{\V{N},\V{base}}$
+        \myfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
     \bcuz{} \longLmref{Generation New Parent Equivalence}
         {generation-new-parent-equivalence}.
 }
 \mypareq{eq:lem-generation-predecessor-size-120}{%
-    $\size{\myfn{NewParents}{\V{N},\V{base}}} =
+    $\size{\myfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}} =
         \size{\myfn{gen}{\V{N}+1,\V{base}}}$
     \bcuz{} \Eref{eq:lem-generation-predecessor-size-110}.
 }
@@ -4417,25 +4421,26 @@ Then
     \bcuz{} \longLmref{Generation Surface Containment}{generation-surface-containment}
 }
 \mypareq{eq:lem-generation-predecessor-size-150}{%
-    $\myfn{gen}{\V{N},\V{base}} \ge \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}$
+    $\size{\myfn{gen}{\V{N},\V{base}}} \ge \size{\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}}$
     \bcuz{} \Eref{eq:lem-generation-predecessor-size-140}.
 }
 \mypareq{eq:lem-generation-predecessor-size-160}{%
-    $\size{\myfn{gen}{\myfn{Anc}{\V{N},\V{base}}}} \ge
+    $\size{\myfn{gen}{\V{N},\V{base}}} \ge
         2 \times
-        \size{\myfn{gen}{\myfn{Anc}{\V{N}+1,\V{base}}}}$
-    \bcuz{} \Eref{eq:lem-generation-predecessor-size-100},
-        \Eref{eq:lem-generation-predecessor-size-120}.
+        \size{\myfn{gen}{\V{N}+1,\V{base}}}$
+    \bcuz{}
+        \Eref{eq:lem-generation-predecessor-size-130},
+        \Eref{eq:lem-generation-predecessor-size-150}.
 }
-The theorem is the universal generalization of
+The lemma is the universal generalization of
 \Eref{eq:lem-generation-predecessor-size-160} for \Vnat{N}
 and \V{base}.
 \myqed
 \end{proof}
 
-\begin{theorem}[Non-unary Tree Size]
-\label{th:non-unary-tree-size}
-For the purposes of this theorem, let \V{tree} be non-unary.
+\begin{lemma}[Non-unary Subtree Size]
+\label{lem:non-unary-subtree-size}
+For the purposes of this lemma, let \V{tree} be non-unary.
 Let \V{base} be a subset of \V{nodes},
 and let $\V{N}\in\naturals$.
 Then
@@ -4445,11 +4450,11 @@ Then
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{N} : \myfn{gen}{\V{i},\V{base}} }
     }
-    \\ \le\; \subtract{2\times\Vsize{base}}{(\cond{\V{N}=0}{0}{1})}.
+    \le\; 2\times\Vsize{base}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
-\end{theorem}
+\end{lemma}
 
 \begin{proof}
 The proof is by minimal counter-example.
@@ -4458,10 +4463,10 @@ Where
 \label{eq:th-non-unary-tree-size-100}
 \begin{gathered}
     \Vmyfn{INST}{ex} \defined
-    \size{\bigcup
+    \\ \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{ex} : \myfn{gen}{\V{i},\V{base}} }
     }
-    \\ \le\; \subtract{2\times\Vsize{base}}{(\cond{\V{ex}=0}{0}{1})}
+        \le\; 2\times\Vsize{base}
     \\ \text{\cuz{} \Eref{eq:th-non-unary-tree-size-050}
          with \Vnat{ex} for \Vsize{N}.}
 \end{gathered}
