@@ -2646,7 +2646,7 @@ Symbolically,
 \begin{gathered}
     \myfn{PredecessorAnc}{\Vnat{N},\Vnodset{base}} \ldefined
     \\ \cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}}.
-    \quad \defEnd
+    \quad \ldefEnd
 \end{gathered}
 \end{equation}
 \end{ldef}
@@ -3418,7 +3418,7 @@ reductio.
      \implies \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} = \emptyset$
      \cuz{} \Eref{eq:lem-generation-disjointness-250}.
 }
-The theorem is the universal generalization of \Eref{eq:lem-generation-disjointness-260}
+The lemma is the universal generalization of \Eref{eq:lem-generation-disjointness-260}
 for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 \myqed
 \end{proof}
@@ -3428,7 +3428,7 @@ for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 The union of all generations of level \V{N} or less
 is equal to the \V{N}-level ancestry of the same base.
 That is,
-if \V{base} be an arbitary subset of \V{nodes},
+if \V{base} is an arbitary subset of \V{nodes},
 then
 \mypareq{eq:lem-generation-coverage-050}{%
     $\forall\; \Vnat{N} :
@@ -3440,7 +3440,7 @@ then
 
 \begin{proof}
 The proof is by minimal counterexample.
-Where
+Let
 \mypareq{eq:lem-generation-coverage-150}{%
     $\Vmyfn{INST}{ex} \defined
         \myfn{Anc}{\V{ex},\V{base}} =
@@ -3448,7 +3448,7 @@ Where
     \cuz{} UI of
         \Eref{eq:lem-generation-coverage-050} with \V{ex}.
 }
-we assume there is a minimal \V{bad} such that
+We assume there is a minimal \V{bad} such that
 \Vmyfn{INST}{bad} is false:
 \begin{gather}
 \label{eq:lem-generation-coverage-160}
@@ -3491,7 +3491,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
 \mypareq{eq:lem-generation-coverage-220}{%
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
-    \cup \bigfn{gen}{\myfn{Anc}{\var{bad},\V{base}}}$
+    \cup \bigfn{gen}{\var{bad},\V{base}}$
         \bcuz{} \longLmref{Generation--New-Parent Equivalence}
             {generation-new-parent-equivalence},
         \Eref{eq:lem-generation-coverage-210}.
@@ -3510,7 +3510,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
 }
 \mypareq{eq:lem-generation-coverage-250}{%
     $\myfn{INST}{\V{bad},\V{base}}$
-    \cuz{} \Eref{eq:lem-generation-coverage-165},
+    \cuz{} \Eref{eq:lem-generation-coverage-150},
         \Eref{eq:lem-generation-coverage-240}.
 }
 Equation \Eref{eq:lem-generation-coverage-250} is contrary
@@ -3519,13 +3519,16 @@ from \Eref{eq:lem-generation-coverage-160}--%
 \Eref{eq:lem-generation-coverage-165} to
 \Eref{eq:lem-generation-coverage-250}.
 This reductio proves the absence
-of a minimal counter-example,
-which in turn gives us the theorem.
+of a counter-example,
+which in turn gives us the lemma.
 \myqed
 \end{proof}
 
-Let the ``surface'' of a subset of \V{nodes} be
-the set of its elements which have parents outside of
+
+\begin{ldef}{Surface}
+\label{ldef:surface}
+The \dfn{surface} of a subset of \V{nodes}
+is the set of its elements which have parents outside of
 that subset.
 This is,
 let
@@ -3536,7 +3539,7 @@ be such that
 \begin{equation}
 \label{eq:def-surface}
 \begin{gathered}
-\myfn{Surface}{\V{ndset}} \defined
+\myfn{Surface}{\V{ndset}} \ldefined
 \\ \set{
     \begin{gathered}
     \V{child} \in \V{ndset} :
@@ -3544,9 +3547,11 @@ be such that
     \\ \tuple{\V{parent},\V{child}} \in \V{edges}
         \land \V{parent} \notin \V{ndset}
     \end{gathered}
-}.
+}.  \quad \ldefEnd
 \end{gathered}
 \end{equation}
+\end{ldef}
+
 The definition of ``surface'' \Eref{eq:def-surface}
 implies that the root node
 is never an element of the surface.
@@ -3578,7 +3583,7 @@ Let
     \myfn{Surface}{\myfn{Anc}{\V{ex},\Vnodset{base}}}
         \\ \cap\; \myfn{PredecessorAnc}{\V{ex},\V{base}}
     \end{gathered} \right) = \emptyset
-    \\ \text{\cuz{} \Eref{eq:lem-surface-disjointness-050}
+    \\ \text{\cuz{} EI of \Eref{eq:lem-surface-disjointness-050}
          with \Vnat{ex} for \Vnat{N}.
          New free \Vnodset{base}.}
 \end{gathered}
@@ -3615,7 +3620,9 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \\ \label{eq:lem-surface-disjointness-210}
     \land\; \V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}
 \\ \nonumber
-    \myparbox{\cuz{} \Eref{eq:lem-surface-disjointness-100},
+    \myparbox{\cuz{}
+        \longdfref{\myfnname{PredecessorAnc}}{predecessor-anc},
+        \linebreak \Eref{eq:lem-surface-disjointness-100},
         \Eref{eq:lem-surface-disjointness-110},
         \Eref{eq:lem-surface-disjointness-160}.
         New free \Vnod{nd}.}
@@ -3670,11 +3677,11 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     $\exists\; \Vnod{child} : \V{child} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \tuple{\V{parent},\V{child}} \in \V{edges}$
-    \bcuz{} EI of \Eref{eq:lem-surface-disjointness-290} with \Vnod{child}
+    \bcuz{} EG of \Eref{eq:lem-surface-disjointness-290} with \Vnod{child}
         for \Vnod{nd}.
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
-    $\Vnod{parent} \in \myfn{NewParents}{\Vdecr{bad},\V{base}}$
+    $\Vnod{parent} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
     \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:lem-surface-disjointness-300}.
 }
@@ -3690,7 +3697,7 @@ and shows the reductio from
 \Eref{eq:lem-surface-disjointness-110}--\Eref{eq:lem-surface-disjointness-120}
 to \Eref{eq:lem-surface-disjointness-330}.
 From the reductio, we conclude the absence of
-a minimal counter-example, and the theorem.
+a counter-example, and the lemma.
 \myqed
 \end{proof}
 
@@ -3705,6 +3712,7 @@ of the N-level generation of that same base.  That is,
 \end{lem}
 
 \begin{proof}
+\todo{Convert to proof by minimal counter-example}
 The proof is direct.
 We consider an arbitrary node in the surface:
 \mypareq{eq:lem-generation-surface-containment-100}{%
