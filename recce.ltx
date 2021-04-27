@@ -2914,7 +2914,7 @@ and the lemma.
 \myqed
 \end{proof}
 
-\begin{lem}{Ancestry closure}
+\begin{lem}{Ancestry Closure}
 \label{lem:ancestry-closure}
 Every ancestry is
 the union of all the ancestries with the same base,
@@ -2931,10 +2931,8 @@ Then
 \end{lem}
 
 \begin{proof}
-\todo{Recheck this proof}
 The proof is by minimal counterexample.
-Let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
-Where
+Let
 \begin{equation}
 \label{eq:lem-ancestry-closure-150}
 \begin{gathered}
@@ -2942,10 +2940,11 @@ Where
         \myfn{Anc}{\V{ex},\V{base}} =
     \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{Anc}{\V{i},\V{base}}}
 \\ \myparbox{\cuz{}
-    UI of \Eref{eq:lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.}
+    UI of \Eref{eq:lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.
+    New free $\V{base} \in \Vpowerset{nodes}.$}
 \end{gathered}
 \end{equation}
-we assume there is a minimal \V{bad} such that
+We assume there is a minimal \V{bad} such that
 \Vmyfn{INST}{bad} is false:
 \begin{gather}
 \label{eq:lem-ancestry-closure-160}
@@ -2959,7 +2958,7 @@ It follows from a basic fact of set theory that
 \mypareq{eq:lem-ancestry-closure-170}{%
         $\myfn{Anc}{0,\V{base}}
 	  = \bigcup \set{ \forall\; \Vnat{i} \le 0 : \myfn{Anc}{\V{i},\V{base}}}$
-        \linebreak \cuz{} trivial.  This is \myfn{INST}{0}.
+        \linebreak \cuz{} Trivial.  This is \myfn{INST}{0}.
 }
 \mypareq{eq:lem-ancestry-closure-180}{%
     $\V{bad} > 0$ \cuz{}
@@ -2983,13 +2982,12 @@ It follows from a basic fact of set theory that
         \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-250},
         \Eref{eq:lem-ancestry-closure-270}.
 }
-Making a basic fact of set theory relative to the domain of quantification \powerset{\V{nodes}},
-we obtain
 \mypareq{eq:lem-ancestry-closure-290}{%
         $\forall\;\V{whole} \in \powerset{\V{nodes}} :
         \forall\;\V{part} \in \powerset{\V{nodes}} :
 	\linebreak
-        \V{part} \subseteq \V{whole} \implies \V{whole} = \V{whole} \cup \V{part}.$
+        \V{part} \subseteq \V{whole} \implies \V{whole} = \V{whole} \cup \V{part}$
+        \bcuz{} Fact of set theory.
 }
 \mypareq{eq:lem-ancestry-closure-200}{%
       $\myfn{Anc}{\V{bad},\V{base}} =
@@ -3004,12 +3002,12 @@ we obtain
       $\myfn{Anc}{\V{bad},\V{base}} =
     \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{Anc}{\V{i},\V{base}}}$
         \linebreak \cuz{} \Eref{eq:lem-ancestry-closure-200}.
-        This is \Vmyfn{INDH}{bad}.
+        This is \Vmyfn{INST}{bad}.
 }
 Equation \Eref{eq:lem-ancestry-closure-210} is contrary to
 \Eref{eq:lem-ancestry-closure-160}, which shows the reductio.
-From the reductio, we conclude that there is no minimal counter-example to the theorem,
-and the theorem follows.
+From the reductio, we conclude that there is no counter-example,
+and the lemma follows.
 \myqed
 \end{proof}
 
@@ -3732,79 +3730,101 @@ a counter-example, and the lemma.
 \label{lem:generation-surface-containment}
 The surface of the N-level ancestry of a base is a subset
 of the N-level generation of that same base.  That is,
-\[
+\begin{equation}
+\label{eq:lem-generation-surface-containment-050}
 \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq \myfn{gen}{\V{N},\V{base}}.
 \quad \thEnd
-\]
+\end{equation}
 \end{lem}
 
 \begin{proof}
-\todo{Convert to proof by minimal counter-example}
-The proof is direct.
-We consider an arbitrary node in the surface:
-\mypareq{eq:lem-generation-surface-containment-100}{%
-    $\V{nd} \in \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}$
-    \bcuz{} AF proof.
-        New free \V{nd}.
-        New free abitrary \Vnat{N}, $\V{base} \in \Vpowerset{nodes}$.
-}
-\mypareq{eq:lem-generation-surface-containment-110}{%
+The proof is by minimal counter-example.
+Let
+\begin{equation}
+\label{eq:lem-generation-surface-containment-100}
+\begin{gathered}
+    \Vmyfn{INST}{ex} \ldefined
+    \\ \myfn{Surface}{\myfn{Anc}{\V{ex},\V{base}}} \subseteq \myfn{gen}{\V{ex},\V{base}}.
+    \\ \text{\cuz{} \Eref{eq:lem-generation-surface-containment-050}
+         with \Vnat{ex} for \Vnat{N}.
+         New free \Vnodset{base}.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
+\begin{gather}
+\label{eq:lem-generation-surface-containment-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:lem-generation-surface-containment-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \myparbox{\cuz{} AF reductio.
+    New free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:lem-generation-surface-containment-210}{%
     $\forall\; \V{ndset} \in \Vpowerset{nodes} :
         \myfn{Surface}{\V{ndset}} \subseteq \V{ndset}$
     \bcuz{} Def of \myfnname{Surface} \Eref{eq:def-surface}.
 }
-\mypareq{eq:lem-generation-surface-containment-120}{%
+\mypareq{eq:lem-generation-surface-containment-220}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{Anc}{0,\V{base}}$
-    \bcuz{} \Eref{eq:lem-generation-surface-containment-110}.
+    \bcuz{} \Eref{eq:lem-generation-surface-containment-210}.
 }
-\mypareq{eq:lem-generation-surface-containment-130}{%
+\mypareq{eq:lem-generation-surface-containment-230}{%
     $\forall\; \V{base} \in \Vpowerset{nodes} : \myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
         \longdfref{\myfnname{Anc}}{ancestry},
         Def of \myfnname{gen} \dfref{generation}.
 }
-\mypareq{eq:lem-generation-surface-containment-140}{%
+\mypareq{eq:lem-generation-surface-containment-240}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{gen}{0,\V{base}}$
-    \bcuz{} \Eref{eq:lem-generation-surface-containment-120},
-        \Eref{eq:lem-generation-surface-containment-130}.
-        This is the theorem for the subcase $\V{N} = 0$.
+    \bcuz{} \Eref{eq:lem-generation-surface-containment-220},
+        \Eref{eq:lem-generation-surface-containment-230}.
+        \linebreak This is the expansion of
+        \Eref{eq:lem-generation-surface-containment-100}
+        as \myfn{INST}{0}.}
+\mypareq{eq:lem-generation-surface-containment-250}{%
+    $\Vnat{bad} > 0$
+    \cuz{} \Eref{eq:lem-generation-surface-containment-110},
+        \Eref{eq:lem-generation-surface-containment-240}.}
+\mypareq{eq:lem-generation-surface-containment-260}{%
+    $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+    \bcuz{} \Eref{eq:lem-generation-surface-containment-210}.
 }
-We now consider the other subcase
-\mypareq{eq:lem-generation-surface-containment-150}{%
-    $\V{N} > 0$ \cuz{} AF subcase.
-}
-\mypareq{eq:lem-generation-surface-containment-160}{%
-    $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq \myfn{Anc}{\V{N},\V{base}}$
-    \bcuz{} \Eref{eq:lem-generation-surface-containment-110}.
-}
-\mypareq{eq:lem-generation-surface-containment-170}{%
-    $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
-        \cap \myfn{Anc}{\Vdecr{N},\V{base}} = \emptyset$
+\mypareq{eq:lem-generation-surface-containment-270}{%
+    $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}}
+        \cap \myfn{Anc}{\Vdecr{bad},\V{base}} = \emptyset$
         \bcuz{} \longLmref{Surface Disjointness}{surface-disjointness},
-            \Eref{eq:lem-generation-surface-containment-150}.
+            \Eref{eq:lem-generation-surface-containment-250}.
 }
-\mypareq{eq:lem-generation-surface-containment-175}{%
+\mypareq{eq:lem-generation-surface-containment-275}{%
     $\forall\; \Vnodset{small} : \forall\; \Vnodset{big} : \forall\; \Vnodset{other} :$
     \linebreak $\var{small} \subseteq \var{big} \land \var{small} \cap \V{other} = \emptyset$
     \linebreak $\implies \var{small} \subseteq \subtract{\var{big}}{\V{other}}$
     \bcuz Fact of set theory.
 }
-\mypareq{eq:lem-generation-surface-containment-180}{%
-    $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq
-        \subtract{\myfn{Anc}{\V{N},\V{base}}}
-        {\myfn{Anc}{\Vdecr{N},\V{base}}}$
-    \bcuz{} \Eref{eq:lem-generation-surface-containment-160},
-        \Eref{eq:lem-generation-surface-containment-170},
-        \Eref{eq:lem-generation-surface-containment-175}.
+\mypareq{eq:lem-generation-surface-containment-280}{%
+    $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}} \subseteq
+        \subtract{\myfn{Anc}{\V{bad},\V{base}}}
+        {\myfn{Anc}{\Vdecr{bad},\V{base}}}$
+    \bcuz{} \Eref{eq:lem-generation-surface-containment-260},
+        \Eref{eq:lem-generation-surface-containment-270},
+        \Eref{eq:lem-generation-surface-containment-275}.
 }
-\mypareq{eq:lem-generation-surface-containment-190}{%
-    $\myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}} \subseteq
-        \myfn{gen}{\V{N},\V{base}}$
+\mypareq{eq:lem-generation-surface-containment-290}{%
+    $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}} \subseteq
+        \myfn{gen}{\V{bad},\V{base}}$
     \bcuz{} Def of \myfnname{gen} \dfref{generation},
-        \Eref{eq:lem-generation-surface-containment-180}.
-        \quad \myqed
-}
+        \Eref{eq:lem-generation-surface-containment-280}.
+        \linebreak This is the expansion of
+        \Eref{eq:lem-generation-surface-containment-100}
+        as \Vmyfn{INST}{bad}.}
+\Eref{eq:lem-generation-surface-containment-290} is contrary to
+\Eref{eq:lem-generation-surface-containment-110}
+which shows the reductio.
+From the reductio, we conclude that there is no counter-example
+and the lemma follows.
+\myqed
 \end{proof}
 
 \begin{lem}{Generation Union Tree Containment}
