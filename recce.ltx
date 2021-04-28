@@ -3770,8 +3770,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
     \bcuz{} \Eref{eq:lem-generation-surface-containment-210}.
 }
 \mypareq{eq:lem-generation-surface-containment-230}{%
-    $\forall\; \V{base} \in \Vpowerset{nodes} : \myfn{Anc}{0,\V{base}} = \V{base} =
-    \myfn{gen}{0,\V{base}}$
+    $\myfn{Anc}{0,\V{base}} = \V{base} = \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
         \longdfref{\myfnname{Anc}}{ancestry},
         Def of \myfnname{gen} \dfref{generation}.
@@ -3823,7 +3822,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \Eref{eq:lem-generation-surface-containment-110}
 which shows the reductio.
 From the reductio, we conclude that there is no counter-example
-and the lemma follows.
+and the lemma follows from the universal generalization of \V{base}.
 \myqed
 \end{proof}
 
@@ -3831,35 +3830,35 @@ and the lemma follows.
 \label{lem:generation-union-tree-containment}
 The union of all generations of the leaves
 whose level is less than the node count
-is the set of nodes
-in \V{tree}.
+of \V{tree},
+is the set of nodes in \V{tree}.
 That is,
-if
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-050}
-\V{genUnion} = \bigcup \set{
+\V{nodes} = \bigcup \set{
     \begin{gathered}
         \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
-    \end{gathered}},
+    \end{gathered}}.  \quad \thEnd
 \end{equation}
-\mypareq{eq:lem-generation-union-tree-containment-060}{
-   then $\V{nodes} = \V{genUnion}.$ \thEnd
-}
 \end{lem}
 
 \begin{proof}
-\todo{Convert to proof by minimal counter-example}
-It follows directly from the statement of the theorem that
-\mypareq{eq:lem-generation-union-tree-containment-100}{
-   $\V{genUnion} \subseteq \V{nodes}$
-    \cuz{} \Eref{eq:lem-generation-union-tree-containment-050}.
-}
-It remains to prove that
-\mypareq{eq:lem-generation-union-tree-containment-120}{%
-    $\forall\; \V{nd} \in \V{nodes} : \V{nd} \in \V{genUnion}$
-    \cuz{} To show.
-}
+The proof is direct.
+It follows immediately from the statement of the theorem that
+every element of the union of generations is an element of \V{nodes}:
+\begin{equation}
+\label{eq:lem-generation-union-tree-containment-100}
+\V{nodes} \subseteq \bigcup \set{
+    \begin{gathered}
+        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+            \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
+    \end{gathered}}
+    \because \Eref{eq:lem-generation-union-tree-containment-050}.
+\end{equation}
+We now proceed to
+to prove the converse of
+\Eref{eq:lem-generation-union-tree-containment-100}.
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-130}
 \begin{gathered}
@@ -3896,8 +3895,8 @@ Let \Vnod{nd} be an arbitrary node.
         with new free \V{lpath}.}
 \end{gather}
 By the Leaf Path Finiteness Lemma,
-every node of a tree is the start of a leaf path of length at most \Vsize{nodes}, so
-that
+every path of a tree is of length at most \Vsize{nodes},
+so that
 \mypareq{eq:lem-generation-union-tree-containment-180}{%
     $\Vsize{lpath} \le \Vsize{nodes}$
     \cuz{} \Lmref{tree-path-maximum}.
@@ -3932,20 +3931,20 @@ that
     $\Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}$
     \bcuz{} \Eref{eq:lem-generation-union-tree-containment-150},
         \Eref{eq:lem-generation-union-tree-containment-170},
-        \Eref{eq:lem-generation-union-tree-containment-180}.}
+        \Eref{eq:lem-generation-union-tree-containment-180},
+        \Eref{eq:lem-generation-union-tree-containment-310}.}
 \mypareq{eq:lem-generation-union-tree-containment-330}{%
     $\Vnod{nd} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}$
     \cuz{} \Eref{eq:lem-generation-union-tree-containment-160},
         \Eref{eq:lem-generation-union-tree-containment-320}.}
 \mypareq{eq:lem-generation-union-tree-containment-340}{%
-    $\Vnod{nd} \in \bigcup \set{ \forall\; \Vnat{i} < \Vsize{nodes} : \myfn{gen}{\V{i},\V{base}}}$
+    $\Vnod{nd} \in \bigcup \set{ \forall\; \Vnat{i} < \Vsize{nodes} : \myfn{gen}{\V{i},\V{leaves}}}$
     \bcuz{} \longLmref{Generation Coverage}{generation-coverage}.}
 Recall that \V{nd} was an arbitrary element of \V{nodes}
 \Eref{eq:lem-generation-union-tree-containment-140}.
-\Eref{eq:lem-generation-union-tree-containment-120} is the universal generalization
-of \V{nod} in \Eref{eq:lem-generation-union-tree-containment-340}.
 The lemma follows from \Eref{eq:lem-generation-union-tree-containment-100}
-and \Eref{eq:lem-generation-union-tree-containment-120}.
+and the universal generalization of \V{nd} in
+\Eref{eq:lem-generation-union-tree-containment-340}.
 \myqed
 \end{proof}
 
@@ -4201,7 +4200,7 @@ The theorem is then obtained using universal generalization.
 \\ \label{eq:surface-new-parents-inclusion-130}
     \land\; \V{parent} \in \Vmyfn{NewParents}{nds}
 \\ \nonumber \myparbox{\cuz{}
-    Hypothesis of \Eref{eq:surface-new-parents-inclusion-060},
+    Hypothesis of lemma \Eref{eq:surface-new-parents-inclusion-060},
         AF implication.
         New free \Vnod{parent}, new free \Vnod{child},
         new free \Vnodset{nds}.}
@@ -4256,11 +4255,11 @@ The theorem is then obtained using universal generalization.
 The theorem then follows from
 \begin{itemize}
 \item the UG of \Vnod{child} in \Eref{eq:surface-new-parents-inclusion-220}
-    to bound \Vnod{child};
+    to a new, bound \Vnod{child};
 \item the UG of \Vnod{parent} in \Eref{eq:surface-new-parents-inclusion-220}
-    to bound \Vnod{parent}; and
+    to a new, bound \Vnod{parent}; and
 \item the UG of \Vnodset{nds} in \Eref{eq:surface-new-parents-inclusion-220}
-    to bound \Vnodset{ndset}.  \myqed
+    to a bound \Vnodset{ndset}.  \myqed
 \end{itemize}
 \end{proof}
 
