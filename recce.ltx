@@ -2629,6 +2629,28 @@ In this context scope,
 $\Vnodset{leaves} \subseteq \V{nodes}$
 will be the set of leaves in \V{tree}.
 
+\begin{ldef}{\myfn{parents}{} and \myfn{children}{}}
+\label{ldef:parents}
+\begin{gather}
+\label{eq:ldef-parents-150}
+\Vmyfn{parents}{child} \ldefined
+    \set{
+        \begin{gathered}
+        \V{parent} \in \V{nodes} :
+        \\  \tuple{\V{parent},\V{child}} \in \V{edges}
+        \end{gathered}
+    }.
+\\ \label{eq:ldef-parents-250}
+\Vmyfn{children}{parent} \ldefined
+    \set{
+        \begin{gathered}
+        \V{child} \in \V{nodes} :
+        \\  \tuple{\V{parent},\V{child}} \in \V{edges}
+        \end{gathered}
+    }. \quad \ldefEnd
+\end{gather}
+\end{ldef}
+
 \section{Tree ancestries}
 
 \begin{ldef}{New Parents}
@@ -4274,9 +4296,9 @@ The theorem then follows from
 
 \begin{lem}{Surface--Parents Ratio}
 \label{lem:surface-parents-ratio}
-For any subset of nodes of from a non-unary tree,
-its surface is at least twice the size of
-its set of direct parents.
+For any subset of the nodes of a non-unary tree,
+the surface of the subset is at least twice the size of
+the subset's set of direct parents.
 That is, if \V{tree} is non-unary,
 then
 \begin{equation}
@@ -4293,19 +4315,6 @@ then
 
 \begin{proof}
 The proof is direct.
-For the purposes of this proof,
-let
-\begin{equation}
-\label{eq:lem-surface-parents-ratio-150}
-    \Vmyfn{children}{parent} \ldefined
-        \set{
-            \begin{gathered}
-            \V{child} \in \V{nodes} :
-            \\  \tuple{\V{parent},\V{child}} \in \V{edges}
-            \end{gathered}
-        }
-\end{equation}
-
 By definition,
 every node in \Vmyfn{NewParents}{ndset} must have at least one
 child:
@@ -4347,7 +4356,7 @@ from every other parent's set of children:
     \forall\; \V{parent2} \in \V{nodes} :
     \\ \Vmyfn{children}{parent1}
     \cap \Vmyfn{children}{parent2} = \emptyset
-    \\ \because \Eref{eq:lem-surface-parents-ratio-150},
+    \\ \because \longdfref{\myfn{children}{}}{parents},
         \Eref{eq:lem-surface-parents-ratio-190}.
 \end{gathered}
 \end{equation}
@@ -4392,7 +4401,7 @@ is equal to the sum of their cardinalities:
         \\ \land\; \V{parent} \in \Vmyfn{NewParents}{ndset}
     \end{gathered} }}
 \\ \ge\; 2 \times \size{\Vmyfn{NewParents}{ndset}}
-\\ \because \Eref{eq:lem-surface-parents-ratio-150},
+\\ \because \longdfref{\myfn{children}{}}{parents},
         \Eref{eq:lem-surface-parents-ratio-230}.
 \end{gathered}
 \end{equation}
@@ -4500,7 +4509,7 @@ Let \V{base} be a subset of \V{nodes},
 and let $\V{N}\in\naturals$.
 Then
 \begin{equation}
-\label{eq:th-non-unary-tree-size-050}
+\label{eq:lem-non-unary-subtree-size-050}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{N} : \myfn{gen}{\V{i},\V{base}} }
@@ -4515,89 +4524,89 @@ Then
 The proof is by minimal counter-example.
 Where
 \begin{equation}
-\label{eq:th-non-unary-tree-size-100}
+\label{eq:lem-non-unary-subtree-size-100}
 \begin{gathered}
     \Vmyfn{INST}{ex} \defined
     \\ \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{ex} : \myfn{gen}{\V{i},\V{base}} }
     }
         \le\; 2\times\Vsize{base}
-    \\ \text{\cuz{} \Eref{eq:th-non-unary-tree-size-050}
+    \\ \text{\cuz{} \Eref{eq:lem-non-unary-subtree-size-050}
          with \Vnat{ex} for \Vsize{N}.}
 \end{gathered}
 \end{equation}
 we assume there is a minimal \V{bad} such that
 \Vmyfn{INST}{bad} is false:
 \begin{gather}
-\label{eq:th-non-unary-tree-size-110}
+\label{eq:lem-non-unary-subtree-size-110}
     \neg \Vmyfn{INST}{bad}
-\\ \label{eq:th-non-unary-tree-size-120}
+\\ \label{eq:lem-non-unary-subtree-size-120}
     \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
 \\ \nonumber
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
-\mypareq{eq:th-non-unary-tree-size-130}{%
+\mypareq{eq:lem-non-unary-subtree-size-130}{%
     $\myfn{gen}{0,\V{base}} = \V{base}$
     \cuz{} Def of \myfnname{gen} \dfref{generation}.
 }
-\mypareq{eq:th-non-unary-tree-size-140}{%
+\mypareq{eq:lem-non-unary-subtree-size-140}{%
     $\size{\myfn{gen}{0,\V{base}}} \le 2\times\Vsize{base}$
-        \cuz{} \Eref{eq:th-non-unary-tree-size-130}.
+        \cuz{} \Eref{eq:lem-non-unary-subtree-size-130}.
 }
 \begin{equation}
-\label{eq:th-non-unary-tree-size-150}
+\label{eq:lem-non-unary-subtree-size-150}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le (0) : \myfn{gen}{\V{i},\V{base}} }
     }
         \le\; 2\times\Vsize{base}
-    \\ \text{\cuz{} \Eref{eq:th-non-unary-tree-size-140}.}
+    \\ \text{\cuz{} \Eref{eq:lem-non-unary-subtree-size-140}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-non-unary-tree-size-160}{%
-    \myfn{INST}{0} \cuz{} \Eref{eq:th-non-unary-tree-size-100},
-        \Eref{eq:th-non-unary-tree-size-150}.
+\mypareq{eq:lem-non-unary-subtree-size-160}{%
+    \myfn{INST}{0} \cuz{} \Eref{eq:lem-non-unary-subtree-size-100},
+        \Eref{eq:lem-non-unary-subtree-size-150}.
 }
-\mypareq{eq:th-non-unary-tree-size-200}{%
+\mypareq{eq:lem-non-unary-subtree-size-200}{%
     $\V{bad} > 0$ \cuz{}
-        \Eref{eq:th-non-unary-tree-size-110},
-        \Eref{eq:th-non-unary-tree-size-160}.
+        \Eref{eq:lem-non-unary-subtree-size-110},
+        \Eref{eq:lem-non-unary-subtree-size-160}.
 }
-\mypareq{eq:th-non-unary-tree-size-210}{%
+\mypareq{eq:lem-non-unary-subtree-size-210}{%
     $\size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } =
     \sum \set{ 0 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
     \bcuz{} \longLmref{Generation Sum Size}{generation-sum-size}.
 }
-\mypareq{eq:th-non-unary-tree-size-220}{%
+\mypareq{eq:lem-non-unary-subtree-size-220}{%
     $\size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } =
     \size{\myfn{gen}{0,\V{base}}} +
     \sum \set{ 1 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
-    \bcuz{} \Eref{eq:th-non-unary-tree-size-200},
-        \Eref{eq:th-non-unary-tree-size-210}.
+    \bcuz{} \Eref{eq:lem-non-unary-subtree-size-200},
+        \Eref{eq:lem-non-unary-subtree-size-210}.
 }
-\mypareq{eq:th-non-unary-tree-size-230}{%
+\mypareq{eq:lem-non-unary-subtree-size-230}{%
     $\size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } =
     \Vsize{base} +
     \sum \set{ 1 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
     \bcuz{} Def of \myfnname{gen} \dfref{generation},
-        \Eref{eq:th-non-unary-tree-size-220}.
+        \Eref{eq:lem-non-unary-subtree-size-220}.
 }
-\mypareq{eq:th-non-unary-tree-size-240}{%
+\mypareq{eq:lem-non-unary-subtree-size-240}{%
     $\size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } =
     \Vsize{base} +
     \sum \set{ 0 \le \Vnat{i} \le \Vdecr{bad} : \size{\myfn{gen}{\V{i}+1,\V{base}}} }$
-    \bcuz{} \Eref{eq:th-non-unary-tree-size-230}.
+    \bcuz{} \Eref{eq:lem-non-unary-subtree-size-230}.
 }
 \begin{equation}
-\label{eq:th-non-unary-tree-size-250}
+\label{eq:lem-non-unary-subtree-size-250}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
@@ -4608,11 +4617,11 @@ we assume there is a minimal \V{bad} such that
             \myfn{gen}{\V{i}, \myfn{gen}{1,\V{base}}} }
     }
     \\ \because \longLmref{Generation addition}{generation-addition},
-        \Eref{eq:th-non-unary-tree-size-240}.
+        \Eref{eq:lem-non-unary-subtree-size-240}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-non-unary-tree-size-260}
+\label{eq:lem-non-unary-subtree-size-260}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
@@ -4622,41 +4631,41 @@ we assume there is a minimal \V{bad} such that
             \myfn{gen}{\V{i}, \myfn{gen}{1,\V{base}} }
     }}
     \\ \because \longLmref{Generation Sum Size}{generation-sum-size},
-        \Eref{eq:th-non-unary-tree-size-250}.
+        \Eref{eq:lem-non-unary-subtree-size-250}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-non-unary-tree-size-270}
+\label{eq:lem-non-unary-subtree-size-270}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } \le
     \\ \Vsize{base} + 2\times\size{
             \myfn{gen}{1,\V{base}} }
-    \\ \because \Eref{eq:th-non-unary-tree-size-100},
-        \Eref{eq:th-non-unary-tree-size-120},
-        \Eref{eq:th-non-unary-tree-size-260}.
+    \\ \because \Eref{eq:lem-non-unary-subtree-size-100},
+        \Eref{eq:lem-non-unary-subtree-size-120},
+        \Eref{eq:lem-non-unary-subtree-size-260}.
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-non-unary-tree-size-280}{%
+\mypareq{eq:lem-non-unary-subtree-size-280}{%
      $\size{\myfn{gen}{0,\V{base}}} \ge
      2 \times \size{\myfn{gen}{1,\V{base}}}$
      \bcuz{}
          \longLmref{Generation Predecessor Size}{generation-predecessor-size}.
 }
 \begin{equation}
-\label{eq:th-non-unary-tree-size-290}
+\label{eq:lem-non-unary-subtree-size-290}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
     } \le
     \\ \Vsize{base} + \size{\myfn{gen}{0,\V{base}} }
-    \\ \because \Eref{eq:th-non-unary-tree-size-270},
-        \Eref{eq:th-non-unary-tree-size-280}.
+    \\ \because \Eref{eq:lem-non-unary-subtree-size-270},
+        \Eref{eq:lem-non-unary-subtree-size-280}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-non-unary-tree-size-300}
+\label{eq:lem-non-unary-subtree-size-300}
 \begin{gathered}
     \size{\bigcup
         \set{ 0 \le \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}} }
@@ -4664,18 +4673,18 @@ we assume there is a minimal \V{bad} such that
         2\times\Vsize{base}
     \\ \myparbox{\cuz{}
         Def of \myfnname{gen} \dfref{generation},
-        \Eref{eq:th-non-unary-tree-size-290}.}
+        \Eref{eq:lem-non-unary-subtree-size-290}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-non-unary-tree-size-310}{%
-    \myfn{INST}{\V{bad}} \cuz \Eref{eq:th-non-unary-tree-size-100},
-        \Eref{eq:th-non-unary-tree-size-300}.
+\mypareq{eq:lem-non-unary-subtree-size-310}{%
+    \myfn{INST}{\V{bad}} \cuz \Eref{eq:lem-non-unary-subtree-size-100},
+        \Eref{eq:lem-non-unary-subtree-size-300}.
 }
-Equation \Eref{eq:th-non-unary-tree-size-310} is contrary to
-\Eref{eq:th-non-unary-tree-size-110}, which shows the
+Equation \Eref{eq:lem-non-unary-subtree-size-310} is contrary to
+\Eref{eq:lem-non-unary-subtree-size-110}, which shows the
 reductio from
-\Eref{eq:th-non-unary-tree-size-110}--%\Eref{eq:th-non-unary-tree-size-120}
-to \Eref{eq:th-non-unary-tree-size-310}.
+\Eref{eq:lem-non-unary-subtree-size-110}--%\Eref{eq:lem-non-unary-subtree-size-120}
+to \Eref{eq:lem-non-unary-subtree-size-310}.
 From the reductio we know that there is no counter-example,
 which shows the lemma.
 \myqed
@@ -4726,6 +4735,11 @@ and \Eref{eq:th-non-unary-tree-size-200}.
 \end{proof}
 
 \section{Compressed Trees}
+
+\begin{definition}{Unary path}
+\label{def:unary-path}
+\todo{Write this}
+\end{definition}
 
 \chapter{Context-free grammars}
 \label{chap:CFGs}
