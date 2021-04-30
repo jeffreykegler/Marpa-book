@@ -2274,7 +2274,7 @@ every sequence of nodes of length 1 is a path, vacuously.
 
 \begin{definition}[Subpath]
 \label{def:subpath}
-Let \V{p} be a path in a graph \V{G}.
+Let \V{p} be a path in a graph $\V{G} = \tuple{\V{V}, \V{E}}$.
 A sequence is a \dfn{subpath} of \V{p}
 iff it is a subsequence of \V{p}.
 A subpath of \V{p} is a \dfn{proper subpath} of
@@ -2285,9 +2285,9 @@ A subpath of \V{p} is a \dfn{proper subpath} of
 \begin{theorem}[Subpath]
 \label{th:subpath}
 Every subpath of a path in a graph
-\V{G} is a path in \V{G}.
-That is, if \V{G}
-is an arbitrary graph, then
+$\V{G} = \tuple{\V{V}, \V{E}}$
+is a path in \V{G}.
+That is,
 \[
 \begin{gathered}
 \forall\; \V{seq} \in \Vmyfn{paths}{G} :
@@ -2373,6 +2373,52 @@ Proceeding, we have
 The consequent of the theorem is \Eref{eq:th-subpath-120},
 \Eref{eq:th-subpath-240}, and \Eref{eq:th-subpath-290}.
 \myqed
+\end{proof}
+
+\begin{theorem}[Path Pre-increment]
+\label{th:path-pre-increment}
+If there an edge from a node in a graph to the
+head of a path,
+then the path with the node prepended is also a path
+in the same graph.
+That is,
+let
+$\V{G} = \tuple{\V{V}, \V{E}}$
+be a graph.
+Then
+\[
+\begin{gathered}
+\forall\; \V{p} \in \Vmyfn{paths}{G} :
+\\ \forall\; \V{nd} \in \V{V} : \tuple{\V{nd},\Velement{p}{0}} \in \V{E}
+\\ \implies \seq{\V{nd},\Velement{p}{0} \ldots \Velement{p}{\Vlastix{p}}} \in \Vmyfn{paths}{G}.
+    \quad \defEnd
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is direct, assuming the hypothesis of the theorem
+to show the consequent.
+\begin{gather}
+\label{eq:th-path-pre-increment-150}
+    \V{p} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-path-pre-increment-160}
+    \land\; \tuple{\V{nd},\Velement{p}{0}} \in \V{E}
+\\ \nonumber
+    \myparbox{\cuz{} Hypothesis of theorem.
+    New free \V{p}.
+    New free $\V{nd} \in \V{V}.$}
+\end{gather}
+\mypareq{eq:th-path-pre-increment-170}{%
+    $\V{preInc} = \seq{\V{nd},\Velement{p}{0} \ldots \Velement{p}{\Vlastix{p}}}.$
+    \bcuz{} New free \V{preInc} for convenience.}
+\mypareq{eq:th-path-pre-increment-180}{%
+    $\Vsize{preInc} = \Vsize{p}+1$
+    \cuz{} \Eref{eq:th-path-pre-increment-170}.}
+\mypareq{eq:th-path-pre-increment-190}{%
+    \V{p} is finite and non-empty \cuz{}
+    \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-150}.}
+\todo{Prove this}
 \end{proof}
 
 \begin{definition}[Parents]
