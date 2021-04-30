@@ -2379,8 +2379,9 @@ The consequent of the theorem is \Eref{eq:th-subpath-120},
 \label{th:path-pre-increment}
 If there an edge from a node in a graph to the
 head of a path,
-then the path with the node prepended is also a path
-in the same graph.
+then a new path, with the node prepended, is also a path
+in the same graph,
+and the size of new path is the size of the old path plus one.
 That is,
 let
 $\V{G} = \tuple{\V{V}, \V{E}}$
@@ -2388,9 +2389,10 @@ be a graph.
 Then
 \[
 \begin{gathered}
-\forall\; \V{p} \in \Vmyfn{paths}{G} :
-\\ \forall\; \V{nd} \in \V{V} : \tuple{\V{nd},\Velement{p}{0}} \in \V{E}
-\\ \implies \seq{\V{nd},\Velement{p}{0} \ldots \Velement{p}{\Vlastix{p}}} \in \Vmyfn{paths}{G}.
+\forall\; \V{old} \in \Vmyfn{paths}{G} :
+\\ \forall\; \V{nd} \in \V{V} : \tuple{\V{nd},\Velement{old}{0}} \in \V{E}
+\\ \land\; \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}
+\\ \implies \V{new} \in \Vmyfn{paths}{G} \land \Vsize{new} = \Vsize{old}+1.
     \quad \defEnd
 \end{gathered}
 \]
@@ -2418,7 +2420,50 @@ to show the consequent.
 \mypareq{eq:th-path-pre-increment-190}{%
     \V{p} is finite and non-empty \cuz{}
     \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-150}.}
-\todo{Prove this}
+\mypareq{eq:th-path-pre-increment-200}{%
+    \V{preInc} is finite and non-empty \cuz{}
+     \Eref{eq:th-path-pre-increment-180},
+     \Eref{eq:th-path-pre-increment-190}.}
+\mypareq{eq:th-path-pre-increment-205}{%
+    $\Ran{\V{preInc}} = \set{\V{nd}} \cup \Ran{\V{p}}$
+     \Eref{eq:th-path-pre-increment-170}.}
+\mypareq{eq:th-path-pre-increment-210}{%
+    $\V{nd} \in \V{V}$ \cuz{} \Eref{eq:th-path-pre-increment-160}.}
+\mypareq{eq:th-path-pre-increment-220}{%
+    $\Ran{\V{p}} \subseteq \V{V}$ \cuz{} \Eref{eq:th-path-pre-increment-150}.}
+\mypareq{eq:th-path-pre-increment-230}{%
+    $\Ran{\V{preInc}} \subseteq \V{V}$ \cuz{}
+        \Eref{eq:th-path-pre-increment-205},
+        \Eref{eq:th-path-pre-increment-210},
+        \Eref{eq:th-path-pre-increment-220}.}
+\mypareq{eq:th-path-pre-increment-240}{%
+    $\forall\; 0 \le \V{i} \le \Vlastix{p} : \Velement{preInc}{\V{i}+1} = \VVelement{p}{i}$
+    \cuz \Eref{eq:th-path-pre-increment-170}.}
+\mypareq{eq:th-path-pre-increment-250}{%
+    $\forall\; 0 \le \V{i} < \Vlastix{p} : \tuple{\VVelement{p}{i},\VVelement{p}{\V{i}+1}} \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-150}.}
+\mypareq{eq:th-path-pre-increment-260}{%
+    $\forall\; 1 \le \V{i} < \Vlastix{p}+1 : \tuple{\VVelement{preInc}{i},\VVelement{preInc}{\V{i}+1}} \in \V{E}$
+    \bcuz{} \Eref{eq:th-path-pre-increment-240}, \Eref{eq:th-path-pre-increment-250}.}
+\mypareq{eq:th-path-pre-increment-270}{%
+    $\forall\; 1 \le \V{i} < \Vlastix{preInc} : \tuple{\VVelement{preInc}{i},\VVelement{preInc}{\V{i}+1}} \in \V{E}$
+    \bcuz{} \Eref{eq:th-path-pre-increment-180}, \Eref{eq:th-path-pre-increment-260}.}
+\mypareq{eq:th-path-pre-increment-280}{%
+    $\tuple{\Velement{preInc}{0},\Velement{preInc}{1}} \in \V{E}$
+    \bcuz{} \Eref{eq:th-path-pre-increment-160},
+        \Eref{eq:th-path-pre-increment-170}.}
+\mypareq{eq:th-path-pre-increment-290}{%
+    $\forall\; 0 \le \V{i} < \Vlastix{preInc} : \tuple{\VVelement{preInc}{i},\VVelement{preInc}{\V{i}+1}} \in \V{E}$
+    \bcuz{} \Eref{eq:th-path-pre-increment-270}, \Eref{eq:th-path-pre-increment-280}.}
+\mypareq{eq:th-path-pre-increment-300}{%
+    $\seq{\V{nd},\Velement{p}{0} \ldots \Velement{p}{\Vlastix{p}}} \in \Vmyfn{paths}{G}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-170},
+        \Eref{eq:th-path-pre-increment-200},
+        \Eref{eq:th-path-pre-increment-230},
+        \Eref{eq:th-path-pre-increment-290}.}
+The consequent of the theorem is \Eref{eq:th-path-pre-increment-180}
+and \Eref{eq:th-path-pre-increment-300}.
+\myqed
 \end{proof}
 
 \begin{definition}[Parents]
