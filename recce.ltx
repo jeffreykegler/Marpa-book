@@ -4841,7 +4841,7 @@ then the edge $\V{edge}\in\V{E}$ is unary iff
 \]
 \end{definition}
 
-\begin{definition}[Unary path]
+\begin{definition}[Unary Path]
 \label{def:unary-path}
 A path is a unary path iff all of its edges are unary edges.
 That is,
@@ -4859,40 +4859,49 @@ iff
 Note that, by \Dfref{def:unary-path},
 every trivial path is a unary path.
 
-\begin{theorem}[Unary Path Uniqueness from Head]
-\label{th:unary-path-uniqueness-from-head}
-Two unary paths of the same length and with the same head
+\begin{definition}[Unary Suffix Path]
+\label{def:unary-suffix}
+A unary path \V{suff} is a \dfn{unary suffix path},
+or \dfn{unary suffix},
+with respect to the vertex
+which is its head.
+That is,
+in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
+the unary path
+$\V{suff} \in \Vmyfn{paths}{G}$ is a unary suffix of $\V{nd} \in \V{V}$
+iff $\Velement{suff}{0} = \V{nd}$.
+\defEnd
+\end{definition}
+
+\begin{definition}[Unary Prefix Path]
+\label{def:unary-prefix}
+A unary path \V{pref} is a \dfn{unary prefix path},
+or \dfn{unary prefix},
+with respect to the vertex
+which is its tail.
+That is,
+in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
+the unary path
+$\V{pref} \in \Vmyfn{paths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
+iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
+\defEnd
+\end{definition}
+
+\begin{theorem}[Unary Suffix Uniqueness]
+\label{th:unary-suffix-uniqueness}
+Two unary paths of the same node,
+and of the same length,
 are identical.
 That is,
 where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
 \[
 \begin{gathered}
 \forall\;\Vnat{len} :
-    \forall\;\V{p1} \in \Vmyfn{paths}{G} :
-    \forall\;\V{p2} \in \Vmyfn{paths}{G} :
-\\ \Velement{p1}{0} = \Velement{p2}{0}
-    \land\; \Vsize{p1} = \Vsize{p2}.  \quad \thEnd
-\end{gathered}
-\]
-\end{theorem}
-
-\begin{proof}
-\todo{Write this proof}
-\end{proof}
-
-\begin{theorem}[Unary Path Uniqueness from Tail]
-\label{th:unary-path-uniqueness-from-tail}
-Two unary paths of the same length and with the same tail
-are identical.
-That is,
-where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
-\[
-\begin{gathered}
-\forall\;\Vnat{len} :
-    \forall\;\V{p1} \in \Vmyfn{paths}{G} :
-    \forall\;\V{p2} \in \Vmyfn{paths}{G} :
-\\ \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{\Vlastix{p2}}
-    \land\; \Vsize{p1} = \Vsize{p2}.  \quad \thEnd
+    \forall\;\V{suf1} \in \Vmyfn{paths}{G} :
+    \forall\;\V{suf2} \in \Vmyfn{paths}{G} :
+\\ \Velement{suf1}{0} = \Velement{suf2}{0}
+    \land\; \Vsize{suf1} = \Vsize{suf2}
+\\ \implies \V{suf1} = \V{suf2}.  \quad \thEnd
 \end{gathered}
 \]
 \end{theorem}
@@ -4902,6 +4911,30 @@ where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
 \end{proof}
 
 \section{Compressed Trees}
+
+\begin{theorem}[Unary Prefix Uniqueness]
+\label{th:unary-prefix-uniqueness-from-tail}
+In a tree,
+two unary prefixes of the same node
+with the same length
+are identical.
+That is,
+where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
+\[
+\begin{gathered}
+\forall\;\Vnat{len} :
+    \forall\;\V{pref1} \in \Vmyfn{paths}{G} :
+    \forall\;\V{pref2} \in \Vmyfn{paths}{G} :
+\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
+    \land \Vsize{pref1} = \Vsize{pref2}
+\\ \implies \V{pref1} = \V{pref2}.  \quad \thEnd
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+\todo{Write this proof}
+\end{proof}
 
 \chapter{Context-free grammars}
 \label{chap:CFGs}
