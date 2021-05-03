@@ -4906,6 +4906,74 @@ where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
 \end{theorem}
 
 \begin{proof}
+The proof is by minimal counter-example.
+If two unary suffixes of the same length differ,
+there be some element in which they differ.
+And if one or more elements of the suffixes differ,
+there must be a first one which differs.
+We look for this first ``bad'' element.
+
+Since, by hypothesis for the theorem,
+$\Vsize{suf1} = \Vsize{suf2}$,
+we can state the condition we are looking for as
+\begin{equation}
+\label{eq:th-unary-suffix-uniqueness-100}
+\begin{gathered}
+\forall\; \Vnat{len} :
+\\ \Velement{suf1}{0} = \Velement{suf2}{0}
+        \land \Vsize{suf1} = \Vsize{suf2}
+        \land \Vsize{suf1} \le \V{len}
+\\ \implies \V{suf1} = \V{suf2}
+\\ \myparbox{\cuz{}
+    Restatement of theorem.
+    New free $\V{suf1} \in \Vmyfn{paths}{G}.$
+         New free $\V{suf1} \in \Vmyfn{paths}{G}$.
+         }
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-unary-suffix-uniqueness-105}
+\begin{gathered}
+\Vmyfn{INST}{\Vnat{ex}} \defined
+\\ \Velement{suf1}{0} = \Velement{suf2}{0}
+        \land \Vsize{suf1} = \Vsize{suf2}
+        \land \Vsize{suf1} \le \V{ex}
+\\ \implies \V{suf1} = \V{suf2}
+    \\ \text{\cuz{} EI of \Eref{eq:th-unary-suffix-uniqueness-100}
+         with \Vnat{ex} for \Vnat{len}.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal \Vnat{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:th-unary-suffix-uniqueness-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:th-unary-suffix-uniqueness-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:th-unary-suffix-uniqueness-130}{%
+    $\V{sufZero1} = \seq{ \V{ndZero} }
+    \land \V{sufZero2} = \seq{ \V{ndZero} }$
+    \bcuz{} AF implication.
+    New free $\V{sufZero1} \in \Vmyfn{paths}{G}$.
+    New free $\V{sufZero2} \in \Vmyfn{paths}{G}$.
+}
+%\mypareq{eq:th-unary-suffix-uniqueness-140}{%
+%    $\myfn{INST}{0}$
+%    \cuz{} \Eref{eq:th-unary-suffix-uniqueness-100},
+%        \Eref{eq:th-unary-suffix-uniqueness-130}.
+%}
+%\mypareq{eq:th-unary-suffix-uniqueness-150}{%
+%    $\V{bad} > 0$
+%    \cuz \Eref{eq:th-unary-suffix-uniqueness-120},
+%        \Eref{eq:th-unary-suffix-uniqueness-140}.
+%}
+%\mypareq{eq:th-unary-suffix-uniqueness-160}{%
+%    $\myfn{INST}{\Vdecr{bad}}$
+%    \cuz{} \Eref{eq:th-unary-suffix-uniqueness-120}.
+%}
 \todo{Write this proof}
 \end{proof}
 
