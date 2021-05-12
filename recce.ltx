@@ -4845,14 +4845,21 @@ then the edge $\V{edge}\in\V{E}$ is unary iff
 \label{def:unary-path}
 A path is a unary path iff all of its edges are unary edges.
 That is,
-\V{up} is a unary path
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$
-iff
+\V{up} is a unary path iff
+it is an element of \Vmyfn{Upaths}{G} where
 \[
-    \forall\; \Vnat{ix} < \Vlastix{up} :
-        \myfn{children}{\VVelement{up}{ix}}
-            = \set{ \VVelement{up}{\V{ix}+1} }.
-        \quad \defEnd
+\begin{gathered}
+    \myfn{Upaths}{\V{G}} \defined
+    \set{
+        \begin{gathered}
+            \V{up} \in \Vmyfn{paths}{G} :
+                \forall\; \Vnat{ix} < \Vlastix{up} :
+            \\ \myfn{children}{\VVelement{up}{ix}}
+                = \set{ \VVelement{up}{\V{ix}+1} }
+        \end{gathered}
+    }.  \quad \defEnd
+\end{gathered}
 \]
 \end{definition}
 
@@ -4868,7 +4875,7 @@ which is its head.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 the unary path
-$\V{suff} \in \Vmyfn{paths}{G}$ is a unary suffix of $\V{nd} \in \V{V}$
+$\V{suff} \in \Vmyfn{Upaths}{G}$ is a unary suffix of $\V{nd} \in \V{V}$
 iff $\Velement{suff}{0} = \V{nd}$.
 \defEnd
 \end{definition}
@@ -4882,62 +4889,45 @@ which is its tail.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 the unary path
-$\V{pref} \in \Vmyfn{paths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
+$\V{pref} \in \Vmyfn{Upaths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
 iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
 \defEnd
 \end{definition}
 
 \begin{theorem}[Unary Suffix Uniqueness]
 \label{th:unary-suffix-uniqueness}
-Two unary suffixes of the same node,
-and of the same length,
+Two unary suffixes of the same node and same length
 are identical.
 That is,
-where
-and $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
-and \V{suf1} and \V{suf2} are unary paths in \V{G},
+where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
 then
-\[
+\begin{equation}
+\label{eq:th-unary-suffix-uniqueness-050}
 \begin{gathered}
-\Velement{suf1}{0} = \Velement{suf2}{0}
-    \land\; \Vsize{suf1} = \Vsize{suf2}
+\forall\; \V{suf1} \in \Vmyfn{Upaths}{G} :
+\forall\; \V{suf2} \in \Vmyfn{Upaths}{G} :
+\\ \Velement{suf1}{0} = \Velement{suf2}{0}
+    \land\; \Vlastix{suf1} = \Vlastix{suf2}
 \implies \V{suf1} = \V{suf2}.  \quad \thEnd
 \end{gathered}
-\]
+\end{equation}
 \end{theorem}
 
 \begin{proof}
 The proof is by minimal counter-example.
-Let
-\mypareq{eq:th-unary-suffix-uniqueness-90}{%
-    $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free graph,}
-\mypareq{eq:th-unary-suffix-uniqueness-95}{%
-    and let \V{suf1} and \V{suf2} be new free unary paths in \V{G}.}
-By definition \Dfref{def:path},
-all paths have length at least one,
-so that
-\begin{equation}
-\label{eq:th-unary-suffix-uniqueness-100}
-\begin{gathered}
-\forall\; \Vnat{len} > 1 :
-\\ \Velement{suf1}{0} = \Velement{suf2}{0}
-        \land \Vsize{suf1} = \Vsize{suf2} = \V{len}
-\\ \implies \V{suf1} = \V{suf2}
-\\ \myparbox{\cuz{}
-    Restatement of theorem.
-         }
-\end{gathered}
-\end{equation}
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free graph.
 \begin{equation}
 \label{eq:th-unary-suffix-uniqueness-105}
 \begin{gathered}
 \Vmyfn{INST}{\Vnat{ex}} \defined
+\\ \forall\; \V{suf1} \in \Vmyfn{Upaths}{G} :
+    \forall\; \V{suf2} \in \Vmyfn{Upaths}{G} :
 \\ \Velement{suf1}{0} = \Velement{suf2}{0}
-        \land \Vsize{suf1} = \Vsize{suf2}
-        \land \Vsize{suf1} \le \V{ex}
+        \land \Vlastix{suf1} = \Vlastix{suf2} = \V{ex}
 \\ \implies \V{suf1} = \V{suf2}
-    \\ \text{\cuz{} Macro for EI of \Eref{eq:th-unary-suffix-uniqueness-100}
-         with \Vnat{ex} for \Vnat{len}.}
+    \\ \myparbox{\cuz{}
+        Macro for EI for adaptation of \Eref{eq:th-unary-suffix-uniqueness-050}
+         setting $\Vnat{ex}=\Vlastix{suf2}$.}
 \end{gathered}
 \end{equation}
 We assume there is a minimal \Vnat{bad} such that
@@ -4952,15 +4942,14 @@ We assume there is a minimal \Vnat{bad} such that
 \end{gather}
 \mypareq{eq:th-unary-suffix-uniqueness-130}{%
 $\Velement{sufZ1}{0} = \Velement{sufZ2}{0}
-        \land \Vsize{sufZ1} = \Vsize{sufZ2} = 0$
+        \land \Vlastix{sufZ1} = \Vlastix{sufZ2} = 0$
     \bcuz{} AF implication.
     New free $\V{sufZ1} \in \Vmyfn{paths}{G}$.
     New free $\V{sufZ2} \in \Vmyfn{paths}{G}$.
 }
 \mypareq{eq:th-unary-suffix-uniqueness-140}{%
-$\V{sufZ1} = \seq{\V{ndZero}} = \V{sufZ2}$
-\bcuz \Eref{eq:th-unary-suffix-uniqueness-130}.
-    New $\V{ndZero} \in \V{V}$ for convenience.}
+    $\V{sufZ1} = \V{sufZ2}$
+    \cuz{} \Eref{eq:th-unary-suffix-uniqueness-130}.}
 \mypareq{eq:th-unary-suffix-uniqueness-150}{%
     $\myfn{INST}{0}$
     \cuz{} Implication from
@@ -4973,16 +4962,29 @@ $\V{sufZ1} = \seq{\V{ndZero}} = \V{sufZ2}$
     \cuz \Eref{eq:th-unary-suffix-uniqueness-110},
         \Eref{eq:th-unary-suffix-uniqueness-150}.
 }
+\begin{equation}
+\label{eq:th-unary-suffix-uniqueness-170}
+\begin{gathered}
+\exists\; \V{suf1} \in \Vmyfn{Upaths}{G} :
+    \exists\; \V{suf2} \in \Vmyfn{Upaths}{G} :
+\\ \Velement{suf1}{0} = \Velement{suf2}{0}
+        \land \Vlastix{suf1} = \Vlastix{suf2} = \V{bad}
+\\ \land\; \V{suf1} \ne \V{suf2}
+\\ \myparbox{\cuz{} Expansion of \Eref{eq:th-unary-suffix-uniqueness-110}
+        using \Eref{eq:th-unary-suffix-uniqueness-105}.}
+\end{gathered}
+\end{equation}
 \begin{gather}
 \label{eq:th-unary-suffix-uniqueness-200}
     \Velement{suf1}{0} = \Velement{suf2}{0}
 \\ \label{eq:th-unary-suffix-uniqueness-210}
-    \land\; \Vsize{suf1} = \Vsize{suf2} = \Vnat{bad}
-\\ \label{eq:th-unary-suffix-uniqueness-210}
+    \land\; \Vlastix{suf1} = \Vlastix{suf2} = \Vnat{bad}
+\\ \label{eq:th-unary-suffix-uniqueness-220}
     \land\; \V{suf1} \ne \V{suf2}
-\\ \nonumber
-    \myparbox{\cuz{} Expansion of \Eref{eq:th-unary-suffix-uniqueness-110}
-        using \Eref{eq:th-unary-suffix-uniqueness-105}.}
+\\ \nonumber \myparbox{\cuz{}
+    EI of \Eref{eq:th-unary-suffix-uniqueness-170}
+    with new free \V{suf1} for bound \V{suf1} and
+    new free \V{suf2} for bound \V{suf2}.}
 \end{gather}
 \todo{Finish this proof}
 \end{proof}
