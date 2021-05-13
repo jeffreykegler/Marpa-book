@@ -4835,7 +4835,7 @@ That is,
 where $\V{G} = \tuple{\V{V}, \V{E}}$ is a graph,
 then the edge $\V{edge}\in\V{E}$ is unary iff
 \[
-    \V{edge} = \tuple{ \V{parent},\V{child}}
+    \V{edge} = \tuple{ \Tvar{parent}{V},\Tvar{child}{V}}
         \land \Vmyfn{children}{parent} = \set{\V{child}}.
         \quad \defEnd
 \]
@@ -4846,14 +4846,14 @@ then the edge $\V{edge}\in\V{E}$ is unary iff
 A path is a unary path iff all of its edges are unary edges.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$
-\V{up} is a unary path iff
+\Tvarseq{up}{V} is a unary path iff
 it is an element of \Vmyfn{Upaths}{G} where
 \[
 \begin{gathered}
     \myfn{Upaths}{\V{G}} \defined
     \set{
         \begin{gathered}
-            \V{up} \in \Vmyfn{paths}{G} :
+            \Tvarseq{up}{V} \in \Vmyfn{paths}{G} :
                 \forall\; \Vnat{ix} < \Vlastix{up} :
             \\ \myfn{children}{\VVelement{up}{ix}}
                 = \set{ \VVelement{up}{\V{ix}+1} }
@@ -4875,7 +4875,7 @@ which is its head.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 the unary path
-$\V{suff} \in \Vmyfn{Upaths}{G}$ is a unary suffix of $\V{nd} \in \V{V}$
+$\Tvarseq{suff}{V} \in \Vmyfn{Upaths}{G}$ is a unary suffix of $\V{nd} \in \V{V}$
 iff $\Velement{suff}{0} = \V{nd}$.
 \defEnd
 \end{definition}
@@ -4889,7 +4889,7 @@ which is its tail.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 the unary path
-$\V{pref} \in \Vmyfn{Upaths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
+$\Tvarseq{pref}{V} \in \Vmyfn{Upaths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
 iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
 \defEnd
 \end{definition}
@@ -4904,8 +4904,8 @@ then
 \begin{equation}
 \label{eq:th-unary-suffix-uniqueness-050}
 \begin{gathered}
-\forall\; \V{suf1} \in \Vmyfn{Upaths}{G} :
-\forall\; \V{suf2} \in \Vmyfn{Upaths}{G} :
+\forall\; \Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G} :
+\forall\; \Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G} :
 \\ \Velement{suf1}{0} = \Velement{suf2}{0}
     \land\; \Vlastix{suf1} = \Vlastix{suf2}
 \implies \V{suf1} = \V{suf2}.  \quad \thEnd
@@ -4920,8 +4920,8 @@ Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free graph.
 \label{eq:th-unary-suffix-uniqueness-105}
 \begin{gathered}
 \Vmyfn{INST}{\Vnat{ex}} \defined
-\\ \forall\; \V{suf1} \in \Vmyfn{Upaths}{G} :
-    \forall\; \V{suf2} \in \Vmyfn{Upaths}{G} :
+\\ \forall\; \Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G} :
+    \forall\; \Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G} :
 \\ \Velement{suf1}{0} = \Velement{suf2}{0}
         \land \Vlastix{suf1} = \Vlastix{suf2} = \V{ex}
 \\ \implies \V{suf1} = \V{suf2}
@@ -4944,8 +4944,8 @@ We assume there is a minimal \Vnat{bad} such that
 $\Velement{sufZ1}{0} = \Velement{sufZ2}{0}
         \land \Vlastix{sufZ1} = \Vlastix{sufZ2} = 0$
     \bcuz{} AF implication.
-    New free $\V{sufZ1} \in \Vmyfn{paths}{G}$.
-    New free $\V{sufZ2} \in \Vmyfn{paths}{G}$.
+    New free \Tvarseq{sufZ1}{V}.
+    New free \Tvarseq{sufZ2}{V}.
 }
 \mypareq{eq:th-unary-suffix-uniqueness-140}{%
     $\V{sufZ1} = \V{sufZ2}$
@@ -4965,8 +4965,8 @@ $\Velement{sufZ1}{0} = \Velement{sufZ2}{0}
 \begin{equation}
 \label{eq:th-unary-suffix-uniqueness-170}
 \begin{gathered}
-\exists\; \V{suf1} \in \Vmyfn{Upaths}{G} :
-    \exists\; \V{suf2} \in \Vmyfn{Upaths}{G} :
+\exists\; \Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G} :
+    \exists\; \Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G} :
 \\ \Velement{suf1}{0} = \Velement{suf2}{0}
         \land \Vlastix{suf1} = \Vlastix{suf2} = \V{bad}
 \\ \land\; \V{suf1} \ne \V{suf2}
@@ -4975,17 +4975,30 @@ $\Velement{sufZ1}{0} = \Velement{sufZ2}{0}
 \end{gathered}
 \end{equation}
 \begin{gather}
-\label{eq:th-unary-suffix-uniqueness-200}
-    \Velement{suf1}{0} = \Velement{suf2}{0}
+\label{eq:th-unary-suffix-uniqueness-190}
+\Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G} \land
+    \Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G}
+\\ \label{eq:th-unary-suffix-uniqueness-200}
+    \land\; \Velement{suf1}{0} = \Velement{suf2}{0}
 \\ \label{eq:th-unary-suffix-uniqueness-210}
     \land\; \Vlastix{suf1} = \Vlastix{suf2} = \Vnat{bad}
 \\ \label{eq:th-unary-suffix-uniqueness-220}
     \land\; \V{suf1} \ne \V{suf2}
 \\ \nonumber \myparbox{\cuz{}
     EI of \Eref{eq:th-unary-suffix-uniqueness-170}
-    with new free \V{suf1} for bound \V{suf1} and
-    new free \V{suf2} for bound \V{suf2}.}
+    with new free \Tvarseq{suf1}{V} for bound \Tvarseq{suf1}{V} and
+    new free \Tvarseq{suf2}{V} for bound \Tvarseq{suf2}{V}.}
 \end{gather}
+\mypareq{eq:th-unary-suffix-uniqueness-230}{%
+    $\Tvarseq{suf1}{V} = \seq{ \Velement{pre1}{0} \ldots \Velement{pre1}{\Vlastix{pre1}}, \V{suf1Last} }$
+    \bcuz{} \Eref{eq:th-unary-suffix-uniqueness-160}.
+    New sequence \Tvarseq{pre1}{V}, new \Tvar{suf1Last}{V}.
+}
+\mypareq{eq:th-unary-suffix-uniqueness-240}{%
+    $\Tvarseq{suf2}{V} = \seq{ \Velement{pre2}{0} \ldots \Velement{pre2}{\Vlastix{pre2}}, \V{suf2Last} }$
+    \bcuz{} \Eref{eq:th-unary-suffix-uniqueness-160}.
+    New sequence \Tvarseq{pre2}{V}, new \Tvar{suf2Last}{V}.
+}
 \todo{Finish this proof}
 \end{proof}
 
