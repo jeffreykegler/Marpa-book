@@ -4895,8 +4895,40 @@ and let \Tvarseq{subp}{V} be a subsequence of \V{p}:
     $\Vnat{lo} \le \Vnat{hi} \le \Vlastix{up}$ \cuz{} New free \Vnat{lo}, new free \Vnat{hi}.}
 \mypareq{eq:th-unary-subpath-120}{%
     $\V{subp} = \seq{ \VVelement{up}{lo} \ldots \VVelement{up}{hi} }$ \cuz{} New free \Tvarseq{subp}{V}.}
-By the Subpath Theorem, we know that
-\todo{Finish proving this}
+By the Subpath Theorem, we know that \V{subp} is a path:
+\mypareq{eq:th-unary-subpath-130}{%
+    $\V{subp} \in \Vmyfn{paths}{G}$ \cuz{} \Thref{subpath}.}
+\begin{equation}
+\label{eq:th-unary-subpath-250}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{up} :
+    \myfn{children}{\VVelement{up}{ix}}
+                = \set{ \VVelement{up}{\V{ix}+1} }
+    \\ \because \longDfref{Unary Path}{def:unary-path}, \Eref{eq:th-unary-subpath-100}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-unary-subpath-260}
+\begin{gathered}
+    \forall\; \Vnat{ix} \; (\V{lo} < \V{ix} < \V{hi}) :
+    \myfn{children}{\VVelement{up}{ix}}
+                = \set{ \VVelement{up}{\V{ix}+1} }
+    \\ \because \Eref{eq:th-unary-subpath-110}, \Eref{eq:th-unary-subpath-250}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-unary-subpath-270}
+\begin{gathered}
+    \forall\; \V{ix} < \Vlastix{subp} :
+    \myfn{children}{\VVelement{subp}{ix}}
+                = \set{ \VVelement{subp}{\V{ix}+1} }
+    \\ \because \Eref{eq:th-unary-subpath-120}, \Eref{eq:th-unary-subpath-260}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-unary-subpath-280}{%
+    $\V{subp} \in \Vmyfn{Upaths}{G}$
+    \bcuz{} \longDfref{Unary Path}{def:unary-path}, \Eref{eq:th-unary-subpath-100},
+            \Eref{eq:th-unary-subpath-270}. \myqed}
 \end{proof}
 
 \begin{definition}[Unary Suffix Path]
