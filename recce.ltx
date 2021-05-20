@@ -5147,19 +5147,68 @@ with the same length
 are identical.
 That is,
 where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
-\[
+\begin{equation}
+\label{eq:th-unary-prefix-uniqueness-050}
 \begin{gathered}
     \forall\;\V{pref1} \in \Vmyfn{paths}{G} :
     \forall\;\V{pref2} \in \Vmyfn{paths}{G} :
 \\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
-    \land \Vsize{pref1} = \Vsize{pref2}
+    \land \Vlastix{pref1} = \Vlastix{pref2}
 \\ \implies \V{pref1} = \V{pref2}.  \quad \thEnd
 \end{gathered}
-\]
+\end{equation}
 \end{theorem}
 
 \begin{proof}
-\todo{Write this proof}
+The proof is by minimal counter-example.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free tree.
+\begin{equation}
+\label{eq:th-unary-prefix-uniqueness-105}
+\begin{gathered}
+\Vmyfn{INST}{\Vnat{ex}} \ldefined
+\\ \forall\; \Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} :
+    \forall\; \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G} :
+\\ \Velement{pref1}{0} = \Velement{pref2}{0}
+        \land \Vlastix{pref1} = \Vlastix{pref2} = \V{ex}
+\\ \implies \V{pref1} = \V{pref2}
+    \\ \myparbox{\cuz{}
+        Macro for EI for adaptation of \Eref{eq:th-unary-prefix-uniqueness-050}
+         setting $\Vnat{ex}=\Vlastix{pref2}$.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal \Vnat{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:th-unary-prefix-uniqueness-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:th-unary-prefix-uniqueness-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:th-unary-prefix-uniqueness-130}{%
+$\Velement{prefZ1}{0} = \Velement{prefZ2}{0}
+        \land \Vlastix{prefZ1} = \Vlastix{prefZ2} = 0$
+    \bcuz{} AF implication.
+    New free \Tvarseq{prefZ1}{V}.
+    New free \Tvarseq{prefZ2}{V}.
+}
+\mypareq{eq:th-unary-prefix-uniqueness-140}{%
+    $\V{prefZ1} = \V{prefZ2}$
+    \cuz{} \Eref{eq:th-unary-prefix-uniqueness-130}.}
+\mypareq{eq:th-unary-prefix-uniqueness-150}{%
+    $\myfn{INST}{0}$
+    \cuz{} Implication from
+        \Eref{eq:th-unary-prefix-uniqueness-130}--%
+        \Eref{eq:th-unary-prefix-uniqueness-140};
+        Macrofication using
+        \Eref{eq:th-unary-prefix-uniqueness-105}.}
+\mypareq{eq:th-unary-prefix-uniqueness-160}{%
+    $\V{bad} > 0$
+    \cuz \Eref{eq:th-unary-prefix-uniqueness-110},
+        \Eref{eq:th-unary-prefix-uniqueness-150}.
+}
+\todo{Finish this proof}
 \end{proof}
 
 \chapter{Context-free grammars}
