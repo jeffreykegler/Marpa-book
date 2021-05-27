@@ -2507,6 +2507,51 @@ is a directed graph,
 \end{gather}
 \end{ldef}
 
+\begin{definition}[Acyclic graph]
+\label{def:acyclic}
+A directed graph is \dfn{acyclic} iff
+it does not contain any non-trivial path that starts and ends
+with the same node.
+That is,
+the directed graph $\V{G} = \tuple{ \V{V}, \V{E} }$
+is \dfn{acyclic} iff
+\[
+\forall\; \V{path} \in \Vmyfn{paths}{G} :
+\Vlastix{path} \ne 0 \implies \Velement{path}{0} \ne
+    \Velement{path}{\Vlastix{path}}.
+    \quad \defEnd
+\]
+\end{definition}
+
+\begin{theorem}[Acyclic path maximum]
+\label{th:acyclic-path-maximum}
+The length of a path in an acyclic directed graph is at most
+the number of nodes in the graph.
+That is,
+if $\V{G} = \tuple{ \V{V}, \V{E} }$ is an acyclic directed graph, then
+\begin{equation*}
+\forall\; \V{path} \in \Vmyfn{paths}{G} :
+    \Vsize{path} \le \Vsize{V}. \quad \thEnd
+\end{equation*}
+\end{theorem}
+
+\begin{proof}
+Let $\V{G} = \tuple{ \V{V}, \V{E} }$ be a new free acyclic directed graph,
+and \V{path} be a path in \V{G}.
+By definition \Dfref{def:path},
+a path is a sequence whose values are the nodes of \V{G}.
+By assumption for the theorem, \V{G} is acyclic,
+so that by the definition of acyclic \Dfref{def:acyclic}
+no value occurs twice in \V{path},
+and every value of \V{path} is distinct.
+The values of \V{path} are the nodes of \V{G},
+that is, \V{V}.
+Therefore there can be at most one distinct value of \V{path}
+for each element of {V}.
+The theorem follows.
+\myqed
+\end{proof}
+
 \begin{definition}[Tree]
 \label{def:tree}
 A \V{tree} is a directed graph,
@@ -2544,23 +2589,24 @@ That is,
 \begin{gathered}
     \text{if $\V{tree} = \tuple{ \V{nodes}, \V{edges} }$ is a tree, then}
     \\ \forall\; \V{path} \in \Vmyfn{path}{tree} :
-        \Vsize{path} \le \V{nodes}. \quad \thEnd
+        \Vsize{path} \le \Vsize{nodes}. \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
 
 \begin{proof}
+The proof is direct.
 Let \V{path} be a path in the arbitrary tree \V{tree}.
 By definition \Dfref{def:path},
 a path is a sequence whose values are the nodes of \V{tree}.
 It is a fact of graph theory that no path in any tree
 contains a cycle,
-so that no value occurs twice in \V{path} ---
-every value of a path sequence must be distinct.
-The values of \V{path} are nodes of \V{tree},
-so there can be at most one distinct value of \V{path}
-for each node of \V{tree}.
-The theorem follows.
+so by the Acyclic Path Maximum theorem
+\Thref{acyclic-path-maximum},
+the length of \V{path} is at most the node count of
+the directed graph that contains it.
+Here \V{tree} is the directed graph,
+and \V{nodes} is the node count of \V{tree}.
 \myqed
 \end{proof}
 
@@ -5147,22 +5193,30 @@ same node.
 \end{definition}
 
 \begin{theorem}[Maximal Unary Suffix Uniqueness]
-Every node of a directed graph is in exactly one
+\label{th:Maximal Unary Suffix Uniqueness}
+Every node of an acyclic directed graph is in exactly one
 maximal unary suffix.
 \thEnd
 \end{theorem}
 
 \begin{proof}
 The proof is direct.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free graph,
-and let
-$\V{nd} \in \V{V}$ be a new free node in \V{G}.
-\seq{ \V{nd} } is a unary path trivially \Dfref{def:unary-path}
-and a unary suffix, also trivially
-\Dfref{def:unary-suffix},
-and therefore we know that the set of unary suffixes of \V{nd}
-is non-empty.
+\mypareq{eq:th-maximal-unary-suffix-uniqueness-100}{%
+    $\V{G} = \tuple{\V{V}, \V{E}}$ \cuz{} AF theorem.
+    \linebreak \V{G} is a new free acyclic directed graph.}
+\mypareq{eq:th-maximal-unary-suffix-uniqueness-110}{%
+    $\V{nd} \in \V{V}$ \cuz{} AF theorem.
+    \linebreak \V{nd} is a new free node in \V{G}.}
+\mypareq{eq:th-maximal-unary-suffix-uniqueness-120}{%
+    \seq{ \V{nd} } is a unary path \cuz{} \longDfref{Unary path}{def:unary-path},
+        trivially.}
+\mypareq{eq:th-maximal-unary-suffix-uniqueness-130}{%
+    \seq{ \V{nd} } is a unary suffix
+         \bcuz{} \longDfref{Unary suffix}{def:unary-suffix},
+            trivially.}
 \todo{Finish this proof}
+therefore we know that the set of unary suffixes of \V{nd}
+is non-empty.
 \myqed
 \end{proof}
 
