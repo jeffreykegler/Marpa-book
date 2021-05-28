@@ -2237,6 +2237,8 @@ we have made for the fragment of graph theory that we use.
 The authority we follow most closely is
 is \cite{HU1979}.
 
+\section{Directed graph}
+
 \begin{definition}[Directed graph]
 \label{def:directed-graph}
 A \dfn{directed graph} is a pair
@@ -2507,7 +2509,9 @@ is a directed graph,
 \end{gather}
 \end{ldef}
 
-\begin{definition}[Acyclic graph]
+\section{Acyclic directed graph}
+
+\begin{definition}[Acyclic directed graph]
 \label{def:acyclic}
 A directed graph is \dfn{acyclic} iff
 it does not contain any non-trivial path that starts and ends
@@ -2551,6 +2555,37 @@ for each element of {V}.
 The theorem follows.
 \myqed
 \end{proof}
+
+\begin{theorem}[Acyclic path maximum]
+\label{th:acyclic-path-maximum}
+In an acyclic directed graph,
+the length of a path is at most
+the number of nodes in the graph.
+That is,
+if $\V{adg} = \tuple{ \V{V}, \V{E} }$ is an acyclic directed graph,
+then
+\[
+\forall\; \V{path} \in \Vmyfn{path}{adg} :
+    \Vsize{path} \le \Vsize{V}. \quad \thEnd
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is direct.
+Let \V{path} be a path in the arbitrary acyclic directed
+graph \V{adg}.
+If any path contained the same node of \V{adg} twice,
+it would have a subpath which is a cycle.
+By assumption, \V{adg} is acyclic,
+so no path in \V{adg} contains a node more than once.
+Any path of length greater than \Vsize{V} must contain
+the same node more than once,
+so therefore no path of \V{adg} is of length greater
+than \V{V}.
+\myqed
+\end{proof}
+
+\section{Tree}
 
 \begin{definition}[Tree]
 \label{def:tree}
@@ -2596,17 +2631,18 @@ That is,
 
 \begin{proof}
 The proof is direct.
-Let \V{path} be a path in the arbitrary tree \V{tree}.
-By definition \Dfref{def:path},
-a path is a sequence whose values are the nodes of \V{tree}.
-It is a fact of graph theory that no path in any tree
-contains a cycle,
-so by the Acyclic Path Maximum theorem
+A tree is by definition a directed graph,
+and we know as a fact of graph theory that no path in any tree
+contains a cycle.
+Hence \V{tree} is an acyclic directed graph.
+By the Acyclic Path Maximum theorem
 \Thref{acyclic-path-maximum},
-the length of \V{path} is at most the node count of
-the directed graph that contains it.
-Here \V{tree} is the directed graph,
-and \V{nodes} is the node count of \V{tree}.
+the length of any path
+in an acyclic directed graph
+is at most the node count of
+that acyclic directed graph.
+\V{nodes} is the node count of \V{tree}
+and the theorem follows.
 \myqed
 \end{proof}
 
@@ -2633,6 +2669,7 @@ That is, if \V{tree} is a tree,
 \end{theorem}
 
 \begin{proof}
+\todo{Redo using acyclic result}
 A tree is a directed graph,
 which has a finite set of vertices,
 so that \V{tree} has a finite set of nodes.
