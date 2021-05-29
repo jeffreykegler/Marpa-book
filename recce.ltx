@@ -2264,8 +2264,8 @@ where
 \label{eq:def-path}
 \begin{gathered}
     \Vmyfn{paths}{G} \defined \set{ \begin{gathered}
-        \V{pth} \in \powerset{\naturals\times\V{V}} : \exists\; \Vnat{length} > 0 :
-        \\ \Dom{\V{pth}} = \V{length} \land \Ran{\V{pth}} \subseteq \V{V}
+        \V{pth} \in \powerset{\naturals\times\V{V}} :
+        \\ \exists\; \Vnat{length} > 0 : \Dom{\V{pth}} = \V{length}
         \\ \land\; \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vlastix{pth} :
                 \\ \family{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
@@ -2380,6 +2380,200 @@ Proceeding, we have
 \end{equation}
 The consequent of the theorem is \Eref{eq:th-subpath-120},
 \Eref{eq:th-subpath-240}, and \Eref{eq:th-subpath-290}.
+\myqed
+\end{proof}
+
+\begin{definition}[Path Fusion]
+\label{def:fusion}
+Let \V{p1} and \V{p2} be paths in a graph $\V{G} = \tuple{\V{V}, \V{E}}$,
+such that they share a value $\V{joint} \in \V{V}$,
+such that $\V{joint} = \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}$.
+The value \dfn{joint} is called the \dfn{joint} of \V{p1} and \V{p2}.
+Their \dfn{fusion} is the consisting of \V{p1} followed by the suffix
+of \V{p2} of length \decr{\Vlastix{p2}}.
+That is,%
+\footnote{
+    Using a sequence-based notation
+    \[
+        \text{(A)}\qquad
+        \seq{\Velement{p1}{0}\ldots\Velement{p1}{\Vlastix{p1}},
+        \Velement{p2}{1}\ldots\Velement{p2}{\Vlastix{p2}}}
+    \]
+    to define the fusion of \V{p1} and \V{p2} is tempting
+    but problematic.
+    If $\V{p1} = \seq{1,2,2}$
+    and $\V{p2} = \seq{1,1,2}$
+    then (A) might be either
+    \[
+        \seq{ \Velement{p1}{0},
+            \Velement{p1}{1},
+            \Velement{p1}{2},
+            \Velement{p2}{0},
+        \Velement{p2}{1},
+        \Velement{p1}{2}}
+        = \seq{1, 2, 2, 1, 1, 2}
+    \]
+    or
+    \[ \seq{ 1\ldots 2, 1\ldots 2} = \seq{1,2,1,2}. \]
+    Also (A) is simply wrong if
+    $\Vlastix{p2} = 0$.%
+}
+the \dfn{fusion} of
+\V{p1} and \V{p2} is the set
+\[
+\begin{gathered}
+\set{ \tuple{\V{ix}, \V{val}} \in \naturals \times \V{V} : \Vnat{val} = \VVelement{p1}{ix} }
+\\ \bigcup\; \set{
+    \tuple{\V{ix}+\Vlastix{p1}, \V{val}} \in \naturals \times \V{V} :
+    \Vnat{val} = \VVelement{p2}{ix} }.
+        \quad \defEnd
+\end{gathered}
+\]
+\end{definition}
+
+As an example, if \V{p1} = \seq{\V{nd1}, \V{nd2}, \V{nd3}}
+and \V{p2} = \seq{\V{nd3}, \V{nd4}, \V{nd5}}
+then their join is \V{nd3} and
+their fusion is
+\seq{\V{nd1}, \V{nd2}, \V{nd3}, \V{nd4}, \V{nd5}}.
+
+\begin{theorem}[Path Fusion]
+\label{th:fusion}
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a directed graph.
+Every fusion of two paths
+in \V{G} is a path in \V{G}.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+The proof is direct,
+assuming the hypothesis of the theorem to
+show its consequent,
+then generalizing.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$
+be an arbitrary graph,
+and let
+\V{path1}
+and \V{path2}
+be arbitrary paths in \V{G},
+such that \V{path1} and \V{path2}
+share a joint.
+\begin{gather}
+\label{eq:th-fusion-100}
+\V{path1} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-fusion-110}
+    \land\; \V{path2} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-fusion-120}
+    \land\; \Velement{path1}{0} = \Velement{path2}{\Vlastix{path2}}
+\\ \nonumber
+    \myparbox{\cuz{}
+        AF hypothesis of theorem.
+        New free \Tvarseq{path1}{V} and \Tvarseq{path2}{V}.}
+\end{gather}
+\begin{equation}
+\label{eq:th-fusion-130}
+\begin{gathered}
+\var{fusion} =
+\\
+\set{ \tuple{\V{ix}, \V{val}} \in \Vsize{p1} \times \V{V} : \Tvar{val}{V} = \VVelement{p1}{ix} }
+\\ \bigcup\; \set{
+    \begin{gathered}
+        \tuple{\V{ix}, \V{val}} \in
+            \left( \Vlastix{p1} \ldots
+                \left( \Vlastix{p1}+\Vsize{p2} \right)
+            \times \V{V}
+            \right) :
+        \\ \Tvar{val}{V} = \VVelement{p2}{\subtract{\V{ix}}{\Vlastix{p1}} }
+    \end{gathered} }
+\\ \myparbox{\cuz{} \longDfref{Fusion}{def:fusion},
+    \Eref{eq:th-fusion-100},
+    \Eref{eq:th-fusion-110},
+    \Eref{eq:th-fusion-120}.
+    New free \V{fusion} for convenience.}
+\end{gathered}
+\end{equation}
+Every path is non-empty by definition,
+so that we know \Velement{path1}{0} exists,
+and therefore \V{fusion} is non-empty.
+\mypareq{eq:th-fusion-140}{%
+   $\Vsize{fusion} > 0$ \cuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-fusion-100},
+        \Eref{eq:th-fusion-130}.}
+Investigating the domain of \V{fusion}:
+\mypareq{eq:th-fusion-150}{%
+    $\Dom{\V{fusion}} \subseteq \Vsize{p1} \cup \set{ \Vnat{ix} : \Vlastix{p1} \le \V{ix} \le \Vlastix{p1}+\Vlastix{p2} }$
+    \bcuz{} \Eref{eq:th-fusion-130}.}
+\mypareq{eq:th-fusion-160}{%
+    $\Dom{\V{fusion}} \subseteq \left( \Vsize{p1} + \decr{\Vsize{p2}} \right)$
+    \cuz{} \Eref{eq:th-fusion-150}.}
+\mypareq{eq:th-fusion-170}{%
+    $\forall\; \Vnat{ix} \le \Vlastix{p1} : \exists\; \Tvar{val}{V} :
+        \V{val} = \VVelement{p1}{ix}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-100}.}
+\mypareq{eq:th-fusion-180}{%
+    $\forall\; \Vnat{ix} \le \Vlastix{p2} : \exists\; \Tvar{val}{V} :
+        \V{val} = \VVelement{p2}{ix}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-110}.}
+\mypareq{eq:th-fusion-190}{%
+    $\forall\; \Vnat{ix}\; (\Vlastix{p1} \le \Vnat{ix} \le \Vlastix{p1} + \Vlastix{p2}) :$
+    \linebreak $\exists\; \Tvar{val}{V} :
+        \V{val} = \VVelement{p2}{\subtract{\V{ix}}{\Vlastix{p1}}}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-180}.}
+
+\todo{Rewrite from here}
+Since \V{subpath} is a sequence,
+it follows from set theory that
+\mypareq{eq:th-fusion-120-DELETE}{%
+    \V{subpath} is a finite non-empty sequence
+    \cuz{} \Eref{eq:th-fusion-110}.
+}
+Proceeding, we have
+\mypareq{eq:th-fusion-220}{%
+    $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
+        \longDfref{Path}{def:path}, \Eref{eq:th-fusion-100}.}
+\mypareq{eq:th-fusion-230}{%
+    $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$
+        DELETE ME .}
+\mypareq{eq:th-fusion-240}{%
+    $\Ran{\V{subpath}} \subseteq \V{V}$ \cuz{}
+        \Eref{eq:th-fusion-220}, \Eref{eq:th-fusion-230}.}
+\begin{equation}
+\label{eq:th-fusion-250}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path} :
+    \\ \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}
+    \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-fusion-100}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-260}{%
+     $\Vlastix{subpath}+\V{lo} \le \Vlastix{path}$
+     \cuz{} DELETE ME, \Eref{eq:th-fusion-110}.}
+\begin{equation}
+\label{eq:th-fusion-270}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \tuple{ \Velement{path}{\V{ix} + \V{lo}}, \Velement{path}{\V{ix}+\V{lo}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-fusion-250}, \Eref{eq:th-fusion-260}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-fusion-280}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \Velement{path}{\V{ix} + \V{lo}} = \VVelement{subpath}{ix}
+    \\ \because \Eref{eq:th-fusion-110}, \Eref{eq:th-fusion-260}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-fusion-290}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{subpath} :
+    \\ \tuple{ \Velement{subpath}{\V{ix}}, \Velement{subpath}{\V{ix}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-fusion-270}, \Eref{eq:th-fusion-280}.
+\end{gathered}
+\end{equation}
+The consequent of the theorem is \Eref{eq:th-fusion-120-DELETE},
+\Eref{eq:th-fusion-240}, and \Eref{eq:th-fusion-290}.
 \myqed
 \end{proof}
 
@@ -2553,35 +2747,6 @@ that is, \V{V}.
 Therefore there can be at most one distinct value of \V{path}
 for each element of {V}.
 The theorem follows.
-\myqed
-\end{proof}
-
-\begin{theorem}[Acyclic path maximum]
-\label{th:acyclic-path-maximum}
-In an acyclic directed graph,
-the length of a path is at most
-the number of nodes in the graph.
-That is,
-if $\V{adg} = \tuple{ \V{V}, \V{E} }$ is an acyclic directed graph,
-then
-\[
-\forall\; \V{path} \in \Vmyfn{path}{adg} :
-    \Vsize{path} \le \Vsize{V}. \quad \thEnd
-\]
-\end{theorem}
-
-\begin{proof}
-The proof is direct.
-Let \V{path} be a path in the arbitrary acyclic directed
-graph \V{adg}.
-If any path contained the same node of \V{adg} twice,
-it would have a subpath which is a cycle.
-By assumption, \V{adg} is acyclic,
-so no path in \V{adg} contains a node more than once.
-Any path of length greater than \Vsize{V} must contain
-the same node more than once,
-so therefore no path of \V{adg} is of length greater
-than \V{V}.
 \myqed
 \end{proof}
 
