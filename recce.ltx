@@ -1927,6 +1927,8 @@ and
         \V{ix} > 0 \implies \VVelement{seq}{ix} = \myfn{succ}{\Velement{seq}{\Vdecr{ix}}}.
 \]
 
+\begin{definition}[Subsequence]
+\label{def:subsequence}
 We will write
 $\V{s}[\V{a} \ldots \V{z}]$
 for the subsequence
@@ -1952,8 +1954,10 @@ so that
     \\ \text{and } \Velement{s}{0 \ldots {-1}}
         = \Velement{s}{~}
         = \epsilon.
+        \quad \defEnd
 \end{gathered}
 \]
+\end{definition}
 
 \begin{definition}[Sequence Predecessor and Successor]
 \label{def:sequence-predecessor}
@@ -2386,11 +2390,12 @@ The consequent of the theorem is \Eref{eq:th-subpath-120},
 \begin{definition}[Path Fusion]
 \label{def:fusion}
 Let \V{p1} and \V{p2} be paths in a graph $\V{G} = \tuple{\V{V}, \V{E}}$,
-such that they share a value $\V{joint} \in \V{V}$,
+A \dfn{fusion joint}, or \dfn{joint}, is an element \Tvar{joint}{V},
 such that $\V{joint} = \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}$.
-The value \dfn{joint} is called the \dfn{joint} of \V{p1} and \V{p2}.
-Their \dfn{fusion} is the consisting of \V{p1} followed by the suffix
-of \V{p2} of length \decr{\Vlastix{p2}}.
+Their \dfn{fusion} is a path in which \V{p1} is a prefix,
+\V{p2} is a suffix,
+and in which the overlap of the prefix and suffix is the singleton
+sequence \seq{\V{joint}}.
 That is,%
 \footnote{
     Using a sequence-based notation
@@ -2422,10 +2427,7 @@ the \dfn{fusion} of
 \V{p1} and \V{p2} is the set
 \[
 \begin{gathered}
-\set{ \tuple{\V{ix}, \V{val}} \in \naturals \times \V{V} : \Vnat{val} = \VVelement{p1}{ix} }
-\\ \bigcup\; \set{
-    \tuple{\V{ix}+\Vlastix{p1}, \V{val}} \in \naturals \times \V{V} :
-    \Vnat{val} = \VVelement{p2}{ix} }.
+\V{fusion} = \Velement{p1}{0\ldots\Vlastix{p1}} \cat \set{\V{joint}} \cat \Velement{p2}{1\ldots\Vlastix{p2}}
         \quad \defEnd
 \end{gathered}
 \]
@@ -2436,6 +2438,9 @@ and \V{p2} = \seq{\V{nd3}, \V{nd4}, \V{nd5}}
 then their join is \V{nd3} and
 their fusion is
 \seq{\V{nd1}, \V{nd2}, \V{nd3}, \V{nd4}, \V{nd5}}.
+Also, in reading \Dfref{def:fusion},
+recall that by our conventions for subsequence notation \Dfref{def:subsequence},
+\Velement{p2}{1\ldots\Vlastix{p2}} is an empty sequence if $\Vsize{p2} = 1$.
 
 \begin{theorem}[Path Fusion]
 \label{th:fusion}
