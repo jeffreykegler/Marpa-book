@@ -2390,64 +2390,53 @@ The consequent of the theorem is \Eref{eq:th-subpath-120},
 \begin{definition}[Path Fusion]
 \label{def:fusion}
 Let \V{p1} and \V{p2} be paths in a graph $\V{G} = \tuple{\V{V}, \V{E}}$,
-A \dfn{fusion joint}, or \dfn{joint}, is an element \Tvar{joint}{V},
-such that $\V{joint} = \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}$.
-Their \dfn{fusion} is a path in which \V{p1} is a prefix,
-\V{p2} is a suffix,
-and in which the overlap of the prefix and suffix is the singleton
-sequence \seq{\V{joint}}.
-That is,%
-\footnote{
-    Using a sequence-based notation
-    \[
-        \text{(A)}\qquad
-        \seq{\Velement{p1}{0}\ldots\Velement{p1}{\Vlastix{p1}},
-        \Velement{p2}{1}\ldots\Velement{p2}{\Vlastix{p2}}}
-    \]
-    to define the fusion of \V{p1} and \V{p2} is tempting
-    but problematic.
-    If $\V{p1} = \seq{1,2,2}$
-    and $\V{p2} = \seq{1,1,2}$
-    then (A) might be either
-    \[
-        \seq{ \Velement{p1}{0},
-            \Velement{p1}{1},
-            \Velement{p1}{2},
-            \Velement{p2}{0},
-        \Velement{p2}{1},
-        \Velement{p1}{2}}
-        = \seq{1, 2, 2, 1, 1, 2}
-    \]
-    or
-    \[ \seq{ 1\ldots 2, 1\ldots 2} = \seq{1,2,1,2}. \]
-    Also (A) is simply wrong if
-    $\Vlastix{p2} = 0$.%
-}
+Their \dfn{fusion}
+is a path, call it \V{fusion},
+such that \V{p1} is a prefix of \V{fusion},
+\V{p2} is a suffix of \V{fusion},
+and the overlap of the prefix and suffix in \V{fusion}
+is a singleton.
+That is,
 the \dfn{fusion} of
-\V{p1} and \V{p2} is the set
-\[
+\V{p1} and \V{p2} is the set \V{fusion} such that
+\begin{equation}
+\label{eq:def-fusion}
 \begin{gathered}
-\V{fusion} = \Velement{p1}{0\ldots\Vlastix{p1}} \cat \set{\V{joint}} \cat \Velement{p2}{1\ldots\Vlastix{p2}}
+    \Velement{fusion}{0\ldots \Vlastix{p1}} = \V{p1}
+    \\ \land\; \Velement{fusion}{\Vlastix{p1}\ldots\Vlastix{fusion}} = \V{p2}
         \quad \defEnd
 \end{gathered}
-\]
+\end{equation}
 \end{definition}
 
 As an example, if \V{p1} = \seq{\V{nd1}, \V{nd2}, \V{nd3}}
 and \V{p2} = \seq{\V{nd3}, \V{nd4}, \V{nd5}}
-then their join is \V{nd3} and
-their fusion is
+then their fusion is
 \seq{\V{nd1}, \V{nd2}, \V{nd3}, \V{nd4}, \V{nd5}}.
-Also, in reading \Dfref{def:fusion},
-recall that by our conventions for subsequence notation \Dfref{def:subsequence},
-\Velement{p2}{1\ldots\Vlastix{p2}} is an empty sequence if $\Vsize{p2} = 1$.
 
 \begin{theorem}[Path Fusion]
 \label{th:fusion}
 Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a directed graph.
-Every fusion of two paths
-in \V{G} is a path in \V{G}.
-\thEnd
+If two paths
+in \V{G} are such that the last element of the first
+one is equal to the first element of the second one,
+then they have a fusion.
+Further, the length of that fusion is the sum of the lengths
+of its two component paths, minus one.
+
+That is,
+\begin{gather}
+   \V{p1} \in \Vmyfn{paths}{G}
+   \\ \land\; \V{p2} \in \Vmyfn{paths}{G}
+   \\ \land\; \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}
+   \\ \nonumber
+       \implies
+   \\ \exists\; \V{fusion} \in \Vmyfn{paths}{G} :
+   \\ \Velement{fusion}{0\ldots \Vlastix{p1}} = \V{p1}
+   \\ \land\; \Velement{fusion}{\Vlastix{p1}\ldots\Vlastix{fusion}} = \V{p2}
+   \\ \land\; \Vsize{fusion} = \subtract{\Vsize{p1} + \Vsize{p2}}{1}.
+       \quad \thEnd
+\end{gather}
 \end{theorem}
 
 \begin{proof}
