@@ -149,7 +149,7 @@
 \newcommand{\step}[1]{}
 
 \newcommand{\deffn}[3]{\ensuremath{%
-    \V{#1} \mathbin{::} #2 \to #3%
+    \V{#1} \in #3 \expOp #2%
 }}
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
@@ -301,6 +301,8 @@
 % clearly distinguished by the typography
 \newcommand{\subtractOp}{\mathbin{-}}
 \newcommand{\subtract}[2]{\ensuremath{#1\,\subtractOp\,#2}}
+
+\newcommand{\expOp}{\mathbin{\wedge\wedge}}
 
 \newcommand{\condOp}{\mathbin{?}}
 \newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
@@ -2086,24 +2088,23 @@ so that the loosest precedence is last.
    {$\ge$} {$>$}
    & \cellboxr{Equality, comparison} \\
    \hline
-{$\cat$} & \cellboxr{Concatenation, for example $\V{a}\cat \V{b}$} \\
+{$\V{a} \cat \V{b}$} & \cellboxr{Concatenation of \V{b} after \V{a}} \\
 \hline
 {$\cup$ $\cap$ $\subtractOp$} & \cellboxr{Set union, intersection, difference} \\
 \hline
-{$\times$} & \cellboxr{Cartesian product (for sets)} \\
+{$\times$} & \cellboxr{Cartesian product of sets} \\
+\hline
+{$\V{cod} \expOp \V{dom}$} &
+    \cellboxr{Set of functions from \V{dom} to \V{code}} \\
 \hline
 {$\subset$} {$\subseteq$}
     {$\supset$} {$\supseteq$}
-    & \cellboxr{Set inclusion, set containment} \\
-    \hline
-{$\in$} {$\notin$}
     & \cellboxr{Set inclusion} \\
     \hline
+{$\in$} {$\notin$}
+    & \cellboxr{Set membership} \\
+    \hline
 {$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
-\hline
-{$\V{f} \mathop{::} \V{dom} \to \V{cod}$} &
-    \cellboxr{True iff \V{f} is function
-        \linebreak from domain \V{dom} to codomain \V{cod}} \\
 \hline
 {$\neg$} & \cellboxr{Logical negation} \\
 \hline
@@ -2127,9 +2128,9 @@ so that the loosest precedence is last.
     \hline
 {$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
 \hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
+\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined, \ldefined$}
 &
-\raisebox{.7ex}{Definition} \\
+\raisebox{.7ex}{Definition, local definition} \\
 \hline
 {$\because$} & \cellboxr{Hint separator} \\
 \hline
@@ -2420,21 +2421,28 @@ Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a directed graph.
 If two paths
 in \V{G} are such that the last element of the first
 one is equal to the first element of the second one,
-then they have a fusion.
+then they have a unique fusion.
 Further, the length of that fusion is the sum of the lengths
 of its two component paths, minus one.
 
 That is,
 \begin{gather}
+\label{eq:th-fusion-010}
    \V{p1} \in \Vmyfn{paths}{G}
-   \\ \land\; \V{p2} \in \Vmyfn{paths}{G}
-   \\ \land\; \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}
+\\ \label{eq:th-fusion-020}
+   \land\; \V{p2} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-fusion-030}
+   \land\; \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}
    \\ \nonumber
        \implies
-   \\ \exists\; \V{fusion} \in \Vmyfn{paths}{G} :
-   \\ \Velement{fusion}{0\ldots \Vlastix{p1}} = \V{p1}
-   \\ \land\; \Velement{fusion}{\Vlastix{p1}\ldots\Vlastix{fusion}} = \V{p2}
-   \\ \land\; \Vsize{fusion} = \subtract{\Vsize{p1} + \Vsize{p2}}{1}.
+\\ \label{eq:th-fusion-040}
+   \exists\; \V{fusion} \in \Vmyfn{paths}{G} :
+\\ \label{eq:th-fusion-050}
+   \Velement{fusion}{0\ldots \Vlastix{p1}} = \V{p1}
+\\ \label{eq:th-fusion-060}
+   \land\; \Velement{fusion}{\Vlastix{p1}\ldots\Vlastix{fusion}} = \V{p2}
+\\ \label{eq:th-fusion-070}
+   \land\; \Vsize{fusion} = \subtract{\Vsize{p1} + \Vsize{p2}}{1}.
        \quad \thEnd
 \end{gather}
 \end{theorem}
@@ -2445,25 +2453,42 @@ assuming the hypothesis of the theorem to
 show its consequent,
 then generalizing.
 Let $\V{G} = \tuple{\V{V}, \V{E}}$
-be an arbitrary graph,
+be an arbitrary graph.
+Because \V{path1} is a path,
+we know that \V{path1} is sequence
+of vertices:
+\mypareq{eq:th-fusion-100}{%
+$\V{path1} \in \Vsize{path1}\times\V{V}$ \cuz{}
+    \longDfref{Path}{def:path}, \Eref{eq:th-fusion-010}.}
+Similarly for \V{path2}:
+\mypareq{eq:th-fusion-110}{%
+$\V{path2} \in \Vsize{path2}\times\V{V}$ \cuz{}
+    \Dfref{def:path}, \Eref{eq:th-fusion-010}.}
+From set theory we know that
+\mypareq{eq:th-fusion-120}{%
+$\Velement{path1}{0\ldots\decr{\Vlastix{path1}}} \in \decr{\Vsize{path1}}\times\V{V}$ \cuz{}
+    Fact of set theory, \Eref{eq:th-fusion-100}.}
+In \Eref{eq:th-fusion-120}, for the case where $\Vsize{path1} = 1$,
+recall that according to our conventions for subsequences \Dfref{def:subsequence},
+$\Velement{path1}{0\ldots{-1}} = \epsilon$.
+\mypareq{eq:th-fusion-130}{%
+$\Velement{path2}{1\ldots\Vlastix{path2}} \in \decr{\Vsize{path2}}\times\V{V}$ \cuz{}
+    Fact of set theory, \Eref{eq:th-fusion-110}.}
+In \Eref{eq:th-fusion-130}, for the case where $\Vsize{path2} = 1$,
+recall from \Dfref{def:subsequence} that
+$\Velement{path1}{1\ldots 0} = \epsilon$.
+\mypareq{eq:th-fusion-140}{%
+$\seq{\Velement{path1}{\Vlastix{path1}}} \in (1)\times\V{V}$ \cuz{}
+    Fact of set theory, \Eref{eq:th-fusion-110}.}
+
+\todo{Finish this proof}
+
 and let
 \V{path1}
 and \V{path2}
 be arbitrary paths in \V{G},
 such that \V{path1} and \V{path2}
 share a joint.
-\begin{gather}
-\label{eq:th-fusion-100}
-\V{path1} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-fusion-110}
-    \land\; \V{path2} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-fusion-120}
-    \land\; \Velement{path1}{0} = \Velement{path2}{\Vlastix{path2}}
-\\ \nonumber
-    \myparbox{\cuz{}
-        AF hypothesis of theorem.
-        New free \Tvarseq{path1}{V} and \Tvarseq{path2}{V}.}
-\end{gather}
 \begin{equation}
 \label{eq:th-fusion-130}
 \begin{gathered}
@@ -2569,6 +2594,15 @@ Proceeding, we have
 The consequent of the theorem is \Eref{eq:th-fusion-120-DELETE},
 \Eref{eq:th-fusion-240}, and \Eref{eq:th-fusion-290}.
 \myqed
+\end{proof}
+
+\begin{theorem}[Path Fusion Uniqueness]
+\label{th:fusion-uniqueness}
+The fusion of two paths is unique.  \thEnd
+\end{theorem}
+
+\begin{proof}
+\todo{Prove this}
 \end{proof}
 
 \begin{theorem}[Path Pre-increment]
@@ -3052,7 +3086,10 @@ so that
 \label{ldef:ancestry}
 Let the ``ancestry'' function,
 \[
-    \deffn{Anc}{\naturals \times \powerset{\Vnodset{nodes}}}
+    \deffn{Anc}{
+        \left(
+            \naturals \times \powerset{\Vnodset{nodes}}
+        \right)}
         {\powerset{\V{nodes}}},
 \]
 be such that
@@ -3660,7 +3697,9 @@ is the set of nodes
 added to the set of ancestors of \V{leaves} at ancestry level \V{N}.
 That is,
 \[
-    \deffn{gen}{\naturals\times\Vpowerset{nodes}}{\Vpowerset{nodes}}
+    \deffn{gen}{ \left(
+            \naturals\times\Vpowerset{nodes}
+    \right) } {\Vpowerset{nodes}}
 \]
 is the function whose value is the \V{N}'th generation of \V{tree}
 from \V{base},
@@ -7649,7 +7688,7 @@ An Earley table, type \type{ET},
 is a finite sequence of Earley sets.
 That is,
 \[
-    \type{ET} = \set{ \V{et} \in \naturals\times\type{ES} :
+    \type{ET} = \set{ \V{et} \in \powerset{\naturals\times\type{ES}} :
         \exists\; \V{length} \in \naturals :
         (\deffn{et}{\V{length}}{\type{ES}})}. \quad \defEnd
 \]
@@ -21454,8 +21493,9 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \phantomsection
-\renewcommand{\listtheoremname}{Theorems,
-    Definitions, Remarks and Observations}
+\renewcommand{\listtheoremname}{Global Blocks}
+% \renewcommand{\listtheoremname}{Theorems,
+    % Definitions, Remarks and Observations}
 \pdfbookmark[0]{\listtheoremname}{listoftheorems}
 \listoftheorems[ignoreall,
 show={theorem,remark,observation,definition}]
@@ -21470,11 +21510,12 @@ show={theorem,remark,observation,definition}]
     \listoftodos
 }{}
 
-\renewcommand{\listtheoremname}{Lemmas and Local Definitions}
+\renewcommand{\listtheoremname}{Global and Local Blocks}
 \clearpage
 \phantomsection
 \pdfbookmark[0]{\listtheoremname}{listoflemmas}
-\listoftheorems[ignoreall, show={rawLemma,rawLdef}]
+\listoftheorems[ignoreall,
+    show={rawLemma,rawLdef,theorem,remark,observation,definition}]
 
 \clearpage
 % \def\indexname{Index of Notation}
