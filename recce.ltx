@@ -2472,51 +2472,40 @@ Because \V{path1} is a path,
 we know that \V{path1} is sequence
 of vertices:
 \mypareq{eq:th-fusion-100}{%
-$\V{path1} \in \Vsize{path1}\times\V{V}$ \cuz{}
+$\V{path1} \in \V{V} \expOp \Vsize{path1}$ \cuz{}
     \longDfref{Path}{def:path}, \Eref{eq:th-fusion-010}.}
 Similarly for \V{path2}:
 \mypareq{eq:th-fusion-110}{%
-$\V{path2} \in \Vsize{path2}\times\V{V}$ \cuz{}
+$\V{path2} \in \V{V} \expOp \Vsize{path2}$ \cuz{}
     \Dfref{def:path}, \Eref{eq:th-fusion-010}.}
-From set theory we know that
+For the case where $\Vsize{path1} = 1$,
+we recall that according to our conventions for subsequences \Dfref{def:subsequence},
+$\Velement{path1}{0\ldots{-1}} = \epsilon$, so that
 \mypareq{eq:th-fusion-120}{%
-$\Velement{path1}{0\ldots\decr{\Vlastix{path1}}} \in \decr{\Vsize{path1}}\times\V{V}$ \cuz{}
-    Fact of set theory, \Eref{eq:th-fusion-100}.}
-In \Eref{eq:th-fusion-120}, for the case where $\Vsize{path1} = 1$,
-recall that according to our conventions for subsequences \Dfref{def:subsequence},
-$\Velement{path1}{0\ldots{-1}} = \epsilon$.
+$\Velement{path1}{0\ldots\decr{\Vlastix{path1}}} \in \V{V} \expOp \decr{\Vsize{path1}}$
+    \bcuz{} Fact of set theory, \Eref{eq:th-fusion-100}.}
+Similarly, for the case where $\Vsize{path2} = 1$,
+we recall from \Dfref{def:subsequence} that
+$\Velement{path2}{1\ldots 0} = \epsilon$:
 \mypareq{eq:th-fusion-130}{%
-$\Velement{path2}{1\ldots\Vlastix{path2}} \in \decr{\Vsize{path2}}\times\V{V}$ \cuz{}
-    Fact of set theory, \Eref{eq:th-fusion-110}.}
-In \Eref{eq:th-fusion-130}, for the case where $\Vsize{path2} = 1$,
-recall from \Dfref{def:subsequence} that
-$\Velement{path1}{1\ldots 0} = \epsilon$.
+$\Velement{path2}{1\ldots\decr{\Vlastix{path2}}} \in \V{V} \expOp \decr{\Vsize{path2}}$
+    \bcuz{} Fact of set theory, \Eref{eq:th-fusion-110}.}
 \mypareq{eq:th-fusion-140}{%
-$\seq{\Velement{path1}{\Vlastix{path1}}} \in (1)\times\V{V}$ \cuz{}
+$\seq{\Velement{path1}{\Vlastix{path1}}} \in \V{V} \expOp 1$ \cuz{}
     Fact of set theory, \Eref{eq:th-fusion-110}.}
+From set theory, we know we can concatenate sequences into new sequences,
+so that, combining the results just previous:
+\mypareq{eq:th-fusion-150}{%
+    $\Velement{path1}{0\ldots\decr{\Vlastix{path1}}} \cat
+        \seq{\Velement{path1}{\Vlastix{path1}}}$
+    \linebreak $\cat\; \Velement{path2}{1\ldots\decr{\Vlastix{path2}}}$
+    \linebreak $\in\; \V{V} \expOp (\decr{\Vsize{path1}} + 1 + \decr{\Vsize{path2}})$
+    \bcuz{} Fact of set theory,
+        \Eref{eq:th-fusion-120},
+        \Eref{eq:th-fusion-130},
+        \Eref{eq:th-fusion-140}.}
 
 \todo{Finish this proof}
-
-Investigating the domain of \V{fusion}:
-\mypareq{eq:th-fusion-150}{%
-    $\Dom{\V{fusion}} \subseteq \Vsize{p1} \cup \set{ \Vnat{ix} : \Vlastix{p1} \le \V{ix} \le \Vlastix{p1}+\Vlastix{p2} }$
-    \bcuz{} \Eref{eq:th-fusion-130}.}
-\mypareq{eq:th-fusion-160}{%
-    $\Dom{\V{fusion}} \subseteq \left( \Vsize{p1} + \decr{\Vsize{p2}} \right)$
-    \cuz{} \Eref{eq:th-fusion-150}.}
-\mypareq{eq:th-fusion-170}{%
-    $\forall\; \Vnat{ix} \le \Vlastix{p1} : \exists\; \Tvar{val}{V} :
-        \V{val} = \VVelement{p1}{ix}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-100}.}
-\mypareq{eq:th-fusion-180}{%
-    $\forall\; \Vnat{ix} \le \Vlastix{p2} : \exists\; \Tvar{val}{V} :
-        \V{val} = \VVelement{p2}{ix}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-110}.}
-\mypareq{eq:th-fusion-190}{%
-    $\forall\; \Vnat{ix}\; (\Vlastix{p1} \le \Vnat{ix} \le \Vlastix{p1} + \Vlastix{p2}) :$
-    \linebreak $\exists\; \Tvar{val}{V} :
-        \V{val} = \VVelement{p2}{\subtract{\V{ix}}{\Vlastix{p1}}}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-180}.}
 
 \todo{Rewrite from here}
 Since \V{subpath} is a sequence,
