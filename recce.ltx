@@ -302,7 +302,7 @@
 \newcommand{\subtractOp}{\mathbin{-}}
 \newcommand{\subtract}[2]{\ensuremath{#1\,\subtractOp\,#2}}
 
-\newcommand{\expOp}{\mathbin{\wedge\wedge}}
+\newcommand{\expOp}{\mathbin{\ast\ast}}
 
 \newcommand{\condOp}{\mathbin{?}}
 \newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
@@ -1573,7 +1573,12 @@ We write
 \]
 to say that \V{f}
 is a function with domain \V{X}
-and codomain \V{Y}.
+and codomain \V{Y}.\footnote{
+    More often in the literature,
+    \deffn{f}{\V{X}}{\V{Y}} is written as $\V{Y}^\V{X}$,
+    but we prefer a more readable notation.
+    Our notation, adopted from one many programming languages
+    use for exponentiation, avoids superscripts.}
 
 In this book, the natural numbers begin with 0,
 and that set of natural numbers is written \naturals{},
@@ -1844,14 +1849,23 @@ applies.
 
 A sequence is a family (and therefore a function)
 whose domain is an initial segment of \naturals.
+Since a sequence is a function, we can use similar notations.
+For example $\V{V} \expOp 5$ is the set of all sequences
+of length 5 whose values are elements of the set \V{V}.
+(Recall that $5 = \set{0,1,2,3,4}$).
+
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}
-and \Ran{\V{seq}} is the set of valid elements of \V{seq}.
+and \Ran{\V{seq}} is the set of valid values of \V{seq}.
+It is therefore always the case that
+$\V{seq} \in \Ran{\V{seq}} \expOp \Dom{\V{seq}}$
+and that $\Dom{\V{seq}} = \Vsize{seq}.$
+
 We specify a sequence by specifying its elements explicitly,
 via a sequence constructor,
 or inductively.
-
-An example of a sequence with explicitly specified elements
+An example of a
+\dfn{sequence with explicitly specified elements}
 is \seq{43, 1729, 1491, 1493 }.
 In explicitly specified sequences, ellipses specify continuation
 in some fashion which is understood in context so that,
@@ -2483,41 +2497,6 @@ $\seq{\Velement{path1}{\Vlastix{path1}}} \in (1)\times\V{V}$ \cuz{}
 
 \todo{Finish this proof}
 
-and let
-\V{path1}
-and \V{path2}
-be arbitrary paths in \V{G},
-such that \V{path1} and \V{path2}
-share a joint.
-\begin{equation}
-\label{eq:th-fusion-130}
-\begin{gathered}
-\var{fusion} =
-\\
-\set{ \tuple{\V{ix}, \V{val}} \in \Vsize{p1} \times \V{V} : \Tvar{val}{V} = \VVelement{p1}{ix} }
-\\ \bigcup\; \set{
-    \begin{gathered}
-        \tuple{\V{ix}, \V{val}} \in
-            \left( \Vlastix{p1} \ldots
-                \left( \Vlastix{p1}+\Vsize{p2} \right)
-            \times \V{V}
-            \right) :
-        \\ \Tvar{val}{V} = \VVelement{p2}{\subtract{\V{ix}}{\Vlastix{p1}} }
-    \end{gathered} }
-\\ \myparbox{\cuz{} \longDfref{Fusion}{def:fusion},
-    \Eref{eq:th-fusion-100},
-    \Eref{eq:th-fusion-110},
-    \Eref{eq:th-fusion-120}.
-    New free \V{fusion} for convenience.}
-\end{gathered}
-\end{equation}
-Every path is non-empty by definition,
-so that we know \Velement{path1}{0} exists,
-and therefore \V{fusion} is non-empty.
-\mypareq{eq:th-fusion-140}{%
-   $\Vsize{fusion} > 0$ \cuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-fusion-100},
-        \Eref{eq:th-fusion-130}.}
 Investigating the domain of \V{fusion}:
 \mypareq{eq:th-fusion-150}{%
     $\Dom{\V{fusion}} \subseteq \Vsize{p1} \cup \set{ \Vnat{ix} : \Vlastix{p1} \le \V{ix} \le \Vlastix{p1}+\Vlastix{p2} }$
