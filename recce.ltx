@@ -2442,21 +2442,21 @@ of its two component paths, minus one.
 That is,
 \begin{gather}
 \label{eq:th-fusion-010}
-   \V{p1} \in \Vmyfn{paths}{G}
+   \V{path1} \in \Vmyfn{paths}{G}
 \\ \label{eq:th-fusion-020}
-   \land\; \V{p2} \in \Vmyfn{paths}{G}
+   \land\; \V{path2} \in \Vmyfn{paths}{G}
 \\ \label{eq:th-fusion-030}
-   \land\; \Velement{p1}{\Vlastix{p1}} = \Velement{p2}{0}
+   \land\; \Velement{path1}{\Vlastix{path1}} = \Velement{path2}{0}
    \\ \nonumber
        \implies
 \\ \label{eq:th-fusion-040}
    \exists\; \V{fusion} \in \Vmyfn{paths}{G} :
 \\ \label{eq:th-fusion-050}
-   \Velement{fusion}{0\ldots \Vlastix{p1}} = \V{p1}
+   \Velement{fusion}{0\ldots \Vlastix{path1}} = \V{path1}
 \\ \label{eq:th-fusion-060}
-   \land\; \Velement{fusion}{\Vlastix{p1}\ldots\Vlastix{fusion}} = \V{p2}
+   \land\; \Velement{fusion}{\Vlastix{path1}\ldots\Vlastix{fusion}} = \V{path2}
 \\ \label{eq:th-fusion-070}
-   \land\; \Vsize{fusion} = \subtract{\Vsize{p1} + \Vsize{p2}}{1}.
+   \land\; \Vsize{fusion} = \subtract{\Vsize{path1} + \Vsize{path2}}{1}.
        \quad \thEnd
 \end{gather}
 \end{theorem}
@@ -2464,8 +2464,7 @@ That is,
 \begin{proof}
 The proof is direct,
 assuming the hypothesis of the theorem to
-show its consequent,
-then generalizing.
+show its consequent.
 Let $\V{G} = \tuple{\V{V}, \V{E}}$
 be an arbitrary graph.
 Because \V{path1} is a path,
@@ -2495,31 +2494,25 @@ $\seq{\Velement{path1}{\Vlastix{path1}}} \in \V{V} \expOp 1$
     \cuz{} \Eref{eq:th-fusion-110}.}
 From set theory, we know we can concatenate sequences into new sequences,
 so that, combining the results just previous:
-\mypareq{eq:th-fusion-150}{%
-    $\Velement{path1}{0\ldots\decr{\Vlastix{path1}}} \cat
-        \seq{\Velement{path1}{\Vlastix{path1}}}$
-    \linebreak $\cat\; \Velement{path2}{1\ldots\decr{\Vlastix{path2}}}$
-    \linebreak $\in\; \V{V} \expOp (\decr{\Vsize{path1}} + 1 + \decr{\Vsize{path2}})$
-    \bcuz{} \Eref{eq:th-fusion-120},
-        \Eref{eq:th-fusion-130},
-        \Eref{eq:th-fusion-140}.}
-It will be helpful to have a variable to represent this concatenation:
 \begin{equation}
-\label{eq:th-fusion-160}
+\label{eq:th-fusion-150}
 \begin{gathered}
-    \V{fusion} =
-    \left( \begin{gathered}
+    \V{fusion} = \in\; \V{V} \expOp (\decr{\Vsize{path1}} + 1 + \decr{\Vsize{path2}})
+    \land\; \V{fusion} = \left( \begin{gathered}
         \Velement{path1}{0\ldots\decr{\Vlastix{path1}}}
         \\ \cat\; \seq{\Velement{path1}{\Vlastix{path1}}}
         \\ \cat\; \Velement{path2}{1\ldots\decr{\Vlastix{path2}}}
+        \\ \land\;
     \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{eq:th-fusion-150}.
-    New free \V{fusion} for convenience.}
+\\ \myparbox{\cuz{} \Eref{eq:th-fusion-120},
+        \Eref{eq:th-fusion-130},
+        \Eref{eq:th-fusion-140}.
+        \linebreak New free \V{fusion} for convenience.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-fusion-170}{%
     $\Vsize{fusion} = \decr{\Vsize{path1}} + 1 + \Vdecr{\Vsize{path2}}$
-    \bcuz{} \Eref{eq:th-fusion-150}, \Eref{eq:th-fusion-160}.}
+    \bcuz{} \Eref{eq:th-fusion-150}.}
 \mypareq{eq:th-fusion-180}{%
     $\forall\; \V{path} \in \Vmyfn{paths}{G} : \V{path} \ge 1 \land \V{path} \in \naturals$
     \bcuz{} \longDfref{Path}{def:path}.}
@@ -2530,39 +2523,91 @@ It will be helpful to have a variable to represent this concatenation:
     $\Vsize{fusion} \in \naturals$ \cuz{} \Eref{eq:th-fusion-170}, \Eref{eq:th-fusion-180}.}
 \mypareq{eq:th-fusion-210}{%
     \V{fusion} is a finite, non-empty sequence of elements of \V{V}
-    \bcuz{} \Eref{eq:th-fusion-150}, \Eref{eq:th-fusion-160},
-        \Eref{eq:th-fusion-190}, \Eref{eq:th-fusion-200}.}
-
-\todo{Finish this proof}
-
+    \bcuz{} \Eref{eq:th-fusion-150}, \Eref{eq:th-fusion-190}, \Eref{eq:th-fusion-200}.}
+\begin{equation}
+\label{eq:th-fusion-220}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path1} :
+    \\ \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}
+    \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-fusion-010}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-fusion-230}
+\begin{gathered}
+    \forall\; \Vnat{ix} \le \Vlastix{path1} :
+    \\ \VVelement{fusion}{ix} = \VVelement{path1}{ix}
+    \\ \because \Eref{eq:th-fusion-150}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-fusion-240}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path1} :
+    \\ \tuple{ \VVelement{fusion}{ix}, \Velement{fusion}{\V{ix}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-fusion-220}, \Eref{eq:th-fusion-230}.
+\end{gathered}
+\end{equation}
+\begin{equation}
 \label{eq:th-fusion-250}
-\mypareq{eq:th-fusion-260}{%
-     $\Vlastix{subpath}+\V{lo} \le \Vlastix{path}$
-     \cuz{} DELETE ME, \Eref{eq:th-fusion-110}.}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path2} :
+    \\ \tuple{ \VVelement{path2}{ix}, \Velement{path2}{\V{ix}+1} } \in \V{E}
+    \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-fusion-020}.
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:th-fusion-260}
+\begin{gathered}
+    \forall\; \Vnat{ix} \le \Vlastix{path2} :
+    \\ \Velement{fusion}{\Vlastix{path1}+\V{ix}} = \VVelement{path2}{ix}
+    \\ \because \Eref{eq:th-fusion-150}.
+\end{gathered}
+\end{equation}
 \begin{equation}
 \label{eq:th-fusion-270}
 \begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \tuple{ \Velement{path}{\V{ix} + \V{lo}}, \Velement{path}{\V{ix}+\V{lo}+1} } \in \V{E}
+    \forall\; \Vnat{ix} \;(\Vlastix{path1} < \V{ix} < \Vlastix{path1} + \Vlastix{path2}) :
+    \\ \tuple{ \VVelement{fusion}{ix}, \Velement{fusion}{\V{ix}+1} } \in \V{E}
     \\ \because \Eref{eq:th-fusion-250}, \Eref{eq:th-fusion-260}.
 \end{gathered}
 \end{equation}
-\begin{equation}
-\label{eq:th-fusion-280}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \Velement{path}{\V{ix} + \V{lo}} = \VVelement{subpath}{ix}
-    \\ \because \Eref{eq:th-fusion-110}, \Eref{eq:th-fusion-260}.
-\end{gathered}
-\end{equation}
+\mypareq{eq:th-fusion-280}{%
+     $\Vlastix{fusion} = \Vlastix{path1} + \Vlastix{path2}$ \cuz
+        \Eref{eq:th-fusion-150}.}
 \begin{equation}
 \label{eq:th-fusion-290}
 \begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \tuple{ \Velement{subpath}{\V{ix}}, \Velement{subpath}{\V{ix}+1} } \in \V{E}
+    \forall\; \Vnat{ix} \;(\Vlastix{path1} < \V{ix} < \Vlastix{fusion}) :
+    \\ \tuple{ \VVelement{fusion}{ix}, \Velement{fusion}{\V{ix}+1} } \in \V{E}
     \\ \because \Eref{eq:th-fusion-270}, \Eref{eq:th-fusion-280}.
 \end{gathered}
 \end{equation}
+\begin{equation}
+\label{eq:th-fusion-300}
+\begin{gathered}
+    \forall\; \Vnat{ix} \;(\Vlastix{path1} < \V{ix} < \Vlastix{fusion}) :
+    \\ \tuple{ \VVelement{fusion}{ix}, \Velement{fusion}{\V{ix}+1} } \in \V{E}
+    \\ \because \Eref{eq:th-fusion-240}, \Eref{eq:th-fusion-290}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-310}{%
+     $\V{fusion} \in \Vmyfn{paths}{G}$
+        \cuz{} \Eref{eq:th-fusion-210}, \Eref{eq:th-fusion-300}.}
+\mypareq{eq:th-fusion-320}{%
+   $\Velement{fusion}{0\ldots \Vlastix{path1}} = \V{path1}$
+       \cuz{} \Eref{eq:th-fusion-150}.}
+\mypareq{eq:th-fusion-330}{%
+   $\Velement{fusion}{\Vlastix{path1}\ldots\Vlastix{fusion}} = \V{path2}$
+       \cuz{} \Eref{eq:th-fusion-150}.}
+\mypareq{eq:th-fusion-340}{%
+   $\Vsize{fusion} = \subtract{\Vsize{path1} + \Vsize{path2}}{1}$
+       \cuz{} \Eref{eq:th-fusion-150}.}
+The consequent of this theorem is
+\Eref{eq:th-fusion-310},
+\Eref{eq:th-fusion-320},
+\Eref{eq:th-fusion-330},
+and \Eref{eq:th-fusion-340}.
 \myqed
 \end{proof}
 
