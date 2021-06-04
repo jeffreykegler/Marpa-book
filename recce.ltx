@@ -3,6 +3,7 @@
 % a Creative Commons Attribution-NoDerivs 3.0 United States License.
 \documentclass[draft,openany,12pt]{amsbook}
 \usepackage{calc} % calc is required by todonotes
+\usepackage{xstring}
 \usepackage{ifdraft}
 \usepackage[obeyDraft]{todonotes}
 \ifdraft{
@@ -233,9 +234,34 @@
   {}{:\pageref{#1}}%
 }
 
+% Pre-declare these temporary values
+\newcommand{\refChapter}{UNUSED}
+\newcommand{\refEqno}{UNUSED}
+
 \newcommand{\Aref}[1]{(a\ref{#1}\colonpageref{#1})}
 \newcommand{\Asmref}[1]{(\textrm{Asm}\ref{#1}\colonpageref{#1})}
-\newcommand{\Eref}[1]{(e\ref{#1}\colonpageref{#1})}
+\newcommand{\Eref}[1]{%
+ \StrBefore{\getrefnumber{#1}}{.}[\refChapter]%
+ \StrBehind{\getrefnumber{#1}}{.}[\refEqno]%
+ (\ensuremath{% To cover both cases, force math mode
+     \hyperref[#1]{%
+         \text{e}%
+         \ifthenelse{\equal{\refChapter}{\thechapter}}%
+         {% Do nothing
+         }{% Otherwise, add chapter ref
+	     \refChapter{.}%
+	 }%
+	 \refEqno%
+         %\ref*{#1}%
+         \ifthenelse{% If equation page equals current page
+             \equal{\pageref{#1}}{\thepage}%
+          }{% Do nothing
+          }{% Otherwise, add page ref
+              {:}\pageref*{#1}%
+          }%
+      }%
+  )}%
+}
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
@@ -497,6 +523,8 @@
     \element{\element{\V{transitions}}{#1}}{#2}}}
 \newcommand{\Valid}[1]{\ensuremath{\mymathop{Valid}(#1)}}
 \newcommand{\Vocab}[1]{\ensuremath{\mymathop{Vocab}(#1)}}
+
+\numberwithin{equation}{chapter}
 
 % I use parboxes in equations.  This sets a useful width for them.
 \newlength{\mathparwidth}
