@@ -291,10 +291,23 @@
   \fi%
 }
 
-\newcommand{\Dfref}[1]{(\textrm{Df}\ref{#1}\colonpageref{#1})}
+\newcommand{\Dfref}[1]{%
+    (\ensuremath{% To cover both cases, force math mode
+     \hyperref[#1]{%
+         \textrm{Df}%
+	 \refEqno%
+         \ifthenelse{% If equation page equals current page
+             \equal{\pageref{#1}}{\thepage}%
+          }{% Do nothing
+          }{% Otherwise, add page ref
+              {:}\pageref*{#1}%
+          }%
+      }%
+    })%
+}
 % Lowercase "df" is tag for local definitions.
 \newcommand{\dfref}[1]{%
-    (\textrm{Df}\ref{ldef:#1}\colonpageref{ldef:#1})%
+    (\textrm{df}\ref{ldef:#1}\colonpageref{ldef:#1})%
 }
 \newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
