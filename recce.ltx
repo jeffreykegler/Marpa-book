@@ -231,7 +231,7 @@
 
 \newcommand{\colonpageref}[1]{%
  \ifthenelse{\equal{\pageref{#1}}{\thepage}}%
-  {}{:\pageref{#1}}%
+  {}{{:}\pageref*{#1}}%
 }
 
 % Pre-declare these temporary values
@@ -252,16 +252,19 @@
 	     \refChapter{.}%
 	 }%
 	 \refEqno%
-         %\ref*{#1}%
-         \ifthenelse{% If equation page equals current page
-             \equal{\pageref{#1}}{\thepage}%
-          }{% Do nothing
-          }{% Otherwise, add page ref
-              {:}\pageref*{#1}%
-          }%
+         \colonpageref{#1}%
       }%
   )}%
 }
+
+% genref -- generic reference
+\newcommand{\genref}[2]{%
+    (\ensuremath{% To cover both cases, force math mode
+        \hyperref[#1]{%
+            \textrm{#2}\ref*{#1}\colonpageref{#1}%
+        }%
+    })%
+} 
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
@@ -272,7 +275,7 @@
 % new style, including tag
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
 \newcommand{\Thref}[1]{(\textrm{Th}\ref{th:#1}\colonpageref{th:#1})}
-\newcommand{\Rmref}[1]{(\textrm{Rm}\ref{rem:#1}\colonpageref{rem:#1})}
+\newcommand{\Rmref}[1]{\genref{rem:#1}{Rm}}
 
 \newcommand{\longLmref}[2]{%
   \ifmmode \text{``#1''\Lmref{#2}}%
@@ -291,20 +294,7 @@
   \fi%
 }
 
-\newcommand{\Dfref}[1]{%
-    (\ensuremath{% To cover both cases, force math mode
-     \hyperref[#1]{%
-         \textrm{Df}%
-	 \refEqno%
-         \ifthenelse{% If equation page equals current page
-             \equal{\pageref{#1}}{\thepage}%
-          }{% Do nothing
-          }{% Otherwise, add page ref
-              {:}\pageref*{#1}%
-          }%
-      }%
-    })%
-}
+\newcommand{\Dfref}[1]{\genref{#1}{Df}}
 % Lowercase "df" is tag for local definitions.
 \newcommand{\dfref}[1]{%
     (\textrm{df}\ref{ldef:#1}\colonpageref{ldef:#1})%
@@ -633,6 +623,7 @@
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
 \hyphenation{memo-ization}
+\hyphenation{TeXbook}
 
 \begin{document}
 
@@ -1158,8 +1149,6 @@ influenced by Tarski~\cite{Tarski}.
 Its basis is a naive set theory,
 consistent with that of
 Halmos\cite{Halmos1960}.
-In particular,
-all of our mathematical objects are sets.
 
 Alongside the set theoretical notions,
 and in concept based on them,
@@ -1172,7 +1161,7 @@ The algorithmic notions are, in concept,
 ultimately reducible to sequences of the primitive operations
 of a random access machine (RAM), like the one described by Earley%
 \index{recce-general}{Earley, Jay}
-but with two addition understandings.%
+but with two additional understandings.%
 \footnote{Jay Earley%
   \index{recce-general}{Earley, Jay}
   describes his random access machine model in
@@ -1269,40 +1258,45 @@ A sentence is called
 a \dfn{condition} in contexts where we are emphasizing
 its boolean value.
 
-\begin{remark}[Labelables]
+\begin{remark}[Labelable Block]
+\label{rem:labelable-block}
 Many sets of considerations
 are displayed in a form where they can be labelled.
 Whether or not they actually have a label,
-these sets of considerations are called \dfn{labelables}.
+these sets of considerations are called
+\dfn{labelable blocks}, or \dfn{blocks}.
 For example,
-this remark is an labelable.
+this remark \Rmref{labelable-block} is an block.
 \rmEnd
 \end{remark}
 
-Labelables fall into two major groups:
+Blocks fall into two major groups:
 global and local.
 If a label is global, it is considered
 to be visible in this
 entire book.
-If a labelable is local, it is treated
+If a block is local, it is treated
 as visible only in part of this book.
 
-The global labelables are theorems, definitions,
-remarks, observations and equations.
+Every global blocks is a theorem, a definition,
+a remark, an observation and or an equation.
 Remarks are outside of the deductive logic,
 often because they describe meta-notions, such
 as matters of notation.
 Observations are parts of the deductive logic
 for which we choose to omit the proof.
 
-We follow current practice\footnote{%
-See, for example, Chapter~19, ``Displayed Equations'',
-p.~185,
-in~\cite{Knuth1986}.}
+We follow current practice%
+\footnote{%
+    See, for example, Chapter~19, ``Displayed Equations'',
+    p.~185,
+    in Knuth's {\em TeXbook}~\cite{Knuth1986}.%
+}
 in overloading
 the term ``equation'' with a typographic sense,
 to mean a special kind of displayed expression,
-one which frequently is not an equation in the traditional sense.
+one which frequently is not an equation in the
+traditional mathematical sense.
 Equations are often followed by a ``hint''.
 The ``hint'' is a list of considerations,
 such as theorems, definitions
@@ -1312,9 +1306,9 @@ in that context.
 The ``hint'' is separated
 from the body of the equation by a ``because'' symbol (``$\because$'').
 
-The local labelables are lemmas,
-and local definitions.
-Local labelables are visible
+A local block is either a lemma,
+or a local definition.
+Local blocks are visible
 either in the current scope
 and in an explicitly stated scope.
 Scopes are described in more detail
@@ -1350,21 +1344,23 @@ and
 \Lref{loc-brick-depth} refers
 to page \pageref{loc-brick-depth}
 inside section \ref{loc-brick-depth}.
-Where the page reference would be to the current page,
-it is omitted.
+Where a page reference would be to the current page,
+the page reference is omitted.
+Where the block is numbered globally,
+instead of within each chapter,
+no chapter reference is provided.
+Where a chapter reference would be to the current chapter,
+the chapter reference is omitted.
 
-Definitions are presented not only as labelable definitions,
-and labelable local definitions,
+Definitions are presented not only as blocks,
 but also as theorems and
-in non-labelable statements.
-A non-labelable definition is one that occurs outside
-of a labelable.
-The defiendum of a non-labelable definition is in boldface,
+in statements outside of labelable blocks.
+The defiendum of a definition outside of a block is in boldface,
 if it is of global scope,
 and in double quotes, if it is of local significance.
-Defienda in labelable definitions and theorems are in
+Defienda in block definitions and theorems are in
 boldface.
-The end of a labelable definition
+The end of a block definition
 is indicated with a circle (\defEnd).
 
 Often one or more shorter defienda are defined as synonyms of a longer one.
@@ -1446,36 +1442,65 @@ itself being visible outside the scope.
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
 
-\todo{Rewrite type system description, add "context" discussion}
-In order to abbreviate certain recurring definitions,
-for the purposes of this book,
-we use a simple and opportunistic ``type system''.%
+Following Halmos\cite{Halmos1960},
+all of our mathematical objects are sets.
+There is no universal set, so each variable implies
+a set that is its \dfn{domain of discourse}.
+Every instance of a variable also has a \dfn{type}, which is
+the subset of the variable's domain that that instance
+can range over.%
+\footnote{
+Constants
+can be considered to have a type that is the singleton set
+that contains the constant.
+We do not carefully distinguish constants and
+variables.
+Our goal in this book will be only to assure ourselves that all of the
+mathematical objects we use are elements of a domain of
+discourse which could, if necessary,
+be constructed using the axioms in Halmos\cite{Halmos1960}.
+}
+Almost always, the type of a variable
+and its domain of discourse are
+equivalent.
+Finally, within the scope of a quantifier,
+the quantified variable has a \dfn{domain of quantification}.
+The domain of quantification is often,
+but not always, equivalent to the type.
+
+The term ``type'' here is overloaded,%
 \footnote{%
     We considered using the term ``tag'' instead of
     ``type'', in order to avoid raising certain kinds
     of expectation.
-    Our types are not intended to help with automated theorem
-    proving.
-    Also,
-    though a \Marpa{} implementation might
-    use some of our
-    type names and concepts,
-    the types in this book are not intended to be taken
-    as a model of the type system a \Marpa{} implementation
-    should follow.
 }
-Our types are certain sets of values,
-which will be specifically defined.
-Not all values have a type ---
-for example, the types themselves usually do not
-have a type.%
-\footnote{
-   We do not need to assign a type to all of the sets
-   we use,
-   because the objective of our type
-   system is limited to abbreviating
-   a specific set of definitions for readability purposes.
-}
+and must not be taken to imply that we are introducing
+a type theory.
+For example,
+the ``types'' of this book are not likely to be helpful
+for automated theorem proving.
+And,
+although a \Marpa{} implementation might
+use some of our
+type names and concepts,
+the types in this book are not intended to be taken
+as a model of the type system a \Marpa{} implementation
+should follow.
+
+Instead, our ``types'' are intended as a
+replacement for the traditional scheme for
+variables in the parsing literature, where the range
+of each of the single-character variables
+is suggested by a combination
+of the language of the alphabet used,
+the typeface,
+and whether the variable is from the end,
+middle or beginning of the alphabet.
+For single-character variables,
+these schemes were awkward and restrictive,
+and pushed the legibility envelope.
+For the multi-character variables of this paper,
+an alternative was called for.
 
 This book will
 use subscripts to indicate commonly occurring types,
