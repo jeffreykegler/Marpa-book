@@ -264,7 +264,7 @@
             \textrm{#2}\ref*{#1}\colonpageref{#1}%
         }%
     })%
-} 
+}
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
@@ -2688,16 +2688,12 @@ and \Eref{eq:th-fusion-340}.
 
 \begin{theorem}[Path Fusion Uniqueness]
 \label{th:fusion-uniqueness}
-The fusion of two paths is unique.  \thEnd
+The fusion of two paths, if it exists, is unique.  \thEnd
 \end{theorem}
 
 \begin{proof}
 The proof is direct, assuming there are two fusions
 and proving that they are equivalent.
-Let the two fusions be
-$\V{fusion1} \in \Vmyfn{paths}{G}$
-and
-$\V{fusion2} \in \Vmyfn{paths}{G}$.
 \begin{gather}
 \label{eq:th-fusion-uniqueness-100}
    \Velement{fusion1}{0\ldots \Vlastix{path1}} = \V{path1}
@@ -2711,7 +2707,11 @@ $\V{fusion2} \in \Vmyfn{paths}{G}$.
    \land\; \Vsize{fusion1} = \subtract{\Vsize{path1} + \Vsize{path2}}{1}
        = \Vsize{fusion2}.
 \\ \nonumber
-   \myparbox{\cuz{} \longDfref{Fusion}{def:fusion}, AF proof.}
+   \myparbox{\cuz{} \longDfref{Fusion}{def:fusion}, AF proof.
+       \linebreak New free $\V{path1} \in \Vmyfn{paths}{G},$
+            $\V{path2} \in \Vmyfn{paths}{G},$
+            $\V{fusion1} \in \Vmyfn{paths}{G},$
+            $\V{fusion2} \in \Vmyfn{paths}{G}.$}
 \end{gather}
 \begin{equation}
 \label{eq:th-fusion-uniqueness-120}
@@ -2726,12 +2726,30 @@ $\V{fusion2} \in \Vmyfn{paths}{G}$.
 \label{eq:th-fusion-uniqueness-130}
 \begin{gathered}
     \forall\; \Vnat{ix} < \Vlastix{path2} :
-       \Velement{fusion1}{\Vlastix{path1}\ldots\Vlastix{fusion1}} =
+    \\ \Velement{fusion1}{\Vlastix{path1}\ldots\Vlastix{fusion1}} =
     \\ \Velement{fusion2}{\Vlastix{path1}\ldots\Vlastix{fusion2}}
     \\ \because \Eref{eq:th-fusion-uniqueness-110}.
 \end{gathered}
 \end{equation}
-\todo{Finish proving this}
+\begin{equation}
+\label{eq:th-fusion-uniqueness-140}
+\begin{gathered}
+    \forall\; \Vnat{ix} < \Vlastix{path1} + \Vlastix{path2} :
+    \\ \VVelement{fusion1}{ix} = \VVelement{fusion2}{ix}
+    \\ \because \Eref{eq:th-fusion-uniqueness-120}, \Eref{eq:th-fusion-uniqueness-130}.
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-uniqueness-150}{%
+   $\Vlastix{fusion1} = \Vlastix{path1} + \Vlastix{path2} = \Vlastix{fusion2}$
+    \cuz{} \Eref{eq:th-fusion-uniqueness-115}.}
+\mypareq{eq:th-fusion-uniqueness-160}{%
+   $\V{fusion1} = \V{fusion2}$
+    \cuz{} \Eref{eq:th-fusion-uniqueness-140},
+        \Eref{eq:th-fusion-uniqueness-150}.}
+Since the choice of \V{fusion1} and \V{fusion2} was arbitrary,
+with \Eref{eq:th-fusion-uniqueness-160}
+we have shown that any two fusions of
+\V{path1} and \V{path2} are equivalent.
 \myqed
 \end{proof}
 
