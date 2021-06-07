@@ -274,7 +274,7 @@
 
 % new style, including tag
 \newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
-\newcommand{\Thref}[1]{(\textrm{Th}\ref{th:#1}\colonpageref{th:#1})}
+\newcommand{\Thref}[1]{\genref{th:#1}{Th}}
 \newcommand{\Rmref}[1]{\genref{rem:#1}{Rm}}
 
 \newcommand{\longLmref}[2]{%
@@ -2367,8 +2367,53 @@ If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
 \defEnd
 \end{definition}
 
-Note that, by \Eref{eq:def-path},
-every sequence of nodes of length 1 is a path, vacuously.
+\begin{theorem}[Singleton Path]
+\label{th:singleton-path}
+Every sequence of nodes of length 1 is a path.
+This is, if
+$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
+then
+\[
+    \forall\; \V{nd} \in \V{V} : \seq{\V{nd}} \in \Vmyfn{paths}{G}.
+    \quad \thEnd
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is direct.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary directed graph.
+We assume,
+where $\V{nd} \in \V{V}$ is an arbitrary node of \V{G},
+that $\Tvarseq{singleton}{V} = \seq{\V{nd}}$, so that
+\mypareq{eq:th-single-edge-path-100}{%
+   $\V{singleton} \in \V{V} \expOp 1$
+   \bcuz{} AF proof.
+   New free \V{singleton}.}
+From basic set theory we conclude that
+\mypareq{eq:th-single-edge-path-110}{%
+   \V{singleton} is a finite non-empty sequence of
+   vertices of \V{G} \cuz{} \Eref{eq:th-single-edge-path-100}.}
+Then we have
+\mypareq{eq:th-single-edge-path-120}{%
+    $\forall\; \Vnat{ix} < \Vlastix{singleton} :
+        \family{ \VVelement{singleton}{ix}, \Velement{singleton}{\V{ix}+1} } \in \V{E}$
+    \cuz{} vacuously.}
+It follows immediately from
+\Eref{eq:th-single-edge-path-110}
+and
+\Eref{eq:th-single-edge-path-120} that \V{singleton} is a path.
+\myqed
+\end{proof}
+
+\begin{theorem}[Single-edge Path]
+\label{th:single-edge-path}
+Every edge of a directed graph induces a path.
+\todo{Finish statement of theorem}
+\end{theorem}
+
+\begin{proof}
+\todo{Prove this}
+\end{proof}
 
 \begin{definition}[Subpath]
 \label{def:subpath}
@@ -2597,7 +2642,7 @@ so that, combining the results just previous:
 \mypareq{eq:th-fusion-200}{%
     $\Vsize{fusion} \in \naturals$ \cuz{} \Eref{eq:th-fusion-170}, \Eref{eq:th-fusion-180}.}
 \mypareq{eq:th-fusion-210}{%
-    \V{fusion} is a finite, non-empty sequence of elements of \V{V}
+    \V{fusion} is a finite, non-empty sequence of vertices of \V{G}
     \bcuz{} \Eref{eq:th-fusion-150}, \Eref{eq:th-fusion-190}, \Eref{eq:th-fusion-200}.}
 \begin{equation}
 \label{eq:th-fusion-220}
