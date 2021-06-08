@@ -2369,50 +2369,114 @@ If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
 
 \begin{theorem}[Singleton Path]
 \label{th:singleton-path}
-Every sequence of nodes of length 1 is a path.
+Every node in a directed graph induces a unique path.
 This is, if
 $\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
 then
 \[
-    \forall\; \V{nd} \in \V{V} : \seq{\V{nd}} \in \Vmyfn{paths}{G}.
+\begin{gathered}
+    \forall\; \V{nd} \in \V{V} :
+    \\ \existsUniq\; \V{singleton} \in \set{ \seq{\V{nd}} } :
+    \V{singleton} \in \Vmyfn{paths}{G}.
     \quad \thEnd
+\end{gathered}
 \]
 \end{theorem}
 
 \begin{proof}
 The proof is direct.
 Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary directed graph.
-We assume,
-where $\V{nd} \in \V{V}$ is an arbitrary node of \V{G},
-that $\Tvarseq{singleton}{V} = \seq{\V{nd}}$, so that
-\mypareq{eq:th-single-edge-path-100}{%
+We assume that
+$\V{nd} \in \V{V}$ is an arbitrary node of \V{G},
+to show that the induced sequence
+$\Tvarseq{singleton}{V} = \seq{\V{nd}}$ is a unique path:
+\begin{gather}
+\label{eq:th-singleton-path-100}
+\V{nd} \in \V{V}
+\\ \label{eq:th-singleton-path-102}
+\land\; \Tvarseq{singleton}{V} = \seq{\V{nd}}
+\\ \nonumber
+\myparbox{\cuz{} AF proof.
+   New free \Tvarseq{singleton}{V},
+   new free \Tvar{nd}{V}.}
+\end{gather}
+\mypareq{eq:th-singleton-path-108}{%
    $\V{singleton} \in \V{V} \expOp 1$
-   \bcuz{} AF proof.
-   New free \V{singleton}.}
+   \bcuz{} \Eref{eq:th-singleton-path-100},
+    \Eref{eq:th-singleton-path-102}.}
 From basic set theory we conclude that
-\mypareq{eq:th-single-edge-path-110}{%
+\mypareq{eq:th-singleton-path-110}{%
    \V{singleton} is a finite non-empty sequence of
-   vertices of \V{G} \cuz{} \Eref{eq:th-single-edge-path-100}.}
+   vertices of \V{G} \cuz{} \Eref{eq:th-singleton-path-100}.}
 Then we have
-\mypareq{eq:th-single-edge-path-120}{%
+\mypareq{eq:th-singleton-path-120}{%
     $\forall\; \Vnat{ix} < \Vlastix{singleton} :
         \family{ \VVelement{singleton}{ix}, \Velement{singleton}{\V{ix}+1} } \in \V{E}$
     \cuz{} vacuously.}
 It follows immediately from
-\Eref{eq:th-single-edge-path-110}
+\Eref{eq:th-singleton-path-110}
 and
-\Eref{eq:th-single-edge-path-120} that \V{singleton} is a path.
+\Eref{eq:th-singleton-path-120} that \V{singleton} is a path.
+It follows from the Axiom of Extensionality that the sequence
+$\V{singleton} = \seq{\V{nd}}$ is unique.
 \myqed
 \end{proof}
 
 \begin{theorem}[Single-edge Path]
 \label{th:single-edge-path}
-Every edge of a directed graph induces a path.
-\todo{Finish statement of theorem}
+Every edge in a directed graph induces a unique path.
+This is, if
+$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
+then
+\[
+\begin{gathered}
+    \forall\; \tuple{\V{from}, \V{to}} \in \V{E} :
+    \\ \existsUniq\; \V{path} \in \set{ \seq{\V{from}, \V{to}} } :
+        \V{path} \in \Vmyfn{paths}{G}.
+    \quad \thEnd
+\end{gathered}
+\]
 \end{theorem}
 
 \begin{proof}
-\todo{Prove this}
+The proof is direct.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary directed graph.
+We assume an arbitrary edge
+$\tuple{\V{from}, \V{to}} \in \V{E}$
+to show that the induced sequence,
+$\Tvarseq{path}{V} = \seq{\V{from}, \V{to}}$,
+is a unique path:
+\begin{gather}
+\label{eq:th-single-edge-path-100}
+\tuple{\Tvar{from}{V}, \Tvar{to}{V}} \in \V{E}
+\\ \label{eq:th-single-edge-path-102}
+\land\; \Tvarseq{path}{V} = \seq{\V{from}, \V{to}}
+\\ \nonumber
+\myparbox{\cuz{} AF proof.
+   New free \Tvarseq{path}{V},
+   new free \Tvar{from}{V},
+   new free \Tvar{to}{V}.}
+\end{gather}
+\mypareq{eq:th-single-edge-path-108}{%
+  $\V{path} \in \V{V} \expOp 2$ \cuz{}
+    \Eref{eq:th-single-edge-path-100},
+    \Eref{eq:th-single-edge-path-102}.}
+From basic set theory we conclude that
+\mypareq{eq:th-single-edge-path-110}{%
+   \V{path} is a finite non-empty sequence of
+   vertices of \V{G} \cuz{} \Eref{eq:th-single-edge-path-108}.}
+Then we have
+\mypareq{eq:th-single-edge-path-120}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path} :
+        \family{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \Eref{eq:th-single-edge-path-100}, \Eref{eq:th-single-edge-path-102}.}
+It follows immediately from
+\Eref{eq:th-single-edge-path-110}
+and
+\Eref{eq:th-single-edge-path-120} that \V{path} is a path.
+It follows from the Axiom of Extensionality that the sequence
+$\V{path} = \seq{\V{from}, \V{to}}$ is unique.
+\myqed
 \end{proof}
 
 \begin{definition}[Subpath]
