@@ -2864,11 +2864,12 @@ we have shown that any two fusions of
 
 \begin{theorem}[Path Pre-increment]
 \label{th:path-pre-increment}
-If there an edge from a node in a graph to the
-head of a path,
-then a new path, with the node prepended, is also a path
-in the same graph,
-and the size of new path is the size of the old path plus one.
+If, in a directed graph,
+there is an edge from a node to the head of a path,
+then there is a unique new path
+that is the old path with the node prepended.
+Further,
+the size of new path is the size of the old path plus one.
 That is,
 let
 $\V{G} = \tuple{\V{V}, \V{E}}$
@@ -2876,80 +2877,118 @@ be a graph.
 Then
 \[
 \begin{gathered}
-\forall\; \V{old} \in \Vmyfn{paths}{G} :
-\\ \forall\; \V{nd} \in \V{V} : \tuple{\V{nd},\Velement{old}{0}} \in \V{E}
-\\ \land\; \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}
-\\ \implies \V{new} \in \Vmyfn{paths}{G} \land \Vsize{new} = \Vsize{old}+1.
+\forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
+\\ \tuple{\V{nd},\Velement{old}{0}} \in \V{E} \implies
+\\ \left(\begin{gathered}
+        \existsUniq \V{new} \in \Vmyfn{paths}{G} :
+        \\ \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}
+        \\ \land\; \Vsize{new} = \Vsize{old}+1
+    \end{gathered}\right).
     \quad \defEnd
 \end{gathered}
 \]
 \end{theorem}
 
 \begin{proof}
-The proof is direct, assuming the hypothesis of the theorem
-to show the consequent.
+The proof is direct, assuming a path and an edge to its head,
+in order to show the existence of a unique new path with the edge
+prepended and the specified length.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a graph.
 \begin{gather}
-\label{eq:th-path-pre-increment-150}
-    \V{old} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-path-pre-increment-160}
+\label{eq:th-path-pre-increment-100}
+\V{old} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-path-pre-increment-110}
     \land\; \tuple{\V{nd},\Velement{old}{0}} \in \V{E}
-\\ \nonumber
-    \myparbox{\cuz{} Hypothesis of theorem.
-    New free \V{old}.
-    New free $\V{nd} \in \V{V}.$}
+\\ \nonumber \myparbox{\cuz{} AF proof.
+    New free $\V{old} \in \Vmyfn{paths}{G},$
+    new free $\V{nd} \in \V{V}.$}
 \end{gather}
-\mypareq{eq:th-path-pre-increment-170}{%
-    $\V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}.$
-    \bcuz{} New free \V{new} for convenience.}
-\mypareq{eq:th-path-pre-increment-180}{%
-    $\Vsize{new} = \Vsize{old}+1$
-    \cuz{} \Eref{eq:th-path-pre-increment-170}.}
-\mypareq{eq:th-path-pre-increment-190}{%
-    \V{old} is finite and non-empty \cuz{}
-    \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-150}.}
-\mypareq{eq:th-path-pre-increment-200}{%
-    \V{new} is finite and non-empty \cuz{}
-     \Eref{eq:th-path-pre-increment-180},
-     \Eref{eq:th-path-pre-increment-190}.}
-\mypareq{eq:th-path-pre-increment-205}{%
-    $\Ran{\V{new}} = \set{\V{nd}} \cup \Ran{\V{old}}$
-     \Eref{eq:th-path-pre-increment-170}.}
-\mypareq{eq:th-path-pre-increment-210}{%
-    $\V{nd} \in \V{V}$ \cuz{} \Eref{eq:th-path-pre-increment-160}.}
-\mypareq{eq:th-path-pre-increment-220}{%
-    $\Ran{\V{old}} \subseteq \V{V}$ \cuz{} \Eref{eq:th-path-pre-increment-150}.}
-\mypareq{eq:th-path-pre-increment-230}{%
-    $\Ran{\V{new}} \subseteq \V{V}$ \cuz{}
-        \Eref{eq:th-path-pre-increment-205},
-        \Eref{eq:th-path-pre-increment-210},
-        \Eref{eq:th-path-pre-increment-220}.}
-\mypareq{eq:th-path-pre-increment-240}{%
-    $\forall\; 0 \le \V{i} \le \Vlastix{old} : \Velement{new}{\V{i}+1} = \VVelement{old}{i}$
-    \cuz \Eref{eq:th-path-pre-increment-170}.}
-\mypareq{eq:th-path-pre-increment-250}{%
-    $\forall\; 0 \le \V{i} < \Vlastix{old} : \tuple{\VVelement{old}{i},\VVelement{old}{\V{i}+1}} \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-150}.}
-\mypareq{eq:th-path-pre-increment-260}{%
-    $\forall\; 1 \le \V{i} < \Vlastix{old}+1 : \tuple{\VVelement{new}{i},\VVelement{new}{\V{i}+1}} \in \V{E}$
-    \bcuz{} \Eref{eq:th-path-pre-increment-240}, \Eref{eq:th-path-pre-increment-250}.}
-\mypareq{eq:th-path-pre-increment-270}{%
-    $\forall\; 1 \le \V{i} < \Vlastix{new} : \tuple{\VVelement{new}{i},\VVelement{new}{\V{i}+1}} \in \V{E}$
-    \bcuz{} \Eref{eq:th-path-pre-increment-180}, \Eref{eq:th-path-pre-increment-260}.}
-\mypareq{eq:th-path-pre-increment-280}{%
-    $\tuple{\Velement{new}{0},\Velement{new}{1}} \in \V{E}$
-    \bcuz{} \Eref{eq:th-path-pre-increment-160},
-        \Eref{eq:th-path-pre-increment-170}.}
-\mypareq{eq:th-path-pre-increment-290}{%
-    $\forall\; 0 \le \V{i} < \Vlastix{new} : \tuple{\VVelement{new}{i},\VVelement{new}{\V{i}+1}} \in \V{E}$
-    \bcuz{} \Eref{eq:th-path-pre-increment-270}, \Eref{eq:th-path-pre-increment-280}.}
-\mypareq{eq:th-path-pre-increment-300}{%
-    $\V{new} \in \Vmyfn{paths}{G}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-path-pre-increment-170},
-        \Eref{eq:th-path-pre-increment-200},
-        \Eref{eq:th-path-pre-increment-230},
-        \Eref{eq:th-path-pre-increment-290}.}
-The consequent of the theorem is \Eref{eq:th-path-pre-increment-180}
-and \Eref{eq:th-path-pre-increment-300}.
+We know that the edge induces a unique path:
+\mypareq{eq:th-path-pre-increment-120}{%
+    $\seq{\V{nd},\Velement{old}{0}} \in \Vmyfn{paths}{G}$
+    \cuz{} \longThref{Single Edge Path}{single-edge-path}.
+}
+From the preceding, we know there is a fusion
+of the unique path induced
+by the edge and \V{old}:
+\mypareq{eq:th-path-pre-increment-130}{%
+    \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}.
+    \bcuz{} \longThref{Fusion}{fusion},
+        \Eref{eq:th-path-pre-increment-110},
+        \Eref{eq:th-path-pre-increment-120}.}
+From the Fusion Uniqueness Theorem \Thref{fusion-uniqueness},
+we know that the fusion \V{new} in \Eref{eq:th-path-pre-increment-130}
+is unique and,
+from \Eref{eq:th-path-pre-increment-130},
+we can see that \V{new} is of length $\Vsize{old}+1$.
+\myqed
+\end{proof}
+
+\begin{theorem}[Path Post-increment]
+\label{th:path-post-increment}
+If, in a directed graph,
+there is an edge from
+the tail of a path to
+a node to
+then there is a unique new path
+that is the old path with the node appended.
+Further,
+the size of new path is the size of the old path plus one.
+That is,
+let
+$\V{G} = \tuple{\V{V}, \V{E}}$
+be a graph.
+Then
+\[
+\begin{gathered}
+\forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
+\\ \tuple{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \V{E} \implies
+\\ \left(\begin{gathered}
+        \existsUniq \V{new} \in \Vmyfn{paths}{G} :
+        \\ \V{new} = \seq{\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}, \V{nd}}
+        \\ \land\; \Vsize{new} = \Vsize{old}+1
+    \end{gathered}\right).
+    \quad \defEnd
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+The proof is similiar to the proof for
+the Path Pre-increment Theorem
+\Thref{path-pre-increment}.
+It is direct, assuming a path and an edge from its tail,
+in order to show the existence of a unique new path with the edge
+appended and the specified length.
+
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a graph.
+\begin{gather}
+\label{eq:th-path-post-increment-100}
+\V{old} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-path-post-increment-110}
+    \land\; \tuple{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \V{E}
+\\ \nonumber \myparbox{\cuz{} AF proof.
+    New free $\V{old} \in \Vmyfn{paths}{G},$
+    new free $\V{nd} \in \V{V}.$}
+\end{gather}
+We know that the edge induces a unique path:
+\mypareq{eq:th-path-post-increment-120}{%
+    $\seq{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \Vmyfn{paths}{G}$
+    \cuz{} \longThref{Single Edge Path}{single-edge-path}.
+}
+From the preceding, we know there is a fusion
+of the unique path induced
+by the edge and \V{old}:
+\mypareq{eq:th-path-post-increment-130}{%
+    \V{new} = \seq{\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}, \V{nd}}.
+    \bcuz{} \longThref{Fusion}{fusion},
+        \Eref{eq:th-path-post-increment-110},
+        \Eref{eq:th-path-post-increment-120}.}
+From the Fusion Uniqueness Theorem \Thref{fusion-uniqueness},
+we know that the fusion \V{new} in \Eref{eq:th-path-post-increment-130}
+is unique and,
+from \Eref{eq:th-path-post-increment-130},
+we can see that \V{new} is of length $\Vsize{old}+1$.
 \myqed
 \end{proof}
 
