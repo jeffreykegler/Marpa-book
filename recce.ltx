@@ -3131,6 +3131,188 @@ As a matter of convention,
 the children of every vertex of a tree
 are ordered left-to-right.
 
+\begin{definition}[Prefix Path]
+\label{def:prefix-path}
+A path \V{pref} is a \dfn{prefix path},
+or \dfn{prefix},
+with respect to the vertex
+which is its tail.
+That is,
+in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
+the path
+$\Tvarseq{pref}{V} \in \Vmyfn{Upaths}{G}$ is a prefix of $\V{nd} \in \V{V}$
+iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
+\defEnd
+\end{definition}
+
+\begin{theorem}[Prefix Uniqueness]
+\label{th:prefix-uniqueness-from-tail}
+In a tree,
+two prefixes of the same node
+with the same length
+are identical if they are equally long.
+That is,
+where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
+\begin{equation}
+\label{eq:th-prefix-uniqueness-050}
+\begin{gathered}
+    \forall\;\V{pref1} \in \Vmyfn{paths}{G} :
+    \forall\;\V{pref2} \in \Vmyfn{paths}{G} :
+\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
+    \land \Vlastix{pref1} = \Vlastix{pref2}
+\\ \implies \V{pref1} = \V{pref2}.  \quad \thEnd
+\end{gathered}
+\end{equation}
+\end{theorem}
+
+\begin{proof}
+The proof is by minimal counter-example.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free tree.
+\begin{equation}
+\label{eq:th-prefix-uniqueness-105}
+\begin{gathered}
+\Vmyfn{INST}{\Vnat{ex}} \ldefined
+\\ \forall\; \Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} :
+    \forall\; \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G} :
+\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
+        \land \Vlastix{pref1} = \Vlastix{pref2} = \V{ex}
+\\ \implies \V{pref1} = \V{pref2}
+    \\ \myparbox{\cuz{}
+        Macro for EI for adaptation of \Eref{eq:th-prefix-uniqueness-050}
+         setting $\Vnat{ex}=\Vlastix{pref2}$.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal \Vnat{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\label{eq:th-prefix-uniqueness-110}
+    \neg \Vmyfn{INST}{bad}
+\\ \label{eq:th-prefix-uniqueness-120}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\mypareq{eq:th-prefix-uniqueness-130}{%
+$\Velement{prefZ1}{\Vlastix{pref1}} = \Velement{prefZ2}{\Vlastix{pref2}}$
+\linebreak $\land\; \Vlastix{prefZ1} = \Vlastix{prefZ2} = 0$
+    \bcuz{} AF implication.
+    New free \Tvarseq{prefZ1}{V} and \Tvarseq{prefZ2}{V}.
+}
+\mypareq{eq:th-prefix-uniqueness-140}{%
+    $\V{prefZ1} = \V{prefZ2}$
+    \cuz{} \Eref{eq:th-prefix-uniqueness-130}.}
+\mypareq{eq:th-prefix-uniqueness-150}{%
+    $\myfn{INST}{0}$
+    \cuz{} Implication from
+        \Eref{eq:th-prefix-uniqueness-130} to
+        \Eref{eq:th-prefix-uniqueness-140};
+        Macrofication using
+        \Eref{eq:th-prefix-uniqueness-105}.}
+\mypareq{eq:th-prefix-uniqueness-160}{%
+    $\V{bad} > 0$
+    \cuz \Eref{eq:th-prefix-uniqueness-110},
+        \Eref{eq:th-prefix-uniqueness-150}.
+}
+\begin{equation}
+\label{eq:th-prefix-uniqueness-170}
+\begin{gathered}
+\exists\; \Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} :
+    \exists\; \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G} :
+\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
+\\ \land\; \Vlastix{pref1} = \Vlastix{pref2} = \V{bad}
+\\ \land\; \V{pref1} \ne \V{pref2}
+\\ \myparbox{\cuz{} Expansion of \Eref{eq:th-prefix-uniqueness-110}
+        using \Eref{eq:th-prefix-uniqueness-105}.}
+\end{gathered}
+\end{equation}
+\begin{gather}
+\label{eq:th-prefix-uniqueness-190}
+\Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} \land
+    \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G}
+\\ \label{eq:th-prefix-uniqueness-200}
+    \land\; \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
+\\ \label{eq:th-prefix-uniqueness-210}
+    \land\; \Vlastix{pref1} = \Vlastix{pref2} = \Vnat{bad}
+\\ \label{eq:th-prefix-uniqueness-220}
+    \land\; \V{pref1} \ne \V{pref2}
+\\ \nonumber \myparbox{\cuz{}
+    EI of \Eref{eq:th-prefix-uniqueness-170}
+    with new free \Tvarseq{pref1}{V} for bound \Tvarseq{pref1}{V} and
+    new free \Tvarseq{pref2}{V} for bound \Tvarseq{pref2}{V}.}
+\end{gather}
+\mypareq{eq:th-prefix-uniqueness-230}{%
+    $\Tvarseq{pref1}{V} = \seq{ \V{pref1First}, \Velement{suf1}{0} \ldots \Velement{suf1}{\Vlastix{suf1}} }$
+    \bcuz{} \Eref{eq:th-prefix-uniqueness-160}, \Eref{eq:th-prefix-uniqueness-210}.
+    New \Tvarseq{suf1}{V}, new \Tvar{pref1First}{V}.}
+\mypareq{eq:th-prefix-uniqueness-240}{%
+    $\Tvarseq{pref2}{V} = \seq{ \V{pref2First}, \Velement{suf2}{0} \ldots \Velement{suf2}{\Vlastix{suf2}} }$
+    \bcuz{} \Eref{eq:th-prefix-uniqueness-160}, \Eref{eq:th-prefix-uniqueness-210}.
+    New \Tvarseq{suf2}{V}, new \Tvar{pref2First}{V}.}
+\mypareq{eq:th-prefix-uniqueness-250}{%
+    $\Vlastix{suf1} = \Vlastix{suf2} = \Vdecr{bad}$ \cuz{} \Eref{eq:th-prefix-uniqueness-210},
+        \Eref{eq:th-prefix-uniqueness-230}, \Eref{eq:th-prefix-uniqueness-240}.}
+\mypareq{eq:th-prefix-uniqueness-260}{%
+    $\Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G}$
+        \bcuz{} \longThref{Subpath}{subpath},
+            \Eref{eq:th-prefix-uniqueness-190}, \Eref{eq:th-prefix-uniqueness-230}.}
+\mypareq{eq:th-prefix-uniqueness-270}{%
+    $\Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G}$
+        \cuz{} \Thref{subpath},
+            \Eref{eq:th-prefix-uniqueness-190}, \Eref{eq:th-prefix-uniqueness-240}.}
+\mypareq{eq:th-prefix-uniqueness-280}{%
+    $\Velement{suf1}{\Vlastix{suf2}} = \Velement{suf2}{\Vlastix{suf2}}$ \cuz{} \Eref{eq:th-prefix-uniqueness-200},
+        \Eref{eq:th-prefix-uniqueness-230}, \Eref{eq:th-prefix-uniqueness-240}.}
+\mypareq{eq:th-prefix-uniqueness-290}{%
+    $\myfn{INST}{\Vdecr{bad}}$ \cuz{} \Eref{eq:th-prefix-uniqueness-120},
+        \Eref{eq:th-prefix-uniqueness-160}.}
+\mypareq{eq:th-prefix-uniqueness-300}{%
+$\Velement{suf1}{\Vlastix{suf1}} = \Velement{suf2}{\Vlastix{suf2}}
+        \land \Vlastix{suf1} = \Vlastix{suf2} = \Vdecr{bad}$
+\linebreak $\implies\; \V{suf1} = \V{suf2}$
+\bcuz{} Expansion of
+        \Eref{eq:th-prefix-uniqueness-290}
+        using \Eref{eq:th-prefix-uniqueness-105};
+        \Eref{eq:th-prefix-uniqueness-260};
+        \Eref{eq:th-prefix-uniqueness-270};
+        and EI of \V{pref1} as \V{suf1} and \V{pref2} as \V{suf2}.}
+\mypareq{eq:th-prefix-uniqueness-310}{%
+    $\Tvarseq{suf1}{V} = \Tvarseq{suf2}{V}$
+    \bcuz{} \Eref{eq:th-prefix-uniqueness-250},
+        \Eref{eq:th-prefix-uniqueness-280},
+        \Eref{eq:th-prefix-uniqueness-300}.}
+\mypareq{eq:th-prefix-uniqueness-320}{%
+    $\Velement{suf1}{0} = \Velement{suf2}{0}$
+        \cuz{} \Eref{eq:th-prefix-uniqueness-310}.}
+\mypareq{eq:th-prefix-uniqueness-330}{%
+    $\Tvar{pref1First}{V} \in \myfn{parents}{\Velement{suf1}{0}}$
+        \cuz{} \Eref{eq:th-prefix-uniqueness-230}.}
+\mypareq{eq:th-prefix-uniqueness-340}{%
+    $\Tvar{pref2First}{V} \in \myfn{parents}{\Velement{suf2}{0}}$
+        \cuz{} \Eref{eq:th-prefix-uniqueness-240}.}
+\mypareq{eq:th-prefix-uniqueness-350}{%
+    $\Tvar{pref2First}{V} \in \myfn{parents}{\Velement{suf1}{0}}$
+        \cuz{} \Eref{eq:th-prefix-uniqueness-320},
+            \Eref{eq:th-prefix-uniqueness-340}.}
+And since, by the definition of a tree, there is at most one parent for every
+node,
+\mypareq{eq:th-prefix-uniqueness-360}{%
+    $\Tvar{pref1First}{V} = \Tvar{pref2First}{V}$ \cuz \Dfref{def:tree},
+        \Eref{eq:th-prefix-uniqueness-350}.}
+\mypareq{eq:th-prefix-uniqueness-370}{%
+     $\Tvarseq{pref1}{V} = \Tvarseq{pref2}{V}$ \cuz{} \Eref{eq:th-prefix-uniqueness-230},
+        \Eref{eq:th-prefix-uniqueness-240},
+        \Eref{eq:th-prefix-uniqueness-310},
+        \Eref{eq:th-prefix-uniqueness-360}.}
+Equation \Eref{eq:th-prefix-uniqueness-370} is contrary to
+\Eref{eq:th-prefix-uniqueness-220}, which shows the reductio
+from \Eref{eq:th-prefix-uniqueness-110}--%
+    \Eref{eq:th-prefix-uniqueness-120} to
+    \Eref{eq:th-prefix-uniqueness-370}.
+From the reductio we know that there is no counter-example to the
+lemma, which shows us the lemma.
+\myqed
+\end{proof}
+
 \begin{theorem}[Tree acyclicity]
 \label{th:tree-acyclicity}
 No tree contains a cycle.
@@ -3159,7 +3341,7 @@ That is,
 The proof is direct.
 A tree is by definition a directed graph.
 No path in any tree
-contains a cycle \Thref{th:tree-acyclicity}.
+contains a cycle \Thref{tree-acyclicity}.
 Hence \V{tree} is an acyclic directed graph.
 By the Acyclic Path Maximum theorem
 \Thref{acyclic-path-maximum},
@@ -5565,20 +5747,6 @@ iff $\Velement{suff}{0} = \V{nd}$.
 \defEnd
 \end{definition}
 
-\begin{definition}[Unary Prefix Path]
-\label{def:unary-prefix}
-A unary path \V{pref} is a \dfn{unary prefix path},
-or \dfn{unary prefix},
-with respect to the vertex
-which is its tail.
-That is,
-in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
-the unary path
-$\Tvarseq{pref}{V} \in \Vmyfn{Upaths}{G}$ is a unary prefix of $\V{nd} \in \V{V}$
-iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
-\defEnd
-\end{definition}
-
 \begin{theorem}[Unary Suffix Uniqueness]
 \label{th:unary-suffix-uniqueness}
 Two unary suffixes of the same node and same length
@@ -5814,174 +5982,6 @@ is a path of \V{G}:
 \end{proof}
 
 \section{Compressed Trees}
-
-\begin{theorem}[Unary Prefix Uniqueness]
-\label{th:unary-prefix-uniqueness-from-tail}
-In a tree,
-two unary prefixes of the same node
-with the same length
-are identical if they are equally long.
-That is,
-where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
-\begin{equation}
-\label{eq:th-unary-prefix-uniqueness-050}
-\begin{gathered}
-    \forall\;\V{pref1} \in \Vmyfn{paths}{G} :
-    \forall\;\V{pref2} \in \Vmyfn{paths}{G} :
-\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
-    \land \Vlastix{pref1} = \Vlastix{pref2}
-\\ \implies \V{pref1} = \V{pref2}.  \quad \thEnd
-\end{gathered}
-\end{equation}
-\end{theorem}
-
-\begin{proof}
-The proof is by minimal counter-example.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free tree.
-\begin{equation}
-\label{eq:th-unary-prefix-uniqueness-105}
-\begin{gathered}
-\Vmyfn{INST}{\Vnat{ex}} \ldefined
-\\ \forall\; \Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} :
-    \forall\; \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G} :
-\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
-        \land \Vlastix{pref1} = \Vlastix{pref2} = \V{ex}
-\\ \implies \V{pref1} = \V{pref2}
-    \\ \myparbox{\cuz{}
-        Macro for EI for adaptation of \Eref{eq:th-unary-prefix-uniqueness-050}
-         setting $\Vnat{ex}=\Vlastix{pref2}$.}
-\end{gathered}
-\end{equation}
-We assume there is a minimal \Vnat{bad} such that
-\Vmyfn{INST}{bad} is false:
-\begin{gather}
-\label{eq:th-unary-prefix-uniqueness-110}
-    \neg \Vmyfn{INST}{bad}
-\\ \label{eq:th-unary-prefix-uniqueness-120}
-    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
-\\ \nonumber
-    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
-\end{gather}
-\mypareq{eq:th-unary-prefix-uniqueness-130}{%
-$\Velement{prefZ1}{\Vlastix{pref1}} = \Velement{prefZ2}{\Vlastix{pref2}}$
-\linebreak $\land\; \Vlastix{prefZ1} = \Vlastix{prefZ2} = 0$
-    \bcuz{} AF implication.
-    New free \Tvarseq{prefZ1}{V} and \Tvarseq{prefZ2}{V}.
-}
-\mypareq{eq:th-unary-prefix-uniqueness-140}{%
-    $\V{prefZ1} = \V{prefZ2}$
-    \cuz{} \Eref{eq:th-unary-prefix-uniqueness-130}.}
-\mypareq{eq:th-unary-prefix-uniqueness-150}{%
-    $\myfn{INST}{0}$
-    \cuz{} Implication from
-        \Eref{eq:th-unary-prefix-uniqueness-130} to
-        \Eref{eq:th-unary-prefix-uniqueness-140};
-        Macrofication using
-        \Eref{eq:th-unary-prefix-uniqueness-105}.}
-\mypareq{eq:th-unary-prefix-uniqueness-160}{%
-    $\V{bad} > 0$
-    \cuz \Eref{eq:th-unary-prefix-uniqueness-110},
-        \Eref{eq:th-unary-prefix-uniqueness-150}.
-}
-\begin{equation}
-\label{eq:th-unary-prefix-uniqueness-170}
-\begin{gathered}
-\exists\; \Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} :
-    \exists\; \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G} :
-\\ \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
-\\ \land\; \Vlastix{pref1} = \Vlastix{pref2} = \V{bad}
-\\ \land\; \V{pref1} \ne \V{pref2}
-\\ \myparbox{\cuz{} Expansion of \Eref{eq:th-unary-prefix-uniqueness-110}
-        using \Eref{eq:th-unary-prefix-uniqueness-105}.}
-\end{gathered}
-\end{equation}
-\begin{gather}
-\label{eq:th-unary-prefix-uniqueness-190}
-\Tvarseq{pref1}{V} \in \Vmyfn{Upaths}{G} \land
-    \Tvarseq{pref2}{V} \in \Vmyfn{Upaths}{G}
-\\ \label{eq:th-unary-prefix-uniqueness-200}
-    \land\; \Velement{pref1}{\Vlastix{pref1}} = \Velement{pref2}{\Vlastix{pref2}}
-\\ \label{eq:th-unary-prefix-uniqueness-210}
-    \land\; \Vlastix{pref1} = \Vlastix{pref2} = \Vnat{bad}
-\\ \label{eq:th-unary-prefix-uniqueness-220}
-    \land\; \V{pref1} \ne \V{pref2}
-\\ \nonumber \myparbox{\cuz{}
-    EI of \Eref{eq:th-unary-prefix-uniqueness-170}
-    with new free \Tvarseq{pref1}{V} for bound \Tvarseq{pref1}{V} and
-    new free \Tvarseq{pref2}{V} for bound \Tvarseq{pref2}{V}.}
-\end{gather}
-\mypareq{eq:th-unary-prefix-uniqueness-230}{%
-    $\Tvarseq{pref1}{V} = \seq{ \V{pref1First}, \Velement{suf1}{0} \ldots \Velement{suf1}{\Vlastix{suf1}} }$
-    \bcuz{} \Eref{eq:th-unary-prefix-uniqueness-160}, \Eref{eq:th-unary-prefix-uniqueness-210}.
-    New \Tvarseq{suf1}{V}, new \Tvar{pref1First}{V}.}
-\mypareq{eq:th-unary-prefix-uniqueness-240}{%
-    $\Tvarseq{pref2}{V} = \seq{ \V{pref2First}, \Velement{suf2}{0} \ldots \Velement{suf2}{\Vlastix{suf2}} }$
-    \bcuz{} \Eref{eq:th-unary-prefix-uniqueness-160}, \Eref{eq:th-unary-prefix-uniqueness-210}.
-    New \Tvarseq{suf2}{V}, new \Tvar{pref2First}{V}.}
-\mypareq{eq:th-unary-prefix-uniqueness-250}{%
-    $\Vlastix{suf1} = \Vlastix{suf2} = \Vdecr{bad}$ \cuz{} \Eref{eq:th-unary-prefix-uniqueness-210},
-        \Eref{eq:th-unary-prefix-uniqueness-230}, \Eref{eq:th-unary-prefix-uniqueness-240}.}
-\mypareq{eq:th-unary-prefix-uniqueness-260}{%
-    $\Tvarseq{suf1}{V} \in \Vmyfn{Upaths}{G}$
-        \bcuz{} \longThref{Unary Subpath}{unary-subpath},
-            \Eref{eq:th-unary-prefix-uniqueness-190}, \Eref{eq:th-unary-prefix-uniqueness-230}.}
-\mypareq{eq:th-unary-prefix-uniqueness-270}{%
-    $\Tvarseq{suf2}{V} \in \Vmyfn{Upaths}{G}$
-        \cuz{} \Thref{unary-subpath},
-            \Eref{eq:th-unary-prefix-uniqueness-190}, \Eref{eq:th-unary-prefix-uniqueness-240}.}
-\mypareq{eq:th-unary-prefix-uniqueness-280}{%
-    $\Velement{suf1}{\Vlastix{suf2}} = \Velement{suf2}{\Vlastix{suf2}}$ \cuz{} \Eref{eq:th-unary-prefix-uniqueness-200},
-        \Eref{eq:th-unary-prefix-uniqueness-230}, \Eref{eq:th-unary-prefix-uniqueness-240}.}
-\mypareq{eq:th-unary-prefix-uniqueness-290}{%
-    $\myfn{INST}{\Vdecr{bad}}$ \cuz{} \Eref{eq:th-unary-prefix-uniqueness-120},
-        \Eref{eq:th-unary-prefix-uniqueness-160}.}
-\mypareq{eq:th-unary-prefix-uniqueness-300}{%
-$\Velement{suf1}{\Vlastix{suf1}} = \Velement{suf2}{\Vlastix{suf2}}
-        \land \Vlastix{suf1} = \Vlastix{suf2} = \Vdecr{bad}$
-\linebreak $\implies\; \V{suf1} = \V{suf2}$
-\bcuz{} Expansion of
-        \Eref{eq:th-unary-prefix-uniqueness-290}
-        using \Eref{eq:th-unary-prefix-uniqueness-105};
-        \Eref{eq:th-unary-prefix-uniqueness-260};
-        \Eref{eq:th-unary-prefix-uniqueness-270};
-        and EI of \V{pref1} as \V{suf1} and \V{pref2} as \V{suf2}.}
-\mypareq{eq:th-unary-prefix-uniqueness-310}{%
-    $\Tvarseq{suf1}{V} = \Tvarseq{suf2}{V}$
-    \bcuz{} \Eref{eq:th-unary-prefix-uniqueness-250},
-        \Eref{eq:th-unary-prefix-uniqueness-280},
-        \Eref{eq:th-unary-prefix-uniqueness-300}.}
-\mypareq{eq:th-unary-prefix-uniqueness-320}{%
-    $\Velement{suf1}{0} = \Velement{suf2}{0}$
-        \cuz{} \Eref{eq:th-unary-prefix-uniqueness-310}.}
-\mypareq{eq:th-unary-prefix-uniqueness-330}{%
-    $\Tvar{pref1First}{V} \in \myfn{parents}{\Velement{suf1}{0}}$
-        \cuz{} \Eref{eq:th-unary-prefix-uniqueness-230}.}
-\mypareq{eq:th-unary-prefix-uniqueness-340}{%
-    $\Tvar{pref2First}{V} \in \myfn{parents}{\Velement{suf2}{0}}$
-        \cuz{} \Eref{eq:th-unary-prefix-uniqueness-240}.}
-\mypareq{eq:th-unary-prefix-uniqueness-350}{%
-    $\Tvar{pref2First}{V} \in \myfn{parents}{\Velement{suf1}{0}}$
-        \cuz{} \Eref{eq:th-unary-prefix-uniqueness-320},
-            \Eref{eq:th-unary-prefix-uniqueness-340}.}
-And since, by the definition of a tree, there is at most one parent for every
-node,
-\mypareq{eq:th-unary-prefix-uniqueness-360}{%
-    $\Tvar{pref1First}{V} = \Tvar{pref2First}{V}$ \cuz \Dfref{def:tree},
-        \Eref{eq:th-unary-prefix-uniqueness-350}.}
-\mypareq{eq:th-unary-prefix-uniqueness-370}{%
-     $\Tvarseq{pref1}{V} = \Tvarseq{pref2}{V}$ \cuz{} \Eref{eq:th-unary-prefix-uniqueness-230},
-        \Eref{eq:th-unary-prefix-uniqueness-240},
-        \Eref{eq:th-unary-prefix-uniqueness-310},
-        \Eref{eq:th-unary-prefix-uniqueness-360}.}
-Equation \Eref{eq:th-unary-prefix-uniqueness-370} is contrary to
-\Eref{eq:th-unary-prefix-uniqueness-220}, which shows the reductio
-from \Eref{eq:th-unary-prefix-uniqueness-110}--%
-    \Eref{eq:th-unary-prefix-uniqueness-120} to
-    \Eref{eq:th-unary-prefix-uniqueness-370}.
-From the reductio we know that there is no counter-example to the
-lemma, which shows us the lemma.
-\myqed
-\end{proof}
 
 \chapter{Context-free grammars}
 \label{chap:CFGs}
