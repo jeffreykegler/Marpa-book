@@ -3029,20 +3029,26 @@ is a directed graph,
 
 \section{Acyclic directed graph}
 
+\begin{definition}[Cycle]
+\label{def:cycle}
+In a directed graph,
+a cycle is a non-trivial path that starts and ends
+with the same node.
+That is,
+in the directed graph $\V{G} = \tuple{ \V{V}, \V{E} }$
+\Tvarseq{cycle}{V} is a cycle iff
+\[
+\Vsize{cycle} > 1 \land
+    \Velement{cycle}{0} = \Velement{cycle}{\Vlastix{cycle}}.
+    \quad \defEnd
+\]
+\end{definition}
+
 \begin{definition}[Acyclic directed graph]
 \label{def:acyclic}
 A directed graph is \dfn{acyclic} iff
-it does not contain any non-trivial path that starts and ends
-with the same node.
-That is,
-the directed graph $\V{G} = \tuple{ \V{V}, \V{E} }$
-is \dfn{acyclic} iff
-\[
-\forall\; \V{path} \in \Vmyfn{paths}{G} :
-\Vlastix{path} \ne 0 \implies \Velement{path}{0} \ne
-    \Velement{path}{\Vlastix{path}}.
-    \quad \defEnd
-\]
+none of its paths is a cycle.
+\defEnd
 \end{definition}
 
 \begin{theorem}[Acyclic path maximum]
@@ -3167,7 +3173,7 @@ where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
 
 \begin{proof}
 The proof is by minimal counter-example.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a new free tree.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary tree.
 \begin{equation}
 \label{eq:th-prefix-uniqueness-105}
 \begin{gathered}
@@ -3315,10 +3321,24 @@ lemma, which shows us the lemma.
 
 \begin{theorem}[Tree acyclicity]
 \label{th:tree-acyclicity}
-No tree contains a cycle.
+No tree contains a cycle.   \thEnd
 \end{theorem}
 
 \begin{proof}
+The proof is by reductio, assuming that a tree contains a cycle
+to show a contradiction.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree, and let
+\Tvarseq{cycle} be a cycle in \V{G}:
+\mypareq{eq:th-tree-acyclicity-100}{%
+    $\V{cycle} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}
+    \land \Vsize{cycle} > 1$
+    \bcuz{} \longDfref{Cycle}{def:cycle}.}
+Because $\Velement{cycle}{Vlastix{cycle}} = \V{dup}$ and
+$\Vsize{cycle} \ge 1$, we know there is an edge to \V{dup}:
+\mypareq{eq:th-tree-acyclicity-110}{%
+    $\exists \tuple{\V{from}, \V{dup}} \in \V{E}$
+    \cuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-tree-acyclicity-100}.}
 \todo{Write this proof}
 \end{proof}
 
