@@ -2514,7 +2514,7 @@ and let \V{path} be an arbitrary path in \V{G}:
     $\V{path} \in \Vmyfn{paths}{G}$
     \linebreak \cuz{} hypothesis of theorem.
     New free $\V{path} \in \powerset{\naturals \times \V{V}}$.}
-Let \Vnat{lo} and \Vnat{hi} be the first and last elements of
+Let \Vnat{lo} and \Vnat{hi} be the head and tail of
 a subpath of \V{path}:
 \mypareq{eq:th-subpath-105}{%
      $\V{lo} \le \V{hi} \le \Vlastix{path}$
@@ -2593,7 +2593,7 @@ and the overlap of the prefix and suffix in \V{fusion}
 is a singleton.
 That is,
 the \dfn{fusion} of
-\V{p1} and \V{p2} is the set \V{fusion} such that
+\V{p1} and \V{p2} is the sequence \V{fusion} such that
 \begin{equation}
 \label{eq:def-fusion}
 \begin{gathered}
@@ -2613,8 +2613,8 @@ then their fusion is
 \label{th:fusion}
 Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a directed graph.
 If two paths
-in \V{G} are such that the last element of the first
-one is equal to the first element of the second one,
+in \V{G} are such that the tail of the first
+one is equal to the head of the second one,
 then they have a fusion.
 Further, the length of that fusion is the sum of the lengths
 of its two component paths, minus one.
@@ -3327,22 +3327,58 @@ No tree contains a cycle.   \thEnd
 \begin{proof}
 The proof is by reductio, assuming that a tree contains a cycle
 to show a contradiction.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree, and let
-\Tvarseq{cycle}{V} be a cycle in \V{G}:
+Let $\V{tree} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
+We first observe a few useful facts about cycles in trees.
+First because, by the definition of a cycle,
+every cycle is of length at least 2,
+\mypareq{eq:th-tree-acyclicity-070}{%
+    there must be an edge in \V{G} to the tail of any cycle
+    in \V{G} \bcuz{} \Dfref{def:cycle}.}
+Since, also by the definition of a cycle,
+the head and tail of a cycle are equivalent,
+this edge is also an edge to the head of the cycle
+so that
+\mypareq{eq:th-tree-acyclicity-080}{%
+    there must be an edge in \V{G} to the head of any cycle
+    in \V{G} \bcuz{} \Dfref{def:cycle}.}
+Finally, since by the definition of a tree the in-degree of
+its root must be zero:
+\mypareq{eq:th-tree-acyclicity-090}{%
+    Neither the head or tail of a cycle can be the root
+    of a tree \bcuz{} \Dfref{def:tree},
+    \Eref{eq:th-tree-acyclicity-070},
+    \Eref{eq:th-tree-acyclicity-080}.
+}
+Let, then, \Tvarseq{cycle}{V} be a cycle in \V{tree}:
 \mypareq{eq:th-tree-acyclicity-100}{%
-    $\V{cycle} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}
-    \land \Vsize{cycle} > 1$
-    \bcuz{} \longDfref{Cycle}{def:cycle}.
+    $\V{cycle} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}$
+    \bcuz{} AF reductio.
     New free \Tvarseq{cycle}{V},
-    new free Tvar{dup}{V}.}
-Because $\Velement{cycle}{\Vlastix{cycle}} = \V{dup}$ and
-$\Vsize{cycle} \ge 1$, we know there is an edge to \V{dup}:
+    new free \Tvar{dup}{V}.}
 \mypareq{eq:th-tree-acyclicity-110}{%
-    $\exists \tuple{\V{from}, \V{dup}} \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-tree-acyclicity-100}.
-        New free \V{from} \in \V{V}.}
+    Let \V{root} be the root of \V{tree} \cuz{}
+    new \V{root} for convenience.
+}
+\mypareq{eq:th-tree-acyclicity-120}{%
+    $\V{dup} \ne \V{root}$
+    \cuz{} \Eref{eq:th-tree-acyclicity-090},
+        \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-110}.}
+By the definition of a tree,
+there is a path from its root to \V{dup},
+which, since the root and \V{dup} are distinct,
+is of length at least 2:
+\mypareq{eq:th-tree-acyclicity-130}{%
+    $\V{rootpath} = \seq{\V{root}\ldots\V{dup}}
+        \land \Vsize{rootpath} \ge 2$
+    \bcuz{}
+    \Dfref{def:tree}, \Eref{eq:th-tree-acyclicity-120}.}
+\mypareq{eq:th-tree-acyclicity-140}{%
+    $\Velement{rootpath}{\Vlastix{rootpath}} = \Velement{cycle}{0}$
+    \cuz{} \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-140}.}
 \todo{Write this proof}
+\myqed
 \end{proof}
 
 \begin{theorem}[Tree path maximum]
