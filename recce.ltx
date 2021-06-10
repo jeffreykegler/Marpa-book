@@ -1077,15 +1077,15 @@ an irrecoverable loss to history of the field.%
    not only of his own work,
    but of the work of others.%
 }
-In every field, judgements must be made as
+In every field, judgments must be made as
 to what is important and what is not.
 To the extent a new investigator lacks an explanation of why
 her predecessors
-made the judgements they made,
+made the judgments they made,
 she faces an unhappy choice.
 She can suppress her skepticism,
-and accept previous judgements uncritically,
-or she can risk rejectiing those judgements
+and accept previous judgments uncritically,
+or she can risk rejecting those judgments
 out of ignorance.
 We believe this erasure of the field's history is much
 of the explanation for its slowed progress
@@ -1111,7 +1111,7 @@ seem likely to be helpful in the preservation of
 useful history.
 And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
-which pose legibility and opthamological challenges.
+which pose legibility and ophthalmological challenges.
 
 We make heavy use of multi-character variable names,
 and allow hyphenated variable names.
@@ -1135,7 +1135,7 @@ we distinguish subtraction typographically
 \]
 We do not need subtraction often, since we borrow
 a handy and compact notation
-for decremention by 1
+for decrementation by 1
 from programming languages:
 \subtract{\V{x}}{1}.
 Full details of
@@ -1261,7 +1261,7 @@ its boolean value.
 \begin{remark}[Labelable Block]
 \label{rem:labelable-block}
 Many sets of considerations
-are displayed in a form where they can be labelled.
+are displayed in a form where they can be labeled.
 Whether or not they actually have a label,
 these sets of considerations are called
 \dfn{labelable blocks}, or \dfn{blocks}.
@@ -1692,19 +1692,22 @@ and $\bigcap \V{S}$ for the intersection of the elements of the set \V{S}.
 By analogy, we write
 $\sum \V{S}$ for the sum of the elements of the set \V{S}.
 
-To avoid ambiguity, especially with multi-character variables,
-we avoid representing relations in the form
+Multi-character variables introduce ambiguity into the standard
+notation for relations
+so that,
+where \V{R} is a binary relation between \V{x} and \V{y},
+we avoid representing that fact in the form
 \begin{equation}
 \label{eq:relation-example}
-\V{x} \V{R} \V{y},
+\V{x} \V{R} \V{y}.
 \end{equation}
-where \V{R} is a binary relation between \V{x} and \V{y}.
-Though in desperation we might write
-\Eref{eq:relation-example} as $\V{x}(\V{R})\V{y}$,
-we prefer to deal with relations in the form of the equivalent
+We sometimes use parentheses to disambiguate, for
+example, writing
+\Eref{eq:relation-example} as $\V{x}(\V{R})\V{y}$.
+But we prefer to deal with relations in the form of the equivalent
 set,
 or via the boolean function they induce.
-For example we might discuss
+For instance, we might discuss
 \Eref{eq:relation-example} via the boolean binary function
 \myfn{R}{\V{x}, \V{y}}.
 
@@ -1749,7 +1752,7 @@ $\myfn{floor}{\V{a}}$.
 
 \section{Quantifiers}
 
-We do not have a universal, so tht
+We do not have a universal, so that
 logical quantification is always with regard to a
 set that is the ``domain of quantification''.
 The domain of quantification set may be specified explicitly
@@ -1767,7 +1770,7 @@ As one example, in the expression
 \label{eq:quantification-by-type-030}
      \forall\; \Vnat{i} : \Vmyfn{f}{i},
 \end{equation}
-the domain of quanification is the natural numbers.
+the domain of quantification is the natural numbers.
 \Eref{eq:quantification-by-type-030}
 is equivalent to
 \begin{equation}
@@ -1831,7 +1834,7 @@ it is usually obvious which variable is
 the index variable.
 In such cases, the index variable specifier and
 the parentheses
-surrounging the guard may be omitted.
+surrounding the guard may be omitted.
 For example, \Eref{eq:quantification-by-boolean} would
 usually be written as
 \[
@@ -1859,6 +1862,16 @@ $\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
 
 \section{Orders}
 
+Recall that an relation
+$\V{R}$ is \dfn{anti-symmetric} if
+\[
+    \V{a}\;(\V{R})\;\V{b} \;\; \land \;\; \V{b}\;(\V{R})\;\V{a} \implies \V{a} = \V{b}.
+\]
+A relation \V{R} is \dfn{asymmetric}
+if
+\[
+    \V{a}\;(\V{R})\;\V{b} \implies \neg (\V{b}\;(\V{R})\;\V{a}).
+\]
 A \dfn{lax partial order} is a relation which
 is reflexive, transitive and anti-symmetric.\footnote{%
 Halmos~\cite{Halmos1960}
@@ -2954,7 +2967,7 @@ Then
 \end{theorem}
 
 \begin{proof}
-The proof is similiar to the proof for
+The proof is similar to the proof for
 the Path Pre-increment Theorem
 \Thref{path-pre-increment}.
 It is direct, assuming a path and an edge from its tail,
@@ -3377,7 +3390,41 @@ is of length at least 2:
     $\Velement{rootpath}{\Vlastix{rootpath}} = \Velement{cycle}{0}$
     \cuz{} \Eref{eq:th-tree-acyclicity-100},
         \Eref{eq:th-tree-acyclicity-140}.}
+We now consider the fusion of \V{cycle} and \V{rootpath}:
+\begin{gather}
+\label{eq:th-tree-acyclicity-150}
+   \Velement{fusion}{0\ldots \Vlastix{rootpath}} = \V{rootpath}
+\\ \label{eq:th-tree-acyclicity-160}
+   \land\; \Velement{fusion}{\Vlastix{rootpath}\ldots\Vlastix{fusion}} = \V{cycle}
+\\ \label{eq:th-tree-acyclicity-170}
+   \land\; \Vsize{fusion} = \subtract{\Vsize{rootpath} + \Vsize{cycle}}{1}
+\\ \nonumber
+   \myparbox{\cuz{} \longThref{Fusion}{fusion}.
+       New free $\V{fusion} \in \Vmyfn{paths}{G}$.}
+\end{gather}
+We define a function
+for the index of occurrences of variables in \V{fusion}:
+\begin{equation}
+\label{eq:th-tree-acyclicity-180}
+\begin{gathered}
+    \myfn{Occ}{\V{v}, \V{n}} \ldefined \riota \Vnat{ix} :
+    \left(\begin{gathered}
+        \VVelement{fusion}{ix} = \V{v}
+        \\ \land \;
+            \V{n} = \size{ \set{ \V{j} \le \V{ix} : \VVelement{fusion}{j} = \V{v} }}
+    \end{gathered}\right)
+    \\ \myparbox{\cuz{} new function
+        $\V{Occ} \in \naturals \expOp (\V{V} \times \naturals)$
+        for convenience.}
+\end{gathered}
+\end{equation}
+In particular \myfn{Occ}{\V{x},1}
+is the first occurrence of \V{x} in \V{fusion}
+and
+\myfn{Occ}{\V{x},2} is first duplication
+(second occurrence) of \V{x} in \V{fusion}.
 \todo{Write this proof}
+
 \myqed
 \end{proof}
 
@@ -3902,7 +3949,7 @@ Every ancestry is
 the union of all the ancestries with the same base,
 and at the same or a lower level.
 That is,
-let \V{base} be an arbitary subset of \V{nodes}.
+let \V{base} be an arbitrary subset of \V{nodes}.
 Then
 \mypareq{eq:lem-ancestry-closure-050}{%
     $\forall\; \Vnat{N} :
@@ -4437,7 +4484,7 @@ for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 The union of all generations of level \V{N} or less
 is equal to the \V{N}-level ancestry of the same base.
 That is,
-if \V{base} is an arbitary subset of \V{nodes},
+if \V{base} is an arbitrary subset of \V{nodes},
 then
 \mypareq{eq:lem-generation-coverage-050}{%
     $\forall\; \Vnat{N} :
@@ -6205,7 +6252,7 @@ A sequence of iterated rewrite steps of \Vcfg{g}, such that
 is called a \dfn{derivation} of \Vcfg{g},
 and a rewrite step that is part of a derivation is called
 a \dfn{derivation step}.
-A derivation is a \dfn{right derviation} iff
+A derivation is a \dfn{right derivation} iff
 all of its rewrite steps are right rewrite steps.
 
 The sequence of strings in a derivation, its sequence of strings
@@ -7582,7 +7629,7 @@ Leo items (type \type{LIM})
 will be defined in \Chref{chap:leo}.
 \end{definition}
 
-\todo{Revisit productivity, accessiblity.  Require in INT?}
+\todo{Revisit productivity, accessibility.  Require in INT?}
 \begin{definition}[EIM validity]
 \label{def:eim-validity}
 Let
@@ -7685,7 +7732,7 @@ Where \Matches{\V{l},\V{r}},
 we say that \V{l} is a \dfn{left match} of \V{r},
 and that \V{r} is a \dfn{right match} of \V{l}.
 
-Three of the loadings of \V{Matches} are as follows.
+Three of the overloadings of \V{Matches} are as follows.
 The match of an \type{EIM} with another \type{EIM},
 \begin{equation}
 \label{eq:def-matches-eim-eim}
@@ -8836,7 +8883,7 @@ iff
 \end{theorem}
 
 \begin{proof}
-For the forward direction we assume the antecedant to
+For the forward direction we assume the antecedent to
 show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-10}
@@ -8893,7 +8940,7 @@ the forward direction, so that the derivation
 \Eref{eq:th-leo-eligible-location-20} shows
 the forward direction.
 
-For the reverse direction, again we assume the antecedant
+For the reverse direction, again we assume the antecedent
 to show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-30}
@@ -10617,7 +10664,7 @@ We show the first subcase directly.
 \mypareq{eq:th-les-uniqueness-10-18}{%
    $\var{les1} = \var{les2}$ \cuz{} \Eref{eq:th-les-uniqueness-10-16}.
    This is the consequent \Eref{eq:th-les-uniqueness-08}
-      and shows the first subcase of the foward direction.
+      and shows the first subcase of the forward direction.
 }
 
 For the second subcase, we proceed via a reductio.
@@ -10721,7 +10768,7 @@ Let
 \mypareq{eq:th-les-prefix-20}{%
     $\Vles{subLes2} = \Velement{les2}{0\ldots \Vlastix{les1}}$
     \linebreak \cuz{} \longThref{LES subsequence}{les-subsequence},
-       antecedant of forward direction
+       antecedent of forward direction
            \Eref{eq:th-les-prefix-02}--\Eref{eq:th-les-prefix-06},
            new \Vles{subLes2} for convenience.
 }
@@ -10740,7 +10787,7 @@ Let
 \mypareq{eq:th-les-prefix-26}{%
     $\Velement{subLes2}{0} = \Velement{les1}{0}$
     \linebreak \cuz{}
-       antecedant of forward direction \Eref{eq:th-les-prefix-06},
+       antecedent of forward direction \Eref{eq:th-les-prefix-06},
        \Eref{eq:th-les-prefix-24}.
 }
 \mypareq{eq:th-les-prefix-27}{%
@@ -11467,15 +11514,15 @@ The forward direction follows immediately from the definition
 of an \type{LSS} \Dfref{def:lss},
 and definition of an \type{LES} \Dfref{def:next-eligible-sequence}.
 We prove the reverse direction, by assuming
-the antecedant to show the consequent.
+the antecedent to show the consequent.
 \mypareq{eq:th-lss-extension-10}{%
         $\myfn{Is-source}{\var{next}}$
-        \cuz{} antecedant \Eref{eq:th-lss-extension-07} of
+        \cuz{} antecedent \Eref{eq:th-lss-extension-07} of
         reverse direction.
 }
 \mypareq{eq:th-lss-extension-12}{%
         $\myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
-        \cuz{} antecedant \Eref{eq:th-lss-extension-07} of
+        \cuz{} antecedent \Eref{eq:th-lss-extension-07} of
         reverse direction.
 }
 \mypareq{eq:th-lss-extension-14}{%
@@ -11534,7 +11581,7 @@ iff
 \end{theorem}
 
 \begin{proof}
-We first prove the forward direction, assuming the antecedant
+We first prove the forward direction, assuming the antecedent
 to show the consequent.
 \begin{equation}
 \label{eq:th-lss-generalized-extension-10}
@@ -11542,7 +11589,7 @@ to show the consequent.
    \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \Veim{next}} \in \type{LSS}
    \\ \myparbox{\cuz{}
-       antecedant \Eref{eq:th-lss-generalized-extension-02} of forward
+       antecedent \Eref{eq:th-lss-generalized-extension-02} of forward
        direction, existential instantiation of new free \Veim{next}.
    }
 \end{gathered}
@@ -11662,7 +11709,7 @@ Let
 \mypareq{eq:th-lss-prefix-20}{%
     $\Vlss{subLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
     \linebreak \cuz{} \longThref{LSS subsequence}{lss-subsequence},
-       antecedant of forward direction
+       antecedent of forward direction
            \Eref{eq:th-lss-prefix-02}--\Eref{eq:th-lss-prefix-06},
            new \Vlss{subLss2} for convenience.
 }
@@ -11681,7 +11728,7 @@ Let
 \mypareq{eq:th-lss-prefix-26}{%
     $\Velement{subLss2}{0} = \Velement{lss1}{0}$
     \linebreak \cuz{}
-       antecedant of forward direction \Eref{eq:th-lss-prefix-06},
+       antecedent of forward direction \Eref{eq:th-lss-prefix-06},
        \Eref{eq:th-lss-prefix-24}.
 }
 \mypareq{eq:th-lss-prefix-27}{%
@@ -11705,7 +11752,7 @@ With both directions, we have the proof.
 \begin{theorem}[LSS trichotomy]
 \label{th:lss-trichotomy}
 If two \type{LSS}'s of the same length have the same base element,
-then there are three mutually exclusive possibilites:
+then there are three mutually exclusive possibilities:
 \begin{itemize}
 \item They are identical.
 \item The first \type{LSS} is a proper prefix of the second.
@@ -11903,7 +11950,7 @@ maximal \type{LSS}.  That is,
 
 \begin{proof}
 The proof strategy is direct.
-We assume the antecedant of the theorem to show its
+We assume the antecedent of the theorem to show its
 consequent.
 Consider \var{based}, the set of all \type{LSS}'s
 with \var{eim} as their base:
@@ -11912,7 +11959,7 @@ $\Vlssset{based} = \set{
    \Vlss{lss} : \Velement{lss}{0} = \var{eim}}$
     \linebreak \cuz{}
         \longDfref{LSS}{def:lss},
-        antecedant of theorem \Eref{eq:th-maximal-lss-existence-02},
+        antecedent of theorem \Eref{eq:th-maximal-lss-existence-02},
        new \var{based} for convenience.
 }
 \begin{equation}
@@ -12024,7 +12071,7 @@ prefix of another \type{LSS}.
 \mypareq{eq:th-maximal-lss-existence-32}{%
     $\var{maxier} \in \type{LSS} \land \PrPfx{\var{max}, \var{maxier}}$
     \cuz{} \Eref{eq:th-maximal-lss-existence-30},
-    existental instantiation.%
+    existential instantiation.%
 }
 \mypareq{eq:th-maximal-lss-existence-33}{%
     $\PrPfx{\var{max}, \var{maxier}}$
@@ -12229,7 +12276,7 @@ then
 \end{theorem}
 
 \begin{proof}
-The proof is direct assuming the antecedant
+The proof is direct assuming the antecedent
 \Eref{eq:th-maximal-lss-top-02}
 to show the consequent
 \Eref{eq:th-maximal-lss-top-07}.
@@ -12240,12 +12287,12 @@ to show the consequent
         \myfn{Next-Eligible}{\var{next},\Velement{max}{\Vlastix{max}}}$
         \linebreak \cuz{}
         \longThref{Maximal LSS termination}{maximal-lss-termination},
-        antecedant \Eref{eq:th-maximal-lss-top-02}
+        antecedent \Eref{eq:th-maximal-lss-top-02}
         of theorem.
 }
 To show the consequent \Eref{eq:th-maximal-lss-top-07},
 we first instantiate the universal generalization,
-then we assume the antecedant of its predicate to show
+then we assume the antecedent of its predicate to show
 its consequent.
 \mypareq{eq:th-maximal-lss-top-12}{%
     $\var{lss} \in \type{LSS}$ \cuz{} new free \Vlss{lss}.
@@ -13615,7 +13662,7 @@ once for every \dfn{pass} of the loop.
 The first line of a loop is invoked
 \begin{itemize}
 \item once for every successful test of the test condition of the loop; and
-\item exactly once for an unsucessful, and therefore final, test
+\item exactly once for an unsuccessful, and therefore final, test
 of the test condition of the loop.
 \defEnd
 \end{itemize}
@@ -13683,7 +13730,7 @@ is initialized 3 times, once for every pass of the outer loop.
 Loop \enRefs{line:toy-40}{line:toy-50}
 is therefore said to have been
 invoked 3 times.
-The inner loop has 2 passes per intialization,
+The inner loop has 2 passes per initialization,
 for a total of 6 passes.
 \item Line \ref{line:toy-40},
 the first line of the inner loop,
@@ -13905,7 +13952,7 @@ an ID in \Oc{} time and zero space.
 
 \begin{proof}
 One way to assign the
-dotted rule ID's is to interate through the array
+dotted rule ID's is to iterate through the array
 of rules by rule ID,
 and within each rule iterate through its possible dot
 positions,
@@ -13999,7 +14046,7 @@ plus \Oc{} time and zero space for the final test.
 
 \begin{proof}
 The proof is by example of an implementation.
-An \type{ES} could be implementated as a dynamic array,
+An \type{ES} could be implemented as a dynamic array,
 which would have the stated complexity for reads.
 \myqed
 \end{proof}
@@ -14556,7 +14603,7 @@ this \type{LIM} is first in the linked list returned by the
 \myfn{Transitions}{} function.
 The \type{LIM} in that linked list can therefore be found
 in \Oc{} time and zero space.
-Totalling the two resource requirements,
+Totaling the two resource requirements,
 the time incurred is $\Oc{} + \Oc{} = \Oc{}$
 and the space incurred is $0+0=0$.
 \myqed
@@ -14594,7 +14641,7 @@ so the \type{LIM} obviously may be found in \Oc{} time and zero space.
 \end{itemize}
 
 The algorithm above
-Totalling the two resource requirements,
+Totaling the two resource requirements,
 the time incurred is
 $\Oc{} + \Oc{} + \Oc{} + \Oc{} = \Oc{}$
 and the space incurred is $0+0+0+0=0$.
@@ -16965,7 +17012,7 @@ The operations use per-symbol two bitmaps which,
 since the number of symbols in \Vint{g} is a constant,
 may be kept on the stack, so that they incur zero additional
 space.
-Totalling the space requirements, we see that
+Totaling the space requirements, we see that
 \mypareq{th:leo-eligible-traversal-350}{%
     traversal of the Leo eligible items in \var{eset}
     incurs zero space per \type{EIM}.
@@ -17462,7 +17509,7 @@ at line \ref{line:memoizer-op-9}.
 \begin{theorem}[Memoizer op non-duplication]
 \label{th:memoizer-op-non-duplication}
 Let $\ell$ be a valid \type{LIM}.
-Every call of the Memorizer op attempts to add $\ell$
+Every call of the Memoizer op attempts to add $\ell$
 at most once.
 \end{theorem}
 
@@ -17862,7 +17909,7 @@ to
 is not the same as the derivation from
 \Eref{eq:th-h-ambig-10-2-a} to
 \Eref{eq:th-h-ambig-10-2-f}.
-Since these are both right derviations,
+Since these are both right derivations,
 the parse must be ambiguous, which shows
 the reductio.
 Since the parse is ambiguous, its grammar is ambiguous.
@@ -18119,7 +18166,7 @@ for some \Vstr{w} and \Vloc{dot},
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
 \end{equation}
 is a partial parse.
-Futher assume that \var{partial}
+Further assume that \var{partial}
 has a horizontally ambiguous \type{EIM} \Dfref{def:ambig-eim}.
 
 Without loss of generality,
@@ -18238,7 +18285,7 @@ for some \Vstr{w} and \Vloc{dot},
 \var{partial} = \left[\Vcfg{g}, \boldRangeDecr{w}{0}{dot} \right]
 \end{equation}
 is a partial parse.
-Futher assume that \var{partial}
+Further assume that \var{partial}
 has a vertically ambiguous \type{EIM} \Dfref{def:ambig-eim}.
 
 Without loss of generality,
@@ -19383,7 +19430,7 @@ todo{Fix next equation}
 \myparbox{
   \Veim{source} is valid
   $\because$
-  text{TODO \type{LIM} valdity definition},
+  text{TODO \type{LIM} validity definition},
   \Eref{eq:edge-elements-are-complete-37-10}.
   }
 \end{equation}
@@ -19960,7 +20007,7 @@ The \Earley{} initializer operation preserves
 validity because the \Earley{} algorithm is
 correct
 \Thref{earley-is-correct}.
-Note in the case of the Initalizer operation,
+Note in the case of the Initializer operation,
 validity is preserved vacuously ---
 no \type{PIM} is in the ancestry of the Initializer
 operation.
@@ -20899,7 +20946,7 @@ must take  the form
 \end{align}
 
 Assume, for an inner reductio,
-that, in the derviation from \Eref{eq:equal-prefix10b}
+that, in the derivation from \Eref{eq:equal-prefix10b}
 to \Eref{eq:equal-prefix10c},
 \Vstr{rhs2} does not produce the \Vsym{lhs} of
 \Eref{eq:equal-prefix10c}.
@@ -20983,7 +21030,7 @@ occurs in \Eref{eq:equal-prefix1}, and
 \Eref{eq:equal-prefix20f}
 must occur in the derivation after
 \Eref{eq:equal-prefix20e}
-because, in a right derviation,
+because, in a right derivation,
 any non-terminals in
 \Eref{eq:equal-prefix20e} must be expanded
 before we reach step
@@ -21423,7 +21470,7 @@ but this is rarely the case in practice.
 In practice, \Marpa{} and its competitors are almost used to
 parse.
 The next theorem
-\Thref{cfg-space-is-quadration-wo-links}
+\Thref{cfg-space-is-quadratic-wo-links}
 shows that, in an apples-to-applies, \Marpa{} has
 the same space bound for CFG's as \Earley{}.
 
@@ -21443,7 +21490,7 @@ if it does not track links.
 Traditionally only the space result stated for a parsing algorithm
 is that
 without links, as in
-\Thref{cfg-space-is-quadration-wo-links}.
+\Thref{cfg-space-is-quadratic-wo-links}.
 This is sufficiently relevant
 if the parser is only used as a recognizer.
 In practice, however,
@@ -21662,7 +21709,7 @@ But, from almost its beginning,
 Ron Savage has been unstinting in
 his support.
 
-Jean-Damien Durand's assistance included several ambitous
+Jean-Damien Durand's assistance included several ambitious
 \Marpa{} applications.
 Deyan Ginev provided advice on \LaTeX{} and
 on deeper matters which proved essential for this book.
