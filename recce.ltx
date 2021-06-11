@@ -3407,22 +3407,76 @@ for the index of occurrences of variables in \V{fusion}:
 \begin{equation}
 \label{eq:th-tree-acyclicity-180}
 \begin{gathered}
-    \myfn{Occ}{\V{v}, \V{n}} \ldefined \riota \Vnat{ix} :
-    \left(\begin{gathered}
+    \myfn{occs}{\V{v}, \V{n}} \ldefined
+    \set{ \begin{gathered}
+        \V{ix} \in \Vsize{fusion} :
         \VVelement{fusion}{ix} = \V{v}
         \\ \land \;
-            \V{n} = \size{ \set{ \V{j} \le \V{ix} : \VVelement{fusion}{j} = \V{v} }}
-    \end{gathered}\right)
+            \V{n} = \size{ \set{ \Vnat{j} \le \V{ix} : \VVelement{fusion}{j} = \V{v} }}
+    \end{gathered} }
     \\ \myparbox{\cuz{} new function
-        $\V{Occ} \in \naturals \expOp (\V{V} \times \naturals)$
+        $\V{Occ} \in \powerset{\naturals} \expOp (\V{V} \times \Vsize{fusion})$
+        for convenience.}
+\end{gathered}
+\end{equation}
+In fact,
+the set \myfn{occs}{\V{v}, \V{n}} is either empty or a singleton
+so that the following more convenient function is well-defined:
+\begin{equation}
+\label{eq:th-tree-acyclicity-190}
+\begin{gathered}
+    \myfn{Occ}{\V{v}, \V{n}} \ldefined
+    \left( \begin{gathered}
+     \size{\myfn{occs}{\V{v}, \V{n}}} = 1
+         \\ \condOp \; \left(
+             \riota \Vnat{ix} \in \Vsize{fusion} :
+            \V{ix} \in \myfn{occs}{\V{v}, \V{n}}
+            \right)
+         \\ : \; \Lambda
+    \end{gathered} \right)
+    \\ \myparbox{\cuz{} new function
+        $\V{Occ} \in \naturals \expOp (\V{V} \times \Vsize{fusion})$
         for convenience.}
 \end{gathered}
 \end{equation}
 In particular \myfn{Occ}{\V{x},1}
-is the first occurrence of \V{x} in \V{fusion}
+is the index of the first occurrence of \V{x} in \V{fusion}
 and
-\myfn{Occ}{\V{x},2} is first duplication
+\myfn{Occ}{\V{x},2} is the
+index of the duplication
 (second occurrence) of \V{x} in \V{fusion}.
+
+We now consider the set of vertices which occur twice in \V{fusion}:
+\mypareq{eq:th-tree-acyclicity-200}{%
+    $\V{dups} = \set{ \V{nd} \in \V{V} : \myfn{Occ}{\V{nd}, 2} \ne \Lambda }$
+    \bcuz{} new $\V{dups} \in \Vpowerset{V}$ for convenience.}
+Since $\V{dup} \in \V{dups}$,
+\mypareq{eq:th-tree-acyclicity-210}{%
+    $\Vsize{dups} \ge 1$
+    \cuz{} \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-160}, \Eref{eq:th-tree-acyclicity-200}.}
+Let $\prec$ be the
+strict total order induced on the elements of \V{dups}
+by the natural order of the indexes of their duplicates:
+\mypareq{eq:th-tree-acyclicity-220}{%
+     $(\prec) \ldefined \set{ \tuple{ \V{lo}, \V{hi} } :
+         \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2} }$
+     \bcuz{} new $(\prec) \in \powerset{\V{dups}\times\V{dups}}$ for convenience.}
+Since $\prec$ is a total order on a finite set,
+there is a least element of \V{dups}, call it \V{firstDup}:
+\begin{gather}
+\label{eq:th-tree-acyclicity-230}
+     \V{firstDup} \in \V{dups}
+     \\ \label{eq:th-tree-acyclicity-240}
+     \land\;
+     \left( \begin{gathered}
+         \forall\; \V{nd} \in \V{dups} :
+         \\ \neg ( \V{firstDup} \prec \V{nd})
+             \implies \V{firstDup} = \V{nd}
+     \end{gathered} \right)
+     \\ \nonumber \myparbox{\cuz{}
+          new $\V{firstDup} \in \V{dups}$ for convenience.}
+\end{gather}
 \todo{Write this proof}
 
 \myqed
