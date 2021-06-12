@@ -3445,6 +3445,26 @@ and
 \myfn{Occ}{\V{x},2} is the
 index of the duplication
 (second occurrence) of \V{x} in \V{fusion}.
+It follows from basic set theory that
+if some $\V{v} \in \V{V}$
+occurs \V{j} times in \V{fusion},
+then there is also a \V{i}'th occurrence
+of \V{v}
+for every \V{i} less than \V{j},
+and the index in \V{fusion} of the \V{i}'th occurrence
+is less than the index of the \V{j}'th occurrence:
+\begin{equation}
+\label{eq:th-tree-acyclicity-195}
+\begin{gathered}
+    \forall\; \Vnat{hi} \le \Vsize{fusion} :
+    \forall\; \Vnat{lo} < \V{hi} :
+    \forall\;\V{nd}\in\V{V} :
+    \\ \myfn{Occ}{\V{nd},\V{hi}} \neq \Lambda \implies
+         \myfn{Occ}{\V{nd},\V{lo}} < \myfn{Occ}{\V{nd},\V{hi}}
+    \\ \myparbox{\cuz{}
+        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
+\end{gathered}
+\end{equation}
 
 We now consider the set of vertices which occur twice in \V{fusion}:
 \mypareq{eq:th-tree-acyclicity-200}{%
@@ -3459,9 +3479,23 @@ Let $\prec$ be the
 strict total order induced on the elements of \V{dups}
 by the natural order of the indexes of their duplicates:
 \mypareq{eq:th-tree-acyclicity-220}{%
-     $(\prec) \ldefined \set{ \tuple{ \V{lo}, \V{hi} } :
-         \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2} }$
+     $(\prec) \ldefined \set{
+         \begin{gathered}
+         \tuple{ \V{lo}, \V{hi} } \in \V{dups}\times\V{dups} :
+         \\ \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
+         \end{gathered}
+         }$
      \bcuz{} new $(\prec) \in \powerset{\V{dups}\times\V{dups}}$ for convenience.}
+We can assert that $\prec$ is a total order because
+by the definition of a sequence no two distinct values occur in the same
+position of \V{fusion},
+and therefore
+\[
+\V{lo} \neq \V{hi} \implies
+\myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
+\lor
+\myfn{Occ}{\V{hi},2} < \myfn{Occ}{\V{lo},2}.
+\]
 Since $\prec$ is a total order on a finite set,
 there is a least element of \V{dups}, call it \V{firstDup}:
 \begin{gather}
