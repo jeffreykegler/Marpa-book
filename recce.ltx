@@ -3447,7 +3447,7 @@ If \V{rootpath} contain more than one occurrence of \V{dup},
 we can always shorten it using the Subpath Theorem,
 so that WLOG
 \mypareq{eq:th-tree-acyclicity-135}{%
-    $\forall \V{ix} < \Vlastix{rootpath} :
+    $\forall\; \V{ix} < \Vlastix{rootpath} :
         \VVelement{rootpath}{ix} \ne \V{dup}$
         \bcuz \Thref{subpath}, \Eref{eq:th-tree-acyclicity-130}.}
 \mypareq{eq:th-tree-acyclicity-140}{%
@@ -3530,6 +3530,15 @@ is less than the index of the \V{j}'th occurrence:
 \end{gathered}
 \end{equation}
 
+Based on our construction of \V{fusion}, we know that
+\V{dup} is duplicated in it:
+\mypareq{eq:th-tree-acyclicity-197}{%
+    $\myfn{Occ}{\V{dup}, 2} = \Vlastix{fusion}$
+    \bcuz{} \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-102},
+        \Eref{eq:th-tree-acyclicity-105},
+        \Eref{eq:th-tree-acyclicity-135},
+        \Eref{eq:th-tree-acyclicity-160}.}
 We now consider the set of vertices which occur twice in \V{fusion}:
 \mypareq{eq:th-tree-acyclicity-200}{%
     $\V{dups} = \set{ \V{nd} \in \V{V} : \myfn{Occ}{\V{nd}, 2} \ne \Lambda }$
@@ -3537,8 +3546,16 @@ We now consider the set of vertices which occur twice in \V{fusion}:
 Since $\V{dup} \in \V{dups}$,
 \mypareq{eq:th-tree-acyclicity-210}{%
     $\Vsize{dups} \ge 1$
-    \cuz{} \Eref{eq:th-tree-acyclicity-100},
-        \Eref{eq:th-tree-acyclicity-160}, \Eref{eq:th-tree-acyclicity-200}.}
+    \cuz{}
+        \Eref{eq:th-tree-acyclicity-197}, \Eref{eq:th-tree-acyclicity-200}.}
+Since \V{dups} is a subset of the vertices of \V{tree},
+and these are finite, it follows that \V{dups} is finite:
+\mypareq{eq:th-tree-acyclicity-215}{%
+    $\Vsize{dups} \in \naturals$
+    \bcuz{}
+        \longDfref{Directed Graph}{def:directed-graph},
+        \longDfref{Tree}{def:tree},
+        \Eref{eq:th-tree-acyclicity-200}.}
 Let $\prec$ be the
 strict total order induced on the elements of \V{dups}
 by the natural order of the indexes of their duplicates:
@@ -3560,7 +3577,8 @@ and therefore
 \lor
 \myfn{Occ}{\V{hi},2} < \myfn{Occ}{\V{lo},2}.
 \]
-Since $\prec$ is a total order on a finite set,
+Since $\prec$ is a total order on a
+non-empty finite set,
 there is a least element of \V{dups}, call it \V{firstDup}:
 \begin{gather}
 \label{eq:th-tree-acyclicity-230}
@@ -3569,11 +3587,12 @@ there is a least element of \V{dups}, call it \V{firstDup}:
      \land\;
      \left( \begin{gathered}
          \forall\; \V{nd} \in \V{dups} :
-         \\ \neg ( \V{firstDup} \prec \V{nd})
+         \\ \neg\; ( \V{firstDup} \prec \V{nd})
              \implies \V{firstDup} = \V{nd}
      \end{gathered} \right)
-     \\ \nonumber \myparbox{\cuz{}
-          new $\V{firstDup} \in \V{dups}$ for convenience.}
+     \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-135},
+         \Eref{eq:th-tree-acyclicity-215}.
+         New $\V{firstDup} \in \V{dups}$ for convenience.}
 \end{gather}
 \todo{Write this proof}
 
