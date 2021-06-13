@@ -3393,7 +3393,7 @@ to show a contradiction.
 Let $\V{tree} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
 Let
 $\Tvarseq{cycle}{V} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}$
-be a cycle in \V{tree}:
+be a cycle in \V{tree}.
 \begin{gather}
 \label{eq:th-tree-acyclicity-100}
     \Velement{cycle}{0} = \V{dup}
@@ -3407,17 +3407,30 @@ be a cycle in \V{tree}:
         New free \Tvarseq{cycle}{V},
         new free \Tvar{dup}{V}.}
 \end{gather}
+if \V{cycle} contains \V{dup} more than twice, we
+can always shorten it using the Subpath Theorem,
+so that we have WLOG
+\mypareq{eq:th-tree-acyclicity-105}{%
+    $\forall\; 1 \le \V{ix} < \Vlastix{cycle} :
+        \VVelement{cycle}{ix} \ne \V{dup}$
+    \bcuz{} \Thref{subpath},
+        \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-102},
+        \Eref{eq:th-tree-acyclicity-104}.}
 \mypareq{eq:th-tree-acyclicity-107}{%
-    $\Vlastix{cycle} > 0$ \cuz{} \Eref{eq:th-tree-acyclicity-104}.}
+    $\Vlastix{cycle} > 0$ \cuz{}
+        \Eref{eq:th-tree-acyclicity-100},
+        \Eref{eq:th-tree-acyclicity-102},
+        \Eref{eq:th-tree-acyclicity-104}.}
 \mypareq{eq:th-tree-acyclicity-110}{%
     Let \V{root} be the root of \V{tree} \cuz{}
     new \V{root} for convenience.
 }
-Because \V{dup} occurs after the first position
+Because one of the occurences of \V{dup} is after the first position
 in \V{cycle}, \V{dup} cannot be \V{root}:
 \mypareq{eq:th-tree-acyclicity-120}{%
     $\V{dup} \ne \V{root}$
-    \cuz{} \longThref{Root path}{th:root-path},
+    \cuz{} \longThref{Root path}{root-path},
         \Eref{eq:th-tree-acyclicity-102},
         \Eref{eq:th-tree-acyclicity-107},
         \Eref{eq:th-tree-acyclicity-110}.}
@@ -3430,6 +3443,13 @@ is of length at least 2:
         \land \Vsize{rootpath} \ge 2$
     \bcuz{}
     \Dfref{def:tree}, \Eref{eq:th-tree-acyclicity-120}.}
+If \V{rootpath} contain more than one occurrence of \V{dup},
+we can always shorten it using the Subpath Theorem,
+so that WLOG
+\mypareq{eq:th-tree-acyclicity-135}{%
+    $\forall \V{ix} < \Vlastix{rootpath} :
+        \VVelement{rootpath}{ix} \ne \V{dup}$
+        \bcuz \Thref{subpath}, \Eref{eq:th-tree-acyclicity-130}.}
 \mypareq{eq:th-tree-acyclicity-140}{%
     $\Velement{rootpath}{\Vlastix{rootpath}} = \Velement{cycle}{0}$
     \cuz{} \Eref{eq:th-tree-acyclicity-100},
@@ -21607,7 +21627,7 @@ shows that, in an apples-to-applies, \Marpa{} has
 the same space bound for CFG's as \Earley{}.
 
 \begin{theorem}[\Marpa{} context-free space is quadratic without links]
-\label{th:cfg-space-is-quadration-wo-links}
+\label{th:cfg-space-is-quadratic-wo-links}
 For every context-free grammar,
 \Marpa{} runs in $\order{\var{n}^2}$ space,
 if it does not track links.
