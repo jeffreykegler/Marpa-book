@@ -3157,9 +3157,27 @@ A \dfn{root path} is a path that contains the root of its tree.
 
 \begin{theorem}
 \label{th:root-path}
-In every root path,
-root can only occur at its first element.
-\thEnd
+In every root path
+a root node can only occur at the first element
+of the path.
+That is,
+if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree,
+then
+\[
+\begin{gathered}
+\forall\; \V{p} \in \Vmyfn{paths}{G} :
+\\ \forall\; \V{root} \in
+\set{ \V{to} \in \V{V} :
+    \nexists\; \V{from} \in \V{V} :
+    \tuple{\V{from}, \V{to}} \in \V{E}
+} :
+\\
+    \left(
+        \exists\; \V{ix} \le \Vlastix{p} : \VVelement{p}{ix} = \V{root}
+    \right)
+\implies \V{ix} = 0.  \quad \thEnd
+\end{gathered}
+\]
 \end{theorem}
 
 \begin{proof}
@@ -3184,7 +3202,24 @@ A \dfn{leaf path} is a path which contains a leaf of its tree.
 \label{th:leaf-path}
 In every leaf path,
 a leaf can only occur as the last element.
-\thEnd
+That is,
+if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree,
+then
+\[
+\begin{gathered}
+\forall\; \V{p} \in \Vmyfn{paths}{G} :
+\\ \forall\; \V{leaf} \in
+\set{ \V{from} \in \V{V} :
+    \nexists\; \V{to} \in \V{V} :
+    \tuple{\V{from}, \V{to}} \in \V{E}
+} :
+\\
+    \left(
+        \exists\; \V{ix} \le \Vlastix{p} : \VVelement{p}{ix} = \V{leaf}
+    \right)
+\implies \V{ix} = \Vlastix{p}.  \quad \thEnd
+\end{gathered}
+\]
 \end{theorem}
 
 \begin{proof}
@@ -3422,9 +3457,12 @@ so that we have WLOG
         \Eref{eq:th-tree-acyclicity-100},
         \Eref{eq:th-tree-acyclicity-102},
         \Eref{eq:th-tree-acyclicity-104}.}
+Let \V{root} be the root of \V{tree}:
 \mypareq{eq:th-tree-acyclicity-110}{%
-    Let \V{root} be the root of \V{tree} \cuz{}
-    new \V{root} for convenience.
+    $\existsUniq\; \V{root} \in \V{V} : \forall\; \V{from} \in \V{V} :
+    \nexists\; \tuple{\V{from}, \V{root}} \in \V{E}$
+    \bcuz{} \longDfref{Tree}{def:tree}.
+    New \V{root} for convenience.
 }
 Because one of the occurences of \V{dup} is after the first position
 in \V{cycle}, \V{dup} cannot be \V{root}:
@@ -3456,8 +3494,10 @@ so that WLOG
         \Eref{eq:th-tree-acyclicity-140}.}
 We now consider the fusion of \V{cycle} and \V{rootpath}:
 \begin{gather}
-\label{eq:th-tree-acyclicity-150}
-   \Velement{fusion}{0\ldots \Vlastix{rootpath}} = \V{rootpath}
+\label{eq:th-tree-acyclicity-145}
+   \V{fusion} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-tree-acyclicity-150}
+   \land\; \Velement{fusion}{0\ldots \Vlastix{rootpath}} = \V{rootpath}
 \\ \label{eq:th-tree-acyclicity-160}
    \land\; \Velement{fusion}{\Vlastix{rootpath}\ldots\Vlastix{fusion}} = \V{cycle}
 \\ \label{eq:th-tree-acyclicity-170}
@@ -3466,6 +3506,23 @@ We now consider the fusion of \V{cycle} and \V{rootpath}:
    \myparbox{\cuz{} \longThref{Fusion}{fusion}.
        New free $\V{fusion} \in \Vmyfn{paths}{G}$.}
 \end{gather}
+We can quickly deduce some convenient facts about \V{fusion}:
+\mypareq{eq:th-tree-acyclicity-172}{%
+    $\Velement{fusion}{0} = \V{root}$ \cuz{}
+        \Eref{eq:th-tree-acyclicity-130}, \Eref{eq:th-tree-acyclicity-150}.}
+\begin{equation}
+\label{eq:th-tree-acyclicity-174}
+\begin{gathered}
+    \forall\; \Vnat{ix} \le \Vlastix{fusion} :
+        \V{ix} \ne 0 \implies
+    \\ \exists\; \V{from} \in \V{V} :
+                 \tuple{ \Velement{fusion}{\Vdecr{ix}}, \VVelement{fusion}{ix}}
+                      \in \V{E}
+    \\ \because{} \longDfref{Path}{def:path},
+        \Eref{eq:th-tree-acyclicity-145}.
+\end{gathered}
+\end{equation}
+
 We define a function
 for the index of occurrences of variables in \V{fusion}:
 \begin{equation}
@@ -3529,8 +3586,9 @@ is less than the index of the \V{j}'th occurrence:
         \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
 \end{gathered}
 \end{equation}
-Also from set theory follows
-the highly intuitive fact that every time a node
+From basic set theory, we can deduce a few highly intuitive facts about
+\myfn{Occ}{}:
+Every time a node
 appears in \V{fusion} it is either the first occurrence
 or a later occurrence.
 \begin{equation}
@@ -3541,6 +3599,18 @@ or a later occurrence.
     \\ \VVelement{fusion}{ix} = \V{nd}
         \implies \exists\; \V{n} \ge 1 :
             \myfn{Occ}{\V{nd},\V{n}} = \V{ix}
+    \\ \myparbox{\cuz{}
+        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
+\end{gathered}
+\end{equation}
+The \V{n}'th occurrence of a node in \V{fusion}
+is at at least the \V{n}'th location
+(that is, the location with index \Vdecr{n})
+in \V{fusion}:
+\begin{equation}
+\label{eq:th-tree-acyclicity-195C}
+\begin{gathered}
+    \myfn{Occ}{\V{nd},\V{n}} \ge \Vdecr{n}
     \\ \myparbox{\cuz{}
         \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
 \end{gathered}
@@ -3610,6 +3680,39 @@ there is a least element of \V{dups}, call it \V{firstDup}:
          \Eref{eq:th-tree-acyclicity-215}.
          New $\V{firstDup} \in \V{dups}$ for convenience.}
 \end{gather}
+We examine the first two occurrences of \Tvar{firstDup}{V} more
+closely:
+\mypareq{eq:th-tree-acyclicity-250}{%
+    $\myfn{Occ}{\V{firstDup},2} = \V{firstLoc2}$
+    \cuz{} \Eref{eq:th-tree-acyclicity-230}.
+    New free \Vnat{firstLoc2}.}
+\begin{gather}
+\label{eq:th-tree-acyclicity-260}
+    \myfn{Occ}{\V{firstDup},1} = \V{firstLoc1}
+\\ \label{eq:th-tree-acyclicity-263}
+    \land\; \V{firstLoc1} < \V{firstloc2}
+    \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195A}
+        \Eref{eq:th-tree-acyclicity-250}.
+        New free \Vnat{firstLoc1}.}
+\end{gather}
+We now seek to show that these first two occurrences of \V{firstDup} are both
+the to-nodes of edges.
+\mypareq{eq:th-tree-acyclicity-270}{%
+    $\V{firstLoc2} \ge 1$
+    \cuz{} \Eref{eq:th-tree-acyclicity-195C},
+        \Eref{eq:th-tree-acyclicity-263}.}
+\mypareq{eq:th-tree-acyclicity-280}{%
+    $\tuple{ \Velement{fusion}{\Vdecr{firstLoc2}}, \VVelement{fusion}{firstLoc2}}
+        \in \V{E}$
+\bcuz{} \Eref{eq:th-tree-acyclicity-174}, \Eref{eq:th-tree-acyclicity-270}.}
+\mypareq{eq:th-tree-acyclicity-290}{%
+    $\VVelement{fusion}{firstLoc2} = \V{firstDup}$
+        \cuz{} \Eref{eq:th-tree-acyclicity-250}.}
+\mypareq{eq:th-tree-acyclicity-300}{%
+    $\V{firstDup} \ne \V{root}$
+    \cuz{} \longThref{Root path}{root-path},
+        \Eref{eq:th-tree-acyclicity-270},
+        \Eref{eq:th-tree-acyclicity-290}.}
 \todo{Write this proof}
 
 \myqed
