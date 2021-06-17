@@ -3615,6 +3615,30 @@ in \V{fusion}:
         \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
 \end{gathered}
 \end{equation}
+And earlier locations imply earlier occurrences and vice versa:
+\begin{equation}
+\label{eq:th-tree-acyclicity-195D}
+\begin{gathered}
+    \forall\;\V{nd}\in\V{V} :
+    \forall\;\Vnat{locLo} :
+    \forall\;\Vnat{locHi} :
+    \\ \left( \begin{gathered}
+        \VVelement{fusion}{locLo} =
+            \VVelement{fusion}{locHi} = \V{nd}
+        \\ \land\; \V{locLo} < \V{locHi}
+    \end{gathered} \right)
+    \\ \iff
+    \left( \begin{gathered}
+        \exists\;\Vnat{occLo} :
+        \exists\;\Vnat{occHi} :
+        \V{occLo} < \V{occHi}
+        \\ \land\; \myfn{Occ}{\V{nd},\V{occLo}} = \V{locLo}
+        \\ \land\; \myfn{Occ}{\V{nd},\V{occHi}} = \V{locHi}
+    \end{gathered} \right)
+    \\ \myparbox{\cuz{}
+        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
+\end{gathered}
+\end{equation}
 
 Based on our construction of \V{fusion}, we know that
 \V{dup} is duplicated in it:
@@ -3746,7 +3770,31 @@ so that
         \Eref{eq:th-tree-acyclicity-330},
         \Eref{eq:th-tree-acyclicity-340}.
     New $\V{firster} \in \V{V}$ for convenience.}
-We now investigate the occurrences of \V{firster}.
+We now investigate the occurrences of \V{firster},
+recalling that every occurrence of a variable is at least occurrence 1:
+\begin{gather}
+\label{eq:th-tree-acyclicity-360}
+    \myfn{Occ}{\V{firster},\V{firsterOcc1}} = \Vdecr{firstLoc1} = \V{firsterLoc1}
+\\ \label{eq:th-tree-acyclicity-362}
+    \land\; \V{firsterOcc1} \ge 1
+\\ \label{eq:th-tree-acyclicity-370}
+    \myfn{Occ}{\V{firster},\V{firsterOcc2}} = \Vdecr{firstLoc2} = \V{firsterLoc2}
+\\ \label{eq:th-tree-acyclicity-372}
+    \land\; \V{firsterOcc2} \ge 1
+\\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195B},
+        \Eref{eq:th-tree-acyclicity-350}.
+        New \Vnat{firsterOcc1}, \Vnat{firsterLoc1}
+        \Vnat{firsterOcc2}, \Vnat{firsterLoc2}
+        for convenience.}
+\end{gather}
+\mypareq{eq:th-tree-acyclicity-380}{%
+    $\Vdecr{firstLoc1} < \Vdecr{firstloc2}$
+    \cuz{} \Eref{eq:th-tree-acyclicity-263}.}
+\mypareq{eq:th-tree-acyclicity-390}{%
+    $\V{firsterLoc1} < \V{firsterloc2}$
+    \cuz{} \Eref{eq:th-tree-acyclicity-360},
+        \Eref{eq:th-tree-acyclicity-370},
+        \Eref{eq:th-tree-acyclicity-380}.}
 
 \todo{Write this proof}
 
