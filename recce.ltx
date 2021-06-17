@@ -198,7 +198,10 @@
 \newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
 \newcommand{\Velement}[2]{\element{\V{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
-\newcommand{\VlastElement}[1]{\Velement{#1}{\#\V{#1}}}
+\newcommand{\VlastElement}[1]{\Velement{#1}{\Vlastix{#1}}}
+\newcommand{\bigelement}[2]{\ensuremath{\mathop{#1}\left[#2\right]}}
+\newcommand{\Vbigelement}[2]{\ensuremath{\mathop{\V{#1}}\left[#2\right]}}
+\newcommand{\VVbigelement}[2]{\ensuremath{\mathop{\V{#1}}\left[ \V{#2} \right]}}
 
 \newcommand{\defEnd}{\Circle}
 \newcommand{\ldefEnd}{\Circle}
@@ -3422,7 +3425,6 @@ No tree contains a cycle.   \thEnd
 \end{theorem}
 
 \begin{proof}
-\todo{Rewrite this proof}
 The proof is by reductio, assuming that a tree contains a cycle
 to show a contradiction.
 Let $\V{tree} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
@@ -3432,372 +3434,383 @@ be a cycle in \V{tree}.
 \begin{gather}
 \label{eq:th-tree-acyclicity-100}
     \Velement{cycle}{0} = \V{dup}
-\\ \label{eq:th-tree-acyclicity-102}
+\\ \label{eq:th-tree-acyclicity-110}
     \land\; \Velement{cycle}{\Vlastix{cycle}} = \V{dup}
-\\ \label{eq:th-tree-acyclicity-104}
-    \land\; \Vsize{cycle} \ge 2
+\\ \label{eq:th-tree-acyclicity-120}
+    \land\; \Vlastix{cycle} > 0
 \\ \nonumber
     \myparbox{\cuz{} AF reductio.
         \longDfref{Cycle}{def:cycle}.
-        New free \Tvarseq{cycle}{V},
-        new free \Tvar{dup}{V}.}
+        \linebreak
+        New free $\V{cycle} \in \V{V} \expOp \naturals$.
+        New free $\V{dup} \in \V{V}$.}
 \end{gather}
-if \V{cycle} contains \V{dup} more than twice, we
-can always shorten it using the Subpath Theorem,
-so that we have WLOG
-\mypareq{eq:th-tree-acyclicity-105}{%
-    $\forall\; 1 \le \V{ix} < \Vlastix{cycle} :
-        \VVelement{cycle}{ix} \ne \V{dup}$
-    \bcuz{} \Thref{subpath},
-        \Eref{eq:th-tree-acyclicity-100},
-        \Eref{eq:th-tree-acyclicity-102},
-        \Eref{eq:th-tree-acyclicity-104}.}
-\mypareq{eq:th-tree-acyclicity-107}{%
-    $\Vlastix{cycle} > 0$ \cuz{}
-        \Eref{eq:th-tree-acyclicity-100},
-        \Eref{eq:th-tree-acyclicity-102},
-        \Eref{eq:th-tree-acyclicity-104}.}
 Let \V{root} be the root of \V{tree}:
-\mypareq{eq:th-tree-acyclicity-110}{%
-    $\existsUniq\; \V{root} \in \V{V} : \forall\; \V{from} \in \V{V} :
+\mypareq{eq:th-tree-acyclicity-130}{%
+    $\forall\; \V{from} \in \V{V} :
     \nexists\; \tuple{\V{from}, \V{root}} \in \V{E}$
     \bcuz{} \longDfref{Tree}{def:tree}.
-    New \V{root} for convenience.
+    New $\V{root} \in \V{V}$ for convenience.
 }
+\begin{equation}
+\label{eq:th-tree-acyclicity-140}
+\begin{gathered}
+    \forall\; \V{p} \in \Vmyfn{paths}{G} :
+    \forall\; \Vnat{ix} \le \Vlastix{p} :
+    \\ \V{ix} \ne 0 \implies
+        \left(
+            \exists\; \V{from} \in \V{V} :
+                 \tuple{ \Vbigelement{p}{\Vdecr{ix}}, \VVbigelement{p}{ix}}
+                 \in \V{E}
+        \right)
+    \\ \myparbox{\cuz{} \longDfref{Path}{def:path}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-tree-acyclicity-150}{%
+    $\tuple{ \; \Vbigelement{p}{
+            \Velement{cycle}{\decr{\Vlastix{p}}}
+        }, \V{dup}
+        \; } \in \V{E}$
+        \bcuz{} \Eref{eq:th-tree-acyclicity-110},
+            \Eref{eq:th-tree-acyclicity-120},
+            \Eref{eq:th-tree-acyclicity-140}.}
 Because one of the occurences of \V{dup} is after the first position
 in \V{cycle}, \V{dup} cannot be \V{root}:
-\mypareq{eq:th-tree-acyclicity-120}{%
+\mypareq{eq:th-tree-acyclicity-160}{%
     $\V{dup} \ne \V{root}$
-    \cuz{} \longThref{Root path}{root-path},
-        \Eref{eq:th-tree-acyclicity-102},
-        \Eref{eq:th-tree-acyclicity-107},
-        \Eref{eq:th-tree-acyclicity-110}.}
-By the definition of a tree,
-there is a path from its root to \V{dup},
-which, since the root and \V{dup} are distinct,
-is of length at least 2:
-\mypareq{eq:th-tree-acyclicity-130}{%
-    $\V{rootpath} = \seq{\V{root}\ldots\V{dup}}
-        \land \Vsize{rootpath} \ge 2$
-    \bcuz{}
-    \Dfref{def:tree}, \Eref{eq:th-tree-acyclicity-120}.}
-If \V{rootpath} contain more than one occurrence of \V{dup},
-we can always shorten it using the Subpath Theorem,
-so that WLOG
-\mypareq{eq:th-tree-acyclicity-135}{%
-    $\forall\; \V{ix} < \Vlastix{rootpath} :
-        \VVelement{rootpath}{ix} \ne \V{dup}$
-        \bcuz \Thref{subpath}, \Eref{eq:th-tree-acyclicity-130}.}
-\mypareq{eq:th-tree-acyclicity-140}{%
-    $\Velement{rootpath}{\Vlastix{rootpath}} = \Velement{cycle}{0}$
-    \cuz{} \Eref{eq:th-tree-acyclicity-100},
-        \Eref{eq:th-tree-acyclicity-140}.}
-We now consider the fusion of \V{cycle} and \V{rootpath}:
-\begin{gather}
-\label{eq:th-tree-acyclicity-145}
-   \V{fusion} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-tree-acyclicity-150}
-   \land\; \Velement{fusion}{0\ldots \Vlastix{rootpath}} = \V{rootpath}
-\\ \label{eq:th-tree-acyclicity-160}
-   \land\; \Velement{fusion}{\Vlastix{rootpath}\ldots\Vlastix{fusion}} = \V{cycle}
-\\ \label{eq:th-tree-acyclicity-170}
-   \land\; \Vsize{fusion} = \subtract{\Vsize{rootpath} + \Vsize{cycle}}{1}
-\\ \nonumber
-   \myparbox{\cuz{} \longThref{Fusion}{fusion}.
-       New free $\V{fusion} \in \Vmyfn{paths}{G}$.}
-\end{gather}
-We can quickly deduce some convenient facts about \V{fusion}:
-\mypareq{eq:th-tree-acyclicity-172}{%
-    $\Velement{fusion}{0} = \V{root}$ \cuz{}
-        \Eref{eq:th-tree-acyclicity-130}, \Eref{eq:th-tree-acyclicity-150}.}
-\begin{equation}
-\label{eq:th-tree-acyclicity-174}
-\begin{gathered}
-    \forall\; \Vnat{ix} \le \Vlastix{fusion} :
-        \V{ix} \ne 0 \implies
-    \\ \exists\; \V{from} \in \V{V} :
-                 \tuple{ \Velement{fusion}{\Vdecr{ix}}, \VVelement{fusion}{ix}}
-                      \in \V{E}
-    \\ \because{} \longDfref{Path}{def:path},
-        \Eref{eq:th-tree-acyclicity-145}.
-\end{gathered}
-\end{equation}
+    \cuz{} \Eref{eq:th-tree-acyclicity-110},
+        \Eref{eq:th-tree-acyclicity-150}.}
+\todo{Revised to here}
 
-We define a function
-for the index of occurrences of variables in \V{fusion}:
-\begin{equation}
-\label{eq:th-tree-acyclicity-180}
-\begin{gathered}
-    \myfn{occs}{\V{v}, \V{n}} \ldefined
-    \set{ \begin{gathered}
-        \V{ix} \in \Vsize{fusion} :
-        \VVelement{fusion}{ix} = \V{v}
-        \\ \land \;
-            \V{n} = \size{ \set{ \Vnat{j} \le \V{ix} : \VVelement{fusion}{j} = \V{v} }}
-    \end{gathered} }
-    \\ \myparbox{\cuz{} new function
-        $\V{Occ} \in \powerset{\naturals} \expOp (\V{V} \times \Vsize{fusion})$
-        for convenience.}
-\end{gathered}
-\end{equation}
-In fact,
-the set \myfn{occs}{\V{v}, \V{n}} is either empty or a singleton
-so that the following more convenient function is well-defined:
-\begin{equation}
-\label{eq:th-tree-acyclicity-190}
-\begin{gathered}
-    \myfn{Occ}{\V{v}, \V{n}} \ldefined
-    \left( \begin{gathered}
-     \size{\myfn{occs}{\V{v}, \V{n}}} = 1
-         \\ \condOp \; \left(
-             \riota \Vnat{ix} \in \Vsize{fusion} :
-            \V{ix} \in \myfn{occs}{\V{v}, \V{n}}
-            \right)
-         \\ : \; \Lambda
-    \end{gathered} \right)
-    \\ \myparbox{\cuz{} new function
-        $\V{Occ} \in \naturals \expOp (\V{V} \times \Vsize{fusion})$
-        for convenience.}
-\end{gathered}
-\end{equation}
-In particular \myfn{Occ}{\V{x},1}
-is the index of the first occurrence of \V{x} in \V{fusion}
-and
-\myfn{Occ}{\V{x},2} is the
-index of the duplication
-(second occurrence) of \V{x} in \V{fusion}.
-It follows from basic set theory that
-if some $\V{v} \in \V{V}$
-occurs \V{j} times in \V{fusion},
-then there is also a \V{i}'th occurrence
-of \V{v}
-for every \V{i} less than \V{j},
-and the index in \V{fusion} of the \V{i}'th occurrence
-is less than the index of the \V{j}'th occurrence:
-\begin{equation}
-\label{eq:th-tree-acyclicity-195A}
-\begin{gathered}
-    \forall\; \Vnat{hi} \le \Vsize{fusion} :
-    \forall\; \Vnat{lo} < \V{hi} :
-    \forall\;\V{nd}\in\V{V} :
-    \\ \myfn{Occ}{\V{nd},\V{hi}} \neq \Lambda \implies
-         \myfn{Occ}{\V{nd},\V{lo}} < \myfn{Occ}{\V{nd},\V{hi}}
-    \\ \myparbox{\cuz{}
-        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
-\end{gathered}
-\end{equation}
-We now set out a few facts
-about \myfn{Occ}{}
-which are highly plausible, intuitively,
-and which follow deductively
-from the facts of basic set theory
-and the definition of \myfn{Occ}{}.
-Every time a node
-appears in \V{fusion} it is an occurrence,
-and at least occurrence 1:
-\begin{equation}
-\label{eq:th-tree-acyclicity-195B}
-\begin{gathered}
-    \forall\;\V{nd}\in\V{V} :
-    \forall\; \Vnat{ix} \le \Vsize{fusion} :
-    \\ \VVelement{fusion}{ix} = \V{nd}
-        \implies \exists\; \V{n} \ge 1 :
-            \myfn{Occ}{\V{nd},\V{n}} = \V{ix}
-    \\ \myparbox{\cuz{}
-        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
-\end{gathered}
-\end{equation}
-The \V{n}'th occurrence of a node in \V{fusion}
-must be at a location in \V{fusion} with an index
-of \Vdecr{n} or greater:
-\begin{equation}
-\label{eq:th-tree-acyclicity-195C}
-\begin{gathered}
-    \myfn{Occ}{\V{nd},\V{n}} \ge \Vdecr{n}
-    \\ \myparbox{\cuz{}
-        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
-\end{gathered}
-\end{equation}
-And earlier locations imply earlier occurrences and vice versa:
-\begin{equation}
-\label{eq:th-tree-acyclicity-195D}
-\begin{gathered}
-    \forall\;\V{nd}\in\V{V} :
-    \forall\;\Vnat{locLo} :
-    \forall\;\Vnat{locHi} :
-    \\ \left( \begin{gathered}
-        \VVelement{fusion}{locLo} =
-            \VVelement{fusion}{locHi} = \V{nd}
-        \\ \land\; \V{locLo} < \V{locHi}
-    \end{gathered} \right)
-    \\ \iff
-    \left( \begin{gathered}
-        \exists\;\Vnat{occLo} :
-        \exists\;\Vnat{occHi} :
-        \V{occLo} < \V{occHi}
-        \\ \land\; \myfn{Occ}{\V{nd},\V{occLo}} = \V{locLo}
-        \\ \land\; \myfn{Occ}{\V{nd},\V{occHi}} = \V{locHi}
-    \end{gathered} \right)
-    \\ \myparbox{\cuz{}
-        \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
-\end{gathered}
-\end{equation}
-
-Based on our construction of \V{fusion}, we know that
-\V{dup} is duplicated in it:
-\mypareq{eq:th-tree-acyclicity-197}{%
-    $\myfn{Occ}{\V{dup}, 2} = \Vlastix{fusion}$
-    \bcuz{} \Eref{eq:th-tree-acyclicity-100},
-        \Eref{eq:th-tree-acyclicity-102},
-        \Eref{eq:th-tree-acyclicity-105},
-        \Eref{eq:th-tree-acyclicity-135},
-        \Eref{eq:th-tree-acyclicity-160}.}
-We now consider the set of vertices which occur twice in \V{fusion}:
-\mypareq{eq:th-tree-acyclicity-200}{%
-    $\V{dups} = \set{ \V{nd} \in \V{V} : \myfn{Occ}{\V{nd}, 2} \ne \Lambda }$
-    \bcuz{} new $\V{dups} \in \Vpowerset{V}$ for convenience.}
-Since $\V{dup} \in \V{dups}$,
-\mypareq{eq:th-tree-acyclicity-210}{%
-    $\Vsize{dups} \ge 1$
-    \cuz{}
-        \Eref{eq:th-tree-acyclicity-197}, \Eref{eq:th-tree-acyclicity-200}.}
-Since \V{dups} is a subset of the vertices of \V{tree},
-and these are finite, it follows that \V{dups} is finite:
-\mypareq{eq:th-tree-acyclicity-215}{%
-    $\Vsize{dups} \in \naturals$
-    \bcuz{}
-        \longDfref{Directed Graph}{def:directed-graph},
-        \longDfref{Tree}{def:tree},
-        \Eref{eq:th-tree-acyclicity-200}.}
-Let $\prec$ be the
-strict total order induced on the elements of \V{dups}
-by the natural order of the indexes of their duplicates:
-\mypareq{eq:th-tree-acyclicity-220}{%
-     $(\prec) \ldefined \set{
-         \begin{gathered}
-         \tuple{ \V{lo}, \V{hi} } \in \V{dups}\times\V{dups} :
-         \\ \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
-         \end{gathered}
-         }$
-     \bcuz{} new $(\prec) \in \powerset{\V{dups}\times\V{dups}}$ for convenience.}
-We can assert that $\prec$ is a total order because
-by the definition of a sequence no two distinct values occur in the same
-position of \V{fusion},
-and therefore
-\[
-\V{lo} \neq \V{hi} \implies
-\myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
-\lor
-\myfn{Occ}{\V{hi},2} < \myfn{Occ}{\V{lo},2}.
-\]
-Since $\prec$ is a total order on a
-non-empty finite set,
-there is a least element of \V{dups}, call it \V{firstDup}:
-\begin{gather}
-\label{eq:th-tree-acyclicity-230}
-     \V{firstDup} \in \V{dups}
-     \\ \label{eq:th-tree-acyclicity-240}
-     \land\;
-     \left( \begin{gathered}
-         \forall\; \V{nd} \in \V{dups} :
-         \\ \neg\; ( \V{firstDup} \prec \V{nd})
-             \implies \V{firstDup} = \V{nd}
-     \end{gathered} \right)
-     \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-135},
-         \Eref{eq:th-tree-acyclicity-215}.
-         New $\V{firstDup} \in \V{dups}$ for convenience.}
-\end{gather}
-We examine the first two occurrences of \Tvar{firstDup}{V} more
-closely:
-\mypareq{eq:th-tree-acyclicity-250}{%
-    $\myfn{Occ}{\V{firstDup},2} = \V{firstLoc2}$
-    \cuz{} \Eref{eq:th-tree-acyclicity-230}.
-    New free \Vnat{firstLoc2}.}
-\begin{gather}
-\label{eq:th-tree-acyclicity-260}
-    \myfn{Occ}{\V{firstDup},1} = \V{firstLoc1}
-\\ \label{eq:th-tree-acyclicity-263}
-    \land\; \V{firstLoc1} < \V{firstloc2}
-    \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195A}
-        \Eref{eq:th-tree-acyclicity-250}.
-        New free \Vnat{firstLoc1}.}
-\end{gather}
-We now seek to show that these first two occurrences of \V{firstDup} are both
-the to-nodes of edges.
-\mypareq{eq:th-tree-acyclicity-270}{%
-    $\V{firstLoc2} \ge 1$
-    \cuz{} \Eref{eq:th-tree-acyclicity-195C},
-        \Eref{eq:th-tree-acyclicity-263}.}
-\mypareq{eq:th-tree-acyclicity-280}{%
-    $\tuple{ \Velement{fusion}{\Vdecr{firstLoc2}}, \VVelement{fusion}{firstLoc2}}
-        \in \V{E}$
-\bcuz{} \Eref{eq:th-tree-acyclicity-174}, \Eref{eq:th-tree-acyclicity-270}.}
-\mypareq{eq:th-tree-acyclicity-290}{%
-    $\VVelement{fusion}{firstLoc2} = \V{firstDup}$
-        \cuz{} \Eref{eq:th-tree-acyclicity-250}.}
-\mypareq{eq:th-tree-acyclicity-300}{%
-    $\V{firstDup} \ne \V{root}$
-    \cuz{} \longThref{Root path}{root-path},
-        \Eref{eq:th-tree-acyclicity-270},
-        \Eref{eq:th-tree-acyclicity-290}.}
-The zero'th value of \V{fusion} is \V{root}
-and, since \V{firstDup} is not \V{root},
-\V{firstDup}'s first occurrence must be after
-the zero'th location of \V{fusion}:
-\mypareq{eq:th-tree-acyclicity-310}{%
-    $\V{firstLoc1} \ge 1$
-    \cuz{} \Eref{eq:th-tree-acyclicity-172},
-        \Eref{eq:th-tree-acyclicity-300}.}
-\mypareq{eq:th-tree-acyclicity-320}{%
-    $\tuple{ \Velement{fusion}{\Vdecr{firstLoc1}}, \VVelement{fusion}{firstLoc1}}
-        \in \V{E}$
-    \bcuz{} \Eref{eq:th-tree-acyclicity-174},
-        \Eref{eq:th-tree-acyclicity-310}.}
-We notice that the to-node in both edges under consideration
-is \V{firstDup}.
-\mypareq{eq:th-tree-acyclicity-330}{%
-    $\tuple{ \Velement{fusion}{\Vdecr{firstLoc1}}, \V{firstDup}}
-        \in \V{E}$ \cuz{} \Eref{eq:th-tree-acyclicity-260},
-            \Eref{eq:th-tree-acyclicity-320}.}
-\mypareq{eq:th-tree-acyclicity-340}{%
-    $\tuple{ \Velement{fusion}{\Vdecr{firstLoc2}}, \V{firstDup}}
-        \in \V{E}$ \cuz{} \Eref{eq:th-tree-acyclicity-290},
-            \Eref{eq:th-tree-acyclicity-280}.}
-No node in a tree has an in-degree of more than one,
-and therefore \V{firstDup} cannot have two distinct parents,
-so that
-\mypareq{eq:th-tree-acyclicity-350}{%
-    $\Velement{fusion}{\Vdecr{firstLoc1}} =
-        \Velement{fusion}{\Vdecr{firstLoc2}} = \Tvar{firster}{V}$
-    \bcuz{} \longDfref{Tree}{def:tree},
-        \Eref{eq:th-tree-acyclicity-330},
-        \Eref{eq:th-tree-acyclicity-340}.
-    New $\V{firster} \in \V{V}$ for convenience.}
-We now investigate the occurrences of \V{firster},
-recalling that every occurrence of a variable is at least occurrence 1:
-\begin{gather}
-\label{eq:th-tree-acyclicity-360}
-    \myfn{Occ}{\V{firster},\V{firsterOcc1}} = \Vdecr{firstLoc1} = \V{firsterLoc1}
-\\ \label{eq:th-tree-acyclicity-362}
-    \land\; \V{firsterOcc1} \ge 1
-\\ \label{eq:th-tree-acyclicity-370}
-    \myfn{Occ}{\V{firster},\V{firsterOcc2}} = \Vdecr{firstLoc2} = \V{firsterLoc2}
-\\ \label{eq:th-tree-acyclicity-372}
-    \land\; \V{firsterOcc2} \ge 1
-\\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195B},
-        \Eref{eq:th-tree-acyclicity-350}.
-        New \Vnat{firsterOcc1}, \Vnat{firsterLoc1}
-        \Vnat{firsterOcc2}, \Vnat{firsterLoc2}
-        for convenience.}
-\end{gather}
-\mypareq{eq:th-tree-acyclicity-380}{%
-    $\Vdecr{firstLoc1} < \Vdecr{firstloc2}$
-    \cuz{} \Eref{eq:th-tree-acyclicity-263}.}
-\mypareq{eq:th-tree-acyclicity-390}{%
-    $\V{firsterLoc1} < \V{firsterloc2}$
-    \cuz{} \Eref{eq:th-tree-acyclicity-360},
-        \Eref{eq:th-tree-acyclicity-370},
-        \Eref{eq:th-tree-acyclicity-380}.}
+% if \V{cycle} contains \V{dup} more than twice, we
+% can always shorten it using the Subpath Theorem,
+% so that we have WLOG
+% \mypareq{OLD-eq:th-tree-acyclicity-105}{%
+%     $\forall\; 1 \le \V{ix} < \Vlastix{cycle} :
+%         \VVelement{cycle}{ix} \ne \V{dup}$
+%     \bcuz{} \Thref{subpath},
+%         \Eref{OLD-eq:th-tree-acyclicity-100},
+%         \Eref{OLD-eq:th-tree-acyclicity-102},
+%         \Eref{OLD-eq:th-tree-acyclicity-104}.}
+% \mypareq{OLD-eq:th-tree-acyclicity-107}{%
+%     $\Vlastix{cycle} > 0$ \cuz{}
+%         \Eref{OLD-eq:th-tree-acyclicity-100},
+%         \Eref{OLD-eq:th-tree-acyclicity-102},
+%         \Eref{OLD-eq:th-tree-acyclicity-104}.}
+% By the definition of a tree,
+% there is a path from its root to \V{dup},
+% which, since the root and \V{dup} are distinct,
+% is of length at least 2:
+% \mypareq{OLD-eq:th-tree-acyclicity-130}{%
+%     $\V{rootpath} = \seq{\V{root}\ldots\V{dup}}
+%         \land \Vsize{rootpath} \ge 2$
+%     \bcuz{}
+%     \Dfref{def:tree}, \Eref{OLD-eq:th-tree-acyclicity-120}.}
+% If \V{rootpath} contain more than one occurrence of \V{dup},
+% we can always shorten it using the Subpath Theorem,
+% so that WLOG
+% \mypareq{OLD-eq:th-tree-acyclicity-135}{%
+%     $\forall\; \V{ix} < \Vlastix{rootpath} :
+%         \VVelement{rootpath}{ix} \ne \V{dup}$
+%         \bcuz \Thref{subpath}, \Eref{OLD-eq:th-tree-acyclicity-130}.}
+% \mypareq{OLD-eq:th-tree-acyclicity-140}{%
+%     $\Velement{rootpath}{\Vlastix{rootpath}} = \Velement{cycle}{0}$
+%     \cuz{} \Eref{OLD-eq:th-tree-acyclicity-100},
+%         \Eref{OLD-eq:th-tree-acyclicity-140}.}
+% We now consider the fusion of \V{cycle} and \V{rootpath}:
+% \begin{gather}
+% \label{OLD-eq:th-tree-acyclicity-145}
+%    \V{fusion} \in \Vmyfn{paths}{G}
+% \\ \label{OLD-eq:th-tree-acyclicity-150}
+%    \land\; \Velement{fusion}{0\ldots \Vlastix{rootpath}} = \V{rootpath}
+% \\ \label{OLD-eq:th-tree-acyclicity-160}
+%    \land\; \Velement{fusion}{\Vlastix{rootpath}\ldots\Vlastix{fusion}} = \V{cycle}
+% \\ \label{OLD-eq:th-tree-acyclicity-170}
+%    \land\; \Vsize{fusion} = \subtract{\Vsize{rootpath} + \Vsize{cycle}}{1}
+% \\ \nonumber
+%    \myparbox{\cuz{} \longThref{Fusion}{fusion}.
+%        New free $\V{fusion} \in \Vmyfn{paths}{G}$.}
+% \end{gather}
+% We can quickly deduce some convenient facts about \V{fusion}:
+% \mypareq{OLD-eq:th-tree-acyclicity-172}{%
+%     $\Velement{fusion}{0} = \V{root}$ \cuz{}
+%         \Eref{OLD-eq:th-tree-acyclicity-130}, \Eref{OLD-eq:th-tree-acyclicity-150}.}
+%
+% We define a function
+% for the index of occurrences of variables in \V{fusion}:
+% \begin{equation}
+% \label{OLD-eq:th-tree-acyclicity-180}
+% \begin{gathered}
+%     \myfn{occs}{\V{v}, \V{n}} \ldefined
+%     \set{ \begin{gathered}
+%         \V{ix} \in \Vsize{fusion} :
+%         \VVelement{fusion}{ix} = \V{v}
+%         \\ \land \;
+%             \V{n} = \size{ \set{ \Vnat{j} \le \V{ix} : \VVelement{fusion}{j} = \V{v} }}
+%     \end{gathered} }
+%     \\ \myparbox{\cuz{} new function
+%         $\V{Occ} \in \powerset{\naturals} \expOp (\V{V} \times \Vsize{fusion})$
+%         for convenience.}
+% \end{gathered}
+% \end{equation}
+% In fact,
+% the set \myfn{occs}{\V{v}, \V{n}} is either empty or a singleton
+% so that the following more convenient function is well-defined:
+% \begin{equation}
+% \label{OLD-eq:th-tree-acyclicity-190}
+% \begin{gathered}
+%     \myfn{Occ}{\V{v}, \V{n}} \ldefined
+%     \left( \begin{gathered}
+%      \size{\myfn{occs}{\V{v}, \V{n}}} = 1
+%          \\ \condOp \; \left(
+%              \riota \Vnat{ix} \in \Vsize{fusion} :
+%             \V{ix} \in \myfn{occs}{\V{v}, \V{n}}
+%             \right)
+%          \\ : \; \Lambda
+%     \end{gathered} \right)
+%     \\ \myparbox{\cuz{} new function
+%         $\V{Occ} \in \naturals \expOp (\V{V} \times \Vsize{fusion})$
+%         for convenience.}
+% \end{gathered}
+% \end{equation}
+% In particular \myfn{Occ}{\V{x},1}
+% is the index of the first occurrence of \V{x} in \V{fusion}
+% and
+% \myfn{Occ}{\V{x},2} is the
+% index of the duplication
+% (second occurrence) of \V{x} in \V{fusion}.
+% It follows from basic set theory that
+% if some $\V{v} \in \V{V}$
+% occurs \V{j} times in \V{fusion},
+% then there is also a \V{i}'th occurrence
+% of \V{v}
+% for every \V{i} less than \V{j},
+% and the index in \V{fusion} of the \V{i}'th occurrence
+% is less than the index of the \V{j}'th occurrence:
+% \begin{equation}
+% \label{OLD-eq:th-tree-acyclicity-195A}
+% \begin{gathered}
+%     \forall\; \Vnat{hi} \le \Vsize{fusion} :
+%     \forall\; \Vnat{lo} < \V{hi} :
+%     \forall\;\V{nd}\in\V{V} :
+%     \\ \myfn{Occ}{\V{nd},\V{hi}} \neq \Lambda \implies
+%          \myfn{Occ}{\V{nd},\V{lo}} < \myfn{Occ}{\V{nd},\V{hi}}
+%     \\ \myparbox{\cuz{}
+%         \Eref{OLD-eq:th-tree-acyclicity-180}, \Eref{OLD-eq:th-tree-acyclicity-190}.}
+% \end{gathered}
+% \end{equation}
+% We now set out a few facts
+% about \myfn{Occ}{}
+% which are highly plausible, intuitively,
+% and which follow deductively
+% from the facts of basic set theory
+% and the definition of \myfn{Occ}{}.
+% Every time a node
+% appears in \V{fusion} it is an occurrence,
+% and at least occurrence 1:
+% \begin{equation}
+% \label{OLD-eq:th-tree-acyclicity-195B}
+% \begin{gathered}
+%     \forall\;\V{nd}\in\V{V} :
+%     \forall\; \Vnat{ix} \le \Vsize{fusion} :
+%     \\ \VVelement{fusion}{ix} = \V{nd}
+%         \implies \exists\; \V{n} \ge 1 :
+%             \myfn{Occ}{\V{nd},\V{n}} = \V{ix}
+%     \\ \myparbox{\cuz{}
+%         \Eref{OLD-eq:th-tree-acyclicity-180}, \Eref{OLD-eq:th-tree-acyclicity-190}.}
+% \end{gathered}
+% \end{equation}
+% The \V{n}'th occurrence of a node in \V{fusion}
+% must be at a location in \V{fusion} with an index
+% of \Vdecr{n} or greater:
+% \begin{equation}
+% \label{eq:th-tree-acyclicity-195C}
+% \begin{gathered}
+%     \myfn{Occ}{\V{nd},\V{n}} \ge \Vdecr{n}
+%     \\ \myparbox{\cuz{}
+%         \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
+% \end{gathered}
+% \end{equation}
+% And earlier locations imply earlier occurrences and vice versa:
+% \begin{equation}
+% \label{eq:th-tree-acyclicity-195D}
+% \begin{gathered}
+%     \forall\;\V{nd}\in\V{V} :
+%     \forall\;\Vnat{locLo} :
+%     \forall\;\Vnat{locHi} :
+%     \\ \left( \begin{gathered}
+%         \VVelement{fusion}{locLo} =
+%             \VVelement{fusion}{locHi} = \V{nd}
+%         \\ \land\; \V{locLo} < \V{locHi}
+%     \end{gathered} \right)
+%     \\ \iff
+%     \left( \begin{gathered}
+%         \exists\;\Vnat{occLo} :
+%         \exists\;\Vnat{occHi} :
+%         \V{occLo} < \V{occHi}
+%         \\ \land\; \myfn{Occ}{\V{nd},\V{occLo}} = \V{locLo}
+%         \\ \land\; \myfn{Occ}{\V{nd},\V{occHi}} = \V{locHi}
+%     \end{gathered} \right)
+%     \\ \myparbox{\cuz{}
+%         \Eref{eq:th-tree-acyclicity-180}, \Eref{eq:th-tree-acyclicity-190}.}
+% \end{gathered}
+% \end{equation}
+%
+% Based on our construction of \V{fusion}, we know that
+% \V{dup} is duplicated in it:
+% \mypareq{eq:th-tree-acyclicity-197}{%
+%     $\myfn{Occ}{\V{dup}, 2} = \Vlastix{fusion}$
+%     \bcuz{} \Eref{eq:th-tree-acyclicity-100},
+%         \Eref{eq:th-tree-acyclicity-102},
+%         \Eref{eq:th-tree-acyclicity-105},
+%         \Eref{eq:th-tree-acyclicity-135},
+%         \Eref{eq:th-tree-acyclicity-160}.}
+% We now consider the set of vertices which occur twice in \V{fusion}:
+% \mypareq{eq:th-tree-acyclicity-200}{%
+%     $\V{dups} = \set{ \V{nd} \in \V{V} : \myfn{Occ}{\V{nd}, 2} \ne \Lambda }$
+%     \bcuz{} new $\V{dups} \in \Vpowerset{V}$ for convenience.}
+% Since $\V{dup} \in \V{dups}$,
+% \mypareq{eq:th-tree-acyclicity-210}{%
+%     $\Vsize{dups} \ge 1$
+%     \cuz{}
+%         \Eref{eq:th-tree-acyclicity-197}, \Eref{eq:th-tree-acyclicity-200}.}
+% Since \V{dups} is a subset of the vertices of \V{tree},
+% and these are finite, it follows that \V{dups} is finite:
+% \mypareq{eq:th-tree-acyclicity-215}{%
+%     $\Vsize{dups} \in \naturals$
+%     \bcuz{}
+%         \longDfref{Directed Graph}{def:directed-graph},
+%         \longDfref{Tree}{def:tree},
+%         \Eref{eq:th-tree-acyclicity-200}.}
+% Let $\prec$ be the
+% strict total order induced on the elements of \V{dups}
+% by the natural order of the indexes of their duplicates:
+% \mypareq{eq:th-tree-acyclicity-220}{%
+%      $(\prec) \ldefined \set{
+%          \begin{gathered}
+%          \tuple{ \V{lo}, \V{hi} } \in \V{dups}\times\V{dups} :
+%          \\ \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
+%          \end{gathered}
+%          }$
+%      \bcuz{} new $(\prec) \in \powerset{\V{dups}\times\V{dups}}$ for convenience.}
+% We can assert that $\prec$ is a total order because
+% by the definition of a sequence no two distinct values occur in the same
+% position of \V{fusion},
+% and therefore
+% \[
+% \V{lo} \neq \V{hi} \implies
+% \myfn{Occ}{\V{lo},2} < \myfn{Occ}{\V{hi},2}
+% \lor
+% \myfn{Occ}{\V{hi},2} < \myfn{Occ}{\V{lo},2}.
+% \]
+% Since $\prec$ is a total order on a
+% non-empty finite set,
+% there is a least element of \V{dups}, call it \V{firstDup}:
+% \begin{gather}
+% \label{eq:th-tree-acyclicity-230}
+%      \V{firstDup} \in \V{dups}
+%      \\ \label{eq:th-tree-acyclicity-240}
+%      \land\;
+%      \left( \begin{gathered}
+%          \forall\; \V{nd} \in \V{dups} :
+%          \\ \neg\; ( \V{firstDup} \prec \V{nd})
+%              \implies \V{firstDup} = \V{nd}
+%      \end{gathered} \right)
+%      \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-135},
+%          \Eref{eq:th-tree-acyclicity-215}.
+%          New $\V{firstDup} \in \V{dups}$ for convenience.}
+% \end{gather}
+% We examine the first two occurrences of \Tvar{firstDup}{V} more
+% closely:
+% \mypareq{eq:th-tree-acyclicity-250}{%
+%     $\myfn{Occ}{\V{firstDup},2} = \V{firstLoc2}$
+%     \cuz{} \Eref{eq:th-tree-acyclicity-230}.
+%     New free \Vnat{firstLoc2}.}
+% \begin{gather}
+% \label{eq:th-tree-acyclicity-260}
+%     \myfn{Occ}{\V{firstDup},1} = \V{firstLoc1}
+% \\ \label{eq:th-tree-acyclicity-263}
+%     \land\; \V{firstLoc1} < \V{firstloc2}
+%     \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195A}
+%         \Eref{eq:th-tree-acyclicity-250}.
+%         New free \Vnat{firstLoc1}.}
+% \end{gather}
+% We now seek to show that these first two occurrences of \V{firstDup} are both
+% the to-nodes of edges.
+% \mypareq{eq:th-tree-acyclicity-270}{%
+%     $\V{firstLoc2} \ge 1$
+%     \cuz{} \Eref{eq:th-tree-acyclicity-195C},
+%         \Eref{eq:th-tree-acyclicity-263}.}
+% \mypareq{eq:th-tree-acyclicity-280}{%
+%     $\tuple{ \Velement{fusion}{\Vdecr{firstLoc2}}, \VVelement{fusion}{firstLoc2}}
+%         \in \V{E}$
+% \bcuz{} \Eref{eq:th-tree-acyclicity-174}, \Eref{eq:th-tree-acyclicity-270}.}
+% \mypareq{eq:th-tree-acyclicity-290}{%
+%     $\VVelement{fusion}{firstLoc2} = \V{firstDup}$
+%         \cuz{} \Eref{eq:th-tree-acyclicity-250}.}
+% \mypareq{eq:th-tree-acyclicity-300}{%
+%     $\V{firstDup} \ne \V{root}$
+%     \cuz{} \longThref{Root path}{root-path},
+%         \Eref{eq:th-tree-acyclicity-270},
+%         \Eref{eq:th-tree-acyclicity-290}.}
+% The zero'th value of \V{fusion} is \V{root}
+% and, since \V{firstDup} is not \V{root},
+% \V{firstDup}'s first occurrence must be after
+% the zero'th location of \V{fusion}:
+% \mypareq{eq:th-tree-acyclicity-310}{%
+%     $\V{firstLoc1} \ge 1$
+%     \cuz{} \Eref{eq:th-tree-acyclicity-172},
+%         \Eref{eq:th-tree-acyclicity-300}.}
+% \mypareq{eq:th-tree-acyclicity-320}{%
+%     $\tuple{ \Velement{fusion}{\Vdecr{firstLoc1}}, \VVelement{fusion}{firstLoc1}}
+%         \in \V{E}$
+%     \bcuz{} \Eref{eq:th-tree-acyclicity-174},
+%         \Eref{eq:th-tree-acyclicity-310}.}
+% We notice that the to-node in both edges under consideration
+% is \V{firstDup}.
+% \mypareq{eq:th-tree-acyclicity-330}{%
+%     $\tuple{ \Velement{fusion}{\Vdecr{firstLoc1}}, \V{firstDup}}
+%         \in \V{E}$ \cuz{} \Eref{eq:th-tree-acyclicity-260},
+%             \Eref{eq:th-tree-acyclicity-320}.}
+% \mypareq{eq:th-tree-acyclicity-340}{%
+%     $\tuple{ \Velement{fusion}{\Vdecr{firstLoc2}}, \V{firstDup}}
+%         \in \V{E}$ \cuz{} \Eref{eq:th-tree-acyclicity-290},
+%             \Eref{eq:th-tree-acyclicity-280}.}
+% No node in a tree has an in-degree of more than one,
+% and therefore \V{firstDup} cannot have two distinct parents,
+% so that
+% \mypareq{eq:th-tree-acyclicity-350}{%
+%     $\Velement{fusion}{\Vdecr{firstLoc1}} =
+%         \Velement{fusion}{\Vdecr{firstLoc2}} = \Tvar{firster}{V}$
+%     \bcuz{} \longDfref{Tree}{def:tree},
+%         \Eref{eq:th-tree-acyclicity-330},
+%         \Eref{eq:th-tree-acyclicity-340}.
+%     New $\V{firster} \in \V{V}$ for convenience.}
+% We now investigate the occurrences of \V{firster},
+% recalling that every occurrence of a variable is at least occurrence 1:
+% \begin{gather}
+% \label{eq:th-tree-acyclicity-360}
+%     \myfn{Occ}{\V{firster},\V{firsterOcc1}} = \Vdecr{firstLoc1} = \V{firsterLoc1}
+% \\ \label{eq:th-tree-acyclicity-362}
+%     \land\; \V{firsterOcc1} \ge 1
+% \\ \label{eq:th-tree-acyclicity-370}
+%     \myfn{Occ}{\V{firster},\V{firsterOcc2}} = \Vdecr{firstLoc2} = \V{firsterLoc2}
+% \\ \label{eq:th-tree-acyclicity-372}
+%     \land\; \V{firsterOcc2} \ge 1
+% \\ \nonumber \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-195B},
+%         \Eref{eq:th-tree-acyclicity-350}.
+%         New \Vnat{firsterOcc1}, \Vnat{firsterLoc1}
+%         \Vnat{firsterOcc2}, \Vnat{firsterLoc2}
+%         for convenience.}
+% \end{gather}
+% \mypareq{eq:th-tree-acyclicity-380}{%
+%     $\Vdecr{firstLoc1} < \Vdecr{firstloc2}$
+%     \cuz{} \Eref{eq:th-tree-acyclicity-263}.}
+% \mypareq{eq:th-tree-acyclicity-390}{%
+%     $\V{firsterLoc1} < \V{firsterloc2}$
+%     \cuz{} \Eref{eq:th-tree-acyclicity-360},
+%         \Eref{eq:th-tree-acyclicity-370},
+%         \Eref{eq:th-tree-acyclicity-380}.}
 
 \todo{Write this proof}
 
