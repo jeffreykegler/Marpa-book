@@ -3127,20 +3127,52 @@ is a finite constant.
 \label{def:tree}
 A \V{tree} is a directed graph,
 $\V{G} = \tuple{\V{V}, \V{E}}$
-such that
-\begin{itemize}
-\item Exactly one vertex of \V{G}, called the \V{root},
-    has an in-degree of zero.
-    In other words, \V{G} has a distinguished vertex,
-    called its root, which has no parents.
-\item There is a path from the root to every vertex of
-    the tree.  (Note that there is a trivial path from the root
-    to itself.)
-\item Every vertex, other than the root, has an in-degree of
-    one.
-    In other words, every non-root vertex of \V{G} has exactly
-    one parent.
-\end{itemize}
+with the following three properties:
+
+Exactly one vertex of \V{G}, called the \V{root},
+has an in-degree of zero.
+In other words, the root of \V{G}
+is a distinguished vertex
+which has no parents.
+That is,
+\begin{equation}
+\label{eq:def-tree-root}
+\begin{gathered}
+    \exists\; \V{root} \in \V{V} : \forall\; \V{parent} \in \V{V} :
+        \nexists\; \tuple{\V{parent}, \V{root}} \in \V{E}.
+\end{gathered}
+\end{equation}
+
+There is a path from the root to every vertex of
+the tree.
+That is,
+\begin{equation}
+\label{eq:def-tree-rootpath}
+\begin{gathered}
+    \forall\; \V{nd} \in \V{V} :
+        \exists\; \V{rootpath} \in \Vmyfn{paths}{G} :
+    \\ \Velement{rootpath}{0} = \V{root}
+\land \Velement{rootpath}{\Vlastix{rootpath}} = \V{nd}.
+\end{gathered}
+\end{equation}
+Note that there is a trivial path from the root to itself.
+
+Every vertex, other than the root, has an in-degree of
+one.
+In other words, every non-root vertex of \V{G} has exactly
+one parent.
+That is,
+\begin{equation}
+\label{eq:def-tree-hierarchy}
+\begin{gathered}
+    \forall\; \V{parent1} \in \V{V} :
+        \forall\; \V{parent2} \in \V{V} :
+        \forall\; \V{nd} \in \V{V} :
+    \\ \tuple{ \V{parent1}, \V{nd} } \in \V{E}
+        \land \tuple{ \V{parent2}, \V{nd} } \in \V{E}
+    \\ \implies \V{parent1} = \V{parent2}.
+\end{gathered}
+\end{equation}
 When a directed graph is a tree, its vertices are more
 often called \dfn{nodes}.
 A \dfn{leaf} of a tree is a node with an out-degree of zero ---
@@ -3478,19 +3510,39 @@ Let \V{root} be the root of \V{tree}:
         \bcuz{} \Eref{eq:th-tree-acyclicity-100},
             \Eref{eq:th-tree-acyclicity-150}.}
 From \Eref{eq:th-tree-acyclicity-160},
-two useful facts about the values of \V{cycle} emerge:
-all of them are the to-node of an edge,
-and none of them are \V{root}.
-\mypareq{eq:th-tree-acyclicity-170}{%
-    $\forall\; \V{nd} \in \Ran{\V{cycle}} :
-    \exists\; \V{from} : \tuple{ \V{from}, \Velement{cycle}{0} } \in \V{E}$
-        \bcuz{} \Eref{eq:th-tree-acyclicity-100},
+two useful facts about the values of \V{cycle} emerge.
+First, all of the values of \V{cycle} are the to-node of an edge
+whose from-node is in \V{cycle}.
+\begin{equation}
+\label{eq:th-tree-acyclicity-170}
+\begin{gathered}
+    \forall\; \V{nd} \in \Ran{\V{cycle}} : \exists\; \V{from} :
+    \\ \tuple{ \V{from}, \VVelement{cycle}{nd} } \in \V{E}
+        \land \V{from} \in \Ran{\V{cycle}}
+    \\ \myparbox{\cuz{} \Eref{eq:th-tree-acyclicity-100},
             \Eref{eq:th-tree-acyclicity-160}.}
+\end{gathered}
+\end{equation}
+A second useful fact about the values of \V{cycle}
+is that none of them are \V{root}.
 \mypareq{eq:th-tree-acyclicity-180}{%
     $\forall\; \V{nd} \in \Ran{\V{cycle}} :
         \V{nd} \ne \V{root}$
         \bcuz{} \Eref{eq:th-tree-acyclicity-130},
             \Eref{eq:th-tree-acyclicity-160}.}
+Recall from the definition of a tree, that every parent is unique:
+\begin{equation}
+\label{eq:th-tree-acyclicity-190}
+\begin{gathered}
+    \forall\; \V{from1} \in \V{V} :
+        \forall\; \V{from2} \in \V{V} :
+        \forall\; \V{to} \in \V{V} :
+    \\ \tuple{ \V{from1}, \V{to} } \in \V{E}
+        \land \tuple{ \V{from2}, \V{to} } \in \V{E}
+        \implies \V{from1} = \V{from2}
+    \\ \myparbox{\cuz{} \Dfref{def:tree}.}
+\end{gathered}
+\end{equation}
 \todo{Revised to here}
 
 % if \V{cycle} contains \V{dup} more than twice, we
