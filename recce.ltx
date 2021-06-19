@@ -3530,19 +3530,46 @@ is that none of them are \V{root}.
         \V{nd} \ne \V{root}$
         \bcuz{} \Eref{eq:th-tree-acyclicity-130},
             \Eref{eq:th-tree-acyclicity-160}.}
-Recall from the definition of a tree, that every parent is unique:
+Recalling from the definition of a tree, that every node has at
+most one parent, we see that
 \begin{equation}
 \label{eq:th-tree-acyclicity-190}
 \begin{gathered}
-    \forall\; \V{from1} \in \V{V} :
-        \forall\; \V{from2} \in \V{V} :
-        \forall\; \V{to} \in \V{V} :
-    \\ \tuple{ \V{from1}, \V{to} } \in \V{E}
-        \land \tuple{ \V{from2}, \V{to} } \in \V{E}
-        \implies \V{from1} = \V{from2}
-    \\ \myparbox{\cuz{} \Dfref{def:tree}.}
+    \forall\; \V{nd} \in \Ran{\V{cycle}} :
+    \forall\; \V{parent} \in \V{V} :
+    \\ \tuple{ \V{parent}, \V{to} } \in \V{E} \implies
+        \V{parent} \in \Ran{\V{cycle}}
+    \\ \myparbox{\cuz{}
+        \Eref{eq:def-tree-hierarchy} in \Dfref{def:tree},
+        \Eref{eq:th-tree-acyclicity-170}.}
 \end{gathered}
 \end{equation}
+
+We now look consider at the rootpath to \V{dup}.
+\begin{gather}
+\label{eq:th-tree-acyclicity-200}
+    \Velement{rootpath}{0} = \V{root}
+\\ \label{eq:th-tree-acyclicity-210}
+    \land\; \VlastElement{rootpath} = \V{dup}
+\\ \nonumber
+    \myparbox{cuz{} \Eref{eq:def-tree-rootpath} in \Dfref{def:tree},
+    \Eref{eq:th-tree-acyclicity-100}.}
+\end{gather}
+Next we consider the first occurrence of a value of \V{cycle} in
+\V{rootpath}.
+Since $\V{dup} \in \Ran{\V{rootpath}}$
+and \V{dup} is a node in \V{cycle},
+we know there is
+such a first occurrence.
+We leave it open whether
+this first occurrence is an occurrence of \V{dup} or
+of some other value of \V{cycle}.
+
+
+% \mypareq{eq:th-tree-acyclicity-320}{%
+    % $\Velement{rootpath}{0} = \V{root}$ \cuz{}
+        % \Eref{eq:th-tree-acyclicity-210}.}
+
 \todo{Revised to here}
 
 % if \V{cycle} contains \V{dup} more than twice, we
@@ -3564,11 +3591,6 @@ Recall from the definition of a tree, that every parent is unique:
 % there is a path from its root to \V{dup},
 % which, since the root and \V{dup} are distinct,
 % is of length at least 2:
-% \mypareq{OLD-eq:th-tree-acyclicity-130}{%
-%     $\V{rootpath} = \seq{\V{root}\ldots\V{dup}}
-%         \land \Vsize{rootpath} \ge 2$
-%     \bcuz{}
-%     \Dfref{def:tree}, \Eref{OLD-eq:th-tree-acyclicity-120}.}
 % If \V{rootpath} contain more than one occurrence of \V{dup},
 % we can always shorten it using the Subpath Theorem,
 % so that WLOG
