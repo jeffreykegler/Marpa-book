@@ -2383,6 +2383,32 @@ If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
 \defEnd
 \end{definition}
 
+\begin{theorem}[Edge To-node]
+\label{th:edge-to-node}
+If a vertex is not at location 0,
+there must be an edge to it.
+This is, if
+$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
+\[
+\begin{gathered}
+    \forall\; \V{p} \in \Vmyfn{paths}{G} :
+    \forall\; \Vnat{ix} \le \Vlastix{p} :
+    \\ \V{ix} \ne 0 \implies
+        \left(
+            \exists\; \V{from} \in \V{V} :
+                 \tuple{ \Vbigelement{p}{\Vdecr{ix}}, \VVbigelement{p}{ix}}
+                 \in \V{E}
+        \right).
+        \quad \thEnd
+\end{gathered}
+\]
+\end{theorem}
+
+\begin{proof}
+This theorem follows immediately from the definition of a path \Dfref{def:path}.
+\myqed
+\end{proof}
+
 \begin{theorem}[Singleton Path]
 \label{th:singleton-path}
 Every node in a directed graph induces a unique path.
@@ -3484,26 +3510,12 @@ Let \V{root} be the root of \V{tree}:
     \bcuz{} \longDfref{Tree}{def:tree}.
     New $\V{root} \in \V{V}$ for convenience.
 }
-\begin{equation}
-\label{eq:th-tree-acyclicity-140}
-\begin{gathered}
-    \forall\; \V{p} \in \Vmyfn{paths}{G} :
-    \forall\; \Vnat{ix} \le \Vlastix{p} :
-    \\ \V{ix} \ne 0 \implies
-        \left(
-            \exists\; \V{from} \in \V{V} :
-                 \tuple{ \Vbigelement{p}{\Vdecr{ix}}, \VVbigelement{p}{ix}}
-                 \in \V{E}
-        \right)
-    \\ \myparbox{\cuz{} \longDfref{Path}{def:path}.}
-\end{gathered}
-\end{equation}
 \mypareq{eq:th-tree-acyclicity-150}{%
     $\tuple{ \Velement{cycle}{\decr{\Vlastix{p}}}, \V{dup}
         } \in \V{E}$
-        \bcuz{} \Eref{eq:th-tree-acyclicity-110},
-            \Eref{eq:th-tree-acyclicity-120},
-            \Eref{eq:th-tree-acyclicity-140}.}
+        \bcuz{} \longThref{Edge of To-Node}{edge-to-node},
+            \Eref{eq:th-tree-acyclicity-110},
+            \Eref{eq:th-tree-acyclicity-120}.}
 \mypareq{eq:th-tree-acyclicity-160}{%
     $\tuple{ \Velement{cycle}{\decr{\Vlastix{p}}}, \Velement{cycle}{0}
         } \in \V{E}$
