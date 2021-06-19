@@ -2323,8 +2323,8 @@ Similarly, we consider the equation
 \]
 to be well-defined and true.
 
-\chapter{Graph theory}
-\label{ch:graph-theory}
+\chapter{Directed Graphs}
+\label{ch:directed-graphs}
 
 \todo[prepend, caption={``Graph theory'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
@@ -2333,17 +2333,20 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-The graph theory results we use are standard,
-Unfortunately,
+Graph theory is one of our preceding disciplines,
+and the graph theory results we use are standard,
+so that ordinarily we would simply refer to them.
+But, unfortunately,
 our authorities differ in details of terminology
-and derivation.
-In order for our presentation to be careful,
-we need to be explicit about the choices
-we have made for the fragment of graph theory that we use.
-The authority we follow most closely is
-is \cite{HU1979}.
-
-\section{Directed graph}
+and derivation.\footnote{%
+    The authority we follow most closely is
+    is \cite{HU1979}.}
+In order to be careful, therefore,
+we are forced to
+make explicit the choices
+we have made for the fragments of graph theory that we use.
+This chapter lays out our definitions and basic results
+for directed graphs.
 
 \begin{definition}[Directed graph]
 \label{def:directed-graph}
@@ -2354,6 +2357,43 @@ and $\V{E} \in \V{V}\times\V{V}$ is a set of
 \dfn{edges}.
 \defEnd
 \end{definition}
+
+\begin{definition}[Parents]
+\label{def:parents}
+Where $\V{G} = \tuple{\V{V}, \V{E}}$
+is a directed graph,
+\begin{itemize}
+\item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
+\item \V{child} is the \dfn{child} of \V{parent} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
+\item The \dfn{in-degree} of a vertex is the count of its parents.
+\item The \dfn{out-degree} of a vertex is the count of its children.
+    \defEnd
+\end{itemize}
+\end{definition}
+
+\begin{ldef}{\myfn{parents}{} and \myfn{children}{}}
+\label{ldef:parents}
+\begin{gather}
+\label{eq:ldef-parents-150}
+\Vmyfn{parents}{child} \ldefined
+    \set{
+        \begin{gathered}
+        \V{parent} \in \V{V} :
+        \\  \tuple{\V{parent},\V{child}} \in \V{E}
+        \end{gathered}
+    }.
+\\ \label{eq:ldef-parents-250}
+\Vmyfn{children}{parent} \ldefined
+    \set{
+        \begin{gathered}
+        \V{child} \in \V{V} :
+        \\  \tuple{\V{parent},\V{child}} \in \V{E}
+        \end{gathered}
+    }. \quad \ldefEnd
+\end{gather}
+\end{ldef}
+
+\section{Paths}
 
 \begin{definition}[Path]
 \label{def:path}
@@ -3034,42 +3074,7 @@ we can see that \V{new} is of length $\Vsize{old}+1$.
 \myqed
 \end{proof}
 
-\begin{definition}[Parents]
-\label{def:parents}
-Where $\V{G} = \tuple{\V{V}, \V{E}}$
-is a directed graph,
-\begin{itemize}
-\item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
-\item \V{child} is the \dfn{child} of \V{parent} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
-\item The \dfn{in-degree} of a vertex is the count of its parents.
-\item The \dfn{out-degree} of a vertex is the count of its children.
-    \defEnd
-\end{itemize}
-\end{definition}
-
-\begin{ldef}{\myfn{parents}{} and \myfn{children}{}}
-\label{ldef:parents}
-\begin{gather}
-\label{eq:ldef-parents-150}
-\Vmyfn{parents}{child} \ldefined
-    \set{
-        \begin{gathered}
-        \V{parent} \in \V{V} :
-        \\  \tuple{\V{parent},\V{child}} \in \V{E}
-        \end{gathered}
-    }.
-\\ \label{eq:ldef-parents-250}
-\Vmyfn{children}{parent} \ldefined
-    \set{
-        \begin{gathered}
-        \V{child} \in \V{V} :
-        \\  \tuple{\V{parent},\V{child}} \in \V{E}
-        \end{gathered}
-    }. \quad \ldefEnd
-\end{gather}
-\end{ldef}
-
-\section{Acyclic directed graph}
+\section{Acyclic directed graphs}
 
 \begin{definition}[Cycle]
 \label{def:cycle}
@@ -3122,7 +3127,7 @@ The theorem follows.
 \myqed
 \end{proof}
 
-\begin{theorem}[Acyclic path set finiteness]
+\begin{theorem}[Acyclic Path Set Finiteness]
 \label{th:acyclic-pathset-finiteness}
 The count of paths for any acyclic directed graph is finite.
 That is, if \V{adg} is an acyclic direct graph, then
@@ -3147,7 +3152,16 @@ is a finite constant.
 \myqed
 \end{proof}
 
-\section{Tree}
+\chapter{Trees}
+\label{ch:trees}
+
+Trees are another topic for which
+our graph theoretic authorities differ in details of terminology
+and derivation.
+This chapter
+makes explicit our definitions and
+the basic results
+we will need for trees.
 
 \begin{definition}[Tree]
 \label{def:tree}
@@ -3479,12 +3493,17 @@ lemma, which shows us the lemma.
 
 \begin{theorem}[Tree acyclicity]
 \label{th:tree-acyclicity}
-No tree contains a cycle.   \thEnd
+A tree is an acyclic directed graph.
+\thEnd
 \end{theorem}
 
 \begin{proof}
-The proof is by reductio, assuming that a tree contains a cycle
+That a tree is a directed graph follows immediately from
+its definition \Dfref{def:tree}.
+The proof that a tree is acyclic
+is by reductio, assuming that a tree contains a cycle
 to show a contradiction.
+
 Let $\V{tree} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
 Let
 $\Tvarseq{cycle}{V} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}$
@@ -3583,7 +3602,9 @@ of some other value of \V{cycle}.
 \\ \label{eq:th-tree-acyclicity-230}
     \land\; \forall\; \Vnat{i} < \V{firstCycIx} :
         \VVelement{rootpath}{i} \notin \Ran{\V{cycle}}
-\\ \nonumber \myparbox{\cuz{} New free $\Vnat{firstCycIx} \in \Vsize{rootpath}$.}
+\\ \nonumber \myparbox{\cuz{} New free
+    $\Vnat{firstCycIx} \in \Vsize{rootpath}$ for
+    convenience.}
 \end{gather}
 Since the first occurrence is in \V{cycle} it is not
 root and therefore not at the head of the rootpath:
@@ -3592,9 +3613,28 @@ root and therefore not at the head of the rootpath:
     \cuz{} \Eref{eq:th-tree-acyclicity-180},
         \Eref{eq:th-tree-acyclicity-200},
         \Eref{eq:th-tree-acyclicity-220}.}
-
-\todo{Write this proof}
-
+\mypareq{eq:th-tree-acyclicity-250}{%
+    $\tuple{ \Velement{rootpath}{\Vdecr{firstCycIx}},
+        \VVelement{rootpath}{firstCycIx} } \in \V{E}$
+    \bcuz{} \longThref{Edge of To-Node}{edge-to-node},
+        \Eref{eq:th-tree-acyclicity-220},
+        \Eref{eq:th-tree-acyclicity-240}.}
+By our definition, \Vnat{firstCycIx} is the location
+of the first occurrence of a value of \V{cycle} in \V{rootpath},
+so that
+\mypareq{eq:th-tree-acyclicity-260}{%
+    $\Velement{rootpath}{\Vdecr{firstCycIx}} \notin \Ran{\V{cycle}}$
+    \bcuz{} \Eref{eq:th-tree-acyclicity-230},
+        \Eref{eq:th-tree-acyclicity-250}.}
+But we also established that every from-node in an edge to a
+node of a cycle is also in the cycle, so that
+\mypareq{eq:th-tree-acyclicity-270}{%
+    $\Velement{rootpath}{\Vdecr{firstCycIx}} \in \Ran{\V{cycle}}$
+    \bcuz{} \Eref{eq:th-tree-acyclicity-170},
+        \Eref{eq:th-tree-acyclicity-250}.}
+Equation \Eref{eq:th-tree-acyclicity-260} is contrary to
+\Eref{eq:th-tree-acyclicity-270}, which shows the reductio
+and this theorem.
 \myqed
 \end{proof}
 
@@ -3653,14 +3693,10 @@ That is, if \V{tree} is a tree,
 \end{theorem}
 
 \begin{proof}
-\todo{Redo using acyclic result}
-A tree is a directed graph,
-which has a finite set of vertices,
-so that \V{tree} has a finite set of nodes.
-The values of a path are nodes, and the length of a path has
-a fixed maximum which depends on \V{tree} \Lmref{tree-path-maximum},
-so that the number of possible paths
-is a finite constant which depends on \V{tree}.
+A tree is an acyclic directed graph \Thref{tree-acyclicity}.
+This theorem therefore follows from the
+Acyclic Pathset Finiteness Theorem
+\Thref{acyclic-pathset-finiteness}.
 \myqed
 \end{proof}
 
