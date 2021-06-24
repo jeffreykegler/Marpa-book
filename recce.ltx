@@ -2358,10 +2358,13 @@ and $\V{E} \in \V{V}\times\V{V}$ is a set of
 \defEnd
 \end{definition}
 
+This chapter is a new context scope, which contains an arbitrary
+directed graph called the “context directed graph” or ``context graph''.
+The \dfn{context graph} is
+$\V{G} = \tuple{\V{V}, \V{E}}$.
+
 \begin{definition}[Parents]
 \label{def:parents}
-Where $\V{G} = \tuple{\V{V}, \V{E}}$
-is a directed graph,
 \begin{itemize}
 \item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
 \item \V{child} is the \dfn{child} of \V{parent} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
@@ -2403,7 +2406,6 @@ iff each successive pair of  values is one
 of the edges of the directed graph.
 More specifically,
 \V{pth} is a \dfn{path}
-in the directed graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 iff it is an element of \Vmyfn{paths}{G},
 where
 \begin{equation}
@@ -2427,8 +2429,7 @@ If $\Vsize{pth}=1$, we say that \V{pth} is \dfn{trivial}.
 \label{th:edge-to-node}
 If a vertex is not at location 0,
 there must be an edge to it.
-This is, if
-$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
+This is,
 \[
 \begin{gathered}
     \forall\; \V{p} \in \Vmyfn{paths}{G} :
@@ -2452,9 +2453,7 @@ This theorem follows immediately from the definition of a path \Dfref{def:path}.
 \begin{theorem}[Singleton Path]
 \label{th:singleton-path}
 Every node in a directed graph induces a unique path.
-This is, if
-$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
-then
+This is,
 \[
 \begin{gathered}
     \forall\; \V{nd} \in \V{V} :
@@ -2467,7 +2466,6 @@ then
 
 \begin{proof}
 The proof is direct.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary directed graph.
 We assume that
 $\V{nd} \in \V{V}$ is an arbitrary node of \V{G},
 to show that the induced sequence
@@ -2507,9 +2505,7 @@ $\V{singleton} = \seq{\V{nd}}$ is unique.
 \begin{theorem}[Single-edge Path]
 \label{th:single-edge-path}
 Every edge in a directed graph induces a unique path.
-This is, if
-$\V{G} = \tuple{\V{V}, \V{E}}$ is a directed graph
-then
+This is,
 \[
 \begin{gathered}
     \forall\; \tuple{\V{from}, \V{to}} \in \V{E} :
@@ -2522,7 +2518,6 @@ then
 
 \begin{proof}
 The proof is direct.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary directed graph.
 We assume an arbitrary edge
 $\tuple{\V{from}, \V{to}} \in \V{E}$
 to show that the induced sequence,
@@ -2563,7 +2558,7 @@ $\V{path} = \seq{\V{from}, \V{to}}$ is unique.
 
 \begin{definition}[Subpath]
 \label{def:subpath}
-Let \V{p} be a path in a graph $\V{G} = \tuple{\V{V}, \V{E}}$.
+Let \V{p} be a path in \V{G}.
 A sequence is a \dfn{subpath} of \V{p}
 iff it is a subsequence of \V{p}.
 A subpath of \V{p} is a \dfn{proper subpath} of
@@ -2573,8 +2568,7 @@ A subpath of \V{p} is a \dfn{proper subpath} of
 
 \begin{theorem}[Subpath]
 \label{th:subpath}
-Every subpath of a path in a graph
-$\V{G} = \tuple{\V{V}, \V{E}}$
+Every subpath of a path in \V{G}
 is a path in \V{G}.
 That is,
 \[
@@ -2589,9 +2583,7 @@ That is,
 \end{theorem}
 
 \begin{proof}
-Let $\V{G} = \tuple{\V{V}, \V{E}}$
-be an arbitrary graph,
-and let \V{path} be an arbitrary path in \V{G}:
+Let \V{path} be an arbitrary path in \V{G}:
 \mypareq{eq:th-subpath-100}{%
     $\V{path} \in \Vmyfn{paths}{G}$
     \linebreak \cuz{} hypothesis of theorem.
@@ -2666,7 +2658,7 @@ The consequent of the theorem is \Eref{eq:th-subpath-120},
 
 \begin{definition}[Path Fusion]
 \label{def:fusion}
-Let \V{p1} and \V{p2} be paths in a graph $\V{G} = \tuple{\V{V}, \V{E}}$.
+Let \V{p1} and \V{p2} be paths in \V{G}.
 Their \dfn{fusion}
 is a path, call it \V{fusion},
 such that \V{p1} is a prefix of \V{fusion},
@@ -2693,7 +2685,6 @@ then their fusion is
 
 \begin{theorem}[Path Fusion]
 \label{th:fusion}
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a directed graph.
 If two paths
 in \V{G} are such that the tail of the first
 one is equal to the head of the second one,
@@ -2727,8 +2718,6 @@ That is,
 The proof is direct,
 assuming the hypothesis of the theorem to
 show its consequent.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$
-be an arbitrary graph.
 Because \V{path1} is a path,
 we know that \V{path1} is sequence
 of vertices:
@@ -2953,10 +2942,6 @@ that is the old path with the node prepended.
 Further,
 the size of new path is the size of the old path plus one.
 That is,
-let
-$\V{G} = \tuple{\V{V}, \V{E}}$
-be a graph.
-Then
 \[
 \begin{gathered}
 \forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
@@ -2975,7 +2960,6 @@ Then
 The proof is direct, assuming a path and an edge to its head,
 in order to show the existence of a unique new path with the edge
 prepended and the specified length.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a graph.
 \begin{gather}
 \label{eq:th-path-pre-increment-100}
 \V{old} \in \Vmyfn{paths}{G}
@@ -3017,10 +3001,6 @@ that is the old path with the node appended.
 Further,
 the size of new path is the size of the old path plus one.
 That is,
-let
-$\V{G} = \tuple{\V{V}, \V{E}}$
-be a graph.
-Then
 \[
 \begin{gathered}
 \forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
@@ -3043,7 +3023,6 @@ It is direct, assuming a path and an edge from its tail,
 in order to show the existence of a unique new path with the edge
 appended and the specified length.
 
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a graph.
 \begin{gather}
 \label{eq:th-path-post-increment-100}
 \V{old} \in \Vmyfn{paths}{G}
@@ -3082,7 +3061,6 @@ In a directed graph,
 a cycle is a non-trivial path that starts and ends
 with the same node.
 That is,
-in the directed graph $\V{G} = \tuple{ \V{V}, \V{E} }$
 \Tvarseq{cycle}{V} is a cycle iff
 \[
 \Vsize{cycle} > 1 \land
@@ -3098,12 +3076,16 @@ none of its paths is a cycle.
 \defEnd
 \end{definition}
 
+Let from here until the end of this section be a new
+new context scope, in which
+the \dfn{context graph} $\V{G} = \tuple{\V{V}, \V{E}}$
+is acyclic.
+
 \begin{theorem}[Acyclic path maximum]
 \label{th:acyclic-path-maximum}
 The length of a path in an acyclic directed graph is at most
 the number of nodes in the graph.
 That is,
-if $\V{G} = \tuple{ \V{V}, \V{E} }$ is an acyclic directed graph, then
 \begin{equation*}
 \forall\; \V{path} \in \Vmyfn{paths}{G} :
     \Vsize{path} \le \Vsize{V}. \quad \thEnd
@@ -3111,7 +3093,6 @@ if $\V{G} = \tuple{ \V{V}, \V{E} }$ is an acyclic directed graph, then
 \end{theorem}
 
 \begin{proof}
-Let $\V{G} = \tuple{ \V{V}, \V{E} }$ be a new free acyclic directed graph,
 and \V{path} be a path in \V{G}.
 By definition \Dfref{def:path},
 a path is a sequence whose values are the nodes of \V{G}.
@@ -3154,6 +3135,13 @@ is a finite constant.
 
 \chapter{Trees}
 \label{ch:trees}
+
+\todo[prepend, caption={``Trees'' chapter is FRAGMENTARY}]{%
+This chapter is fragmentary and inconsistent
+and much of it may be deleted.
+Non-author readers are not encouraged.
+Filing pull requests
+will usually be a waste of time.}
 
 Trees are another topic for which
 our graph theoretic authorities differ in details of terminology
