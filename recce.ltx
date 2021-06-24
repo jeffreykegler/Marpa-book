@@ -3491,6 +3491,54 @@ lemma, which shows us the lemma.
 \myqed
 \end{proof}
 
+\begin{theorem}[Rootpath uniqueness]
+\label{th:rootpath-uniqueness}
+Every node in a tree has exactly one root path.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary tree,
+and let $\V{nd} \in \V{V}$ be an arbitrary node of \V{G}.
+From the definition of tree \Dfref{def:tree}
+we know
+\mypareq{eq:th-rootpath-uniqueness-100}{%
+    there is a root path to \V{nd}.}
+It remains to show that there is not more than one.
+
+Let \V{root} be the root of \V{G}:
+\mypareq{eq:th-rootpath-uniqueness-110}{%
+    $\nexists\; \V{from} \in \V{V} :
+    \tuple{\V{from}, \V{root}} \in \V{E}$
+    \bcuz{} \Eref{eq:def-tree-root} in \longDfref{Tree}{def:tree}.
+    New free $\V{root} \in \V{V}$.}
+For a reductio, we assume that there are two distinct root paths
+to \V{nd}:
+\begin{gather}
+\label{eq:th-rootpath-uniqueness-120}
+    \V{longRpath} \in \Vmyfn{paths}{G}:
+\\ \label{eq:th-rootpath-uniqueness-125}
+    \land\; \V{shortRpath} \in \Vmyfn{paths}{G}:
+\\ \label{eq:th-rootpath-uniqueness-130}
+    \Velement{longRpath}{0} = \V{root} =\Velement{shortRpath}{0}
+\\ \label{eq:th-rootpath-uniqueness-140}
+    \land\; \left(\begin{gathered}
+        \VlastElement{longRpath} = \V{nd}
+        \\ = \VlastElement{shortRpath}
+    \end{gathered}\right)
+\\ \label{eq:th-rootpath-uniqueness-150}
+    \land\; \V{longRpath} \ne \V{shortRpath}
+\\ \nonumber
+    \myparbox{\cuz{} AF reductio.
+    New free $\V{longRpath} \in \Vmyfn{paths}{G}$.
+    New free $\V{shortRpath} \in \Vmyfn{paths}{G}$.}
+\end{gather}
+
+% \Thref{th:prefix-uniqueness-from-tail}
+\todo{Finish proving this}
+\myqed
+\end{proof}
+
 \begin{theorem}[Tree acyclicity]
 \label{th:tree-acyclicity}
 A tree is an acyclic directed graph.
