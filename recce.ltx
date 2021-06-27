@@ -3166,14 +3166,14 @@ That is,
 \begin{equation}
 \label{eq:def-tree-root}
 \begin{gathered}
-    \exists\; \V{root} \in \V{V} : \forall\; \V{parent} \in \V{V} :
+    \existsUniq\; \V{root} \in \V{V} : \forall\; \V{parent} \in \V{V} :
         \nexists\; \tuple{\V{parent}, \V{root}} \in \V{E}.
 \end{gathered}
 \end{equation}
 
 There is a path from the root to every vertex of
 the tree.
-That is,
+That is, where \V{root} is the root of \V{G},
 \begin{equation}
 \label{eq:def-tree-rootpath}
 \begin{gathered}
@@ -3187,8 +3187,8 @@ Note that there is a trivial path from the root to itself.
 
 Every vertex, other than the root, has an in-degree of
 one.
-In other words, every non-root vertex of \V{G} has exactly
-one parent.
+In other words, the parent of a node,
+if it exists, is unique.
 That is,
 \begin{equation}
 \label{eq:def-tree-hierarchy}
@@ -3205,12 +3205,16 @@ When a directed graph is a tree, its vertices are more
 often called \dfn{nodes}.
 A \dfn{leaf} of a tree is a node with an out-degree of zero ---
 in other words, a leaf is a node with no children.
-\defEnd
-\end{definition}
-
 As a matter of convention,
 the children of every vertex of a tree
 are ordered left-to-right.
+\defEnd
+\end{definition}
+
+
+From here until the end of this chapter
+the \dfn{context tree} $\V{G} = \tuple{\V{V}, \V{E}}$
+will be in scope.
 
 \begin{definition}[Root path]
 \label{def:root-path}
@@ -3224,8 +3228,6 @@ In every root path
 a root node can only occur at the first element
 of the path.
 That is,
-if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree,
-then
 \[
 \begin{gathered}
 \forall\; \V{p} \in \Vmyfn{paths}{G} :
@@ -3266,8 +3268,6 @@ A \dfn{leaf path} is a path which contains a leaf of its tree.
 In every leaf path,
 a leaf can only occur as the last element.
 That is,
-if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree,
-then
 \[
 \begin{gathered}
 \forall\; \V{p} \in \Vmyfn{paths}{G} :
@@ -3304,7 +3304,6 @@ or \dfn{prefix},
 with respect to the vertex
 which is its tail.
 That is,
-in the graph $\V{G} = \tuple{\V{V}, \V{E}}$,
 the path
 $\Tvarseq{pref}{V} \in \Vmyfn{Upaths}{G}$ is a prefix of $\V{nd} \in \V{V}$
 iff $\Velement{pref}{\Vlastix{pref}} = \V{nd}$.
@@ -3318,7 +3317,6 @@ two prefixes of the same node
 with the same length
 are identical if they are equally long.
 That is,
-where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
 \begin{equation}
 \label{eq:th-prefix-uniqueness-050}
 \begin{gathered}
@@ -3333,7 +3331,6 @@ where $\V{G} = \tuple{\V{V}, \V{E}}$ is a tree,
 
 \begin{proof}
 The proof is by minimal counter-example.
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary tree.
 \begin{equation}
 \label{eq:th-prefix-uniqueness-105}
 \begin{gathered}
@@ -3486,10 +3483,9 @@ Every node in a tree has exactly one root path.
 \end{theorem}
 
 \begin{proof}
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be an arbitrary tree,
-and let $\V{nd} \in \V{V}$ be an arbitrary node of \V{G}.
+Let $\V{nd} \in \V{V}$ be an arbitrary node of \V{G}.
 From the definition of tree \Dfref{def:tree}
-we know
+we know that
 \mypareq{eq:th-rootpath-uniqueness-100}{%
     there is a root path to \V{nd}.}
 It remains to show that there is not more than one.
@@ -3540,7 +3536,6 @@ The proof that a tree is acyclic
 is by reductio, assuming that a tree contains a cycle
 to show a contradiction.
 
-Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
 Let
 $\Tvarseq{cycle}{V} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}$
 be a cycle in \V{G}.
@@ -3679,14 +3674,10 @@ and this theorem.
 The length of a path in a tree is at most
 the number of nodes in the tree.
 That is,
-\begin{equation}
-\nonumber
-\begin{gathered}
-    \text{if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree, then}
-    \\ \forall\; \V{path} \in \Vmyfn{path}{G} :
+\[
+    \forall\; \V{path} \in \Vmyfn{path}{G} :
         \Vsize{path} \le \Vsize{V}. \quad \thEnd
-\end{gathered}
-\end{equation}
+\]
 \end{theorem}
 
 \begin{proof}
@@ -3721,7 +3712,7 @@ it must have a root node.
 \begin{theorem}[Tree path set finiteness]
 \label{th:tree-pathset-finiteness}
 The count of paths for any tree is finite.
-That is, if \V{G} is a tree,
+That is,
 \[
      \size{\Vmyfn{path}{G}} \in \naturals.
      \quad \thEnd
@@ -3744,10 +3735,9 @@ least one leaf path.
 \end{theorem}
 
 \begin{proof}
-Let $\V{G} = \tuple{ \V{V}, \V{E}}$
-be a tree, and let \V{leaves} be the set of leaves in \V{G}.
-We select an arbitrary node of \V{G}, call it \V{nd},
-and note that the trivial path whose only element is \V{nd}
+Let \V{leaves} be the set of leaves in \V{G}.
+We select an arbitrary node of \V{G}, call it \V{nd} and
+notice that the trivial path whose only element is \V{nd}
 is one of the paths of \V{G}.
 \mypareq{eq:th-tree-leaf-path-100}{%
      $\seq{\V{nd}} \in \Vmyfn{paths}{G}$
