@@ -765,7 +765,17 @@ subject to deletion.
 % section \Chref{chap:input}
 % generalizes \Marpa{}'s input model.
 
-We assume familiarity with the theory of parsing,
+We\footnote{%
+    In the math literature it is traditional,
+    even in a book with single author,
+    to refer to the author in the third person ---
+    as a ``we''.
+    We do not know the origins of this convention,
+    but we like to see it,
+    and we hope the reader will see it,
+    as inviting them into join with us in a collaboration.
+    (See \cite[p. 492]{Cummings2021}.)}
+assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
 \cite{Timeline}
 contains a full description of \Marpa{}'s relationship to
@@ -1453,24 +1463,24 @@ Every instance of a variable also has a \dfn{type}, which is
 the subset of the domain of discourse
 over which that variable instance
 can range.%
-\footnote{
-Constants
-can be considered to have a type that is the singleton set
-that contains the constant.
-We do not carefully distinguish constants and
-variables.
-Our goal in this book will be only to assure ourselves that all of the
-mathematical objects we use are elements of a domain of
-discourse which could, if necessary,
-be constructed using the axioms in Halmos\cite{Halmos1960}.
-}
+\footnote{%
+    Constants
+    can be considered to have a type that is the singleton set
+    that contains the constant.
+    We do not carefully distinguish constants and
+    variables.
+    Our goal in this book will be only to assure ourselves that all of the
+    mathematical objects we use are elements of a domain of
+    discourse which could, if necessary,
+    be constructed using the axioms in Halmos\cite{Halmos1960}.}
 Almost always, the type of a variable
 and its domain of discourse are
 equivalent.
 Finally, within the scope of a quantifier,
 the quantified variable has a \dfn{domain of quantification}.
-The domain of quantification is often,
-but not always, equivalent to the type.
+The domain of quantification is sometimes
+equivalent to the type,
+but there are many exceptions.
 
 In this book,
 the term ``type'' is overloaded,
@@ -1515,6 +1525,35 @@ use subscripts to indicate commonly occurring types,
 as shown in
 \Tbref{tab:type-notation}.
 Use of subscripts for other purposes is avoided.
+
+\begin{table}[t]
+\centering
+\caption{Type notations}
+\begin{tabular}{ll}
+\hline
+$\V{X}_\V{T}$ & The variable \V{X} of type \type{T} \\
+$\V{agg-one}_\set{\V{T}}$ & The variable \V{set-one} of type ``set of \type{T}'' \\
+$\V{agg-one}_\Tseq{\V{T}}$ & The variable \V{seq-one} of type ``sequence of \type{T}'' \\
+\type{SYM} & The type for a symbol \\
+\type{STR} & The type for a string \\
+\type{EIM} & The type for an Earley item \\
+\type{RULE} & The type for the rule of a grammar\\
+\Tvar{a}{SYM} & Variable \V{a} of type \type{SYM}, subscripted form \\
+\Vsym{a} & Variable \V{a} of type \type{SYM}, angle bracket form \\
+\Tvar{a}{STR} & Variable \V{a} of type \type{STR}, subscripted form \\
+\Vstr{a} & Variable \V{a} of type \type{STR}, angle bracket form \\
+\Veim{a} & Variable \V{a} of type \type{EIM} \\
+\Vrule{a} & Variable \V{a} of type \type{RULE} \\
+\Vsymset{agg-two} & Variable \V{agg-two}, an set  of strings \\
+\Vstrset{strings} & Variable \V{strings}, an set of strings \\
+\Veimset{agg-three} & Variable \V{agg-three}, an set of Earley items \\
+\Veimseq{agg-three} & Variable \V{agg-three}, an sequence of Earley items \\
+\Vruleset{agg-four} & Variable \V{agg-four}, an set of grammar rules \\
+$\V{i}_\type{\naturals}$ & Variable \V{i}, a non-negative integer \\
+\hline
+\end{tabular}
+\label{tab:type-notation}
+\end{table}
 
 Since a type is a set,
 we may express facts about types using set notation.
@@ -1563,36 +1602,38 @@ whose index set is
 $\naturals$ is a type.
 \end{itemize}
 
-\begin{table}[t]
-\centering
-\caption{Type notations}
-\begin{tabular}{ll}
-\hline
-$\V{X}_\V{T}$ & The variable \V{X} of type \type{T} \\
-$\V{agg-one}_\set{\V{T}}$ & The variable \V{set-one} of type ``set of \type{T}'' \\
-$\V{agg-one}_\Tseq{\V{T}}$ & The variable \V{seq-one} of type ``sequence of \type{T}'' \\
-\type{SYM} & The type for a symbol \\
-\type{STR} & The type for a string \\
-\type{EIM} & The type for an Earley item \\
-\type{RULE} & The type for the rule of a grammar\\
-\Tvar{a}{SYM} & Variable \V{a} of type \type{SYM}, subscripted form \\
-\Vsym{a} & Variable \V{a} of type \type{SYM}, angle bracket form \\
-\Tvar{a}{STR} & Variable \V{a} of type \type{STR}, subscripted form \\
-\Vstr{a} & Variable \V{a} of type \type{STR}, angle bracket form \\
-\Veim{a} & Variable \V{a} of type \type{EIM} \\
-\Vrule{a} & Variable \V{a} of type \type{RULE} \\
-\Vsymset{agg-two} & Variable \V{agg-two}, an set  of strings \\
-\Vstrset{strings} & Variable \V{strings}, an set of strings \\
-\Veimset{agg-three} & Variable \V{agg-three}, an set of Earley items \\
-\Veimseq{agg-three} & Variable \V{agg-three}, an sequence of Earley items \\
-\Vruleset{agg-four} & Variable \V{agg-four}, an set of grammar rules \\
-$\V{i}_\type{\naturals}$ & Variable \V{i}, a non-negative integer \\
-\hline
-\end{tabular}
-\label{tab:type-notation}
-\end{table}
-
 \FloatBarrier
+
+\section{Arbitrary and Convenience Variables}
+
+We often, especially in proofs,
+find it helpful to notate the point at which we introduce a free variable.
+In that introductory note,
+a new variable is labeled ``ARB'' if it is chosen arbitarily from a set
+of values.
+If the ``ARB'' introduction is made via a displayed equation,
+the new variable is subject to the restrictions of that equation,
+which often states the type of the variable.
+The type of a new variable may also be stated in its introductory note.
+
+If, in its introductory note, a new variable is labeled ``CV'',
+it is a convenience variable, introduced to abbreviate an expression
+and avoid repetition.
+An instance of a convenience variable
+can always be eliminated by expanding it back into
+the expression that it abbreviates.
+Convenience variables are similar to definitions.
+In fact,
+especially for functions and macros,
+a variable is sometimes introduced via a local definition
+as an alternative to treating it as a convenience variable.
+
+Context variables are arbitrary variables unless otherwise stated.
+New variables in the statements of theorems and of lemmas are arbitrary variables
+unless otherwise stated.
+When a proof ends,
+a universal generalization over all the relevant arbitrary
+variables in the current scope is implied.
 
 \chapter{Preceding Considerations}
 \label{chap:preceding-math}
@@ -1651,7 +1692,8 @@ and codomain \V{Y}.\footnote{
     More often in the literature,
     \deffn{f}{\V{X}}{\V{Y}} is written as $\V{Y}^\V{X}$,
     but we prefer a more readable notation.
-    Our notation, adopted from one many programming languages
+    Our notation, adopted from one that
+    many programming languages
     use for exponentiation, avoids superscripts.}
 
 In this book, the natural numbers begin with 0,
@@ -1664,7 +1706,7 @@ indicates that \V{set} is countably infinite.
 We use the von Neumann convention,
 according to which every natural number is the set of
 all preceding natural numbers
-so that, for example, $0 = \emptyset$
+so that, for example, $0 = \emptyset = \set{}$
 and $3 = \set{0,1,2}$.
 We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
 The von Neumann convention extends to \naturals,
@@ -3517,6 +3559,11 @@ to \V{nd}:
     New free $\V{longRpath} \in \Vmyfn{paths}{G}$.
     New free $\V{shortRpath} \in \Vmyfn{paths}{G}$.}
 \end{gather}
+Since the choice between $\V{shortRpath}$ and
+$\V{longRpath}$ is arbitrary,
+\mypareq{eq:th-rootpath-uniqueness-160}{%
+$\V{shortRpath} < \V{longRpath}$ \cuz
+    \Eref{eq:th-rootpath-uniqueness-150}, WLOG.}
 
 % \Thref{th:prefix-uniqueness-from-tail}
 \todo{Finish proving this}
@@ -22022,6 +22069,11 @@ Karel~{\v{C}}ulik, and Rina~Cohen.
 \newblock {\em Journal of Computer and System Sciences},
   Vol. 7, No. 1, 1973,
   pp. 66--96.
+
+\bibitem{Cummings2021}
+Cummings~Jay.
+\newblock {\em Proofs: A Long-Form Mathematics Textbook}.
+\newblock ``13 May 2021, Middletown DE''.
 
 \bibitem{Earley1968}
 J.~Earley.
