@@ -2354,7 +2354,7 @@ A \dfn{directed graph} is a pair
 $\tuple{\V{V}, \V{E}}$,
 where \V{V} is a finite set of \dfn{vertices},
 and $\V{E} \in \V{V}\times\V{V}$ is a set of
-\dfn{edges}.
+\dfn{E}.
 \defEnd
 \end{definition}
 
@@ -3143,17 +3143,17 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-Trees are another topic for which
+Trees are another topic on which
 our graph theoretic authorities differ in details of terminology
 and derivation.
 This chapter
 makes explicit our definitions and
-the basic results
-we will need for trees.
+derives the basic results
+that we will need for trees.
 
 \begin{definition}[Tree]
 \label{def:tree}
-A \V{tree} is a directed graph,
+A \dfn{tree} is a directed graph,
 $\V{G} = \tuple{\V{V}, \V{E}}$
 with the following three properties:
 
@@ -3540,10 +3540,10 @@ The proof that a tree is acyclic
 is by reductio, assuming that a tree contains a cycle
 to show a contradiction.
 
-Let $\V{tree} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
+Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a arbitrary tree.
 Let
 $\Tvarseq{cycle}{V} = \seq{\Tvar{dup}{V}\ldots\Tvar{dup}{V}}$
-be a cycle in \V{tree}.
+be a cycle in \V{G}.
 \begin{gather}
 \label{eq:th-tree-acyclicity-100}
     \Velement{cycle}{0} = \V{dup}
@@ -3558,7 +3558,7 @@ be a cycle in \V{tree}.
         New free $\V{cycle} \in \V{V} \expOp \naturals$.
         New free $\V{dup} \in \V{V}$.}
 \end{gather}
-Let \V{root} be the root of \V{tree}:
+Let \V{root} be the root of \V{G}:
 \mypareq{eq:th-tree-acyclicity-130}{%
     $\forall\; \V{from} \in \V{V} :
     \nexists\; \tuple{\V{from}, \V{root}} \in \V{E}$
@@ -3682,9 +3682,9 @@ That is,
 \begin{equation}
 \nonumber
 \begin{gathered}
-    \text{if $\V{tree} = \tuple{ \V{nodes}, \V{edges} }$ is a tree, then}
-    \\ \forall\; \V{path} \in \Vmyfn{path}{tree} :
-        \Vsize{path} \le \Vsize{nodes}. \quad \thEnd
+    \text{if $\V{G} = \tuple{ \V{V}, \V{E} }$ is a tree, then}
+    \\ \forall\; \V{path} \in \Vmyfn{path}{G} :
+        \Vsize{path} \le \Vsize{V}. \quad \thEnd
 \end{gathered}
 \end{equation}
 \end{theorem}
@@ -3694,14 +3694,14 @@ The proof is direct.
 A tree is by definition a directed graph.
 No path in any tree
 contains a cycle \Thref{tree-acyclicity}.
-Hence \V{tree} is an acyclic directed graph.
+Hence \V{G} is an acyclic directed graph.
 By the Acyclic Path Maximum theorem
 \Thref{acyclic-path-maximum},
 the length of any path
 in an acyclic directed graph
 is at most the node count of
 that acyclic directed graph.
-\V{nodes} is the node count of \V{tree}
+\Vsize{V} is the node count of \V{G}
 and the theorem follows.
 \myqed
 \end{proof}
@@ -3721,9 +3721,9 @@ it must have a root node.
 \begin{theorem}[Tree path set finiteness]
 \label{th:tree-pathset-finiteness}
 The count of paths for any tree is finite.
-That is, if \V{tree} is a tree,
+That is, if \V{G} is a tree,
 \[
-     \size{\Vmyfn{path}{tree}} \in \naturals.
+     \size{\Vmyfn{path}{G}} \in \naturals.
      \quad \thEnd
 \]
 \end{theorem}
@@ -3744,18 +3744,18 @@ least one leaf path.
 \end{theorem}
 
 \begin{proof}
-Let $\V{tree} = \tuple{ \V{nodes}, \V{edges}}$
-be a tree, and let \V{leaves} be the set of leaves in \V{tree}.
-We select an arbitrary node of \V{tree}, call it \V{nd},
+Let $\V{G} = \tuple{ \V{V}, \V{E}}$
+be a tree, and let \V{leaves} be the set of leaves in \V{G}.
+We select an arbitrary node of \V{G}, call it \V{nd},
 and note that the trivial path whose only element is \V{nd}
-is one of the paths of \V{tree}.
+is one of the paths of \V{G}.
 \mypareq{eq:th-tree-leaf-path-100}{%
-     $\seq{\V{nd}} \in \Vmyfn{paths}{tree}$
+     $\seq{\V{nd}} \in \Vmyfn{paths}{G}$
      \cuz{} \longDfref{Path}{def:path}.
-     New arbitrary $\V{nd} \in \V{nodes}$.
+     New arbitrary $\V{nd} \in \V{V}$.
 }
 \mypareq{eq:th-tree-leaf-path-110}{%
-    $\V{pathset} \defined \set{ \V{p} \in \Vmyfn{paths}{tree} : \Velement{p}{0} = \V{nd} }$
+    $\V{pathset} \defined \set{ \V{p} \in \Vmyfn{paths}{G} : \Velement{p}{0} = \V{nd} }$
     \bcuz{} New \V{pathset} for convenience.
 }
 \mypareq{eq:th-tree-leaf-path-115}{%
@@ -3798,10 +3798,10 @@ that \V{max1} is not a leaf path.
     $\Velement{max1}{\Vlastix{max1}} \notin \V{leaves}$
     \bcuz{} AF reductio, \longDfref{Leaf path}{def:tree}.}
 \mypareq{eq:th-tree-leaf-path-200}{%
-    $\exists\; \V{oneMore} \in \V{nodes} : \tuple{ \Velement{max1}{\Vlastix{max1}}, \V{oneMore} } \in \V{edges}$
+    $\exists\; \V{oneMore} \in \V{V} : \tuple{ \Velement{max1}{\Vlastix{max1}}, \V{oneMore} } \in \V{E}$
     \bcuz{} \longDfref{Leaf}{def:tree}, \Eref{eq:th-tree-leaf-path-190}.}
 \mypareq{eq:th-tree-leaf-path-205}{%
-    $\tuple{ \Velement{max1}{\Vlastix{max1}}, \V{oneMore} } \in \V{edges}$
+    $\tuple{ \Velement{max1}{\Vlastix{max1}}, \V{oneMore} } \in \V{E}$
     \bcuz{} EI of bound \V{oneMore} in \Eref{eq:th-tree-leaf-path-190}
     with new free \V{oneMore}.}
 \mypareq{eq:th-tree-leaf-path-210}{%
@@ -3810,7 +3810,7 @@ that \V{max1} is not a leaf path.
             \V{oneMore} }$
     \bcuz{} New \V{evenLonger} for convenience.}
 \mypareq{eq:th-tree-leaf-path-215}{%
-    $\V{evenLonger} \in \Vmyfn{paths}{tree}$
+    $\V{evenLonger} \in \Vmyfn{paths}{G}$
     \bcuz{} \longDfref{Path}{def:path},
         \Eref{eq:th-tree-leaf-path-205},
         \Eref{eq:th-tree-leaf-path-210}.}
@@ -3840,7 +3840,7 @@ from \Eref{eq:th-tree-leaf-path-190} to
 \Eref{eq:th-tree-leaf-path-250}.
 From the reductio we conclude that \V{max1} is a leaf
 path starting at \V{nd}.
-Since our choices of \V{tree} and \V{nd} were arbitrary,
+Since our choices of \V{G} and \V{nd} were arbitrary,
 we conclude that every node of a tree is the start of a leaf
 path.
 \myqed
@@ -3881,11 +3881,11 @@ the ``context tree''.
 The context tree is
 \begin{equation}
 \label{eq:non-unary-chap-context-tree}
-\V{tree} = \tuple{\Vnodset{nodes},\V{edges}}.
+\V{G} = \tuple{\Vnodset{V},\V{E}}.
 \end{equation}
 In this context scope,
-$\Vnodset{leaves} \subseteq \V{nodes}$
-will be the set of leaves in \V{tree}.
+$\Vnodset{leaves} \subseteq \V{V}$
+will be the set of leaves in \V{G}.
 
 \section{Tree ancestries}
 
@@ -3893,7 +3893,7 @@ will be the set of leaves in \V{tree}.
 \label{ldef:new-parents}
 Let the ``new parents'' function,
 \[
-    \deffn{NewParents}{\powerset{\Vnodset{nodes}}}{\powerset{\Vnodset{nodes}}},
+    \deffn{NewParents}{\powerset{\Vnodset{V}}}{\powerset{\Vnodset{V}}},
 \]
 be the set of the direct parents of a node set that are not already in that node set,
 so that
@@ -3902,7 +3902,7 @@ so that
         \begin{gathered}
             \Vnod{parent} : \exists\; \Vnod{child} :
             \\ \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
-            \\ \land\; \tuple{\V{parent}, \V{child}} \in \V{edges}
+            \\ \land\; \tuple{\V{parent}, \V{child}} \in \V{E}
         \end{gathered}
     }. \quad \defEnd
 \end{equation}
@@ -3914,9 +3914,9 @@ Let the ``ancestry'' function,
 \[
     \deffn{Anc}{
         \left(
-            \naturals \times \powerset{\Vnodset{nodes}}
+            \naturals \times \powerset{\Vnodset{V}}
         \right)}
-        {\powerset{\V{nodes}}},
+        {\powerset{\V{V}}},
 \]
 be such that
 \begin{equation}
@@ -3978,8 +3978,8 @@ some \Vnat{N}.
 
 \begin{lem}{Ancestry Monotonicity}
 \label{lem:ancestry-monotonicity}
-Every ancestry of \V{tree} contains
-all the ancestries of \V{tree}
+Every ancestry of \V{G} contains
+all the ancestries of \V{G}
 that have the same base
 and are at the same or a lower level.
 That is,
@@ -4191,7 +4191,7 @@ Every ancestry is
 the union of all the ancestries with the same base,
 and at the same or a lower level.
 That is,
-let \V{base} be an arbitrary subset of \V{nodes}.
+let \V{base} be an arbitrary subset of \V{V}.
 Then
 \mypareq{eq:lem-ancestry-closure-050}{%
     $\forall\; \Vnat{N} :
@@ -4212,7 +4212,7 @@ Let
     \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{Anc}{\V{i},\V{base}}}
 \\ \myparbox{\cuz{}
     UI of \Eref{eq:lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.
-    New free $\V{base} \in \Vpowerset{nodes}.$}
+    New free $\V{base} \in \Vpowerset{V}.$}
 \end{gathered}
 \end{equation}
 We assume there is a minimal \V{bad} such that
@@ -4254,8 +4254,8 @@ It follows from a basic fact of set theory that
         \Eref{eq:lem-ancestry-closure-270}.
 }
 \mypareq{eq:lem-ancestry-closure-290}{%
-        $\forall\;\V{whole} \in \powerset{\V{nodes}} :
-        \forall\;\V{part} \in \powerset{\V{nodes}} :
+        $\forall\;\V{whole} \in \powerset{\V{V}} :
+        \forall\;\V{part} \in \powerset{\V{V}} :
 	\linebreak
         \V{part} \subseteq \V{whole} \implies \V{whole} = \V{whole} \cup \V{part}$
         \bcuz{} Fact of set theory.
@@ -4292,7 +4292,7 @@ That is,
 \label{eq:ancestry-from-path-050}
 \begin{gathered}
 \forall\; \Vnat{N} :
-\forall\; \V{path} \in \Vmyfn{paths}{tree} :
+\forall\; \V{path} \in \Vmyfn{paths}{G} :
 \forall\; \Vnodset{base} :
 \\ \Vlastix{path} \le \V{N}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
@@ -4304,12 +4304,12 @@ That is,
 
 \begin{proof}
 The proof is by minimal counterexample.
-Let $\V{base} \in \Vpowerset{nodes}$ be an arbitrary nodeset.
+Let $\V{base} \in \Vpowerset{V}$ be an arbitrary nodeset.
 Where
 \begin{equation}
 \label{eq:ancestry-from-path-150}
 \begin{gathered}
-\Vmyfn{INST}{ex} \defined \forall\; \V{path} \in \Vmyfn{paths}{tree} :
+\Vmyfn{INST}{ex} \defined \forall\; \V{path} \in \Vmyfn{paths}{G} :
 \\ \Vlastix{path} \le \V{ex}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{ex}, \V{base}}.
@@ -4362,7 +4362,7 @@ for this purpose.
 \begin{equation}
 \label{eq:ancestry-from-path-210}
 \begin{gathered}
-\forall\; \V{path} \in \Vmyfn{paths}{tree}
+\forall\; \V{path} \in \Vmyfn{paths}{G}
 \\ \Vlastix{path} \le 0
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{0, \V{base}}.
@@ -4415,7 +4415,7 @@ then \Vdecr{bad} cannot be a counter-example:
 \begin{equation}
 \label{eq:ancestry-from-path-360}
 \begin{gathered}
-\forall\; \V{path} \in \Vmyfn{paths}{tree} :
+\forall\; \V{path} \in \Vmyfn{paths}{G} :
 \\ \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
@@ -4452,7 +4452,7 @@ Now it will be helpful to consider a suffix of \V{path}.
     \left( \V{suffix} \ldefined \family{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
         \right)
 \\ \label{eq:ancestry-from-path-412}
-    \land\; \V{suffix} \in \Vmyfn{paths}{tree}
+    \land\; \V{suffix} \in \Vmyfn{paths}{G}
 \\ \nonumber
     \myparbox{\cuz{} \longDfref{Path}{def:path},
     \Eref{eq:ancestry-from-path-290}, new \V{suffix} for convenience.}
@@ -4478,7 +4478,7 @@ Now it will be helpful to consider a suffix of \V{path}.
         \linebreak \Eref{eq:ancestry-from-path-412}, \Eref{eq:ancestry-from-path-430},
         \Eref{eq:ancestry-from-path-450}.}
 \mypareq{eq:ancestry-from-path-470}{%
-    $\tuple{ \Velement{path}{0}, \Velement{path}{1} } \in \V{edges}$
+    $\tuple{ \Velement{path}{0}, \Velement{path}{1} } \in \V{E}$
     \cuz{} \longDfref{Path}{def:path},
         \Eref{eq:ancestry-from-path-290}.
 }
@@ -4487,7 +4487,7 @@ Now it will be helpful to consider a suffix of \V{path}.
         \cuz{} \Eref{eq:ancestry-from-path-410}.
 }
 \mypareq{eq:ancestry-from-path-490}{%
-    $\tuple{ \Velement{path}{0}, \Velement{suffix}{0} } \in \V{edges}$
+    $\tuple{ \Velement{path}{0}, \Velement{suffix}{0} } \in \V{E}$
     \cuz{} \Eref{eq:ancestry-from-path-470},
         \Eref{eq:ancestry-from-path-480}.}
 \begin{equation}
@@ -4496,7 +4496,7 @@ Now it will be helpful to consider a suffix of \V{path}.
     \exists\; \Vnod{child} :
     \\ \V{child} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
-    \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{edges}
+    \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{E}
     \\ \myparbox{\cuz{} \Eref{eq:ancestry-from-path-340},
         EG of \Velement{suffix}{0} with \V{child} in \Eref{eq:ancestry-from-path-460} and
             \Eref{eq:ancestry-from-path-490}.}
@@ -4524,10 +4524,10 @@ added to the set of ancestors of \V{leaves} at ancestry level \V{N}.
 That is,
 \[
     \deffn{gen}{ \left(
-            \naturals\times\Vpowerset{nodes}
-    \right) } {\Vpowerset{nodes}}
+            \naturals\times\Vpowerset{V}
+    \right) } {\Vpowerset{V}}
 \]
-is the function whose value is the \V{N}'th generation of \V{tree}
+is the function whose value is the \V{N}'th generation of \V{G}
 from \V{base},
 if
 \begin{equation}
@@ -4551,7 +4551,7 @@ the new parents of the predecessor.
 That is,
 \begin{equation}
 \begin{gathered}
-\forall\; \V{base} \in \Vpowerset{nodes} :
+\forall\; \V{base} \in \Vpowerset{V} :
     \forall\; \Vnat{N} :
 \\ \myfn{gen}{\V{N}+1,\V{base}} =
     \myfn{NewParents}{\V{N},\V{base}}.
@@ -4589,9 +4589,9 @@ That is,
 \begin{equation}
 \label{eq:lem-generation-new-parent-equivalence-130}
 \begin{gathered}
-     \forall\; \V{part1} \in \Vpowerset{nodes} :
-     \forall\; \V{part2} \in \Vpowerset{nodes} :
-     \\ \forall\; \V{nextGen} \in \Vpowerset{nodes} :
+     \forall\; \V{part1} \in \Vpowerset{V} :
+     \forall\; \V{part2} \in \Vpowerset{V} :
+     \\ \forall\; \V{nextGen} \in \Vpowerset{V} :
      \\ \V{part1} \cap \V{part2} = \emptyset
      \\ \land\; \V{nextGen} = \subtract{(\V{part1} \cup \V{part2})}{\V{part1}}
      \\ \implies \V{nextGen} = \V{part2}
@@ -4625,7 +4625,7 @@ That is,
 \begin{gathered}
     \forall\;\Vnat{a} :
     \forall\;\Vnat{b} :
-    \forall\;\V{base}\in\Vpowerset{nodes} :
+    \forall\;\V{base}\in\Vpowerset{V} :
     \\ \V{a} \ne \V{b} \implies
     \myfn{gen}{\V{a},\V{base}} \cap \myfn{gen}{\V{b},\V{base}} = \emptyset.
     \quad \thEnd
@@ -4643,7 +4643,7 @@ The proof is by reductio.
 \\ \nonumber
     \because \text{AF reductio.
         New free \Vnat{lo}, \Vnat{hi}.
-        New free $\V{base} \in \Vpowerset{nodes}$.}
+        New free $\V{base} \in \Vpowerset{V}$.}
 \end{gather}
 We need to choose one of the two variables, \V{lo} and \V{hi},
 to be first in numeric order.
@@ -4726,7 +4726,7 @@ for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 The union of all generations of level \V{N} or less
 is equal to the \V{N}-level ancestry of the same base.
 That is,
-if \V{base} is an arbitrary subset of \V{nodes},
+if \V{base} is an arbitrary subset of \V{V},
 then
 \mypareq{eq:lem-generation-coverage-050}{%
     $\forall\; \Vnat{N} :
@@ -4825,13 +4825,13 @@ which in turn gives us the lemma.
 
 \begin{ldef}{Surface}
 \label{ldef:surface}
-The \dfn{surface} of a subset of \V{nodes}
+The \dfn{surface} of a subset of \V{V}
 is the set of its elements which have parents outside of
 that subset.
 This is,
 let
 \[
-    \deffn{Surface}{\Vpowerset{nodes}}{\Vpowerset{nodes}}
+    \deffn{Surface}{\Vpowerset{V}}{\Vpowerset{V}}
 \]
 be such that
 \begin{equation}
@@ -4841,8 +4841,8 @@ be such that
 \\ \set{
     \begin{gathered}
     \V{child} \in \V{ndset} :
-        \exists\; \V{parent} \in \V{nodes} :
-    \\ \tuple{\V{parent},\V{child}} \in \V{edges}
+        \exists\; \V{parent} \in \V{V} :
+    \\ \tuple{\V{parent},\V{child}} \in \V{E}
         \land \V{parent} \notin \V{ndset}
     \end{gathered}
 }.  \quad \ldefEnd
@@ -4861,7 +4861,7 @@ That is,
 \begin{equation}
 \label{eq:lem-surface-disjointness-050}
 \begin{gathered}
-    \forall\;\V{base} \in \Vpowerset{nodes} :
+    \forall\;\V{base} \in \Vpowerset{V} :
         \forall\;\Vnat{N} :
     \\ \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
         \cap \myfn{PredecessorAnc}{\V{N},\V{base}} = \emptyset.
@@ -4931,7 +4931,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \\ \label{eq:lem-surface-disjointness-230}
     \land\; \exists\; \Vnod{parent} :
     \left( \begin{gathered}
-        \tuple{\V{parent},\V{nd}} \in \V{edges}
+        \tuple{\V{parent},\V{nd}} \in \V{E}
         \\ \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
     \end{gathered} \right)
     \\ \nonumber
@@ -4940,7 +4940,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \begin{gather}
 \label{eq:lem-surface-disjointness-240}
-    \tuple{\Vnod{parent},\V{nd}} \in \V{edges}
+    \tuple{\Vnod{parent},\V{nd}} \in \V{E}
 \\ \label{eq:lem-surface-disjointness-250}
         \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
 \\ \nonumber
@@ -4966,7 +4966,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-290}{%
     $\V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
-    \linebreak $\land\; \tuple{\V{parent},\V{nd}} \in \V{edges}$
+    \linebreak $\land\; \tuple{\V{parent},\V{nd}} \in \V{E}$
     \bcuz{} \Eref{eq:lem-surface-disjointness-210},
         \Eref{eq:lem-surface-disjointness-240},
         \Eref{eq:lem-surface-disjointness-280}.
@@ -4974,7 +4974,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-300}{%
     $\exists\; \Vnod{child} : \V{child} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
-    \linebreak $\land\; \tuple{\V{parent},\V{child}} \in \V{edges}$
+    \linebreak $\land\; \tuple{\V{parent},\V{child}} \in \V{E}$
     \bcuz{} EG of \Eref{eq:lem-surface-disjointness-290} with \Vnod{child}
         for \Vnod{nd}.
 }
@@ -5034,7 +5034,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
     New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-generation-surface-containment-210}{%
-    $\forall\; \V{ndset} \in \Vpowerset{nodes} :
+    $\forall\; \V{ndset} \in \Vpowerset{V} :
         \myfn{Surface}{\V{ndset}} \subseteq \V{ndset}$
     \bcuz{} Def of \myfnname{Surface} \Eref{eq:def-surface}.
 }
@@ -5103,14 +5103,14 @@ and the lemma follows from the universal generalization of \V{base}.
 \label{lem:generation-union-tree-containment}
 The union of all generations of the leaves
 whose level is less than the node count
-of \V{tree},
-is the set of nodes in \V{tree}.
+of \V{G},
+is the set of nodes in \V{G}.
 That is,
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-050}
-\V{nodes} = \bigcup \set{
+\V{V} = \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}.  \quad \thEnd
 \end{equation}
@@ -5119,12 +5119,12 @@ That is,
 \begin{proof}
 The proof is direct.
 It follows immediately from the statement of the theorem that
-every element of the union of generations is an element of \V{nodes}:
+every element of the union of generations is an element of \V{V}:
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-100}
-\V{nodes} \subseteq \bigcup \set{
+\V{V} \subseteq \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}
     \because \Eref{eq:lem-generation-union-tree-containment-050}.
@@ -5135,8 +5135,8 @@ to prove the converse of
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-130}
 \begin{gathered}
-\forall\; \V{nd} \in \V{nodes} :
-\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
+\forall\; \V{nd} \in \V{V} :
+\exists\; \V{lpath} \in \Vmyfn{paths}{G} :
 \\ \Velement{lpath}{0} = \V{nd}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}.
 \\ \because \longThref{Tree Leaf Path Theorem}{tree-leaf-path}.
@@ -5146,7 +5146,7 @@ Let \Vnod{nd} be an arbitrary node.
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-140}
 \begin{gathered}
-\exists\; \V{lpath} \in \Vmyfn{paths}{tree} :
+\exists\; \V{lpath} \in \Vmyfn{paths}{G} :
 \\ \Velement{lpath}{0} = \V{nd}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \V{leaves}
 \\ \myparbox{\cuz{}
@@ -5156,7 +5156,7 @@ Let \Vnod{nd} be an arbitrary node.
 \end{equation}
 \begin{gather}
 \label{eq:lem-generation-union-tree-containment-150}
-\V{lpath} \in \Vmyfn{paths}{tree} :
+\V{lpath} \in \Vmyfn{paths}{G} :
 \\ \label{eq:lem-generation-union-tree-containment-160}
     \land\; \Velement{lpath}{0} = \V{nd}
 \\ \label{eq:lem-generation-union-tree-containment-170}
@@ -5168,17 +5168,17 @@ Let \Vnod{nd} be an arbitrary node.
         with new free \V{lpath}.}
 \end{gather}
 By the Leaf Path Finiteness Lemma,
-every path of a tree is of length at most \Vsize{nodes},
+every path of a tree is of length at most \Vsize{V},
 so that
 \mypareq{eq:lem-generation-union-tree-containment-180}{%
-    $\Vsize{lpath} \le \Vsize{nodes}$
+    $\Vsize{lpath} \le \Vsize{V}$
     \cuz{} \Lmref{tree-path-maximum}.
 }
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-300}
 \begin{gathered}
 \forall\; \Vnat{N} :
-\forall\; \V{path} \in \Vmyfn{paths}{tree} :
+\forall\; \V{path} \in \Vmyfn{paths}{G} :
 \forall\; \Vnodset{base} :
 \\ \Vlastix{path} \le \V{N}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
@@ -5189,31 +5189,31 @@ so that
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-310}
 \begin{gathered}
-\V{lpath} \in \Vmyfn{paths}{tree}
-\\ \land\; \Vlastix{lpath} < \Vsize{nodes}
+\V{lpath} \in \Vmyfn{paths}{G}
+\\ \land\; \Vlastix{lpath} < \Vsize{V}
 \\ \land\; \Velement{lpath}{\Vlastix{lpath}} \in \Vnodset{leaves}
-\\ \implies \Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}
+\\ \implies \Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{V}}, \V{leaves}}
 \\ \myparbox{\cuz{}
     UI in \Eref{eq:lem-generation-union-tree-containment-300}
-    of bound \Vnat{N} with \decr{\Vsize{nodes}},
+    of bound \Vnat{N} with \decr{\Vsize{V}},
     \linebreak of bound \V{path} with \V{lpath}, and
     \linebreak of bound \Vnodset{base} with \Vnodset{leaves}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:lem-generation-union-tree-containment-320}{%
-    $\Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}$
+    $\Velement{lpath}{0} \in \bigfn{Anc}{\decr{\Vsize{V}}, \V{leaves}}$
     \bcuz{} \Eref{eq:lem-generation-union-tree-containment-150},
         \Eref{eq:lem-generation-union-tree-containment-170},
         \Eref{eq:lem-generation-union-tree-containment-180},
         \Eref{eq:lem-generation-union-tree-containment-310}.}
 \mypareq{eq:lem-generation-union-tree-containment-330}{%
-    $\Vnod{nd} \in \bigfn{Anc}{\decr{\Vsize{nodes}}, \V{leaves}}$
+    $\Vnod{nd} \in \bigfn{Anc}{\decr{\Vsize{V}}, \V{leaves}}$
     \cuz{} \Eref{eq:lem-generation-union-tree-containment-160},
         \Eref{eq:lem-generation-union-tree-containment-320}.}
 \mypareq{eq:lem-generation-union-tree-containment-340}{%
-    $\Vnod{nd} \in \bigcup \set{ \forall\; \Vnat{i} < \Vsize{nodes} : \myfn{gen}{\V{i},\V{leaves}}}$
+    $\Vnod{nd} \in \bigcup \set{ \forall\; \Vnat{i} < \Vsize{V} : \myfn{gen}{\V{i},\V{leaves}}}$
     \bcuz{} \longLmref{Generation Coverage}{generation-coverage}.}
-Recall that \V{nd} was an arbitrary element of \V{nodes}
+Recall that \V{nd} was an arbitrary element of \V{V}
 \Eref{eq:lem-generation-union-tree-containment-140}.
 The lemma follows from \Eref{eq:lem-generation-union-tree-containment-100}
 and the universal generalization of \V{nd} in
@@ -5230,7 +5230,7 @@ That is if \V{genset} is a set of generations such that
 \[
     \V{genset} =
         \set{ \begin{gathered}
-            \Vnodset{nds} \in \Vpowerset{nodes} :
+            \Vnodset{nds} \in \Vpowerset{V} :
             \\ \V{nds} = \myfn{gen}{\V{i},\V{base}}
                 \land \Vnat{i} \in \powerset{\naturals}
         \end{gathered} }
@@ -5453,7 +5453,7 @@ That is,
 \label{eq:surface-new-parents-inclusion-050}
     \forall\; \Vnodset{ndset} : \forall\; \Vnod{parent} : \forall\; \Vnod{child} :
     \\ \label{eq:surface-new-parents-inclusion-060}
-        \tuple{\V{parent},\V{child}} \in \V{edges} \land \V{parent} \in \Vmyfn{NewParents}{ndset}
+        \tuple{\V{parent},\V{child}} \in \V{E} \land \V{parent} \in \Vmyfn{NewParents}{ndset}
     \\ \label{eq:surface-new-parents-inclusion-070}
         \implies\; \V{child} \in \Vmyfn{Surface}{ndset}.
 \end{gather}
@@ -5468,7 +5468,7 @@ The theorem is then obtained using universal generalization.
 
 \begin{gather}
 \label{eq:surface-new-parents-inclusion-120}
-\tuple{\Vnod{parent},\Vnod{child}} \in \V{edges}
+\tuple{\Vnod{parent},\Vnod{child}} \in \V{E}
 \\ \label{eq:surface-new-parents-inclusion-130}
     \land\; \V{parent} \in \Vmyfn{NewParents}{nds}
 \\ \nonumber \myparbox{\cuz{}
@@ -5481,7 +5481,7 @@ The theorem is then obtained using universal generalization.
 \label{eq:surface-new-parents-inclusion-150}
 \begin{gathered}
     \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
-    \\ \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
+    \\ \land\; \tuple{\V{parent},\V{child}} \in \V{E}
     \\ \myparbox{\cuz{}
         \longdfref{\myfnname{NewParents}}{new-parents},
         \Eref{eq:surface-new-parents-inclusion-130}.}
@@ -5493,7 +5493,7 @@ The theorem is then obtained using universal generalization.
 \\ \label{eq:surface-new-parents-inclusion-180}
     \land\; \V{parent} \notin \V{nds}
 \\ \label{eq:surface-new-parents-inclusion-190}
-    \land\; \tuple{\V{parent},\V{child}} \in \V{edges}
+    \land\; \tuple{\V{parent},\V{child}} \in \V{E}
 \\ \nonumber
     \myparbox{\cuz{}
         EI of \Vnod{child}
@@ -5502,7 +5502,7 @@ The theorem is then obtained using universal generalization.
 \end{gather}
 \mypareq{eq:surface-new-parents-inclusion-200}{%
     $\exists\; \Vnod{parent} : \V{parent} \notin \V{nds}
-    \land \tuple{\V{parent},\V{child}} \in \V{edges}$
+    \land \tuple{\V{parent},\V{child}} \in \V{E}$
     \bcuz{}
         EG of \Vnod{parent}
         in \Eref{eq:surface-new-parents-inclusion-180} and
@@ -5516,7 +5516,7 @@ The theorem is then obtained using universal generalization.
 \begin{equation}
 \label{eq:surface-new-parents-inclusion-220}
 \begin{gathered}
-        \tuple{\V{parent},\V{child}} \in \V{edges} \land \V{parent} \in \Vmyfn{NewParents}{nds}
+        \tuple{\V{parent},\V{child}} \in \V{E} \land \V{parent} \in \Vmyfn{NewParents}{nds}
     \\ \implies\; \V{child} \in \Vmyfn{Surface}{nds}
     \\ \myparbox{\cuz{}
                 Implication from \Eref{eq:surface-new-parents-inclusion-120}--%
@@ -5540,12 +5540,12 @@ The theorem then follows from
 For any subset of the nodes of a non-unary tree,
 the surface of the subset is at least twice the size of
 the subset's set of direct parents.
-That is, if \V{tree} is non-unary,
+That is, if \V{G} is non-unary,
 then
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-050}
 \begin{gathered}
-    \forall\; \V{ndset} \in \Vpowerset{nodes} :
+    \forall\; \V{ndset} \in \Vpowerset{V} :
     \\ \size{\myfn{Surface}{\V{ndset}}} \ge
         2 \times
         \size{\myfn{NewParents}{\V{ndset}}}.
@@ -5563,9 +5563,9 @@ child:
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
     \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
-    New free $\V{ndset} \in \Vpowerset{nodes}$.
+    New free $\V{ndset} \in \Vpowerset{V}$.
 }
-In fact, since \V{tree} is a non-unary tree,
+In fact, since \V{G} is a non-unary tree,
 every direct parent node of \V{ndset} must have at least two
 children:
 \mypareq{eq:lem-surface-parents-ratio-180}{%
@@ -5579,11 +5579,11 @@ every node has at most one parent:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-190}
 \begin{gathered}
-    \forall\; \V{parent1} \in \V{nodes} :
-    \forall\; \V{parent2} \in \V{nodes} :
-    \forall\; \V{child} \in \V{nodes} :
-    \\ \tuple{\V{parent1},\V{child}} \in \V{edges}
-    \land \tuple{\V{parent2},\V{child}} \in \V{edges}
+    \forall\; \V{parent1} \in \V{V} :
+    \forall\; \V{parent2} \in \V{V} :
+    \forall\; \V{child} \in \V{V} :
+    \\ \tuple{\V{parent1},\V{child}} \in \V{E}
+    \land \tuple{\V{parent2},\V{child}} \in \V{E}
     \\ \implies \V{parent1} = \V{parent2}
     \\ \because \text{Def of tree, graph theory.}
 \end{gathered}
@@ -5593,8 +5593,8 @@ from every other parent's set of children:
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-200}
 \begin{gathered}
-    \forall\; \V{parent1} \in \V{nodes} :
-    \forall\; \V{parent2} \in \V{nodes} :
+    \forall\; \V{parent1} \in \V{V} :
+    \forall\; \V{parent2} \in \V{V} :
     \\ \Vmyfn{children}{parent1}
     \cap \Vmyfn{children}{parent2} = \emptyset
     \\ \because \longdfref{\myfn{children}{}}{parents},
@@ -5637,8 +5637,8 @@ is equal to the sum of their cardinalities:
 \begin{gathered}
 \size{\set{
     \begin{gathered}
-        \V{child} \in \V{nodes} :
-        \\ \tuple{\V{parent},\V{child}} \in \V{edges}
+        \V{child} \in \V{V} :
+        \\ \tuple{\V{parent},\V{child}} \in \V{E}
         \\ \land\; \V{parent} \in \Vmyfn{NewParents}{ndset}
     \end{gathered} }}
 \\ \ge\; 2 \times \size{\Vmyfn{NewParents}{ndset}}
@@ -5651,8 +5651,8 @@ is equal to the sum of their cardinalities:
 \begin{gathered}
 \set{
     \begin{gathered}
-        \V{child} \in \V{nodes} :
-        \\ \tuple{\V{parent},\V{child}} \in \V{edges}
+        \V{child} \in \V{V} :
+        \\ \tuple{\V{parent},\V{child}} \in \V{E}
         \\ \land\; \V{parent} \in \Vmyfn{NewParents}{ndset}
     \end{gathered} }
 \\ \subseteq\; \Vmyfn{Surface}{ndset}
@@ -5679,11 +5679,11 @@ For the nodes of a non-unary tree,
 every generation of a node set
 is at least twice the size
 of the successor generation with the same base.
-That is, if \V{tree} is non-unary,
+That is, if \V{G} is non-unary,
 \begin{equation}
 \label{eq:lem-generation-predecessor-size-050}
 \begin{gathered}
-     \forall\; \Vnat{N} : \forall\; \V{base} \in \Vpowerset{nodes} :
+     \forall\; \Vnat{N} : \forall\; \V{base} \in \Vpowerset{V} :
      \\ \size{\myfn{gen}{\V{N},\V{base}}} \ge
      2 \times \size{\myfn{gen}{\V{N}+1,\V{base}}}.
      \quad \thEnd
@@ -5745,8 +5745,8 @@ and \V{base}.
 
 \begin{lem}[Non-unary Subtree Size]
 \label{lem:non-unary-subtree-size}
-For the purposes of this lemma, let \V{tree} be non-unary.
-Let \V{base} be a subset of \V{nodes},
+For the purposes of this lemma, let \V{G} be non-unary.
+Let \V{base} be a subset of \V{V},
 and let $\V{N}\in\naturals$.
 Then
 \begin{equation}
@@ -5949,7 +5949,7 @@ then
 \begin{gathered}
 \V{V} = \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}
     \\ \myparbox{\cuz{}
@@ -5961,7 +5961,7 @@ then
 \begin{gathered}
  \size{ \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{nodes} : \forall\; \Vnat{N} < \Vsize{nodes} :
+        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}}
         \le 2\times\V{leaves}.
