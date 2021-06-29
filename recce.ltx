@@ -103,6 +103,7 @@
 %
 % * Not in fancyref
 % Definition def:
+% Epigraph epi:
 % Theorem th:
 % Lemma lem:
 % Remark rem:
@@ -683,6 +684,14 @@ a Creative Commons Attribution-NoDerivs 3.0 United States License.
 
 \chapter{Introduction}
 
+\epigraph{%
+\label{epi:goedel}
+The more I think about language,
+the more it amazes me that people ever understand each other at all.}
+{Kurt G{\"o}del~\footnotemark}
+\footnotetext{Sources and other details for the epigraphs are given
+starting at page \pageref{chap:epigraphs}.}
+
 The \Marpa{} project was intended to create
 a practical and highly available tool
 to generate and use general context-free
@@ -767,14 +776,14 @@ subject to deletion.
 
 We\footnote{%
     In the math literature it is traditional,
-    even in a book with single author,
     to refer to the author in the third person ---
     as a ``we''.
+    This is done even when, as in this case,
+    there is only one author.
     We do not know the origins of this convention,
-    but we like to see it,
-    and we hope the reader will see it,
-    as inviting them into join with us in a collaboration.
-    (See \cite[p. 492]{Cummings2021}.)}
+    but we like to see it
+    as inviting the reader to join with us in a collaboration.
+    (Compare \cite[p. 492]{Cummings2021}.)}
 assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
 \cite{Timeline}
@@ -1053,8 +1062,9 @@ will usually be a waste of time.}
 % 6.) Replace subtraction of one with \decr{}.
 
 \epigraph{%
+\label{epi:tarski}
 [Mathematical] statements are generally accompanied by arguments whose
-purpose is to demonstrate their truth.}{Tarski, \cite[p. 3]{Tarski}}
+purpose is to demonstrate their truth.}{Tarski}
 
 This is the first of the mathematical chapters.
 It contains considerations that introduce the deductive reasoning
@@ -2368,21 +2378,33 @@ to be well-defined and true.
 \chapter{Directed Graphs}
 \label{ch:directed-graphs}
 
-\todo[prepend, caption={``Graph theory'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``Directed Graphs'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
+{ \setlength{\epigraphwidth}{.6\textwidth}
+    \epigraph{\label{epi:looking-glass}
+    `When I use a word,' Humpty Dumpty said in rather a scornful tone,
+    `it means just what I choose it to mean — neither more nor less.'
+
+    `The question is,' said Alice, `whether you can make words mean so many different things.'
+
+    `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
+    {Lewis Carroll, {\em Through the Looking Glass}}
+}
+
 Graph theory is one of our preceding disciplines,
-and the graph theory results we use are standard,
-so that ordinarily we would simply refer to them.
-But, unfortunately,
+and the graph theory results we use are standard.
+Ordinarily, we would simply refer to them.
+Unfortunately,
 our authorities differ in details of terminology
 and derivation.\footnote{%
     The authority we follow most closely is
     is \cite{HU1979}.}
+
 In order to be careful, therefore,
 we are forced to
 make explicit the choices
@@ -2395,8 +2417,7 @@ for directed graphs.
 A \dfn{directed graph} is a pair
 $\tuple{\V{V}, \V{E}}$,
 where \V{V} is a finite set of \dfn{vertices},
-and $\V{E} \in \V{V}\times\V{V}$ is a set of
-\dfn{E}.
+and $\V{E} \in \powerset{\V{V}\times\V{V}}$.
 \defEnd
 \end{definition}
 
@@ -2407,6 +2428,7 @@ $\V{G} = \tuple{\V{V}, \V{E}}$.
 
 \begin{definition}[Parents]
 \label{def:parents}
+\noindent
 \begin{itemize}
 \item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
 \item \V{child} is the \dfn{child} of \V{parent} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
@@ -3536,8 +3558,8 @@ Let \V{root} be the root of \V{G}:
 \mypareq{eq:th-rootpath-uniqueness-110}{%
     $\nexists\; \V{from} \in \V{V} :
     \tuple{\V{from}, \V{root}} \in \V{E}$
-    \bcuz{} \Eref{eq:def-tree-root} in \longDfref{Tree}{def:tree}.
-    New free $\V{root} \in \V{V}$.}
+    \bcuz{} \Eref{eq:def-tree-root} in \longDfref{Tree}{def:tree};
+    ARB $\V{root} \in \V{V}$.}
 For a reductio, we assume that there are two distinct root paths
 to \V{nd}:
 \begin{gather}
@@ -3555,15 +3577,39 @@ to \V{nd}:
 \\ \label{eq:th-rootpath-uniqueness-150}
     \land\; \V{longRpath} \ne \V{shortRpath}
 \\ \nonumber
-    \myparbox{\cuz{} AF reductio.
-    New free $\V{longRpath} \in \Vmyfn{paths}{G}$.
-    New free $\V{shortRpath} \in \Vmyfn{paths}{G}$.}
+    \myparbox{\cuz{} AF reductio;
+    ARB $\V{longRpath} \in \Vmyfn{paths}{G}$;
+    ARB $\V{shortRpath} \in \Vmyfn{paths}{G}$.}
 \end{gather}
-Since the choice between $\V{shortRpath}$ and
-$\V{longRpath}$ is arbitrary,
+Seeing that 
+one of $\V{shortRpath}$ and $\V{longRpath}$ must be shorter
+than the other,
+we arbitrarily make the choice consistent with their naming.
+Reversing the choice would produce a symmetric proof,
+so this choice is without loss of generality.
 \mypareq{eq:th-rootpath-uniqueness-160}{%
 $\V{shortRpath} < \V{longRpath}$ \cuz
     \Eref{eq:th-rootpath-uniqueness-150}, WLOG.}
+\mypareq{eq:th-rootpath-uniqueness-170}{%
+    $\V{longSuffix} = \Vbigelement{longRpath}{
+        \begin{gathered}
+            \left( \subtract{\Vlastix{longRpath}}{\Vsize{shortRpath}} \right)
+            \\ \ldots\;\Vlastix{longRpath}
+        \end{gathered}
+     }$
+    \bcuz{} \longThref{Subpath}{subpath},
+         \Eref{eq:th-rootpath-uniqueness-160}; CV \Tvarseq{longsuffix}{V}.}
+\mypareq{eq:th-rootpath-uniqueness-180}{%
+    $\Vsize{longSuffix} = \Vsize{shortRpath}$
+    \cuz{} \Eref{eq:th-rootpath-uniqueness-170}.}
+\mypareq{eq:th-rootpath-uniqueness-190}{%
+    $\VlastElement{longSuffix} = \VlastElement{shortRpath}$
+    \cuz{} \Eref{eq:th-rootpath-uniqueness-130}, \Eref{eq:th-rootpath-uniqueness-170}.}
+\mypareq{eq:th-rootpath-uniqueness-200}{%
+    $\V{longSuffix} = \V{shortRpath}$
+    \bcuz{} \longThref{Prefix Uniqueness}{prefix-uniqueness-from-tail},
+        \Eref{eq:th-rootpath-uniqueness-180},
+        \Eref{eq:th-rootpath-uniqueness-190}.}
 
 % \Thref{th:prefix-uniqueness-from-tail}
 \todo{Finish proving this}
@@ -21937,6 +21983,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{epigraph}{%
+\label{epi:hamlet}
 Beggar that I am, I am even poor in thanks; but I thank you;
 and sure, dear friends, my thanks are too dear a halfpenny.}
 {Hamlet}
@@ -22023,6 +22070,42 @@ Omar Roth,
 Aria Stewart,
 Flaviu Tomas,
 and David Whitten.
+
+\chapter{About the Epigraphs}
+\label{chap:epigraphs}
+
+\todo[prepend, caption={``Epigraphs'' chapter is FRAGMENTARY}]{%
+This chapter is fragmentary and inconsistent
+and much of it may be deleted.
+Non-author readers are not encouraged.
+Filing pull requests
+will usually be a waste of time.}
+
+\newcommand{\epiSource}[2]{%
+    {\bf Page} \pageref{epi:#2}, {#1}:}
+
+This section provides sourcing for the epigraphs.
+It also contains additional information about them which,
+while we hope it is interesting,
+would clutter the main presentation if
+included there.
+
+\epiSource{Kurt G{\"o}del}{goedel}
+From page 75 of Hao Wang's book,
+{\em A Logical Journey: From G{\"o}del to Philosophy,}
+The MIT Press, 1997.
+% TODO: From Wikipedia citation.  Confirm sometime by looking
+% at my copy of Wang.
+
+\epiSource{Tarski}{tarski}
+From \cite[p. 3]{Tarski}.
+
+\epiSource{Lewis Carroll}{looking-glass}
+In Chapter 6 of
+{\em Through the Looking Glass}.
+
+\epiSource{Hamlet}{hamlet}
+William Shakespeare's "Hamlet", Act~2, scene~2.
 
 \bibliographystyle{plain}
 
