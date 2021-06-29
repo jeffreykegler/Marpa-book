@@ -200,9 +200,9 @@
 \newcommand{\Velement}[2]{\element{\V{#1}}{#2}}
 \newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
 \newcommand{\VlastElement}[1]{\Velement{#1}{\Vlastix{#1}}}
-\newcommand{\bigelement}[2]{\ensuremath{\mathop{#1}\left[#2\right]}}
-\newcommand{\Vbigelement}[2]{\ensuremath{\mathop{\V{#1}}\left[#2\right]}}
-\newcommand{\VVbigelement}[2]{\ensuremath{\mathop{\V{#1}}\left[ \V{#2} \right]}}
+\newcommand{\bigElement}[2]{\ensuremath{\mathop{#1}\left[#2\right]}}
+\newcommand{\VbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[#2\right]}}
+\newcommand{\VVbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[ \V{#2} \right]}}
 
 \newcommand{\defEnd}{\Circle}
 \newcommand{\ldefEnd}{\Circle}
@@ -2501,7 +2501,7 @@ This is,
     \\ \V{ix} \ne 0 \implies
         \left(
             \exists\; \V{from} \in \V{V} :
-                 \tuple{ \Vbigelement{p}{\Vdecr{ix}}, \VVbigelement{p}{ix}}
+                 \tuple{ \VbigElement{p}{\Vdecr{ix}}, \VVbigElement{p}{ix}}
                  \in \V{E}
         \right).
         \quad \thEnd
@@ -3540,6 +3540,153 @@ lemma, which shows us the lemma.
 \myqed
 \end{proof}
 
+\begin{theorem}[Rootpath Non-duplication]
+\label{th:rootpath-non-duplication}
+Every node in a tree is the tail at most one root path.
+That is, 
+if \V{root} is the root of \V{G},
+\mypareq{eq:th-rootpath-non-duplication-010}{%
+    $\nexists\; \V{from} \in \V{V} :
+    \tuple{\V{from}, \V{root}} \in \V{E}$
+    \bcuz{} \Eref{eq:def-tree-root} in \longDfref{Tree}{def:tree};}
+\V{nd} is an arbitrary node of \V{G},
+\mypareq{eq:th-rootpath-non-duplication-020}{%
+    $\V{nd} \in \V{V}$;
+}
+and \V{path1} and \V{path2} are two root paths to \V{nd}
+in \V{G},
+\begin{gather}
+\label{eq:th-rootpath-non-duplication-030}
+    \V{path1} \in \Vmyfn{paths}{G}:
+\\ \label{eq:th-rootpath-non-duplication-040}
+    \land\; \V{path2} \in \Vmyfn{paths}{G}:
+\\ \label{eq:th-rootpath-non-duplication-050}
+    \Velement{path1}{0} = \V{root} =\Velement{path2}{0}
+\\ \label{eq:th-rootpath-non-duplication-060}
+    \land\; \left(\begin{gathered}
+        \VlastElement{path1} = \V{nd}
+        \\ = \VlastElement{path2}
+    \end{gathered}\right)
+    \\ \nonumber
+\myparbox{\cuz{} \longThref{Root Path Theorem}{th:root-path}.}
+\end{gather}
+then 
+\V{path1} and \V{path2} are equivalent:
+\mypareq{eq:th-rootpath-non-duplication-070}{
+    $\V{path1} = \V{path2}$.
+    \thEnd
+}
+\end{theorem}
+
+\begin{proof}
+For a reductio, we assume that \V{path1} and \V{path2}
+are distinct:
+\mypareq{eq:th-rootpath-non-duplication-100}{%
+    $\V{path1} \ne \V{path2}$
+    \cuz{} AF reductio.}
+Since
+one of $\V{path1}$ and $\V{path2}$ must be shorter
+than the other,
+we arbitrarily make the choice,
+and introduce two variables as mnemonics.
+Reversing the choice would produce a symmetric proof,
+so this choice is without loss of generality.
+\mypareq{eq:th-rootpath-non-duplication-160}{%
+$\V{shortRpath} = \V{path1}
+\land \V{longRpath} = \V{path2}
+\land \V{shortRpath} < \V{longRpath}$ \cuz{}
+    \Eref{eq:th-rootpath-non-duplication-100}, WLOG;
+    CV $\V{shortRpath} \in \Vmyfn{paths}{G}$;
+    CV $\V{longRpath} \in \Vmyfn{paths}{G}$.}
+\mypareq{eq:th-rootpath-non-duplication-170}{%
+    $\V{longSuffix} = \VbigElement{longRpath}{
+        \begin{gathered}
+            \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+            \\ \ldots\;\Vlastix{longRpath}
+        \end{gathered}
+     }$
+    \bcuz{} \longThref{Subpath}{subpath},
+         \Eref{eq:th-rootpath-non-duplication-160}; CV \Tvarseq{longsuffix}{V}.}
+The first element of \V{longSuffix} is at
+location \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} in \V{longpath},
+and the last element of \V{longSuffix} is at \Vlastix{longRpath} in \V{longpath},
+so that
+\begin{equation}
+\label{eq:th-rootpath-non-duplication-180}
+\begin{gathered}
+    \Vsize{longSuffix}
+    \\ = \subtract{\Vlastix{longRpath}}
+        { \decr{ \left(
+                {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}
+            \right) } }
+    \\ = \subtract{\Vlastix{longRpath}}
+            { \left(
+                {\subtract{\Vlastix{longRpath}}{\Vsize{shortRpath}}}
+            \right) }
+    \\ = \Vsize{shortRpath}
+    \\ \myparbox{\cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-rootpath-non-duplication-190}{%
+    $\VlastElement{longSuffix} = \VlastElement{shortRpath}$
+    \cuz{} \Eref{eq:th-rootpath-non-duplication-130}, \Eref{eq:th-rootpath-non-duplication-170}.}
+\mypareq{eq:th-rootpath-non-duplication-200}{%
+    $\V{longSuffix} = \V{shortRpath}$
+    \bcuz{} \longThref{Prefix Uniqueness}{prefix-uniqueness-from-tail},
+        \Eref{eq:th-rootpath-non-duplication-180},
+        \Eref{eq:th-rootpath-non-duplication-190}.}
+\mypareq{eq:th-rootpath-non-duplication-210}{%
+    $\Velement{longSuffix}{0} =
+        \VbigElement{longRpath}
+             {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}$
+    \cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
+\mypareq{eq:th-rootpath-non-duplication-220}{%
+    $\Velement{longSuffix}{0} = \Velement{shortRpath}{0} = \V{root}$
+    \bcuz{} \Eref{eq:th-rootpath-non-duplication-130},
+        \Eref{eq:th-rootpath-non-duplication-200}.}
+\mypareq{eq:th-rootpath-non-duplication-230}{%
+    $\VbigElement{longRpath}
+             {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}
+             = \V{root}$
+    \bcuz{} \Eref{eq:th-rootpath-non-duplication-210},
+        \Eref{eq:th-rootpath-non-duplication-220}.}
+\mypareq{eq:th-rootpath-non-duplication-240}{%
+    $\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \ge 1$
+        \cuz{} \Eref{eq:th-rootpath-non-duplication-160}.}
+\mypareq{eq:th-rootpath-non-duplication-250}{%
+    $\VbigElement{longRpath}{
+                 \begin{gathered}
+                 \decr{
+                     \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                 },
+                 \\ \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                 \end{gathered}
+             }
+             \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-rootpath-non-duplication-120},
+        \Eref{eq:th-rootpath-non-duplication-240}.}
+\mypareq{eq:th-rootpath-non-duplication-260}{%
+    $\VbigElement{longRpath}{
+                 \begin{gathered}
+                 \decr{
+                     \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                 },
+                 \\ \V{root}
+                 \end{gathered}
+             }
+             \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-rootpath-non-duplication-230},
+        \Eref{eq:th-rootpath-non-duplication-250}.}
+
+Equation \Eref{eq:th-rootpath-non-duplication-260} is contrary to
+\Eref{eq:th-rootpath-non-duplication-110}, which shows the reductio.
+
+\todo{Finish proving this}
+\myqed
+\end{proof}
+
 \begin{theorem}[Rootpath uniqueness]
 \label{th:rootpath-uniqueness}
 Every node in a tree has exactly one root path.
@@ -3547,72 +3694,12 @@ Every node in a tree has exactly one root path.
 \end{theorem}
 
 \begin{proof}
-Let $\V{nd} \in \V{V}$ be an arbitrary node of \V{G}.
 From the definition of tree \Dfref{def:tree}
-we know that
-\mypareq{eq:th-rootpath-uniqueness-100}{%
-    there is a root path to \V{nd}.}
-It remains to show that there is not more than one.
-
-Let \V{root} be the root of \V{G}:
-\mypareq{eq:th-rootpath-uniqueness-110}{%
-    $\nexists\; \V{from} \in \V{V} :
-    \tuple{\V{from}, \V{root}} \in \V{E}$
-    \bcuz{} \Eref{eq:def-tree-root} in \longDfref{Tree}{def:tree};
-    ARB $\V{root} \in \V{V}$.}
-For a reductio, we assume that there are two distinct root paths
-to \V{nd}:
-\begin{gather}
-\label{eq:th-rootpath-uniqueness-120}
-    \V{longRpath} \in \Vmyfn{paths}{G}:
-\\ \label{eq:th-rootpath-uniqueness-125}
-    \land\; \V{shortRpath} \in \Vmyfn{paths}{G}:
-\\ \label{eq:th-rootpath-uniqueness-130}
-    \Velement{longRpath}{0} = \V{root} =\Velement{shortRpath}{0}
-\\ \label{eq:th-rootpath-uniqueness-140}
-    \land\; \left(\begin{gathered}
-        \VlastElement{longRpath} = \V{nd}
-        \\ = \VlastElement{shortRpath}
-    \end{gathered}\right)
-\\ \label{eq:th-rootpath-uniqueness-150}
-    \land\; \V{longRpath} \ne \V{shortRpath}
-\\ \nonumber
-    \myparbox{\cuz{} AF reductio;
-    ARB $\V{longRpath} \in \Vmyfn{paths}{G}$;
-    ARB $\V{shortRpath} \in \Vmyfn{paths}{G}$.}
-\end{gather}
-Seeing that 
-one of $\V{shortRpath}$ and $\V{longRpath}$ must be shorter
-than the other,
-we arbitrarily make the choice consistent with their naming.
-Reversing the choice would produce a symmetric proof,
-so this choice is without loss of generality.
-\mypareq{eq:th-rootpath-uniqueness-160}{%
-$\V{shortRpath} < \V{longRpath}$ \cuz
-    \Eref{eq:th-rootpath-uniqueness-150}, WLOG.}
-\mypareq{eq:th-rootpath-uniqueness-170}{%
-    $\V{longSuffix} = \Vbigelement{longRpath}{
-        \begin{gathered}
-            \left( \subtract{\Vlastix{longRpath}}{\Vsize{shortRpath}} \right)
-            \\ \ldots\;\Vlastix{longRpath}
-        \end{gathered}
-     }$
-    \bcuz{} \longThref{Subpath}{subpath},
-         \Eref{eq:th-rootpath-uniqueness-160}; CV \Tvarseq{longsuffix}{V}.}
-\mypareq{eq:th-rootpath-uniqueness-180}{%
-    $\Vsize{longSuffix} = \Vsize{shortRpath}$
-    \cuz{} \Eref{eq:th-rootpath-uniqueness-170}.}
-\mypareq{eq:th-rootpath-uniqueness-190}{%
-    $\VlastElement{longSuffix} = \VlastElement{shortRpath}$
-    \cuz{} \Eref{eq:th-rootpath-uniqueness-130}, \Eref{eq:th-rootpath-uniqueness-170}.}
-\mypareq{eq:th-rootpath-uniqueness-200}{%
-    $\V{longSuffix} = \V{shortRpath}$
-    \bcuz{} \longThref{Prefix Uniqueness}{prefix-uniqueness-from-tail},
-        \Eref{eq:th-rootpath-uniqueness-180},
-        \Eref{eq:th-rootpath-uniqueness-190}.}
-
-% \Thref{th:prefix-uniqueness-from-tail}
-\todo{Finish proving this}
+we know that there is at least one root path to \V{nd}.
+From the Rootpath Non-duplication Theorem
+\Thref{th:rootpath-non-duplication}, we know there
+is at most one.
+The theorem follows from these two facts.
 \myqed
 \end{proof}
 
