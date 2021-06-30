@@ -1413,11 +1413,13 @@ analysis.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
 ``Def'' abbreviates ``definition''.
 ``iff'' abbreviates ``if and only if''.
-``WLOG'' abbreviates ``without loss of generality''.
 ``EI'' abbreviates ``existential instantiation''.
 ``EG'' abbreviates ``existential generalization''.
 ``UI'' abbreviates ``universal instantiation''.
 ``UG'' abbreviates ``universal generalization''.
+``WLOG'' abbreviates ``without loss of generality''.
+``ZF'' (for Zermolo-Frankel) abbreviates ``set theory''.
+For our purposes, number theory is consider to be part of set theory.
 
 \section{Scope and types}
 \label{sec:scope-and-type}
@@ -2516,19 +2518,20 @@ This theorem follows immediately from the definition of a path \Dfref{def:path}.
 
 \begin{theorem}[Singleton Path]
 \label{th:singleton-path}
+A node \V{nd} induces a path iff that path is \seq{\V{nd}}.
 Every node in a directed graph induces a unique path
 of length 1.
-This is,if
+This is, if
 \mypareq{eq:th-singleton-path-010}{%
-    $\V{nd} \in \V{V}.$}
+    $\V{nd} \in \V{V}$}
 then
 \begin{gather}
 \label{eq:th-singleton-path-020}
-    \existsUniq; \V{induced} \in \Vmyfn{paths}{G}
+    \existsUniq\; \V{induced} \in \Vmyfn{paths}{G} :
 \\ \label{eq:th-singleton-path-030}
-    \land\; \V{induced} = \seq{\V{nd}}
+    \V{induced} = \seq{\V{nd}}
 \\ \label{eq:th-singleton-path-040}
-    \land\; \Vsize{induced} = 1
+    \land\; \Vsize{induced} = 1.
     \quad \thEnd
 \end{gather}
 \end{theorem}
@@ -2539,46 +2542,38 @@ assuming the hypothesis
 \Eref{eq:th-singleton-path-010}
 to show the consequent
 \Eref{eq:th-singleton-path-020}--\Eref{eq:th-singleton-path-040}.
-We introduce a new free variable for the induced path,
-recycling for this purpose, \V{singleton},
-the name bound in the consequent of the theorem.
-\mypareq{eq:th-singleton-path-100}{%
-    \V{induced} = \seq{\V{nd}}
-        \cuz{} CV \Tvarseq{singleton}{V}.}
-\todo{Rewrite from here.}
-
-\begin{gather}
-\label{eq:th-singleton-path-102}
-\land\; \Tvarseq{singleton}{V} = \seq{\V{nd}}
-\\ \nonumber
-\myparbox{\cuz{} AF proof.
-   New free \Tvarseq{singleton}{V},
-   new free \Tvar{nd}{V}.}
-\end{gather}
-\mypareq{eq:th-singleton-path-108}{%
-   $\V{singleton} \in \V{V} \expOp 1$
-   \bcuz{} \Eref{eq:th-singleton-path-100},
-    \Eref{eq:th-singleton-path-102}.}
-From basic set theory we conclude that
-\mypareq{eq:th-singleton-path-110}{%
-   \V{singleton} is a finite non-empty sequence of
-   vertices of \V{G} \cuz{} \Eref{eq:th-singleton-path-100}.}
-Then we have
+It follows trivially from Axiom of Extensionality that the sequence
+induced by \V{nd} is unique:
 \mypareq{eq:th-singleton-path-120}{%
-    $\forall\; \Vnat{ix} < \Vlastix{singleton} :
-        \family{ \VVelement{singleton}{ix}, \Velement{singleton}{\V{ix}+1} } \in \V{E}$
-    \cuz{} vacuously.}
-It follows immediately from
-\Eref{eq:th-singleton-path-110}
-and
-\Eref{eq:th-singleton-path-120} that \V{singleton} is a path.
-It follows from the Axiom of Extensionality that the sequence
-$\V{singleton} = \seq{\V{nd}}$ is unique.
+    $\forall\; \V{induced1} :
+    \forall\; \V{induced2} :
+    \V{induced1} = \seq{\V{nd}} = \V{induced2}$
+    \bcuz{} ZF.
+}
+We introduce a new free variable for the induced sequence.
+\mypareq{eq:th-singleton-path-130}{%
+    $\V{singleton} = \seq{\V{nd}}$
+        \cuz{} ARB \Tvarseq{singleton}{V}.}
+Given that V{singleton} is a sequence,
+it follows vacuously from the definition of path that \V{singleton} is also a
+path:
+\mypareq{eq:th-singleton-path-140}{%
+    $\V{singleton} \in \Vmyfn{paths}{G}$
+    \cuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-singleton-path-130}.}
+Finally, it is a trivial observation that
+$\V{singleton} = \seq{\V{nd}}$ is of length 1.
+\mypareq{eq:th-singleton-path-150}{%
+    $\Vsize{singleton} = 1$
+        \Eref{eq:th-singleton-path-130}.}
+The consequent of the theorem follows from equations
+\Eref{eq:th-singleton-path-120}--\Eref{eq:th-singleton-path-150}
+and the existential generalization of \V{singleton}.
 \myqed
 \end{proof}
 
-\begin{theorem}[Single-edge Path]
-\label{th:single-edge-path}
+\begin{theorem}[Edge-induced Path]
+\label{th:edge-induced-path}
 Every edge in a directed graph induces a unique path.
 This is,
 \[
@@ -2599,9 +2594,9 @@ to show that the induced sequence,
 $\Tvarseq{path}{V} = \seq{\V{from}, \V{to}}$,
 is a unique path:
 \begin{gather}
-\label{eq:th-single-edge-path-100}
+\label{eq:th-edge-induced-path-100}
 \tuple{\Tvar{from}{V}, \Tvar{to}{V}} \in \V{E}
-\\ \label{eq:th-single-edge-path-102}
+\\ \label{eq:th-edge-induced-path-102}
 \land\; \Tvarseq{path}{V} = \seq{\V{from}, \V{to}}
 \\ \nonumber
 \myparbox{\cuz{} AF proof.
@@ -2609,23 +2604,23 @@ is a unique path:
    new free \Tvar{from}{V},
    new free \Tvar{to}{V}.}
 \end{gather}
-\mypareq{eq:th-single-edge-path-108}{%
+\mypareq{eq:th-edge-induced-path-108}{%
   $\V{path} \in \V{V} \expOp 2$ \cuz{}
-    \Eref{eq:th-single-edge-path-100},
-    \Eref{eq:th-single-edge-path-102}.}
+    \Eref{eq:th-edge-induced-path-100},
+    \Eref{eq:th-edge-induced-path-102}.}
 From basic set theory we conclude that
-\mypareq{eq:th-single-edge-path-110}{%
+\mypareq{eq:th-edge-induced-path-110}{%
    \V{path} is a finite non-empty sequence of
-   vertices of \V{G} \cuz{} \Eref{eq:th-single-edge-path-108}.}
+   vertices of \V{G} \cuz{} \Eref{eq:th-edge-induced-path-108}.}
 Then we have
-\mypareq{eq:th-single-edge-path-120}{%
+\mypareq{eq:th-edge-induced-path-120}{%
     $\forall\; \Vnat{ix} < \Vlastix{path} :
         \family{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \Eref{eq:th-single-edge-path-100}, \Eref{eq:th-single-edge-path-102}.}
+    \bcuz{} \Eref{eq:th-edge-induced-path-100}, \Eref{eq:th-edge-induced-path-102}.}
 It follows immediately from
-\Eref{eq:th-single-edge-path-110}
+\Eref{eq:th-edge-induced-path-110}
 and
-\Eref{eq:th-single-edge-path-120} that \V{path} is a path.
+\Eref{eq:th-edge-induced-path-120} that \V{path} is a path.
 It follows from the Axiom of Extensionality that the sequence
 $\V{path} = \seq{\V{from}, \V{to}}$ is unique.
 \myqed
@@ -3047,7 +3042,7 @@ prepended and the specified length.
 We know that the edge induces a unique path:
 \mypareq{eq:th-path-pre-increment-120}{%
     $\seq{\V{nd},\Velement{old}{0}} \in \Vmyfn{paths}{G}$
-    \cuz{} \longThref{Single Edge Path}{single-edge-path}.
+    \cuz{} \longThref{Edge-induced Path}{edge-induced-path}.
 }
 From the preceding, we know there is a fusion
 of the unique path induced
@@ -3110,7 +3105,7 @@ appended and the specified length.
 We know that the edge induces a unique path:
 \mypareq{eq:th-path-post-increment-120}{%
     $\seq{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \Vmyfn{paths}{G}$
-    \cuz{} \longThref{Single Edge Path}{single-edge-path}.
+    \cuz{} \longThref{Edge-induced Path}{edge-induced-path}.
 }
 From the preceding, we know there is a fusion
 of the unique path induced
