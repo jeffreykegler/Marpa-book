@@ -3557,18 +3557,18 @@ and \V{path1} and \V{path2} are two root paths to \V{nd}
 in \V{G},
 \begin{gather}
 \label{eq:th-rootpath-non-duplication-030}
-    \V{path1} \in \Vmyfn{paths}{G}:
+    \V{path1} \in \Vmyfn{paths}{G}
 \\ \label{eq:th-rootpath-non-duplication-040}
-    \land\; \V{path2} \in \Vmyfn{paths}{G}:
+    \land\; \V{path2} \in \Vmyfn{paths}{G}
 \\ \label{eq:th-rootpath-non-duplication-050}
-    \Velement{path1}{0} = \V{root} =\Velement{path2}{0}
+    \land\; \Velement{path1}{0} = \V{root} =\Velement{path2}{0}
 \\ \label{eq:th-rootpath-non-duplication-060}
     \land\; \left(\begin{gathered}
         \VlastElement{path1} = \V{nd}
         \\ = \VlastElement{path2}
     \end{gathered}\right)
     \\ \nonumber
-\myparbox{\cuz{} \longThref{Root Path Theorem}{root-path}.}
+\myparbox{\cuz{} \longThref{Root Path Theorem}{root-path};}
 \end{gather}
 then 
 \V{path1} and \V{path2} are equivalent:
@@ -3579,7 +3579,9 @@ then
 \end{theorem}
 
 \begin{proof}
-For a reductio, we assume that \V{path1} and \V{path2}
+The proof is by reductio.
+For the reductio,
+we assume that \V{path1} and \V{path2}
 are distinct:
 \mypareq{eq:th-rootpath-non-duplication-100}{%
     $\V{path1} \ne \V{path2}$
@@ -3587,17 +3589,23 @@ are distinct:
 Since
 one of $\V{path1}$ and $\V{path2}$ must be shorter
 than the other,
-we arbitrarily make the choice,
-and introduce two variables as mnemonics.
+we arbitrarily choose,
+introducing two convenience variables as mnemonics.
 Reversing the choice would produce a symmetric proof,
 so this choice is without loss of generality.
-\mypareq{eq:th-rootpath-non-duplication-160}{%
-$\V{shortRpath} = \V{path1}
-\land \V{longRpath} = \V{path2}
-\land \V{shortRpath} < \V{longRpath}$ \cuz{}
+\begin{gather}
+\label{eq:th-rootpath-non-duplication-158}
+\V{shortRpath} = \V{path1}
+   \land\; \V{longRpath} = \V{path2}
+\\ \label{eq:th-rootpath-non-duplication-160}
+   \land\; \Vsize{shortRpath} < \Vsize{longRpath}
+\\ \nonumber
+\myparbox{\cuz{}
     \Eref{eq:th-rootpath-non-duplication-100}, WLOG;
     CV $\V{shortRpath} \in \Vmyfn{paths}{G}$;
+    \linebreak[1]
     CV $\V{longRpath} \in \Vmyfn{paths}{G}$.}
+\end{gather}
 \mypareq{eq:th-rootpath-non-duplication-170}{%
     $\V{longSuffix} = \VbigElement{longRpath}{
         \begin{gathered}
@@ -3627,9 +3635,16 @@ so that
     \\ \myparbox{\cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-rootpath-non-duplication-190}{%
-    $\VlastElement{longSuffix} = \VlastElement{shortRpath}$
-    \cuz{} \Eref{eq:th-rootpath-non-duplication-130}, \Eref{eq:th-rootpath-non-duplication-170}.}
+\begin{equation}
+\label{eq:th-rootpath-non-duplication-190}
+\begin{gathered}
+    \VlastElement{longSuffix} = \VlastElement{longRpath}
+    \\ = \VlastElement{shortRpath}
+    \\ \myparbox{\cuz{} \Eref{eq:th-rootpath-non-duplication-060},
+        \Eref{eq:th-rootpath-non-duplication-158},
+        \Eref{eq:th-rootpath-non-duplication-170}.}
+\end{gathered}
+\end{equation}
 \mypareq{eq:th-rootpath-non-duplication-200}{%
     $\V{longSuffix} = \V{shortRpath}$
     \bcuz{} \longThref{Prefix Uniqueness}{prefix-uniqueness-from-tail},
@@ -3642,7 +3657,8 @@ so that
     \cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
 \mypareq{eq:th-rootpath-non-duplication-220}{%
     $\Velement{longSuffix}{0} = \Velement{shortRpath}{0} = \V{root}$
-    \bcuz{} \Eref{eq:th-rootpath-non-duplication-130},
+    \bcuz{} \Eref{eq:th-rootpath-non-duplication-050},
+        \Eref{eq:th-rootpath-non-duplication-158},
         \Eref{eq:th-rootpath-non-duplication-200}.}
 \mypareq{eq:th-rootpath-non-duplication-230}{%
     $\VbigElement{longRpath}
@@ -3664,7 +3680,8 @@ so that
              }
              \in \V{E}$
     \bcuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-rootpath-non-duplication-120},
+        \Eref{eq:th-rootpath-non-duplication-040},
+        \Eref{eq:th-rootpath-non-duplication-158},
         \Eref{eq:th-rootpath-non-duplication-240}.}
 \mypareq{eq:th-rootpath-non-duplication-260}{%
     $\VbigElement{longRpath}{
@@ -3676,13 +3693,12 @@ so that
                  \end{gathered}
              }
              \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path},
+    \bcuz{}
         \Eref{eq:th-rootpath-non-duplication-230},
         \Eref{eq:th-rootpath-non-duplication-250}.}
-
 Equation \Eref{eq:th-rootpath-non-duplication-260} is contrary to
-\Eref{eq:th-rootpath-non-duplication-110}, which shows the reductio.
-
+\Eref{eq:th-rootpath-non-duplication-010}, which shows the reductio
+and the theorem.
 \todo{Finish proving this}
 \myqed
 \end{proof}
@@ -3694,10 +3710,11 @@ Every node in a tree has exactly one root path.
 \end{theorem}
 
 \begin{proof}
-From the definition of tree \Dfref{def:tree}
+Let $\V{nd} \in \V{V}$ be an arbitrary node in \V{G}.
+From the definition of a tree \Dfref{def:tree}
 we know that there is at least one root path to \V{nd}.
 From the Rootpath Non-duplication Theorem
-\Thref{th:rootpath-non-duplication}, we know there
+\Thref{rootpath-non-duplication}, we know there
 is at most one.
 The theorem follows from these two facts.
 \myqed
