@@ -43,7 +43,7 @@ clean:
 
 recce.pdf: recce.ltx
 	$(MAKE) recce-indexes
-	$(LATEX) $?
+	max_print_line=99999 $(LATEX) $?
 
 recce-indexes:
 	for ix in general lemmas notation; do \
