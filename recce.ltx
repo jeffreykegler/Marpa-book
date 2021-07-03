@@ -2648,96 +2648,101 @@ A sequence is a \dfn{subpath} of \V{p}
 iff it is a subsequence of \V{p}.
 A subpath of \V{p} is a \dfn{proper subpath} of
 \V{p} iff it is not equal to \V{p}.
+The triple of path \V{p}, start location \Vnat{lo}
+and end location \Vnat{hi}
+is said to \dfn{induce} a subpath if the subpath
+is $\VVelement{p}{\V{lo} \ldots \V{hi}}$.
 \defEnd
 \end{definition}
 
 \begin{theorem}[Subpath]
 \label{th:subpath}
-Every subpath of a path in \V{G}
-is a path in \V{G}.
-That is,
-\[
-\begin{gathered}
-\forall\; \V{seq} \in \Vmyfn{paths}{G} :
-\\ \forall\; \Vnat{lo} \; (\V{lo} \le \Vlastix{seq}) :
-    \forall\; \Vnat{hi} \; (\V{lo} \le \V{hi} \le \Vlastix{seq}) :
-\\ \seq{\VVelement{seq}{lo} \ldots \VVelement{seq}{hi}} \in \Vmyfn{paths}{G}.
-    \quad \defEnd
-\end{gathered}
-\]
+If start and end locations are inside a path,
+and the end location is at or after the start location,
+the path and the locations
+induce a unique path
+whose length is the one plus the difference of the locations.
+That is, if
+\begin{gather}
+\label{eq:th-subpath-010}
+\V{path} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-subpath-020}
+    \land\; \V{lo} \le \Vlastix{path}
+\\ \label{eq:th-subpath-030}
+    \land\; \V{lo} \le \V{hi} \le \Vlastix{path}
+\end{gather}
+then
+\begin{gather}
+\label{eq:th-subpath-040}
+\existsUniq\; \V{subpath} \in \Vmyfn{paths}{G}
+\\ \label{eq:th-subpath-050}
+    \land\; \V{subpath} = \VVelement{path}{\V{lo} \ldots \V{hi}}
+\\ \label{eq:th-subpath-060}
+    \land\; \Vsize{subpath} = (\subtract{\V{hi}}{\V{lo}}) + 1.
+        \quad \defEnd
+\end{gather}
 \end{theorem}
 
 \begin{proof}
-Let \V{path} be an arbitrary path in \V{G}:
+The proof is direct, assuming the hypothesis
+\Eref{eq:th-subpath-010}--\Eref{eq:th-subpath-030}
+to show the consequent
+\Eref{eq:th-subpath-040}--\Eref{eq:th-subpath-060}.
+We need to assure ourselves that
+the sequence
+$\VVelement{path}{\V{lo}\ldots \V{hi}}$ actually exists.
+This follows from the assumptions about \V{lo} and \V{hi}
+in the hypothesis, and the fact that $\Vsize{path}\ge 1$,
+which we know by the definition of a path.
+Since the subpath exists, we can instantiate it:
 \mypareq{eq:th-subpath-100}{%
-    $\V{path} \in \Vmyfn{paths}{G}$
-    \linebreak \cuz{} hypothesis of theorem.
-    New free $\V{path} \in \powerset{\naturals \times \V{V}}$.}
-Let \Vnat{lo} and \Vnat{hi} be the head and tail of
-a subpath of \V{path}:
-\mypareq{eq:th-subpath-105}{%
-     $\V{lo} \le \V{hi} \le \Vlastix{path}$
-    \linebreak \cuz{} hypothesis of theorem.
-        New free \Vnat{lo} and \Vnat{hi}.
-}
-Call that subpath \V{subpath}:
+$\V{subpath} = \VVelement{path}{\V{lo} \ldots \V{hi}}$
+    \bcuz{} \longDfref{Path}{def:path},
+    \longDfref{Induced Subpath}{def:subpath},
+    \Eref{eq:th-subpath-010},
+        \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030}; ARB \V{subpath}.}
+To show that the induced subpath is unique,
+we instantiate another
+arbitrary induced subpath:
 \mypareq{eq:th-subpath-110}{%
-    $\V{subpath} = \seq{\VVelement{path}{lo} \ldots \VVelement{path}{hi}}$
-    \linebreak \cuz{} \Eref{eq:th-subpath-105}.  New \V{subpath} for convenience.
-}
-Since \V{subpath} is a sequence,
-it follows from set theory that
+    $\V{subpath2} = \VVelement{path}{\V{lo} \ldots \V{hi}}$
+    \bcuz{} \longDfref{Path}{def:path},
+    \longDfref{Induced Subpath}{def:subpath},
+    \Eref{eq:th-subpath-010},
+        \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030}; ARB \V{subpath2}.}
 \mypareq{eq:th-subpath-120}{%
-    \V{subpath} is a finite non-empty sequence
-    \cuz{} \Eref{eq:th-subpath-110}.
-}
-Proceeding, we have
-\mypareq{eq:th-subpath-220}{%
-    $\Ran{\V{path}} \subseteq \V{V}$ \cuz{}
-        \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.}
-\mypareq{eq:th-subpath-230}{%
-    $\Ran{\V{subpath}} \subseteq \Ran{\V{path}}$
-        \cuz{} \Eref{eq:th-subpath-105}, \Eref{eq:th-subpath-110}.}
-\mypareq{eq:th-subpath-240}{%
-    $\Ran{\V{subpath}} \subseteq \V{V}$ \cuz{}
-        \Eref{eq:th-subpath-220}, \Eref{eq:th-subpath-230}.}
-\begin{equation}
-\label{eq:th-subpath-250}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{path} :
-    \\ \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}
-    \\ \because \longDfref{Path}{def:path}, \Eref{eq:th-subpath-100}.
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-subpath-260}{%
-     $\Vlastix{subpath}+\V{lo} \le \Vlastix{path}$
-     \cuz{} \Eref{eq:th-subpath-105}, \Eref{eq:th-subpath-110}.}
-\begin{equation}
-\label{eq:th-subpath-270}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \tuple{ \Velement{path}{\V{ix} + \V{lo}}, \Velement{path}{\V{ix}+\V{lo}+1} } \in \V{E}
-    \\ \because \Eref{eq:th-subpath-250}, \Eref{eq:th-subpath-260}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-subpath-280}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \Velement{path}{\V{ix} + \V{lo}} = \VVelement{subpath}{ix}
-    \\ \because \Eref{eq:th-subpath-110}, \Eref{eq:th-subpath-260}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-subpath-290}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{subpath} :
-    \\ \tuple{ \Velement{subpath}{\V{ix}}, \Velement{subpath}{\V{ix}+1} } \in \V{E}
-    \\ \because \Eref{eq:th-subpath-270}, \Eref{eq:th-subpath-280}.
-\end{gathered}
-\end{equation}
-The consequent of the theorem is \Eref{eq:th-subpath-120},
-\Eref{eq:th-subpath-240}, and \Eref{eq:th-subpath-290}.
+    $\V{subpath} = \V{subpath2}$
+    \cuz{} \Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-110}.}
+Since \V{subpath} and \V{subpath2} are both arbitrary induced subpaths
+of \V{path}, \V{lo}, and \V{hi}, we may conclude that all induced subpaths are equivalent:
+\mypareq{eq:th-subpath-130}{%
+    \V{subpath} is the unique induced subpath of \V{path}, \V{lo}, \V{hi}
+    \bcuz{} \Eref{eq:th-subpath-120}.}
+It remains to show that \V{subpath} is a path,
+and of the length required by the theorem.
+\mypareq{eq:th-subpath-140}{%
+    $\Vsize{subpath} = (\subtract{\V{hi}}{\V{lo}}) + 1$
+        \cuz{} \Eref{eq:th-subpath-100}.}
+\mypareq{eq:th-subpath-150}{%
+    $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
+        \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
+        \cuz{} \Eref{eq:th-subpath-110}.}
+\mypareq{eq:th-subpath-160}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path} :
+        \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-040}.}
+\mypareq{eq:th-subpath-170}{%
+    $\forall\; \Vnat{ix} < \Vlastix{subpath} :
+        \tuple{ \VVelement{subpath}{ix}, \Velement{subpath}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \Eref{eq:th-subpath-150}, \Eref{eq:th-subpath-160}.}
+\mypareq{eq:th-subpath-180}{%
+    $\V{subpath} \in \Vmyfn{paths}{G}$
+        \bcuz{} \Dfref{def:path}, \Eref{eq:th-subpath-100},
+            \Eref{eq:th-subpath-170}.}
+The consequent of the theorem is
+\Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-130},
+\Eref{eq:th-subpath-140}, and \Eref{eq:th-subpath-180};
+followed by the existential generalization of \V{subpath}
 \myqed
 \end{proof}
 
