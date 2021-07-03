@@ -3607,108 +3607,106 @@ are distinct:
 \mypareq{eq:th-rootpath-non-duplication-100}{%
     $\V{path1} \ne \V{path2}$
     \cuz{} AF reductio.}
-Since
-one of $\V{path1}$ and $\V{path2}$ must be shorter
-than the other,
-we arbitrarily choose,
+One of $\V{path1}$ and $\V{path2}$ must be shorter
+than the other.
+We arbitrarily choose \V{path1} as the shortest,
 introducing two convenience variables as mnemonics.
 Reversing the choice would produce a symmetric proof,
 so this choice is without loss of generality.
 \begin{gather}
 \label{eq:th-rootpath-non-duplication-158}
-\V{shortRpath} = \V{path1}
-   \land\; \V{longRpath} = \V{path2}
+\V{short} = \V{path1}
+   \land\; \V{long} = \V{path2}
 \\ \label{eq:th-rootpath-non-duplication-160}
-   \land\; \Vsize{shortRpath} < \Vsize{longRpath}
+   \land\; \Vsize{short} < \Vsize{long}
 \\ \nonumber
 \myparbox{\cuz{}
     \Eref{eq:th-rootpath-non-duplication-100}, WLOG;
-    CV $\V{shortRpath} \in \Vmyfn{paths}{G}$;
+    CV $\V{short} \in \Vmyfn{paths}{G}$;
     \linebreak[1]
-    CV $\V{longRpath} \in \Vmyfn{paths}{G}$.}
+    CV $\V{long} \in \Vmyfn{paths}{G}$.}
 \end{gather}
 \mypareq{eq:th-rootpath-non-duplication-170}{%
-    $\V{longSuffix} = \VbigElement{longRpath}{
-        \begin{gathered}
-            \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
-            \\ \ldots\;\Vlastix{longRpath}
-        \end{gathered}
+    $\V{longSuffix} = \VbigElement{long}{
+            \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
+            \ldots\;\Vlastix{long}
      }$
     \bcuz{} \longThref{Subpath}{subpath},
-         \Eref{eq:th-rootpath-non-duplication-160}; CV \Tvarseq{longsuffix}{V}.}
+         \Eref{eq:th-rootpath-non-duplication-160}; CV \Tvarseq{longSuffix}{V}.}
 The first element of \V{longSuffix} is at
-location \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} in \V{longpath},
-and the last element of \V{longSuffix} is at \Vlastix{longRpath} in \V{longpath},
+location \subtract{\Vsize{long}}{\Vsize{short}} in \V{longpath},
+and the last element of \V{longSuffix} is at \Vlastix{long} in \V{longpath},
 so that
 \begin{equation}
 \label{eq:th-rootpath-non-duplication-180}
 \begin{gathered}
     \Vsize{longSuffix}
-    \\ = \subtract{\Vlastix{longRpath}}
+    \\ = \subtract{\Vlastix{long}}
         { \decr{ \left(
-                {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}
+                {\subtract{\Vsize{long}}{\Vsize{short}}}
             \right) } }
-    \\ = \subtract{\Vlastix{longRpath}}
+    \\ = \subtract{\Vlastix{long}}
             { \left(
-                {\subtract{\Vlastix{longRpath}}{\Vsize{shortRpath}}}
+                {\subtract{\Vlastix{long}}{\Vsize{short}}}
             \right) }
-    \\ = \Vsize{shortRpath}
+    \\ = \Vsize{short}
     \\ \myparbox{\cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \label{eq:th-rootpath-non-duplication-190}
 \begin{gathered}
-    \VlastElement{longSuffix} = \VlastElement{longRpath}
-    \\ = \VlastElement{shortRpath}
+    \VlastElement{longSuffix} = \VlastElement{long}
+    \\ = \VlastElement{short}
     \\ \myparbox{\cuz{} \Eref{eq:th-rootpath-non-duplication-060},
         \Eref{eq:th-rootpath-non-duplication-158},
         \Eref{eq:th-rootpath-non-duplication-170}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-rootpath-non-duplication-200}{%
-    $\V{longSuffix} = \V{shortRpath}$
+    $\V{longSuffix} = \V{short}$
     \bcuz{} \longThref{Prefix Uniqueness}{prefix-uniqueness-from-tail},
         \Eref{eq:th-rootpath-non-duplication-180},
         \Eref{eq:th-rootpath-non-duplication-190}.}
 \mypareq{eq:th-rootpath-non-duplication-210}{%
     $\Velement{longSuffix}{0} =
-        \VbigElement{longRpath}
-             {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}$
+        \VbigElement{long}
+             {\subtract{\Vsize{long}}{\Vsize{short}}}$
     \cuz{} \Eref{eq:th-rootpath-non-duplication-170}.}
 \mypareq{eq:th-rootpath-non-duplication-220}{%
-    $\Velement{longSuffix}{0} = \Velement{shortRpath}{0} = \V{root}$
+    $\Velement{longSuffix}{0} = \Velement{short}{0} = \V{root}$
     \bcuz{} \Eref{eq:th-rootpath-non-duplication-050},
         \Eref{eq:th-rootpath-non-duplication-158},
         \Eref{eq:th-rootpath-non-duplication-200}.}
 \mypareq{eq:th-rootpath-non-duplication-230}{%
-    $\VbigElement{longRpath}
-             {\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}}}
+    $\VbigElement{long}
+             {\subtract{\Vsize{long}}{\Vsize{short}}}
              = \V{root}$
     \bcuz{} \Eref{eq:th-rootpath-non-duplication-210},
         \Eref{eq:th-rootpath-non-duplication-220}.}
 \mypareq{eq:th-rootpath-non-duplication-240}{%
-    $\subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \ge 1$
+    $\subtract{\Vsize{long}}{\Vsize{short}} \ge 1$
         \cuz{} \Eref{eq:th-rootpath-non-duplication-160}.}
 \mypareq{eq:th-rootpath-non-duplication-250}{%
-    $\VbigElement{longRpath}{
+    $\VbigElement{long}{
                  \begin{gathered}
                  \decr{
-                     \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                     \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
                  },
-                 \\ \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                 \\ \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
                  \end{gathered}
              }
              \in \V{E}$
     \bcuz{} \longDfref{Path}{def:path},
         \Eref{eq:th-rootpath-non-duplication-040},
         \Eref{eq:th-rootpath-non-duplication-158},
+        \Eref{eq:th-rootpath-non-duplication-160},
         \Eref{eq:th-rootpath-non-duplication-240}.}
 \mypareq{eq:th-rootpath-non-duplication-260}{%
-    $\VbigElement{longRpath}{
+    $\VbigElement{long}{
                  \begin{gathered}
                  \decr{
-                     \left( \subtract{\Vsize{longRpath}}{\Vsize{shortRpath}} \right)
+                     \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
                  },
                  \\ \V{root}
                  \end{gathered}
@@ -3720,7 +3718,6 @@ so that
 Equation \Eref{eq:th-rootpath-non-duplication-260} is contrary to
 \Eref{eq:th-rootpath-non-duplication-010}, which shows the reductio
 and the theorem.
-\todo{Finish proving this}
 \myqed
 \end{proof}
 
