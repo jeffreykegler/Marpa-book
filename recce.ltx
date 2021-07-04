@@ -382,6 +382,7 @@
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
+\newcommand{\TypeSet}[1]{\ensuremath{\mymathop{TypeSet}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
@@ -1614,6 +1615,26 @@ whose index set is
 $\naturals$ is a type.
 \end{itemize}
 
+It will sometimes be convenient to use our variable-subscript notation
+for types in other contexts.
+Our notation for the set represented by the type \V{T} will be
+\TypeSet{\V{T}}.
+For example, where \V{V} is a set,
+we write $\V{seq} \in \TypeSet{\seq{\V{V}}}$ to say that \V{seq}
+is a sequence of whose values are elements of the set \V{V}.
+Writing $\V{seq} \in \TypeSet{\seq{\V{V}}}$ is similar to writing
+\Tvarseq{seq}{V}, but
+$\V{seq} \in \TypeSet{\seq{\V{V}}}$ has a boolean value and
+makes a statement about the type of \V{seq} only if that expression
+is the first appearance of that binding of the variable \V{seq}.
+On the other hand,
+the value of \Tvarseq{seq}{V}
+is the value of the variable \V{seq},
+and \Tvarseq{seq}{V} always states that the type of \V{seq}
+is ``$\set{\V{V}}$'',
+even when that appearance of \V{seq} is not the first occurrence
+of that binding of \V{seq}.
+
 \FloatBarrier
 
 \section{Arbitrary and Convenience Variables}
@@ -1724,6 +1745,11 @@ We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
 The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
+
+We also, in context, treat 0 and 1 as boolean values, so
+that $1 = (3 \in \set{3,4,5})$ is true.
+This means that $1 = (1 = (3 \in \set{3,4,5}))$ is also true.
+This also means that $2 = {0,1}$ is the set of boolean values.
 
 We write tuples using double square brackets.
 For example,
@@ -2001,6 +2027,13 @@ and \Ran{\V{seq}} is the set of valid values of \V{seq}.
 It is therefore always the case that
 $\V{seq} \in \Ran{\V{seq}} \expOp \Dom{\V{seq}}$
 and that $\Dom{\V{seq}} = \Vsize{seq}.$
+
+Recall that we defined 0 as boolean false and
+1 as boolean true;
+and therefore $2 = \set{0,1}$ as the set of boolean values.
+This means that
+$2 \expOp \V{V}$ is the set of boolean functions whose domain
+is \V{V}.
 
 We specify a sequence by specifying its elements explicitly,
 via a sequence constructor,
@@ -2516,11 +2549,20 @@ This theorem follows immediately from the definition of a path \Dfref{def:path}.
 \myqed
 \end{proof}
 
+\begin{definition}[Node-induced Sequence]
+\label{def:node-induced}
+A node \dfn{induces} a sequence iff that sequence is
+the singleton whose only element is that node.
+That is, the node \V{nd} induces the sequence \V{seq}
+iff $\V{seq} = \seq{\V{nd}}$.
+\defEnd
+\end{definition}
+
 \begin{theorem}[Node-induced Path]
 \label{th:node-induced-path}
-A node \V{nd} induces a path iff that path is \seq{\V{nd}}.
-Every node in a directed graph \dfn{induces} a unique path
-of length 1.
+Every node in a directed graph \dfn{induces} a unique sequence
+of length 1;
+and that sequence is a path.
 That is, if
 \mypareq{eq:th-node-induced-path-010}{%
     $\V{nd} \in \V{V}$}
@@ -2542,33 +2584,68 @@ assuming the hypothesis
 \Eref{eq:th-node-induced-path-010}
 to show the consequent
 \Eref{eq:th-node-induced-path-020}--\Eref{eq:th-node-induced-path-040}.
-It follows trivially from Axiom of Extensionality that the sequence
-induced by \V{nd} is unique:
-\mypareq{eq:th-node-induced-path-120}{%
-    $\forall\; \V{induced1} :
-    \forall\; \V{induced2} :
-    \V{induced1} = \seq{\V{nd}} = \V{induced2}$
-    \bcuz{} ZF.
-}
-We introduce a new free variable for the induced sequence.
-\mypareq{eq:th-node-induced-path-130}{%
+For this proof we define a boolean function
+$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+such that
+\mypareq{eq:th-node-induced-path-100}{%
+    for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
+    \V{seq} is the sequence induced by \V{nd} according to
+    the definition \Dfref{def:node-induced}.}
+We introduce a new induced sequence, and then prove that our choice
+is the sequence induced by \V{nd}.
+\mypareq{eq:th-node-induced-path-110}{%
     $\V{singleton} = \seq{\V{nd}}$
         \cuz{} ARB \Tvarseq{singleton}{V}.}
-Given that \V{singleton} is a sequence,
-it follows vacuously from the definition of path that \V{singleton} is also a
-path:
+\mypareq{eq:th-node-induced-path-120}{%
+    $\V{singleton} \in \ \V{V} \expOp 1$
+        \cuz{} \Eref{eq:th-node-induced-path-110}.}
+\mypareq{eq:th-node-induced-path-130}{%
+    $\Vmyfn{Induced}{singleton}$
+    \cuz{} \Dfref{def:node-induced}, \cuz{} \Eref{eq:th-node-induced-path-110}.}
+We introduce a second, arbitrarily chosen, sequence induced by \V{nd},
+in order to show that the sequence induced by \V{nd} is unique:
 \mypareq{eq:th-node-induced-path-140}{%
+    $\Vmyfn{Induced}{singleton2}$
+        \cuz{} ARB \Tvarseq{singleton2}{V}.}
+\mypareq{eq:th-node-induced-path-150}{%
+    $\V{singleton2} = \seq{\V{nd}}$
+    \cuz{} \longDfref{Node-induced sequence}{def:node-induced}.}
+Since \V{singleton2} is an arbitrarily chosen \V{nd}-induced sequence,
+we may universally generalize:
+\mypareq{eq:th-node-induced-path-160}{%
+    $\forall\; \Tvarseq{induced}{V} :
+    \Vmyfn{Induced}{induced} \implies \V{induced} = \seq{\V{nd}}$
+    \bcuz{} \Eref{eq:th-node-induced-path-150}.}
+And from this we see that the sequence induced by \V{nd} is unique:
+\begin{equation}
+\label{eq:th-node-induced-path-170}
+\begin{gathered}
+    \forall\; \Tvarseq{induced1}{V} : \forall\; \Tvarseq{induced2}{V} :
+    \\ \Vmyfn{Induced}{induced1} \land \Vmyfn{Induced}{induced2}
+    \\ \implies \V{induced1} = \V{induced2}
+    \\ \myparbox{\cuz{} \Eref{eq:th-node-induced-path-160}.}
+\end{gathered}
+\end{equation}
+It remains to show that \V{induced} is a path of length 1.
+\mypareq{eq:th-node-induced-path-180}{%
+    $\Vsize{singleton} = 1$
+        \cuz{} \Eref{eq:th-node-induced-path-120}.}
+From \Eref{eq:th-node-induced-path-120}
+it follows that
+that \V{singleton} is a finite, non-empty sequence of vertices,
+and from this in turn,
+together with a vacuous use of the definition of path,
+it follows that \V{singleton} is also a path:
+\mypareq{eq:th-node-induced-path-190}{%
     $\V{singleton} \in \Vmyfn{paths}{G}$
     \cuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-node-induced-path-130}.}
-Finally, it is a trivial observation that
-$\V{singleton} = \seq{\V{nd}}$ is of length 1.
-\mypareq{eq:th-node-induced-path-150}{%
-    $\Vsize{singleton} = 1$
-        \cuz{} \Eref{eq:th-node-induced-path-130}.}
+        \Eref{eq:th-node-induced-path-120}.}
 The consequent of the theorem follows from equations
-\Eref{eq:th-node-induced-path-120}--\Eref{eq:th-node-induced-path-150}
-and the existential generalization of \V{singleton}.
+\Eref{eq:th-node-induced-path-110},
+\Eref{eq:th-node-induced-path-170},
+and \Eref{eq:th-node-induced-path-190};
+and from the existential generalization of \V{singleton}.
+\todo{Recheck this proof.}
 \myqed
 \end{proof}
 
