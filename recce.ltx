@@ -2590,8 +2590,9 @@ such that
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
     \V{seq} is the sequence induced by \V{nd} according to
     the definition \Dfref{def:node-induced}.}
-We construct a new free sequence, and then prove that our choice
-is the sequence induced by \V{nd}.
+We show the existence of at least one \V{nd}-induced
+sequence by constructing a new free sequence, and proving that our construction
+is, in fact, a sequence induced by \V{nd}.
 \mypareq{eq:th-node-induced-path-110}{%
     $\V{singleton} = \seq{\V{nd}}$
         \cuz{} CV \Tvarseq{singleton}{V}.}
@@ -2691,8 +2692,9 @@ such that
     \V{seq} is the sequence induced by
     \V{edge} according to
     the definition \Dfref{def:edge-induced}.}
-We construct a new free sequence, and then prove that our choice
-is the sequence induced by \V{edge}.
+We show the existence of at least one \V{nd}-induced
+sequence by constructing a new free sequence, and proving that our construction
+is, in fact, a sequence induced by \V{edge}.
 \mypareq{eq:th-edge-induced-path-110}{%
     $\V{duple} = \seq{\V{from},\V{to}}$
         \cuz{} CV \Tvarseq{duple}{V}.}
@@ -2732,22 +2734,17 @@ and that it is of length 2.
 \mypareq{eq:th-edge-induced-path-180}{%
     $\Vsize{duple} = 2$
         \cuz{} \Eref{eq:th-edge-induced-path-120}.}
-\mypareq{eq:th-edge-induced-path-185}{%
+\mypareq{eq:th-edge-induced-path-190}{%
     \V{duple} is a finite, non-empty sequence of vertices.
       \bcuz{} \Eref{eq:th-edge-induced-path-120}.}
-\mypareq{eq:th-edge-induced-path-190}{%
-    $\tuple{\V{from},\V{to}} \in \V{E} \implies
-    \V{duple} \in \Vmyfn{paths}{G}$
-    \bcuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-edge-induced-path-110},
-        \Eref{eq:th-edge-induced-path-120},
-        \Eref{eq:th-edge-induced-path-185}.}
 \mypareq{eq:th-edge-induced-path-200}{%
     $\tuple{\V{from},\V{to}} \in \V{E}$
         \cuz{} \Eref{eq:th-edge-induced-path-010}.}
 \mypareq{eq:th-edge-induced-path-210}{%
     $\V{duple} \in \Vmyfn{paths}{G}$
-    \cuz{} \Eref{eq:th-edge-induced-path-190},
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-edge-induced-path-110},
+        \Eref{eq:th-edge-induced-path-190},
         \Eref{eq:th-edge-induced-path-200}.}
 The consequent of the theorem follows from equations
 \Eref{eq:th-edge-induced-path-110},
@@ -2755,7 +2752,6 @@ The consequent of the theorem follows from equations
 \Eref{eq:th-edge-induced-path-180},
 and \Eref{eq:th-edge-induced-path-210},
 followed by the existential generalization of \V{duple}.
-\todo{Recheck this proof.}
 \myqed
 \end{proof}
 
@@ -2805,62 +2801,31 @@ then
 The proof is direct, assuming the hypothesis
 \Eref{eq:th-subpath-010}--\Eref{eq:th-subpath-030}
 to show the consequent
-\Eref{eq:th-subpath-040}--\Eref{eq:th-subpath-060}.
-We need to assure ourselves that
-the sequence
-$\VVelement{path}{\V{lo}\ldots \V{hi}}$ actually exists.
-This follows from the assumptions about \V{lo} and \V{hi}
-in the hypothesis, and the fact that $\Vsize{path}\ge 1$,
-which we know by the definition of a path.
-Since the subpath exists, we can instantiate it:
-\mypareq{eq:th-subpath-100}{%
-$\V{subpath} = \VVelement{path}{\V{lo} \ldots \V{hi}}$
-    \bcuz{} \longDfref{Path}{def:path},
-    \longDfref{Induced Subpath}{def:subpath},
-    \Eref{eq:th-subpath-010},
-        \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030}; ARB \V{subpath}.}
-To show that the induced subpath is unique,
-we instantiate another
-arbitrary induced subpath:
-\mypareq{eq:th-subpath-110}{%
-    $\V{subpath2} = \VVelement{path}{\V{lo} \ldots \V{hi}}$
-    \bcuz{} \longDfref{Path}{def:path},
-    \longDfref{Induced Subpath}{def:subpath},
-    \Eref{eq:th-subpath-010},
-        \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030}; ARB \V{subpath2}.}
-\mypareq{eq:th-subpath-120}{%
-    $\V{subpath} = \V{subpath2}$
-    \cuz{} \Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-110}.}
-Since \V{subpath} and \V{subpath2} are both arbitrary induced subpaths
-of \V{path}, \V{lo}, and \V{hi}, we may conclude that all induced subpaths are equivalent:
-\mypareq{eq:th-subpath-130}{%
-    \V{subpath} is the unique induced subpath of \V{path}, \V{lo}, \V{hi}
-    \bcuz{} \Eref{eq:th-subpath-120}.}
-It remains to show that \V{subpath} is a path,
-and of the length required by the theorem.
-\mypareq{eq:th-subpath-140}{%
-    $\Vsize{subpath} = (\subtract{\V{hi}}{\V{lo}}) + 1$
-        \cuz{} \Eref{eq:th-subpath-100}.}
-\mypareq{eq:th-subpath-150}{%
-    $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
-        \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
-        \cuz{} \Eref{eq:th-subpath-110}.}
-\mypareq{eq:th-subpath-160}{%
-    $\forall\; \Vnat{ix} < \Vlastix{path} :
-        \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-040}.}
-\mypareq{eq:th-subpath-170}{%
-    $\forall\; \Vnat{ix} < \Vlastix{subpath} :
-        \tuple{ \VVelement{subpath}{ix}, \Velement{subpath}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \Eref{eq:th-subpath-150}, \Eref{eq:th-subpath-160}.}
-\mypareq{eq:th-subpath-180}{%
-    $\V{subpath} \in \Vmyfn{paths}{G}$
-        \bcuz{} \Dfref{def:path}, \Eref{eq:th-subpath-100},
-            \Eref{eq:th-subpath-170}.}
-The consequent of the theorem is
-\Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-130},
-\Eref{eq:th-subpath-140}, and \Eref{eq:th-subpath-180};
-followed by the existential generalization of \V{subpath}
+\todo{Rewriting from here}
+% \Eref{eq:th-subpath-040}--\Eref{eq:th-subpath-060}.
+% \mypareq{eq:th-subpath-140}{%
+%     $\Vsize{subpath} = (\subtract{\V{hi}}{\V{lo}}) + 1$
+%         \cuz{} \Eref{eq:th-subpath-100}.}
+% \mypareq{eq:th-subpath-150}{%
+%     $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
+%         \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
+%         \cuz{} \Eref{eq:th-subpath-110}.}
+% \mypareq{eq:th-subpath-160}{%
+%     $\forall\; \Vnat{ix} < \Vlastix{path} :
+%         \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
+%     \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-040}.}
+% \mypareq{eq:th-subpath-170}{%
+%     $\forall\; \Vnat{ix} < \Vlastix{subpath} :
+%         \tuple{ \VVelement{subpath}{ix}, \Velement{subpath}{\V{ix}+1} } \in \V{E}$
+%     \bcuz{} \Eref{eq:th-subpath-150}, \Eref{eq:th-subpath-160}.}
+% \mypareq{eq:th-subpath-180}{%
+%     $\V{subpath} \in \Vmyfn{paths}{G}$
+%         \bcuz{} \Dfref{def:path}, \Eref{eq:th-subpath-100},
+%             \Eref{eq:th-subpath-170}.}
+% The consequent of the theorem is
+% \Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-130},
+% \Eref{eq:th-subpath-140}, and \Eref{eq:th-subpath-180};
+% followed by the existential generalization of \V{subpath}
 \myqed
 \end{proof}
 
