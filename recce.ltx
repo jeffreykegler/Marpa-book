@@ -2611,7 +2611,7 @@ in order to show that the sequence induced by \V{nd} is unique:
     \cuz{} \longDfref{Node-induced sequence}{def:node-induced}.}
 Since \V{singleton2} is an arbitrarily chosen \V{nd}-induced sequence,
 we may universally generalize the implication from
-\Eref{eq:th-node-induced-path-160} to \Eref{eq:th-node-induced-path-170}.
+\Eref{eq:th-node-induced-path-140} to \Eref{eq:th-node-induced-path-150}:
 \mypareq{eq:th-node-induced-path-160}{%
     $\forall\; \Tvarseq{induced}{V} :
     \Vmyfn{Induced}{induced} \implies \V{induced} = \seq{\V{nd}}$
@@ -2683,7 +2683,79 @@ assuming the hypothesis
 \Eref{eq:th-edge-induced-path-010}
 to show the consequent
 \Eref{eq:th-edge-induced-path-020}--\Eref{eq:th-edge-induced-path-040}.
-\todo{Rewrite this proof.}
+For this proof we define a boolean function
+$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+such that
+\mypareq{eq:th-edge-induced-path-100}{%
+    for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
+    \V{seq} is the sequence induced by
+    \V{edge} according to
+    the definition \Dfref{def:edge-induced}.}
+We construct a new free sequence, and then prove that our choice
+is the sequence induced by \V{edge}.
+\mypareq{eq:th-edge-induced-path-110}{%
+    $\V{duple} = \seq{\V{from},\V{to}}$
+        \cuz{} CV \Tvarseq{duple}{V}.}
+\mypareq{eq:th-edge-induced-path-120}{%
+    $\V{duple} \in \ \V{V} \expOp 2$
+        \cuz{} \Eref{eq:th-edge-induced-path-110}.}
+\mypareq{eq:th-edge-induced-path-130}{%
+    $\Vmyfn{Induced}{duple}$
+    \cuz{} \Dfref{def:edge-induced}, \Eref{eq:th-edge-induced-path-110}.}
+We introduce a second, arbitrarily chosen, sequence induced by \V{edge},
+in order to show that the sequence induced by \V{edge} is unique:
+\mypareq{eq:th-edge-induced-path-140}{%
+    $\Vmyfn{Induced}{duple2}$
+        \cuz{} ARB \Tvarseq{duple2}{V}.}
+\mypareq{eq:th-edge-induced-path-150}{%
+    $\V{duple2} = \seq{\V{from},\V{to}}$
+    \cuz{} \longDfref{Node-induced sequence}{def:edge-induced}.}
+Since \V{duple2} is an arbitrarily chosen \V{edge}-induced sequence,
+we may universally generalize the implication from
+\Eref{eq:th-edge-induced-path-140} to \Eref{eq:th-edge-induced-path-150}.
+\mypareq{eq:th-edge-induced-path-160}{%
+    $\forall\; \Tvarseq{induced}{V} :
+    \Vmyfn{Induced}{induced} \implies \V{induced} = \seq{\V{from},\V{to}}$
+    \bcuz{} \Eref{eq:th-edge-induced-path-150}.}
+And from this we see that the sequence induced by \V{edge} is unique:
+\begin{equation}
+\label{eq:th-edge-induced-path-170}
+\begin{gathered}
+    \forall\; \Tvarseq{induced1}{V} : \forall\; \Tvarseq{induced2}{V} :
+    \\ \Vmyfn{Induced}{induced1} \land \Vmyfn{Induced}{induced2}
+    \\ \implies \V{induced1} = \V{induced2}
+    \\ \myparbox{\cuz{} \Eref{eq:th-edge-induced-path-160}.}
+\end{gathered}
+\end{equation}
+It remains to show that \V{induced} is a path,
+and that it is of length 2.
+\mypareq{eq:th-edge-induced-path-180}{%
+    $\Vsize{duple} = 2$
+        \cuz{} \Eref{eq:th-edge-induced-path-120}.}
+\mypareq{eq:th-edge-induced-path-185}{%
+    \V{duple} is a finite, non-empty sequence of vertices.
+      \bcuz{} \Eref{eq:th-edge-induced-path-120}.}
+\mypareq{eq:th-edge-induced-path-190}{%
+    $\tuple{\V{from},\V{to}} \in \V{E} \implies
+    \V{duple} \in \Vmyfn{paths}{G}$
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-edge-induced-path-110},
+        \Eref{eq:th-edge-induced-path-120},
+        \Eref{eq:th-edge-induced-path-185}.}
+\mypareq{eq:th-edge-induced-path-200}{%
+    $\tuple{\V{from},\V{to}} \in \V{E}$
+        \cuz{} \Eref{eq:th-edge-induced-path-010}.}
+\mypareq{eq:th-edge-induced-path-210}{%
+    $\V{duple} \in \Vmyfn{paths}{G}$
+    \cuz{} \Eref{eq:th-edge-induced-path-190},
+        \Eref{eq:th-edge-induced-path-200}.}
+The consequent of the theorem follows from equations
+\Eref{eq:th-edge-induced-path-110},
+\Eref{eq:th-edge-induced-path-170},
+\Eref{eq:th-edge-induced-path-180},
+and \Eref{eq:th-edge-induced-path-210},
+followed by the existential generalization of \V{duple}.
+\todo{Recheck this proof.}
 \myqed
 \end{proof}
 
