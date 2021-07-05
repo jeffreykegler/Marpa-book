@@ -2802,30 +2802,90 @@ The proof is direct, assuming the hypothesis
 \Eref{eq:th-subpath-010}--\Eref{eq:th-subpath-030}
 to show the consequent
 \todo{Rewriting from here}
-% \Eref{eq:th-subpath-040}--\Eref{eq:th-subpath-060}.
-% \mypareq{eq:th-subpath-140}{%
-%     $\Vsize{subpath} = (\subtract{\V{hi}}{\V{lo}}) + 1$
-%         \cuz{} \Eref{eq:th-subpath-100}.}
-% \mypareq{eq:th-subpath-150}{%
-%     $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
-%         \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
-%         \cuz{} \Eref{eq:th-subpath-110}.}
-% \mypareq{eq:th-subpath-160}{%
-%     $\forall\; \Vnat{ix} < \Vlastix{path} :
-%         \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
-%     \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-040}.}
-% \mypareq{eq:th-subpath-170}{%
-%     $\forall\; \Vnat{ix} < \Vlastix{subpath} :
-%         \tuple{ \VVelement{subpath}{ix}, \Velement{subpath}{\V{ix}+1} } \in \V{E}$
-%     \bcuz{} \Eref{eq:th-subpath-150}, \Eref{eq:th-subpath-160}.}
-% \mypareq{eq:th-subpath-180}{%
-%     $\V{subpath} \in \Vmyfn{paths}{G}$
-%         \bcuz{} \Dfref{def:path}, \Eref{eq:th-subpath-100},
-%             \Eref{eq:th-subpath-170}.}
-% The consequent of the theorem is
-% \Eref{eq:th-subpath-100}, \Eref{eq:th-subpath-130},
-% \Eref{eq:th-subpath-140}, and \Eref{eq:th-subpath-180};
-% followed by the existential generalization of \V{subpath}
+For convenient reference, we assign a variable name to the
+triple containing the data that induces the subpath:
+\mypareq{eq:th-subpath-100}{%
+    \V{splice} = \tuple{\V{path},\V{lo},\V{hi}}
+    \bcuz{} CV $\V{splice} \in \TypeSet{\seq{\V{V}}}\times\naturals\times\naturals$.}
+For this proof we define a boolean function
+$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+such that
+\mypareq{eq:th-subpath-105}{%
+    for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
+    \V{seq} is the sequence induced by \V{splice} according to
+    the definition \Dfref{def:subpath}.}
+We show the existence of at least one \V{splice}-induced
+sequence by constructing a new free sequence, and proving that our construction
+is, in fact, a sequence induced by \V{splice}.
+\mypareq{eq:th-subpath-110}{%
+    $\V{subpath} = \Velement{path}{\V{lo}\ldots \V{hi}}$
+        \cuz{} CV \Tvarseq{subpath}{V}.}
+\mypareq{eq:th-subpath-120}{%
+    $\V{subpath} \in \V{V} \expOp \left( (\subtract{\V{hi}}{\V{lo}})+1 \right)$
+        \cuz{} \Eref{eq:th-subpath-110}.}
+\mypareq{eq:th-subpath-130}{%
+    $\Vmyfn{Induced}{subpath}$
+    \cuz{} \Dfref{def:subpath}, \Eref{eq:th-subpath-110}.}
+We introduce a second, arbitrarily chosen, sequence induced by \V{splice},
+in order to show that the sequence induced by \V{splice} is unique:
+\mypareq{eq:th-subpath-140}{%
+    $\Vmyfn{Induced}{subpath2}$
+        \cuz{} ARB \Tvarseq{subpath2}{V}.}
+\mypareq{eq:th-subpath-150}{%
+    $\V{subpath2} = \seq{\V{lo}\ldots \V{hi}}$
+    \cuz{} \longDfref{Subpath}{def:subpath}.}
+Since \V{subpath2} is an arbitrarily chosen \V{splice}-induced sequence,
+we may universally generalize the implication from
+\Eref{eq:th-subpath-140} to \Eref{eq:th-subpath-150}.
+\mypareq{eq:th-subpath-160}{%
+    $\forall\; \Tvarseq{induced}{V} :
+    \Vmyfn{Induced}{induced} \implies \V{induced} = \seq{\V{lo}\ldots \V{hi}}$
+    \bcuz{} \Eref{eq:th-subpath-150}.}
+And from this we see that the sequence induced by \V{splice} is unique:
+\begin{equation}
+\label{eq:th-subpath-170}
+\begin{gathered}
+    \forall\; \Tvarseq{induced1}{V} : \forall\; \Tvarseq{induced2}{V} :
+    \\ \Vmyfn{Induced}{induced1} \land \Vmyfn{Induced}{induced2}
+    \\ \implies \V{induced1} = \V{induced2}
+    \\ \myparbox{\cuz{} \Eref{eq:th-subpath-160}.}
+\end{gathered}
+\end{equation}
+It remains to show that \V{induced} is a path,
+and that it is of the required length.
+\mypareq{eq:th-subpath-180}{%
+    $\Vsize{subpath} = \left( (\subtract{\V{hi}}{\V{lo}})+1 \right)$
+	\cuz{} \Eref{eq:th-subpath-120}.}
+\mypareq{eq:th-subpath-190}{%
+    \V{subpath} is a finite, non-empty sequence of vertices.
+        \bcuz{} \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030},
+            \Eref{eq:th-subpath-180}.}
+\todo{Are the bounds here right?}
+\mypareq{eq:th-subpath-250}{%
+    $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
+        \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
+        \bcuz{} \Eref{eq:th-subpath-110}.}
+\mypareq{eq:th-subpath-260}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path} :
+        \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-040}.}
+\mypareq{eq:th-subpath-270}{%
+    $\forall\; \Vnat{ix} < \Vlastix{subpath} :
+        \tuple{ \VVelement{subpath}{ix}, \Velement{subpath}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \Eref{eq:th-subpath-250}, \Eref{eq:th-subpath-260}.}
+\mypareq{eq:th-subpath-400}{%
+    $\V{subpath} \in \Vmyfn{paths}{G}$
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-subpath-110},
+        \Eref{eq:th-subpath-190},
+        \Eref{eq:th-subpath-270}.
+	}
+The consequent of the theorem follows from equations
+\Eref{eq:th-subpath-110},
+\Eref{eq:th-subpath-170},
+\Eref{eq:th-subpath-180},
+and \Eref{eq:th-subpath-400},
+followed by the existential generalization of \V{subpath}.
 \myqed
 \end{proof}
 
