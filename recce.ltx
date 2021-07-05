@@ -2560,9 +2560,8 @@ iff $\V{seq} = \seq{\V{nd}}$.
 
 \begin{theorem}[Node-induced Path]
 \label{th:node-induced-path}
-Every node in a directed graph \dfn{induces} a unique sequence
-of length 1;
-and that sequence is a path.
+Every node in a directed graph \dfn{induces} a unique sequence,
+and that sequence is a path of length 1.
 That is, if
 \mypareq{eq:th-node-induced-path-010}{%
     $\V{nd} \in \V{V}$}
@@ -2591,17 +2590,17 @@ such that
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
     \V{seq} is the sequence induced by \V{nd} according to
     the definition \Dfref{def:node-induced}.}
-We introduce a new induced sequence, and then prove that our choice
+We construct a new free sequence, and then prove that our choice
 is the sequence induced by \V{nd}.
 \mypareq{eq:th-node-induced-path-110}{%
     $\V{singleton} = \seq{\V{nd}}$
-        \cuz{} ARB \Tvarseq{singleton}{V}.}
+        \cuz{} CV \Tvarseq{singleton}{V}.}
 \mypareq{eq:th-node-induced-path-120}{%
     $\V{singleton} \in \ \V{V} \expOp 1$
         \cuz{} \Eref{eq:th-node-induced-path-110}.}
 \mypareq{eq:th-node-induced-path-130}{%
     $\Vmyfn{Induced}{singleton}$
-    \cuz{} \Dfref{def:node-induced}, \cuz{} \Eref{eq:th-node-induced-path-110}.}
+    \cuz{} \Dfref{def:node-induced}, \Eref{eq:th-node-induced-path-110}.}
 We introduce a second, arbitrarily chosen, sequence induced by \V{nd},
 in order to show that the sequence induced by \V{nd} is unique:
 \mypareq{eq:th-node-induced-path-140}{%
@@ -2611,7 +2610,8 @@ in order to show that the sequence induced by \V{nd} is unique:
     $\V{singleton2} = \seq{\V{nd}}$
     \cuz{} \longDfref{Node-induced sequence}{def:node-induced}.}
 Since \V{singleton2} is an arbitrarily chosen \V{nd}-induced sequence,
-we may universally generalize:
+we may universally generalize the implication from
+\Eref{eq:th-node-induced-path-160} to \Eref{eq:th-node-induced-path-170}.
 \mypareq{eq:th-node-induced-path-160}{%
     $\forall\; \Tvarseq{induced}{V} :
     \Vmyfn{Induced}{induced} \implies \V{induced} = \seq{\V{nd}}$
@@ -2626,16 +2626,16 @@ And from this we see that the sequence induced by \V{nd} is unique:
     \\ \myparbox{\cuz{} \Eref{eq:th-node-induced-path-160}.}
 \end{gathered}
 \end{equation}
-It remains to show that \V{induced} is a path of length 1.
+It remains to show that \V{induced} is a path,
+and that it is of length 1.
 \mypareq{eq:th-node-induced-path-180}{%
     $\Vsize{singleton} = 1$
         \cuz{} \Eref{eq:th-node-induced-path-120}.}
 From \Eref{eq:th-node-induced-path-120}
 it follows that
-that \V{singleton} is a finite, non-empty sequence of vertices,
-and from this in turn,
-together with a vacuous use of the definition of path,
-it follows that \V{singleton} is also a path:
+that \V{singleton} is a finite, non-empty sequence of vertices.
+From this and a vacuous use of the definition of path,
+it follows that \V{singleton} is a path:
 \mypareq{eq:th-node-induced-path-190}{%
     $\V{singleton} \in \Vmyfn{paths}{G}$
     \cuz{} \longDfref{Path}{def:path},
@@ -2643,17 +2643,18 @@ it follows that \V{singleton} is also a path:
 The consequent of the theorem follows from equations
 \Eref{eq:th-node-induced-path-110},
 \Eref{eq:th-node-induced-path-170},
-and \Eref{eq:th-node-induced-path-190};
-and from the existential generalization of \V{singleton}.
-\todo{Recheck this proof.}
+\Eref{eq:th-node-induced-path-180},
+and \Eref{eq:th-node-induced-path-190},
+followed by the existential generalization of \V{singleton}.
 \myqed
 \end{proof}
 
-\begin{definition}[Edge-induced Path]
+\begin{definition}[Edge-induced Sequence]
+\label{def:edge-induced}
 Let $\V{edge} \in \V{E}$ be an edge in \V{G} such that
 $\V{edge} = \tuple{\V{from},\V{to}})$.
-We say that \V{edge} \dfn{induces} a path iff
-that path is \seq{\V{from},\V{to}}.
+We say that \V{edge} \dfn{induces} a sequence iff
+that sequence is \seq{\V{from},\V{to}}.
 \defEnd
 \end{definition}
 
@@ -2682,39 +2683,7 @@ assuming the hypothesis
 \Eref{eq:th-edge-induced-path-010}
 to show the consequent
 \Eref{eq:th-edge-induced-path-020}--\Eref{eq:th-edge-induced-path-040}.
-It follows trivially from Axiom of Extensionality that the sequence
-induced by \V{edge} is unique:
-\begin{equation}
-\label{eq:th-edge-induced-path-120}
-\begin{gathered}
-    \forall\; \V{induced1} : \forall\; \V{induced2} :
-    \\ \V{induced1} = \seq{\V{from},\V{to}} = \V{induced2}
-    \\ \myparbox{\cuz{} ZF.}
-\end{gathered}
-\end{equation}
-We introduce a new variable for the induced sequence:
-\mypareq{eq:th-edge-induced-path-130}{%
-    $\V{duple} = \seq{\V{from},\V{to}}$
-        \cuz{} ARB \Tvarseq{duple}{V}.}
-Since \tuple{\V{from},\V{to}} is an edge,
-\mypareq{eq:th-edge-induced-path-140}{%
-    $\forall\; \Vnat{ix} < \Vlastix{duple} :
-        \family{ \VVelement{duple}{ix}, \Velement{duple}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \Eref{eq:th-edge-induced-path-010}, \Eref{eq:th-edge-induced-path-130}.}
-\mypareq{eq:th-edge-induced-path-150}{%
-    $\V{duple} \in \Vmyfn{paths}{G}$
-    \cuz{} \longDfref{Path}{def:path},
-        \Eref{eq:th-edge-induced-path-130},
-        \Eref{eq:th-edge-induced-path-140}.}
-\mypareq{eq:th-edge-induced-path-160}{%
-    $\Vsize{duple} = 2$
-        \cuz{} \Eref{eq:th-edge-induced-path-130}.}
-The consequent of the theorem follows from equations
-\Eref{eq:th-edge-induced-path-120},
-\Eref{eq:th-edge-induced-path-130},
-\Eref{eq:th-edge-induced-path-150},
-and \Eref{eq:th-edge-induced-path-160};
-followed by the existential generalization of \V{duple}.
+\todo{Rewrite this proof.}
 \myqed
 \end{proof}
 
