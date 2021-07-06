@@ -337,8 +337,9 @@
 
 \newcommand{\expOp}{\mathbin{\ast\ast}}
 
-\newcommand{\condOp}{\mathbin{?}}
-\newcommand{\cond}[3]{\ensuremath{#1\condOp#2\mathbin{:}#3}}
+\newcommand{\condOpA}{\mathbin{?}}
+\newcommand{\condOpB}{\mathbin{:}}
+\newcommand{\cond}[3]{\ensuremath{#1\condOpA#2\condOpB#3}}
 
 \newcommand{\V}[1]{\ensuremath{\texttt{#1}}}
 \newcommand{\var}[1]{\V{#1}}
@@ -2801,7 +2802,6 @@ then
 The proof is direct, assuming the hypothesis
 \Eref{eq:th-subpath-010}--\Eref{eq:th-subpath-030}
 to show the consequent
-\todo{Rewriting from here}
 For convenient reference, we assign a variable name to the
 triple containing the data that induces the subpath:
 \mypareq{eq:th-subpath-100}{%
@@ -2860,11 +2860,14 @@ and that it is of the required length.
     \V{subpath} is a finite, non-empty sequence of vertices.
         \bcuz{} \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030},
             \Eref{eq:th-subpath-180}.}
-\todo{Are the bounds here right?}
+\mypareq{eq:th-subpath-200}{%
+    $ \V{lo} + \Vlastix{subpath} = \V{hi}$
+	\cuz{} \Eref{eq:th-subpath-180}.}
 \mypareq{eq:th-subpath-250}{%
     $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
         \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
-        \bcuz{} \Eref{eq:th-subpath-110}.}
+        \bcuz{} \Eref{eq:th-subpath-110},
+        \bcuz{} \Eref{eq:th-subpath-200}.}
 \mypareq{eq:th-subpath-260}{%
     $\forall\; \Vnat{ix} < \Vlastix{path} :
         \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
@@ -2952,6 +2955,33 @@ then
 The proof is direct,
 assuming the hypothesis of the theorem to
 show its consequent.
+For convenient reference, we assign a variable name to the
+duple containing the data that induces the fusion:
+\mypareq{eq:th-fusion-100}{%
+    \V{pair} = \tuple{\V{path1},\V{path2}}
+    \bcuz{} CV $\V{pair} \in \TypeSet{\seq{\V{V}}}\times\TypeSet{\seq{\V{V}}}.$}
+For this proof we define a boolean function
+$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+such that
+\mypareq{eq:th-fusion-105}{%
+    for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
+    \V{seq} is the sequence induced by \V{pair} according to
+    the definition \Dfref{def:fusion}.}
+We show the existence of at least one \V{pair}-induced
+sequence by constructing a new free sequence, and proving that our construction
+is, in fact, a sequence induced by \V{pair}.
+\begin{equation}
+\label{eq:th-subpath-110}
+\begin{gathered}
+    \forall\; \V{ix} < \subtract{\left( \Vsize{path1} + \Vsize{path2} \right) }{1} :
+    \\ \V{fusion} = \left( \begin{gathered}
+            \V{ix}\le\Vlastix{path1} \condOpA
+            \\ \VVelement{path1}{ix} \condOpB
+            \\ \Velement{path2}{\subtract{\V{ix}}{\Vlastix{path1}}}
+         \end{gathered} \right)
+    \\ \myparbox{\cuz{} CV \Tvarseq{fusion}{V}.}
+\end{gathered}
+\end{equation}
 \todo{Revise proof from here.}
 The consequent of this theorem is
 % \Eref{eq:th-fusion-310},
@@ -2963,6 +2993,7 @@ The consequent of this theorem is
 
 \begin{theorem}[Path Fusion Uniqueness]
 \label{th:fusion-uniqueness}
+\todo{Delete this theorem}
 The fusion of two paths, if it exists, is unique.  \thEnd
 \end{theorem}
 
@@ -4136,7 +4167,7 @@ be such that
 \begin{equation}
     \myfn{Anc}{\Vnat{N},\Vnodset{base}} =
     \left(\begin{gathered}
-    \V{N}=0 \condOp \V{base} :
+    \V{N}=0 \condOpA \V{base} \condOpB
     \\ \myfn{Anc}{\Vdecr{N},\V{base}}
     \\ \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}\right).
@@ -4749,7 +4780,7 @@ if
     \Vmyfn{gen}{\V{N},\V{base}} \ldefined
     \set{
     \begin{gathered}
-     \V{N}= 0 \condOp \V{base} :
+     \V{N}= 0 \condOpA \V{base} \condOpB
         \\ \subtract{\myfn{Anc}{\V{N},\V{base}}}
             {\myfn{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}
@@ -7032,7 +7063,7 @@ iff
         \V{cell} \in \powerset{\Term{\V{g}}^\ast} :
             \exists\; \Vterm{u} :
         \\ \left(\begin{gathered}
-                \Vsize{u} < \V{k} \condOp \V{cell} = \set{\V{u}} :
+                \Vsize{u} < \V{k} \condOpA \V{cell} = \set{\V{u}} \condOpB
                 \\ \V{cell} = \set{\V{u}\V{v} : \V{v} \in \Term{\V{g}}^\ast}
             \end{gathered}\right)
     \end{gathered}
