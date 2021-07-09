@@ -2955,12 +2955,12 @@ then
 The proof is direct,
 assuming the hypothesis of the theorem to
 show its consequent.
-For convenient reference, we assign a variable name to the
+For convenience, we assign a variable name to the
 duple containing the data that induces the fusion:
 \mypareq{eq:th-fusion-100}{%
     \V{pair} = \tuple{\V{path1},\V{path2}}
     \bcuz{} CV $\V{pair} \in \TypeSet{\seq{\V{V}}}\times\TypeSet{\seq{\V{V}}}.$}
-For this proof we define a boolean function
+Also, within the context of this proof, we define a boolean function
 $\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
 such that
 \mypareq{eq:th-fusion-105}{%
@@ -2992,80 +2992,71 @@ is, in fact, a sequence induced by \V{pair}.
     $\V{fusion} \in \V{V} \expOp
         \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }$
    \cuz{} \Eref{eq:th-fusion-110}.}
+\mypareq{eq:th-fusion-150}{%
+    $\Vmyfn{Induced}{fusion}$ \bcuz{} \longDfref{Fusion}{def:fusion},
+        \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-120},
+        \Eref{eq:th-fusion-130}.}
+To show that the \V{pair}-induced sequence is unique,
+we introduce a second, arbitrarily chosen, sequence induced by \V{pair}:
+\mypareq{eq:th-fusion-160}{%
+    $\Vmyfn{Induced}{fusion2}$
+        \cuz{} ARB \Tvarseq{fusion2}{V}.}
+\mypareq{eq:th-fusion-170}{%
+   $\Velement{fusion2}{0\ldots \Vlastix{path1}} = \V{path1}$
+    \bcuz{} \longDfref{Fusion}{def:fusion},
+        \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-160}.}
+\mypareq{eq:th-fusion-180}{%
+   $\Velement{fusion2}{\Vlastix{path1}\ldots\Vlastix{fusion2}} = \V{path2}$
+    \bcuz{} \longDfref{Fusion}{def:fusion},
+        \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-160}.}
+\begin{equation}
+\label{eq:th-fusion-190}
+\begin{gathered}
+    \forall\; \V{ix} < \subtract{\left( \Vsize{path1} + \Vsize{path2} \right) }{1} :
+    \\ \VVelement{fusion2}{ix} = \VVelement{fusion}{ix}
+    \\ \myparbox{\cuz{} \Eref{eq:th-fusion-110},
+        \Eref{eq:th-fusion-170}, \Eref{eq:th-fusion-180}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-200}{%
+    $\V{fusion2} = \V{fusion}$ \cuz{} \Eref{eq:th-fusion-190}.}
+Since \V{fusion2} is an arbitrarily chosen \V{pair}-induced sequence,
+we may universally generalize the implication from
+\Eref{eq:th-fusion-160} to \Eref{eq:th-fusion-200}.
+\mypareq{eq:th-fusion-210}{%
+    $\forall\; \Tvarseq{induced}{V} :
+    \Vmyfn{Induced}{induced} \implies \V{induced} = \V{fusion}$
+    \bcuz{} \Eref{eq:th-fusion-200}.}
+And from this we see that the sequence induced by \V{pair} is unique:
+\begin{equation}
+\label{eq:th-fusion-220}
+\begin{gathered}
+    \forall\; \Tvarseq{induced1}{V} : \forall\; \Tvarseq{induced2}{V} :
+    \\ \Vmyfn{Induced}{induced1} \land \Vmyfn{Induced}{induced2}
+    \\ \implies \V{induced1} = \V{induced2}
+    \\ \myparbox{\cuz{} \Eref{eq:th-fusion-210}.}
+\end{gathered}
+\end{equation}
+It remains to show that \V{fusion} is a path,
+and of the required length.
+\mypareq{eq:th-fusion-230}{%
+    $\Vsize{fusion} =
+        \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }$
+        \cuz{} \Eref{eq:th-fusion-140}.}
+\mypareq{eq:th-subpath-240}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path1} :
+        \tuple{ \VVelement{path1}{ix}, \Velement{path1}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-010}.}
+\mypareq{eq:th-subpath-250}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path2} :
+        \tuple{ \VVelement{path2}{ix}, \Velement{path2}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-subpath-020}.}
 \todo{Revise proof from here.}
 The consequent of this theorem is
 % \Eref{eq:th-fusion-310},
 % \Eref{eq:th-fusion-320},
 % \Eref{eq:th-fusion-330},
 % and \Eref{eq:th-fusion-340}.
-\myqed
-\end{proof}
-
-\begin{theorem}[Path Fusion Uniqueness]
-\label{th:fusion-uniqueness}
-\todo{Delete this theorem}
-The fusion of two paths, if it exists, is unique.  \thEnd
-\end{theorem}
-
-\begin{proof}
-The proof is direct, assuming there are two fusions
-and proving that they are equivalent.
-\begin{gather}
-\label{eq:th-fusion-uniqueness-100}
-   \Velement{fusion1}{0\ldots \Vlastix{path1}} = \V{path1}
-       = \Velement{fusion2}{0\ldots \Vlastix{path1}}
-\\ \label{eq:th-fusion-uniqueness-110}
-   \begin{gathered}
-   \land\; \Velement{fusion1}{\Vlastix{path1}\ldots\Vlastix{fusion1}} =
-       \\ \V{path2} = \Velement{fusion2}{\Vlastix{path1}\ldots\Vlastix{fusion2}}
-   \end{gathered}
-\\ \label{eq:th-fusion-uniqueness-115}
-   \land\; \Vsize{fusion1} = \subtract{\Vsize{path1} + \Vsize{path2}}{1}
-       = \Vsize{fusion2}.
-\\ \nonumber
-   \myparbox{\cuz{} \longDfref{Fusion}{def:fusion}, AF proof.
-       \linebreak New free $\V{path1} \in \Vmyfn{paths}{G},$
-            $\V{path2} \in \Vmyfn{paths}{G},$
-            $\V{fusion1} \in \Vmyfn{paths}{G},$
-            $\V{fusion2} \in \Vmyfn{paths}{G}.$}
-\end{gather}
-\begin{equation}
-\label{eq:th-fusion-uniqueness-120}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{path1} :
-    \\ \Velement{fusion1}{0\ldots \Vlastix{path1}}
-       = \Velement{fusion2}{0\ldots \Vlastix{path1}}
-    \\ \because \Eref{eq:th-fusion-uniqueness-100}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-fusion-uniqueness-130}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{path2} :
-    \\ \Velement{fusion1}{\Vlastix{path1}\ldots\Vlastix{fusion1}} =
-    \\ \Velement{fusion2}{\Vlastix{path1}\ldots\Vlastix{fusion2}}
-    \\ \because \Eref{eq:th-fusion-uniqueness-110}.
-\end{gathered}
-\end{equation}
-\begin{equation}
-\label{eq:th-fusion-uniqueness-140}
-\begin{gathered}
-    \forall\; \Vnat{ix} < \Vlastix{path1} + \Vlastix{path2} :
-    \\ \VVelement{fusion1}{ix} = \VVelement{fusion2}{ix}
-    \\ \because \Eref{eq:th-fusion-uniqueness-120}, \Eref{eq:th-fusion-uniqueness-130}.
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-fusion-uniqueness-150}{%
-   $\Vlastix{fusion1} = \Vlastix{path1} + \Vlastix{path2} = \Vlastix{fusion2}$
-    \cuz{} \Eref{eq:th-fusion-uniqueness-115}.}
-\mypareq{eq:th-fusion-uniqueness-160}{%
-   $\V{fusion1} = \V{fusion2}$
-    \cuz{} \Eref{eq:th-fusion-uniqueness-140},
-        \Eref{eq:th-fusion-uniqueness-150}.}
-Since the choice of \V{fusion1} and \V{fusion2} was arbitrary,
-with \Eref{eq:th-fusion-uniqueness-160}
-we have shown that any two fusions of
-\V{path1} and \V{path2} are equivalent.
 \myqed
 \end{proof}
 
@@ -3093,36 +3084,7 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof is direct, assuming a path and an edge to its head,
-in order to show the existence of a unique new path with the edge
-prepended and the specified length.
-\begin{gather}
-\label{eq:th-path-pre-increment-100}
-\V{old} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-path-pre-increment-110}
-    \land\; \tuple{\V{nd},\Velement{old}{0}} \in \V{E}
-\\ \nonumber \myparbox{\cuz{} AF proof.
-    New free $\V{old} \in \Vmyfn{paths}{G},$
-    new free $\V{nd} \in \V{V}.$}
-\end{gather}
-We know that the edge induces a unique path:
-\mypareq{eq:th-path-pre-increment-120}{%
-    $\seq{\V{nd},\Velement{old}{0}} \in \Vmyfn{paths}{G}$
-    \cuz{} \longThref{Edge-induced Path}{edge-induced-path}.
-}
-From the preceding, we know there is a fusion
-of the unique path induced
-by the edge and \V{old}:
-\mypareq{eq:th-path-pre-increment-130}{%
-    \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}.
-    \bcuz{} \longThref{Fusion}{fusion},
-        \Eref{eq:th-path-pre-increment-110},
-        \Eref{eq:th-path-pre-increment-120}.}
-From the Fusion Uniqueness Theorem \Thref{fusion-uniqueness},
-we know that the fusion \V{new} in \Eref{eq:th-path-pre-increment-130}
-is unique and,
-from \Eref{eq:th-path-pre-increment-130},
-we can see that \V{new} is of length $\Vsize{old}+1$.
+\todo{Revise this proof.}
 \myqed
 \end{proof}
 
@@ -3152,40 +3114,7 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof is similar to the proof for
-the Path Pre-increment Theorem
-\Thref{path-pre-increment}.
-It is direct, assuming a path and an edge from its tail,
-in order to show the existence of a unique new path with the edge
-appended and the specified length.
-
-\begin{gather}
-\label{eq:th-path-post-increment-100}
-\V{old} \in \Vmyfn{paths}{G}
-\\ \label{eq:th-path-post-increment-110}
-    \land\; \tuple{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \V{E}
-\\ \nonumber \myparbox{\cuz{} AF proof.
-    New free $\V{old} \in \Vmyfn{paths}{G},$
-    new free $\V{nd} \in \V{V}.$}
-\end{gather}
-We know that the edge induces a unique path:
-\mypareq{eq:th-path-post-increment-120}{%
-    $\seq{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \Vmyfn{paths}{G}$
-    \cuz{} \longThref{Edge-induced Path}{edge-induced-path}.
-}
-From the preceding, we know there is a fusion
-of the unique path induced
-by the edge and \V{old}:
-\mypareq{eq:th-path-post-increment-130}{%
-    \V{new} = \seq{\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}, \V{nd}}.
-    \bcuz{} \longThref{Fusion}{fusion},
-        \Eref{eq:th-path-post-increment-110},
-        \Eref{eq:th-path-post-increment-120}.}
-From the Fusion Uniqueness Theorem \Thref{fusion-uniqueness},
-we know that the fusion \V{new} in \Eref{eq:th-path-post-increment-130}
-is unique and,
-from \Eref{eq:th-path-post-increment-130},
-we can see that \V{new} is of length $\Vsize{old}+1$.
+\todo{Revise this proof.}
 \myqed
 \end{proof}
 
