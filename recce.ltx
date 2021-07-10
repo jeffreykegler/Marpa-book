@@ -2647,7 +2647,7 @@ The consequent of the theorem follows from equations
 \Eref{eq:th-node-induced-path-170},
 \Eref{eq:th-node-induced-path-180},
 and \Eref{eq:th-node-induced-path-190},
-followed by the existential generalization of \V{singleton}.
+followed by the unique existential generalization of \V{singleton}.
 \myqed
 \end{proof}
 
@@ -2752,7 +2752,7 @@ The consequent of the theorem follows from equations
 \Eref{eq:th-edge-induced-path-170},
 \Eref{eq:th-edge-induced-path-180},
 and \Eref{eq:th-edge-induced-path-210},
-followed by the existential generalization of \V{duple}.
+followed by the unique existential generalization of \V{duple}.
 \myqed
 \end{proof}
 
@@ -2859,15 +2859,14 @@ and that it is of the required length.
 \mypareq{eq:th-subpath-190}{%
     \V{subpath} is a finite, non-empty sequence of vertices.
         \bcuz{} \Eref{eq:th-subpath-020}, \Eref{eq:th-subpath-030},
-            \Eref{eq:th-subpath-180}.}
+            \Eref{eq:th-subpath-120}, \Eref{eq:th-subpath-180}.}
 \mypareq{eq:th-subpath-200}{%
     $ \V{lo} + \Vlastix{subpath} = \V{hi}$
 	\cuz{} \Eref{eq:th-subpath-180}.}
 \mypareq{eq:th-subpath-250}{%
     $\forall\; \Vnat{ix} \le \Vlastix{subpath} :
         \VVelement{subpath}{ix} = \Velement{path}{\V{lo}+\V{ix}}$
-        \bcuz{} \Eref{eq:th-subpath-110},
-        \bcuz{} \Eref{eq:th-subpath-200}.}
+        \bcuz{} \Eref{eq:th-subpath-110}, \Eref{eq:th-subpath-200}.}
 \mypareq{eq:th-subpath-260}{%
     $\forall\; \Vnat{ix} < \Vlastix{path} :
         \tuple{ \VVelement{path}{ix}, \Velement{path}{\V{ix}+1} } \in \V{E}$
@@ -2888,7 +2887,7 @@ The consequent of the theorem follows from equations
 \Eref{eq:th-subpath-170},
 \Eref{eq:th-subpath-180},
 and \Eref{eq:th-subpath-400},
-followed by the existential generalization of \V{subpath}.
+followed by the unique existential generalization of \V{subpath}.
 \myqed
 \end{proof}
 
@@ -3043,29 +3042,82 @@ and of the required length.
     $\Vsize{fusion} =
         \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }$
         \cuz{} \Eref{eq:th-fusion-140}.}
+By definition paths are finite and of non-zero length, so that
+\mypareq{eq:th-fusion-232}{%
+        $\decr{\left( \Vsize{path1} + \Vsize{path2} \right) } \in \naturals
+        \land \decr{\left( \Vsize{path1} + \Vsize{path2} \right) } > 0$
+        \bcuz{} \longDfref{Path}{def:path},
+            \Eref{eq:th-fusion-010},
+            \Eref{eq:th-fusion-020}.}
+\mypareq{eq:th-fusion-234}{%
+    \V{fusion} is a finite, non-empty sequence of vertices
+    \bcuz{} \Eref{eq:th-fusion-140}, \Eref{eq:th-fusion-230},
+            \Eref{eq:th-fusion-232}.}
 \mypareq{eq:th-fusion-240}{%
     $\forall\; \Vnat{ix} < \Vlastix{path1} :
         \tuple{ \VVelement{path1}{ix}, \Velement{path1}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-010}.}
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-010},
+         \Eref{eq:th-fusion-120}.}
 \mypareq{eq:th-fusion-250}{%
-    $\forall\; \Vnat{ix} < \Vlastix{path2} :
-        \tuple{ \VVelement{path2}{ix}, \Velement{path2}{\V{ix}+1} } \in \V{E}$
-    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-020}.}
-\mypareq{eq:th-fusion-260}{%
     $\forall\; \Vnat{ix} \le \Vlastix{path1} :
         \VVelement{fusion}{ix} = \VVelement{path1}{ix}$
         \cuz{} \Eref{eq:th-fusion-120}.}
+\mypareq{eq:th-fusion-260}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path1} :
+        \tuple{ \VVelement{fusion}{ix}, \Velement{fusion}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-240},
+        \Eref{eq:th-fusion-250}.}
 \mypareq{eq:th-fusion-270}{%
-    $\forall\; \Vnat{ix} \le \Vlastix{path2} :
-        \Velement{fusion}{\Vlastix{path1}+\V{ix}} = \VVelement{path2}{ix}$
-        \cuz{} \Eref{eq:th-fusion-130}.}
-
-\todo{Revise proof from here.}
+    $\forall\; \Vnat{ix} < \Vlastix{path2} :
+        \tuple{ \VVelement{path2}{ix}, \Velement{path2}{\V{ix}+1} } \in \V{E}$
+    \bcuz{} \longDfref{Path}{def:path}, \Eref{eq:th-fusion-020},
+         \Eref{eq:th-fusion-130}.}
+\mypareq{eq:th-fusion-280}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path2} :
+        \VVelement{path2}{ix} =
+        \VVelement{fusion}{\V{ix}+\Vlastix{path1}}$
+        \bcuz{} \Eref{eq:th-fusion-130}.}
+\mypareq{eq:th-fusion-290}{%
+    $\forall\; \Vnat{ix} < \Vlastix{path2} :
+        \tuple{\Velement{fusion}{\V{ix}+\Vlastix{path1}},
+            \Velement{fusion}{\V{ix}+\Vlastix{path1}+1}} \in \V{E}$
+    \bcuz{}  \Eref{eq:th-fusion-270}, \Eref{eq:th-fusion-280}.}
+\begin{equation}
+\label{eq:th-fusion-300}
+\begin{gathered}
+    \forall\; \Vnat{ix}
+        \;(\Vlastix{path1} \le \V{ix} < \Vlastix{path1}+\Vlastix{path2}) :
+    \\ \tuple{\Velement{fusion}{\V{ix}}, \Velement{fusion}{\V{ix}+1}} \in \V{E}
+    \\ \myparbox{\cuz{}  \Eref{eq:th-fusion-270}, \Eref{eq:th-fusion-280}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-310}{%
+    $\Vlastix{fusion} = \Vlastix{path1} + \Vlastix{path2}$
+        \cuz{} \Eref{eq:th-fusion-230}.}
+\begin{equation}
+\label{eq:th-fusion-320}
+\begin{gathered}
+    \forall\; \Vnat{ix}
+        \;(\Vlastix{path1} \le \V{ix} < \Vlastix{fusion}) :
+    \\ \tuple{\Velement{fusion}{\V{ix}}, \Velement{fusion}{\V{ix}+1}} \in \V{E}
+    \\ \myparbox{\cuz{}  \Eref{eq:th-fusion-300}, \Eref{eq:th-fusion-310}.}
+\end{gathered}
+\end{equation}
+\mypareq{eq:th-fusion-330}{%
+    $\forall\; \Vnat{ix} < \Vlastix{fusion} :
+     \tuple{\Velement{fusion}{\V{ix}}, \Velement{fusion}{\V{ix}+1}} \in \V{E}$
+    \bcuz{} \Eref{eq:th-fusion-260}, \Eref{eq:th-fusion-320}.}
+\mypareq{eq:th-fusion-400}{%
+    $\V{fusion} \in \Vmyfn{paths}{G}$
+    \bcuz{} \longDfref{Path}{def:path},
+        \Eref{eq:th-fusion-234}, \Eref{eq:th-fusion-330}.}
 The consequent of this theorem is
-% \Eref{eq:th-fusion-310},
-% \Eref{eq:th-fusion-320},
-% \Eref{eq:th-fusion-330},
-% and \Eref{eq:th-fusion-340}.
+\Eref{eq:th-fusion-120}, \Eref{eq:th-fusion-130},
+\Eref{eq:th-fusion-220}, \Eref{eq:th-fusion-230},
+and \Eref{eq:th-fusion-400},
+followed by the unique existential generalization of \V{fusion}.
+
+\todo{Recheck proof.}
 \myqed
 \end{proof}
 
