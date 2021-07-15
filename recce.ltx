@@ -383,6 +383,7 @@
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
+\newcommand{\Pairs}[1]{\ensuremath{\mymathop{Pairs}(#1)}}
 \newcommand{\TypeSet}[1]{\ensuremath{\mymathop{TypeSet}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
@@ -2198,6 +2199,48 @@ and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
 \defEnd
 \end{definition}
 
+\begin{definition}[Sequence Pairs]
+\label{def:sequence-pairs}
+Let \V{seq} be a sequence.
+The set of \dfn{pairs} of \V{seq}, \Pairs{\V{seq}},
+is the set of duples containing the values
+of consecutive elements of \V{seq}.
+That is,
+\[
+   \Pairs{\V{seq}} =
+       \set{
+       \begin{gathered}
+       \tuple{\V{from},\V{to}} \in \Ran{\V{seq}}\times\Ran{\V{seq}} :
+       \\ \exists\; \V{i} \in \Dom{\V{seq}} :
+           \exists\; \V{j} \in \Dom{\V{seq}} :
+       \\ \V{j} = \V{i}+1
+       \land \V{from} = \VVelement{seq}{i}
+       \land \V{to} = \VVelement{seq}{j}
+       \end{gathered} }. \quad \defEnd
+\]
+\end{definition}
+
+\begin{theorem}[Sequence Pairs]
+\label{th:sequence-pairs}
+Let \V{seq} be a sequence.
+Then
+\begin{equation}
+\label{eq:th-sequence-pairs-010}
+\begin{gathered}
+   \Vnat{i} < \Vlastix{seq} \land \Vnat{j} = \V{i}+1
+   \\ \iff \tuple{\VVelement{seq}{i}, \VVelement{seq}{j}} \in \Pairs{\V{seq}}
+\end{gathered}
+\end{equation}
+and
+\begin{equation}
+\label{eq:th-sequence-pairs-020}
+   \forall\; \Vnat{i} < \Vlastix{seq} :
+       \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+           \in \Pairs{\V{seq}}.
+       \quad \thEnd
+\end{equation}
+\end{theorem}
+
 \section{Strings}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
@@ -2263,10 +2306,12 @@ and unequal to any other value.
 \begin{table}[p]
 \caption{
     \label{tab:op-precedence}
-    Binary operator precedence}
-Precedence is from tightest to loosest, \\
-so that the loosest precedence is last.
-\\[1.5ex]
+    Precedence of symbols,
+    from tightest to loosest
+    }
+% Precedence is from tightest to loosest, \\
+% so that the loosest precedence is last.
+% \\[1.5ex]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 {$\times$} & \cellboxr{Multiplication} \\
@@ -2283,8 +2328,8 @@ so that the loosest precedence is last.
 \hline
 {$\times$} & \cellboxr{Cartesian product of sets} \\
 \hline
-{$\V{cod} \expOp \V{dom}$} &
-    \cellboxr{Set of functions from \V{dom} to \V{code}} \\
+{$\V{C} \expOp \V{D}$} &
+    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
 \hline
 {$\subset$} {$\subseteq$}
     {$\supset$} {$\supseteq$}
@@ -2317,7 +2362,7 @@ so that the loosest precedence is last.
     \hline
 {$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
 \hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined, \ldefined$}
+\rule{0em}{3.8ex}\raisebox{1.5ex}{{$\defined$} \; {$\ldefined$}}
 &
 \raisebox{.7ex}{Definition, local definition} \\
 \hline
