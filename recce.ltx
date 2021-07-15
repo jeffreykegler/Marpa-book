@@ -2222,13 +2222,18 @@ That is,
 
 \begin{theorem}[Sequence Pairs]
 \label{th:sequence-pairs}
-Let \V{seq} be a sequence.
+Let \V{V} be a non-empty set of objects,
+and let $\Tvarseq{seq}{V}$ be a sequence.
 Then
 \begin{equation}
 \label{eq:th-sequence-pairs-010}
 \begin{gathered}
    \Vnat{i} < \Vlastix{seq} \land \Vnat{j} = \V{i}+1
-   \\ \iff \tuple{\VVelement{seq}{i}, \VVelement{seq}{j}} \in \Pairs{\V{seq}}
+   \\ \iff
+   \left( \begin{gathered}
+   \Vnat{i} \in \Dom{\V{seq}} \land \Vnat{j} \in \Dom{\V{seq}}
+   \\ \land\; \tuple{\VVelement{seq}{i}, \VVelement{seq}{j}} \in \Pairs{\V{seq}}
+   \end{gathered} \right)
 \end{gathered}
 \end{equation}
 and
@@ -2242,25 +2247,27 @@ and
 \end{theorem}
 
 \begin{proof}
+Recall from the statement of the theorem
+that \V{V} is an arbitrary non-empty set of objects.
 We first seek to show
 \Eref{eq:th-sequence-pairs-010}, taking one direction at a time.
 \mypareq{eq:th-sequence-pairs-100}{%
-   $\V{i} < \Vlastix{seq}$
+   $\V{i1} < \Vlastix{seq1}$
    \cuz{} Hypothesis of
        \Eref{eq:th-sequence-pairs-010} in the forward direction;
-       ARB \Vnat{i}; ARB \V{seq}.}
+       ARB \Vnat{i1}; ARB \Tvarseq{seq1}.}
 \mypareq{eq:th-sequence-pairs-110}{%
-   $\Vnat{j} = \V{i}+1$
+   $\Vnat{j1} = \V{i1}+1$
    \cuz{} Hypothesis of
        \Eref{eq:th-sequence-pairs-010} in the forward direction;
-       ARB \Vnat{i}.}
+       CV \Vnat{j1}.}
 \mypareq{eq:th-sequence-pairs-120}{%
-   $\Vnat{i} \in \Dom{\V{seq}}$ \cuz{} \Eref{eq:th-sequence-pairs-100}.}
+   $\Vnat{i1} \in \Dom{\V{seq1}}$ \cuz{} \Eref{eq:th-sequence-pairs-100}.}
 \mypareq{eq:th-sequence-pairs-130}{%
-   $\Vnat{j} \in \Dom{\V{seq}}$ \cuz{}
+   $\Vnat{j1} \in \Dom{\V{seq1}}$ \cuz{}
        \Eref{eq:th-sequence-pairs-100}, \Eref{eq:th-sequence-pairs-110}.}
 \mypareq{eq:th-sequence-pairs-140}{%
-   $\tuple{\VVelement{seq}{i}, \VVelement{seq}{j}} \in \Pairs{\V{seq}}$
+   $\tuple{\VVelement{seq1}{i1}, \VVelement{seq1}{j1}} \in \Pairs{\V{seq1}}$
    \bcuz{}
        \Eref{eq:th-sequence-pairs-110}, \Eref{eq:th-sequence-pairs-120},
        \Eref{eq:th-sequence-pairs-130}.}
@@ -2269,10 +2276,38 @@ forward direction of \Eref{eq:th-sequence-pairs-010}:
 \begin{equation}
 \label{eq:th-sequence-pairs-150}
 \begin{gathered}
-   \Vnat{i} < \Vlastix{seq} \land \Vnat{j} = \V{i}+1
+   \forall\; \Tvarseq{seq}{V} :
+   \forall\; \Vnat{i} < \Vlastix{seq} :
+   \forall\; \Vnat{j} = \V{i}+1 :
    \\ \implies \tuple{\VVelement{seq}{i}, \VVelement{seq}{j}} \in \Pairs{\V{seq}}
+   \\ \myparbox{\cuz{}
+       Implication from \Eref{eq:th-sequence-pairs-100} to
+        \Eref{eq:th-sequence-pairs-140}.}
 \end{gathered}
 \end{equation}
+For the reverse direction:
+\mypareq{eq:th-sequence-pairs-170}{%
+   $\tuple{\VVelement{seq2}{i2}, \VVelement{seq2}{\V{i2}+1}}
+           \in \Pairs{\V{seq2}}.$
+   \cuz{} Hypothesis of
+       \Eref{eq:th-sequence-pairs-010} in the reverse direction.
+       ARB \Vnat{i2}; ARB \Tvarseq{seq2}{V}.}
+\mypareq{eq:th-sequence-pairs-180}{%
+   $\Vnat{j2} = \V{i2}+1$
+   \bcuz{} \longDfref{Pairs}{def:sequence-pairs},
+       \Eref{eq:th-sequence-pairs-170}; CV \Vnat{j2}.}
+\mypareq{eq:th-sequence-pairs-190}{%
+   $\Vnat{j2} \in \Dom{\V{seq2}}$
+   \bcuz{} \longDfref{Pairs}{def:sequence-pairs},
+       \Eref{eq:th-sequence-pairs-170}.}
+\mypareq{eq:th-sequence-pairs-200}{%
+   $\Vnat{j2} \le \Vlastix{seq2}$
+   \bcuz{} \longDfref{Pairs}{def:sequence-pairs},
+       \Eref{eq:th-sequence-pairs-190}.}
+\mypareq{eq:th-sequence-pairs-210}{%
+   $\Vnat{i2} < \Vlastix{seq2}$
+   \bcuz{} \Eref{eq:th-sequence-pairs-180},
+       \Eref{eq:th-sequence-pairs-200}.}
 \todo{Finish proving this.}
 \end{proof}
 
