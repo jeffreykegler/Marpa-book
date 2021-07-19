@@ -2201,7 +2201,8 @@ and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
 
 \begin{definition}[Sequence Pairs]
 \label{def:sequence-pairs}
-Let \V{seq} be a sequence.
+Let \V{V} be a non-empty set of objects,
+and let $\Tvarseq{seq}{V}$ be a finite sequence.
 The set of \dfn{pairs} of \V{seq}, \Pairs{\V{seq}},
 is the set of duples containing the values
 of consecutive elements of \V{seq}.
@@ -2210,7 +2211,7 @@ That is,
    \Pairs{\V{seq}} =
        \set{
        \begin{gathered}
-       \tuple{\V{from},\V{to}} \in \Ran{\V{seq}}\times\Ran{\V{seq}} :
+       \tuple{\V{from},\V{to}} \in \V{V}\times\V{V} :
        \\ \exists\; \V{i} \in \Dom{\V{seq}} :
            \exists\; \V{j} \in \Dom{\V{seq}} :
        \\ \V{j} = \V{i}+1
@@ -2222,6 +2223,7 @@ That is,
 
 \begin{theorem}[Sequence Pairs]
 \label{th:sequence-pairs}
+\todo{I probably do not need this theorem}
 Let \V{V} be a non-empty set of objects,
 and let $\Tvarseq{seq}{V}$ be a finite sequence.
 Then
@@ -2302,6 +2304,72 @@ Equations \Eref{eq:th-sequence-pairs-150} and
 \Eref{eq:th-sequence-pairs-220} show
 the theorem.
 \myqed
+\end{proof}
+
+\begin{lem}{Sequence Pairs Set 1}
+\label{lem:sequence-pairs-set-1}
+Let \V{V} be a non-empty set of objects,
+and let $\Tvarseq{seq}{V}$ be a finite sequence.
+\begin{gather}
+\label{eq:th-sequence-pairs-set-1-010}
+   \Pairs{\V{seq}}
+\\ \label{eq:th-sequence-pairs-set-1-020}
+   \subseteq \set{ \begin{gathered}
+       \V{pair} \in \V{V}\times\V{V} :
+       \exists\; \Vnat{i} < \Vlastix{seq} :
+       \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+   \end{gathered} }. \quad \thEnd
+\end{gather}
+\end{lem}
+
+\begin{proof}
+The proof is direct, assuming an arbitrary element of
+\Pairs{\V{seq}} \Eref{eq:th-sequence-pairs-set-1-010}
+to show that it an element of set in
+\Eref{eq:th-sequence-pairs-set-1-010}.
+\begin{gather}
+\label{eq:th-sequence-pairs-set-1-100}
+       \V{pair} \in \Ran{\V{seq}}\times\Ran{\V{seq}}
+\\ \label{eq:th-sequence-pairs-set-1-105}
+       \land\; \V{pair} = \tuple{\V{from},\V{to}}
+\\ \label{eq:th-sequence-pairs-set-1-110}
+       \land\; \V{from} = \VVelement{seq}{i}
+\\ \label{eq:th-sequence-pairs-set-1-120}
+       \land\; \V{to} = \VVelement{seq}{j}
+\\ \label{eq:th-sequence-pairs-set-1-130}
+       \land\; \V{i} \in \Dom{\V{seq}}
+\\ \label{eq:th-sequence-pairs-set-1-140}
+       \land\; \V{j} \in \Dom{\V{seq}}
+\\ \label{eq:th-sequence-pairs-set-1-150}
+       \land\; \V{j} = \V{i}+1
+\\ \nonumber \myparbox{\cuz{}
+       \Eref{eq:th-sequence-pairs-set-1-010},
+       \longDfref{\myfn{Pairs}{}}{def:sequence-pairs};
+       ARB \V{pair};
+       CV $\V{from} \in \V{V}$; CV \Vnat{i};
+       CV $\V{to} \in \V{V}$; CV \Vnat{j}.}
+\end{gather}
+\myqed
+\todo{Prove this}
+\end{proof}
+
+\begin{lem}{Sequence Pairs Set 2}
+\label{lem:sequence-pairs-set-2}
+Let \V{V} be a non-empty set of objects,
+and let $\Tvarseq{seq}{V}$ be a finite sequence.
+\begin{equation}
+\label{eq:th-sequence-pairs-set-2-010}
+   \set{ \begin{gathered}
+       \V{pair} \in \V{V}\times\V{V} :
+       \exists\; \Vnat{i} < \Vlastix{seq} :
+       \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+   \end{gathered} }
+       \subseteq \Pairs{\V{seq}}. \quad \thEnd
+\end{equation}
+\end{lem}
+
+\begin{proof}
+\todo{Prove this}
 \end{proof}
 
 \begin{theorem}[Sequence Pairs Set]
@@ -4065,7 +4133,7 @@ and this theorem.
 \end{proof}
 
 \begin{theorem}[Tree path maximum]
-\label{lem:tree-path-maximum}
+\label{th:tree-path-maximum}
 The length of a path in a tree is at most
 the number of nodes in the tree.
 That is,
@@ -5556,7 +5624,7 @@ every path of a tree is of length at most \Vsize{V},
 so that
 \mypareq{eq:lem-generation-union-tree-containment-180}{%
     $\Vsize{lpath} \le \Vsize{V}$
-    \cuz{} \Lmref{tree-path-maximum}.
+    \cuz{} \Thref{tree-path-maximum}.
 }
 \begin{equation}
 \label{eq:lem-generation-union-tree-containment-300}
