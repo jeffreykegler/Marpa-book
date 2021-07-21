@@ -1063,6 +1063,7 @@ will usually be a waste of time.}
 % 4.) Create remarks, as appropriate.
 % 5.) Convert definitions to local definitions, as appropriate.
 % 6.) Replace subtraction of one with \decr{}.
+% 6.) Replace "type" with "realm".
 
 \epigraph{%
 \label{epi:tarski}
@@ -2087,10 +2088,17 @@ the first element of \V{seq} is \Velement{seq}{0}.%
    much depended on whether the second level subscript was
    the numeral 1 or the letter l.
 }
+
+\begin{definition}[Last sequence index]
+\label{def:last-index}
 Where \V{seq} is a finite sequence,
-the last element is \Velement{seq}{\Vlastix{seq}}.
+the last index is \Vlastix{seq},
+so that the last element is \Velement{seq}{\Vlastix{seq}}.
 For a finite sequence,
+this means that
 $\Vlastix{seq} = \Vsize{seq}\subtractOp 1$.
+\defEnd
+\end{definition}
 
 When we apply a unary family operator to a sequence,
 we often use a sequence constructor
@@ -2308,8 +2316,13 @@ the theorem.
 
 \begin{lem}{Sequence Pairs Set 1}
 \label{lem:sequence-pairs-set-1}
-Let \V{V} be a non-empty set of objects,
-and let $\Tvarseq{seq}{V}$ be a finite sequence.
+\todo{Put the discussion of schematic variable vs. "place-holder" in
+an earlier chapter.}
+Let \V{V} be a placeholder\footnote{%
+Corcoran \cite{Corcoran2005} considers it "unfortunate" to call
+schematic variables "variables".}
+for a variable whose value is a non-empty set.
+Let $\Tvarseq{seq}{V}$ be a finite sequence.
 \begin{gather}
 \label{eq:th-sequence-pairs-set-1-010}
    \Pairs{\V{seq}}
@@ -2325,50 +2338,100 @@ and let $\Tvarseq{seq}{V}$ be a finite sequence.
 \begin{proof}
 The proof is direct, assuming an arbitrary element of
 \Pairs{\V{seq}} \Eref{eq:th-sequence-pairs-set-1-010}
-to show that it an element of set in
-\Eref{eq:th-sequence-pairs-set-1-010}.
+to show that it is an element of the set in
+\Eref{eq:th-sequence-pairs-set-1-020}.
+\mypareq{eq:th-sequence-pairs-set-1-100}{
+    $\V{pair} \in \Pairs{\V{seq}}$
+       \cuz{} AF implication;
+       ARB $\V{pair} \in \V{V}\times\V{V}$.}
 \begin{gather}
-\label{eq:th-sequence-pairs-set-1-100}
-       \V{pair} \in \Ran{\V{seq}}\times\Ran{\V{seq}}
-\\ \label{eq:th-sequence-pairs-set-1-105}
-       \land\; \V{pair} = \tuple{\V{from},\V{to}}
+\label{eq:th-sequence-pairs-set-1-105}
+       \V{pair} = \tuple{\V{from},\V{to}}
 \\ \label{eq:th-sequence-pairs-set-1-110}
        \land\; \V{from} = \VVelement{seq}{i}
-\\ \label{eq:th-sequence-pairs-set-1-120}
-       \land\; \V{to} = \VVelement{seq}{j}
+           \land\ \V{to} = \VVelement{seq}{j}
 \\ \label{eq:th-sequence-pairs-set-1-130}
        \land\; \V{i} \in \Dom{\V{seq}}
-\\ \label{eq:th-sequence-pairs-set-1-140}
-       \land\; \V{j} \in \Dom{\V{seq}}
+           \land\ \V{j} \in \Dom{\V{seq}}
 \\ \label{eq:th-sequence-pairs-set-1-150}
        \land\; \V{j} = \V{i}+1
 \\ \nonumber \myparbox{\cuz{}
-       \Eref{eq:th-sequence-pairs-set-1-010},
+       \Eref{eq:th-sequence-pairs-set-1-100},
        \longDfref{\myfn{Pairs}{}}{def:sequence-pairs};
-       ARB \V{pair};
-       CV $\V{from} \in \V{V}$; CV \Vnat{i};
-       CV $\V{to} \in \V{V}$; CV \Vnat{j}.}
+       CV $\V{from} \in \V{V}$; CV $\V{to} \in \V{V}$;
+       CV \Vnat{i}; CV \Vnat{j}.}
 \end{gather}
-\myqed
-\todo{Prove this}
+\mypareq{eq:th-sequence-pairs-set-1-160}{
+    $\forall\;\Vnat{x} :
+        \Vnat{x} \in \Dom{\V{seq}} \implies \V{x} \le \Vlastix{seq}$
+        \bcuz{} \longDfref{Last Index}{def:last-index}.}
+\mypareq{eq:th-sequence-pairs-set-1-170}{
+    $\Vnat{i} < \Vlastix{seq}$
+    \cuz{} \Eref{eq:th-sequence-pairs-set-1-130},
+        \Eref{eq:th-sequence-pairs-set-1-150},
+        \Eref{eq:th-sequence-pairs-set-1-160}.}
+\mypareq{eq:th-sequence-pairs-set-1-180}{%
+    $\V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}$
+        \cuz{} \Eref{eq:th-sequence-pairs-set-1-105},
+        \Eref{eq:th-sequence-pairs-set-1-110}.}
+\mypareq{eq:th-sequence-pairs-set-1-185}{%
+    $\V{pair} \in \V{V}\times\V{V}$
+        \cuz{} \Eref{eq:th-sequence-pairs-set-1-100}.}
+\mypareq{eq:th-sequence-pairs-set-1-190}{%
+    $\exists\; \Vnat{i} < \Vlastix{seq} :
+        \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}$
+        \bcuz{} EG of \Vnat{i} in 
+            \Eref{eq:th-sequence-pairs-set-1-170}
+            and \Eref{eq:th-sequence-pairs-set-1-180}.}
+\begin{equation}
+\label{eq:th-sequence-pairs-set-1-200}
+   \begin{gathered}
+       \V{pair} \in \Pairs{\V{seq}}
+       \\ \implies \V{pair} \in \set{ \begin{gathered}
+           \V{pair} \in \V{V}\times\V{V} :
+           \exists\; \Vnat{i} < \Vlastix{seq} :
+           \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \end{gathered} }
+       \\ \myparbox{\cuz{}
+           Implication from \Eref{eq:th-sequence-pairs-set-1-100}
+               to \Eref{eq:th-sequence-pairs-set-1-185}
+               and \Eref{eq:th-sequence-pairs-set-1-190}.
+               \myqed}
+   \end{gathered}
+\end{equation}
 \end{proof}
 
 \begin{lem}{Sequence Pairs Set 2}
 \label{lem:sequence-pairs-set-2}
-Let \V{V} be a non-empty set of objects,
-and let $\Tvarseq{seq}{V}$ be a finite sequence.
-\begin{equation}
+Let \V{V} be a placeholder
+for a variable whose value is a non-empty set.
+Let $\Tvarseq{seq}{V}$ be a finite sequence.
+\begin{gather}
 \label{eq:th-sequence-pairs-set-2-010}
    \set{ \begin{gathered}
        \V{pair} \in \V{V}\times\V{V} :
        \exists\; \Vnat{i} < \Vlastix{seq} :
        \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
    \end{gathered} }
+\\ \label{eq:th-sequence-pairs-set-2-020}
        \subseteq \Pairs{\V{seq}}. \quad \thEnd
-\end{equation}
+\end{gather}
 \end{lem}
 
 \begin{proof}
+The proof is direct, assuming an arbitrary element of the set in
+\Eref{eq:th-sequence-pairs-set-2-010}
+to show that it is an element of
+\Pairs{\V{seq}} \Eref{eq:th-sequence-pairs-set-2-020}.
+\begin{gather}
+\label{eq:th-sequence-pairs-set-2-100}
+       \V{pair} \in \V{V}\times\V{V}
+\\ \label{eq:th-sequence-pairs-set-2-110}
+       \exists\; \Vnat{i} < \Vlastix{seq} :
+       \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+\\ \myparbox{\cuz{} AF implication; ARB \V{pair}.}
+\end{gather}
+\myqed
 \todo{Prove this}
 \end{proof}
 
@@ -22509,6 +22572,12 @@ Claus~Brabrand, Robert~Giegerich and Anders~M{\"o}ller.
 on Implementation and Application of Automata}.
 \newblock CIAA ’07, Prague, Czech Republic, July 2007.
 \newblock \url{http://www.brics.dk/~amoeller/papers/ambiguity/journal.pdf}
+
+\bibitem{Corcoran2005}
+John~Corcoran.
+\newblock Schemata: The Concept of Schema in the history of logic.
+\newblock {\em The Bulletin of Symbolic Logic}.
+\newblock Vol. 12, No. 2, June 2006.
 
 \bibitem{Cormen2009}
 Thomas~H.~Cormen, Charles~E.~Leiserson, Ronald~L.~Rivest, and
