@@ -43,12 +43,9 @@
 %    the quote sign does not seem to work in amsmidx
 \newcommand{\Pipe}{\char‘\|}
 \makeindex{recce-general}
-% \makeindex{recce-algorithms}
-% \makeindex{recce-figures}
-% \makeindex{recce-theorems}
-% \makeindex{recce-definitions}
-\makeindex{recce-notation}
-\makeindex{recce-lemmas}
+\makeindex{recce-defienda}
+% \makeindex{recce-notation}
+% \makeindex{recce-lemmas}
 
 % This is used to find the font size if need be.
 % Its uses are usually commented out.
@@ -73,6 +70,9 @@
 \usepackage{thmtools}
 \usepackage{multirow}
 % \usepackage[notcite,notref]{showkeys}
+
+% \usepackage{glossaries} % must after hyperref
+% \makeglossaries
 
 \allowdisplaybreaks[3]
 
@@ -168,7 +168,8 @@
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\ldefined}{\underset{\text{ldef}}{\equiv}}
-\newcommand{\dfn}[1]{{\bf #1}}
+\newcommand{\dfn}[1]{\rawdfn{#1}\index{recce-defienda}{#1}}
+\newcommand{\rawdfn}[1]{{\bf #1}}
 \newcommand{\op}[2][]{%
   \ifmmode\texttt{#2}(#1)%
   \else\texttt{#2}(#1)%
@@ -607,7 +608,7 @@
 \newtheorem{rawLemma}{Lemma}[chapter]
 \newenvironment{lem}[1]{%
    \begin{rawLemma}[#1]%
-   \index{recce-lemmas}{\thechapter@\therawLemma \hspace{1em}  #1}
+   % \index{recce-lemmas}{\thechapter@\therawLemma \hspace{1em}  #1}
 }{%
    \end{rawLemma}
 }
@@ -618,7 +619,7 @@
 \newtheorem{rawLdef}[rawLemma]{Local Definition}
 \newenvironment{ldef}[1]{%
    \begin{rawLdef}[#1]%
-   \index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
+   %\index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
 }{%
    \end{rawLdef}
 }
@@ -1071,8 +1072,13 @@ will usually be a waste of time.}
 purpose is to demonstrate their truth.}{Tarski}
 
 This is the first of the mathematical chapters.
-It contains considerations that introduce the deductive reasoning
+This chapter contains considerations that introduce the deductive reasoning
 but are outside of it.
+
+% TODO Describe "long form" style
+% "You should optimize your writing for the reader,
+% not for the word-counter."
+% Cummings2021, p. 491.
 
 The conventions of the parsing literature were formed
 when its dissemination relied on printed media.
@@ -1170,6 +1176,9 @@ our notation for operations is in
 \Chref{chap:preceding-math}.
 
 \section{Base theories}
+
+% Expand on Tarski, our use of meta-language and object-language
+% Needs its own section?
 
 The presentation of the deductive logic in this book is
 influenced by Tarski~\cite{Tarski}.
@@ -1413,16 +1422,34 @@ or which are a matter of tactical choice within a proof strategy,
 such as the details of resource charging in our complexity
 analysis.
 
-``AF'' abbreviates ``assumed for''.
+\rawdfn{AF}%
+\index{recce-defienda}{AF@AF (``assumed for'')}
+abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
-``Def'' abbreviates ``definition''.
-``iff'' abbreviates ``if and only if''.
-``EI'' abbreviates ``existential instantiation''.
-``EG'' abbreviates ``existential generalization''.
-``UI'' abbreviates ``universal instantiation''.
-``UG'' abbreviates ``universal generalization''.
-``WLOG'' abbreviates ``without loss of generality''.
-``ZF'' (for Zermolo-Frankel) abbreviates ``set theory''.
+\rawdfn{Def}%
+\index{recce-defienda}{Def@Def (``definition'')}
+abbreviates ``definition''.
+\rawdfn{iff}%
+\index{recce-defienda}{iff@iff (``if and only if'')}
+abbreviates ``if and only if''.
+\rawdfn{EI}%
+\index{recce-defienda}{EI@EI (``existential instantiation'')}
+abbreviates ``existential instantiation''.
+\rawdfn{EG}%
+\index{recce-defienda}{EG@EG (``existential generalization'')}
+abbreviates ``existential generalization''.
+\rawdfn{UI}%
+\index{recce-defienda}{UI@UI (``universal instantiation'')}
+abbreviates ``universal instantiation''.
+\rawdfn{UG}%
+\index{recce-defienda}{UG@UG (``universal generalization'')}
+abbreviates ``universal generalization''.
+\rawdfn{WLOG}%
+\index{recce-defienda}{WLOG@WLOG (``without loss of generality'')}
+abbreviates ``without loss of generality''.
+\rawdfn{ZF}%
+\index{recce-defienda}{ZF@ZF (``Zermolo-Frankel set theory'')}
+(for Zermolo-Frankel) abbreviates ``set theory''.
 For our purposes, number theory is consider to be part of set theory.
 
 \section{Scope and types}
@@ -2380,7 +2407,7 @@ to show that it is an element of the set in
 \mypareq{eq:th-sequence-pairs-set-1-190}{%
     $\exists\; \Vnat{i} < \Vlastix{seq} :
         \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}$
-        \bcuz{} EG of \Vnat{i} in 
+        \bcuz{} EG of \Vnat{i} in
             \Eref{eq:th-sequence-pairs-set-1-170}
             and \Eref{eq:th-sequence-pairs-set-1-180}.}
 \begin{equation}
@@ -2714,15 +2741,23 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-{ \setlength{\epigraphwidth}{.6\textwidth}
+{ \setlength{\epigraphwidth}{.64\textwidth}
     \epigraph{\label{epi:looking-glass}
     `When I use a word,' Humpty Dumpty said in rather a scornful tone,
     `it means just what I choose it to mean — neither more nor less.'
-
+    \\[.3\baselineskip]
     `The question is,' said Alice, `whether you can make words mean so many different things.'
-
+    \\[.3\baselineskip]
     `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
     {Lewis Carroll, {\em Through the Looking Glass}}
+}
+{ \setlength{\epigraphwidth}{.6\textwidth}
+    \epigraph{\label{epi:corcoran}
+    [S]tipulated technical usage is powerless to completely cancel
+    metaphorical implications, overtones and connotations
+    accompanying ordinary usage.}
+    {Corcoran, ``Schemata: The Concept of Schema in the History of Logic''~%
+        \cite[p. 223]{Corcoran2005}}
 }
 
 Graph theory is one of our preceding disciplines,
@@ -22728,6 +22763,10 @@ J.~M. I.~M. Leo.
 } % RaggedRight
 
 \clearpage
+\def\indexname{Index of Defined Terms}
+\printindex{recce-defienda}
+
+\clearpage
 \phantomsection
 \listofalgorithms
 
@@ -22756,10 +22795,6 @@ show={theorem,remark,observation,definition}]
 \pdfbookmark[0]{\listtheoremname}{listoflemmas}
 \listoftheorems[ignoreall,
     show={rawLemma,rawLdef,theorem,remark,observation,definition}]
-
-\clearpage
-% \def\indexname{Index of Notation}
-\printindex{recce-notation}
 
 \clearpage
 % \def\indexname{General Index}

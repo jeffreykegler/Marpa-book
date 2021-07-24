@@ -19,6 +19,8 @@
 
 LATEX = pdflatex
 MAKEINDEX = makeindex
+# INDEX_LIST = general notation lemmas defienda
+INDEX_LIST = general defienda
 
 .SUFFIXES:
 .SUFFIXES: .pdf .ltx .ind .idx .ilg
@@ -35,19 +37,21 @@ travis:
 	$(LATEX) recce.ltx
 
 clean:
-	rm recce.out recce.aux recce.toc recce.tdo recce.loe \
+	rm -f recce.out recce.aux recce.toc recce.tdo recce.loe \
 	    recce.loa recce.lot recce.pdf
-	for ix in general notation lemmas; do \
-	    rm -f recce-$$ix.ind recce-$$ix.ilg; \
+	for ix in $(INDEX_LIST); do \
+	    rm -f recce-$$ix.idx recce-$$ix.ind recce-$$ix.ilg; \
 	done
 
 recce.pdf: recce.ltx
+	for ix in $(INDEX_LIST); do \
+	  if ! test -f recce-$$ix.idx ; then touch recce-$$ix.idx; fi; \
+	done
 	$(MAKE) recce-indexes
 	max_print_line=99999 $(LATEX) $?
 
 recce-indexes:
-	for ix in general lemmas notation; do \
-	  if ! test -f recce-$$ix.idx ; then touch recce-$$ix.idx; fi; \
+	for ix in $(INDEX_LIST); do \
 	  $(MAKEINDEX) -s recce-$$ix.mst -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
 	done
 
