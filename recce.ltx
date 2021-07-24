@@ -4,6 +4,7 @@
 \documentclass[draft,openany,12pt]{amsbook}
 \usepackage{calc} % calc is required by todonotes
 \usepackage{xstring}
+\usepackage{mfirstuc}
 \usepackage{ifdraft}
 \usepackage[obeyDraft]{todonotes}
 \ifdraft{
@@ -168,7 +169,12 @@
 
 \newcommand{\defined}{\underset{\text{def}}{\equiv}}
 \newcommand{\ldefined}{\underset{\text{ldef}}{\equiv}}
-\newcommand{\dfn}[1]{\rawdfn{#1}\index{recce-defienda}{#1}}
+\newcommand{\dfn}[2][]{\rawdfn{#1}%
+    \ifthenelse{\equal{#1}{}}{%
+            \index{recce-defienda}{#2@\makefirstuc{#2}}%
+        }%
+        {\index{recce-defienda}{#1}}%
+}
 \newcommand{\rawdfn}[1]{{\bf #1}}
 \newcommand{\op}[2][]{%
   \ifmmode\texttt{#2}(#1)%
@@ -4551,9 +4557,14 @@ The theorem follows immediately from the definition of \myfnname{NewParents}
 
 \begin{ldef}{Ancestry of Base}
 \label{ldef:ancestry-of-base}
-We say that \Vnodset{A} is an \dfn{\V{N}-level ancestry of base \Vnodset{b}}
+We say that \Vnodset{A} is an
+\V{N}-level
+\dfn[ancestry-nodeset@Ancestry (of nodeset)!by level]{ancestry}
+of base \Vnodset{b}
 iff $\V{A}=\myfn{Anc}{\Vnat{N},\V{b}}$.
-We say that \Vnodset{A} is an \dfn{ancestry} of \Vnodset{nds}
+We say that \Vnodset{A} is an
+\dfn[ancestry-nodeset@Ancestry (of nodeset)]{ancestry}
+of \Vnodset{nds}
 iff \Vnodset{A} is an \V{N}-level ancestry of \Vnodset{nds} for
 some \Vnat{N}.
 \ldefEnd
