@@ -390,9 +390,8 @@
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
-\newcommand{\FinSeqs}[1]{\ensuremath{\mymathop{FinSeq}(#1)}}
+\newcommand{\FinSeqs}[1]{\ensuremath{\mymathop{FinSeqs}(#1)}}
 \newcommand{\Pairs}[1]{\ensuremath{\mymathop{Pairs}(#1)}}
-\newcommand{\RealmSet}[1]{\ensuremath{\mymathop{RealmSet}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
@@ -1664,26 +1663,6 @@ whose index set is
 $\naturals$ is a type.
 \end{itemize}
 
-It will sometimes be convenient to use our variable-subscript notation
-for types in other contexts.
-Our notation for the set represented by the type \V{T} will be
-\RealmSet{\V{T}}.
-For example, where \V{V} is a set,
-we write $\V{seq} \in \RealmSet{\seq{\V{V}}}$ to say that \V{seq}
-is a sequence of whose values are elements of the set \V{V}.
-Writing $\V{seq} \in \RealmSet{\seq{\V{V}}}$ is similar to writing
-\Tvarseq{seq}{V}, but
-$\V{seq} \in \RealmSet{\seq{\V{V}}}$ has a boolean value and
-makes a statement about the type of \V{seq} only if that expression
-is the first appearance of that binding of the variable \V{seq}.
-On the other hand,
-the value of \Tvarseq{seq}{V}
-is the value of the variable \V{seq},
-and \Tvarseq{seq}{V} always states that the type of \V{seq}
-is ``$\set{\V{V}}$'',
-even when that appearance of \V{seq} is not the first occurrence
-of that binding of \V{seq}.
-
 \FloatBarrier
 
 \section{Arbitrary and Convenience Variables}
@@ -1795,10 +1774,26 @@ The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
-We also, in context, treat 0 and 1 as boolean values, so
+We also treat
+0 and 1 as boolean values,%
+    \footnote{%
+    Caution must be exercised when calling these values
+    ``true'' and ``false''.
+    Due to well-known results of Tarski and G\"odel,
+    we know that
+    our object language cannot consistently speak of the
+    truth and falsity of its own expressions.
+    Within our object language our boolean values
+    must be considered simply as sets,
+    and ``true'' and ``false'' are simply names for two
+    of those sets, without alethic implications.
+    Only when interpreted within our meta-language can
+    the concept of the truth or falsity of the expressions
+    in our object language be brought into play.}%
+so
 that $1 = (3 \in \set{3,4,5})$ is true.
 This means that $1 = (1 = (3 \in \set{3,4,5}))$ is also true.
-This also means that $2 = {0,1}$ is the set of boolean values.
+This also means that $2 = \set{0,1}$ is the set of boolean values.
 
 We write tuples using double square brackets.
 For example,
@@ -2075,7 +2070,7 @@ and that $\Dom{\V{seq}} = \Vsize{seq}.$
 It is sometimes convenient to speak of
 a set of values from which the range of \V{seq} is drawn,
 but which may not actually occur as values of \V{seq}.
-We call this the codomain of the sequence \V{seq}
+We call this the codomain of the sequence \V{seq},
 so that $\Ran{\V{seq}} \subseteq \Cod{\V{seq}}$.
 
 Since a sequence is a function, we can use similar notations.
@@ -2088,7 +2083,10 @@ We write \FinSeqs{\V{V}}%
 for the set of all finite sequences
 whose domain is \V{V}:
 \[
-    \FinSeqs{\V{V}} = \set{\V{seq} : \exists\; \Vnat{len} : \V{seq} \in \V{V}\expOp\V{len}}.
+    \FinSeqs{\V{V}} = \set{ \begin{gathered}
+        \V{seq} \in \powerset{\naturals\times{\V{V}}} :
+        \\ \exists\; \Vnat{len} : \V{seq} \in \V{V}\expOp\V{len}
+    \end{gathered} }.
 \]
 
 Recall that we defined 0 as boolean false and
@@ -2973,7 +2971,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-node-induced-path-020}--\Eref{eq:th-node-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
 such that
 \mypareq{eq:th-node-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3074,7 +3072,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-edge-induced-path-020}--\Eref{eq:th-edge-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
 such that
 \mypareq{eq:th-edge-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3194,9 +3192,9 @@ For convenient reference, we assign a variable name to the
 triple containing the data that induces the subpath:
 \mypareq{eq:th-subpath-100}{%
     \V{splice} = \tuple{\V{path},\V{lo},\V{hi}}
-    \bcuz{} CV $\V{splice} \in \RealmSet{\seq{\V{V}}}\times\naturals\times\naturals$.}
+    \bcuz{} CV $\V{splice} \in \FinSeqs{\V{V}}\times\naturals\times\naturals$.}
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
 such that
 \mypareq{eq:th-subpath-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3346,9 +3344,9 @@ For convenience, we assign a variable name to the
 duple containing the data that induces the fusion:
 \mypareq{eq:th-fusion-100}{%
     \V{pair} = \tuple{\V{path1},\V{path2}}
-    \bcuz{} CV $\V{pair} \in \RealmSet{\seq{\V{V}}}\times\RealmSet{\seq{\V{V}}}.$}
+    \bcuz{} CV $\V{pair} \in \FinSeqs{\V{V}}\times\FinSeqs{\V{V}}.$}
 Also, within the context of this proof, we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
 such that
 \mypareq{eq:th-fusion-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
