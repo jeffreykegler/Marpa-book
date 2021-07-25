@@ -390,8 +390,9 @@
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
+\newcommand{\FinSeqs}[1]{\ensuremath{\mymathop{FinSeq}(#1)}}
 \newcommand{\Pairs}[1]{\ensuremath{\mymathop{Pairs}(#1)}}
-\newcommand{\TypeSet}[1]{\ensuremath{\mymathop{TypeSet}(#1)}}
+\newcommand{\RealmSet}[1]{\ensuremath{\mymathop{RealmSet}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
@@ -1666,13 +1667,13 @@ $\naturals$ is a type.
 It will sometimes be convenient to use our variable-subscript notation
 for types in other contexts.
 Our notation for the set represented by the type \V{T} will be
-\TypeSet{\V{T}}.
+\RealmSet{\V{T}}.
 For example, where \V{V} is a set,
-we write $\V{seq} \in \TypeSet{\seq{\V{V}}}$ to say that \V{seq}
+we write $\V{seq} \in \RealmSet{\seq{\V{V}}}$ to say that \V{seq}
 is a sequence of whose values are elements of the set \V{V}.
-Writing $\V{seq} \in \TypeSet{\seq{\V{V}}}$ is similar to writing
+Writing $\V{seq} \in \RealmSet{\seq{\V{V}}}$ is similar to writing
 \Tvarseq{seq}{V}, but
-$\V{seq} \in \TypeSet{\seq{\V{V}}}$ has a boolean value and
+$\V{seq} \in \RealmSet{\seq{\V{V}}}$ has a boolean value and
 makes a statement about the type of \V{seq} only if that expression
 is the first appearance of that binding of the variable \V{seq}.
 On the other hand,
@@ -2064,17 +2065,31 @@ applies.
 
 A sequence is a family (and therefore a function)
 whose domain is an initial segment of \naturals.
-Since a sequence is a function, we can use similar notations.
-For example $\V{V} \expOp 5$ is the set of all sequences
-of length 5 whose values are elements of the set \V{V}.
-(Recall that $5 = \set{0,1,2,3,4}$).
-
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}
 and \Ran{\V{seq}} is the set of valid values of \V{seq}.
 It is therefore always the case that
 $\V{seq} \in \Ran{\V{seq}} \expOp \Dom{\V{seq}}$
 and that $\Dom{\V{seq}} = \Vsize{seq}.$
+
+It is sometimes convenient to speak of
+a set of values from which the range of \V{seq} is drawn,
+but which may not actually occur as values of \V{seq}.
+We call this the codomain of the sequence \V{seq}
+so that $\Ran{\V{seq}} \subseteq \Cod{\V{seq}}$.
+
+Since a sequence is a function, we can use similar notations.
+For example $\V{V} \expOp 5$ is the set of all sequences
+of length 5 whose codomain is \V{V}.
+(Recall that $5 = \set{0,1,2,3,4}$).
+We write \FinSeqs{\V{V}}%
+\index{recce-defienda}{FinSeqs@\FinSeqs{\V{v}}: the set of finite sequences
+   with codomain \V{v}}
+for the set of all finite sequences
+whose domain is \V{V}:
+\[
+    \FinSeqs{\V{V}} = \set{\V{seq} : \exists\; \Vnat{len} : \V{seq} \in \V{V}\expOp\V{len}}.
+\]
 
 Recall that we defined 0 as boolean false and
 1 as boolean true;
@@ -2958,7 +2973,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-node-induced-path-020}--\Eref{eq:th-node-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
 such that
 \mypareq{eq:th-node-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3059,7 +3074,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-edge-induced-path-020}--\Eref{eq:th-edge-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
 such that
 \mypareq{eq:th-edge-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3179,9 +3194,9 @@ For convenient reference, we assign a variable name to the
 triple containing the data that induces the subpath:
 \mypareq{eq:th-subpath-100}{%
     \V{splice} = \tuple{\V{path},\V{lo},\V{hi}}
-    \bcuz{} CV $\V{splice} \in \TypeSet{\seq{\V{V}}}\times\naturals\times\naturals$.}
+    \bcuz{} CV $\V{splice} \in \RealmSet{\seq{\V{V}}}\times\naturals\times\naturals$.}
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
 such that
 \mypareq{eq:th-subpath-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3331,9 +3346,9 @@ For convenience, we assign a variable name to the
 duple containing the data that induces the fusion:
 \mypareq{eq:th-fusion-100}{%
     \V{pair} = \tuple{\V{path1},\V{path2}}
-    \bcuz{} CV $\V{pair} \in \TypeSet{\seq{\V{V}}}\times\TypeSet{\seq{\V{V}}}.$}
+    \bcuz{} CV $\V{pair} \in \RealmSet{\seq{\V{V}}}\times\RealmSet{\seq{\V{V}}}.$}
 Also, within the context of this proof, we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \TypeSet{\seq{\V{V}}}$
+$\myfnname{Induced} \in 2 \expOp \RealmSet{\seq{\V{V}}}$
 such that
 \mypareq{eq:th-fusion-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
