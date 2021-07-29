@@ -342,7 +342,8 @@
 \newcommand{\subtractOp}{\mathbin{-}}
 \newcommand{\subtract}[2]{\ensuremath{#1\,\subtractOp\,#2}}
 
-\newcommand{\expOp}{\mathbin{\ast\ast}}
+\newcommand{\expOp}{\mathbin{{\ast}{\ast}}}
+\newcommand{\exxpOp}{\mathbin{{\ast}{\ast}{\ast}}}
 
 \newcommand{\condOpA}{\mathbin{?}}
 \newcommand{\condOpB}{\mathbin{:}}
@@ -390,7 +391,6 @@
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
-\newcommand{\FinSeqs}[1]{\ensuremath{\mymathop{FinSeqs}(#1)}}
 \newcommand{\Pairs}[1]{\ensuremath{\mymathop{Pairs}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
@@ -1743,19 +1743,36 @@ $\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
 $\Dom{\V{f}}$ is the domain of \V{f},
 $\Cod{\V{f}}$ is the codomain of \V{f},
 and $\Ran{\V{f}}$ is the range of \V{f}.
-We write
+
+We write $\V{X}\expOp\V{Y}$%
+\index{recce-defienda}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
+    is the set of functions from \V{Y} to \V{X})}
+for the set of
+functions with \V{Y} as their domain
+and \V{X} as their codomain.
+Therefore we write
 \[
-\deffn{f}{\V{X}}{\V{Y}}
+    \V{f} \in \V{X}\expOp\V{Y}
 \]
-to say that \V{f}
-is a function with domain \V{X}
-and codomain \V{Y}.\footnote{
+to say that \V{f} is a function
+such that $\Dom{\V{f}} = \V{Y}$
+and $\Cod{\V{f}} = \V{X}$.\footnote{
     More often in the literature,
-    \deffn{f}{\V{X}}{\V{Y}} is written as $\V{Y}^\V{X}$,
+    $\V{f} \in \V{X}\expOp\V{Y}$
+    is written as $\V{X}^\V{Y}$,
     but we prefer a more readable notation.
     Our notation, adopted from one that
     many programming languages
     use for exponentiation, avoids superscripts.}
+We often wish to speak of the set of functions whose domain is an element
+of a set.
+For this we write, where \V{Yset} is a set of domains
+and \V{X} is a codomain,
+$\V{X}\exxpOp\V{Yset}$%
+\index{recce-defienda}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
+    is the set of functions from an element of \V{Ys} to \V{X})}%
+, so that
+\[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
 
 In this book, the natural numbers begin with 0,
 and that set of natural numbers is written \naturals{},
@@ -1779,11 +1796,11 @@ We also treat
     \footnote{%
     We must exercise caution when calling these values
     ``true'' and ``false''.
-    Due to well-known results of Tarski and G\"odel,
+    Due to well-known results from Tarski and G\"odel,
     we know that
-    our object language cannot speak of the
-    truth and falsity of its own expressions,
-    and remain consistent.
+    our object language, if it is consistent,
+    cannot speak of the
+    truth and falsity of its own expressions.
     Within our object language our boolean values
     must be considered simply as sets,
     so that ``true'' and ``false'' are simply names for
@@ -2078,17 +2095,9 @@ Since a sequence is a function, we can use similar notations.
 For example $\V{V} \expOp 5$ is the set of all sequences
 of length 5 whose codomain is \V{V}.
 (Recall that $5 = \set{0,1,2,3,4}$).
-We write \FinSeqs{\V{V}}%
-\index{recce-defienda}{FinSeqs@\FinSeqs{\V{v}}: the set of finite sequences
-   with codomain \V{v}}
+We write $\V{V}\exxpOp\naturals$
 for the set of all finite sequences
-whose domain is \V{V}:
-\[
-    \FinSeqs{\V{V}} = \set{ \begin{gathered}
-        \V{seq} \in \powerset{\naturals\times{\V{V}}} :
-        \\ \exists\; \Vnat{len} : \V{seq} \in \V{V}\expOp\V{len}
-    \end{gathered} }.
-\]
+whose codomain is \V{V}.
 
 Recall that we defined 0 as boolean false and
 1 as boolean true;
@@ -2665,6 +2674,9 @@ and unequal to any other value.
 {$\V{C} \expOp \V{D}$} &
     \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
 \hline
+{$\V{C} \exxpOp \V{Dset}$} &
+    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
+\hline
 {$\subset$} {$\subseteq$}
     {$\supset$} {$\supseteq$}
     & \cellboxr{Set inclusion} \\
@@ -2972,7 +2984,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-node-induced-path-020}--\Eref{eq:th-node-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
+$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-node-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3073,7 +3085,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{eq:th-edge-induced-path-020}--\Eref{eq:th-edge-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
+$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-edge-induced-path-100}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3193,9 +3205,11 @@ For convenient reference, we assign a variable name to the
 triple containing the data that induces the subpath:
 \mypareq{eq:th-subpath-100}{%
     \V{splice} = \tuple{\V{path},\V{lo},\V{hi}}
-    \bcuz{} CV $\V{splice} \in \FinSeqs{\V{V}}\times\naturals\times\naturals$.}
+    \bcuz{} CV $\V{splice} \in
+        (\V{V}\exxpOp\naturals)
+        \times\naturals\times\naturals$.}
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
+$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-subpath-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -3345,9 +3359,10 @@ For convenience, we assign a variable name to the
 duple containing the data that induces the fusion:
 \mypareq{eq:th-fusion-100}{%
     \V{pair} = \tuple{\V{path1},\V{path2}}
-    \bcuz{} CV $\V{pair} \in \FinSeqs{\V{V}}\times\FinSeqs{\V{V}}.$}
+    \bcuz{} CV $\V{pair} \in
+        (\V{V}\exxpOp\naturals) \times (\V{V}\exxpOp\naturals).$}
 Also, within the context of this proof, we define a boolean function
-$\myfnname{Induced} \in 2 \expOp \FinSeqs{\V{V}}$
+$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-fusion-105}{%
     for all \Tvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
