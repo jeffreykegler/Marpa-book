@@ -2676,8 +2676,12 @@ Then
     \begin{gathered}
         \forall\; \V{seq} \in \V{V}\exxpOp(\naturals\cup\set{\naturals}) :
             \forall\; \V{subseq} \in \V{V}\exxpOp\naturals :
-        \\ \V{j} \in \Dom{\V{seq}} \land \Vnat{i} \le \Vnat{j}
-                \land \V{subseq} = \Velement{seq}{\V{i}\ldots\V{j}}
+        \\ \left( \begin{gathered}
+            \exists\; \Vnat{offset} :
+                \forall\; \V{ix} \in \Dom{\V{subseq}} :
+            \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
+                \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
+        \end{gathered} \right)
         \\ \implies \Pairs{\V{subseq}} \subseteq \Pairs{\V{seq}}.
             \quad \thEnd
     \end{gathered}
@@ -2691,20 +2695,35 @@ We assume the existence of a pair for a subsequence,
 that is not an element of the pairs for its containing
 sequence, \V{seq}.
 \begin{gather}
-    \Vnat{j} \in \Dom{\V{seq}}
-    \\ \land\; \Vnat{i} \le \Vnat{j}
-    \\ \land\; \V{subseq} = \Velement{seq}{\V{i}\ldots\V{j}}
-    \\ \land\; \V{pair} \in \Pairs{\V{subseq}}
-    \\ \land\; \V{pair} \notin \Pairs{\V{seq}}
+    \label{eq:th-subsequence-pairs-100}
+    \left( \begin{gathered}
+        \exists\; \Vnat{offset} :
+            \forall\; \V{ix} \in \Dom{\V{subseq}} :
+        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
+            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
+    \end{gathered} \right)
+    \\ \label{eq:th-subsequence-pairs-110}
+        \land\; \V{pair} \in \Pairs{\V{subseq}}
+    \\ \label{eq:th-subsequence-pairs-120}
+        \land\; \V{pair} \notin \Pairs{\V{seq}}
     \\ \nonumber \myparbox{\cuz{}
         AF reductio; ARB \Vnat{i}; ARB \Vnat{j};
         \linebreak[1] ARB $\V{seq} \in \V{V}\exxpOp(\naturals\cup\set{\naturals})$;
         ARB $\V{subseq} \in \V{V}\exxpOp\naturals$.}
 \end{gather}
+\begin{gather}
+\label{eq:th-subsequence-pairs-130}
+    \begin{gathered}
+            \forall\; \V{ix} \in \Dom{\V{subseq}} :
+        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
+            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
+    \end{gathered}
+    \\ \nonumber \myparbox{\cuz{}
+        \Eref{eq:th-subsequence-pairs-100}, EI of \V{offset}; ARV \Vnat{offset}.}
+\end{gather}
 \todo{Prove this}
 \myqed
 \end{proof}
-
 
 \section{Strings}
 
