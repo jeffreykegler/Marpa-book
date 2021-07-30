@@ -1565,7 +1565,7 @@ was called the "domain" for each variable%
     the domain of the variable is $2\expOp\naturals$, while
     the domain (``domain of the function'')
     of each of its values is \naturals.
-    This distinction arises in many of our contexts, 
+    This distinction arises in many of our contexts,
     and we thought it would be exasperatingly confusing.
 },
 and it was represented by a scheme
@@ -2201,35 +2201,104 @@ and
 
 \begin{definition}[Subsequence]
 \label{def:subsequence}
-We will write
-$\V{s}[\V{a} \ldots \V{z}]$
-for the subsequence
+A \dfn[Subsequence, consecutive]{consecutive subsequence},
+or \dfn[Subsequence (consecutive subsequence)]{subsequence},
+is a sequence of consecutive values from another,
+containing, set.
+That is, \V{subseq} is a subsequence of \V{seq} iff
 \[
-    \V{s}[\V{a}], \;\;
-    \V{s}[\V{a}+1], \;\;
-    \ldots \;\;
-    \V{s}[\V{z}].
+    \begin{gathered}
+        \exists\; \Vnat{offset} :
+            \forall\; \V{ix} \in \Dom{\V{subseq}} :
+        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
+            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}.
+    \end{gathered}
 \]
-We require of the subsequence indices that
-$\V{z} \in \Dom{\V{seq}}$,
-except in one special case.
-If
-$\V{z} < \V{a}$ then
-the values of \V{a} and \V{z} may be negative integers,
-and $\V{s}[\V{a} \ldots \V{z}]$
-is the empty sequence.
-We often write the empty sequence as $\epsilon$,
-so that
-\[
-\begin{gathered}
-    \V{z} < \V{a} \implies \Velement{s}{\V{a} \ldots \V{z}} = \epsilon
-    \\ \text{and } \Velement{s}{0 \ldots {-1}}
-        = \Velement{s}{~}
-        = \epsilon.
-        \quad \defEnd
-\end{gathered}
-\]
+
+Note that if \Vsize{subseq} = 0, then it is vacuously true that
+\V{subseq} is a subsequence of \V{seq}.
+We often write the empty sequence as $\epsilon$.
+
+We find it convenient to overload the notation
+\begin{equation}
+\label{eq:def-subsequence-200}
+\V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}].
+\end{equation}
+Where \V{a} and \V{b} are natural numbers,
+\V{subseq}
+in \Eref{eq:def-subsequence-200}
+is well-defined only if $\V{a} \in \Dom{\V{s}}$
+and $\V{z} \in \Dom{\V{s}}$.
+If \V{a} and \V{b} are natural numbers,
+and \V{subseq} in \Eref{eq:def-subsequence-200} is well defined,
+then
+\begin{itemize}
+\item
+If $\V{a} \le \V{z}$,
+then
+\begin{equation*}
+    \V{subseq} = \seq{
+        \V{s}[\V{a}], \;\;
+        \V{s}[\V{a}+1], \;\;
+        \ldots \;\;
+        \V{s}[\V{z}]
+    }.
+\end{equation*}
+\item
+If $\V{a} > \V{z}$,
+then $\V{subseq} = \epsilon.$
+\end{itemize}
+
+Where \V{a} and \V{b}
+in \Eref{eq:def-subsequence-200} are
+are integers,
+and both \V{a} and \V{b} are non-negative,
+we convert both to natural numbers,
+and proceed as described above.
+Otherwise \V{subseq}
+in \Eref{eq:def-subsequence-200}
+is the empty sequence,
+$\V{subseq} = \epsilon.$
+\defEnd
 \end{definition}
+
+Here are some examples of
+the sequence notation \Dfref{def:subsequence}.
+Let
+\[
+    \V{s} = \seq{1, 2, 3, 4, 5}.
+\]
+\begin{itemize}
+\item
+    $\Velement{s}{0 \ldots {-1}} = \epsilon.$
+\item
+    $\Velement{s}{1 \ldots 2} = \seq{2, 3}.$
+\item
+    $\Velement{s}{2 \ldots 2} = \seq{3}.$
+\item
+    $\Velement{s}{3 \ldots 2} = \epsilon.$
+\item
+    $\Velement{s}{0 \ldots 4} = \seq{1, 2, 3, 4, 5}.$
+\item
+    \Velement{s}{0 \ldots 5} is not well-defined
+        because $5 \notin \Dom{\V{s}}.$
+\end{itemize}
+We avoid corner-cases in our presentation.
+But, for the sake of completeness, here are examples:
+\begin{itemize}
+\item $\Velement{s}{{-1} \ldots 5} = \epsilon$
+        because the presence of a negative number in the
+        limits of the range is considered first, so
+        that the fact that
+        $5 \notin \Dom{\V{s}}$ does not become relevant.
+\item $\Velement{s}{{-1} \ldots 4} = \epsilon.$
+\item \Velement{s}{42 \ldots 3} is not well-defined
+        because $42 \notin \Dom{\V{s}}.$
+\item $\Velement{s}{42 \ldots {-3}} = \epsilon$
+        because the fact that $-3$ is negative is
+        considered before the fact the $42 \notin \Dom{\V{s}}.$
+    \item $\Velement{s}{{-42} \ldots {-7}} = \epsilon.$
+\end{itemize}
 
 \begin{definition}[Sequence Predecessor and Successor]
 \label{def:sequence-predecessor}
