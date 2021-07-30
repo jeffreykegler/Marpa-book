@@ -407,7 +407,7 @@
 % The V{} macro does this.  Many other macros are prefaced with a "V" to indicate
 % the first appropriate argument is to be have the V{} macro applied.
 % A "VV" indicates the first two appropiate arguments should have V{} applied.
-% Macros prefaced with a "T" apply type information.
+% Macros prefaced with a "T" apply realm information.
 
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\V{#1}_{\V{#2}}}}
@@ -1071,7 +1071,6 @@ will usually be a waste of time.}
 % 4.) Create remarks, as appropriate.
 % 5.) Convert definitions to local definitions, as appropriate.
 % 6.) Replace subtraction of one with \decr{}.
-% 6.) Replace "type" with "realm".
 
 \epigraph{%
 \label{epi:tarski}
@@ -1335,7 +1334,7 @@ Local theoremoids are visible
 either in the current scope
 and in an explicitly stated scope.
 Scopes are described in more detail
-below \Sref{scope-and-type}.
+below \Sref{scope-and-realm}.
 \rmEnd
 \end{remark}
 
@@ -1471,8 +1470,8 @@ abbreviates ``without loss of generality''.
 (for Zermolo-Frankel) abbreviates ``set theory''.
 For our purposes, number theory is consider to be part of set theory.
 
-\section{Scope and types}
-\label{sec:scope-and-type}
+\section{Scope and realms}
+\label{sec:scope-and-realm}
 
 \FloatBarrier
 
@@ -1517,75 +1516,76 @@ itself being visible outside the scope.
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
 
+\todo{Revise re realms, domains of discourse}
 Following Halmos\cite{Halmos1960},
 all of our mathematical objects are sets.
 There is no universal set, so each variable implies
 a set that is its \dfn{domain of discourse}.
-Every instance of a variable also has a \dfn{type}, which is
+Every instance of a variable also has a
+\dfn[Realm (of a variable)]{realm},
+which is
 the subset of the domain of discourse
 over which that variable instance
 can range.%
 \footnote{%
-    Constants
-    can be considered to have a type that is the singleton set
-    that contains the constant.
-    We do not carefully distinguish constants and
-    variables.
+    Constants and variables that are instances of placeholders
+    can be considered to have a realm that is the singleton set
+    that contains the constant or placeholder instance.
     Our goal in this book will be only to assure ourselves that all of the
-    mathematical objects we use are elements of a domain of
+    Constants and placeholder instances could, alternatively,
+    be treated as ``realm-less''.
+    Our goal is to assure ourselves that the mathematical objects we use
+    are, in fact, elements of a domain of
     discourse which could, if necessary,
     be constructed using the axioms in Halmos\cite{Halmos1960}.}
-Almost always, the type of a variable
+Almost always, the realm of a variable
 and its domain of discourse are
 equivalent.
 Finally, within the scope of a quantifier,
 the quantified variable has a \dfn{domain of quantification}.
 The domain of quantification is sometimes
-equivalent to the type,
+equivalent to the realm,
 but there are many exceptions.
 
-In this book,
-the term ``type'' is overloaded,
-and must not be taken to imply that we are
-referring to an existing type theory,
-or introducing a new theory that will
-compete with them.%
-\footnote{%
-    We considered using the term ``tag'' instead of
-    ``type'', in order to avoid raising certain kinds
-    of expectation.
-}
-For example,
-the ``types'' of this book are not likely to be helpful
-for automated theorem proving.
-And,
-although a \Marpa{} implementation might
-use some of our
-type names and concepts,
-the types in this book are not intended to be taken
-as a model of the type system a \Marpa{} implementation
-should follow.
-
-Instead, our ``types'' are intended as a
-replacement for the traditional scheme for
-variables in the parsing literature, where the range
-of each of the single-character variables
-is suggested by a combination
+In the parsing literature,
+the concept analogous to our ``realms''
+was called the "domain" for each variable%
+\footnote{
+    The use of term ``domain'' for the set
+    from which a variable may take its value
+    is well-established.
+    But we choose to depart from it because the
+    term ``domain'' is heavily overloaded with other
+    even more well-established uses.
+    For example,
+    In the tradition terminology,
+    a function variable has a ``domain of the variable''
+    but each of the variable's values also has a ``domain of the function''.
+    So if \V{f} is a variable representing a boolean function of the integers,
+    the domain of the variable is $2\expOp\naturals$, while
+    the domain (``domain of the function'')
+    of each of its values is \naturals.
+    This distinction arises in many of our contexts, 
+    and we thought it would be exasperatingly confusing.
+},
+and it was represented by a scheme
+in which the domain
+was suggested by a combination
 of the language of the alphabet used,
 the typeface,
 and whether the single character of the variable
-is taken from the end,
+was taken from the end,
 middle or beginning of the alphabet.
 For single-character variables,
-these schemes were awkward and restrictive,
-and pushed the legibility envelope.
-For the multi-character variables of this paper,
-an alternative was called for.
+these schemes were awkward and restrictive.
+They also pushed the legibility envelope to its limits.
+The multi-character variables of this paper required
+an alternative.
 
 This book will
-use subscripts to indicate commonly occurring types,
+use subscripts to indicate commonly occurring realms,
 as shown in
-\Tbref{tab:type-notation}.
+\Tbref{tab:realm-notation}.
 Use of subscripts for other purposes is avoided.
 
 \begin{table}[t]
@@ -1593,9 +1593,9 @@ Use of subscripts for other purposes is avoided.
 \caption{Realm notations}
 \begin{tabular}{ll}
 \hline
-$\V{X}_\V{T}$ & The variable \V{X} of realm \realm{T} \\
-$\V{agg-one}_\set{\V{T}}$ & The variable \V{set-one} of realm ``set of \realm{T}'' \\
-$\V{agg-one}_\Tseq{\V{T}}$ & The variable \V{seq-one} of realm ``sequence of \realm{T}'' \\
+$\V{X}_\V{T}$ & The variable \V{X} of realm \realm{R} \\
+$\V{agg-one}_\set{\V{T}}$ & The variable \V{set-one} of realm ``set of \realm{R}'' \\
+$\V{agg-one}_\Tseq{\V{T}}$ & The variable \V{seq-one} of realm ``sequence of \realm{R}'' \\
 \realm{SYM} & The realm for a symbol \\
 \realm{STR} & The realm for a string \\
 \realm{EIM} & The realm for an Earley item \\
@@ -1615,54 +1615,54 @@ $\V{i}_\realm{\integers}$ & Variable \V{i}, an integer \\
 $\V{i}_\realm{\naturals}$ & Variable \V{i}, a non-negative integer \\
 \hline
 \end{tabular}
-\label{tab:type-notation}
+\label{tab:realm-notation}
 \end{table}
 
 Since a realm is a set,
 we may express facts about realms using set notation.
 For example, writing
 \[
-   \V{x} \in \realm{T}
+   \V{x} \in \realm{R}
 \]
-means that \V{x} has type T,
-and is alternative to writing $\V{x}_\realm{T}$.
-We may say that type \realm{T1} is a synonym of type \realm{T2}
-by writing $\realm{T1} = \realm{T2}$.
+means that \V{x} has realm \realm{R},
+and is alternative to writing $\V{x}_\realm{R}$.
+We may say that realm \realm{R1} is a synonym of realm \realm{R2}
+by writing $\realm{R1} = \realm{R2}$.
 And if we write that
 \[
-   \realm{T1} = \realm{T2} \cup \realm{T3} \land (\realm{T2} \cap \realm{T3} = \emptyset)
+   \realm{R1} = \realm{R2} \cup \realm{R3} \land (\realm{R2} \cap \realm{R3} = \emptyset)
 \]
-we indicate that a variable type \realm{T1} is either
-a variable of type \realm{T2}
-or a variable of type \realm{T3},
+we indicate that a variable realm \realm{R1} is either
+a variable of realm \realm{R2}
+or a variable of realm \realm{R3},
 but that no variable can be both
-of type \realm{T2} and of type \realm{T3}.
+of realm \realm{R2} and of realm \realm{R3}.
 
-Type subscripts are often omitted when the type
+Realm subscripts are often omitted when the realm
 is clear from the context.
 Symbols and strings
-have an alternate type notation,
+have an alternate realm notation,
 which uses angle brackets.
-Type names are often used in the text
+Realm names are often used in the text
 as a convenient way to refer to
-their type.
+their realm.
 
 Occasionally we will have two or more distinct variables
-in a scope that have the same name and differ only only in type.
-This is helpful, for example, when two tuples of the same type are
+in a scope that have the same name and differ only only in realm.
+This is helpful, for example, when two tuples of the same realm are
 in scope.
 The elements of each tuple can share a variable name,
-and be distinguished by type.
+and be distinguished by realm.
 We overload in this fashion only when the advantages for clarity
 seem to outweigh the disadvantages.
 
-Types are defined explicitly, when they are introduced.
-In addition, for every type \V{T},
+Realms are defined explicitly, when they are introduced.
+In addition, for every realm \realm{R},
 \begin{itemize}
-\item \powerset{\V{T}} is a type; and
+\item \powerset{\V{T}} is a realm; and
 \item the sequence whose range is \V{T} and
 whose index set is
-$\naturals$ is a type.
+$\naturals$ is a realm.
 \end{itemize}
 
 \FloatBarrier
@@ -1676,8 +1676,8 @@ a new variable is labeled ``ARB'' if it is chosen arbitarily from a set
 of values.
 If the ``ARB'' introduction is made via a displayed equation,
 the new variable is subject to the restrictions of that equation,
-which often states the type of the variable.
-The type of a new variable may also be stated in its introductory note.
+which often states the realm of the variable.
+The realm of a new variable may also be stated in its introductory note.
 
 If, in its introductory note, a new variable is labeled ``CV'',
 it is a convenience variable, introduced to abbreviate an expression
@@ -1903,25 +1903,25 @@ We do not have a universal, so that
 logical quantification is always with regard to a
 set that is the ``domain of quantification''.
 The domain of quantification set may be specified explicitly
-or through the quantified variable's type.
+or through the quantified variable's realm.
 
 In the expression
 \begin{equation}
-\label{eq:quantification-by-type-020}
+\label{eq:quantification-by-realm-020}
      \forall\; \Tvar{i}{T} : \Vmyfn{f}{i},
 \end{equation}
 the domain of quantification
-is the type (and therefore set) \realm{T}.
+is the realm (and therefore set) \realm{R}.
 As one example, in the expression
 \begin{equation}
-\label{eq:quantification-by-type-030}
+\label{eq:quantification-by-realm-030}
      \forall\; \Vnat{i} : \Vmyfn{f}{i},
 \end{equation}
 the domain of quantification is the natural numbers.
-\Eref{eq:quantification-by-type-030}
+\Eref{eq:quantification-by-realm-030}
 is equivalent to
 \begin{equation}
-\label{eq:quantification-by-type-040}
+\label{eq:quantification-by-realm-040}
      \forall\; \V{i} \in \naturals : \Vmyfn{f}{i}.
 \end{equation}
 
@@ -1932,12 +1932,12 @@ a guard expression (or ``guard''),
 a colon,
 and a predicate.
 For example,
-in \Eref{eq:quantification-by-type-040},
+in \Eref{eq:quantification-by-realm-040},
 $\forall$ is the quantifier,
 $\V{i} \in \naturals$ is the ``guard expression'',
 and ``\Vmyfn{f}{i}'' is the predicate.
 The index of quantification (or ``index'')
-in \Eref{eq:quantification-by-type-040} is \V{i},
+in \Eref{eq:quantification-by-realm-040} is \V{i},
 and its domain of quantification is \naturals.
 
 \begin{remark}[Natural Number Quantification]
@@ -2633,13 +2633,13 @@ sequence, \V{seq}.
 \section{Strings}
 
 Let \Vsymset{alphabet} be a non-empty set of symbols.
-Symbols are of type \realm{SYM}.
+Symbols are of realm \realm{SYM}.
 Let \Tvar{x}{SYM} be a symbol.
 More commonly we write
 \Tvar{x}{SYM} as \Vsym{x}.
 
 let $\V{alphabet}^\ast$ be the set of all strings
-(type \realm{STR}) formed
+(realm \realm{STR}) formed
 from those symbols.
 Let \Tvar{s}{STR} be a string.
 More commonly we write
@@ -4568,8 +4568,8 @@ By definition, a leaf path contains a leaf node.
 \label{chap:non-unary-trees}
 
 For the purpose of this chapter we introduce
-the opaque type \realm{NOD}.
-Intuitively, a value of type \realm{NOD} is a ``node''.
+the opaque realm \realm{NOD}.
+Intuitively, a value of realm \realm{NOD} is a ``node''.
 The set of values of
 \realm{NOD} must be non-empty, but is otherwise arbitrary.
 
@@ -7057,11 +7057,11 @@ A \dfn{context free grammar} (CFG) is a 4-tuple,
 \text{$[\Vsymset{nt}, \Vsymset{term}, \Vruleset{rules}, \Vsym{accept}]$ such that} \\
 \Vsymset{nt} \cap \Vsymset{term} = \emptyset, \\
 \text{$\Vsym{accept} \in \Vsymset{nt}$, and} \\
-\text{\Vruleset{rules} is a set of elements of type \realm{RULE}.}
+\text{\Vruleset{rules} is a set of elements of realm \realm{RULE}.}
 \end{gathered}
 \end{equation}
-We will define type \realm{RULE} shortly.
-Context-free grammars have the type CFG.
+We will define realm \realm{RULE} shortly.
+Context-free grammars have the realm CFG.
 
 For convenience,
 for a CFG, \Vcfg{g},
@@ -7086,7 +7086,7 @@ the ``start symbol''.
 the \dfn{vocabulary} of \Vext{g}.
 
 A \dfn{rule}
-(type \realm{RULE})
+(realm \realm{RULE})
 is a duple
 \begin{equation*}
 \left[ \Vsym{lhs} \de \Vstr{rhs} \right]
@@ -7368,7 +7368,7 @@ string, that is, for all \Vstr{y}
 \Vsym{x} is a \dfn{proper nullable} iff it is nullable,
 but not nulling.
 
-Locations in the input will be of type \realm{LOC}.
+Locations in the input will be of realm \realm{LOC}.
 By tradition, the input to the parse is written as \Cw{},
 where $\Cw \in \Term{\V{g}}^\ast$.
 \Vsize{w} will be the length of the input, counted in symbols.
@@ -7377,7 +7377,7 @@ they will often be in terms of $\V{n}$,
 where $\V{n} = \Vsize{w}$.
 
 Unless \Vstr{w}, the context input, is otherwise specified,
-use of the type \realm{LOC} will bind
+use of the realm \realm{LOC} will bind
 its variable,
 so that
 \begin{equation*}
@@ -7403,7 +7403,7 @@ In \Marpa{},
 the implementation of the token is a pointer to a structure
 containing a pointer to the token symbol,
 and a pointer to the token value,
-which is a value of arbitrary type.\footnote{
+which is a value of arbitrary realm.\footnote{
 In C language,
 these can be implemented as so-called ``void pointers''.}
 \defEnd
@@ -7545,7 +7545,7 @@ will usually be a waste of time.}
 
 \section{Cycles}
 
-An \dfn{external grammar} (type \realm{EXT}) is a cycle-free CFG.
+An \dfn{external grammar} (realm \realm{EXT}) is a cycle-free CFG.
 A CFG is \dfn{cycle-free} if it contains no cycles.
 A \dfn{cycle string}, or \dfn{cycle} is a sentential form
 which non-trivially derives itself.
@@ -8177,7 +8177,7 @@ will usually be a waste of time.}
 
 \begin{definition}[Internal grammar]
 \label{def:internal-grammar}
-A Marpa internal grammar (type \realm{INT}) is
+A Marpa internal grammar (realm \realm{INT}) is
 a Marpa external grammar which is augmented,
 and which has no nullable symbols.
 \defEnd
@@ -8347,7 +8347,7 @@ Let $\Vrule{r} \in \Rules{\Vint{g}}$
 be a rule.
 Recall that $\Vsize{r}$
 is the length of the RHS of \V{r}.
-A \dfn{dotted rule} (type \realm{DR}) is a duple, $[\Vrule{r}, \V{pos}]$,
+A \dfn{dotted rule} (realm \realm{DR}) is a duple, $[\Vrule{r}, \V{pos}]$,
 where $0 \le \V{pos} \le \size{\Vrule{r}}$.
 The position, \V{pos}, indicates the extent to which
 the rule has been recognized,
@@ -8496,7 +8496,7 @@ is called a \dfn{medial rule}, or \dfn{medial}.
 
 \begin{definition}[EIM]
 \label{def:eim}
-A Earley item (type \realm{EIM}) is a triple
+A Earley item (realm \realm{EIM}) is a triple
 \begin{equation}
 \label{eq:d-eim}
     [\Vdr{dotted}, \Vorig{i}, \Vcurr{j}]
@@ -8511,15 +8511,15 @@ In the Earley%
 \index{recce-general}{Earley, Jay}
 parsing literature,
 the origin is often called the ``parent''.
-For convenience, the types \realm{ORIG} and \realm{CURR} will be synonyms
+For convenience, the realms \realm{ORIG} and \realm{CURR} will be synonyms
 for \realm{LOC}, so that
 \[
 \realm{LOC} = \realm{ORIG} = \realm{CURR}
 \]
-The type \realm{ORIG} will
+The realm \realm{ORIG} will
 indicate that the variable designates
 an origin element of an Earley item; and
-the type \realm{CURR} will
+the realm \realm{CURR} will
 indicate that the variable designates
 a current location element of an Earley item.
 where
@@ -8570,12 +8570,12 @@ and so on.
 \begin{definition}[PIM]
 \label{def:pim}
 A \dfn{parse item} is either an Earley or a Leo item.
-Parse items are of type \realm{PIM},
+Parse items are of realm \realm{PIM},
 so that
 \[
     \realm{PIM} = \realm{EIM} \cup \realm{LIM}.
 \]
-Leo items (type \realm{LIM})
+Leo items (realm \realm{LIM})
 will be defined in \Chref{chap:leo}.
 \end{definition}
 
@@ -8674,8 +8674,8 @@ and
 
 \begin{definition}[Matching]
 \label{def:matching-1}
-We say that an \V{l} of some type \dfn{matches}
-a \V{r} of some type if
+We say that an \V{l} of some realm \dfn{matches}
+a \V{r} of some realm if
 \Matches{\V{l},\V{r}},
 where \V{Matches} is an overloaded boolean function.
 Where \Matches{\V{l},\V{r}},
@@ -8983,7 +8983,7 @@ the partial parse $[\Vint{g}, \Vstr{w}]$.
 \begin{definition}[Earley set {[}ES{]}]
 \label{def:earley-set}
 An Earley set
-(type \realm{ES})
+(realm \realm{ES})
 is as a set of \dfn{parse items}.
 That is,
 \[
@@ -9036,7 +9036,7 @@ We will do so later \Dfref{def:lim-validity}.
 
 \begin{definition}[Earley table {[}ET{]}]
 \label{def:et}
-An Earley table, type \realm{ET},
+An Earley table, realm \realm{ET},
 is a finite sequence of Earley sets.
 That is,
 \[
@@ -9710,7 +9710,7 @@ Recall that every parse item (\realm{PIM})
 is either
 an Earley item or a Leo item.
 
-A Leo item is of type \realm{LIM},
+A Leo item is of realm \realm{LIM},
 where
 \[
 \realm{LIM} = \set{ [ \Vdr{top}, \Vsym{transition}, \Vorig{top}, \Vcurr{j} ] }.
@@ -10230,7 +10230,7 @@ will usually be a waste of time.}
 
 \begin{definition}[Next eligible sequence]
 \label{def:next-eligible-sequence}
-A \dfn{next eligible sequence} (type \realm{LES}) is
+A \dfn{next eligible sequence} (realm \realm{LES}) is
 a non-empty sequence of valid, Leo eligible \realm{EIM}s
 such that every \realm{EIM}
 except the top \realm{EIM}
@@ -12182,7 +12182,7 @@ That is,
 
 \begin{proof}
 By the definition of \realm{LSS} \Dfref{def:lss},
-the type \realm{LSS} is a subset of \realm{LES}.
+the realm \realm{LSS} is a subset of \realm{LES}.
 This means that every member \realm{LSS} is a member of
 the set \realm{LES}, in other words, identical to
 a member of \realm{LES}, so that
@@ -14422,14 +14422,14 @@ An \dfn{ambiguous link pair} is a link pair
 that is added to a \realm{PIM} that
 is already an element of an Earley set.
 
-A link pair has type \realm{LP}.
+A link pair has realm \realm{LP}.
 The set of link pairs of a \realm{PIM}
 can be written
 \LinkPairs{\Vpim{pim}},
 or as
 \LinkPairs{\Veim{eim}}, or
 \LinkPairs{\Vlim{lim}},
-for the \realm{PIM} subtypes.
+for the \realm{PIM} sub-realms.
 
 \chapter{Complexity preliminaries}
 \label{chap:complexity-preliminaries}
@@ -19821,7 +19821,7 @@ $\because$ Def \var{Next} \Eref{eq:def-next},
 % items restored.
 % We will call \Ves{physical} a \dfn{physical} Earley set, and
 % we will call \Vves{virtual} a \dfn{virtual} Earley set
-% (type \realm{VES}).
+% (realm \realm{VES}).
 
 \begin{definition}[Leo chain]
 \label{def:leo-chain}
