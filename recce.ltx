@@ -2470,15 +2470,15 @@ Let \V{V} be a placeholder\footnote{%
 Corcoran \cite{Corcoran2005} considers it "unfortunate" to call
 schematic variables "variables".}
 for a variable whose value is a non-empty set.
-Let $\Tvarseq{seq}{V}$ be a finite sequence.
+Let $\Tvarseq{seq}{V}$ be a sequence.
 \begin{gather}
 \label{eq:th-sequence-pairs-set-1-010}
    \Pairs{\V{seq}}
 \\ \label{eq:th-sequence-pairs-set-1-020}
    \subseteq \set{ \begin{gathered}
-       \V{pair} \in \V{V}\times\V{V} :
-       \exists\; \Vnat{i} < \Vlastix{seq} :
-       \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \V{pair} \in \V{V}\times\V{V} : \exists\; \Vnat{i} :
+       \\ \Vnat{i} + 1 < \Vsize{seq}
+       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
    \end{gathered} }. \quad \thEnd
 \end{gather}
 \end{lem}
@@ -2511,10 +2511,10 @@ to show that it is an element of the set in
 \end{gather}
 \mypareq{eq:th-sequence-pairs-set-1-160}{%
     $\forall\;\Vnat{x} :
-        \Vnat{x} \in \Dom{\V{seq}} \implies \V{x} \le \Vlastix{seq}$
+        \Vnat{x} \in \Dom{\V{seq}} \implies \V{x} < \Vsize{seq}$
         \bcuz{} \longDfref{Last Index}{def:last-index}.}
 \mypareq{eq:th-sequence-pairs-set-1-170}{%
-    $\Vnat{i} < \Vlastix{seq}$
+    $\Vnat{i} + 1 < \Vsize{seq}$
     \cuz{} \Eref{eq:th-sequence-pairs-set-1-130},
         \Eref{eq:th-sequence-pairs-set-1-150},
         \Eref{eq:th-sequence-pairs-set-1-160}.}
@@ -2526,7 +2526,8 @@ to show that it is an element of the set in
     $\V{pair} \in \V{V}\times\V{V}$
         \cuz{} \Eref{eq:th-sequence-pairs-set-1-100}.}
 \mypareq{eq:th-sequence-pairs-set-1-190}{%
-    $\exists\; \Vnat{i} < \Vlastix{seq} :
+    $\exists\; \Vnat{i} :
+        \Vnat{i} + 1 < \Vsize{seq} \land
         \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}$
         \bcuz{} EG of \Vnat{i} in
             \Eref{eq:th-sequence-pairs-set-1-170}
@@ -2534,32 +2535,37 @@ to show that it is an element of the set in
 \begin{equation}
 \label{eq:th-sequence-pairs-set-1-200}
    \begin{gathered}
-       \V{pair} \in \Pairs{\V{seq}}
-       \\ \implies \V{pair} \in \set{ \begin{gathered}
-           \V{pair} \in \V{V}\times\V{V} :
-           \exists\; \Vnat{i} < \Vlastix{seq} :
-           \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \V{pair} \in \set{ \begin{gathered}
+           \V{pair} \in \V{V}\times\V{V} : \exists\; \Vnat{i} :
+           \\ \Vnat{i} + 1 < \Vsize{seq}
+           \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
        \end{gathered} }
        \\ \myparbox{\cuz{}
-           Implication from \Eref{eq:th-sequence-pairs-set-1-100}
-               to \Eref{eq:th-sequence-pairs-set-1-185}
-               and \Eref{eq:th-sequence-pairs-set-1-190}.
-               \myqed}
+               \Eref{eq:th-sequence-pairs-set-1-185},
+               \Eref{eq:th-sequence-pairs-set-1-190}.}
    \end{gathered}
 \end{equation}
+\Eref{eq:th-sequence-pairs-set-1-200} states that \V{pair}
+is an element of the set in
+\Eref{eq:th-sequence-pairs-set-1-020},
+so that the implication from \Eref{eq:th-sequence-pairs-set-1-100}
+to \Eref{eq:th-sequence-pairs-set-1-200} is what we sought
+to show the theorem.
+\myqed
 \end{proof}
 
 \begin{lem}{Sequence Pairs Set 2}
 \label{lem:sequence-pairs-set-2}
+\todo{Revise for infinite sequence}
 Let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
-Let $\Tvarseq{seq}{V}$ be a finite sequence.
+Let $\Tvarseq{seq}{V}$ be a sequence.
 \begin{gather}
 \label{eq:th-sequence-pairs-set-2-010}
    \set{ \begin{gathered}
-       \V{pair} \in \V{V}\times\V{V} :
-       \exists\; \Vnat{i} < \Vlastix{seq} :
-       \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \V{pair} \in \V{V}\times\V{V} : \exists\; \Vnat{i} :
+       \\ \Vnat{i} + 1 < \Vsize{seq}
+       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
    \end{gathered} }
 \\ \label{eq:th-sequence-pairs-set-2-020}
        \subseteq \Pairs{\V{seq}}. \quad \thEnd
@@ -2642,6 +2648,7 @@ show the theorem.
 
 \begin{theorem}[Sequence Pairs Set]
 \label{th:sequence-pairs-set}
+\todo{Revise for infinite sequence}
 Let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
 Let $\Tvarseq{seq}{V}$ be a finite sequence.
@@ -2719,7 +2726,25 @@ sequence, \V{seq}.
             \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
     \end{gathered}
     \\ \nonumber \myparbox{\cuz{}
-        \Eref{eq:th-subsequence-pairs-100}, EI of \V{offset}; ARV \Vnat{offset}.}
+        \Eref{eq:th-subsequence-pairs-100}, EI of \V{offset}; ARB \Vnat{offset}.}
+\end{gather}
+\begin{equation}
+\label{eq:th-subsequence-pairs-140}
+\begin{gathered}
+    \exists\; \Vnat{i} < \Vlastix{subseq} :
+        \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
+    \\ \nonumber \myparbox{\cuz{}
+        \longDfref{\myfn{Pairs}{}}{def:sequence-pairs},
+        \Eref{eq:th-subsequence-pairs-110}.}
+\end{gathered}
+\end{equation}
+\begin{gather}
+\label{eq:th-subsequence-pairs-150}
+    \Vnat{i} < \Vlastix{subseq} :
+\\ \label{eq:th-subsequence-pairs-160}
+    \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
+\\ \nonumber \myparbox{\cuz{}
+        \Eref{eq:th-subsequence-pairs-140}; ARB \Vnat{i}.}
 \end{gather}
 \todo{Prove this}
 \myqed
