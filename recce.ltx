@@ -2557,7 +2557,6 @@ to show the theorem.
 
 \begin{lem}{Sequence Pairs Set 2}
 \label{lem:sequence-pairs-set-2}
-\todo{Revise for infinite sequence}
 Let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
 Let $\V{seq} \in \naturals\cup\set{\naturals}$
@@ -2590,7 +2589,7 @@ to show that it is an element of
 \end{gather}
 \begin{gather}
 \label{eq:th-sequence-pairs-set-2-120}
-       \Vnat{i} < \Vlastix{seq}
+       \Vnat{i} + 1 < \Vsize{seq}
 \\ \label{eq:th-sequence-pairs-set-2-130}
        \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
 \\ \nonumber
@@ -2598,10 +2597,10 @@ to show that it is an element of
 \end{gather}
 \mypareq{eq:th-sequence-pairs-set-2-140}{%
     $\forall\;\Vnat{x} :
-        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} \le \Vlastix{seq}$
-        \bcuz{} \longDfref{Last Index}{def:last-index}.}
+        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$
+        \bcuz{} ZF.}
 \mypareq{eq:th-sequence-pairs-set-2-150}{%
-       $\Vnat{i} \in \Dom{\V{seq}}$ \cuz{}
+       $\Vnat{i} + 1 \in \Dom{\V{seq}}$ \cuz{}
            \Eref{eq:th-sequence-pairs-set-2-120},
            \Eref{eq:th-sequence-pairs-set-2-140}.}
 \mypareq{eq:th-sequence-pairs-set-2-160}{%
@@ -2611,6 +2610,9 @@ to show that it is an element of
            \Eref{eq:th-sequence-pairs-set-2-120},
            \Eref{eq:th-sequence-pairs-set-2-140},
            \Eref{eq:th-sequence-pairs-set-2-160}.}
+\mypareq{eq:th-sequence-pairs-set-2-175}{%
+       $\Vnat{i} \in \Dom{\V{seq}}$ \cuz{}
+           \Eref{eq:th-sequence-pairs-set-2-150}.}
 \mypareq{eq:th-sequence-pairs-set-2-180}{%
        $\V{from} = \VVelement{seq}{i}$ \cuz{} CV $\V{from} \in \V{V}$.}
 \mypareq{eq:th-sequence-pairs-set-2-190}{%
@@ -2630,9 +2632,9 @@ to show that it is an element of
        \land \V{from} = \VVelement{seq}{i}
        \land \V{to} = \VVelement{seq}{j}
    \\ \myparbox{\cuz{} EI of \V{i}, \V{j};
-       \Eref{eq:th-sequence-pairs-set-2-150},
        \Eref{eq:th-sequence-pairs-set-2-160},
        \Eref{eq:th-sequence-pairs-set-2-170},
+       \Eref{eq:th-sequence-pairs-set-2-175},
        \Eref{eq:th-sequence-pairs-set-2-180},
        \Eref{eq:th-sequence-pairs-set-2-190}.
    }
@@ -2650,18 +2652,18 @@ show the theorem.
 
 \begin{theorem}[Sequence Pairs Set]
 \label{th:sequence-pairs-set}
-\todo{Revise for infinite sequence}
 Let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
-Let $\Tvarseq{seq}{V}$ be a finite sequence.
+Let $\V{seq} \in \naturals\cup\set{\naturals}$
+be a sequence.
 Then
 \begin{equation}
 \label{eq:th-sequence-pairs-set-010}
    \Pairs{\V{seq}} =
    \set{ \begin{gathered}
-       \V{pair} \in \V{V}\times\V{V} :
-       \exists\; \Vnat{i} < \Vlastix{seq} :
-       \\ \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \V{pair} \in \V{V}\times\V{V} : \exists\; \Vnat{i} :
+       \\ \Vnat{i} + 1 < \Vsize{seq}
+       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
    \end{gathered} }. \quad \thEnd
 \end{equation}
 \end{theorem}
@@ -2733,20 +2735,20 @@ sequence, \V{seq}.
 \begin{equation}
 \label{eq:th-subsequence-pairs-140}
 \begin{gathered}
-    \exists\; \Vnat{i} < \Vlastix{subseq} :
-        \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
-    \\ \nonumber \myparbox{\cuz{}
-        \longDfref{\myfn{Pairs}{}}{def:sequence-pairs},
+    \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{subseq}
+    \\ \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
+    \\ \myparbox{\cuz{}
+        \longThref{Sequence Pairs Set}{sequence-pairs-set},
         \Eref{eq:th-subsequence-pairs-110}.}
 \end{gathered}
 \end{equation}
 \begin{gather}
 \label{eq:th-subsequence-pairs-150}
-    \Vnat{i} < \Vlastix{subseq} :
+    \Vnat{i} + 1 < \Vsize{subseq}
 \\ \label{eq:th-subsequence-pairs-160}
     \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
 \\ \nonumber \myparbox{\cuz{}
-        \Eref{eq:th-subsequence-pairs-140}; ARB \Vnat{i}.}
+        \Eref{eq:th-subsequence-pairs-140}, EI of \Vnat{i}; ARB \Vnat{i}.}
 \end{gather}
 \todo{Prove this}
 \myqed
