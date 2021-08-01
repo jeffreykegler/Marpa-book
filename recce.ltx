@@ -1754,7 +1754,9 @@ so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
 We also treat
-0 and 1 as boolean values,%
+0 and 1 as boolean values,
+where the intended interpretation of 0 is ``true''
+and 1 is ``false''.%
     \footnote{%
     We must exercise caution when calling these values
     ``true'' and ``false''.
@@ -1770,10 +1772,18 @@ We also treat
     Alethic implications can be brought into play
     for expressions in our object language
     only when those expressions are
-    interpreted within our meta-language.}%
-so that $2 = \set{0,1}$ is the set of boolean values;
-\[ 1 = (3 \in \set{3,4,5}) \text{ and} \]
-\[ 1 = (1 = (3 \in \set{3,4,5})). \]
+    interpreted within our meta-language.}
+Therefore $2 = \set{0,1}$ is the set of boolean values.
+In general we avoid explicitly writing 0 and 1 when
+the intended interpretation is alethic,
+but if we do so, it is the case that
+\begin{gather*}
+1 = (3 \in \set{3,4,5}),
+\\ 0 = (3 \notin \set{3,4,5}),
+\\ 1 = (1 = (3 \in \set{3,4,5})),
+\\ 1 = (0 = (3 \notin \set{3,4,5})),\text{ and}
+\\ 0 = (1 = (3 \notin \set{3,4,5})),
+\end{gather*}
 
 We write tuples using double square brackets.
 For example,
@@ -1912,10 +1922,10 @@ $\V{X}\exxpOp\V{Yset}$%
 
 \section{Quantifiers}
 
-We do not have a universal, so that
+We do not have a universal set, so that
 logical quantification is always with regard to a
 set that is the ``domain of quantification''.
-The domain of quantification set may be specified explicitly
+The domain of quantification may be specified explicitly
 or through the quantified variable's realm.
 
 In the expression
@@ -2564,91 +2574,6 @@ That is,
        \end{gathered} }. \quad \defEnd
 \]
 \end{definition}
-
-\begin{theorem}[Sequence Pairs]
-\label{th:sequence-pairs}
-\todo{I probably do not need this theorem}
-Let \V{V} be a non-empty set of objects,
-and let $\Tvarseq{seq}{V}$ be a finite sequence.
-Then
-\begin{equation}
-\label{eq:th-sequence-pairs-010}
-\begin{gathered}
-   \Vnat{i} < \Vlastix{seq}
-   \\ \iff
-   \left( \begin{gathered}
-   \Vnat{i}+1 \in \Dom{\V{seq}}
-   \\ \land\; \tuple{\VVelement{seq}{i}, \Velement{seq}{\V{i}+1}} \in \Pairs{\V{seq}}
-   \end{gathered} \right). \quad \thEnd
-\end{gathered}
-\end{equation}
-\end{theorem}
-
-\begin{proof}
-The proof is direct, first showing the directions
-of \Eref{eq:th-sequence-pairs-010}, one at a time.
-\mypareq{eq:th-sequence-pairs-100}{%
-   $\V{i1} < \Vlastix{seq1}$
-   \cuz{} Hypothesis of
-       \Eref{eq:th-sequence-pairs-010} in the forward direction;
-       ARB \Vnat{i1}; ARB \Tvarseq{seq1}{V}.}
-\mypareq{eq:th-sequence-pairs-120}{%
-   $\Vnat{i1} \in \Dom{\V{seq1}}$ \cuz{} \Eref{eq:th-sequence-pairs-100}.}
-\mypareq{eq:th-sequence-pairs-130}{%
-   $\V{i1}+1 \in \Dom{\V{seq1}}$ \cuz{} \Eref{eq:th-sequence-pairs-100}.}
-\mypareq{eq:th-sequence-pairs-140}{%
-   $\tuple{\VVelement{seq1}{i1}, \Velement{seq1}{\V{i1}+1}} \in \Pairs{\V{seq1}}$
-   \bcuz{} \longDfref{Pairs}{def:sequence-pairs},
-       \Eref{eq:th-sequence-pairs-120}, \Eref{eq:th-sequence-pairs-130}.}
-The implication just completed shows the
-forward direction of \Eref{eq:th-sequence-pairs-010}:
-\begin{equation}
-\label{eq:th-sequence-pairs-150}
-\begin{gathered}
-   \forall\; \Tvarseq{seq}{V} : \forall\; \Vnat{i} :
-   \\ \Vnat{i} < \Vlastix{seq}
-   \\ \implies
-   \left( \begin{gathered}
-       \Vnat{i}+1 \in \Dom{\V{seq}}
-       \\ \land\; \tuple{\VVelement{seq}{i}, \Velement{seq}{\V{i}+1}}
-           \in \Pairs{\V{seq}}
-   \end{gathered} \right)
-   \\ \myparbox{\cuz{}
-       Implication from \Eref{eq:th-sequence-pairs-100} to
-        \Eref{eq:th-sequence-pairs-130} and \Eref{eq:th-sequence-pairs-140}.}
-\end{gathered}
-\end{equation}
-For the reverse direction:
-\mypareq{eq:th-sequence-pairs-170}{%
-   $\V{i2}+1 \in \Dom{\V{seq2}}$
-   \bcuz{} Hypothesis of
-       \Eref{eq:th-sequence-pairs-010} in the reverse direction;
-       ARB \Vnat{i2}; ARB \Tvarseq{seq2}{V}.}
-\mypareq{eq:th-sequence-pairs-210}{%
-   $\Vnat{i2} < \Vlastix{seq2}$
-   \cuz{} \Eref{eq:th-sequence-pairs-170}.}
-The implication just completed shows the
-reverse direction of \Eref{eq:th-sequence-pairs-010}:
-\begin{equation}
-\label{eq:th-sequence-pairs-220}
-\begin{gathered}
-   \forall\; \Tvarseq{seq}{V} : \forall\; \Vnat{i} :
-   \\ \left( \begin{gathered}
-       \Vnat{i}+1 \in \Dom{\V{seq}}
-       \\ \land\; \tuple{\VVelement{seq}{i}, \Velement{seq}{\V{i}+1}}
-           \in \Pairs{\V{seq}}
-   \end{gathered} \right)
-   \\ \implies \Vnat{i} < \Vlastix{seq}
-   \\ \myparbox{\cuz{}
-       Implication from \Eref{eq:th-sequence-pairs-170} to
-        \Eref{eq:th-sequence-pairs-210}.}
-\end{gathered}
-\end{equation}
-Equations \Eref{eq:th-sequence-pairs-150} and
-\Eref{eq:th-sequence-pairs-220} show
-the theorem.
-\myqed
-\end{proof}
 
 \begin{lem}{Sequence Pairs Set 1}
 \label{lem:sequence-pairs-set-1}
