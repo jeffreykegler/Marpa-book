@@ -380,7 +380,7 @@
 
 \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
 \newcommand{\Vdecr}[1]{\decr{\V{#1}}}
-\newcommand{\Tseq}[1]{{\left[ #1 \right]} }
+\newcommand{\Rseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
@@ -407,12 +407,17 @@
 % The V{} macro does this.  Many other macros are prefaced with a "V" to indicate
 % the first appropriate argument is to be have the V{} macro applied.
 % A "VV" indicates the first two appropiate arguments should have V{} applied.
-% Macros prefaced with a "T" apply realm information.
+% Macros prefaced with a "T" or "R" apply realm information.
+
+% Eventually eliminate "T" version of macros
 
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 \newcommand{\Tvar}[2]{\ensuremath{\V{#1}_{\V{#2}}}}
 \newcommand{\Tvarset}[2]{\ensuremath{\V{#1}_{\set{\V{#2}}}}}
-\newcommand{\Tvarseq}[2]{\ensuremath{\V{#1}_{\Tseq{\V{#2}}}}}
+\newcommand{\Tvarseq}[2]{\ensuremath{\V{#1}_{\Rseq{\V{#2}}}}}
+\newcommand{\Rvar}[2]{\ensuremath{\V{#1}_{\V{#2}}}}
+\newcommand{\Rvarset}[2]{\ensuremath{\V{#1}_{\set{\V{#2}}}}}
+\newcommand{\Rvarseq}[2]{\ensuremath{\V{#1}_{\Rseq{\V{#2}}}}}
 
 \newcommand{\eim}[1]{\ensuremath{#1_\realm{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\realm{ES}}}
@@ -1593,9 +1598,9 @@ Use of subscripts for other purposes is avoided.
 \caption{Realm notations}
 \begin{tabular}{ll}
 \hline
-$\V{X}_\V{T}$ & The variable \V{X} of realm \realm{R} \\
-$\V{agg-one}_\set{\V{T}}$ & The variable \V{set-one} of realm ``set of \realm{R}'' \\
-$\V{agg-one}_\Tseq{\V{T}}$ & The variable \V{seq-one} of realm ``sequence of \realm{R}'' \\
+$\V{X}_\V{R}$ & The variable \V{X} of realm \realm{R} \\
+$\V{agg-one}_\set{\V{R}}$ & The variable \V{set-one} of realm ``set of \realm{R}'' \\
+$\V{agg-one}_\Rseq{\V{R}}$ & The variable \V{seq-one} of realm ``sequence of \realm{R}'' \\
 \realm{SYM} & The realm for a symbol \\
 \realm{STR} & The realm for a string \\
 \realm{EIM} & The realm for an Earley item \\
@@ -2347,22 +2352,22 @@ and the notation undergo radical alterations.}
 A sequence is a family (and therefore a function)
 whose domain is either a natural number or \naturals.
 If \V{seq} is a sequence,
-\Dom{\V{seq}} is the set of valid indexes of \V{seq}
+\Dom{\V{seq}} is the set of valid indexes of \V{seq}.
 \Cod{\V{seq}} is the set of valid values of \V{seq},
-and Ran{\V{seq}} is the set of actual values of \V{seq},
+and \Ran{\V{seq}} is the set of actual values of \V{seq}.
 It is therefore always the case that
-$\V{seq} \in \Cod{\V{seq}} \expOp \Dom{\V{seq}}$
+$\V{seq} \in \Cod{\V{seq}} \expOp \Dom{\V{seq}}$,
 that $\Ran{\V{seq}} \subseteq \Cod{\V{seq}}$,
 and that $\Dom{\V{seq}} = \Vsize{seq}.$
 
 So that we may speak of sequences whose values are arbitrary sets,
 this section is a schema.
 We let \V{V} be a placeholder for a non-empty set.
-We will usually use \V{V} as the codomain of sequences
+We typically use \V{V} as the codomain of sequences
 under discussion.
 Also, in every theoremoid,
 we will implicitly introduce a new placeholder \V{V},
-which we will usually use to represent the codomain of sequences
+which we typically use to represent the codomain of sequences
 contained in the scope of that theoremoid.
 
 Since a sequence is a function,
@@ -2381,7 +2386,7 @@ whose codomain is \V{V}.
 
 Recall that we defined 0 as boolean false and
 1 as boolean true;
-and therefore $2 = \set{0,1}$ as the set of boolean values.
+and that therefore $2 = \set{0,1}$ as the set of boolean values.
 This means that
 $2 \expOp \V{V}$ is the set of boolean functions whose domain
 is \V{V}.
@@ -2496,26 +2501,25 @@ We often write the empty sequence as $\epsilon$.
 \defEnd
 \end{definition}
 
-\begin{remark}[Subsequence range notation]
-\label{rem:subsequence-range-notation}
-We find it convenient to overload the notation
+\begin{remark}[Subsequence natural range]
+\label{rem:subsequence-natural-range}
+\todo{Check this}
+The notation
 \begin{equation}
-\label{eq:def-subsequence-200}
-\V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}].
+\label{eq:def-subsequence-natural-200}
+\V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}],
 \end{equation}
-\begin{itemize}
-\item Where \V{a} and \V{b} are natural numbers,
-\V{subseq}
-in \Eref{eq:def-subsequence-200}
-is well-defined only if $\V{a} \in \Dom{\V{s}}$
-and $\V{z} \in \Dom{\V{s}}$.
-If \V{a} and \V{b} are natural numbers,
-and \V{subseq} in \Eref{eq:def-subsequence-200} is well defined,
-then
+where \V{a} and \V{b} are natural numbers,
+is interpreted by applying the following rules,
+in order:
 \begin{itemize}
 \item
-If $\V{a} \le \V{z}$,
-then
+If $\V{a} \notin \Dom{\V{s}}$
+and $\V{z} \notin \Dom{\V{s}}$,
+then \V{subseq} is not well-defined.
+\item
+If \V{subseq} is well-defined,
+and $\V{a} \le \V{z}$, then
 \begin{equation*}
     \V{subseq} = \seq{
         \V{s}[\V{a}], \;\;
@@ -2525,20 +2529,35 @@ then
     }.
 \end{equation*}
 \item
-If $\V{a} > \V{z}$,
+If \V{subseq} is well-defined
+and $\V{a} > \V{z}$,
 then $\V{subseq} = \epsilon.$
 \end{itemize}
+\end{remark}
 
-\item Where either \V{a} or \V{b}
+\begin{remark}[Subsequence integer range]
+\label{rem:subsequence-integer-range}
+\todo{Fix this}
+Where either \V{a} or \V{b}
 in \Eref{eq:def-subsequence-200}
 is an integer,
-and both \V{a} and \V{b} are non-negative,
-we convert both to natural numbers,
-and proceed as described above.
-Otherwise \V{subseq}
-in \Eref{eq:def-subsequence-200}
-is the empty sequence,
-$\V{subseq} = \epsilon.$
+we overlap the notation
+\begin{equation}
+\label{eq:def-subsequence-integer-200}
+\V{subseq} = \V{s}[\Rvar{a}{\integers}
+    \ldots \Rvar{a}{\integers}]
+\end{equation}
+by applying the following rules, in order:
+\begin{itemize}
+\item If both \V{a} and \V{b} are non-negative,
+then
+$\V{subseq} = \V{s}[
+\riota \Vnat{aNat} : \V{aNat} \cong \Rvar{a}
+\ldots
+\riota \Vnat{zNat} : \V{zNat} \cong \Rvar{z}
+]$.
+\item If either \V{a} and \V{b} is negative
+then $\V{subseq} = \epsilon.$
 \rmEnd
 \end{itemize}
 \end{remark}
