@@ -89,6 +89,10 @@
 % and let page bottoms be ragged.
 \raggedbottom
 
+% Effectively ban the splitting of footnotes across pages.
+% If this causes problems, we may have to try something less brutal.
+\interfootnotelinepenalty=10000
+
 % Re hbox's, see
 % https://tex.stackexchange.com/questions/241343/what-is-the-meaning-of-fussy-sloppy-emergencystretch-tolerance-hbadness
 
@@ -1667,19 +1671,25 @@ For example,
 when comparing
 two tuples of the same realm in the same scope,
 we might compare
-$\V{tupleA} = \tuple{\Rvar{a}{R}, \Rvar{a}{S}, \Rvar{a}{T}}$ with
-$\V{tupleB} = \tuple{\Rvar{b}{R}, \Rvar{b}{S}, \Rvar{b}{T}}$,
-specifying the elements of each by tuple
-using the variable name, and
-by position using the realm subscript.
+$\tuple{\Rvar{a}{R}, \Rvar{a}{S}, \Rvar{a}{T}}$ with
+$\tuple{\Rvar{b}{R}, \Rvar{b}{S}, \Rvar{b}{T}}$,
+where the name of each variable indicates its tuple,
+and the realm subscript of each variable indicates its position
+within its tuple.
 As another example, it seems very intuitive to
 to represent a natural number as \Vnat{x}
 and its canonical embedding in the integers
 as \Vz{x},
 so that
 \Vnat{x} and \Vz{x} are two different variables distinguished
-only by their realm.
-
+only by their realm.%
+\footnote{In set theory, the different classes of number are quite distinct,
+    an issue which the parsing literature generally ignores, largely without incident.
+    The classes of numbers are also, however, quite distinct in their implementation
+    in software, and ignoring this distinction has not been without incident.
+    Among the many problems that have resulted,
+    the explosion of the Ariane 5 rocket
+    is particularly well-documented.\cite{Lyons1996}}
 Realms are defined explicitly, when they are introduced.
 In addition, for every realm \realm{R},
 \begin{itemize}
@@ -23021,6 +23031,11 @@ J.~Earley.
 \newblock An efficient context-free parsing algorithm.
 \newblock {\em Communications of the Association for Computing Machinery},
   13(2):94--102, 1970.
+
+\bibitem{Lyons1996}
+J.~L.~Lyons.
+\newblock {\em Ariane 5, Flight 501 Failure: Report by Inquiry Board}
+\newblock{Paris, 19 July 1996}
 
 \bibitem{GJ2008}
 Dirk~Grune and Ceriel~J.H Jacobs.
