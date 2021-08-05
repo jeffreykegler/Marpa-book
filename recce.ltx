@@ -113,7 +113,7 @@
 % Lemma lem:
 % Remark rem:
 % Observation obs:
-% Assumption asm:
+% Example ex:
 % Page page:
 
 % The "page:" metatag is for labels intended as the target of
@@ -215,16 +215,6 @@
 \newcommand{\VbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[#2\right]}}
 \newcommand{\VVbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[ \V{#2} \right]}}
 
-\newcommand{\defEnd}{\Circle}
-\newcommand{\ldefEnd}{\Circle}
-\newcommand{\obsEnd}{\Circle}
-\newcommand{\rmEnd}{\Circle}
-\newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
-\newcommand{\thEnd}{%
-  \ifmmode\rotatedSquare
-  \else$\rotatedSquare$
-  \fi%
-}
 \newcommand{\cuz}{%
   \ifmmode%
     \mathrel{\because}%
@@ -253,8 +243,15 @@
 \newcommand{\refChapter}{UNUSED}
 \newcommand{\refEqno}{UNUSED}
 
+% "Full refs" (with 'F' in name) exist because if, for example, both refs
+% are to floats the question of whether both are on the same page becomes
+% difficult for Tex, and it is easiest to just force use of
+% the page number.
+
 \newcommand{\Aref}[1]{(a\ref{#1}\colonpageref{#1})}
-\newcommand{\Asmref}[1]{(\textrm{Asm}\ref{#1}\colonpageref{#1})}
+% "full" ref -- that is, always include page
+\newcommand{\AFref}[1]{(a\ref{#1}:\pageref{#1})}
+
 \newcommand{\Eref}[1]{%
  \StrBefore{\getrefnumber{#1}}{.}[\refChapter]%
  \StrBehind{\getrefnumber{#1}}{.}[\refEqno]%
@@ -271,6 +268,11 @@
       }%
   )}%
 }
+\newcommand{\longEref}[2]{
+  \ifmmode \text{``#1''\Eref{#2}}%
+  \else``#1'' \Eref{#2}%
+  \fi%
+}
 
 % genref -- generic reference
 \newcommand{\genref}[2]{%
@@ -281,64 +283,109 @@
     })%
 }
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
-\newcommand{\Obref}[1]{(\textrm{Ob}\ref{#1}\colonpageref{#1})}
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
 \newcommand{\Chref}[1]{(Ch\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
 
-% new style, including tag
-\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
-\newcommand{\Thref}[1]{\genref{th:#1}{Th}}
-\newcommand{\Rmref}[1]{\genref{rem:#1}{Rm}}
+% Try to gather all the stuff to do with theoremoids here
+% Start off with theorems, then the other theoremoids,
+% mostly alphabetically.
 
-\newcommand{\longLmref}[2]{%
-  \ifmmode \text{``#1''\Lmref{#2}}%
-  \else``#1'' \Lmref{#2}%
+\theoremstyle{definition}
+
+% theoremoids: Th
+
+\newtheorem{theorem}{Theorem}
+\newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
+\newcommand{\thEnd}{%
+  \ifmmode\rotatedSquare
+  \else$\rotatedSquare$
   \fi%
 }
+\newcommand{\Thref}[1]{\genref{th:#1}{Th}}
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
   \else``#1'' \Thref{#2}%
   \fi%
 }
+% "full" ref -- always includes page
+\newcommand{\ThFref}[1]{(\textrm{Th}\ref{#1}:\pageref{#1})}
 
+% theoremoids: Df
+
+\newtheorem{definition}[theorem]{Definition}
+\newcommand{\Dfref}[1]{\genref{#1}{Df}}
+\newcommand{\longDfref}[2]{%
+  \ifmmode \text{``#1''\Dfref{#2}}%
+  \else``#1'' \Dfref{#2}%
+  \fi%
+}
+\newcommand{\defEnd}{\Circle}
+
+% theoremoids: Ex
+
+\newcommand{\exEnd}{\Circle}
+\newtheorem{example}[theorem]{Example}
+\newcommand{\Exref}[1]{\genref{ex:#1}{Ex}}
+
+% theoremoids: Ob
+
+\newcommand{\obsEnd}{\Circle}
+\newtheorem{observation}[theorem]{Observation}
+\newcommand{\Obref}[1]{\genref{obs:#1}{Ob}}
+
+% theoremoids: Rm
+
+\newcommand{\rmEnd}{\Circle}
+\newtheorem{remark}[theorem]{Remark}
+\newcommand{\Rmref}[1]{\genref{rem:#1}{Rm}}
 \newcommand{\longRmref}[2]{%
   \ifmmode \text{``#1''\Rmref{#2}}%
   \else``#1'' \Rmref{#2}%
   \fi%
 }
 
-\newcommand{\Dfref}[1]{\genref{#1}{Df}}
+% local theoremoids: Lm
+
+\newtheorem{rawLemma}{Lemma}[chapter]
+\newenvironment{lem}[1]{%
+   \begin{rawLemma}[#1]%
+   % \index{recce-lemmas}{\thechapter@\therawLemma \hspace{1em}  #1}
+}{%
+   \end{rawLemma}
+}
+\newtheorem{lemma}[theorem]{Lemma}
+
+\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
+\newcommand{\longLmref}[2]{%
+  \ifmmode \text{``#1''\Lmref{#2}}%
+  \else``#1'' \Lmref{#2}%
+  \fi%
+}
+
+% local theoremoids: local definition
+
+\newtheorem{rawLdef}[rawLemma]{Local Definition}
+\newenvironment{ldef}[1]{%
+   \begin{rawLdef}[#1]%
+   %\index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
+}{%
+   \end{rawLdef}
+}
+
 % Lowercase "df" is tag for local definitions.
 \newcommand{\dfref}[1]{%
     (\textrm{df}\ref{ldef:#1}\colonpageref{ldef:#1})%
-}
-\newcommand{\longDfref}[2]{%
-  \ifmmode \text{``#1''\Dfref{#2}}%
-  \else``#1'' \Dfref{#2}%
-  \fi%
 }
 \newcommand{\longdfref}[2]{%
   \ifmmode \text{``#1''\dfref{#2}}%
   \else``#1'' \dfref{#2}%
   \fi%
 }
+\newcommand{\ldefEnd}{\Circle}
 
-\newcommand{\longEref}[2]{
-  \ifmmode \text{``#1''\Eref{#2}}%
-  \else``#1'' \Eref{#2}%
-  \fi%
-}
-
-% "full" refs -- that is, always include page
-% These exist because if, for example, both refs are to floats
-% the question of whether both are on the same page becomes
-% difficult for Tex, and it is easiest to just force use of
-% the page number.
-\newcommand{\ThFref}[1]{(\textrm{Th}\ref{#1}:\pageref{#1})}
-\newcommand{\AFref}[1]{(a\ref{#1}:\pageref{#1})}
-\newcommand{\AsmFref}[1]{(Asm\ref{#1}:\pageref{#1})}
+%% End of theoremoid section
 
 % I use hyphens in variable names,
 % so I need to ensure that subtraction is
@@ -617,30 +664,6 @@
   \myparbox[#1]{$\triangleright$ #2}%
 }
 \newcommand{\lcomment}[1]{\hspace\algorithmicindent$\triangleright$ #1}
-
-\theoremstyle{definition}
-\newtheorem{rawLemma}{Lemma}[chapter]
-\newenvironment{lem}[1]{%
-   \begin{rawLemma}[#1]%
-   % \index{recce-lemmas}{\thechapter@\therawLemma \hspace{1em}  #1}
-}{%
-   \end{rawLemma}
-}
-\newtheorem{theorem}{Theorem}
-\newtheorem{lemma}[theorem]{Lemma}
-
-\newtheorem{definition}[theorem]{Definition}
-\newtheorem{rawLdef}[rawLemma]{Local Definition}
-\newenvironment{ldef}[1]{%
-   \begin{rawLdef}[#1]%
-   %\index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
-}{%
-   \end{rawLdef}
-}
-
-\newtheorem{remark}[theorem]{Remark}
-\newtheorem{observation}[theorem]{Observation}
-% \newtheorem{assumption}[theorem]{Assumption}
 
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
@@ -1328,6 +1351,7 @@ If a theoremoid is local, it is treated
 as visible only in part of this book.
 
 Every global theoremoid is a theorem, a definition,
+an example,
 a remark, or an observation.
 Remarks are outside of the deductive logic,
 and often describe meta-notions, such
@@ -1384,6 +1408,7 @@ Reference types are
 ``df'' (local definition),
 ``Df'' (definition),
 ``e'' (equation),
+``Ex'' (example),
 ``L'' (a location within a section,
 where {\it n} is the section number),
 ``Lm'' (lemma),
@@ -1519,6 +1544,7 @@ Only the theorem itself is visible outside
 that scope.
 An observation is a scope, with only the observation
 itself being visible outside the scope.
+An example is a scope with nothing visible outside the scope.
 
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
@@ -2426,6 +2452,9 @@ is \V{V}.
 We specify a sequence by specifying its elements explicitly,
 via a sequence constructor,
 or inductively.
+
+\begin{remark}[Explicitly specified sequence]
+\label{rem:explicitly-specified-sequence}
 An example of a
 \dfn{sequence with explicitly specified elements}
 is \seq{43, 1729, 1491, 1493 }.
@@ -2438,10 +2467,19 @@ in order, and
 \seq{1, 2, \ldots }
 is the infinite sequence containing, in order,
 all the counting numbers.
+\rmEnd
+\end{remark}
 
+\begin{remark}[Sequence constructor]
+\label{rem:sequence-constructor}
 A \dfn{sequence constructor}
 follows the form already described for
 use in quantification over the natural numbers \Rmref{naturals-quantification}.
+\rmEnd
+\end{remark}
+
+\begin{example}[Sequence constructor]
+\label{ex:sequence-constructor}
 The following are examples of sequence constructors.
 Where \Vnat{hi} and the function $\V{f} \in \V{V}\expOp\naturals$
 are bound in context,
@@ -2477,6 +2515,26 @@ and
             \end{gathered} },
     \end{gathered}
 \]
+\exEnd
+\end{example}
+
+\begin{remark}[Sequence by induction]
+\label{rem:sequence-by-induction}
+The sequence \V{seq} is
+specified by induction by stating
+an \dfn{initial value} from the codomain of \V{seq},
+and a function on the codomain of \V{seq},
+called the \dfn{successor function}.
+Let $\V{init} \in \Cod{\V{seq}}$ be the initial value,
+and let \deffn{succ}{\Cod{\V{seq}}}{\Cod{\V{seq}}} be the successor function.
+Then \Velement{seq}{0} = \V{init}
+and
+\[
+    \forall \V{ix} \in \Dom{\V{seq}} :
+        \V{ix} > 0 \implies \VVelement{seq}{ix} = \myfn{succ}{\Velement{seq}{\Vdecr{ix}}}.
+\]
+\rmEnd
+\end{remark}
 
 \begin{definition}[First and last sequence index]
 \label{def:last-index}
@@ -2514,20 +2572,6 @@ is the sum of the first 100 natural numbers and
 \prod \seq{\V{ix} < 100 : \V{ix}+100 }
 \]
 is the product of the next 100.
-
-The sequence \V{seq} is
-specified by induction by stating
-an \dfn{initial value} from the codomain of \V{seq},
-and a function on the codomain of \V{seq},
-called the \dfn{successor function}.
-Let $\V{init} \in \Cod{\V{seq}}$ be the initial value,
-and let \deffn{succ}{\Cod{\V{seq}}}{\Cod{\V{seq}}} be the successor function.
-Then \Velement{seq}{0} = \V{init}
-and
-\[
-    \forall \V{ix} \in \Dom{\V{seq}} :
-        \V{ix} > 0 \implies \VVelement{seq}{ix} = \myfn{succ}{\Velement{seq}{\Vdecr{ix}}}.
-\]
 
 \begin{definition}[Subsequence]
 \label{def:subsequence}
@@ -14814,7 +14858,7 @@ In the case of the ``main'' pseudocode procedure,
 In the case all other pseudocode procedures,
 every pseudocode procedures which is not the top-level
 has a caller.
-By \Obref{obs:housekeeping-vs-body-execution},
+By \Obref{housekeeping-vs-body-execution},
 the caller always incurs \Oc{} ``housekeeping''
 time when it calls callee.
 If we add \Oc{} of time from callee
@@ -16282,7 +16326,7 @@ so that a link pair does not exist for it,
 even conceptually.
 And \Marpa{} does not track link pairs for
 predictions
-\Obref{obs:prediction-ancestry}.
+\Obref{prediction-ancestry}.
 \obsEnd{}
 \end{observation}
 
@@ -18534,7 +18578,7 @@ link pair.
 This theorem follows from
 the \Source{} Theorem \Thref{leo-source-fn}
 the \PreviousLink{} Theorem \Thref{previous-link}
-and the observation on \realm{LIM} ancestry \Obref{obs:lim-ancestry}.
+and the observation on \realm{LIM} ancestry \Obref{lim-ancestry}.
 \myqed
 \end{proof}
 
@@ -18587,12 +18631,12 @@ is removed,
 \Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
 This can be seen from
 \Aref{alg:marpa},
-\Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-op},
-\Obref{obs:earley-completer-op},
-\Obref{obs:earley-predicter-op},
+\Obref{earley-set-0},
+\Obref{earley-scanner-op},
+\Obref{earley-completer-op},
+\Obref{earley-predicter-op},
 and
-\Obref{obs:earley-memoizer-op}.
+\Obref{earley-memoizer-op}.
 \obsEnd
 \end{observation}
 
@@ -18828,17 +18872,17 @@ This observation follows from
 \label{obs:earley-op-by-result}
 The operation of the original \Earley{} algorithm can be determined
 from the result as described in
-\Obref{obs:marpa-op-by-result},
+\Obref{marpa-op-by-result},
 except
 in \Earley{} there is no \var{Memoizer} operation,
 and there are no \realm{LIM}s.
 This follows from
-\Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-op},
-\Obref{obs:earley-completer-op},
-\Obref{obs:earley-predicter-op},
-\Obref{obs:earley-memoizer-op}, and
-\Obref{obs:marpa-op-by-result}.
+\Obref{earley-set-0},
+\Obref{earley-scanner-op},
+\Obref{earley-completer-op},
+\Obref{earley-predicter-op},
+\Obref{earley-memoizer-op}, and
+\Obref{marpa-op-by-result}.
 \obsEnd
 \end{observation}
 
@@ -18864,11 +18908,11 @@ operation, that operation is the Completer operation.
 If a token is a direct ancestor of a \Marpa{}
 operation, that operation is the Scanner operation.
 This observation follows from
-\Obref{obs:earley-set-0},
-\Obref{obs:earley-scanner-op},
-\Obref{obs:earley-completer-op},
-\Obref{obs:earley-predicter-op} and
-\Obref{obs:earley-memoizer-op}.
+\Obref{earley-set-0},
+\Obref{earley-scanner-op},
+\Obref{earley-completer-op},
+\Obref{earley-predicter-op} and
+\Obref{earley-memoizer-op}.
 \obsEnd
 \end{observation}
 
@@ -20320,7 +20364,7 @@ The proof is by a reductio.
 \label{eq:th-LIM-chain-dr-origin-12}
 \myparbox{\realm{LIM}s are only added by the
 \Marpa{} \var{Memoizer} operation
-$\because$ \Obref{obs:marpa-op-by-result}.%
+$\because$ \Obref{marpa-op-by-result}.%
 }
 \end{equation}
 \begin{equation}
@@ -20618,7 +20662,7 @@ whose ancestry includes
 $\left[ \Veim{source},
   \var{edge}[\var{n}] \right]_\realm{LP}$
 $\because$
-\Obref{obs:earley-op-by-direct-ancestor},
+\Obref{earley-op-by-direct-ancestor},
 \Eref{eq:edge-elements-are-complete-20},
 \Eref{eq:edge-elements-are-complete-30}.
 }
@@ -20767,7 +20811,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred}, \var{lo} \right]_\realm{LP}$
 $\because$
-\Obref{obs:earley-op-by-direct-ancestor},
+\Obref{earley-op-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-12},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -20791,7 +20835,7 @@ $\because$
 operation with link pair
 $\left[ \var{pred2}, \var{lo} \right]_\realm{LP}$
 $\because$
-\Obref{obs:earley-op-by-direct-ancestor},
+\Obref{earley-op-by-direct-ancestor},
 \Eref{th:edge-descendant-uniqueness-14},
 \Eref{th:edge-descendant-uniqueness-18}, WLOG.
 }
@@ -20803,7 +20847,7 @@ $\because$
   $\because$
   \Eref{eq:earley-completer-summary-1}
   and \Eref{eq:earley-completer-summary-2}
-  in \Obref{obs:earley-completer-summary};
+  in \Obref{earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-20}.
 }
 \end{equation}
@@ -20813,7 +20857,7 @@ $\because$
   $\because$
   \Eref{eq:earley-completer-summary-1}
   and \Eref{eq:earley-completer-summary-2}
-  in \Obref{obs:earley-completer-summary};
+  in \Obref{earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-22}.}
 \end{equation}
 \begin{equation}
@@ -20829,7 +20873,7 @@ $\because$
 \myparbox{$\Postdot{\var{pred}} = \LHS{\var{lo}}$
   $\because$
   \Eref{eq:earley-completer-summary-3}
-  in \Obref{obs:earley-completer-summary};
+  in \Obref{earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-20}.
 }
 \end{equation}
@@ -20838,7 +20882,7 @@ $\because$
 \myparbox{$\Postdot{\Veim{pred2}} = \LHS{\var{lo}}$
   $\because$
   \Eref{eq:earley-completer-summary-3}
-  in \Obref{obs:earley-completer-summary};
+  in \Obref{earley-completer-summary};
   \Eref{th:edge-descendant-uniqueness-22}.}
 \end{equation}
 \begin{equation}
@@ -20931,7 +20975,7 @@ $\because$
 \myparbox{If two \Earley{} completer operations share
 a link pair, they produce the same result
 $\because$
-\Obref{obs:earley-completer-summary}.}
+\Obref{earley-completer-summary}.}
 \end{equation}
 \begin{equation}
 \label{th:edge-descendant-uniqueness-54}
@@ -21139,7 +21183,7 @@ result of an \Earley{} completer
 operation with link pair
 $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\realm{LP}$%
 } \\
-\because \Obref{obs:earley-op-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
+\because \Obref{earley-op-by-direct-ancestor}, \Eref{eq:th-leo-edge-top-13-2},
   \Eref{eq:th-leo-edge-top-14}.
 \end{gathered}
 \end{equation}
@@ -21149,7 +21193,7 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\realm{LP}$%
 \Velement{edge}{\Vlastix{edge}} = \\
 \left[ \DR{\var{source}}, \Origin{\var{source}} \right] @ \Current{\Velement{edge}{\Vlastix{chain}}} \\
 \because
-\Obref{obs:earley-completer-summary},
+\Obref{earley-completer-summary},
 \Eref{eq:th-leo-edge-top-18}.
 \end{gathered}
 \end{equation}
@@ -21207,7 +21251,7 @@ validity.
 
 The \Marpa{} initializer operation creates the
 same \realm{PIM}s as the \Earley{} initializer operation
-\Obref{obs:earley-set-0}.
+\Obref{earley-set-0}.
 The \Earley{} initializer operation preserves
 validity because the \Earley{} algorithm is
 correct
@@ -21220,11 +21264,11 @@ operation.
 The \Marpa{} scanner operation
 creates the same \realm{PIM}s as the \Earley{}
 scanner operations
-\Obref{obs:earley-scanner-op}.
+\Obref{earley-scanner-op}.
 The \Marpa{} predicter operation
 creates the same \realm{PIM}s as the \Earley{}
 predicter operations
-\Obref{obs:earley-predicter-op}.
+\Obref{earley-predicter-op}.
 These two operations preserve
 validity because the \Earley{} algorithm is
 correct
@@ -21244,7 +21288,7 @@ We have shown that the
 \Thref{leo-reducer-is-consistent}.
 
 From
-\Obref{obs:earley-completer-op}
+\Obref{earley-completer-op}
 and \Aref{alg:earley-reducer-op},
 \op{Earley-reducer}, creates the \realm{EIM} that
 the \Earley{} completer operation would have
@@ -23157,12 +23201,12 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \phantomsection
-\renewcommand{\listtheoremname}{Global Blocks}
+\renewcommand{\listtheoremname}{Global Theoremoids}
 % \renewcommand{\listtheoremname}{Theorems,
     % Definitions, Remarks and Observations}
 \pdfbookmark[0]{\listtheoremname}{listoftheorems}
 \listoftheorems[ignoreall,
-show={theorem,remark,observation,definition}]
+show={theorem,remark,example,observation,definition}]
 
 \clearpage
 \phantomsection
@@ -23174,12 +23218,12 @@ show={theorem,remark,observation,definition}]
     \listoftodos
 }{}
 
-\renewcommand{\listtheoremname}{Global and Local Blocks}
+\renewcommand{\listtheoremname}{Global and Local Theoremoids}
 \clearpage
 \phantomsection
 \pdfbookmark[0]{\listtheoremname}{listoflemmas}
 \listoftheorems[ignoreall,
-    show={rawLemma,rawLdef,theorem,remark,observation,definition}]
+    show={rawLemma,rawLdef,theorem,example,remark,observation,definition}]
 
 \clearpage
 % \def\indexname{General Index}
