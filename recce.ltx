@@ -2511,10 +2511,10 @@ and
             \\ = \set{ \begin{gathered}
                 \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
                 \V{element} = \tuple {\V{ix}, \Vmyfn{f}{ix+1} }
-            \end{gathered} },
+            \end{gathered} }.
+                \quad \exEnd
     \end{gathered}
 \]
-\exEnd
 \end{example}
 
 \begin{remark}[Sequence by induction]
@@ -2529,10 +2529,10 @@ and let \deffn{succ}{\Cod{\V{seq}}}{\Cod{\V{seq}}} be the successor function.
 Then \Velement{seq}{0} = \V{init}
 and
 \[
-    \forall \V{ix} \in \Dom{\V{seq}} :
+    \forall\; \V{ix} \in \Dom{\V{seq}} :
         \V{ix} > 0 \implies \VVelement{seq}{ix} = \myfn{succ}{\Velement{seq}{\Vdecr{ix}}}.
+        \quad \rmEnd
 \]
-\rmEnd
 \end{remark}
 
 \begin{definition}[First and last sequence index]
@@ -2572,13 +2572,12 @@ is the sum of the first 100 natural numbers and
 \]
 is the product of the next 100.
 
-\begin{definition}[Subsequence]
-\label{def:subsequence}
-A \dfn[Subsequence, consecutive]{consecutive subsequence},
-or \dfn[Subsequence (consecutive subsequence)]{subsequence},
+\begin{definition}[Slice]
+\label{def:slice}
+A \dfn[Slice (of a sequence)]{slice}
 is a sequence of consecutive values from another,
 containing, set.
-That is, \V{subseq} is a subsequence of \V{seq} iff
+That is, \V{subseq} is a slice of \V{seq} iff
 \[
     \begin{gathered}
         \exists\; \Vnat{offset} :
@@ -2589,13 +2588,13 @@ That is, \V{subseq} is a subsequence of \V{seq} iff
 \]
 
 Note that if \Vsize{subseq} = 0, then it is vacuously true that
-\V{subseq} is a subsequence of \V{seq}.
+\V{subseq} is a slice of \V{seq}.
 We often write the empty sequence as $\epsilon$.
 \dfEnd
 \end{definition}
 
-\begin{remark}[Subsequence natural range]
-\label{rem:subsequence-natural-range}
+\begin{remark}[Slice natural range]
+\label{rem:slice-natural-range}
 The notation
 \[ \V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}], \]
 where \Vnat{a} and \Vnat{z} are natural numbers,
@@ -2625,8 +2624,8 @@ then $\V{subseq} = \epsilon.$
 \end{itemize}
 \end{remark}
 
-\begin{remark}[Subsequence integer range]
-\label{rem:subsequence-integer-range}
+\begin{remark}[Slice integer range]
+\label{rem:slice-integer-range}
 Recall that, when \Vz{x} is a non-negative integer, \Vnat{x} is
 the representation of \Vz{x} in the canonical embedding from \naturals.
 The notation
@@ -2647,8 +2646,8 @@ $\V{subseq} = \Velement{s}{\Vnat{a}\ldots\Vnat{z}}$.
 
 Here are some examples of
 the sequence notation of
-\Rmref{subsequence-natural-range} and
-\Rmref{subsequence-integer-range}.
+\Rmref{slice-natural-range} and
+\Rmref{slice-integer-range}.
 Let
 \[
     \V{s} = \seq{1, 2, 3, 4, 5}.
@@ -2969,9 +2968,9 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 \myqed
 \end{proof}
 
-\begin{theorem}[Subsequence Pairs]
-\label{th:subsequence-pairs}
-The pairs of a subsequence are a subset of
+\begin{theorem}[Slice Pairs]
+\label{th:slice-pairs}
+The pairs of a slice are a subset of
 the pairs of the containing sequence.
 More precisely,
 let \V{V} be a placeholder
@@ -2995,23 +2994,23 @@ Then
 
 \begin{proof}
 The proof is by reductio.
-We assume the existence of a pair for a subsequence,
+We assume the existence of a pair for a slice,
 \V{subseq},
 that is not an element of the pairs for its containing
 sequence, \V{seq}.
 \begin{gather}
-    \label{eq:th-subsequence-pairs-100}
+    \label{eq:th-slice-pairs-100}
     \left( \begin{gathered}
         \exists\; \Vnat{offset} :
             \forall\; \V{ix} \in \Dom{\V{subseq}} :
         \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
             \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
     \end{gathered} \right)
-    \\ \label{eq:th-subsequence-pairs-105}
+    \\ \label{eq:th-slice-pairs-105}
         \land\; \V{pair} \in \V{V}\times\V{V}
-    \\ \label{eq:th-subsequence-pairs-110}
+    \\ \label{eq:th-slice-pairs-110}
         \land\; \V{pair} \in \Pairs{\V{subseq}}
-    \\ \label{eq:th-subsequence-pairs-120}
+    \\ \label{eq:th-slice-pairs-120}
         \land\; \V{pair} \notin \Pairs{\V{seq}}
     \\ \nonumber \myparbox{\cuz{}
         AF reductio; ARB \V{pair};
@@ -3019,67 +3018,67 @@ sequence, \V{seq}.
         ARB $\V{subseq} \in \V{V}\exxpOp\naturals$.}
 \end{gather}
 \begin{gather}
-\label{eq:th-subsequence-pairs-130}
+\label{eq:th-slice-pairs-130}
     \begin{gathered}
             \forall\; \V{ix} \in \Dom{\V{subseq}} :
         \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
             \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
     \end{gathered}
     \\ \nonumber \myparbox{\cuz{}
-        \Eref{eq:th-subsequence-pairs-100}, EI of \V{offset}; ARB \Vnat{offset}.}
+        \Eref{eq:th-slice-pairs-100}, EI of \V{offset}; ARB \Vnat{offset}.}
 \end{gather}
 \begin{equation}
-\label{eq:th-subsequence-pairs-140}
+\label{eq:th-slice-pairs-140}
 \begin{gathered}
     \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{subseq}
     \\ \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
     \\ \myparbox{\cuz{}
         \longThref{Sequence Pairs Set}{sequence-pairs-set},
-        \Eref{eq:th-subsequence-pairs-110}.}
+        \Eref{eq:th-slice-pairs-110}.}
 \end{gathered}
 \end{equation}
 \begin{gather}
-\label{eq:th-subsequence-pairs-150}
+\label{eq:th-slice-pairs-150}
     \Vnat{i} + 1 < \Vsize{subseq}
-\\ \label{eq:th-subsequence-pairs-160}
+\\ \label{eq:th-slice-pairs-160}
     \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
 \\ \nonumber \myparbox{\cuz{}
-        \Eref{eq:th-subsequence-pairs-140}, EI of \Vnat{i}; ARB \Vnat{i}.}
+        \Eref{eq:th-slice-pairs-140}, EI of \Vnat{i}; ARB \Vnat{i}.}
 \end{gather}
-\mypareq{eq:th-subsequence-pairs-170}{%
+\mypareq{eq:th-slice-pairs-170}{%
     $\forall\;\Vnat{x} :
         \Vnat{x} \in \Dom{\V{subseq}} \iff \V{x} < \Vsize{subseq}$
         \cuz{} \text{ZF.}}
-\mypareq{eq:th-subsequence-pairs-180}{%
-    $\Vnat{i} + 1 \in \Dom{\V{subseq}}$ \cuz{} \Eref{eq:th-subsequence-pairs-150},
-        \Eref{eq:th-subsequence-pairs-170}.}
-\mypareq{eq:th-subsequence-pairs-190}{%
+\mypareq{eq:th-slice-pairs-180}{%
+    $\Vnat{i} + 1 \in \Dom{\V{subseq}}$ \cuz{} \Eref{eq:th-slice-pairs-150},
+        \Eref{eq:th-slice-pairs-170}.}
+\mypareq{eq:th-slice-pairs-190}{%
     $\Vnat{offset} + \Vnat{i} + 1 \in \Dom{\V{seq}}$
-    \cuz{} \Eref{eq:th-subsequence-pairs-130}, \Eref{eq:th-subsequence-pairs-180}.}
-\mypareq{eq:th-subsequence-pairs-195}{%
-    $\Vnat{offset} + \Vnat{i} + 1 < \Vsize{seq}$ \cuz{} \Eref{eq:th-subsequence-pairs-190}.}
-\mypareq{eq:th-subsequence-pairs-200}{%
+    \cuz{} \Eref{eq:th-slice-pairs-130}, \Eref{eq:th-slice-pairs-180}.}
+\mypareq{eq:th-slice-pairs-195}{%
+    $\Vnat{offset} + \Vnat{i} + 1 < \Vsize{seq}$ \cuz{} \Eref{eq:th-slice-pairs-190}.}
+\mypareq{eq:th-slice-pairs-200}{%
     $\V{pair} = \tuple{\Velement{seq}{\V{offset}+\V{i}}, \Velement{seq}{\V{offset}+\V{i}+1}}$
-        \bcuz{} \Eref{eq:th-subsequence-pairs-130},
-            \Eref{eq:th-subsequence-pairs-180}.}
+        \bcuz{} \Eref{eq:th-slice-pairs-130},
+            \Eref{eq:th-slice-pairs-180}.}
 \begin{equation}
-\label{eq:th-subsequence-pairs-210}
+\label{eq:th-slice-pairs-210}
 \begin{gathered}
     \exists\; \Vnat{j} : \Vnat{j} + 1 < \Vsize{subseq}
     \\ \land\; \V{pair} = \tuple{\VVelement{subseq}{j}, \VVelement{subseq}{\V{j}+1}}
     \\ \myparbox{\cuz{}
-        EG of \Eref{eq:th-subsequence-pairs-195} and
-            \Eref{eq:th-subsequence-pairs-200} with bound \V{j} for
+        EG of \Eref{eq:th-slice-pairs-195} and
+            \Eref{eq:th-slice-pairs-200} with bound \V{j} for
             \V{offset} + \V{i}.}
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-subsequence-pairs-220}{%
+\mypareq{eq:th-slice-pairs-220}{%
         $\V{pair} \in \Pairs{\V{seq}}$ \bcuz{}
         \longThref{Sequence Pairs Set}{sequence-pairs-set},
-        \Eref{eq:th-subsequence-pairs-105},
-        \Eref{eq:th-subsequence-pairs-210}.}
-Equation \Eref{eq:th-subsequence-pairs-220} is
-contrary to \Eref{eq:th-subsequence-pairs-120} which
+        \Eref{eq:th-slice-pairs-105},
+        \Eref{eq:th-slice-pairs-210}.}
+Equation \Eref{eq:th-slice-pairs-220} is
+contrary to \Eref{eq:th-slice-pairs-120} which
 shows the reductio and therefore the current theorem.
 \todo{Recheck this}
 \myqed
@@ -3442,7 +3441,7 @@ followed by the unique existential generalization of \V{duple}.
 \label{def:subpath}
 Let \V{p} be a path in \V{G}.
 A sequence is a \dfn{subpath} of \V{p}
-iff it is a subsequence of \V{p}.
+iff it is a slice of \V{p}.
 A subpath of \V{p} is a \dfn{proper subpath} of
 \V{p} iff it is not equal to \V{p}.
 The triple of path \V{p}, start location \Vnat{lo}
@@ -6963,7 +6962,7 @@ every trivial path is a unary path.
 
 \begin{theorem}[Unary Subpath]
 \label{th:unary-subpath}
-Every subsequence of a unary path in the graph
+Every slice of a unary path in the graph
 $\V{G} = \tuple{\V{V}, \V{E}}$
 is a unary path in \V{G}.
 That is,
@@ -6983,7 +6982,7 @@ That is,
 The proof is direct.
 Let $\V{G} = \tuple{\V{V}, \V{E}}$ be a graph,
 let \Rvarseq{p}{V} be a unary path in \V{G},
-and let \Rvarseq{subp}{V} be a subsequence of \V{p}:
+and let \Rvarseq{subp}{V} be a slice of \V{p}:
 \mypareq{eq:th-unary-subpath-100}{%
     $\Rvarseq{up}{V} \in \Vmyfn{Upaths}{G}$ \cuz{} New free \Rvarseq{up}{V}.}
 \mypareq{eq:th-unary-subpath-110}{%
@@ -7313,7 +7312,7 @@ Let $\V{alphabet}^+$ be
 A string can be seen as sequence of symbols,
 and we use sequence index
 to represent individual symbols of a string,
-and subsequence notation
+and slice notation
 to represent substrings.
 Thus,
 the \V{i}'th character of the string,
@@ -10678,20 +10677,20 @@ The theorem is
 \myqed
 \end{proof}
 
-\begin{theorem}[LES subsequence]
-\label{th:les-subsequence}
-Every subsequence of an \realm{LES} is an \realm{LES}.
+\begin{theorem}[LES slice]
+\label{th:les-slice}
+Every slice of an \realm{LES} is an \realm{LES}.
 That is,
 \begin{gather}
-\label{eq:th-les-subsequence-02}
+\label{eq:th-les-slice-02}
 \V{seq} \in \realm{LES}
-\\ \label{eq:th-les-subsequence-04}
+\\ \label{eq:th-les-slice-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
-\\ \label{eq:th-les-subsequence-06}
+\\ \label{eq:th-les-slice-06}
 \land \; \V{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \\ \nonumber
 \implies
-\\ \label{eq:th-les-subsequence-08}
+\\ \label{eq:th-les-slice-08}
 \V{subseq} \in \realm{LES}.
 \quad \thEnd
 \end{gather}
@@ -10700,18 +10699,18 @@ That is,
 \begin{proof}
 The proof is direct, assuming the hypothesis of
 the theorem to show the conclusion.
-\mypareq{eq:th-les-subsequence-10}{%
+\mypareq{eq:th-les-slice-10}{%
    \Vles{seq} is an \realm{EIM} sequence \linebreak
    \cuz{} \longDfref{LES}{def:next-eligible-sequence},
-    \Eref{eq:th-les-subsequence-02}.%
+    \Eref{eq:th-les-slice-02}.%
 }
-\mypareq{eq:th-les-subsequence-12}{%
+\mypareq{eq:th-les-slice-12}{%
    \Vles{subseq} is an \realm{EIM} sequence \linebreak
-   \cuz{} \Eref{eq:th-les-subsequence-06},
-    \Eref{eq:th-les-subsequence-10}.
+   \cuz{} \Eref{eq:th-les-slice-06},
+    \Eref{eq:th-les-slice-10}.
 }
 \begin{equation}
-\label{eq:th-les-subsequence-14}
+\label{eq:th-les-slice-14}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{seq}} :
    \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
@@ -10719,39 +10718,39 @@ the theorem to show the conclusion.
        \V{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
    \\ \because \longDfref{LES}{def:next-eligible-sequence},
-    \Eref{eq:th-les-subsequence-02}.
+    \Eref{eq:th-les-slice-02}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-les-subsequence-16}
+\label{eq:th-les-slice-16}
 \begin{gathered}
    \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \V{a} \le \V{ii} \le \V{b} }
    \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
-    \\ \because \Eref{eq:th-les-subsequence-04},
-    \Eref{eq:th-les-subsequence-14}.
+    \\ \because \Eref{eq:th-les-slice-04},
+    \Eref{eq:th-les-slice-14}.
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-les-subsequence-18}{%
+\mypareq{eq:th-les-slice-18}{%
     $\forall \; \V{i} : \V{i} < \V{b} \implies \V{i} < \Vlastix{seq}$
-        \cuz{} \Eref{eq:th-les-subsequence-04}.
+        \cuz{} \Eref{eq:th-les-slice-04}.
 }
 \begin{equation}
-\label{eq:th-les-subsequence-20}
+\label{eq:th-les-slice-20}
 \begin{gathered}
    \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \V{a} \le \V{ii} \le \V{b} }
    \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
    \\ \land \; \left(
        \V{i} < \V{b} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
-    \\ \because \Eref{eq:th-les-subsequence-16},
-    \Eref{eq:th-les-subsequence-18}.
+    \\ \because \Eref{eq:th-les-slice-16},
+    \Eref{eq:th-les-slice-18}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-les-subsequence-30}
+\label{eq:th-les-slice-30}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{subseq}} :
    \\ \Valid{\VVelement{subseq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{subseq}{i}}
@@ -10761,18 +10760,18 @@ the theorem to show the conclusion.
        \\ \myfn{Next-Eligible}{\Velement{subseq}{\V{i}+1}, \VVelement{subseq}{i}}
        \end{gathered}
    \right)
-    \\ \because \Eref{eq:th-les-subsequence-06},
-        \Eref{eq:th-les-subsequence-20}.
+    \\ \because \Eref{eq:th-les-slice-06},
+        \Eref{eq:th-les-slice-20}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-les-subsequence-40}
+\label{eq:th-les-slice-40}
 \V{subseq} \in \realm{LES}
   \because \longDfref{LES}{def:next-eligible-sequence},
-   \Eref{eq:th-les-subsequence-12},
-   \Eref{eq:th-les-subsequence-30}.
+   \Eref{eq:th-les-slice-12},
+   \Eref{eq:th-les-slice-30}.
 \end{equation}
-\Eref{eq:th-les-subsequence-40} is the conclusion
+\Eref{eq:th-les-slice-40} is the conclusion
 of this theorem.
 \myqed
 \end{proof}
@@ -10807,8 +10806,8 @@ we assume
 to show
 \Eref{eq:th-les-extension-04}--\Eref{eq:th-les-extension-07}.
 Equation \Eref{eq:th-les-extension-04} follows via
-the ``\realm{LES} subsequence'' theorem
-\Thref{les-subsequence}.
+the ``\realm{LES} slice'' theorem
+\Thref{les-slice}.
 Equations \Eref{eq:th-les-extension-05}--\Eref{eq:th-les-extension-07}
 follow immediately from the definition of \realm{LES} \Dfref{def:next-eligible-sequence}.
 
@@ -11409,7 +11408,7 @@ to show \myfn{INDH}{\V{n}+1}.
 }
 \mypareq{eq:th-les-unit-derivation-38}{%
     $\Vles{pre} = \family{\Velement{lesP}{0} \ldots \Velement{lesP}{\V{n}+2}}$
-    \linebreak \cuz{} \longThref{LES subsequence}{les-subsequence},
+    \linebreak \cuz{} \longThref{LES slice}{les-slice},
     \Eref{eq:th-les-unit-derivation-32};
     new \Vles{pre} for convenience.
 }
@@ -11627,7 +11626,7 @@ Let \Vles{les1} be the prefix of \var{les} such that
 \begin{equation}
 \label{eq:th-les-finiteness-22}
 \Vles{les1} = \Velement{les}{0\ldots \var{z}}
-    \because \longThref{LES subsequence}{les-subsequence},
+    \because \longThref{LES slice}{les-slice},
         \Eref{eq:th-les-finiteness-20}.
 \end{equation}
 \begin{equation}
@@ -11667,7 +11666,7 @@ We let \var{run} be a new \realm{LES}:
 \begin{equation}
 \label{eq:th-les-finiteness-28}
 \Vles{run} = \Velement{les1}{\var{a}\ldots \var{z}}
-    \because \Thref{les-subsequence},
+    \because \Thref{les-slice},
         \Eref{eq:th-les-finiteness-22},
         \Eref{eq:th-les-finiteness-24a}.
 \end{equation}
@@ -11769,7 +11768,7 @@ Let
 \begin{gathered}
 \Vles{cycle} = \Velement{run}{\var{aa}\ldots \var{zz}+1}
     \\ \myparbox{\cuz{}
-        \longThref{LES subsequence}{les-subsequence},
+        \longThref{LES slice}{les-slice},
         \Eref{eq:th-les-finiteness-28},
         \Eref{eq:th-les-finiteness-37},
         \Eref{eq:th-les-finiteness-38}.
@@ -12002,7 +12001,7 @@ It remains to show the forward direction.
 Let
 \mypareq{eq:th-les-prefix-20}{%
     $\Vles{subLes2} = \Velement{les2}{0\ldots \Vlastix{les1}}$
-    \linebreak \cuz{} \longThref{LES subsequence}{les-subsequence},
+    \linebreak \cuz{} \longThref{LES slice}{les-slice},
        antecedent of forward direction
            \Eref{eq:th-les-prefix-02}--\Eref{eq:th-les-prefix-06},
            new \Vles{subLes2} for convenience.
@@ -12668,61 +12667,61 @@ of the the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[LSS subsequence]
-\label{th:lss-subsequence}
-Every subsequence of an \realm{LSS} is an \realm{LSS}.
+\begin{theorem}[LSS slice]
+\label{th:lss-slice}
+Every slice of an \realm{LSS} is an \realm{LSS}.
 That is, if
 \begin{gather}
-\label{eq:th-lss-subsequence-02}
+\label{eq:th-lss-slice-02}
 \var{seq} \in \realm{LSS}
-\\ \label{eq:th-lss-subsequence-04}
+\\ \label{eq:th-lss-slice-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
-\\ \label{eq:th-lss-subsequence-06}
+\\ \label{eq:th-lss-slice-06}
 \land \; \var{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \end{gather}
 then
 \begin{gather}
-\label{eq:th-lss-subsequence-08}
+\label{eq:th-lss-slice-08}
 \var{subseq} \in \realm{LSS}. \quad \thEnd
 \end{gather}
 \end{theorem}
 
 \begin{proof}
-\mypareq{eq:th-lss-subsequence-10}{%
+\mypareq{eq:th-lss-slice-10}{%
    $\var{seq} \in \realm{LES}$
         \cuz{} \longDfref{LSS}{def:lss},
-        \Eref{eq:th-lss-subsequence-02}.%
+        \Eref{eq:th-lss-slice-02}.%
 }
-\mypareq{eq:th-lss-subsequence-12}{%
+\mypareq{eq:th-lss-slice-12}{%
    $\var{subseq} \in \realm{LES}$
-        \cuz{} \longThref{LES subsequence}{les-subsequence},
-        \Eref{eq:th-lss-subsequence-04},
-        \Eref{eq:th-lss-subsequence-06},
-        \Eref{eq:th-lss-subsequence-10}.%
+        \cuz{} \longThref{LES slice}{les-slice},
+        \Eref{eq:th-lss-slice-04},
+        \Eref{eq:th-lss-slice-06},
+        \Eref{eq:th-lss-slice-10}.%
 }
 \begin{equation}
-\label{eq:th-lss-subsequence-20}
+\label{eq:th-lss-slice-20}
 \begin{gathered}
     \forall \; \Vnat{i} \in \Dom{\var{seq}} :
         \size{\myfn{lims}{\VVelement{seq}{i}}} > 0
     \\ \because \longDfref{LSS}{def:lss},
-        \Eref{eq:th-lss-subsequence-02}.
+        \Eref{eq:th-lss-slice-02}.
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:th-lss-subsequence-22}
+\label{eq:th-lss-slice-22}
 \begin{gathered}
     \forall \; \Vnat{i} \in \Dom{\var{subseq}} :
         \size{\myfn{lims}{\VVelement{subseq}{i}}} > 0
-    \\ \because \Eref{eq:th-lss-subsequence-06},
-        \Eref{eq:th-lss-subsequence-20}.
+    \\ \because \Eref{eq:th-lss-slice-06},
+        \Eref{eq:th-lss-slice-20}.
 \end{gathered}
 \end{equation}
-\mypareq{eq:th-lss-subsequence-24}{%
+\mypareq{eq:th-lss-slice-24}{%
    $\var{subseq} \in \realm{LSS}$
         \cuz{} \Dfref{def:lss},
-        \Eref{eq:th-lss-subsequence-12},
-        \Eref{eq:th-lss-subsequence-22}. \quad \myqed
+        \Eref{eq:th-lss-slice-12},
+        \Eref{eq:th-lss-slice-22}. \quad \myqed
 }
 \end{proof}
 
@@ -12943,7 +12942,7 @@ It remains to show the forward direction.
 Let
 \mypareq{eq:th-lss-prefix-20}{%
     $\Vlss{subLss2} = \Velement{lss2}{0\ldots \Vlastix{lss1}}$
-    \linebreak \cuz{} \longThref{LSS subsequence}{lss-subsequence},
+    \linebreak \cuz{} \longThref{LSS slice}{lss-slice},
        antecedent of forward direction
            \Eref{eq:th-lss-prefix-02}--\Eref{eq:th-lss-prefix-06},
            new \Vlss{subLss2} for convenience.
@@ -13790,7 +13789,7 @@ to show \myfn{INDH}{\var{n}+1}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-48}{%
     $\Vlss{suffix} = \Velement{max}{1\ldots \Vlastix{max}}$
-    \cuz{} \longThref{LSS subsequence}{lss-subsequence},
+    \cuz{} \longThref{LSS slice}{lss-slice},
         \Eref{eq:th-maximal-lss-lim-invariant-42},
         \Eref{eq:th-maximal-lss-lim-invariant-46},
         new \Vlss{suffix} for convenience.
