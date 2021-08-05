@@ -2363,7 +2363,8 @@ There are occasions when the range of a function
 is deemed to be more important than the function itself.
 When that is the case, both the terminology
 and the notation undergo radical alterations.}
-{{\em Naive Set Theory}, Halmos\cite[p. 34]{Halmos1960}}
+{{\em Naive Set Theory},
+    \\ Halmos~\cite[p.~34]{Halmos1960}}
 \end{epigraph}
 
 We assume that we are familiar with
@@ -2385,6 +2386,14 @@ contained in the scope of that theoremoid.
 
 A sequence is a family (and therefore a function)
 whose domain is either a natural number or \naturals.
+In most of this book, we will only need finite sequences.
+But in this chapter, we want to be more general,
+and we allow sequences to be countably infinite.
+This means that codomain of the cardinality operator for sequences
+is the countable numbers.
+That is, where \V{seq} is a sequence,
+$\Vsize{seq} \in \naturals\cup\set{\naturals}$.
+
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}.
 \Cod{\V{seq}} is the set of valid values of \V{seq},
@@ -2392,14 +2401,6 @@ and \Ran{\V{seq}} is the set of actual values of \V{seq}.
 It is therefore always the case that
 $\V{seq} \in \Cod{\V{seq}} \expOp \Dom{\V{seq}}$,
 that $\Ran{\V{seq}} \subseteq \Cod{\V{seq}}$.
-
-In most of this book, we will only need finite sequences.
-But in this chapter, we want to be more general,
-and we allow sequences to be countable infinite.
-This means that codomain of the cardinality operator for sequences
-is the countable numbers.
-That is, where \V{seq} is a sequence,
-$\Vsize{seq} \in \naturals\cup\set{\naturals}$.
 
 Since a sequence is a function,
 we can repurpose function notations to deal with sequences.
@@ -2417,7 +2418,7 @@ whose codomain is \V{V}.
 
 Recall that we defined 0 as boolean false and
 1 as boolean true;
-and that therefore $2 = \set{0,1}$ as the set of boolean values.
+and that therefore $2 = \set{0,1}$ is the set of boolean values.
 This means that
 $2 \expOp \V{V}$ is the set of boolean functions whose domain
 is \V{V}.
@@ -2442,21 +2443,43 @@ A \dfn{sequence constructor}
 follows the form already described for
 use in quantification over the natural numbers \Rmref{naturals-quantification}.
 The following are examples of sequence constructors.
-Where \Vnat{hi} and the function \V{f}
+Where \Vnat{hi} and the function $\V{f} \in \V{V}\expOp\naturals$
 are bound in context,
-\begin{gather}
-\nonumber
-    \seq{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
-    = \seq{ \Vmyfn{f}{0},
-     \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}},
-\\ \nonumber
-    \seq{ \Vnat{ix} < 42 : \Vmyfn{f}{ix}+1 }
-    = \seq{ \Vmyfn{f}{1} \ldots \Vmyfn{f}{42} },
-\\ \nonumber
-    \text{and } \seq{ \Vnat{ix} : \Vmyfn{f}{ix}+1 }
-        = \seq{ \Vmyfn{f}{1}, \Vmyfn{f}{2}, \Vmyfn{f}{3}, \ldots }.
-\end{gather}
+\begin{gather*}
+    \begin{gathered}
+        \seq{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
+        \\ = \seq{ \Vmyfn{f}{0}, \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}}
+            \\ = \set{ \begin{gathered}
+                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
+                \\ \V{ix} \le \Vnat{hi} \land
+                \V{element} = \tuple {\V{ix}, \Vmyfn{f}{ix} }
+            \end{gathered} };
+    \end{gathered}
+\\[2ex]
+    \begin{gathered}
+        \seq{ \Vnat{ix} < 42 : \Vmyfn{f}{ix+1} }
+        \\ = \seq{ \Vmyfn{f}{1} \ldots \Vmyfn{f}{42} }
+            \\ = \set{ \begin{gathered}
+                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
+                \\ \V{ix} < 42 \land
+                \V{element} = \tuple {\V{ix}, \Vmyfn{f}{ix+1} }
+            \end{gathered} };
+    \end{gathered}
+\end{gather*}
+and
+\[
+    \begin{gathered}
+    \seq{ \Vnat{ix} : \Vmyfn{f}{ix+1} }
+    \\ = \seq{ \Vmyfn{f}{1}, \Vmyfn{f}{2}, \Vmyfn{f}{3}, \ldots }
+            \\ = \set{ \begin{gathered}
+                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
+                \V{element} = \tuple {\V{ix}, \Vmyfn{f}{ix+1} }
+            \end{gathered} },
+    \end{gathered}
+\]
 
+\begin{definition}[First and last sequence index]
+\label{def:last-index}
 Where \V{seq} is a non-empty sequence,
 the first element of \V{seq} is \Velement{seq}{0}.%
 \footnote{%
@@ -2470,15 +2493,11 @@ the first element of \V{seq} is \Velement{seq}{0}.%
    major theorems into an exercise.
    The notation used a subscript to a subscript, and
    much depended on whether the second level subscript was
-   the numeral 1 or the letter l.
-}
-
-\begin{definition}[Last sequence index]
-\label{def:last-index}
+   the numeral 1 or the letter l.}
 Where \V{seq} is a finite non-empty sequence,
 the last index is \Vlastix{seq},
 so that the last element is \Velement{seq}{\Vlastix{seq}}.
-This means that
+This means that, when \V{seq} is well-defined,
 $\Vlastix{seq} = \Vsize{seq}\subtractOp 1 = \decr{\Vsize{seq}}$.
 \defEnd
 \end{definition}
