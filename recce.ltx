@@ -386,11 +386,11 @@
 
 %% End of theoremoid section
 
-% I use hyphens in variable names,
-% so I need to ensure that subtraction is
+% I once used hyphens in variable names,
+% so I needed to ensure that subtraction was
 % clearly distinguished by the typography
 \newcommand{\subtractOp}{\mathbin{-}}
-\newcommand{\subtract}[2]{\ensuremath{#1\,\subtractOp\,#2}}
+\newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
 \newcommand{\expOp}{\mathbin{{\ast}{\ast}}}
 \newcommand{\exxpOp}{\mathbin{{\ast}{\ast}{\ast}}}
@@ -447,10 +447,10 @@
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
 \newcommand{\boldRange}[3]{\textbf{#1[#2 \ldots #3]}}
 \newcommand{\boldRangeDecr}[3]{\textbf{#1[#2 \ldots %
-\textbf{($\textbf{#3}\subtractOp 1$)}]}%
+\textbf{($\textbf{#3}-1$)}]}%
 }
 \newcommand{\boldRangeSizeDecr}[3]{\textbf{#1[#2 \ldots %
-\textbf{($\left|\textbf{#3}\right|\subtractOp 1$)}%
+\textbf{($\left|\textbf{#3}\right|-1$)}%
 ]} }
 
 % Because I use multi-character variables, I need special typography for them.
@@ -2248,7 +2248,7 @@ applies.
 \hline
 {$\times$} & \cellboxr{Multiplication} \\
 \hline
-{$+$} {$\subtractOp$} & \cellboxr{Addition, subtraction} \\
+{$+$} {$-$} & \cellboxr{Addition, subtraction} \\
 \hline
    {$\le$} {$<$}
    {$\ge$} {$>$}
@@ -2256,7 +2256,7 @@ applies.
    \hline
 {$\V{a} \cat \V{b}$} & \cellboxr{Concatenation of \V{b} after \V{a}} \\
 \hline
-{$\cup$ $\cap$ $\subtractOp$} & \cellboxr{Set union, intersection, difference} \\
+{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
 \hline
 {$\times$} & \cellboxr{Cartesian product of sets} \\
 \hline
@@ -2574,7 +2574,7 @@ Where \V{seq} is a finite non-empty sequence,
 the last index is \Vlastix{seq},
 so that the last element is \Velement{seq}{\Vlastix{seq}}.
 This means that, when \V{seq} is well-defined,
-$\Vlastix{seq} = \Vsize{seq}\subtractOp 1 = \decr{\Vsize{seq}}$.
+$\Vlastix{seq} = \Vdecr{seq} = \decr{\Vsize{seq}}$.
 \dfEnd
 \end{definition}
 
@@ -5553,7 +5553,7 @@ That is,
     \Vmyfn{gen}{\V{N}+1,\V{base}} =
     \\ \left( \myfn{Anc}{\V{N},\V{base}} \cup
             \myfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} \right)
-    \\ \subtractOp \, \myfn{Anc}{\V{N},\V{base}}
+    \\ - \, \myfn{Anc}{\V{N},\V{base}}
     \\ \because \Eref{eq:lem-generation-new-parent-equivalence-100},
         \Eref{eq:lem-generation-new-parent-equivalence-110}.
 \end{gathered}
@@ -8731,7 +8731,7 @@ then
 %
 & \Predot{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\RHS{\Vrule{x}}[\V{pos}\subtractOp 1], \; \text{if $\V{pos} > 0$} \\
+\RHS{\Vrule{x}}[\Vdecr{pos}], \; \text{if $\V{pos} > 0$} \\
 \Lambda, \; \text{otherwise}
 \end{cases} \\
 \label{eq:def-postdot}
@@ -8749,7 +8749,7 @@ then
 \label{eq:def-penult}
 & \Penult{\Vdr{x}} && \defined && \quad
 \begin{cases}
-\Postdot{\Vdr{x}}, \; \text{if $\V{pos} = \size{\Vrule{x}}\subtractOp 1$} \\
+\Postdot{\Vdr{x}}, \; \text{if $\V{pos} = \decr{\size{\Vrule{x}}}$} \\
 \Lambda, \quad \text{otherwise}
 \end{cases}
 %
@@ -8916,9 +8916,9 @@ iff
 \label{eq:eim-valid-22b}
 \Accept{\V{g}} \destar \Vstr{before} \Vsym{lhs} \Vstr{after}, \\
 \label{eq:eim-valid-22c}
-\Vstr{before} \destar \V{inp}[0  \ldots  (\V{i}\subtractOp 1)], \text{ and} \\
+\Vstr{before} \destar \V{inp}[0  \ldots  \Vdecr{i})], \text{ and} \\
 \label{eq:eim-valid-22d}
-\Vstr{rhs1} \destar \V{inp}[\V{i}  \ldots  (\V{j}\subtractOp 1)].
+\Vstr{rhs1} \destar \V{inp}[\V{i}  \ldots  (\Vdecr{j})].
 \end{gather}
 \Veim{x}
 is \dfn{useful}
@@ -9603,7 +9603,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \begin{equation}
 \label{eq:th-predictions-location-14}
 \begin{gathered}
-\Vstr{rhs1} \destar \V{inp}[\V{i}  \ldots  (\V{j}\subtractOp 1)]
+\Vstr{rhs1} \destar \V{inp}[\V{i}  \ldots  \Vdecr{j}]
 \\ \myparbox{\cuz{}
     \Eref{eq:eim-valid-22d} in \longDfref{EIM validity}{def:eim-validity},
     \Eref{eq:th-predictions-location-10-90},
@@ -9613,7 +9613,7 @@ $\Vstr{rhs1} = \epsilon$ \cuz{} \longDfref{prediction}{def:prediction},
 \end{equation}
 \begin{equation}
 \label{eq:th-predictions-location-16}
-\V{inp}[\V{i}  \ldots  (\V{j}\subtractOp 1)] = \epsilon
+\V{inp}[\V{i}  \ldots  \Vdecr{j}] = \epsilon
 \because
 \Eref{eq:th-predictions-location-12},
 \Eref{eq:th-predictions-location-14}.
@@ -10886,10 +10886,10 @@ to show
 \begin{equation}
 \label{eq:th-les-extension-14}
 \begin{gathered}
-   \forall \; \Vnat{i} \in (\Dom{\V{ext}} \subtractOp \set{\Vlastix{ext}}) :
+   \forall \; \Vnat{i} \in (\Dom{\V{ext}} - \set{\Vlastix{ext}}) :
    \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
-       \V{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{NextEligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
+       \V{i} < \decr{\Vlastix{ext}} \implies \myfn{NextEligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
    \right)
    \\ \because \Eref{eq:th-les-extension-10},
     \Eref{eq:th-les-extension-12}.
@@ -10915,7 +10915,7 @@ to show
    \forall \; \Vnat{i} \in \Dom{\V{ext}} :
    \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
-       \V{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{NextEligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
+       \V{i} < \decr{\Vlastix{ext}} \implies \myfn{NextEligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
    \right)
    \\ \because \longDfref{LES}{def:next-eligible-sequence},
     \Eref{eq:th-les-extension-14},
@@ -10928,7 +10928,7 @@ to show
     \cuz{} \Eref{eq:th-les-extension-07}, \Eref{eq:th-les-extension-16}.
 }
 \mypareq{eq:th-les-extension-26}{%
-    $\myfn{NextEligible}{\Velement{ext}{\Vlastix{ext}},\Velement{ext}{\Vlastix{ext}\subtractOp 1}}$
+    $\myfn{NextEligible}{\Velement{ext}{\Vlastix{ext}},\Velement{ext}{\decr{\Vlastix{ext}}}}$
     \cuz{} \Eref{eq:th-les-extension-12}, \Eref{eq:th-les-extension-24}.
 }
 \begin{equation}
@@ -10962,7 +10962,7 @@ is less than or equal to the current location of \V{prev}.
 That is, if
 \[
 \V{les} \in \realm{LES}
-\land \; \Vnat{i} \le (\Vlastix{les}\subtractOp 1)
+\land \; \Vnat{i} \le \decr{\Vlastix{les}}
 \]
 then
 \[
@@ -11288,7 +11288,7 @@ symbol of its first element. That is, if
 then
 \begin{equation}
     \label{eq:th-les-unit-derivation-08}
-    \Symbol{\Velement{les}{\Vlastix{les}\subtractOp 1}} \deplus
+    \Symbol{\Velement{les}{\decr{\Vlastix{les}}}} \deplus
     \Symbol{\Velement{les}{0}}.
     \quad \thEnd
 \end{equation}
@@ -11311,7 +11311,7 @@ The induction hypothesis is
         \Current{\Velement{ines}{\Vlastix{ines}}}
         \end{gathered}
     } :
-    \\ \Symbol{\Velement{ines}{\Vlastix{ines}\subtractOp 1}} \deplus
+    \\ \Symbol{\Velement{ines}{\decr{\Vlastix{ines}}}} \deplus
     \Symbol{\Velement{ines}{0}}.
 \end{gathered}
 \end{equation}
@@ -11362,7 +11362,7 @@ showing it directly.
         \longThref{LES rule}{next-eligible-rule}.
 }
 \mypareq{eq:th-les-unit-derivation-24}{%
-    $\Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOp 1}} \deplus
+    $\Symbol{\Velement{lesB}{\decr{\Vlastix{lesB}}}} \deplus
         \Symbol{\Velement{lesB}{0}}$
     \linebreak \cuz{} \Eref{eq:th-les-unit-derivation-12},
         \Eref{eq:th-les-unit-derivation-22}.
@@ -11373,7 +11373,7 @@ showing it directly.
     \size{\Vles{lesB}} = 3 \land
     \Current{\Velement{lesB}{\Vlastix{lesB}}}
         = \Current{\Velement{lesB}{0}}
-    \\ \implies \Symbol{\Velement{lesB}{\Vlastix{lesB}\subtractOp 1}} \deplus
+    \\ \implies \Symbol{\Velement{lesB}{\decr{\Vlastix{lesB}}}} \deplus
         \Symbol{\Velement{lesB}{0}}
     \\ \myparbox{\cuz{}
         derivation \Eref{eq:th-les-unit-derivation-11}--%
