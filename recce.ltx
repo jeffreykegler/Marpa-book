@@ -547,22 +547,22 @@
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
 \newcommand{\Current}[1]{\ensuremath{\mymathop{Current}(#1)}}
 \newcommand{\DotPos}[1]{\ensuremath{\mymathop{DotPos}(#1)}}
-\newcommand{\DottedRules}[1]{\ensuremath{\mymathop{Dotted-Rules}(#1)}}
+\newcommand{\DottedRules}[1]{\ensuremath{\mymathop{DottedRules}(#1)}}
 \newcommand{\DR}[1]{\ensuremath{\mymathop{DR}(#1)}}
 \newcommand{\GOTO}{\ensuremath{\mymathop{GOTO}}}
 \newcommand{\ID}[1]{\ensuremath{\mymathop{ID}(#1)}}
 \newcommand{\Invocs}[1]{\ensuremath{\mymathop{Invocs}(#1)}}
-\newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{Leo-Eligible}(#1)}}
-\newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{Leo-Unique}(#1)}}
+\newcommand{\LeoEligible}[1]{\ensuremath{\mymathop{LeoEligible}(#1)}}
+\newcommand{\LeoUnique}[1]{\ensuremath{\mymathop{LeoUnique}(#1)}}
 \newcommand{\LHS}[1]{\ensuremath{\mymathop{LHS}(#1)}}
 \newcommand{\Lim}[1]{\ensuremath{\mymathop{Lim}(#1)}}
-\newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIM-Predecessor}(#1)}}
-\newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{Link-Pairs}(#1)}}
+\newcommand{\LIMPredecessor}[1]{\ensuremath{\mymathop{LIMPredecessor}(#1)}}
+\newcommand{\LinkPairs}[1]{\ensuremath{\mymathop{LinkPairs}(#1)}}
 \newcommand{\Matches}[1]{\ensuremath{\mymathop{Matches}(#1)}}
 \newcommand{\Maximal}[1]{\ensuremath{\mymathop{Maximal}(#1)}}
 \newcommand{\myL}[1]{\ensuremath{\mymathop{L}(#1)}}
 \newcommand{\Next}[1]{\ensuremath{\mymathop{Next}(#1)}}
-\newcommand{\NextSource}[1]{\ensuremath{\mymathop{Next-Source}(#1)}}
+\newcommand{\NextSource}[1]{\ensuremath{\mymathop{NextSource}(#1)}}
 \newcommand{\NT}[1]{\ensuremath{\mymathop{NT}(#1)}}
 \newcommand{\Origin}[1]{\ensuremath{\mymathop{Origin}(#1)}}
 \newcommand{\Passes}[1]{\ensuremath{\mymathop{Passes}(#1)}}
@@ -572,13 +572,13 @@
 \newcommand{\Predecessor}[1]{\ensuremath{\mymathop{Predecessor}(#1)}}
 \newcommand{\Predict}[1]{\ensuremath{\mymathop{Predict}(#1)}}
 \newcommand{\Predot}[1]{\ensuremath{\mymathop{Predot}(#1)}}
-\newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{Previous-Link}(#1)}}
+\newcommand{\PreviousLink}[1]{\ensuremath{\mymathop{PreviousLink}(#1)}}
 \newcommand{\PrPfx}[1]{\ensuremath{\mymathop{PrPfx}(#1)}}
 \newcommand{\PrSfx}[1]{\ensuremath{\mymathop{PrSfx}(#1)}}
 \newcommand{\PSL}[2]{\ensuremath{\mymathop{PSL}[#1][#2]}}
 \newcommand{\RHS}[1]{\ensuremath{\mymathop{RHS}(#1)}}
 \newcommand{\Rightmost}[1]{\ensuremath{\bigfn{Rightmost}{#1}}}
-\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{Right-Recursive}(#1)}}
+\newcommand{\RightRecursive}[1]{\ensuremath{\mymathop{RightRecursive}(#1)}}
 \newcommand{\Rule}[1]{\ensuremath{\mymathop{Rule}(#1)}}
 \newcommand{\Rules}[1]{\ensuremath{\mymathop{Rules}(#1)}}
 \newcommand{\Seen}[1]{\ensuremath{\mymathop{Seen}(#1)}}
@@ -8458,11 +8458,11 @@ where \Vint{g} is a rewrite of \Vext{g},
 \item \V{Btree} be the brick tree
 produced from \V{Itree}.
 \end{itemize}
-Let \V{Instance-matches} be the relation defined by
+Let \V{InstanceMatches} be the relation defined by
 the equality of symbol instances
 in \V{Btree} and \V{Etree}:
 \begin{equation*}
-\V{Instance-matches} \; \defined \;
+\V{InstanceMatches} \; \defined \;
 \left\lbrace
 \begin{gathered}
 [ \V{Enode}, \V{Bnode} ] : \\
@@ -8476,7 +8476,7 @@ in \V{Btree} and \V{Etree}:
 \end{equation*}
 
 A rewrite is \dfn{semantics-safe}, iff
-\V{Instance-matches}
+\V{InstanceMatches}
 is a one-to-one correspondence
 (bijection). \dfEnd{}
 \end{definition}
@@ -8714,7 +8714,7 @@ The size of a grammar, \Vsize{\V{g}} is
 the number of distinct dotted rules it allows.
 That is,
 \[
-\size{\Vcfg{g}} = \size{\V{Dotted-Rules}[\V{g}]}.
+\size{\Vcfg{g}} = \size{\DottedRules{\V{g}}}.
 \]
 \end{definition}
 
@@ -10128,21 +10128,21 @@ $\Veim{uniq} \in \LeoUnique{\VVelement{S}{j}}$.
 and
 \begin{equation*}
 \label{eq:def-is-leo-eligible}
-\myfn{Is-Leo-Eligible}{\Veim{x}} \defined \\
+\myfn{IsLeoEligible}{\Veim{x}} \defined \\
 \exists \; \Vloc{i} : \Veim{x} \in \LeoEligible{\V{i}}.
 \end{equation*}
 We say that
 an \realm{EIM} \Veim{eligible}
 is \dfn{Leo eligible}
 iff
-\myfn{Is-Leo-Eligible}{\V{eligible}}.
+\myfn{IsLeoEligible}{\V{eligible}}.
 \dfEnd{}
 \end{definition}
 
 \begin{theorem}[Leo eligible location]
 \label{th:leo-eligible-location}
 \[
-\myfn{Is-Leo-Eligible}{\Veim{x}} \iff
+\myfn{IsLeoEligible}{\Veim{x}} \iff
 \Veim{x} \in \LeoEligible{\Current{\V{x}}}.
 \quad \thEnd
 \]
@@ -10154,7 +10154,7 @@ show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-10}
 \myparbox{%
-    $\myfn{Is-Leo-Eligible}{\Veim{x}}$ \cuz{}
+    $\myfn{IsLeoEligible}{\Veim{x}}$ \cuz{}
     AF forward direction.
 }
 \end{equation}
@@ -10164,7 +10164,7 @@ show the consequent.
    $\exists \; \Vloc{i} : \Veim{x} \in \LeoEligible{\V{i}}$
    \linebreak
    \cuz{}
-       \longDfref{\V{Is-Leo-Eligible}}{def:leo-eligible},
+       \longDfref{\V{IsLeoEligible}}{def:leo-eligible},
        \Eref{eq:th-leo-eligible-location-10}.%
 }
 \end{equation}
@@ -10228,9 +10228,9 @@ to show the consequent.
 \begin{equation}
 \label{eq:th-leo-eligible-location-34}
 \myparbox{%
-   \myfn{Is-Leo-Eligible}{\Veim{x}}
+   \myfn{IsLeoEligible}{\Veim{x}}
    \linebreak \cuz{}
-       \longDfref{\V{Is-Leo-Eligible}}{def:leo-eligible},
+       \longDfref{\V{IsLeoEligible}}{def:leo-eligible},
        \Eref{eq:th-leo-eligible-location-32}.%
 }
 \end{equation}
@@ -10246,7 +10246,7 @@ the reverse direction.
 Every Leo eligible \realm{EIM} is a penult.  That is,
 \label{th:leo-eligible-penult}
 \[
-  \myfn{Is-Leo-Eligible}{\Veim{x}} \implies \Penult{\V{x}}.
+  \myfn{IsLeoEligible}{\Veim{x}} \implies \Penult{\V{x}}.
   \quad \thEnd
 \]
 \end{theorem}
@@ -10258,7 +10258,7 @@ show the conclusion.
 \begin{equation}
 \label{eq:th-leo-eligible-penult-10}
 \myparbox{%
-    $\myfn{Is-Leo-Eligible}{\Veim{x}}$ \cuz{}
+    $\myfn{IsLeoEligible}{\Veim{x}}$ \cuz{}
     hypothesis of theorem.
 }
 \end{equation}
@@ -10268,7 +10268,7 @@ show the conclusion.
    $\exists \; \Vloc{i} : \Veim{x} \in \LeoEligible{\V{i}}$
    \linebreak
    \cuz{}
-       \longDfref{\V{Is-Leo-Eligible}}{def:leo-eligible},
+       \longDfref{\V{IsLeoEligible}}{def:leo-eligible},
        \Eref{eq:th-leo-eligible-penult-10}.%
 }
 \end{equation}
@@ -10307,7 +10307,7 @@ with that postdot symbol.
 That is, if
 \begin{gather}
   \label{eq:th-leo-eligible-postdot-uniqueness-02}
-    \myfn{Is-Leo-Eligible}{\Veim{x}} \\
+    \myfn{IsLeoEligible}{\Veim{x}} \\
   \label{eq:th-leo-eligible-postdot-uniqueness-04}
     \land \; \Current{\V{x}} = \Current{\Veim{y}} \\
   \label{eq:th-leo-eligible-postdot-uniqueness-06}
@@ -10392,7 +10392,7 @@ That is,
 \\ \size{
    \set{
             \Veim{x} \in \Velement{S}{\V{j}} :
-    \myfn{Is-Leo-Eligible}{\V{x}}
+    \myfn{IsLeoEligible}{\V{x}}
    }
 }
 \le \size{\Vocab{\Vint{g}}}.
@@ -10423,7 +10423,7 @@ $\size{\Vocab{\V{g}}}$.
 \begin{gathered}
 \myfn{Next-Eligible}{\Veim{next},\Veim{prev}} \\
 \defined \; \Matches{\V{next},\V{prev}} \\
-\land \; \myfn{Is-Leo-Eligible}{\V{next}} \land \myfn{Is-Leo-Eligible}{\V{prev}}.
+\land \; \myfn{IsLeoEligible}{\V{next}} \land \myfn{IsLeoEligible}{\V{prev}}.
 \end{gathered}
 \]
 We say that \Veim{next} is the \dfn{next Leo eligible \realm{EIM}},
@@ -10519,7 +10519,7 @@ We assume the hypothesis of the theorem to show the conclusion.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-next-eligible-uniqueness-16}{%
-    $\myfn{Is-Leo-Eligible}{\V{next1}}$ \linebreak
+    $\myfn{IsLeoEligible}{\V{next1}}$ \linebreak
         \cuz{}
         \longDfref{Next eligible \realm{EIM}}{def:next-eligible-eim},
         \Eref{eq:th-next-eligible-uniqueness-02}.
@@ -10556,7 +10556,7 @@ previous \realm{EIM} in the sequence.  That is,
 \realm{LES} = \set{
    \begin{gathered}
        \Veimseq{les} : \forall \; \Vnat{i} \in \Dom{\V{les}} :
-       \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
+       \\ \Valid{\VVelement{les}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{les}{i}}
        \\ \land \; \left(
            \V{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\V{i}+1}, \VVelement{les}{i}}
        \right)
@@ -10636,7 +10636,7 @@ show the conclusion.
     \Eref{eq:th-next-eligible-rule-17}.
 \end{equation}
 \mypareq{eq:th-next-eligible-rule-20}{%
-    \myfn{Is-Leo-Eligible}{\V{middle}} \linebreak
+    \myfn{IsLeoEligible}{\V{middle}} \linebreak
     \cuz{}
     \longDfref{Next leo eligible}{def:next-eligible-eim},
     \Eref{eq:th-next-eligible-rule-03b}.
@@ -10745,7 +10745,7 @@ the theorem to show the conclusion.
 \label{eq:th-les-slice-14}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{seq}} :
-   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{seq}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
@@ -10757,7 +10757,7 @@ the theorem to show the conclusion.
 \label{eq:th-les-slice-16}
 \begin{gathered}
    \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \V{a} \le \V{ii} \le \V{b} }
-   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{seq}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{seq} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
@@ -10773,7 +10773,7 @@ the theorem to show the conclusion.
 \label{eq:th-les-slice-20}
 \begin{gathered}
    \forall \; \Vnat{i} \in \set{ \Vnat{ii} : \V{a} \le \V{ii} \le \V{b} }
-   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{seq}{i}}
+   \\ \Valid{\VVelement{seq}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{seq}{i}}
    \\ \land \; \left(
        \V{i} < \V{b} \implies \myfn{Next-Eligible}{\Velement{seq}{\V{i}+1}, \VVelement{seq}{i}}
    \right)
@@ -10785,7 +10785,7 @@ the theorem to show the conclusion.
 \label{eq:th-les-slice-30}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{subseq}} :
-   \\ \Valid{\VVelement{subseq}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{subseq}{i}}
+   \\ \Valid{\VVelement{subseq}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{subseq}{i}}
    \\ \land \; \left(
        \begin{gathered}
        \V{i} < \Vlastix{subseq} \implies
@@ -10824,7 +10824,7 @@ iff
 \\ \label{eq:th-les-extension-05}
     \land \; \Valid{\V{next}}
 \\ \label{eq:th-les-extension-06}
-    \land \; \myfn{Is-Leo-Eligible}{\V{next}}
+    \land \; \myfn{IsLeoEligible}{\V{next}}
 \\ \label{eq:th-les-extension-07}
     \land \; \myfn{Next-Eligible}{\V{next},\Velement{les}{\Vlastix{les}}}.
     \quad \thEnd
@@ -10851,7 +10851,7 @@ to show
 \label{eq:th-les-extension-10}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{les}} :
-   \\ \Valid{\VVelement{les}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{les}{i}}
+   \\ \Valid{\VVelement{les}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{les}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{les} \implies \myfn{Next-Eligible}{\Velement{les}{\V{i}+1}, \VVelement{les}{i}}
    \right)
@@ -10887,7 +10887,7 @@ to show
 \label{eq:th-les-extension-14}
 \begin{gathered}
    \forall \; \Vnat{i} \in (\Dom{\V{ext}} \subtractOp \set{\Vlastix{ext}}) :
-   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
+   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
    \right)
@@ -10905,7 +10905,7 @@ to show
         \Eref{eq:th-les-extension-16}.
 }
 \mypareq{eq:th-les-extension-20}{%
-    $\myfn{Is-Leo-Eligible}{\Velement{ext}{\Vlastix{ext}}}$
+    $\myfn{IsLeoEligible}{\Velement{ext}{\Vlastix{ext}}}$
     \cuz{} \Eref{eq:th-les-extension-06}.
         \Eref{eq:th-les-extension-16}.
 }
@@ -10913,7 +10913,7 @@ to show
 \label{eq:th-les-extension-22}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{ext}} :
-   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
+   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{ext}\subtractOp 1 \implies \myfn{Next-Eligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
    \right)
@@ -10935,7 +10935,7 @@ to show
 \label{eq:th-les-extension-28}
 \begin{gathered}
    \forall \; \Vnat{i} \in \Dom{\V{ext}} :
-   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{ext}{i}}
+   \\ \Valid{\VVelement{ext}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{ext}{i}}
    \\ \land \; \left(
        \V{i} < \Vlastix{ext} \implies \myfn{Next-Eligible}{\Velement{ext}{\V{i}+1}, \VVelement{ext}{i}}
    \right)
@@ -11781,8 +11781,8 @@ there are only \size{\Vocab{\Vint{g}}} symbols in \Vint{g}, and
 }
 at least one symbol must be used twice as the symbol of an
 \realm{EIM} in \var{prerun}.
-Let this symbol be \Vsym{cycle-lhs},
-and let the first and second \realm{EIM}s with \Vsym{cycle-lhs} as their symbol be
+Let this symbol be \Vsym{cycleLHS},
+and let the first and second \realm{EIM}s with \Vsym{cycleLHS} as their symbol be
 \VVelement{prerun}{aa} and
 \VVelement{prerun}{zz}, respectively:
 \begin{equation}
@@ -12215,16 +12215,16 @@ Then the set of \realm{LIM}s of \var{src} is
 \\ \left\lbrace
     \begin{gathered}
     \tuple{ \Vdr{dr}, \Postdot{\var{src}}, \Vorig{orig}, \Current{\var{src}}} :
-    \\ \Valid{\var{src}} \land \myfn{Is-Leo-Eligible}{\var{src}}
+    \\ \Valid{\var{src}} \land \myfn{IsLeoEligible}{\var{src}}
     \\ \land \;
         \left( \begin{gathered}
-            \size{\myfn{next-lims}{\var{src}}} = 0
+            \size{\myfn{nextLIMs}{\var{src}}} = 0
             \\ \implies \var{dr} = \DR{\var{src}} \land \var{orig} = \Origin{\var{src}}
         \end{gathered} \right)
     \\ \land \;
         \left( \begin{gathered}
-            \size{\myfn{next-lims}{\var{src}}} > 0
-            \\ \implies \mylim{\ell} \in \myfn{next-lims}{\var{src}}
+            \size{\myfn{nextLIMs}{\var{src}}} > 0
+            \\ \implies \mylim{\ell} \in \myfn{nextLIMs}{\var{src}}
             \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
         \end{gathered} \right)
     \end{gathered}
@@ -12235,7 +12235,7 @@ where
 \begin{equation}
 \nonumber
 \begin{gathered}
-\myfn{next-lims}{\var{src}} \defined
+\myfn{nextLIMs}{\var{src}} \defined
 \\ \set{
     \begin{gathered}
     \ell \in \realm{LIM} : \exists\; \Veim{next} :
@@ -12262,11 +12262,11 @@ and that the \realm{LIM} $\ell$ is the \dfn{LIM} of \Veim{src}.
 \begin{definition}[Leo source \realm{EIM}]
 \label{def:leo-source-eim}
 \[
-    \myfn{Is-source}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
+    \myfn{isSource}{\Veim{src}} \defined \size{\myfn{lims}{\var{src}}} > 0.
 \]
 We say that \var{src} is
 a \dfn{Leo source \realm{EIM}}, or a \dfn{source \realm{EIM}},
-if \myfn{Is-source}{\Veim{src}}.
+if \myfn{isSource}{\Veim{src}}.
 \dfEnd
 \end{definition}
 
@@ -12278,7 +12278,7 @@ The function
 \deffn{Source}{%
     \set{\mylim{\ell} : \Valid{\ell}}
 }{%
-    \set{\Veim{src} : \myfn{Is-source}{\var{src}}}
+    \set{\Veim{src} : \myfn{isSource}{\var{src}}}
 }
 \\ \label{eq:th-leo-source-fn-07}
     \text{such that } \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
@@ -12310,7 +12310,7 @@ By the definition of \realm{LIM} validity,
 }
 By the definition of Leo source \realm{EIM},
 \mypareq{eq:th-leo-source-fn-10-04}{%
-    $\forall \; \Veim{src} : \myfn{Is-source}{\var{src}}
+    $\forall \; \Veim{src} : \myfn{isSource}{\var{src}}
     \iff \exists \; \ell  : \ell \in \myfn{lims}{\var{src}}$
     \cuz{} \Dfref{def:leo-source-eim}.
 }
@@ -12367,7 +12367,7 @@ To this we assume, for a derivation, that two tuples of
         \Eref{eq:th-leo-source-fn-10-09-34}.
 }
 \mypareq{eq:th-leo-source-fn-10-09-40}{%
-    \myfn{Is-Leo-Eligible}{\var{src1}}
+    \myfn{IsLeoEligible}{\var{src1}}
     \cuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-leo-source-fn-10-09-36}.
 }
@@ -12478,7 +12478,7 @@ That is,
 \realm{LSS} = \set{
     \begin{gathered}
         \var{les} \in \realm{LES} :
-        \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{Is-source}{\VVelement{les}{i}}
+        \\ \forall \; \Vnat{i} \in \Dom{\var{les}} : \myfn{isSource}{\VVelement{les}{i}}
     \end{gathered}
 }.  \quad \dfEnd
 \end{equation}
@@ -12533,7 +12533,7 @@ If $\Vles{les} = \Vlss{lss}$ we say that
 Every source \realm{EIM} is the base element of at least one \realm{LSS}.
 That is,
 \[
-\forall \; \Veim{eim} : \myfn{Is-source}{\var{eim}} \implies
+\forall \; \Veim{eim} : \myfn{isSource}{\var{eim}} \implies
     \exists \; \Vlss{lss} : \var{eim} = \Velement{lss}{0}.
     \quad \thEnd
 \]
@@ -12549,7 +12549,7 @@ as its base element.
 The theorem will follow immediately by existential generalization.
 
 \mypareq{eq:th-source-eim-containment-10-10}{%
-    $\myfn{Is-source}{\var{eim}}$
+    $\myfn{isSource}{\var{eim}}$
     \cuz{} \longDfref{Leo source \realm{EIM}}{def:leo-source-eim},
     AF derivation.
 }
@@ -12560,7 +12560,7 @@ The theorem will follow immediately by existential generalization.
         \Eref{eq:th-source-eim-containment-10-10}.
 }
 \mypareq{eq:th-source-eim-containment-10-30}{%
-    $\myfn{Is-Leo-Eligible}{\var{eim}}$
+    $\myfn{IsLeoEligible}{\var{eim}}$
     \cuz{} \Dfref{def:leo-source-eim},
         \Dfref{def:lim-validity},
         \Eref{eq:th-source-eim-containment-10-10}.
@@ -12588,7 +12588,7 @@ Our example of an \realm{LSS} containing \var{eim} as its base element is
 \label{eq:th-source-eim-containment-17}
    \begin{gathered}
         \forall \; \Vnat{i} \in \Dom{\var{example}} :
-       \\ \Valid{\VVelement{example}{i}} \land \ \myfn{Is-Leo-Eligible}{\VVelement{example}{i}}
+       \\ \Valid{\VVelement{example}{i}} \land \ \myfn{IsLeoEligible}{\VVelement{example}{i}}
        \\ \land \; \left(
            \begin{gathered}
            \var{i} < \Vlastix{example}
@@ -12627,7 +12627,7 @@ Our example of an \realm{LSS} containing \var{eim} as its base element is
      existential generalization of \Vlss{example}.
 }
 \mypareq{eq:th-source-eim-containment-30}{%
-    $\myfn{Is-source}{\var{eim}} \implies
+    $\myfn{isSource}{\var{eim}} \implies
    \exists \; \Vlss{lss} : \Velement{lss}{0} = \Veim{eim}$
     \cuz{}
    derivation \Eref{eq:th-source-eim-containment-10-10}--%
@@ -12768,7 +12768,7 @@ Then
 }
 iff
 \mypareq{eq:th-lss-extension-07}{%
-        $\myfn{Is-source}{\var{next}}
+        $\myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
         \thEnd
@@ -12782,7 +12782,7 @@ and definition of an \realm{LES} \Dfref{def:next-eligible-sequence}.
 We prove the reverse direction, by assuming
 the antecedent to show the consequent.
 \mypareq{eq:th-lss-extension-10}{%
-        $\myfn{Is-source}{\var{next}}$
+        $\myfn{isSource}{\var{next}}$
         \cuz{} antecedent \Eref{eq:th-lss-extension-07} of
         reverse direction.
 }
@@ -12795,7 +12795,7 @@ the antecedent to show the consequent.
     $\var{lss} \in \realm{LSS}$ \cuz{} AF theorem.
 }
 \mypareq{eq:th-lss-extension-16}{%
-    $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{Is-source}{\VVelement{lss}{i}}$
+    $\forall \; \Vnat{i} \in \Dom{\var{lss}} : \myfn{isSource}{\VVelement{lss}{i}}$
         \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-lss-extension-14}.
 }
@@ -12811,7 +12811,7 @@ the antecedent to show the consequent.
         \Eref{eq:th-lss-extension-18}.
 }
 \mypareq{eq:th-lss-extension-22}{%
-    $\forall \; \Vnat{i} \in \Dom{\var{extended}} : \myfn{Is-source}{\VVelement{extended}{i}}$
+    $\forall \; \Vnat{i} \in \Dom{\var{extended}} : \myfn{isSource}{\VVelement{extended}{i}}$
     \cuz{} \Eref{eq:th-lss-extension-10},
     \Eref{eq:th-lss-extension-16},
     \Eref{eq:th-lss-extension-18}.
@@ -12839,7 +12839,7 @@ Then
 }
 iff
 \mypareq{eq:th-lss-generalized-extension-07}{%
-        $\exists \; \Veim{next} : \myfn{Is-source}{\var{next}}
+        $\exists \; \Veim{next} : \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
         \thEnd
@@ -12863,7 +12863,7 @@ to show the consequent.
 \begin{equation}
 \label{eq:th-lss-generalized-extension-12}
 \begin{gathered}
-    \myfn{Is-source}{\var{next}}
+    \myfn{isSource}{\var{next}}
     \land
     \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
     \\ \because \longThref{LSS extension}{lss-generalized-extension},
@@ -12874,7 +12874,7 @@ to show the consequent.
 \label{eq:th-lss-generalized-extension-14}
 \begin{gathered}
     \exists \; \Veim{next} :
-    \\ \myfn{Is-source}{\var{next}}
+    \\ \myfn{isSource}{\var{next}}
         \land \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
     \\ \because \Eref{eq:th-lss-generalized-extension-12},
     \text{existential generalization of \Veim{next}.}
@@ -12901,7 +12901,7 @@ Then
 }
 iff
 \mypareq{eq:th-maximal-lss-termination-07}{%
-        $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
+        $\nexists \; \Veim{next} : \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$.
         \thEnd
@@ -12926,7 +12926,7 @@ We prove the mutual implication directly.
    \left( \nexists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \realm{LSS} \right)
         \\ \iff \nexists \; \Veim{next} :
-        \\ \myfn{Is-source}{\var{next}}
+        \\ \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}
        \\ \because
@@ -13208,7 +13208,7 @@ Since the choice of \var{max1} and \var{max2} was arbitrary,
 Every Leo source \realm{EIM} is the base of at least one
 maximal \realm{LSS}.  That is,
 \mypareq{eq:th-maximal-lss-existence-02}{%
-    $\myfn{Is-source}{\var{eim}} \implies
+    $\myfn{isSource}{\var{eim}} \implies
     \exists \; \var{max} : \Velement{max}{0} = \var{eim} \land \Maximal{\var{max}}$.
     \thEnd
 }
@@ -13548,7 +13548,7 @@ to show the consequent
 \Eref{eq:th-maximal-lss-top-07}.
 \mypareq{eq:th-maximal-lss-top-10}{%
     $\nexists \; \Veim{next} :
-        \myfn{Is-source}{\var{next}}
+        \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{max}{\Vlastix{max}}}$
         \linebreak \cuz{}
@@ -13569,7 +13569,7 @@ its consequent.
 }
 \mypareq{eq:th-maximal-lss-top-16}{%
     $\nexists \; \Veim{next} :
-        \myfn{Is-source}{\var{next}}
+        \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
         \linebreak \cuz{}
@@ -13600,7 +13600,7 @@ and with it, we have the theorem.
 \begin{theorem}[Maximal LSS \realm{LIM}s termination]
 \label{th:maximal-lss-lims-termination}
 \mypareq{eq:th-maximal-lss-lims-termination-02}{%
-    $\Maximal{\Vlss{max}} \iff \size{ \myfn{next-lims}{\Vlastix{max}} } = 0$.
+    $\Maximal{\Vlss{max}} \iff \size{ \myfn{nextLIMs}{\Vlastix{max}} } = 0$.
     \thEnd
 }
 \end{theorem}
@@ -13613,7 +13613,7 @@ The proof is by mutual implication.
     AF proof.
 }
 \mypareq{eq:th-maximal-lss-lims-termination-12}{%
-        $\nexists \; \Veim{next} : \myfn{Is-source}{\var{next}}
+        $\nexists \; \Veim{next} : \myfn{isSource}{\var{next}}
         \land
         \myfn{Next-Eligible}{\var{next},\Velement{lss}{\Vlastix{lss}}}$
     \linebreak \cuz{}
@@ -13655,7 +13655,7 @@ The proof is by mutual implication.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-maximal-lss-lims-termination-82}{%
-    $\size{ \myfn{next-lims}{\Vlastix{max}} } = 0$
+    $\size{ \myfn{nextLIMs}{\Vlastix{max}} } = 0$
     \cuz{} equivalence with
     \Eref{eq:th-maximal-lss-lims-termination-80},
     using \longDfref{LIM validity}{def:lim-validity}.
@@ -13718,7 +13718,7 @@ to show \myfn{INDH}{0}.
     \myparbox{\cuz{} AF derivation, new free \Vlss{max}.}
 \end{gather}
 \mypareq{eq:th-maximal-lss-lim-invariant-18}{%
-    $\size{ \myfn{next-lims}{\Velement{max}{\Vlastix{max}}} } = 0$
+    $\size{ \myfn{nextLIMs}{\Velement{max}{\Vlastix{max}}} } = 0$
     \cuz{} \longThref{Maximal LSS \realm{LIM}s termination}{maximal-lss-lims-termination},
     \Eref{eq:th-maximal-lss-lim-invariant-14}.
 }
@@ -13738,7 +13738,7 @@ to show \myfn{INDH}{0}.
         existential instantiation of \Vnat{i} with 0.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-26}{%
-    $\size{ \myfn{next-lims}{\Velement{max}{0}} } = 0$
+    $\size{ \myfn{nextLIMs}{\Velement{max}{0}} } = 0$
     \cuz{} \Eref{eq:th-maximal-lss-lim-invariant-16},
         \Eref{eq:th-maximal-lss-lim-invariant-18}.
 }
@@ -13892,7 +13892,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-maximal-lss-lim-invariant-62}{%
-   \myfn{Is-source}{\Velement{max}{1}}
+   \myfn{isSource}{\Velement{max}{1}}
    \cuz{} \longDfref{LSS}{def:lss},
         \Eref{eq:th-maximal-lss-lim-invariant-42},
         \Eref{eq:th-maximal-lss-lim-invariant-46}.
@@ -13914,7 +13914,7 @@ to show \myfn{INDH}{\var{n}+1}.
             \Eref{eq:th-maximal-lss-lim-invariant-66}.
 }
 \mypareq{eq:th-maximal-lss-lim-invariant-70}{%
-    $\size{\myfn{next-lims}{\Velement{max}{0}}} > 0$
+    $\size{\myfn{nextLIMs}{\Velement{max}{0}}} > 0$
     \cuz{} \longDfref{LIM validity}{def:lim-validity},
         \Eref{eq:th-maximal-lss-lim-invariant-64},
         \Eref{eq:th-maximal-lss-lim-invariant-68}.
@@ -13925,8 +13925,8 @@ to show \myfn{INDH}{\var{n}+1}.
     \myfn{lims}{\Velement{max}{0}} =
     \\ \left\lbrace \begin{gathered}
         \family{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
-        \\ \Valid{\Velement{max}{0}} \land \myfn{Is-Leo-Eligible}{\Velement{max}{0}}
-        \\ \land \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}}
+        \\ \Valid{\Velement{max}{0}} \land \myfn{IsLeoEligible}{\Velement{max}{0}}
+        \\ \land \; \mylim{\ell} \in \myfn{nextLIMs}{\Velement{max}{0}}
         \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
     \end{gathered} \right\rbrace
     \\ \because \Dfref{def:lim-validity},
@@ -13934,7 +13934,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:th-maximal-lss-lim-invariant-74}{%
-    $\Valid{\Velement{max}{0}} \land \myfn{Is-Leo-Eligible}{\Velement{max}{0}}$
+    $\Valid{\Velement{max}{0}} \land \myfn{IsLeoEligible}{\Velement{max}{0}}$
     \cuz{} \longDfref{LES}{def:next-eligible-sequence},
         \Eref{eq:th-maximal-lss-lim-invariant-66}.
 }
@@ -13953,7 +13953,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{equation}
 \label{eq:th-maximal-lss-lim-invariant-76}
 \begin{gathered}
-\forall \; \mylim{\ell} \in \myfn{next-lims}{\Velement{max}{0}} :
+\forall \; \mylim{\ell} \in \myfn{nextLIMs}{\Velement{max}{0}} :
 \\ \DR{\ell} = \DR{\Velement{max}{\Vlastix{max}}}
 \\ \land \; \Origin{\ell} = \Origin{\Velement{max}{\Vlastix{max}}}.
 \\ \because \longDfref{LIM validity}{def:lim-validity},
@@ -14283,7 +14283,7 @@ so that
 The function
 \mypareq{}{%
     $\deffn{Lim}{%
-        \set{\Veim{src} : \myfn{Is-source}{\var{src}}}
+        \set{\Veim{src} : \myfn{isSource}{\var{src}}}
     }{%
         \set{\mylim{\ell} : \Valid{\ell}}
     }$,
@@ -14348,7 +14348,7 @@ $\var{j} \in \Dom{\Vet{S}}$
 $\size{
        \set{
                 \Veim{x} \in \Velement{S}{\var{j}} :
-        \myfn{Is-Leo-Eligible}{\var{x}}
+        \myfn{IsLeoEligible}{\var{x}}
        }
     }
     \le \size{\Vocab{\Vint{g}}}$
@@ -14356,8 +14356,8 @@ $\size{
         \longThref{Leo Eligible \realm{EIM} count}{leo-eligible-eim-count}.
 }
 \mypareq{eq:th-es-lim-count-16}{%
-$\forall \; \Veim{x} : \myfn{Is-source}{\var{x}}
-    \implies \myfn{Is-Leo-Eligible}{\var{x}}$
+$\forall \; \Veim{x} : \myfn{isSource}{\var{x}}
+    \implies \myfn{IsLeoEligible}{\var{x}}$
 \\ \cuz{} \longDfref{LIM validity}{def:lim-validity},
             \longDfref{Leo source}{def:leo-source-eim}.
 }
@@ -14365,7 +14365,7 @@ $\forall \; \Veim{x} : \myfn{Is-source}{\var{x}}
 $\size{
        \set{
                 \Veim{x} \in \Velement{S}{\var{j}} :
-        \myfn{Is-Source}{\var{x}}
+        \myfn{isSource}{\var{x}}
        }
     }
     \le \size{\Vocab{\Vint{g}}}$
@@ -14380,14 +14380,14 @@ so that
 $\size{
        \set{ \mylim{\ell} :
                 \exists\; \Veim{x} \in \Velement{S}{\var{j}} :
-        \ell = \Lim{\var{x}} \land \myfn{Is-Source}{\var{x}}
+        \ell = \Lim{\var{x}} \land \myfn{isSource}{\var{x}}
        }
     }$
     \linebreak
     $\le \size{
        \set{
                 \Veim{x} \in \Velement{S}{\var{j}} :
-        \myfn{Is-Source}{\var{x}}
+        \myfn{isSource}{\var{x}}
        }
     }$
     \linebreak \cuz{} \Thref{lim-non-duplication},
@@ -14397,7 +14397,7 @@ $\size{
 $\size{
        \set{ \mylim{\ell} :
                 \exists\; \Veim{x} \in \Velement{S}{\var{j}} :
-        \ell = \Lim{\var{x}} \land \myfn{Is-Source}{\var{x}}
+        \ell = \Lim{\var{x}} \land \myfn{isSource}{\var{x}}
        }
     }$
     $\le \size{\Vocab{\Vint{g}}}$
@@ -14406,7 +14406,7 @@ $\size{
 }
 \mypareq{eq:th-es-lim-count-26}{%
     $\forall\; \Veim{x} : \left( \exists\; \mylim{\ell} : \ell = \Lim{\var{x}} \right)
-        \implies \myfn{Is-Source}{\var{x}}$
+        \implies \myfn{isSource}{\var{x}}$
     \cuz{} \longThref{\myfnname{Lim} function}{lim-fn},
             \longDfref{Leo source \realm{EIM}}{def:leo-source-eim}.
 }
@@ -14457,21 +14457,21 @@ $\size{
 \end{equation}
 \end{proof}
 
-\begin{theorem}[\myfn{next-lims}{} size]
+\begin{theorem}[\myfn{nextLIMs}{} size]
 \label{th:next-lims-size}
 For every \realm{EIM} \var{eim},
-\myfn{next-lims}{\var{eim}} is either empty or
+\myfn{nextLIMs}{\var{eim}} is either empty or
 a singleton.
 That is,
 \[
-    \size{\myfn{next-lims}{\var{eim}}} \le 1.
+    \size{\myfn{nextLIMs}{\var{eim}}} \le 1.
     \quad \thEnd
 \]
 \end{theorem}
 
 \begin{proof}
 \mypareq{th-next-lims-cardinality-100}{%
-    $\myfn{next-lims}{\var{eim}} =
+    $\myfn{nextLIMs}{\var{eim}} =
     \set{
         \begin{gathered}
         \ell \in \realm{LIM} :
@@ -14519,7 +14519,7 @@ be a function such that
     \\ \Lambda, \text{ if } \Vsize{nxtlims} = 0,
     \end{cases}
 \end{gathered}
-\\ & \text{where } \var{nxtlims} = \myfn{next-lims}{\Veim{src}}.
+\\ & \text{where } \var{nxtlims} = \myfn{nextLIMs}{\Veim{src}}.
 \end{aligned}
 \end{equation}
 Then \myfnname{LIM-Predecessor} exists.
@@ -14528,16 +14528,16 @@ Then \myfnname{LIM-Predecessor} exists.
 
 \begin{proof}
 From \Eref{eq:th-lim-predecessor-fn-050} it is clear that
-\myfn{next-lims}{\Veim{src}} has a unique value for every \Veim{src},
+\myfn{nextLIMs}{\Veim{src}} has a unique value for every \Veim{src},
 if it has a value.
-By the \myfn{next-lims}{} Size Theorem \Thref{next-lims-size},
+By the \myfn{nextLIMs}{} Size Theorem \Thref{next-lims-size},
 we know that
-\myfn{next-lims}{\Veim{src}} is either empty or a singleton,
+\myfn{nextLIMs}{\Veim{src}} is either empty or a singleton,
 so that the case statement in
 \Eref{eq:th-lim-predecessor-fn-050}
 covers all possibilities,
 and
-\myfn{next-lims}{\Veim{src}} always has a value.
+\myfn{nextLIMs}{\Veim{src}} always has a value.
 \myqed
 \end{proof}
 
@@ -14557,7 +14557,7 @@ and
 \mypareq{th:lim-predecessor-connection-100}{%
     $\begin{gathered}
     \LIMPredecessor{\var{eim}} = \ell \land \ell \in \realm{LIM}
-    \\ \iff \ell \in \myfn{next-lims}{\var{eim}}
+    \\ \iff \ell \in \myfn{nextLIMs}{\var{eim}}
     \end{gathered}$
     \bcuz{} \longThref{\LIMPredecessor{} Theorem}{lim-predecessor-fn}.
 }
@@ -17483,10 +17483,10 @@ the \op{Earley-reducer} Space Worksheet
 \FloatBarrier
 
 \begin{algorithm}[H]
-\caption{\op{Leo-reducer}}
+\caption{\op{LeoReducer}}
 \label{alg:leo-reducer-op}
 \begin{algorithmic}[1]
-\Procedure{Leo-reducer}{\VVelement{S}{j},\Vlim{blocker},\Veim{cuz}}
+\Procedure{LeoReducer}{\VVelement{S}{j},\Vlim{blocker},\Veim{cuz}}
 \State $\Veim{trial} \gets \tuple{
      \begin{gathered}
         \Next{\DR{\var{blocker}}},
@@ -17517,19 +17517,19 @@ the \op{Earley-reducer} Space Worksheet
 
 \FloatBarrier
 
-\begin{definition}[\op{Leo-reducer} passes]
+\begin{definition}[\op{LeoReducer} passes]
 \label{def:op-leo-reducer-passes}
-A call of \op{Leo-reducer} is a \dfn{new pass}
+A call of \op{LeoReducer} is a \dfn{new pass}
 if it adds a new EIM to an ES.
-A call of \op{Leo-reducer} is a \dfn{dup pass}
+A call of \op{LeoReducer} is a \dfn{dup pass}
 if it adjoins a duplicate EIM to an ES.
 \dfEnd
 \end{definition}
 
-\begin{theorem}[\op{Leo-reducer} passes]
+\begin{theorem}[\op{LeoReducer} passes]
 \label{th:op-leo-reducer-passes}
 Every call of\ifhack{\\}{}
-\op{Leo-reducer} is either
+\op{LeoReducer} is either
 a new or a dup pass, but never both.
 \thEnd
 \end{theorem}
@@ -17555,7 +17555,7 @@ but never both.  \myqed
 \begin{table}[t]
 \caption{
     \label{tab:leo-reducer-invocations}
-    Line invocations per call of \op{Leo-reducer}}
+    Line invocations per call of \op{LeoReducer}}
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
@@ -17610,7 +17610,7 @@ Note that $\var{dup}+\var{new}=1$.}
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-time}
-    Time per line invocation of \op{Leo-reducer}}
+    Time per line invocation of \op{LeoReducer}}
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
@@ -17650,7 +17650,7 @@ refer to the \op{Leo-Reducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-time-worksheet}
-    \op{Leo-reducer} time worksheet}
+    \op{LeoReducer} time worksheet}
 \vspace{1ex}
 \begin{tabular}{|r|c|c|}
 \hline
@@ -17685,15 +17685,15 @@ refer to the \op{Leo-Reducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:leo-reducer-time-worksheet}
-refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
+refer to the \op{LeoReducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \end{table}
 
 \FloatBarrier
 
-\begin{theorem}[\op{Leo-reducer} time]
+\begin{theorem}[\op{LeoReducer} time]
 \label{th:leo-reducer-time}
 \ifhack{\raggedright}{}
-The time that \op{Leo-reducer} incurs may
+The time that \op{LeoReducer} incurs may
 be accounted for as follows:
 \begin{itemize}
 \item \label{item:th-leo-reducer-time-1}
@@ -17713,8 +17713,8 @@ the definition
 \Dfref{def:op-leo-reducer-passes}
 and theorem
 \Thref{op-leo-reducer-passes}
-for \op{Leo-reducer} passes,
-and the \op{Leo-reducer} time worksheet
+for \op{LeoReducer} passes,
+and the \op{LeoReducer} time worksheet
 \Tbref{tab:leo-reducer-time-worksheet}.
 \myqed
 \end{proof}
@@ -17725,7 +17725,7 @@ and the \op{Leo-reducer} time worksheet
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-space}
-    Space per line invocation of \op{Leo-reducer}}
+    Space per line invocation of \op{LeoReducer}}
 \vspace{1ex}
 \begin{tabular}{|r|c|l|}
 \hline
@@ -17755,7 +17755,7 @@ and the \op{Leo-reducer} time worksheet
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:leo-reducer-space}
-refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
+refer to the \op{LeoReducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \end{table}
 
 \FloatBarrier
@@ -17763,7 +17763,7 @@ refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \begin{table}[H]
 \caption{
     \label{tab:leo-reducer-space-worksheet}
-    \op{Leo-reducer} space worksheet}
+    \op{LeoReducer} space worksheet}
 \vspace{1ex}
 \begin{tabular}{|r|c|c|}
 \hline
@@ -17784,15 +17784,15 @@ refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.}
 \\ \hline
 \end{tabular}
 \mylegend{Lines in \Tbref{tab:leo-reducer-space-worksheet}
-    refer to the \op{Leo-reducer} Algorithm \Aref{alg:leo-reducer-op}.
+    refer to the \op{LeoReducer} Algorithm \Aref{alg:leo-reducer-op}.
     Omitted lines have zero values.}
 \end{table}
 
 \FloatBarrier
 
-\begin{theorem}[\op{Leo-reducer} space]
+\begin{theorem}[\op{LeoReducer} space]
 \label{th:leo-reducer-space}
-The space that \op{Leo-reducer} incurs may
+The space that \op{LeoReducer} incurs may
 be accounted for
 by
 charging \Oc{} space to \Veim{trial}
@@ -17805,7 +17805,7 @@ of an EIM already in the current ES.
 
 \begin{proof}
 This theorem follows from
-the \op{Leo-reducer} Space Worksheet
+the \op{LeoReducer} Space Worksheet
 \Tbref{tab:leo-reducer-space-worksheet}.
 \myqed
 \end{proof}
@@ -17829,7 +17829,7 @@ the \op{Leo-reducer} Space Worksheet
       \label{line:reducer-op-6}
 \ElsIf{\var{match0} is a \realm{LIM}}
   \label{line:reducer-op-7}
-    \State \Call{Leo-reducer}{\VVelement{S}{j},\Vlim{match0},\Veim{cuz}}
+    \State \Call{LeoReducer}{\VVelement{S}{j},\Vlim{match0},\Veim{cuz}}
       \label{line:reducer-op-8}
 \Else
   \label{line:reducer-op-9}
@@ -18132,7 +18132,7 @@ is the same as the Completer operation of \Earley{},
 if there never is a \realm{LIM} in \Vpimset{matches} on
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}.
 In this case,
-we never execute \op{Leo-reducer}.
+we never execute \op{LeoReducer}.
 \obEnd
 \end{observation}
 
@@ -21246,9 +21246,9 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\realm{LP}$%
 \end{proof}
 
 
-\begin{theorem}[\op{Leo-reducer} is consistent]
+\begin{theorem}[\op{LeoReducer} is consistent]
 \label{th:leo-reducer-is-consistent}
-The \op{Leo-reducer} sub-op
+The \op{LeoReducer} sub-op
 of the \Marpa{} \op{Reducer} operation
 preserves validity.
 \end{theorem}
@@ -21312,9 +21312,9 @@ The remaining subcase is the \Marpa{} \op{Reducer} operation.
 The \Marpa{} \op{Reducer} operation consists of two
 sub-ops:
 \op{Earley-reducer} and
-\op{Leo-reducer}.
+\op{LeoReducer}.
 We have shown that the
-\op{Leo-reducer} preserves validity
+\op{LeoReducer} preserves validity
 \Thref{leo-reducer-is-consistent}.
 
 From
@@ -21708,13 +21708,13 @@ non-nulling symbol.
 So part of the rightmost derivation must take the form
 \begin{equation}
 \label{eq:-th-leo-right-recursion-50}
-\Vstr{earlier-prefix} \cat \Vsym{A} \deplus \Vstr{later-prefix} \cat \Vsym{A}.
+\Vstr{earlierPrefix} \cat \Vsym{A} \deplus \Vstr{laterPrefix} \cat \Vsym{A}.
 \end{equation}
 But the first step of the derivation in
 \Eref{eq:-th-leo-right-recursion-50}
 must use a rule of the form
 \begin{equation*}
-\Vsym{A} \de \Vstr{rhs-prefix} \cat \Vsym{rightmost},
+\Vsym{A} \de \Vstr{RHSprefix} \cat \Vsym{rightmost},
 \end{equation*}
 where $\Vsym{rightmost} \deplus \Vsym{A}$.
 Such a rule is right recursive by definition.
