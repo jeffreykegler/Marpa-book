@@ -389,8 +389,7 @@
 % I once used hyphens in variable names,
 % so I needed to ensure that subtraction was
 % clearly distinguished by the typography.
-% I need to remove these.
-\newcommand{\subtractOp}{\mathbin{-}}
+% I need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
 \newcommand{\expOp}{\mathbin{{\ast}{\ast}}}
@@ -1197,16 +1196,6 @@ we overload the Cartesian product operator
 to represent it
 when the operands are numbers:
 $\V{n} \times 6$.
-To avoid ambiguity with use of hyphenated variables,
-we distinguish subtraction typographically
-\[
-\subtract{\V{SymbolCount}}{\V{terminalCount}}.
-\]
-We do not need subtraction often, since we borrow
-a handy and compact notation
-for decrementation by 1
-from programming languages:
-\subtract{\V{x}}{1}.
 Full details of
 our notation for operations is in
 \Chref{chap:preceding-math}.
@@ -21462,7 +21451,7 @@ $\because$ DFPP.
 \label{eq:def-complete-as-far-as-28}
 \myparbox{The Earley tables are ``complete as far as''
 visible depth \var{n} in Earley set \var{j},
-if they are complete as far as Earley set $\var{j}\subtractOp 1$,
+if they are complete as far as Earley set $\Vdecr{j}$,
 and if they contain all the visible valid \realm{EIM}s of visible depth
 \var{n} or less
 $\because$ DFPP.
@@ -21571,7 +21560,7 @@ Let $\var{p} = [ \Vint{g}, \Vstr{w} ]$
 be an unambiguous parse,
 where $\var{n} = \size{\Vstr{w}}$.
 The number of useful complete right recursive \realm{EIM}s
-in \var{p} is less than or equal to $2 \times \var{n} \subtractOp 1$,
+in \var{p} is less than or equal to $2 \times \Vdecr{n}$,
 or \On{}.
 \end{theorem}
 
@@ -21904,7 +21893,7 @@ Expand \Eref{eq:left-congruence1} into
 \begin{aligned}
 & \var{sfseqA}[\var{lenA}]\cat\Vterm{suffixA} = \Vstr{sfA}\cat\Vterm{suffixA}
 \\
-& \qquad \xderives{R} \var{sfseqA}[\var{lenA}\subtractOp 1]\cat\Vterm{suffixA} \\
+& \qquad \xderives{R} \var{sfseqA}[\Vdecr{lenA}]\cat\Vterm{suffixA} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqA}[1]\cat\Vterm{suffixA}] = \Vstr{prefix}\Vterm{suffixA} \\
 \end{aligned}
@@ -21914,7 +21903,7 @@ and expand \Eref{eq:left-congruence2} into
 \label{eq:left-congruence10b}
 \begin{aligned}
 & \var{sfseqB}[\var{lenB}]\cat\Vterm{suffixB} = \Vstr{sfB}\cat\Vterm{suffixB} \\
-& \qquad \xderives{R} \var{sfseqB}[\var{lenB}\subtractOp 1]\cat\Vterm{suffixB} \\
+& \qquad \xderives{R} \var{sfseqB}[\Vdecr{lenB}]\cat\Vterm{suffixB} \\
 & \qquad \xderives{R} \ldots \\
 & \qquad \xderives{R} \var{sfseqB}[1]\cat\Vterm{suffixB} = \Vstr{prefix}\Vterm{suffixB} \\
 \end{aligned}
@@ -21969,7 +21958,7 @@ where
 \begin{equation}
 \label{eq:left-congruence15a1}
 \Vstr{preA}\Vsym{rhsA}\Vterm{postA} =
-\var{sfseqA}[\var{j}\subtractOp 1]
+\var{sfseqA}[\Vdecr{j}]
 \end{equation}
 and similarly, we can write
 for some $\Vterm{postB} \in \Term{\var{g}}^\ast$,
@@ -21979,20 +21968,20 @@ for some $\Vterm{postB} \in \Term{\var{g}}^\ast$,
 & \Accept{\Vint{g}} \xderives{R\ast} \var{sfseqB}[\var{j}]\cat\Vterm{suffixB} \\
 & \qquad = \Vstr{preB}\Vsym{lhsB}\Vterm{postB}\Vterm{suffixB} \\
 & \qquad \xderives{R} \Vstr{preB}\Vsym{rhsB}\Vterm{postB}\Vterm{suffixB} \\
-& \qquad = \var{sfseqB}[\var{j}\subtractOp 1]\cat\Vterm{suffixB}
+& \qquad = \var{sfseqB}[\Vdecr{j}]\cat\Vterm{suffixB}
 \end{aligned}
 \end{equation}
 where
 \begin{equation}
 \label{eq:left-congruence15b1}
 \Vstr{preB}\Vsym{rhsB}\Vterm{postB} =
-\var{sfseqB}[\var{j}\subtractOp 1].
+\var{sfseqB}[\Vdecr{j}].
 \end{equation}
 Then
 \begin{gather}
 \label{eq:left-congruence18}
 \begin{gathered}
-\var{sfseqA}[\var{j}\subtractOp 1] = \var{sfseqB}[\var{j}\subtractOp 1], \\
+\var{sfseqA}[\Vdecr{j}] = \var{sfseqB}[\Vdecr{j}], \\
 \because \Eref{eq:left-congruence12b}, \;\; \text{and}
 \end{gathered}
 \\[5pt]
@@ -22570,7 +22559,7 @@ pair \Thref{unambig-g-unambig-eim},
 and therefore no \realm{EIM} will have more than one cause \realm{EIM}.
 In this proof,
 let a ``cause chain'' be a sequence \var{chain} such that
-for every \var{i}, $0 \le \var{i} < \Vsize{chain}\subtractOp 1$,
+for every \var{i}, $0 \le \var{i} < \decr{\Vsize{chain}}$,
 $\var{chain}[\var{i}]$ is the cause of the link pair
 of $\var{chain}[\var{i}+1]$.
 
@@ -22639,7 +22628,7 @@ Stating the above reasoning more precisely, we have
 \var{chains} \le \var{leaves} + \frac{\var{leaves}}{2} + \frac{\var{leaves}}{4} + \ldots + 1
 \\
 \label{eq:th-completion-bound-23}
-\var{chains} = 2 \times \var{leaves} \subtractOp 1 \because \Eref{eq:th-completion-bound-22}.
+\var{chains} = 2 \times \var{leaves} - 1 \because \Eref{eq:th-completion-bound-22}.
 \end{gather}
 Letting \var{interior} be the number of interior nodes in the cause tree,
 \begin{gather}
@@ -22649,7 +22638,7 @@ Letting \var{interior} be the number of interior nodes in the cause tree,
 \\
 \label{eq:th-completion-bound-25b}
 \begin{gathered}
-\var{interior} \le (2 \times \var{leaves} \subtractOp 1) \times (\size{\NT{\var{g}}}+1) \\
+\var{interior} \le (2 \times \var{leaves} - 1) \times (\size{\NT{\var{g}}}+1) \\
 \because \Eref{eq:th-completion-bound-23},
 \Eref{eq:th-completion-bound-25a}.
 \end{gathered}
@@ -22671,7 +22660,7 @@ so that
 \label{eq:th-completion-bound-32a}
 \text{$\var{complete} = \var{interior}+1$ and} \\
 \label{eq:th-completion-bound-32b}
-\var{medial} = \var{leaves} \subtractOp 1.
+\var{medial} = \var{leaves} - 1.
 \end{gather}
 Then
 \begin{equation}
