@@ -2624,6 +2624,8 @@ Note that if \Vsize{len} = 0, then it is vacuously true that
 \V{slice} is a slice of \V{seq}.
 We say the \V{slice} is \dfn[To-index (of a slice)]{to the index}
 \V{offset}+\V{len}.
+We say the \V{slice} is \dfn[From-index (of a slice)]{from the index}
+\V{offset}.
 \dfEnd
 \end{definition}
 
@@ -2732,19 +2734,16 @@ is clear in context and left implicit.
 
 \begin{definition}[Prefix]
 \label{def:prefix}
-Let \V{x} and \V{y} be sequences.
-\begin{gather*}
-\Pfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{0\ldots \V{j}}.
-\\
-\PrPfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} < \Vlastix{y}
-\land \V{x} = \Velement{y}{0\ldots \V{j}}.
-\end{gather*}
-We say
-that \V{x} is a \dfn{prefix} of \V{y} if \Pfx{\V{x}, \V{y}};
-and that \V{x} is a \dfn{proper prefix} of \V{y} if \PrPfx{\V{x}, \V{y}}.
+A \dfn[prefix@Prefix (of a sequence)]{prefix}
+of a sequence
+is slice of the sequence from index zero.
+The prefix is a 
+\dfn[prefix@Prefix (of a sequence)!proper]{proper prefix}
+if its length is less that than of the container sequence.
+We write \Pfx{\V{slice},\V{seq}} to say
+that \V{slice} is a prefix of \V{seq}.
+We write \PrPfx{\V{slice},\V{seq}} to say
+that \V{slice} is a proper prefix of \V{seq}.
 \dfEnd
 \end{definition}
 
