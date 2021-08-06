@@ -1181,8 +1181,7 @@ And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which pose legibility and ophthalmological challenges.
 
-We make heavy use of multi-character variable names,
-and allow hyphenated variable names.
+We make heavy use of multi-character variable names.
 This makes implicit operations inconvenient so that,
 with one exception,
 operations are never implicit.
@@ -1943,32 +1942,40 @@ so that it represents multiplication when its
 operands are integers:
 $\V{n} \times 6$.
 
-We also stated earlier that
-we distinguish subtraction typographically:
-\[
-\subtract{\V{symbolCount}}{\V{terminalCount}}.
-\]
-and that we adopt a
-programming language notation for what is by
-far our most common case, decrementation by 1:
-\[
-\Vdecr{x} = \subtract{\V{x}}{1}.
-\]
-
-Subtraction is ``left subtraction''.
+Subtraction is always ``left subtraction''.%
+\footnote{Right subtraction and left subtraction behave identically over the
+    natural numbers,
+    but when transfinite numbers are involved,
+    the result of right subtraction is not always well-defined.
+    For example, if we seek a value for
+    $\naturals-1$, right subtraction requires us to find an ordinal
+    to replace the \V{x} in
+    $\V{x}+1 = \naturals$.
+    But there is no such ordinal \V{x}.}
 That is, where
-$V{a} \in \naturals\cup\set{\naturals}$,
-$V{b} \in \naturals\cup\set{\naturals}$,
-and $V{c} \in \naturals\cup\set{\naturals}$,
-\[
-    \subtract{\V{a}}{\V{b}} = \V{x} \implies \V{b}+\V{x} = \V{a}.
-\]
-This makes a difference if $\V{a}=\naturals$.
-If $\V{b}\in\naturals$, we have $\Vnat{b}+\naturals = \naturals$,
-so that left subtraction always works.
-On the other hand, for ``right subtraction'', there is not necessarly
-a \V{x} such that $\V{x}+\V{b} = \naturals$.
+\V{a}, \V{b} and \V{x} are ordinals,
+the schema for subtraction is
+\begin{equation}
+\label{eq:left-subtraction}
+    \V{a}-\V{b} = \V{x} \defined \V{b}+\V{x} = \V{a}.
+\end{equation}
+For all ordinals \V{a} and \V{b} such that $\V{a} \ge \V{b}$
+the placeholder \V{x}
+in \Eref{eq:left-subtraction}
+can be replaced with a unique ordinal.
+The only cases of interest to us in this book will be subtraction
+of finite numbers from each other,
+and subtraction of a natural number from \naturals.
+In the second case,
+$\V{a}=\naturals$ and $\V{b}\in\naturals$,
+\[ \Vnat{b}+\naturals = \naturals \text{ so that } \naturals-\V{b} = \naturals. \]
 
+We adopt a
+programming language notation for
+decrementation by~1:
+\[
+\Vdecr{x} = \V{x}-1.
+\]
 Another useful notation that we adopt
 from programming is the
 ternary conditional operator:
