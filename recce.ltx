@@ -2435,6 +2435,14 @@ is the countable numbers.
 That is, where \V{seq} is a sequence,
 $\Vsize{seq} \in \naturals\cup\set{\naturals}$.
 
+When \V{seq} is of length zero,
+that is, when it has an empty domain,
+we say that it is the
+\dfn{empty sequence}.%
+\index{recce-defienda}{sequence@Sequence!empty}
+We often write the empty sequence as $\epsilon.$
+\index{recce-defienda}{e@$\epsilon$ (empty sequence)}
+
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}.
 \Cod{\V{seq}} is the set of valid values of \V{seq},
@@ -2471,7 +2479,8 @@ or inductively.
 \begin{remark}[Explicitly specified sequence]
 \label{rem:explicitly-specified-sequence}
 An example of a
-\dfn{sequence with explicitly specified elements}
+\dfn[sequence@Sequence!specified explicitly]{sequence
+    with explicitly specified elements}
 is \seq{43, 1729, 1491, 1493 }.
 In explicitly specified sequences, ellipses specify continuation
 in some fashion which is understood in context so that,
@@ -2590,22 +2599,31 @@ is the product of the next 100.
 
 \begin{definition}[Slice]
 \label{def:slice}
-A \dfn[Slice (of a sequence)]{slice}
-is a sequence of consecutive values from another,
-containing, set.
-That is, \V{subseq} is a slice of \V{seq} iff
+Given an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
+a \dfn[Length (of a slice)]{length}, $\V{len}\in\naturals\cup\set{\naturals},$
+and a \dfn{container sequence}%
+\index{recce-defienda}{sequence@Sequence!container},
+$\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$ such that
+\[ \forall\; \Vnat{ix}, \V{offset} \le \V{ix} < \V{offset}+\V{len}
+    : \V{ix} \in \Dom{\V{seq}}, \]
+we say that \V{slice} is a
+\dfn[Slice (of a sequence)]{slice}
+of length \V{len}
+in \V{sequence}
+from \V{offset}
+iff
 \[
-    \begin{gathered}
-        \exists\; \Vnat{offset} :
-            \forall\; \V{ix} \in \Dom{\V{subseq}} :
-        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
-            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}.
-    \end{gathered}
+    \V{slice} =
+    \set{ \begin{gathered}
+        \V{element} \in \naturals\times\V{V} :
+        \exists\; \Vnat{ix} \in \V{len} :
+        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+    \end{gathered} }
 \]
-
-Note that if \Vsize{subseq} = 0, then it is vacuously true that
-\V{subseq} is a slice of \V{seq}.
-We often write the empty sequence as $\epsilon$.
+Note that if \Vsize{len} = 0, then it is vacuously true that
+\V{slice} is a slice of \V{seq}.
+We say the \V{slice} is \dfn[To-index (of a slice)]{to the index}
+\V{offset}+\V{len}.
 \dfEnd
 \end{definition}
 
@@ -2624,24 +2642,9 @@ then \V{subseq} is not well-defined.
 \item
 If \V{subseq} is well-defined,
 and $\V{a} \le \V{z}$, then
-\[
-    \V{subset} = \seq{
-        \V{s}[\V{a}], \;\;
-        \V{s}[\V{a}+1], \;\;
-        \ldots \;\;
-        \V{s}[\V{z}]
-    }
-\]
-or more precisely,
-\begin{equation*}
-    \V{subseq} =
-    \set{ \begin{gathered}
-         \V{element} \in \naturals\times\V{V} : \exists\; \V{ix} :
-         \\ \V{ix} \ge \Vnat{a} \land \V{ix} \le \Vnat{z}
-         \land \V{element}
-             = \tuple{ \subtract{\V{ix}}{\V{a}}, \VVelement{s}{ix} }
-    \end{gathered} }.
-\end{equation*}
+\V{subset} is
+the slice of \V{s} from \V{a} of length $\V{z}-\V{a}+1$,
+in other words, the slice of \V{s} from \V{a} to \V{z}.
 \item
 If \V{subseq} is well-defined
 and $\V{a} > \V{z}$,
@@ -3000,7 +3003,7 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 \begin{theorem}[Slice Pairs]
 \label{th:slice-pairs}
 The pairs of a slice are a subset of
-the pairs of the containing sequence.
+the pairs of the container sequence.
 More precisely,
 let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
@@ -3025,7 +3028,7 @@ Then
 The proof is by reductio.
 We assume the existence of a pair for a slice,
 \V{subseq},
-that is not an element of the pairs for its containing
+that is not an element of the pairs for its container
 sequence, \V{seq}.
 \begin{gather}
     \label{eq:th-slice-pairs-100}
