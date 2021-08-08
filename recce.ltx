@@ -2599,16 +2599,21 @@ is the product of the next 100.
 
 \begin{definition}[Slice]
 \label{def:slice}
-Given an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
-a \dfn[Length (of a slice)]{length}, $\V{len}\in\naturals\cup\set{\naturals},$
-and a \dfn{container sequence}%
-\index{recce-defienda}{sequence@Sequence!container},
-$\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$ such that
-\[ \forall\; \Vnat{ix}, \V{offset} \le \V{ix} < \V{offset}+\V{len}
+Given an
+\begin{itemize}
+\item \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
+\item a \dfn[Length (of a slice)]{length} or \dfn[Size (of a slice)]{size},
+    $\V{len}\in\naturals\cup\set{\naturals},$
+\item and a \dfn{container sequence}%
+    \index{recce-defienda}{sequence@Sequence!container},
+    $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
+\end{itemize}
+such that
+\[ \forall\; \Vnat{ix},\; \V{offset} \le \V{ix} < \V{offset}+\V{len}
     : \V{ix} \in \Dom{\V{seq}}, \]
 we say that \V{slice} is a
 \dfn[Slice (of a sequence)]{slice}
-of length \V{len}
+of size \V{len}
 in \V{sequence}
 from \V{offset}
 iff
@@ -2620,14 +2625,17 @@ iff
         \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
     \end{gathered} }
 \]
-Note that if \Vsize{len} = 0, then it is vacuously true that
-\V{slice} is a slice of \V{seq}.
-We say the \V{slice} is \dfn[To-index (of a slice)]{to the index}
-\V{offset}+\V{len}.
-We say the \V{slice} is \dfn[From-index (of a slice)]{from the index}
+We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
 \V{offset}.
 \dfEnd
 \end{definition}
+
+\begin{observation}
+From the definition of slice \Dfref{def:slice},
+it is vacuously true that if \Vsize{len} = 0, then
+\V{slice} is a slice of \V{seq}.
+\obEnd
+\end{observation}
 
 \begin{remark}[Slice natural range]
 \label{rem:slice-natural-range}
@@ -2646,7 +2654,7 @@ If \V{subseq} is well-defined,
 and $\V{a} \le \V{z}$, then
 \V{subset} is
 the slice of \V{s} from \V{a} of length $\V{z}-\V{a}+1$,
-in other words, the slice of \V{s} from \V{a} to \V{z}.
+in other words, the slice of \V{s} from \V{a} up to but excluding \V{z}+1.
 \item
 If \V{subseq} is well-defined
 and $\V{a} > \V{z}$,
@@ -2736,10 +2744,10 @@ is clear in context and left implicit.
 \label{def:prefix}
 A \dfn[prefix@Prefix (of a sequence)]{prefix}
 of a sequence
-is slice of the sequence from index zero.
-The prefix is a 
+is a slice of the sequence from index zero.
+The prefix is a
 \dfn[prefix@Prefix (of a sequence)!proper]{proper prefix}
-if its length is less that than of the container sequence.
+iff it is not identical to its container sequence.
 We write \Pfx{\V{slice},\V{seq}} to say
 that \V{slice} is a prefix of \V{seq}.
 We write \PrPfx{\V{slice},\V{seq}} to say
@@ -2749,18 +2757,18 @@ that \V{slice} is a proper prefix of \V{seq}.
 
 \begin{definition}[Suffix]
 \label{def:suffix}
-\begin{gather*}
-\Sfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
-\\
-\PrSfx{\V{x},\V{y}} \defined
-\exists \; \Vnat{j} : 0 < \V{j} \le \Vlastix{y}
-\land \V{x} = \Velement{y}{\V{j}\ldots \Vlastix{y}}.
-\end{gather*}
-We say
-that \V{x} is a \dfn{suffix} of \V{y} if \Sfx{\V{x}, \V{y}};
-and that \V{x} is a \dfn{proper suffix} of \V{y} if \PrSfx{\V{x}, \V{y}}.
+A \dfn[suffix@Suffix (of a sequence)]{suffix}
+of a sequence
+is a slice of the sequence up to but excluding \Vsize{cntn},
+where $\V{cntn}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
+is the container sequence.
+The suffix is a
+\dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
+iff it is not identical to its container sequence.
+We write \Sfx{\V{slice},\V{seq}} to say
+that \V{slice} is a suffix of \V{seq}.
+We write \PrSfx{\V{slice},\V{seq}} to say
+that \V{slice} is a proper suffix of \V{seq}.
 \dfEnd
 \end{definition}
 
