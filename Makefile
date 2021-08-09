@@ -15,7 +15,7 @@
 
 # See below for the list Debian packages required to 'make' this
 
-.phony: all clean recce-indexes full travis stage
+.phony: all clean recce-indexes full travis stage aspell arxiv
 
 LATEX = pdflatex
 MAKEINDEX = makeindex
@@ -67,6 +67,12 @@ finite.pdf: finite.ltx
 
 ah2002_notes.pdf: ah2002_notes.ltx
 	$(LATEX) $?
+
+aspell:
+	cat recce.ltx | aspell list --home-dir=. --personal=aspell-ignore.txt -t | sort | uniq
+
+# interactive aspell command:
+#     aspell --home-dir=. --personal=aspell-ignore.txt -t -c recce.ltx
 
 # Five years outdated, but anyway this is a start
 # Requires these Debian packages (as of Thu Sep 17 10:11:18 PDT 2015)
