@@ -2622,199 +2622,6 @@ is clear in context and left implicit.
 \dfEnd
 \end{definition}
 
-\begin{definition}[Slice]
-\label{def:slice}
-Given
-\begin{itemize}
-\item an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
-\item a \dfn[Length (of a slice)]{length} or \dfn[Size (of a slice)]{size},
-    $\V{len}\in\naturals\cup\set{\naturals},$
-\item and a \dfn{container sequence}%
-    \index{recce-defienda}{sequence@Sequence!container},
-    $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
-\end{itemize}
-we say that \V{slice} is a
-\dfn[Slice (of a sequence)]{slice}
-of size \V{len}
-in \V{sequence}
-from \V{offset}
-iff
-\[
-    \begin{gathered}
-        \V{offset}+\V{len} \le \Vsize{seq}
-        \\ \land\; \V{slice} =
-        \set{ \begin{gathered}
-            \V{element} \in \naturals\times\V{V} :
-            \exists\; \Vnat{ix} \in \V{len} :
-            \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
-        \end{gathered} }
-    \end{gathered}
-\]
-We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
-\V{offset}.
-If \V{slice} is finite,
-we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container sequence]{to} the index
-$\V{offset}+\Vdecr{len}$.
-\dfEnd
-\end{definition}
-
-\begin{observation}
-From the definition of slice \Dfref{def:slice},
-it is vacuously true that if \Vsize{len} = 0, then
-\V{slice} is a slice of \V{seq}.
-\obEnd
-\end{observation}
-
-\begin{remark}[Slice natural range]
-\label{rem:slice-natural-range}
-The notation
-\[ \V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}], \]
-where \Vnat{a} and \Vnat{z} are natural numbers,
-is interpreted by applying the following rules,
-in order:
-\begin{itemize}
-\item
-If $\V{a} \notin \Dom{\V{s}}$
-or $\V{z} \notin \Dom{\V{s}}$,
-then \V{subseq} is not well-defined.
-\item
-If \V{subseq} is well-defined,
-and $\V{a} \le \V{z}$, then
-\V{subset} is
-the slice of \V{s} from \V{a} of size $\V{z}+1-\V{a}$,
-in other words, the slice of \V{s} from \V{a} to \V{z}.
-\item
-If \V{subseq} is well-defined
-and $\V{a} > \V{z}$,
-then $\V{subseq} = \epsilon.$
-\rmEnd
-\end{itemize}
-\end{remark}
-
-\begin{remark}[Slice integer range]
-\label{rem:slice-integer-range}
-Recall that, when \Vz{x} is a non-negative integer, \Vnat{x} is
-the representation of \Vz{x} in the canonical embedding from \naturals.
-The notation
-\[ \V{subseq} = \V{s}[\Vz{a} \ldots \Vz{z}], \]
-where \Vz{a} and \Vz{z}
-are integers,
-is interpreted by applying the following rules,
-in order:
-\begin{itemize}
-\item If \Vz{a} is negative, then $\V{subseq} = \epsilon.$
-\item If \Vz{z} is negative, then $\V{subseq} = \epsilon.$
-\item If both \Vz{a} and \Vz{z} are non-negative,
-then
-$\V{subseq} = \Velement{s}{\Vnat{a}\ldots\Vnat{z}}$.
-\rmEnd
-\end{itemize}
-\end{remark}
-
-\begin{example}[Slice range]
-\label{ex:slice-range}
-Here are some examples of
-the slice notation of
-\Rmref{slice-natural-range} and
-\Rmref{slice-integer-range}.
-Let
-\[
-    \V{s} = \seq{1, 2, 3, 4, 5}.
-\]
-\begin{itemize}
-\item
-    $\Velement{s}{0 \ldots {-1}} = \epsilon.$
-\item
-    $\Velement{s}{1 \ldots 2} = \seq{2, 3}.$
-\item
-    $\Velement{s}{2 \ldots 2} = \seq{3}.$
-\item
-    $\Velement{s}{3 \ldots 2} = \epsilon.$
-\item
-    $\Velement{s}{0 \ldots 4} = \seq{1, 2, 3, 4, 5}.$
-\item
-    \Velement{s}{0 \ldots 5} is not well-defined
-        because $5 \notin \Dom{\V{s}}.$
-\end{itemize}
-We avoid corner-cases in our presentation.
-But, for the sake of completeness, here are examples:
-\begin{itemize}
-\item $\Velement{s}{{-1} \ldots 5} = \epsilon.$
-        The use of a negative number as one of the
-        limits of the range is considered first.
-        Therefore, that $5 \notin \Dom{\V{s}}$ does not become relevant.
-\item $\Velement{s}{{-1} \ldots 4} = \epsilon.$
-\item \Velement{s}{42 \ldots 3} is not well-defined
-        because $42 \notin \Dom{\V{s}}.$
-\item $\Velement{s}{42 \ldots {-3}} = \epsilon.$
-        That $-3$ is negative is
-        considered first and the fact that
-        $42 \notin \Dom{\V{s}}$
-        is not relevant.
-\item $\Velement{s}{{-42} \ldots {-7}} = \epsilon.$ \exEnd
-\end{itemize}
-\end{example}
-
-\begin{definition}[Prefix]
-\label{def:prefix}
-A \dfn[prefix@Prefix (of a sequence)]{prefix}
-of a sequence
-is a slice of the sequence from index zero.
-The prefix is a
-\dfn[prefix@Prefix (of a sequence)!proper]{proper prefix}
-iff it is not identical to its container sequence.
-We write \Pfx{\V{slice},\V{seq}} to say
-that \V{slice} is a prefix of \V{seq}.
-We write \PrPfx{\V{slice},\V{seq}} to say
-that \V{slice} is a proper prefix of \V{seq}.
-\dfEnd
-\end{definition}
-
-\begin{definition}[Suffix]
-\label{def:suffix}
-A \dfn[suffix@Suffix (of a sequence)]{suffix}
-of a sequence
-is a slice of the sequence of size $\Vsize{cntn}-\V{offset}$,
-where $\V{cntn}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
-is the container sequence,
-and \V{offset} is the offset of the slice in \V{cntn}.
-The suffix is a
-\dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
-iff it is not identical to its container sequence.
-We write \Sfx{\V{slice},\V{seq}} to say
-that \V{slice} is a suffix of \V{seq}.
-We write \PrSfx{\V{slice},\V{seq}} to say
-that \V{slice} is a proper suffix of \V{seq}.
-\dfEnd
-\end{definition}
-
-\begin{definition}[Fusion]
-\label{def:fusion}
-Iff a suffix and a prefix share the same container sequence,
-and the size of the prefix is equal to the offset of the suffix,
-we say that the container sequence is the
-\dfn[Fusion (of two sequences)]{fusion}
-of the prefix and suffix.
-\dfEnd
-\end{definition}
-
-\begin{observation}
-The prefix of a fusion must be finite, because the offset
-of a slice is finite by the definition of a slice \Dfref{def:slice},
-and the size of the prefix must be equal to the offset
-of the suffix.
-\obEnd
-\end{observation}
-
-\begin{observation}
-A prefix of a fusion may be the empty sequence,
-in which case the matching suffix of the fusion is identical
-to the fusion.
-A suffix of a fusion may be the empty sequence,
-in which case the matching prefix of the fusion is identical
-to the fusion.
-\obEnd
-\end{observation}
 
 \begin{definition}[Sequence Pairs]
 \label{def:sequence-pairs}
@@ -3051,8 +2858,202 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 \myqed
 \end{proof}
 
+\begin{definition}[Slice]
+\label{def:slice}
+Given
+\begin{itemize}
+\item an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
+\item a \dfn[Length (of a slice)]{length} or \dfn[Size (of a slice)]{size},
+    $\V{len}\in\naturals\cup\set{\naturals},$
+\item and a \dfn{container sequence}%
+    \index{recce-defienda}{sequence@Sequence!container},
+    $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
+\end{itemize}
+we say that \V{slice} is a
+\dfn[Slice (of a sequence)]{slice}
+of size \V{len}
+in \V{sequence}
+from \V{offset}
+iff
+\[
+    \begin{gathered}
+        \V{offset}+\V{len} \le \Vsize{seq}
+        \\ \land\; \V{slice} =
+        \set{ \begin{gathered}
+            \V{element} \in \naturals\times\V{V} :
+            \exists\; \Vnat{ix} \in \V{len} :
+            \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+        \end{gathered} }
+    \end{gathered}
+\]
+We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
+\V{offset}.
+If \V{slice} is finite,
+we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container sequence]{to} the index
+$\V{offset}+\Vdecr{len}$.
+\dfEnd
+\end{definition}
+
+\begin{observation}
+From the definition of slice \Dfref{def:slice},
+it is vacuously true that if \Vsize{len} = 0, then
+\V{slice} is a slice of \V{seq}.
+\obEnd
+\end{observation}
+
+\begin{remark}[Slice natural range]
+\label{rem:slice-natural-range}
+The notation
+\[ \V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}], \]
+where \Vnat{a} and \Vnat{z} are natural numbers,
+is interpreted by applying the following rules,
+in order:
+\begin{itemize}
+\item
+If $\V{a} \notin \Dom{\V{s}}$
+or $\V{z} \notin \Dom{\V{s}}$,
+then \V{subseq} is not well-defined.
+\item
+If \V{subseq} is well-defined,
+and $\V{a} \le \V{z}$, then
+\V{subset} is
+the slice of \V{s} from \V{a} of size $\V{z}+1-\V{a}$,
+in other words, the slice of \V{s} from \V{a} to \V{z}.
+\item
+If \V{subseq} is well-defined
+and $\V{a} > \V{z}$,
+then $\V{subseq} = \epsilon.$
+\rmEnd
+\end{itemize}
+\end{remark}
+
+\begin{remark}[Slice integer range]
+\label{rem:slice-integer-range}
+Recall that, when \Vz{x} is a non-negative integer, \Vnat{x} is
+the representation of \Vz{x} in the canonical embedding from \naturals.
+The notation
+\[ \V{subseq} = \V{s}[\Vz{a} \ldots \Vz{z}], \]
+where \Vz{a} and \Vz{z}
+are integers,
+is interpreted by applying the following rules,
+in order:
+\begin{itemize}
+\item If \Vz{a} is negative, then $\V{subseq} = \epsilon.$
+\item If \Vz{z} is negative, then $\V{subseq} = \epsilon.$
+\item If both \Vz{a} and \Vz{z} are non-negative,
+then
+$\V{subseq} = \Velement{s}{\Vnat{a}\ldots\Vnat{z}}$.
+\rmEnd
+\end{itemize}
+\end{remark}
+
+\begin{example}[Slice range]
+\label{ex:slice-range}
+Here are some examples of
+the slice notation of
+\Rmref{slice-natural-range} and
+\Rmref{slice-integer-range}.
+Let
+\[
+    \V{s} = \seq{1, 2, 3, 4, 5}.
+\]
+\begin{itemize}
+\item
+    $\Velement{s}{0 \ldots {-1}} = \epsilon.$
+\item
+    $\Velement{s}{1 \ldots 2} = \seq{2, 3}.$
+\item
+    $\Velement{s}{2 \ldots 2} = \seq{3}.$
+\item
+    $\Velement{s}{3 \ldots 2} = \epsilon.$
+\item
+    $\Velement{s}{0 \ldots 4} = \seq{1, 2, 3, 4, 5}.$
+\item
+    \Velement{s}{0 \ldots 5} is not well-defined
+        because $5 \notin \Dom{\V{s}}.$
+\end{itemize}
+We avoid corner-cases in our presentation.
+But, for the sake of completeness, here are examples:
+\begin{itemize}
+\item $\Velement{s}{{-1} \ldots 5} = \epsilon.$
+        The use of a negative number as one of the
+        limits of the range is considered first.
+        Therefore, that $5 \notin \Dom{\V{s}}$ does not become relevant.
+\item $\Velement{s}{{-1} \ldots 4} = \epsilon.$
+\item \Velement{s}{42 \ldots 3} is not well-defined
+        because $42 \notin \Dom{\V{s}}.$
+\item $\Velement{s}{42 \ldots {-3}} = \epsilon.$
+        That $-3$ is negative is
+        considered first and the fact that
+        $42 \notin \Dom{\V{s}}$
+        is not relevant.
+\item $\Velement{s}{{-42} \ldots {-7}} = \epsilon.$ \exEnd
+\end{itemize}
+\end{example}
+
+\begin{definition}[Prefix]
+\label{def:prefix}
+A \dfn[prefix@Prefix (of a sequence)]{prefix}
+of a sequence
+is a slice of the sequence from index zero.
+The prefix is a
+\dfn[prefix@Prefix (of a sequence)!proper]{proper prefix}
+iff it is not identical to its container sequence.
+We write \Pfx{\V{slice},\V{seq}} to say
+that \V{slice} is a prefix of \V{seq}.
+We write \PrPfx{\V{slice},\V{seq}} to say
+that \V{slice} is a proper prefix of \V{seq}.
+\dfEnd
+\end{definition}
+
+\begin{definition}[Suffix]
+\label{def:suffix}
+A \dfn[suffix@Suffix (of a sequence)]{suffix}
+of a sequence
+is a slice of the sequence of size $\Vsize{cntn}-\V{offset}$,
+where $\V{cntn}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
+is the container sequence,
+and \V{offset} is the offset of the slice in \V{cntn}.
+The suffix is a
+\dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
+iff it is not identical to its container sequence.
+We write \Sfx{\V{slice},\V{seq}} to say
+that \V{slice} is a suffix of \V{seq}.
+We write \PrSfx{\V{slice},\V{seq}} to say
+that \V{slice} is a proper suffix of \V{seq}.
+\dfEnd
+\end{definition}
+
+\begin{definition}[Fusion]
+\label{def:fusion}
+Iff a suffix and a prefix share the same container sequence,
+and the size of the prefix is equal to the offset of the suffix,
+we say that the container sequence is the
+\dfn[Fusion (of two sequences)]{fusion}
+of the prefix and suffix.
+\dfEnd
+\end{definition}
+
+\begin{observation}
+The prefix of a fusion must be finite, because the offset
+of a slice is finite by the definition of a slice \Dfref{def:slice},
+and the size of the prefix must be equal to the offset
+of the suffix.
+\obEnd
+\end{observation}
+
+\begin{observation}
+A prefix of a fusion may be the empty sequence,
+in which case the matching suffix of the fusion is identical
+to the fusion.
+A suffix of a fusion may be the empty sequence,
+in which case the matching prefix of the fusion is identical
+to the fusion.
+\obEnd
+\end{observation}
 \begin{theorem}[Slice Pairs]
 \label{th:slice-pairs}
+\todo{Recheck for new definition of slice}
 The pairs of a slice are a subset of
 the pairs of the container sequence.
 More precisely,
