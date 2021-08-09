@@ -2611,18 +2611,15 @@ is the product of the next 100.
 
 \begin{definition}[Slice]
 \label{def:slice}
-Given an
+Given
 \begin{itemize}
-\item \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
+\item an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
 \item a \dfn[Length (of a slice)]{length} or \dfn[Size (of a slice)]{size},
     $\V{len}\in\naturals\cup\set{\naturals},$
 \item and a \dfn{container sequence}%
     \index{recce-defienda}{sequence@Sequence!container},
     $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
 \end{itemize}
-such that
-\[ \forall\; \Vnat{ix},\; \V{offset} \le \V{ix} < \V{offset}+\V{len}
-    : \V{ix} \in \Dom{\V{seq}}, \]
 we say that \V{slice} is a
 \dfn[Slice (of a sequence)]{slice}
 of size \V{len}
@@ -2630,15 +2627,21 @@ in \V{sequence}
 from \V{offset}
 iff
 \[
-    \V{slice} =
-    \set{ \begin{gathered}
-        \V{element} \in \naturals\times\V{V} :
-        \exists\; \Vnat{ix} \in \V{len} :
-        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
-    \end{gathered} }
+    \begin{gathered}
+        \V{offset}+\V{len} \le \Vsize{seq}
+        \\ \land\; \V{slice} =
+        \set{ \begin{gathered}
+            \V{element} \in \naturals\times\V{V} :
+            \exists\; \Vnat{ix} \in \V{len} :
+            \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+        \end{gathered} }
+    \end{gathered}
 \]
 We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
 \V{offset}.
+If \V{slice} is finite,
+we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container sequence]{to} the index
+$\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
 
@@ -2665,8 +2668,8 @@ then \V{subseq} is not well-defined.
 If \V{subseq} is well-defined,
 and $\V{a} \le \V{z}$, then
 \V{subset} is
-the slice of \V{s} from \V{a} of length $\V{z}-\V{a}+1$,
-in other words, the slice of \V{s} from \V{a} up to but excluding \V{z}+1.
+the slice of \V{s} from \V{a} of size $\V{z}+1-\V{a}$,
+in other words, the slice of \V{s} from \V{a} to \V{z}.
 \item
 If \V{subseq} is well-defined
 and $\V{a} > \V{z}$,
@@ -2771,9 +2774,10 @@ that \V{slice} is a proper prefix of \V{seq}.
 \label{def:suffix}
 A \dfn[suffix@Suffix (of a sequence)]{suffix}
 of a sequence
-is a slice of the sequence up to but excluding \Vsize{cntn},
+is a slice of the sequence of size $\Vsize{cntn}-\V{offset}$,
 where $\V{cntn}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
-is the container sequence.
+is the container sequence,
+and \V{offset} is the offset of the slice in \V{cntn}.
 The suffix is a
 \dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
 iff it is not identical to its container sequence.
@@ -2783,6 +2787,34 @@ We write \PrSfx{\V{slice},\V{seq}} to say
 that \V{slice} is a proper suffix of \V{seq}.
 \dfEnd
 \end{definition}
+
+\begin{definition}[Fusion]
+\label{def:fusion}
+Iff a suffix and a prefix share the same container sequence,
+and the size of the prefix is equal to the offset of the suffix,
+we say that the container sequence is the
+\dfn[Fusion (of two sequences)]{fusion}
+of the prefix and suffix.
+\dfEnd
+\end{definition}
+
+\begin{observation}
+The prefix of a fusion must be finite, because the offset
+of a slice is finite by the definition of a slice \Dfref{def:slice},
+and the size of the prefix must be equal to the offset
+of the suffix.
+\obEnd
+\end{observation}
+
+\begin{observation}
+A prefix of a fusion may be the empty sequence,
+in which case the matching suffix of the fusion is identical
+to the fusion.
+A suffix of a fusion may be the empty sequence,
+in which case the matching prefix of the fusion is identical
+to the fusion.
+\obEnd
+\end{observation}
 
 \begin{definition}[Sequence Pairs]
 \label{def:sequence-pairs}
@@ -3626,7 +3658,7 @@ followed by the unique existential generalization of \V{subpath}.
 \end{proof}
 
 \begin{definition}[Path Fusion]
-\label{def:fusion}
+\label{def:path-fusion}
 Let \V{p1} and \V{p2} be paths in \V{G}.
 Their \dfn{fusion}
 is a path, call it \V{fusion},
@@ -3700,7 +3732,7 @@ such that
 \mypareq{eq:th-fusion-105}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
     \V{seq} is the sequence induced by \V{pair} according to
-    the definition \Dfref{def:fusion}.}
+    the definition \Dfref{def:path-fusion}.}
 We show the existence of at least one \V{pair}-induced
 sequence by constructing a new free sequence, and proving that our construction
 is, in fact, a sequence induced by \V{pair}.
@@ -3732,7 +3764,7 @@ is, in fact, a sequence induced by \V{pair}.
         \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }$
         \cuz{} \Eref{eq:th-fusion-110}.}
 \mypareq{eq:th-fusion-150}{%
-    $\Vmyfn{Induced}{fusion}$ \bcuz{} \longDfref{Fusion}{def:fusion},
+    $\Vmyfn{Induced}{fusion}$ \bcuz{} \longDfref{Fusion}{def:path-fusion},
         \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-120},
         \Eref{eq:th-fusion-130}.}
 To show that the \V{pair}-induced sequence is unique,
@@ -3742,16 +3774,16 @@ we introduce a second, arbitrarily chosen, sequence induced by \V{pair}:
         \cuz{} ARB \Rvarseq{fusion2}{V}.}
 \mypareq{eq:th-fusion-170}{%
    $\Velement{fusion2}{0\ldots \Vlastix{path1}} = \V{path1}$
-    \bcuz{} \longDfref{Fusion}{def:fusion},
+    \bcuz{} \longDfref{Fusion}{def:path-fusion},
         \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-160}.}
 \mypareq{eq:th-fusion-180}{%
    $\Velement{fusion2}{\Vlastix{path1}\ldots\Vlastix{fusion2}} = \V{path2}$
-    \bcuz{} \longDfref{Fusion}{def:fusion},
+    \bcuz{} \longDfref{Fusion}{def:path-fusion},
         \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-160}.}
 \mypareq{eq:th-fusion-182}{%
     $\Vsize{fusion2} =
         \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }$
-            \bcuz{} \longDfref{Fusion}{def:fusion},
+            \bcuz{} \longDfref{Fusion}{def:path-fusion},
             \Eref{eq:th-fusion-105}, \Eref{eq:th-fusion-160}.}
 \mypareq{eq:th-fusion-184}{%
     $\Vsize{fusion} = \Vsize{fusion2}$ \cuz{}
