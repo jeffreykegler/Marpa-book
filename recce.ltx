@@ -67,6 +67,12 @@
 \makeatother
 
 \usepackage{epigraph}
+% sets a wider default
+\newcommand{\myepi}[3][.64\textwidth]{
+    \setlength{\epigraphwidth}{#1}%
+    \epigraph{#2}{#3}%
+}
+
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
@@ -736,7 +742,7 @@ a Creative Commons Attribution-NoDerivs 3.0 United States License.
 
 \chapter{Introduction}
 
-\epigraph{%
+\myepi{%
 \label{epi:goedel}
 The more I think about language,
 the more it amazes me that people ever understand each other at all.}
@@ -1701,12 +1707,15 @@ $\tuple{\Rvar{b}{R}, \Rvar{b}{S}, \Rvar{b}{T}}$,
 where the name of each variable indicates its tuple,
 and the realm subscript of each variable indicates its position
 within its tuple.
-As another example, it seems very intuitive to
+(We use double brackets to indicate tuples.)
+
+As another example,
+it seems very intuitive
 to represent a natural number as \Vnat{x}
 and its canonical embedding in the integers
-as \Vz{x},
-so that
-\Vnat{x} and \Vz{x} are two different variables distinguished
+as \Vz{x}.
+Here again,
+\Vnat{x} and \Vz{x} are two distinct variables distinguished
 only by their realm.%
 \footnote{In set theory, the different classes of number are quite distinct,
     an issue which the parsing literature generally ignores, largely without incident.
@@ -1715,6 +1724,7 @@ only by their realm.%
     Among the many problems that have resulted,
     the explosion of the Ariane 5 rocket
     is particularly well-documented.\cite{Lyons1996}}
+
 Realms are defined explicitly, when they are introduced.
 In addition, for every realm \realm{R},
 \begin{itemize}
@@ -1810,6 +1820,21 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
+\myepi[.7\textwidth]{\label{epi:corcoran}
+    [S]tipulated technical usage is powerless to completely cancel
+    metaphorical implications, overtones and connotations
+    accompanying ordinary usage.}
+    {Corcoran, ``Schemata: The Concept of Schema in the History of Logic''~%
+        \cite[p. 223]{Corcoran2005}}
+\myepi{\label{epi:looking-glass}%
+    `When I use a word,' Humpty Dumpty said in rather a scornful tone,
+    `it means just what I choose it to mean — neither more nor less.'
+    \\[.3\baselineskip]
+    `The question is,' said Alice, `whether you can make words mean so many different things.'
+    \\[.3\baselineskip]
+    `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
+    {Lewis Carroll, {\em Through the Looking Glass}}
+
 Our preceding disciplines are
 set theory;
 logic;
@@ -1838,8 +1863,7 @@ we deal with considerations from preceding disciplines
 
 \section{Notation and conventions}
 
-{ \setlength{\epigraphwidth}{.64\textwidth}
-\epigraph{\label{epi:naturals-discomfort}%
+\myepi{\label{epi:naturals-discomfort}%
     The slight feeling of discomfort the reader
     may experience with the definition of natural number
     is quite common and in most cases temporary.
@@ -1849,7 +1873,6 @@ we deal with considerations from preceding disciplines
     but to be told that 7 is a subset of 8
     or that 7 is an element of 8 is disturbing.}
     {{\em Naive Set Theory}, Halmos\cite[p. 45]{Halmos1960}}%
-}
 
 In this book, the natural numbers begin with 0,
 and that set of natural numbers is written \naturals{},
@@ -1909,7 +1932,19 @@ is a duple.
 We may refer to tuple element by numeric indices,
 so that the first element of
 \Eref{eq:tuple-example}
-is $\Velement{t}{0}=42$,
+is $\Velement{t}{0}=42$,%
+\footnote{%
+   Our use of \VVelement{S}{i} instead of the more traditional
+   $\V{S}_\V{i}$ is one of the choices that we
+   made hoping to save
+   eyesight as well as reading time.
+   We are particularly motivated by our memory of
+   a paper in which the traditional notation
+   converted the statement of one of the paper's
+   major theorems into an exercise.
+   The notation used a subscript to a subscript, and
+   much depended on whether the second level subscript was
+   the numeral 1 or the letter l.}
 and the last element of
 \Eref{eq:tuple-example}
 is $\Velement{t}{\Vlastix{x}}=1729$.
@@ -2410,7 +2445,7 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-\begin{epigraph}{%
+\myepi{%
 \label{epi:range-vs-function}
 There are occasions when the range of a function
 is deemed to be more important than the function itself.
@@ -2418,7 +2453,6 @@ When that is the case, both the terminology
 and the notation undergo radical alterations.}
 {{\em Naive Set Theory},
     \\ Halmos~\cite[p.~34]{Halmos1960}}
-\end{epigraph}
 
 We assume that we are familiar with
 sequences from basic set theory.
@@ -2575,19 +2609,7 @@ and
 \begin{definition}[First and last sequence index]
 \label{def:last-index}
 Where \V{seq} is a non-empty sequence,
-the first element of \V{seq} is \Velement{seq}{0}.%
-\footnote{%
-   Our use of \VVelement{S}{i} instead of the more traditional
-   $\V{S}_\V{i}$ is one of the choices that we
-   made hoping to save
-   eyesight as well as reading time.
-   We are particularly motivated by our memory of
-   a paper in which the traditional notation
-   converted the statement of one of the paper's
-   major theorems into an exercise.
-   The notation used a subscript to a subscript, and
-   much depended on whether the second level subscript was
-   the numeral 1 or the letter l.}
+the first element of \V{seq} is \Velement{seq}{0}.
 Where \V{seq} is a finite non-empty sequence,
 the last index is \Vlastix{seq},
 so that the last element is \Velement{seq}{\Vlastix{seq}}.
@@ -3190,25 +3212,6 @@ and much of it may be deleted.
 Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
-
-{ \setlength{\epigraphwidth}{.64\textwidth}
-    \epigraph{\label{epi:looking-glass}
-    `When I use a word,' Humpty Dumpty said in rather a scornful tone,
-    `it means just what I choose it to mean — neither more nor less.'
-    \\[.3\baselineskip]
-    `The question is,' said Alice, `whether you can make words mean so many different things.'
-    \\[.3\baselineskip]
-    `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
-    {Lewis Carroll, {\em Through the Looking Glass}}
-}
-{ \setlength{\epigraphwidth}{.6\textwidth}
-    \epigraph{\label{epi:corcoran}
-    [S]tipulated technical usage is powerless to completely cancel
-    metaphorical implications, overtones and connotations
-    accompanying ordinary usage.}
-    {Corcoran, ``Schemata: The Concept of Schema in the History of Logic''~%
-        \cite[p. 223]{Corcoran2005}}
-}
 
 Graph theory is one of our preceding disciplines,
 and the graph theory results we use are standard.
@@ -19977,8 +19980,7 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-{ \setlength{\epigraphwidth}{.64\textwidth}
-\epigraph{\label{epi:ariane}%
+\myepi{\label{epi:ariane}%
     The exception which occurred was not due to random failure but a design
     error. The exception was detected, but inappropriately handled because
     the view had been taken that software should be considered correct until
@@ -19988,7 +19990,6 @@ will usually be a waste of time.}
     to be faulty until applying the currently accepted best practice methods
     can demonstrate that it is correct.}
     {Ariane 5, Flight 501, Failure Report\cite[section 2.2]{Lyons1996}}%
-}
 
 In this book,
 we call a parsing algorithm \dfn{correct} if and
@@ -23002,12 +23003,10 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-\begin{epigraph}{%
-\label{epi:hamlet}
-Beggar that I am, I am even poor in thanks; but I thank you;
-and sure, dear friends, my thanks are too dear a halfpenny.}
-{Hamlet}
-\end{epigraph}
+\myepi{\label{epi:hamlet}%
+    Beggar that I am, I am even poor in thanks; but I thank you;
+    and sure, dear friends, my thanks are too dear a halfpenny.}
+    {Hamlet}
 
 While we always feared that this section would
 be an exhibition of our negligence and ingratitude as anything else,
