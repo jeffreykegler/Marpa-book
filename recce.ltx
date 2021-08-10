@@ -2724,7 +2724,7 @@ to show that it is an element of the set in
 \mypareq{eq:th-sequence-pairs-set-1-160}{%
     $\forall\;\Vnat{x} :
         \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$
-        \bcuz{} \longDfref{Last Index}{def:last-index}.}
+        \cuz{} ZF.}
 \mypareq{eq:th-sequence-pairs-set-1-170}{%
     $\Vnat{i} + 1 < \Vsize{seq}$
     \cuz{} \Eref{eq:th-sequence-pairs-set-1-130},
@@ -2812,7 +2812,7 @@ to show that it is an element of
 \mypareq{eq:th-sequence-pairs-set-2-140}{%
     $\forall\;\Vnat{x} :
         \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$
-        \bcuz{} ZF.}
+        \cuz{} ZF.}
 \mypareq{eq:th-sequence-pairs-set-2-150}{%
        $\Vnat{i} + 1 \in \Dom{\V{seq}}$ \cuz{}
            \Eref{eq:th-sequence-pairs-set-2-120},
@@ -2908,17 +2908,17 @@ of size \V{len}
 in \V{sequence}
 from \V{offset}
 iff
-\[
-    \begin{gathered}
-        \V{offset}+\V{len} \le \Vsize{seq}
-        \\ \land\; \V{slice} =
-        \set{ \begin{gathered}
-            \V{element} \in \naturals\times\V{V} :
-            \exists\; \Vnat{ix} \in \V{len} :
-            \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
-        \end{gathered} }
-    \end{gathered}
-\]
+\begin{gather}
+\label{eq:def-slice-020}
+    \V{offset}+\V{len} \le \Vsize{seq}
+\\ \label{eq:def-slice-040}
+    \land\; \V{slice} =
+    \set{ \begin{gathered}
+        \V{element} \in \naturals\times\V{V} :
+        \exists\; \Vnat{ix} \in \V{len} :
+        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+    \end{gathered} }
+\end{gather}
 We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
 \V{offset}.
 If \V{slice} is finite,
@@ -2933,6 +2933,39 @@ it is vacuously true that if \Vsize{len} = 0, then
 \V{slice} is a slice of \V{seq}.
 \obEnd
 \end{observation}
+
+\begin{lemma}[Slice well-definedness]
+\label{lem:slice-well-definedness}
+Slices are well-defined. \thEnd
+\end{lemma}
+
+\begin{proof}
+For the purpose of this proof,
+we first instantiate the same variables and placeholders as
+in the definition of a slice \Dfref{def:slice}.
+The only problematic portion of \Dfref{def:slice} is the well-definedness
+of indexing of \V{seq} by
+\V{offset}+\V{ix} in
+\VVelement{seq}{\V{offset}+\V{ix}}
+\Eref{eq:def-slice-040}.
+This indexing is quarded by the left hand side of a conjunction,
+\mypareq{eq:lem-slice-well-definedness-100}{%
+    $\V{offset}+\V{len} \le \Vsize{seq}$ \cuz{} AF proof, \Eref{eq:def-slice-020},}
+and an existential quantifier
+\mypareq{eq:lem-slice-well-definedness-110}{%
+    $\Vnat{ix} \in \V{len}$ \cuz{} AF proof, \Eref{eq:def-slice-040}.}
+\mypareq{eq:lem-slice-well-definedness-120}{%
+    $\Vnat{ix} < \V{len}$ \cuz{} ZF,
+        \Eref{eq:lem-slice-well-definedness-110}.}
+\mypareq{eq:lem-slice-well-definedness-130}{%
+    $\V{offset}+\V{ix} < \Vsize{seq}$ \cuz{} \Eref{eq:lem-slice-well-definedness-100},
+        \Eref{eq:lem-slice-well-definedness-120}.}
+\mypareq{eq:lem-slice-well-definedness-140}{%
+    $\forall\;\Vnat{x} :
+        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$ \cuz{} ZF.}
+\todo{Finish this proof}
+\myqed
+\end{proof}
 
 \todo{Prove well-definedness, length, domain,
     and codomain (aka edges) for slices}
