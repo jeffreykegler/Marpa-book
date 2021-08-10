@@ -1557,8 +1557,10 @@ The entire book is the \dfn{global scope}.
 
 \todo{Revise re realms, domains of discourse}
 Following Halmos\cite{Halmos1960},
-all of our mathematical objects are sets.
-There is no universal set, so each variable implies
+all of the mathematical objects
+in our object-language are sets.
+Our object-language does not contain a universal set,
+so each variable implies
 a set that is its \dfn{domain of discourse}.
 Every instance of a variable also has a
 \dfn[Realm (of a variable)]{realm},
@@ -1567,16 +1569,18 @@ the subset of the domain of discourse
 over which that variable instance
 can range.%
 \footnote{%
-    Constants and variables that are instances of placeholders
-    can be considered to have a realm that is the singleton set
-    that contains the constant or placeholder instance.
-    Our goal in this book will be only to assure ourselves that all of the
-    Constants and placeholder instances could, alternatively,
-    be treated as ``realm-less''.
     Our goal is to assure ourselves that the mathematical objects we use
     are, in fact, elements of a domain of
     discourse which could, if necessary,
-    be constructed using the axioms in Halmos\cite{Halmos1960}.}
+    be constructed using the axioms in Halmos\cite{Halmos1960}.
+    In some instances the most natural realm of variable is not
+    a set.
+    (See our discussion of ``placeholders'' below
+    \Sref{placeholders}.)
+    Rather than complicate our scheme with ``realm-less''
+    variables, we assign these variables a trivial realm ---
+    the singleton set
+    that contains that the value of that variable.}
 Almost always, the realm of a variable
 and its domain of discourse are
 equivalent.
@@ -1597,7 +1601,7 @@ was called the "domain" for each variable%
     term ``domain'' is heavily overloaded with other
     even more well-established uses.
     For example,
-    In the tradition terminology,
+    in the traditional terminology,
     a function variable has a ``domain of the variable''
     but each of the variable's values also has a ``domain of the function''.
     So if \V{f} is a variable representing a boolean function of the integers,
@@ -1737,17 +1741,22 @@ $\naturals$ is a realm.
 \FloatBarrier
 
 \section{Placeholders}
+\label{sec:placeholders}
 
 A schema is a mathematical text with \dfn[Placeholder]{placeholders}.
 In concept, the mathematical text is not deductive mathematics until
 the placeholders in it are replaced,
 in a way that is described.\footnote{%
-    For more on the traditional uses of schemas see \cite{Cummings2021}.
-    Not that our placeholders are usually
+    For more on the traditional uses of schemas see \cite{Corcoran2005}.
+    Note that our placeholders are usually
     part of our meta-language,
     so that the text in which the placeholder is specified must
     be read as on level above our meta-language ---
-    as part of a meta-language of our meta-language.}
+    as part of a meta-language of our meta-language.
+    The term ``schematic variable'' is more common for placeholder ---
+    "regrettably" says Corcoran \cite[p. 220]{Corcoran2005}.
+    And in fact the two types of symbol
+    often end up being lumped together as ``variables''.}
 
 Schemas are pervasive in the mathematical literature on which
 this paper is based.
@@ -2556,7 +2565,7 @@ are bound in context,
 \begin{gather*}
     \begin{gathered}
         \seq{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} : \Vmyfn{f}{ix} }
-        \\ = \seq{ \Vmyfn{f}{0}, \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}}
+        = \seq{ \Vmyfn{f}{0}, \Vmyfn{f}{1}, \ldots  \Vmyfn{f}{hi}}
             \\ = \set{ \begin{gathered}
                 \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
                 \\ \V{ix} \le \Vnat{hi} \land
@@ -2566,7 +2575,7 @@ are bound in context,
 \\[2ex]
     \begin{gathered}
         \seq{ \Vnat{ix} < 42 : \Vmyfn{f}{ix+1} }
-        \\ = \seq{ \Vmyfn{f}{1} \ldots \Vmyfn{f}{42} }
+        = \seq{ \Vmyfn{f}{1} \ldots \Vmyfn{f}{42} }
             \\ = \set{ \begin{gathered}
                 \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
                 \\ \V{ix} < 42 \land
@@ -2578,7 +2587,7 @@ and
 \[
     \begin{gathered}
     \seq{ \Vnat{ix} : \Vmyfn{f}{ix+1} }
-    \\ = \seq{ \Vmyfn{f}{1}, \Vmyfn{f}{2}, \Vmyfn{f}{3}, \ldots }
+    = \seq{ \Vmyfn{f}{1}, \Vmyfn{f}{2}, \Vmyfn{f}{3}, \ldots }
             \\ = \set{ \begin{gathered}
                 \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
                 \V{element} = \tuple {\V{ix}, \Vmyfn{f}{ix+1} }
@@ -2669,11 +2678,7 @@ That is,
 
 \begin{lem}{Sequence Pairs Set 1}
 \label{lem:sequence-pairs-set-1}
-\todo{Put the discussion of schematic variable vs. "place-holder" in
-an earlier chapter.}
-Let \V{V} be a placeholder\footnote{%
-Corcoran \cite{Corcoran2005} considers it "unfortunate" to call
-schematic variables "variables".}
+Let \V{V} be a placeholder
 for a variable whose value is a non-empty set.
 Let $\V{seq} \in \naturals\cup\set{\naturals}$
 be a sequence.
