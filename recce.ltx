@@ -456,6 +456,7 @@
 \newcommand{\tuple}[1]{\ensuremath{\left\llbracket #1 \right\rrbracket}}
 \newcommand{\family}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
+\newcommand{\Realm}[1]{\ensuremath{\mymathop{Realm}{#1}}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
@@ -476,7 +477,6 @@
 % the first appropriate argument is to be have the V{} macro applied.
 % A "VV" indicates the first two appropiate arguments should have V{} applied.
 % Macros prefaced with a "R" apply realm information.
-
 
 \newcommand{\Rvar}[2]{\ensuremath{\V{#1}_{\V{#2}}}}
 \newcommand{\Rvarseq}[2]{\ensuremath{\V{#1}_{\Rseq{\V{#2}}}}}
@@ -1563,7 +1563,7 @@ Our object-language does not contain a universal set,
 so each variable implies
 a set that is its \dfn{domain of discourse}.
 Every instance of a variable also has a
-\dfn[Realm (of a variable)]{realm},
+\dfn[Realm (wrt a variable)]{realm},
 which is
 the subset of the domain of discourse
 over which that variable instance
@@ -1771,16 +1771,37 @@ is advisable in our case.
 The most frequent reason that we resort to schemas is when
 the natural realm for a variable would not be a set.
 
-For example, when we deal with sequences, the most natural
+As an example, when we deal with sequences, the most natural
 way to describe them allows the values of the sequence to be
 arbitrary sets.
 But that would mean that the natural realm
-of the codomain of the sequence would
+of the codomain
+todo{codomain not yet defined, so add a forward reference}
+of the sequence would
 be the set of all non-empty sets,
 which is not well-defined in our set theory.
 We work around this by letting the domain of the sequences
 in our discussion be a placeholder, which may be replaced
 by any non-empty set.
+
+In this book,
+a \dfn[Macro]{macro}
+is an expression that looks like a function,
+but is evaluated at the meta-linguistic level.
+For example, we recall that we
+refer to the realm of the variable \V{v} as
+\Realm{\V{v}}.
+\Realm{} cannot be a function,
+because its domain would have to be
+the set of all variables,
+which is not well-defined.
+Instead we define \Realm{} as a macro,
+which is replaced at the meta-linguistic level,
+with the realm of \V{v}.
+\todo{Expand on macro discussion.
+Note argument of Realm() could be a placeholder,
+in which case there are two levels of meta-linguistic
+evaluation.}
 
 In order to be able to claim that all of our variables have a realm,
 we assign a trivial realm to every variable that replaces a placeholder.
@@ -2072,9 +2093,17 @@ A function that is both one-to-one and
 onto is a bijection.
 $\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
 $\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
-$\Dom{\V{f}}$ is the domain of \V{f},
+$\Dom{\V{f}}$ is the
+\dfn[Domain (wrt a function)]{domain} of \V{f},
+and $\Ran{\V{f}}$ is the
+\dfn[Range (wrt a function)]{range} of \V{f}.
+
 $\Cod{\V{f}}$ is the codomain of \V{f},
-and $\Ran{\V{f}}$ is the range of \V{f}.
+The codomain is part of the realm of \V{f}.
+The codomain of a function must be a superset
+of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
+
+\todo{How to define this?}
 
 We write $\V{X}\expOp\V{Y}$%
 \index{recce-defienda}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
@@ -2963,12 +2992,50 @@ and an existential quantifier
 \mypareq{eq:lem-slice-well-definedness-140}{%
     $\forall\;\Vnat{x} :
         \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$ \cuz{} ZF.}
-\todo{Finish this proof}
+\mypareq{eq:lem-slice-well-definedness-150}{%
+    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Eref{eq:lem-slice-well-definedness-130},
+        \Eref{eq:lem-slice-well-definedness-140}.}
+Equation \Eref{eq:lem-slice-well-definedness-150} is what we need to show that
+the indexing of \V{seq} by
+\V{offset}+\V{ix} in
+\VVelement{seq}{\V{offset}+\V{ix}}
+is well-defined,
+which is what we needed for the current proof.
 \myqed
 \end{proof}
 
-\todo{Prove well-definedness, length, domain,
+\begin{observation}[Offset of a slice]
+\label{obs:offset-of-a-slice}
+\todo{Write observation about possible values of the offset.}
+\end{observation}
+
+\todo{Prove domain,
     and codomain (aka edges) for slices}
+
+\begin{lemma}[Slice domain]
+\label{lem:slice-domain}
+The domain of a slice is its length.
+\thEnd
+\end{lemma}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\begin{theorem}[Slice properties]
+\label{th:slice-properties}
+A slice is a sequence whose range is a subset
+of the range of its container suqeunce.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
 
 \begin{theorem}[Slice Pairs]
 \label{th:slice-pairs}
