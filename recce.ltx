@@ -382,6 +382,8 @@
   \fi%
 }
 
+\newcommand{\lemEnd}{\thEnd}
+
 % local theoremoids: local definition
 
 \newtheorem{rawLdef}[rawLemma]{Local Definition}
@@ -2963,12 +2965,47 @@ it is vacuously true that if \Vsize{len} = 0, then
 \obEnd
 \end{observation}
 
+The following mysterious looking lemma is taken from
+the definition of a slice \Dfref{def:slice}.
+The reason for it will be clear when we seek to
+prove that slices are always well-defined.
+
+\begin{lemma}[Slice Well-definedness Helper]
+\label{lem:slice-well-definedness-helper}
+\begin{gather}
+\label{eq:lem-slice-well-definedness-helper-010}
+    \V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).
+\\ \label{eq:lem-slice-well-definedness-helper-020}
+    \land\; \V{offset}+\V{len} \le \Vsize{seq}
+\\ \label{eq:lem-slice-well-definedness-helper-030}
+    \land\; \Vnat{ix} \in \V{len}
+\\ \label{eq:lem-slice-well-definedness-helper-040}
+    \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.  \quad \lemEnd
+\end{gather}
+\end{lemma}
+
+\begin{proof}
+\mypareq{eq:lem-slice-well-definedness-helper-120}{%
+    $\Vnat{ix} < \V{len}$ \cuz{} ZF,
+        \Eref{eq:lem-slice-well-definedness-helper-030}.}
+\mypareq{eq:lem-slice-well-definedness-helper-130}{%
+    $\V{offset}+\V{ix} < \Vsize{seq}$ \cuz{} \Eref{eq:lem-slice-well-definedness-helper-020},
+        \Eref{eq:lem-slice-well-definedness-helper-120}.}
+\mypareq{eq:lem-slice-well-definedness-helper-140}{%
+    $\forall\;\Vnat{x} :
+        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$ \cuz{} ZF.}
+\mypareq{eq:lem-slice-well-definedness-helper-150}{%
+    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Eref{eq:lem-slice-well-definedness-helper-130},
+        \Eref{eq:lem-slice-well-definedness-helper-140}. \myqed}
+\end{proof}
+
 \begin{lemma}[Slice well-definedness]
 \label{lem:slice-well-definedness}
 Slices are well-defined. \thEnd
 \end{lemma}
 
 \begin{proof}
+\todo{Need to redo this proof}
 For the purpose of this proof,
 we first instantiate the same variables and placeholders as
 in the definition of a slice \Dfref{def:slice}.
@@ -2983,18 +3020,11 @@ This indexing is quarded by the left hand side of a conjunction,
 and an existential quantifier
 \mypareq{eq:lem-slice-well-definedness-110}{%
     $\Vnat{ix} \in \V{len}$ \cuz{} AF proof, \Eref{eq:def-slice-040}.}
-\mypareq{eq:lem-slice-well-definedness-120}{%
-    $\Vnat{ix} < \V{len}$ \cuz{} ZF,
-        \Eref{eq:lem-slice-well-definedness-110}.}
-\mypareq{eq:lem-slice-well-definedness-130}{%
-    $\V{offset}+\V{ix} < \Vsize{seq}$ \cuz{} \Eref{eq:lem-slice-well-definedness-100},
-        \Eref{eq:lem-slice-well-definedness-120}.}
-\mypareq{eq:lem-slice-well-definedness-140}{%
-    $\forall\;\Vnat{x} :
-        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$ \cuz{} ZF.}
+From the Slice Well-Definedness Helper Lemma, we see that
 \mypareq{eq:lem-slice-well-definedness-150}{%
-    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Eref{eq:lem-slice-well-definedness-130},
-        \Eref{eq:lem-slice-well-definedness-140}.}
+    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Lmref{slice-well-definedness-helper},
+        \Eref{eq:lem-slice-well-definedness-100},
+        \Eref{eq:lem-slice-well-definedness-110}.}
 Equation \Eref{eq:lem-slice-well-definedness-150} is what we need to show that
 the indexing of \V{seq} by
 \V{offset}+\V{ix} in
@@ -3006,17 +3036,86 @@ which is what we needed for the current proof.
 
 \begin{observation}[Offset of a slice]
 \label{obs:offset-of-a-slice}
-\todo{Write observation about possible values of the offset.}
+Where \V{cntn} is a container sequence,
+\V{offset} is the offset of a slice, \V{slice},
+iff $\V{offset} \le \Vsize{cntn}$, or, alternatively,
+$\V{offset} \in \V{cntn}+1$.
+In plainer terms, the offset of a slice may be anywhere in its
+container, or at the end.
+
+We note that that, if \V{offset}=\Vsize{cntn},
+that \VVelement{slice}{offset} is not well-defined.
+In plainer terms, the container does not have a value at every possible slice offset.
+Where the slice does not have a value at its offset, the slice must be empty.
+\obEnd
 \end{observation}
 
 \todo{Prove domain,
     and codomain (aka edges) for slices}
 
-\begin{lemma}[Slice domain]
-\label{lem:slice-domain}
-The domain of a slice is its length.
+\begin{lemma}[Slice domain size containment]
+\label{lem:slice-domain-size-containment}
+The domain of a slice contains its size.
+That is, where \V{slice} is a slice,
+$\Vsize{slice} \subseteq \Dom{\V{slice}}$.
 \thEnd
 \end{lemma}
+
+\begin{proof}
+The proof is by reductio,
+assuming that an arbitary element of the size of
+a slice is not a element of its domain.
+Let an arbitary slice be such that
+\begin{gather}
+\label{eq:lem-slice-domain-size-containment-100}
+    \V{offset}+\V{len} \le \Vsize{seq}
+\\ \label{eq:lem-slice-domain-size-containment-110}
+    \land\; \V{slice} =
+    \set{ \begin{gathered}
+        \V{element} \in \naturals\times\V{V} :
+        \exists\; \Vnat{ix} \in \V{len} :
+        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+    \end{gathered} }
+\\ \nonumber \myparbox{%
+ AF proof, \longDfref{Slice}{def:slice},
+ ARB $\V{offset}\in\naturals,$
+ \linebreak[1] ARB $\V{len}\in\naturals\cup\set{\naturals},$
+ ARB $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$
+ \linebreak[1] ARB $\V{slice}\in\powerset{\naturals\times\V{V}}$.}
+\end{gather}
+\begin{gather}
+\label{eq:lem-slice-domain-size-containment-120}
+     \Vnat{ix} \in \V{len}
+\\ \label{eq:lem-slice-domain-size-containment-130}
+     \land \Vnat{ix} \notin \Dom{\V{slice}}
+\\ \nonumber \myparbox{\cuz{} AF reductio.}
+\end{gather}
+\mypareq{eq:lem-slice-domain-size-containment-140}{%
+    $\nexists\; \V{v1} \in \V{V} : \tuple{\V{ix}, \V{v1}} \in \V{slice}$
+    \cuz{} \Eref{eq:lem-slice-domain-size-containment-130}.}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\begin{lemma}[Slice size domain containment]
+\label{th:slice-size-domain-containment}
+The size of a slice contains its domain.
+That is, where \V{slice} is a slice,
+$\Dom{\V{slice}} \subseteq \Vsize{slice}$
+\thEnd
+\end{lemma}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\begin{theorem}[Slice sequence]
+\label{th:slice-domain}
+A slice is a sequence.
+\thEnd
+\end{theorem}
 
 \begin{proof}
 % Proof template
