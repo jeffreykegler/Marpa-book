@@ -35,10 +35,9 @@
 % and words capitalized because they are special technical terms
 % (for example, LaTeX).
 %
-% We make some exceptions.  Names of lemmas and theorems need major words
-% to be capitalized to stand out in the text.  That is, they are normally
-% in "title case".  Therefore, when they are titles, they must also
-% be in "title case".
+% We do make exceptions.  For readability, we often want references
+% to theoremoids to stand out, and we selectively capitalize them
+% for this purpose.
 
 % Fix conflict between todonotes and amsart packages
 % See http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/todonotes/todonotes.pdf,
@@ -2942,10 +2941,8 @@ in \V{sequence}
 from \V{offset}
 iff
 \begin{gather}
-\label{eq:def-slice-020}
-    \V{offset}+\V{len} \le \Vsize{seq}
-\\ \label{eq:def-slice-040}
-    \land\; \V{slice} =
+\label{eq:def-slice-040}
+    \V{slice} =
     \set{ \begin{gathered}
         \V{element} \in \naturals\times\V{V} :
         \exists\; \Vnat{ix} \in \V{len} :
@@ -2972,8 +2969,9 @@ the definition of a slice \Dfref{slice}.
 The reason for it will be clear when we seek to
 prove that slices are always well-defined.
 
-\begin{lemma}[Slice Well-definedness Helper]
+\begin{lemma}[Slice well-definedness helper]
 \label{lem:slice-well-definedness-helper}
+\todo{Redo}
 \begin{gather}
 \label{eq:lem-slice-well-definedness-helper-010}
     \V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).
@@ -3003,19 +3001,24 @@ prove that slices are always well-defined.
 
 \begin{lemma}[Slice well-definedness]
 \label{lem:slice-well-definedness}
-Slices are well-defined. \thEnd
+Slices are well-defined
+iff $\VVelement{seq}{\V{offset}+\V{ix}}$.
+\thEnd
 \end{lemma}
 
 \begin{proof}
+\todo{Redo this proof, note now is iff!}
 For the purpose of this proof,
 we first instantiate the same variables and placeholders as
 in the definition of a slice \Dfref{slice}.
-The only problematic portion of \Dfref{slice} is the well-definedness
-of indexing of \V{seq} by
+The only part of \Dfref{slice} that is problematic
+for its well-definedness
+is the indexing of \V{seq} by
 \V{offset}+\V{ix} in
 \VVelement{seq}{\V{offset}+\V{ix}}
 \Eref{def-slice-040}.
-This indexing is quarded by the left hand side of a conjunction,
+Our proof that this indexing is well-defined is direct.
+
 \mypareq{eq:lem-slice-well-definedness-100}{%
     $\V{offset}+\V{len} \le \Vsize{seq}$ \cuz{} AF proof, \Eref{def-slice-020},}
 and an existential quantifier
