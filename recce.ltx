@@ -4,6 +4,7 @@
 \documentclass[draft,openany,12pt]{amsbook}
 \usepackage{calc} % calc is required by todonotes
 \usepackage{xstring}
+\usepackage{needspace}
 \usepackage{mfirstuc}
 \usepackage{ifdraft}
 \usepackage[obeyDraft]{todonotes}
@@ -2923,32 +2924,44 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \todo{Checked to here}
 
+Let this section be a scope.
+The scope of this section
+contains
+the variables
+\begin{itemize}
+\item $\V{offset}\in\naturals,$
+\item $\V{len}\in\naturals\cup\set{\naturals},$
+\item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
+\item $\V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).$
+\end{itemize}
+Also, the scope of every theoremoid of this section
+implicitly contains its own instances of
+\V{offset}, \V{len}, \V{seq}, and \V{slice}
+with realms as just stated.
+
 \begin{definition}[Slice]
 \label{def:slice}
-Given
-\begin{itemize}
-\item an \dfn[Offset (of a slice)]{offset}, $\V{offset}\in\naturals,$
-\item a \dfn[Length (of a slice)]{length} or \dfn[Size (of a slice)]{size},
-    $\V{len}\in\naturals\cup\set{\naturals},$
-\item and a \dfn{container sequence}%
-    \index{recce-defienda}{sequence@Sequence!container},
-    $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
-\end{itemize}
 we say that \V{slice} is a
 \dfn[Slice (of a sequence)]{slice}
 of size \V{len}
-in \V{sequence}
+in \V{seq}
 from \V{offset}
 iff
 \begin{gather}
 \label{eq:def-slice-040}
     \V{slice} =
     \set{ \begin{gathered}
-        \V{element} \in \naturals\times\V{V} :
-        \exists\; \Vnat{ix} \in \V{len} :
-        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
+        \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
+        \\ \Vnat{ix} \in \V{len} \land \V{offset}+\V{ix} \in \Dom{\V{seq}}
+        \\ \land\; \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
     \end{gathered} }
 \end{gather}
+We say that \V{offset} is the \dfn[Offset (of a slice)]{offset}.
+We say that \V{len} is the \dfn[Length (of a slice)]{length}.
+We also say that \V{len} is the \dfn[Size (of a slice)]{size}.
+We say that \V{seq} is the \dfn{container sequence}%
+\index{recce-defienda}{sequence@Sequence!container},
+of \V{slice}
 We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
 \V{offset}.
 If \V{slice} is finite,
@@ -2963,80 +2976,6 @@ it is vacuously true that if \Vsize{len} = 0, then
 \V{slice} is a slice of \V{seq}.
 \obEnd
 \end{observation}
-
-The following mysterious looking lemma is taken from
-the definition of a slice \Dfref{slice}.
-The reason for it will be clear when we seek to
-prove that slices are always well-defined.
-
-\begin{lemma}[Slice well-definedness helper]
-\label{lem:slice-well-definedness-helper}
-\todo{Redo}
-\begin{gather}
-\label{eq:lem-slice-well-definedness-helper-010}
-    \V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).
-\\ \label{eq:lem-slice-well-definedness-helper-020}
-    \land\; \V{offset}+\V{len} \le \Vsize{seq}
-\\ \label{eq:lem-slice-well-definedness-helper-030}
-    \land\; \Vnat{ix} \in \V{len}
-\\ \label{eq:lem-slice-well-definedness-helper-040}
-    \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.  \quad \lemEnd
-\end{gather}
-\end{lemma}
-
-\begin{proof}
-\mypareq{eq:lem-slice-well-definedness-helper-120}{%
-    $\Vnat{ix} < \V{len}$ \cuz{} ZF,
-        \Eref{lem-slice-well-definedness-helper-030}.}
-\mypareq{eq:lem-slice-well-definedness-helper-130}{%
-    $\V{offset}+\V{ix} < \Vsize{seq}$ \cuz{} \Eref{lem-slice-well-definedness-helper-020},
-        \Eref{lem-slice-well-definedness-helper-120}.}
-\mypareq{eq:lem-slice-well-definedness-helper-140}{%
-    $\forall\;\Vnat{x} :
-        \Vnat{x} \in \Dom{\V{seq}} \iff \V{x} < \Vsize{seq}$ \cuz{} ZF.}
-\mypareq{eq:lem-slice-well-definedness-helper-150}{%
-    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Eref{lem-slice-well-definedness-helper-130},
-        \Eref{lem-slice-well-definedness-helper-140}. \myqed}
-\end{proof}
-
-\begin{lemma}[Slice well-definedness]
-\label{lem:slice-well-definedness}
-Slices are well-defined
-iff $\VVelement{seq}{\V{offset}+\V{ix}}$.
-\thEnd
-\end{lemma}
-
-\begin{proof}
-\todo{Redo this proof, note now is iff!}
-For the purpose of this proof,
-we first instantiate the same variables and placeholders as
-in the definition of a slice \Dfref{slice}.
-The only part of \Dfref{slice} that is problematic
-for its well-definedness
-is the indexing of \V{seq} by
-\V{offset}+\V{ix} in
-\VVelement{seq}{\V{offset}+\V{ix}}
-\Eref{def-slice-040}.
-Our proof that this indexing is well-defined is direct.
-
-\mypareq{eq:lem-slice-well-definedness-100}{%
-    $\V{offset}+\V{len} \le \Vsize{seq}$ \cuz{} AF proof, \Eref{def-slice-020},}
-and an existential quantifier
-\mypareq{eq:lem-slice-well-definedness-110}{%
-    $\Vnat{ix} \in \V{len}$ \cuz{} AF proof, \Eref{def-slice-040}.}
-From the Slice Well-Definedness Helper Lemma, we see that
-\mypareq{eq:lem-slice-well-definedness-150}{%
-    $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \Lmref{slice-well-definedness-helper},
-        \Eref{lem-slice-well-definedness-100},
-        \Eref{lem-slice-well-definedness-110}.}
-Equation \Eref{lem-slice-well-definedness-150} is what we need to show that
-the indexing of \V{seq} by
-\V{offset}+\V{ix} in
-\VVelement{seq}{\V{offset}+\V{ix}}
-is well-defined,
-which is what we needed for the current proof.
-\myqed
-\end{proof}
 
 \begin{observation}[Offset of a slice]
 \label{obs:offset-of-a-slice}
@@ -3078,12 +3017,10 @@ to show the consequent \Eref{lem-slice-functional-040}
 \mypareq{eq:lem-slice-functional-110}{%
     $\V{v1} = \VVelement{seq}{\V{offset}+\V{ix1}}$
         \cuz{} \longDfref{Slice}{slice},
-            \longLmref{Slice Well-Definedness}{slice-well-definedness},
             \Eref{lem-slice-functional-010}.}
 \mypareq{eq:lem-slice-functional-120}{%
     $\V{v2} = \VVelement{seq}{\V{offset}+\V{ix2}}$
-        \cuz{} \Dfref{slice}, \Lmref{slice-well-definedness},
-            \Eref{lem-slice-functional-020}.}
+        \cuz{} \Dfref{slice}, \Eref{lem-slice-functional-020}.}
 \mypareq{eq:lem-slice-functional-130}{%
     $\VVelement{seq}{\V{offset}+\V{ix1}} = \VVelement{seq}{\V{offset}+\V{ix2}}$
         \bcuz{} \Eref{lem-slice-functional-030},
