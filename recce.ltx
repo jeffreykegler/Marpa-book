@@ -3007,7 +3007,6 @@ Slices are well-defined. \thEnd
 \end{lemma}
 
 \begin{proof}
-\todo{Need to redo this proof}
 For the purpose of this proof,
 we first instantiate the same variables and placeholders as
 in the definition of a slice \Dfref{slice}.
@@ -3052,25 +3051,48 @@ Where the slice does not have a value at its offset, the slice must be empty.
 \obEnd
 \end{observation}
 
-\todo{Prove domain,
-    and codomain (aka edges) for slices}
-
 \begin{lemma}[Slice functional]
 \label{lem:slice-functional}
 A slice is a functional relation.
 That is, where \V{slice} is a slice,
 \begin{gather}
-\nonumber
+\label{eq:lem-slice-functional-010}
      \tuple{\V{ix1}, \V{v1}} \in \V{slice}
-     \land \tuple{\V{ix2}, \V{v2}} \in \V{slice}
-     \land \V{ix1} = \V{ix2}
-     \\ \implies \V{v1} = \V{v2}.  \quad\lemEnd
+\\ \label{eq:lem-slice-functional-020}
+     \land\; \tuple{\V{ix2}, \V{v2}} \in \V{slice}
+\\ \label{eq:lem-slice-functional-030}
+     \land\; \V{ix1} = \V{ix2}
+\\ \label{eq:lem-slice-functional-040}
+     \implies \V{v1} = \V{v2}.  \quad\lemEnd
 \end{gather}
 \end{lemma}
 
 \begin{proof}
-% Proof template
-\todo{Finish this proof.}
+The proof is direct, assuming the hypothesis
+\Eref{eq:lem-slice-functional-010}--%
+\Eref{eq:lem-slice-functional-030}
+to show the consequent \Eref{eq:lem-slice-functional-040}
+\mypareq{eq:lem-slice-functional-110}{%
+    $\V{v1} = \VVelement{seq}{\V{offset}+\V{ix1}}$
+        \cuz{} \longDfref{Slice}{slice},
+            \longLmref{Slice Well-Definedness}{slice-well-definedness},
+            \Eref{eq:lem-slice-functional-010}.}
+\mypareq{eq:lem-slice-functional-120}{%
+    $\V{v2} = \VVelement{seq}{\V{offset}+\V{ix2}}$
+        \cuz{} \Dfref{slice}, \Lmref{slice-well-definedness},
+            \Eref{eq:lem-slice-functional-020}.}
+\mypareq{eq:lem-slice-functional-130}{%
+    $\VVelement{seq}{\V{offset}+\V{ix1}} = \VVelement{seq}{\V{offset}+\V{ix2}}$
+        \bcuz{} \Eref{eq:lem-slice-functional-030},
+            \Eref{eq:lem-slice-functional-110},
+            \Eref{eq:lem-slice-functional-120}.}
+\mypareq{eq:lem-slice-functional-140}{%
+     $\V{v1} = \V{v2}$ \cuz
+        \Eref{eq:lem-slice-functional-110},
+        \Eref{eq:lem-slice-functional-120},
+        \Eref{eq:lem-slice-functional-130}.}
+\Eref{eq:lem-slice-functional-140} is the consequent \Eref{eq:lem-slice-functional-040},
+which is what we needed to show for the current proof.
 \myqed
 \end{proof}
 
