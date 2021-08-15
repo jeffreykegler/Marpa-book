@@ -3027,7 +3027,7 @@ to show the consequent \Eref{lem-slice-functional-040}
             \Eref{lem-slice-functional-110},
             \Eref{lem-slice-functional-120}.}
 \mypareq{eq:lem-slice-functional-140}{%
-     $\V{v1} = \V{v2}$ \cuz
+     $\V{v1} = \V{v2}$ \cuz{}
         \Eref{lem-slice-functional-110},
         \Eref{lem-slice-functional-120},
         \Eref{lem-slice-functional-130}.}
@@ -3039,43 +3039,42 @@ which is what we needed to show for the current proof.
 \begin{lemma}[Slice domain size containment]
 \label{lem:slice-domain-size-containment}
 The domain of a slice contains its size.
-That is, where \V{slice} is a slice,
-$\Vsize{slice} \subseteq \Dom{\V{slice}}$.
+That is, $\Vsize{slice} \subseteq \Dom{\V{slice}}$.
 \thEnd
 \end{lemma}
 
 \begin{proof}
 The proof is by reductio,
-assuming that an arbitary element of the size of
-a slice is not a element of its domain.
-Let an arbitary slice be such that
-\begin{gather}
-\label{eq:lem-slice-domain-size-containment-100}
-    \V{offset}+\V{len} \le \Vsize{seq}
-\\ \label{eq:lem-slice-domain-size-containment-110}
-    \land\; \V{slice} =
-    \set{ \begin{gathered}
-        \V{element} \in \naturals\times\V{V} :
-        \exists\; \Vnat{ix} \in \V{len} :
-        \\ \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
-    \end{gathered} }
-\\ \nonumber \myparbox{%
- AF proof, \longDfref{Slice}{slice},
- ARB $\V{offset}\in\naturals,$
- \linebreak[1] ARB $\V{len}\in\naturals\cup\set{\naturals},$
- ARB $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$
- \linebreak[1] ARB $\V{slice}\in\powerset{\naturals\times\V{V}}$.}
-\end{gather}
+assuming that
 \begin{gather}
 \label{eq:lem-slice-domain-size-containment-120}
-     \Vnat{ix} \in \V{len}
+     \exists\; \Vnat{ix} :
+\\ \label{eq:lem-slice-domain-size-containment-125}
+     \V{ix} \in \Vsize{slice}
 \\ \label{eq:lem-slice-domain-size-containment-130}
-     \land \Vnat{ix} \notin \Dom{\V{slice}}
+     \land\; \Vnat{ix} \notin \Dom{\V{slice}}
 \\ \nonumber \myparbox{\cuz{} AF reductio.}
 \end{gather}
+When \V{slice} is empty
+\Eref{lem-slice-domain-size-containment-120}--%
+\Eref{lem-slice-domain-size-containment-130} is false
+and we have the reductio vacuously, so that it remains to
+examine the case where
 \mypareq{eq:lem-slice-domain-size-containment-140}{%
-    $\nexists\; \V{v1} \in \V{V} : \tuple{\V{ix}, \V{v1}} \in \V{slice}$
-    \cuz{} \Eref{lem-slice-domain-size-containment-130}.}
+      $\Vsize{slice} > 0$ \cuz{}
+         \Eref{lem-slice-domain-size-containment-120}--%
+         \Eref{lem-slice-domain-size-containment-130}.}
+Since \V{slice} is non-empty, we can instantiate \V{ix}:
+\begin{gather}
+\label{eq:lem-slice-domain-size-containment-150}
+     \V{ix} \in \Vsize{slice}
+\\ \label{eq:lem-slice-domain-size-containment-160}
+     \land\; \Vnat{ix} \notin \Dom{\V{slice}}
+\\ \nonumber \myparbox{\cuz{}
+    EI of \Eref{lem-slice-domain-size-containment-120}--%
+       \Eref{lem-slice-domain-size-containment-130}.}
+\end{gather}
+
 \todo{Finish this proof.}
 \myqed
 \end{proof}
