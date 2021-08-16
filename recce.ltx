@@ -3096,58 +3096,28 @@ That is, $\V{len} \subseteq \Dom{\V{slice}}$.
 \end{lemma}
 
 \begin{proof}
-The proof is by reductio,
-assuming that
-\begin{gather}
-\label{eq:lem-slice-domain-size-containment-120}
-     \exists\; \Vnat{ix} :
-\\ \label{eq:lem-slice-domain-size-containment-130}
-     \V{ix} \in \V{len}
-\\ \label{eq:lem-slice-domain-size-containment-140}
-     \land\; \Vnat{ix} \notin \Dom{\V{slice}}
-\\ \nonumber \myparbox{\cuz{} AF reductio.}
-\end{gather}
-When \V{slice} is empty,
-\Eref{lem-slice-domain-size-containment-120}--%
-\Eref{lem-slice-domain-size-containment-140} is false
-and we have the reductio vacuously, so that it remains to
-examine the case where
-\mypareq{eq:lem-slice-domain-size-containment-150}{%
-      $\Vsize{slice} > 0$ \cuz{}
-         \Eref{lem-slice-domain-size-containment-120}--%
-         \Eref{lem-slice-domain-size-containment-140}.}
-Since \V{slice} is non-empty, we can instantiate \V{ix}:
-\begin{gather}
-\label{eq:lem-slice-domain-size-containment-160}
-     \V{ix} \in \V{len}
-\\ \label{eq:lem-slice-domain-size-containment-170}
-     \land\; \Vnat{ix} \notin \Dom{\V{slice}}
-\\ \nonumber \myparbox{\cuz{}
-    EI of \Eref{lem-slice-domain-size-containment-120}--%
-       \Eref{lem-slice-domain-size-containment-140},
-    \Eref{lem-slice-domain-size-containment-150}.}
-\end{gather}
+\todo{Be sure to cover case where len = 0}
 \begin{equation}
 \label{eq:lem-slice-domain-slice-containment-200}
 \begin{gathered}
-\V{element} \in \V{slice}
+\forall\; \V{elementB} \in \naturals\times\V{V} :
+\\ \V{elementB} \in \V{slice}
 \\ \iff \left( \begin{gathered}
-    \exists\; \Vnat{ix} : \Vnat{ix} \in \V{len}
-    \\ \land\; \V{offset}+\V{ix} \in \Dom{\V{seq}}
-    \\ \land\; \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
+    \exists\; \Vnat{ixB} : \Vnat{ixB} \in \V{len}
+    \\ \land\; \V{elementB} = \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Dfref[Slice]{slice},
-        ARB $\V{element} \in \naturals\times\V{V}.$}
+\\ \myparbox{\cuz{} \Dfref[Slice]{slice}.}
 \end{gathered}
 \end{equation}
+In the names \V{elementB} and \V{ixB}, the ``B'' stands for ``bound''.
 \begin{equation}
 \label{eq:lem-slice-domain-slice-containment-210}
 \begin{gathered}
-\V{element} \notin \V{slice}
+\forall\; \V{elementB} \in \naturals\times\V{V} :
+\\ \V{elementB} \notin \V{slice}
 \\ \iff \left( \begin{gathered}
-    \forall\; \Vnat{ix} : \Vnat{ix} \notin \V{len}
-    \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
-    \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
+    \forall\; \Vnat{ixB} : \Vnat{ixB} \notin \V{len}
+    \\ \lor\; \V{elementB} \neq \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
 \\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-200}.}
 \end{gathered}
@@ -3155,13 +3125,27 @@ Since \V{slice} is non-empty, we can instantiate \V{ix}:
 \begin{equation}
 \label{eq:lem-slice-domain-slice-containment-220}
 \begin{gathered}
-\forall\; \Vnat{ix} : \V{element} \notin \V{slice}
+\forall\; \V{elementB} \in \naturals\times\V{V} :
+    \forall\; \Vnat{ixB} :
+\\ \V{elementB} \notin \V{slice}
 \\ \iff \left( \begin{gathered}
-    \Vnat{ix} \notin \V{len}
-    \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
-    \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
+    \Vnat{ixB} \notin \V{len}
+    \\ \lor\; \V{elementB} \neq \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
 \\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-210}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-slice-domain-slice-containment-230}
+\begin{gathered}
+\forall\; \V{elementB} \in \naturals\times\V{V} :
+    \forall\; \Vnat{ixB} :
+\\ \V{elementB} \in \V{slice}
+\\ \iff \left( \begin{gathered}
+    \Vnat{ixB} \in \V{len}
+    \\ \land\; \V{elementB} = \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
+\end{gathered} \right)
+\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-220}.}
 \end{gathered}
 \end{equation}
 \todo{Rewrite from here}
