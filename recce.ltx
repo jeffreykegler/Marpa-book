@@ -316,7 +316,14 @@
 
 \newtheorem{theorem}{Theorem}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
-\newcommand{\Thref}[1]{\genref{th:#1}{Th}}
+\newcommand{\Thref}[2][]{%
+    \ifthenelse{\equal{#1}{}}{}{%
+      \ifmmode \text{``#1''}%
+      \else``#1'' %
+      \fi%
+    }%
+    \genref{th:#2}{Th}%
+}
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
   \else``#1'' \Thref{#2}%
@@ -3014,14 +3021,14 @@ is well-defined, which is what we needed for the proof.
 \myqed
 \end{proof}
 
-\begin{observation}
+\begin{observation}[Vacuous slice]
 From the definition of slice \Dfref{slice},
 it is vacuously true that if \Vsize{len} = 0, then
 \V{slice} is a slice of \V{seq}.
 \obEnd
 \end{observation}
 
-\begin{observation}[Offset of a slice]
+\begin{observation}[Slice offset]
 \label{obs:offset-of-a-slice}
 Where \V{cntn} is a container sequence,
 \V{offset} is the offset of a slice, \V{slice},
@@ -3060,19 +3067,20 @@ The proof is direct, assuming the hypothesis
 to show the consequent \Eref{lem-slice-functional-040}
 \mypareq{eq:lem-slice-functional-110}{%
     $\V{v1} = \VVelement{seq}{\V{offset}+\V{ix1}}$
-        \cuz{} \longDfref{Slice}{slice},
+        \bcuz{} \longDfref{Slice}{slice},
+            \Thref[Slice well-definedness]{slice-well-definedness},
             \Eref{lem-slice-functional-010}.}
 \mypareq{eq:lem-slice-functional-120}{%
     $\V{v2} = \VVelement{seq}{\V{offset}+\V{ix2}}$
-        \cuz{} \Dfref{slice}, \Eref{lem-slice-functional-020}.}
+        \cuz{} \Dfref{slice}, \Thref{slice-well-definedness},
+        \Eref{lem-slice-functional-020}.}
 \mypareq{eq:lem-slice-functional-130}{%
     $\VVelement{seq}{\V{offset}+\V{ix1}} = \VVelement{seq}{\V{offset}+\V{ix2}}$
-        \bcuz{} \Eref{lem-slice-functional-030},
+        \cuz{} \Eref{lem-slice-functional-030},
             \Eref{lem-slice-functional-110},
             \Eref{lem-slice-functional-120}.}
 \mypareq{eq:lem-slice-functional-140}{%
-     $\V{v1} = \V{v2}$ \cuz{}
-        \Eref{lem-slice-functional-110},
+     $\V{v1} = \V{v2}$ \cuz{} \Eref{lem-slice-functional-110},
         \Eref{lem-slice-functional-120},
         \Eref{lem-slice-functional-130}.}
 \Eref{lem-slice-functional-140} is the consequent \Eref{lem-slice-functional-040},
@@ -3099,7 +3107,7 @@ assuming that
      \land\; \Vnat{ix} \notin \Dom{\V{slice}}
 \\ \nonumber \myparbox{\cuz{} AF reductio.}
 \end{gather}
-When \V{slice} is empty
+When \V{slice} is empty,
 \Eref{lem-slice-domain-size-containment-120}--%
 \Eref{lem-slice-domain-size-containment-140} is false
 and we have the reductio vacuously, so that it remains to
