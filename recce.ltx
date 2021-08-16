@@ -3086,7 +3086,7 @@ Since \V{slice} is non-empty, we can instantiate \V{ix}:
 \label{eq:lem-slice-domain-slice-containment-200}
 \begin{gathered}
 \V{element} \in \V{slice}
-\\ \implies \left( \begin{gathered}
+\\ \iff \left( \begin{gathered}
     \exists\; \Vnat{ix} : \Vnat{ix} \in \V{len}
     \\ \land\; \V{offset}+\V{ix} \in \Dom{\V{seq}}
     \\ \land\; \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
@@ -3098,12 +3098,25 @@ Since \V{slice} is non-empty, we can instantiate \V{ix}:
 \begin{equation}
 \label{eq:lem-slice-domain-slice-containment-210}
 \begin{gathered}
-    \V{element} \in \V{slice} \implies \forall\; \Vnat{ix} :
-        \Vnat{ix} \notin \V{len}
-\\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
-\\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
-\\ \myparbox{\cuz{}
-    \Eref{lem-slice-domain-slice-containment-200}.}
+\V{element} \notin \V{slice}
+\\ \iff \left( \begin{gathered}
+    \forall\; \Vnat{ix} : \Vnat{ix} \notin \V{len}
+    \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
+    \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
+\end{gathered} \right)
+\\ \myparbox{\cuz{} \Eref{eq:lem-slice-domain-slice-containment-200}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\label{eq:lem-slice-domain-slice-containment-220}
+\begin{gathered}
+\forall\; \Vnat{ix} : \V{element} \notin \V{slice}
+\\ \iff \left( \begin{gathered}
+    \Vnat{ix} \notin \V{len}
+    \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
+    \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
+\end{gathered} \right)
+\\ \myparbox{\cuz{} \Eref{eq:lem-slice-domain-slice-containment-210}.}
 \end{gathered}
 \end{equation}
 \todo{Rewrite from here}
