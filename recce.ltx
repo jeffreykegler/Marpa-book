@@ -88,7 +88,7 @@
 
 \usepackage{thmtools}
 \usepackage{multirow}
-% \usepackage[notcite,notref]{showkeys}
+% \usepackage[notcite,notref]{showkeys} % for diagnostics
 
 % \usepackage{glossaries} % must after hyperref
 % \makeglossaries
@@ -2955,11 +2955,13 @@ in \V{seq}
 from \V{offset}
 iff
 \begin{gather}
-\label{eq:def-slice-040}
+\label{eq:def-slice-030}
+        \V{offset}+\V{len} \le \Dom{\V{seq}} \text{ and}
+\\ \label{eq:def-slice-040}
     \V{slice} =
     \set{ \begin{gathered}
         \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
-        \\ \Vnat{ix} \in \V{len} \land \V{offset}+\V{ix} \in \Dom{\V{seq}}
+        \\ \Vnat{ix} \in \V{len}
         \\ \land\; \V{element} = \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}} }.
     \end{gathered} }
 \end{gather}
@@ -2976,6 +2978,41 @@ we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container seque
 $\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
+
+\begin{theorem}[Slice well-definedness]
+\label{th:slice-well-definedness}
+\Dfref[Slice]{slice} is well-defined.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+The only part of
+\Dfref{slice} that is problematic is the indexing
+$\VVelement{seq}{\V{offset}+\V{ix}}$
+in \Eref{def-slice-040}.
+We need to show that the index $\V{offset}+\V{ix}$
+is in the domain \V{seq}, which we do directly.
+From the definition of slice we know that
+the indexing in \Eref{def-slice-040} is guarded
+by the left hand side of two conjunctions:
+\mypareq{eq:th-slice-well-definedness-100}{%
+     $\V{offset}+\V{len} \le \Dom{\V{seq}}$
+         \cuz{} \Eref{def-slice-030} in \Dfref{slice}.}
+\mypareq{eq:th-slice-well-definedness-110}{%
+     $\Vnat{ix} \in \V{len}$
+         \cuz{} \Eref{def-slice-040} in \Dfref{slice}.}
+\mypareq{eq:th-slice-well-definedness-120}{%
+     $\Vnat{ix} < \V{len}$
+         \cuz{} \Eref{th-slice-well-definedness-110}.}
+\mypareq{eq:th-slice-well-definedness-130}{%
+     $\V{offset}+\V{ix} < \Dom{\V{seq}}$
+         \cuz{} \Eref{th-slice-well-definedness-100},
+             \Eref{th-slice-well-definedness-120}.}
+From \Eref{th-slice-well-definedness-130},
+we know that $\VVelement{seq}{\V{offset}+\V{ix}}$
+is well-defined, which is what we needed for the proof.
+\myqed
+\end{proof}
 
 \begin{observation}
 From the definition of slice \Dfref{slice},
@@ -3104,7 +3141,7 @@ Since \V{slice} is non-empty, we can instantiate \V{ix}:
     \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
     \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{eq:lem-slice-domain-slice-containment-200}.}
+\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-200}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3116,7 +3153,7 @@ Since \V{slice} is non-empty, we can instantiate \V{ix}:
     \\ \lor\; \V{offset}+\V{ix} \notin \Dom{\V{seq}}
     \\ \lor\; \V{element} \neq \tuple{ \V{ix}, \VVelement{seq}{\V{offset}+\V{ix}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{eq:lem-slice-domain-slice-containment-210}.}
+\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-210}.}
 \end{gathered}
 \end{equation}
 \todo{Rewrite from here}
