@@ -13,6 +13,16 @@
     \usepackage{draftwatermark}
 }{}
 
+
+% Fix conflict between todonotes and amsart packages
+% See http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/todonotes/todonotes.pdf,
+% p. 10.
+\makeatletter
+\providecommand\@dotsep{5}
+\def\listtodoname{List of TODOs}
+\def\listoftodos{\@starttoc{tdo}\listtodoname}
+\makeatother
+
 % The \ifhack commands are intended for last minute "hacks", adjustments
 % done when the document is final.  These are things like
 % workarounds for over/underfull hboxes, which require hack-ish
@@ -39,16 +49,6 @@
 % We do make exceptions.  For readability, we often want references
 % to theoremoids to stand out, and we selectively capitalize them
 % for this purpose.
-
-% Fix conflict between todonotes and amsart packages
-% See http://ctan.math.washington.edu/tex-archive/macros/latex/contrib/todonotes/todonotes.pdf,
-% p. 10.
-\makeatletter
-\providecommand\@dotsep{5}
-\def\listtodoname{List of TODOs}
-\def\listoftodos{\@starttoc{tdo}\listtodoname}
-\makeatother
-
 \emergencystretch=3em
 
 \usepackage{amsmidx}
@@ -243,14 +243,21 @@
 \newcommand{\bcuz}{%
     \linebreak[1]\cuz{}%
 }
-\newcommand{\tightMath}[1]{%
-    {%
-    \medmuskip=0mu
-    \thinmuskip=0mu
-    \thickmuskip=0mu
-    \ensuremath{#1}%
-    }%
-}
+% \newcommand{\tightMath}[1]{%
+%     {%
+%     \medmuskip=0mu
+%     \thinmuskip=0mu
+%     \thickmuskip=0mu
+%     \ensuremath{#1}%
+%     }%
+% }
+
+% Macros for references
+
+\newcommand{\labPrefix}{UNSET}
+\newcommand{\mylab}[2][null]{\label{#1\labPrefix-#2}}
+\newcommand{\Elab}[1]{\mylab[eq:]{#1}}
+\newcommand{\E}[1]{\Eref{\labPrefix-#1}}
 
 \newcommand{\colonpageref}[1]{%
  \ifthenelse{\equal{\pageref{#1}}{\thepage}}%
@@ -3088,6 +3095,7 @@ which is what we needed to show for the current proof.
 \myqed
 \end{proof}
 
+\renewcommand{\labPrefix}{lem-slice-domain-slice-containment}
 \begin{lemma}[Slice domain size containment]
 \label{lem:slice-domain-size-containment}
 The domain of a slice contains its size.
@@ -3098,7 +3106,7 @@ That is, $\V{len} \subseteq \Dom{\V{slice}}$.
 \begin{proof}
 \todo{Be sure to cover case where len = 0}
 \begin{equation}
-\label{eq:lem-slice-domain-slice-containment-200}
+\Elab{200}
 \begin{gathered}
 \forall\; \V{elementB} \in \naturals\times\V{V} :
 \\ \V{elementB} \in \V{slice}
@@ -3111,7 +3119,7 @@ That is, $\V{len} \subseteq \Dom{\V{slice}}$.
 \end{equation}
 In the names \V{elementB} and \V{ixB}, the ``B'' stands for ``bound''.
 \begin{equation}
-\label{eq:lem-slice-domain-slice-containment-210}
+\Elab{210}
 \begin{gathered}
 \forall\; \V{elementB} \in \naturals\times\V{V} :
 \\ \V{elementB} \notin \V{slice}
@@ -3119,11 +3127,11 @@ In the names \V{elementB} and \V{ixB}, the ``B'' stands for ``bound''.
     \forall\; \Vnat{ixB} : \Vnat{ixB} \notin \V{len}
     \\ \lor\; \V{elementB} \neq \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-200}.}
+\\ \myparbox{\cuz{} \E{200}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:lem-slice-domain-slice-containment-220}
+\Elab{220}
 \begin{gathered}
 \forall\; \V{elementB} \in \naturals\times\V{V} :
     \forall\; \Vnat{ixB} :
@@ -3132,11 +3140,11 @@ In the names \V{elementB} and \V{ixB}, the ``B'' stands for ``bound''.
     \Vnat{ixB} \notin \V{len}
     \\ \lor\; \V{elementB} \neq \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-210}.}
+\\ \myparbox{\cuz{} \E{210}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
-\label{eq:lem-slice-domain-slice-containment-230}
+\Elab{230}
 \begin{gathered}
 \forall\; \V{elementB} \in \naturals\times\V{V} :
     \forall\; \Vnat{ixB} :
@@ -3145,7 +3153,7 @@ In the names \V{elementB} and \V{ixB}, the ``B'' stands for ``bound''.
     \Vnat{ixB} \in \V{len}
     \\ \land\; \V{elementB} = \tuple{ \V{ixB}, \VVelement{seq}{\V{offset}+\V{ixB}}}
 \end{gathered} \right)
-\\ \myparbox{\cuz{} \Eref{lem-slice-domain-slice-containment-220}.}
+\\ \myparbox{\cuz{} \E{220}.}
 \end{gathered}
 \end{equation}
 \todo{Rewrite from here}
