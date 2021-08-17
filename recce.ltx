@@ -3066,6 +3066,59 @@ Where the slice does not have a value at its offset, the slice must be empty.
 
 \todo{Rewrite from here}
 
+The following two theorems restate the definition of slice \Dfref{slice}
+in helpful ways.
+
+\renewcommand{\labBase}{th-slice-1}
+\begin{theorem}[Slice]
+\label{th:slice-1}
+Where $\V{ix}\in\naturals$ and
+$\V{v}\in\V{V}$,
+\begin{gather}
+\Elab{040}
+    \tuple{\V{ix}, \V{v}} \in \V{slice} \iff
+        \V{ix} \in \V{len}
+        \land\; \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+            \quad \dfEnd
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+The proof is direct, starting with the definition of slice \Dfref{slice},
+to show \E{040}.
+\eqpar{100}{$\V{term} = \tuple{\V{ix}, \V{v}}$
+    \cuz{} CV $\V{term}\in\naturals\times\V{V}$.}
+\begin{equation}
+\begin{gathered}
+\Elab{110} \V{term} \in \V{slice}
+\\ \iff \Vtupelem{term}{0} \in \V{len}
+        \land\; \Vtupelem{term}{1} = \VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}
+\\ \myparbox{\cuz{} \Dfref[Slice]{slice}.}
+\end{gathered}
+\end{equation}
+Substituting from \E{100} in \E{110} yields \E{040},
+which is what we sought to prove.
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{th-slice-2}
+\begin{theorem}[Slice]
+\label{th:slice-2}
+Where $\V{ix}\in\naturals$,
+\begin{gather}
+\Elab{040}
+    \tuple{\V{ix}, \V{offset}+\V{ix}} \in \V{slice} \iff
+        \V{ix} \in \V{len}. \quad \dfEnd
+\end{gather}
+\end{theorem}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
 \renewcommand{\labBase}{lem-slice-functional}
 \begin{lemma}[Slice functional]
 \label{lem:slice-functional}
