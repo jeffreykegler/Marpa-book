@@ -225,13 +225,19 @@
 % A "VVxxx" macros wraps two of its arguments in \V{}.
 
 \newcommand{\Vlastix}[1]{\lastix{\V{#1}}}
-\newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
-\newcommand{\Velement}[2]{\element{\V{#1}}{#2}}
-\newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
 \newcommand{\VlastElement}[1]{\Velement{#1}{\Vlastix{#1}}}
-\newcommand{\bigElement}[2]{\ensuremath{\mathop{#1}\left[#2\right]}}
-\newcommand{\VbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[#2\right]}}
-\newcommand{\VVbigElement}[2]{\ensuremath{\mathop{\V{#1}}\left[ \V{#2} \right]}}
+\newcommand{\element}[2]{\ensuremath{\mathop{#1}
+    \mathopen{}\left[#2\right]\mathclose{}}}
+\newcommand{\Velement}[2]{\ensuremath{\mathop{\V{#1}}
+    \mathopen{}\left[#2\right]\mathclose{}}}
+\newcommand{\VVelement}[2]{\ensuremath{\mathop{\V{#1}}
+    \mathopen{}\left[ \V{#2}
+    \right]\mathclose{} }}
+
+% Rename as Felement for fixed element, if needed
+% \newcommand{\element}[2]{\ensuremath{\mathop{#1}[#2]}}
+% \newcommand{\Velement}[2]{\element{\V{#1}}{#2}}
+% \newcommand{\VVelement}[2]{\Velement{#1}{\V{#2}}}
 
 % The \mathopen{} and \mathclose{} eliminate unwanted extra space
 \newcommand{\tupelem}[2]{\ensuremath{\mathop{#1}%
@@ -2983,7 +2989,7 @@ iff
 \\ \label{eq:def-slice-040}
     \V{slice} =
     \set{ \begin{gathered}
-        \V{term} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
+        \V{term} \in \naturals\times\V{V} :
         \\ \Vtupelem{term}{0} \in \V{len}
         \\ \land\; \Vtupelem{term}{1} = \VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}
     \end{gathered} }.
@@ -3058,46 +3064,32 @@ Where the slice does not have a value at its offset, the slice must be empty.
 \obEnd
 \end{observation}
 
+\todo{Rewrite from here}
+
+\renewcommand{\labBase}{lem-slice-functional}
 \begin{lemma}[Slice functional]
 \label{lem:slice-functional}
 A slice is a functional relation.
 That is, where \V{slice} is a slice,
 \begin{gather}
-\label{eq:lem-slice-functional-010}
-     \tuple{\V{ix1}, \V{v1}} \in \V{slice}
-\\ \label{eq:lem-slice-functional-020}
-     \land\; \tuple{\V{ix2}, \V{v2}} \in \V{slice}
-\\ \label{eq:lem-slice-functional-030}
-     \land\; \V{ix1} = \V{ix2}
-\\ \label{eq:lem-slice-functional-040}
-     \implies \V{v1} = \V{v2}.  \quad\lemEnd
+\Elab{010} \tuple{\V{ix}, \V{v1}} \in \V{slice}
+\\ \Elab{020} \land\; \tuple{\V{ix}, \V{v2}} \in \V{slice}
+\\ \Elab{040} \implies \V{v1} = \V{v2}.  \quad\lemEnd
 \end{gather}
 \end{lemma}
 
 \begin{proof}
-The proof is direct, assuming the hypothesis
-\Eref{lem-slice-functional-010}--%
-\Eref{lem-slice-functional-030}
+\todo{Redo, using slice restatement theorem}
+The proof is direct, assuming the hypothesis \E{010}--\E{020}
 to show the consequent \Eref{lem-slice-functional-040}
-\mypareq{eq:lem-slice-functional-110}{%
-    $\V{v1} = \VVelement{seq}{\V{offset}+\V{ix1}}$
-        \bcuz{} \longDfref{Slice}{slice},
+\eqpar{110}{$\V{v1} = \VVelement{seq}{\V{offset}+\V{ix}}$
+        \bcuz{} \Dfref[Slice]{slice},
             \Thref[Slice well-definedness]{slice-well-definedness},
-            \Eref{lem-slice-functional-010}.}
-\mypareq{eq:lem-slice-functional-120}{%
-    $\V{v2} = \VVelement{seq}{\V{offset}+\V{ix2}}$
-        \cuz{} \Dfref{slice}, \Thref{slice-well-definedness},
-        \Eref{lem-slice-functional-020}.}
-\mypareq{eq:lem-slice-functional-130}{%
-    $\VVelement{seq}{\V{offset}+\V{ix1}} = \VVelement{seq}{\V{offset}+\V{ix2}}$
-        \cuz{} \Eref{lem-slice-functional-030},
-            \Eref{lem-slice-functional-110},
-            \Eref{lem-slice-functional-120}.}
-\mypareq{eq:lem-slice-functional-140}{%
-     $\V{v1} = \V{v2}$ \cuz{} \Eref{lem-slice-functional-110},
-        \Eref{lem-slice-functional-120},
-        \Eref{lem-slice-functional-130}.}
-\Eref{lem-slice-functional-140} is the consequent \Eref{lem-slice-functional-040},
+            \E{010}.}
+\eqpar{120}{$\V{v2} = \VVelement{seq}{\V{offset}+\V{ix}}$
+        \cuz{} \Dfref{slice}, \Thref{slice-well-definedness}, \E{020}.}
+\eqpar{140}{$\V{v1} = \V{v2}$ \cuz{} \E{110}, \E{120}.}
+\E{140} is the consequent \E{040},
 which is what we needed to show for the current proof.
 \myqed
 \end{proof}
@@ -3598,7 +3590,7 @@ This is,
     \\ \V{ix} \ne 0 \implies
         \left(
             \exists\; \V{from} \in \V{V} :
-                 \tuple{ \VbigElement{p}{\Vdecr{ix}}, \VVbigElement{p}{ix}}
+                 \tuple{ \Velement{p}{\Vdecr{ix}}, \VVelement{p}{ix}}
                  \in \V{E}
         \right).
         \quad \thEnd
@@ -4742,7 +4734,7 @@ so this choice is without loss of generality.
     CV $\V{long} \in \Vmyfn{paths}{G}$.}
 \end{gather}
 \mypareq{eq:th-rootpath-non-duplication-170}{%
-    $\V{longSuffix} = \VbigElement{long}{%
+    $\V{longSuffix} = \Velement{long}{%
             \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
             \ldots\;\Vlastix{long}
      }$
@@ -4785,7 +4777,7 @@ so that
         \Eref{th-rootpath-non-duplication-190}.}
 \mypareq{eq:th-rootpath-non-duplication-210}{%
     $\Velement{longSuffix}{0} =
-        \VbigElement{long}
+        \Velement{long}
              {\subtract{\Vsize{long}}{\Vsize{short}}}$
     \cuz{} \Eref{th-rootpath-non-duplication-170}.}
 \mypareq{eq:th-rootpath-non-duplication-220}{%
@@ -4794,7 +4786,7 @@ so that
         \Eref{th-rootpath-non-duplication-158},
         \Eref{th-rootpath-non-duplication-200}.}
 \mypareq{eq:th-rootpath-non-duplication-230}{%
-    $\VbigElement{long}
+    $\Velement{long}
              {\subtract{\Vsize{long}}{\Vsize{short}}}
              = \V{root}$
     \bcuz{} \Eref{th-rootpath-non-duplication-210},
@@ -4803,7 +4795,7 @@ so that
     $\subtract{\Vsize{long}}{\Vsize{short}} \ge 1$
         \cuz{} \Eref{th-rootpath-non-duplication-160}.}
 \mypareq{eq:th-rootpath-non-duplication-250}{%
-    $\VbigElement{long}{%
+    $\Velement{long}{%
                  \begin{gathered}
                  \decr{
                      \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
@@ -4818,7 +4810,7 @@ so that
         \Eref{th-rootpath-non-duplication-160},
         \Eref{th-rootpath-non-duplication-240}.}
 \mypareq{eq:th-rootpath-non-duplication-260}{%
-    $\VbigElement{long}{%
+    $\Velement{long}{%
                  \begin{gathered}
                  \decr{
                      \left( \subtract{\Vsize{long}}{\Vsize{short}} \right)
