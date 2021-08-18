@@ -3064,13 +3064,11 @@ Where the slice does not have a value at its offset, the slice must be empty.
 \obEnd
 \end{observation}
 
-\todo{Rewrite from here}
-
 The following two theorems restate the definition of slice \Dfref{slice}
 in helpful ways.
 
 \renewcommand{\labBase}{th-slice-1}
-\begin{theorem}[Slice]
+\begin{theorem}[Slice 1]
 \label{th:slice-1}
 Where $\V{ix}\in\naturals$ and
 $\V{v}\in\V{V}$,
@@ -3098,12 +3096,14 @@ to show \E{040}.
 \end{equation}
 Substituting from \E{100} in \E{110} yields \E{040},
 which is what we sought to prove.
-\todo{Finish this proof.}
 \myqed
 \end{proof}
 
+\todo{Rewrite from here}
+
 \renewcommand{\labBase}{th-slice-2}
-\begin{theorem}[Slice]
+\begin{theorem}[Slice 2]
+\todo{Is there a problem with well-definedness here?}
 \label{th:slice-2}
 Where $\V{ix}\in\naturals$,
 \begin{gather}
@@ -3114,7 +3114,21 @@ Where $\V{ix}\in\naturals$,
 \end{theorem}
 
 \begin{proof}
-% Proof template
+The proof is direct.
+\eqpar{100}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} CV $\V{v1} \in \V{V}$.}
+Substituting from \E{100} into the Slice 1 Theorem, we have
+\begin{equation}
+\Elab{110}
+\begin{gathered}
+    \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
+    \\ \iff
+        \V{ix} \in \V{len}
+        \land\;
+        \Velement{seq}{\V{offset}+\V{ix}} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \nonumber \myparbox{\cuz{} \Thref{slice-1}, \E{100}.}
+\end{gathered}
+\end{equation}
+\E{110} simplifies to \E{040}, which is what we needed to show for the proof.
 \todo{Finish this proof.}
 \myqed
 \end{proof}
