@@ -3008,6 +3008,28 @@ $\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
 
+The following lemma is matter of ZF and arithmetic.
+Nonetheless,
+the tricky fence-post logic
+involved justify making the proof explicit.
+
+\renewcommand{\labBase}{lem-slice-helper}
+\begin{lemma}[Slice helper]
+\label{lem:slice-helper}
+\begin{gather}
+\Elab{010} \Vnat{ix} \in \Vnat{len}
+\\ \Elab{020} \land\; \Vnat{offset}+\V{len} \le \Dom{\V{seq}}
+\\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
+\end{gather}
+\lemEnd
+\end{lemma}
+
+\begin{proof}
+\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} \E{010}.}
+\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{020}, \E{120}.}
+\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}. \quad \myqed}
+\end{proof}
+
 \renewcommand{\labBase}{th-slice-well-definedness}
 \begin{theorem}[Slice well-definedness]
 \label{th:slice-well-definedness}
@@ -3031,13 +3053,14 @@ by the left hand side of two conjunctions:
          \cuz{} \Eref{def-slice-030} in \Dfref{slice}.}
 \eqpar{110}{$\Vtupelem{term}{0} \in \V{len}$
          \cuz{} \Eref{def-slice-040} in \Dfref{slice}.}
-\eqpar{120}{$\Vtupelem{term}{0} < \V{len}$
-         \cuz{} \E{110}.}
-\eqpar{130}{ $\V{offset}+\Vtupelem{term}{0} < \Dom{\V{seq}}$
-         \cuz{} \E{100}, \E{120}.}
-From \E{130},
-we know that $\VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}$
-is well-defined, which is what we needed for the proof.
+If we let set \V{ix}
+in the hypothesis
+of the Slice Helper Lemma \Lmref{slice-helper}
+to \Vtupelem{term}{0},
+we can conclude
+\eqpar{130}{ $\V{offset}+\Vtupelem{term}{0} \in \Dom{\V{seq}}$
+         \cuz{} \Lmref{slice-helper}, \E{100}, \E{110}.}
+\E{130} is what we needed for the proof.
 \myqed
 \end{proof}
 
@@ -3103,17 +3126,18 @@ which is what we sought to prove.
 
 \renewcommand{\labBase}{th-slice-2}
 \begin{theorem}[Slice 2]
-\todo{Is there a problem with well-definedness here?}
 \label{th:slice-2}
 Where $\V{ix}\in\naturals$,
 \begin{gather}
 \Elab{040}
-    \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice} \iff
-        \V{ix} \in \V{len}. \quad \dfEnd
+    \V{ix} \in \V{len} \implies
+        \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}
+         \quad \dfEnd
 \end{gather}
 \end{theorem}
 
 \begin{proof}
+\todo{Is there a problem with well-definedness here?}
 The proof is direct.
 \eqpar{100}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} CV $\V{v1} \in \V{V}$.}
 Substituting from \E{100} into the Slice 1 Theorem, we have
