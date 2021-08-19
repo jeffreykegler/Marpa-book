@@ -408,7 +408,15 @@
 }
 \newtheorem{lemma}[theorem]{Lemma}
 
-\newcommand{\Lmref}[1]{(\textrm{Lm}\ref{lem:#1}\colonpageref{lem:#1})}
+\newcommand{\Lmref}[2][]{%
+    \ifthenelse{\equal{#1}{}}{}{%
+        \ifmmode \text{``#1''}%
+        \else``#1'' %
+        \fi%
+    }%
+    (\textrm{Lm}\ref{lem:#2}\colonpageref{lem:#2})%
+}
+% some day delete longLmref
 \newcommand{\longLmref}[2]{%
   \ifmmode \text{``#1''\Lmref{#2}}%
   \else``#1'' \Lmref{#2}%
@@ -3130,30 +3138,73 @@ which is what we sought to prove.
 Where $\V{ix}\in\naturals$,
 \begin{gather}
 \Elab{040}
-    \V{ix} \in \V{len} \implies
+    \V{ix} \in \V{len}
+\\ \Elab{050} \implies
         \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}
-         \quad \dfEnd
+         \quad \thEnd
 \end{gather}
 \end{theorem}
 
 \begin{proof}
-\todo{Is there a problem with well-definedness here?}
-The proof is direct.
-\eqpar{100}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} CV $\V{v1} \in \V{V}$.}
-Substituting from \E{100} into the Slice 1 Theorem, we have
+\todo{Recheck this proof.}
+The proof is direct, assuming the hypothesis of the theorem \E{040}
+to show its consequent \E{050}.
+Since \V{slice} is a slice, we have
+\eqpar{100}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$ \cuz{} \Dfref[Slice]{slice}.}
+\eqpar{110}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$
+    \bcuz{} \Lmref[Slice helper lemma]{slice-helper}, \E{040}, \E{100}.}
+\E{110} tells us that the
+the indexing of \V{seq} in the following equation is well-defined,
+allowing us to create the convenience variable \V{v1}.
+\eqpar{200}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} \E{110}, CV $\V{v1} \in \V{V}$.}
+The Slice 1 Theorem tells us that
 \begin{equation}
-\Elab{110}
+\Elab{210}
 \begin{gathered}
-    \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
-    \\ \iff
-        \V{ix} \in \V{len}
-        \land\;
-        \Velement{seq}{\V{offset}+\V{ix}} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \nonumber \myparbox{\cuz{} \Thref{slice-1}, \E{100}.}
+    \forall\; \V{v}\in\V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}
+    \\ \iff \V{ix} \in \V{len}
+        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} \Thref{slice-1}.}
 \end{gathered}
 \end{equation}
-\E{110} simplifies to \E{040}, which is what we needed to show for the proof.
-\todo{Finish this proof.}
+\begin{equation}
+\Elab{220}
+\begin{gathered}
+    \tuple{\V{ix}, \V{v1} } \in \V{slice}
+    \\ \iff
+        \V{ix} \in \V{len}
+        \land \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} UI of \V{v1} for \V{v} in \E{210}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\Elab{230}
+\begin{gathered}
+        \V{ix} \in \V{len}
+        \land \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \implies \tuple{\V{ix}, \V{v1} } \in \V{slice}
+    \\ \myparbox{\cuz{} \E{220}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\Elab{240}
+\begin{gathered}
+        \V{ix} \in \V{len}
+        \land \Velement{seq}{\V{offset}+\V{ix}} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \implies \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
+    \\ \myparbox{\cuz{} \E{230}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\Elab{250}
+\begin{gathered}
+    \V{ix} \in \V{len} \implies \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
+    \\ \myparbox{\cuz{} \E{240}.}
+\end{gathered}
+\end{equation}
+\eqpar{260}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}$
+    \cuz{} \E{250}.}
+\E{260} is the consequent, which is what we needed to show for the proof.
 \myqed
 \end{proof}
 
