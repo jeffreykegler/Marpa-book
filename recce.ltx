@@ -3149,40 +3149,43 @@ Where $\V{ix}\in\naturals$,
 \todo{Recheck this proof.}
 The proof is direct, assuming the hypothesis of the theorem \E{040}
 to show its consequent \E{050}.
+\eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} Hypothesis of theorem \E{040}, AF proof.}
 Since \V{slice} is a slice, we have
-\eqpar{100}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$ \cuz{} \Dfref[Slice]{slice}.}
+\eqpar{105}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$ \cuz{} \Dfref[Slice]{slice}.}
 \eqpar{110}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$
-    \bcuz{} \Lmref[Slice helper lemma]{slice-helper}, \E{040}, \E{100}.}
-\E{110} tells us that the
+    \bcuz{} \Lmref[Slice helper lemma]{slice-helper}, \E{100}, \E{105}.}
+\E{110} tells us that
 the indexing of \V{seq} in the following equation is well-defined,
-allowing us to create the convenience variable \V{v1}.
-\eqpar{200}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} \E{110}, CV $\V{v1} \in \V{V}$.}
+allowing us to create the convenience variable \V{v}.
+\eqpar{200}{$\V{v} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} \E{110}, CV $\V{v} \in \V{V}$.}
 The Slice 1 Theorem tells us that
 \begin{equation}
 \Elab{210}
 \begin{gathered}
-    \forall\; \V{v}\in\V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}
-    \\ \iff \V{ix} \in \V{len}
-        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \forall\; \V{vB}\in\V{V} :
+    \forall\; \V{ixB}\in\naturals :
+    \\ \tuple{\V{ixB}, \V{vB}} \in \V{slice}
+    \\ \iff \V{ixB} \in \V{len}
+        \land \V{vB} = \Velement{seq}{\V{offset}+\V{ixB}}.
     \\ \myparbox{\cuz{} \Thref{slice-1}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \Elab{220}
 \begin{gathered}
-    \tuple{\V{ix}, \V{v1} } \in \V{slice}
+    \tuple{\V{ix}, \V{v} } \in \V{slice}
     \\ \iff
         \V{ix} \in \V{len}
-        \land \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \myparbox{\cuz{} UI of \V{v1} for \V{v} in \E{210}.}
+        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} UI of \V{v} for \V{vB} and \V{ix} for \V{ixB} in \E{210}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \Elab{230}
 \begin{gathered}
         \V{ix} \in \V{len}
-        \land \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \implies \tuple{\V{ix}, \V{v1} } \in \V{slice}
+        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \implies \tuple{\V{ix}, \V{v} } \in \V{slice}
     \\ \myparbox{\cuz{} \E{220}.}
 \end{gathered}
 \end{equation}
@@ -3192,7 +3195,7 @@ The Slice 1 Theorem tells us that
         \V{ix} \in \V{len}
         \land \Velement{seq}{\V{offset}+\V{ix}} = \Velement{seq}{\V{offset}+\V{ix}}.
     \\ \implies \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
-    \\ \myparbox{\cuz{} \E{230}.}
+    \\ \myparbox{\cuz{} \E{200}, \E{230}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
@@ -3203,7 +3206,7 @@ The Slice 1 Theorem tells us that
 \end{gathered}
 \end{equation}
 \eqpar{260}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}$
-    \cuz{} \E{250}.}
+    \cuz{} \E{100}, \E{250}.}
 \E{260} is the consequent, which is what we needed to show for the proof.
 \myqed
 \end{proof}
