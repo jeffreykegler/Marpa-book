@@ -3058,29 +3058,26 @@ $\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
 
-\renewcommand{\labBase}{lem-slice-helper}
-\begin{lemma}[Slice helper]
-\label{lem:slice-helper}
+The following lemma is matter of ZF and arithmetic.
+Nonetheless,
+the tricky fence-post logic
+involved justify making the proof explicit.
+
+\renewcommand{\labBase}{lem-slice-helper-1}
+\begin{lemma}[Slice helper 1]
+\label{lem:slice-helper-1}
 \begin{gather}
 \Elab{010} \Vnat{ix} \in \Vnat{len}
+\\ \Elab{020} \land\; \Vnat{offset}+\V{len} \le \Dom{\V{seq}}
 \\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
-    \quad \lemEnd
 \end{gather}
+\lemEnd
 \end{lemma}
 
 \begin{proof}
-The proof is direct,
-assuming the hypothesis \E{010} to show the consequent \E{030}
-\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} Hypothesis of the theorem \E{010}, AF proof.}
-We recall the context contains \V{slice} and \V{seq}, and that \V{ix} and \V{len}
-are defined in terms of them, so that
-\eqpar{125}{$\Vnat{offset}+\V{len} \le \Dom{\V{seq}}$
-    \bcuz{} \Rmref[Slice context]{cxt-sec-slice}, \Dfref[Slice]{slice}.}
-\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{120}, \E{125}.}
-\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}.}
-\E{140} is the consequent, which is what we sought to show for
-the current proof.
-\myqed
+\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} \E{010}.}
+\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{020}, \E{120}.}
+\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}. \quad \myqed}
 \end{proof}
 
 \renewcommand{\labBase}{th-slice-well-definedness}
@@ -3108,12 +3105,43 @@ by the left hand side of two conjunctions:
          \cuz{} \Eref{def-slice-040} in \Dfref{slice}.}
 If we let set \V{ix}
 in the hypothesis
-of the Slice Helper Lemma \Lmref{slice-helper}
+of the Slice Helper Lemma \Lmref{slice-helper-1}
 to \Vtupelem{term}{0},
 we can conclude
 \eqpar{130}{ $\V{offset}+\Vtupelem{term}{0} \in \Dom{\V{seq}}$
-         \cuz{} \Lmref{slice-helper}, \E{100}, \E{110}.}
+         \cuz{} \Lmref{slice-helper-1}, \E{100}, \E{110}.}
 \E{130} is what we needed for the proof.
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{lem-slice-helper-2}
+\begin{lemma}[Slice helper 2]
+\label{lem:slice-helper-2}
+\begin{gather}
+\Elab{010} \Vnat{ix} \in \Vnat{len}
+\\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
+    \quad \lemEnd
+\end{gather}
+\end{lemma}
+
+\begin{proof}
+\todo{Redo this proof.}
+The proof is direct,
+assuming the hypothesis \E{010} to show the consequent \E{030}.
+\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} Hypothesis of the theorem \E{010}, AF proof.}
+\todo{This makes no sense.  I am assume that we can instantiate a slice,
+we I in fact need to prove.}
+We recall the context contains \V{slice} and \V{seq}, and that \V{ix} and \V{len}
+are defined in terms of them, so that
+\eqpar{125}{$\Vnat{offset}+\V{len} \le \Dom{\V{seq}}$
+    \bcuz{} \Rmref[Slice context]{cxt-sec-slice}, \Dfref[Slice]{slice}.}
+We note that, at this point, while we may use the definition of a slice,
+we have yet to show,
+and cannot assume, that an arbitrary slice, such as \V{slice}, is well-defined.
+\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{120}, \E{125}.}
+\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}.}
+\E{140} is the consequent, which is what we sought to show for
+the current proof.
 \myqed
 \end{proof}
 
@@ -3192,10 +3220,8 @@ Where $\V{ix}\in\naturals$,
 The proof is direct, assuming the hypothesis of the theorem \E{040}
 to show its consequent \E{050}.
 \eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} Hypothesis of theorem \E{040}, AF proof.}
-Since \V{slice} is a slice, we have
-\eqpar{105}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$ \cuz{} \Dfref[Slice]{slice}.}
 \eqpar{110}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$
-    \bcuz{} \Lmref[Slice helper lemma]{slice-helper}, \E{100}, \E{105}.}
+    \bcuz{} \Lmref[Slice Helper Lemma 2]{slice-helper-2}, \E{100}.}
 \E{110} tells us that
 the indexing of \V{seq} in the following equation is well-defined,
 allowing us to create the convenience variable \V{v}.
