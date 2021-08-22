@@ -3125,7 +3125,6 @@ we can conclude
 \end{lemma}
 
 \begin{proof}
-\todo{Redo this proof.}
 The proof is direct,
 assuming the hypothesis \E{010} to show the consequent \E{030}.
 \eqpar{120}{$\V{ix} < \V{len}$ \cuz{} Hypothesis of the theorem \E{010}, AF proof.}
@@ -3274,8 +3273,6 @@ The Slice 1 Theorem tells us that
 \myqed
 \end{proof}
 
-\todo{Rewrite from here}
-
 \renewcommand{\labBase}{lem-slice-functional}
 \begin{lemma}[Slice functional]
 \label{lem:slice-functional}
@@ -3289,20 +3286,55 @@ That is, where \V{slice} is a slice,
 \end{lemma}
 
 \begin{proof}
-\todo{Redo, using slice restatement theorem}
 The proof is direct, assuming the hypothesis \E{010}--\E{020}
 to show the consequent \Eref{lem-slice-functional-040}
-\eqpar{110}{$\V{v1} = \VVelement{seq}{\V{offset}+\V{ix}}$
-        \bcuz{} \Dfref[Slice]{slice},
-            \Thref[Slice well-definedness]{slice-well-definedness},
-            \E{010}.}
-\eqpar{120}{$\V{v2} = \VVelement{seq}{\V{offset}+\V{ix}}$
-        \cuz{} \Dfref{slice}, \Thref{slice-well-definedness}, \E{020}.}
-\eqpar{140}{$\V{v1} = \V{v2}$ \cuz{} \E{110}, \E{120}.}
-\E{140} is the consequent \E{040},
+The Slice 1 Theorem tells us that
+\begin{equation}
+\Elab{100}
+\begin{gathered}
+    \forall\; \V{vB}\in\V{V} :
+    \forall\; \V{ixB}\in\naturals :
+    \tuple{\V{ix}, \V{v}} \in \V{slice}
+    \\ \iff \V{ix} \in \V{len}
+        \land\; \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} \Thref[Slice 1 Theorem]{slice-1}.}
+\end{gathered}
+\end{equation}
+\begin{equation}
+\Elab{110}
+\begin{gathered}
+    \tuple{\V{ix}, \V{v1}} \in \V{slice}
+    \\ \iff \V{ix} \in \V{len}
+        \land\; \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} EI of \E{100} with \V{ix} for \V{ixB} and \V{v1} for \V{vB}.}
+\end{gathered}
+\end{equation}
+\eqpar{120}{$\V{ix} \in \V{len}$ \cuz{} \E{010}, \E{110}.}
+\eqpar{130}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{}
+    \Lmref[Slice Helper 1]{slice-helper-1}, \E{120}.}
+With \E{130}, we are now able
+to use \Velement{seq}{\V{offset}+\V{ix}}, in the confidence it is well-formed:
+\eqpar{140}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \cuz{} \E{010}, \E{110}, \E{130}.}
+\begin{equation}
+\Elab{150}
+\begin{gathered}
+    \tuple{\V{ix}, \V{v2}} \in \V{slice}
+    \\ \iff \V{ix} \in \V{len}
+        \land\; \V{v2} = \Velement{seq}{\V{offset}+\V{ix}}.
+    \\ \myparbox{\cuz{} EI of \E{100} with \V{ix} for \V{ixB} and \V{v2} for \V{vB}.}
+\end{gathered}
+\end{equation}
+\eqpar{160}{$\V{v2} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \cuz{} \E{020}, \E{130}, \E{150}.}
+\eqpar{170}{$\V{v1} = \V{v2}$ \cuz{} \E{140}, \E{160}.}
+\E{170} is the consequent \E{040},
 which is what we needed to show for the current proof.
+\todo{Check this proof.}
 \myqed
 \end{proof}
+
+\todo{Rewrite from here}
 
 \renewcommand{\labBase}{lem-slice-domain-slice-containment}
 \begin{lemma}[Slice domain size containment]
