@@ -289,33 +289,38 @@
 % "full" ref -- that is, always include page
 \newcommand{\AFref}[1]{(a\ref{#1}:\pageref{#1})}
 
-\newcommand{\Eref}[1]{%
- \StrBefore{\getrefnumber{eq:#1}}{.}[\refChapter]%
- \StrBehind{\getrefnumber{eq:#1}}{.}[\refEqno]%
- (\ensuremath{% To cover both cases, force math mode
-     \hyperref[eq:#1]{%
-         \text{e}%
-         \ifthenelse{\equal{\refChapter}{\thechapter}}%
-         {% Do nothing
-         }{% Otherwise, add chapter ref
-	     \refChapter{.}%
-	 }%
-	 \refEqno%
-         \colonpageref{eq:#1}%
-      }%
-  )}%
-}
-\newcommand{\longEref}[2]{
-  \ifmmode \text{``#1''\Eref{#2}}%
-  \else``#1'' \Eref{#2}%
-  \fi%
+\newcommand{\Eref}[2][]{%
+    \ifthenelse{\equal{#1}{}}{}{%
+         \ifmmode \text{``#1''}%
+         \else``#1'' %
+         \fi%
+    }%
+    \StrBefore{\getrefnumber{eq:#2}}{.}[\refChapter]%
+    \StrBehind{\getrefnumber{eq:#2}}{.}[\refEqno]%
+    (\ensuremath{% To cover both cases, force math mode
+        \hyperref[eq:#2]{%
+            \text{e}%
+            \ifthenelse{\equal{\refChapter}{\thechapter}}%
+            {% Do nothing
+            }{% Otherwise, add chapter ref
+                \refChapter{.}%
+            }%
+            \refEqno%
+            \colonpageref{eq:#2}%
+         }%
+    })%
 }
 
 % genref -- generic reference
-\newcommand{\genref}[2]{%
+\newcommand{\genref}[3][]{%
+    \ifthenelse{\equal{#1}{}}{}{%
+      \ifmmode \text{``#1''}%
+      \else``#1'' %
+      \fi%
+    }%
     (\ensuremath{% To cover both cases, force math mode
-        \hyperref[#1]{%
-            \textrm{#2}\ref*{#1}\colonpageref{#1}%
+        \hyperref[#2]{%
+            \textrm{#3}\ref*{#2}\colonpageref{#2}%
         }%
     })%
 }
@@ -336,13 +341,9 @@
 \newtheorem{theorem}{Theorem}
 \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
 \newcommand{\Thref}[2][]{%
-    \ifthenelse{\equal{#1}{}}{}{%
-      \ifmmode \text{``#1''}%
-      \else``#1'' %
-      \fi%
-    }%
-    \genref{th:#2}{Th}%
+    \genref[#1]{th:#2}{Th}%
 }
+% some day delete \longThref
 \newcommand{\longThref}[2]{%
   \ifmmode \text{``#1''\Thref{#2}}%
   \else``#1'' \Thref{#2}%
@@ -360,13 +361,9 @@
 
 \newtheorem{definition}[theorem]{Definition}
 \newcommand{\Dfref}[2][]{%
-    \ifthenelse{\equal{#1}{}}{}{%
-      \ifmmode \text{``#1''}%
-      \else``#1'' %
-      \fi%
-    }%
-    \genref{def:#2}{Df}%
+    \genref[#1]{def:#2}{Df}%
 }
+% some day delete \longDfref
 \newcommand{\longDfref}[2]{%
   \ifmmode \text{``#1''\Dfref{#2}}%
   \else``#1'' \Dfref{#2}%
@@ -389,12 +386,7 @@
 % theoremoids: Rm
 
 \newtheorem{remark}[theorem]{Remark}
-\newcommand{\Rmref}[1]{\genref{rem:#1}{Rm}}
-\newcommand{\longRmref}[2]{%
-  \ifmmode \text{``#1''\Rmref{#2}}%
-  \else``#1'' \Rmref{#2}%
-  \fi%
-}
+\newcommand{\Rmref}[2][]{\genref[#1]{rem:#2}{Rm}}
 \newcommand{\rmEnd}{\Circle}
 
 % local theoremoids: Lm
@@ -408,15 +400,8 @@
 }
 \newtheorem{lemma}[theorem]{Lemma}
 
-\newcommand{\Lmref}[2][]{%
-    \ifthenelse{\equal{#1}{}}{}{%
-        \ifmmode \text{``#1''}%
-        \else``#1'' %
-        \fi%
-    }%
-    (\textrm{Lm}\ref{lem:#2}\colonpageref{lem:#2})%
-}
-% some day delete longLmref
+\newcommand{\Lmref}[2][]{\genref[#1]{lem:#2}{Lm}}
+% some day delete \longLmref
 \newcommand{\longLmref}[2]{%
   \ifmmode \text{``#1''\Lmref{#2}}%
   \else``#1'' \Lmref{#2}%
@@ -436,9 +421,8 @@
 }
 
 % Lowercase "df" is tag for local definitions.
-\newcommand{\dfref}[1]{%
-    (\textrm{df}\ref{ldef:#1}\colonpageref{ldef:#1})%
-}
+\newcommand{\dfref}[2][]{\genref[#1]{ldef:#2}{df}}
+% some day delete \longdfref
 \newcommand{\longdfref}[2]{%
   \ifmmode \text{``#1''\dfref{#2}}%
   \else``#1'' \dfref{#2}%
@@ -450,7 +434,7 @@
 % I once used hyphens in variable names,
 % so I needed to ensure that subtraction was
 % clearly distinguished by the typography.
-% I need to remove this macro.
+% I now need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
 \newcommand{\expOp}{\mathbin{{\ast}{\ast}}}
@@ -1383,11 +1367,12 @@ its boolean value.
 \begin{remark}[Theoremoids]
 \label{rem:theoremoid}
 Much of the deductive presentation of this paper
-is made in the form of labelable text blocks,
+is made in the form of labelable text blocks with
+headers,
 like this one.
 
 Because the archetypal example of these are theorems,
-labelable text blocks are called
+labelable text blocks with headers are called
 \dfn[theoremoid]{theoremoids}.
 Another example of a theoremoid is a remark,
 like this one \Rmref{theoremoid}.
@@ -1403,11 +1388,6 @@ as visible only in part of this book.
 Every global theoremoid is a theorem, a definition,
 an example,
 a remark, or an observation.
-Remarks are outside of the deductive logic,
-and often describe meta-notions, such
-as matters of notation.
-Observations are parts of the deductive logic
-for which we choose to omit the proof.
 
 A local theoremoid is either a lemma,
 or a local definition.
@@ -1419,11 +1399,69 @@ below \Sref{scope-and-realm}.
 \rmEnd
 \end{remark}
 
-\begin{remark}[Labelable Blocks]
+\begin{remark}[Remarks]
+Remarks are outside of the deductive logic,
+and often describe meta-notions, such
+as matters of notation.
+They do not require proof.
+\rmEnd
+\end{remark}
+
+\begin{remark}[Observations]
+Observations are statements which form part of the deductive logic,
+together with a brief indication of why the statement is considered true.
+Sometimes our reason to use an observation is to save clutter.
+This is the case when the observation states a fact that is
+obvious from previous results in this book,
+or from one or more of the preceding disciplines.
+
+In other cases, our
+indication of the truthfulness of our observation,
+may fall short of being a careful proof.
+As an example of this,
+we will need to go from pseudocode
+to statements in a from we can use in our deductive logic.
+We will do this by making statements which we consider clearly obvious
+from the pseudocode in the form of observations.
+Many of us will be familiar with programming
+logic, and will have a high degree of confidence
+in their ability to check the truth of our observations,
+without resort to careful proof.
+
+In fact, little additional confidence might be gained from
+more rigorous proofs.
+To lay out a full proof apparatus for
+drawing conclusions from pseudocode would require another book
+of this size and complexity.
+The time-effectiveness of this effort aside,
+checking this apparatus, and
+the proofs based on it, would require a long chain of reasoning,
+reasoning which itself would be open to doubt at every step.
+Ad hoc reasoning based on programming experience would be less rigorous,
+but the reasoning involved is more familiar,
+it reaches its results in fewer steps,
+and, since it can be performed more quickly,
+can be repeatedly checked.
+As a result, careful proofs may not noticeably increase
+our confidence in the observation's truth.\footnote{%
+    Some readers might wonder, given the advantages of ad hoc
+    programmer's reasoning, why so much effort is given to proofs
+    in this book.
+    The answer is that, while some facts about pseudocode are
+    reliably evident to the experienced programmer using ad hoc reasoning,
+    others usually are not.
+    Facts about pseudocode that do not reliably yield themselves
+    up to ad hoc programming reasoning are, in our case,
+    essential to having confidence in claims for correctness and complexity.}
+\rmEnd
+\end{remark}
+
+\begin{remark}[Labelable Text]
 \label{rem:labelables}
-A \dfn[block, labelable]{labelable block},
+A \dfn[labelable]{labelable text},
 or \dfn[labelable]{labelable},
-is a theoremoid or an equation.
+is either a a theoremoid or a
+displayed equation.
 \rmEnd
 \end{remark}
 
@@ -1480,7 +1518,7 @@ to page \pageref{loc-brick-depth}
 inside section \ref{loc-brick-depth}.
 Where a page reference would be to the current page,
 the page reference is omitted.
-Where a labelable is numbered globally,
+Where a labelable text is numbered globally,
 instead of within each chapter,
 no chapter reference is provided.
 Where a chapter reference would be to the current chapter,
@@ -2968,7 +3006,9 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \todo{Checked to here}
 
-Let this section be a scope.
+\begin{remark}[Context]
+\label{rem:cxt-sec-slice}
+The section containing this remark is a scope.
 The scope of this section
 contains
 the variables
@@ -2978,10 +3018,12 @@ the variables
 \item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
 \item $\V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).$
 \end{itemize}
-Also, the scope of every theoremoid of this section
+Also, the scope of every theoremoid within this section
 implicitly contains its own instances of
 \V{offset}, \V{len}, \V{seq}, and \V{slice}
 with realms as just stated.
+\rmEnd
+\end{remark}
 
 \begin{definition}[Slice]
 \label{def:slice}
@@ -3016,26 +3058,29 @@ $\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
 
-The following lemma is matter of ZF and arithmetic.
-Nonetheless,
-the tricky fence-post logic
-involved justify making the proof explicit.
-
 \renewcommand{\labBase}{lem-slice-helper}
 \begin{lemma}[Slice helper]
 \label{lem:slice-helper}
 \begin{gather}
 \Elab{010} \Vnat{ix} \in \Vnat{len}
-\\ \Elab{020} \land\; \Vnat{offset}+\V{len} \le \Dom{\V{seq}}
 \\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
+    \quad \lemEnd
 \end{gather}
-\lemEnd
 \end{lemma}
 
 \begin{proof}
-\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} \E{010}.}
-\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{020}, \E{120}.}
-\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}. \quad \myqed}
+The proof is direct,
+assuming the hypothesis \E{010} to show the consequent \E{030}
+\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} Hypothesis of the theorem \E{010}, AF proof.}
+We recall the context contains \V{slice} and \V{seq}, and that \V{ix} and \V{len}
+are defined in terms of them, so that
+\eqpar{125}{$\Vnat{offset}+\V{len} \le \Dom{\V{seq}}$
+    \bcuz{} \Rmref[Slice context]{cxt-sec-slice}, \Dfref[Slice]{slice}.}
+\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{120}, \E{125}.}
+\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}.}
+\E{140} is the consequent, which is what we sought to show for
+the current proof.
+\myqed
 \end{proof}
 
 \renewcommand{\labBase}{th-slice-well-definedness}
@@ -9454,7 +9499,7 @@ the origin of \Veim{x} is at or before its current location.
 \begin{gathered}
 \Origin{\V{x}} + \size{\Vstr{rhs1}} = \Current{\V{x}} \\
 \because
-\longEref{Origin}{def-origin},
+\Eref[Origin]{def-origin},
 \longThref{EIM direction}{eim-direction},
 \Eref{th-eim-origin-not-after-current-10},
 \Eref{th-eim-origin-not-after-current-12}.
@@ -20357,7 +20402,7 @@ and \var{false} otherwise.
 
 \FloatBarrier
 
-\Aref{alg:adjoin-eim} contains pseudo-code
+\Aref{alg:adjoin-eim} contains pseudocode
 showing the use of PSL's.
 The reader may notice that
 \Aref{alg:adjoin-eim} could be simplified,
