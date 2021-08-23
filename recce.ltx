@@ -408,7 +408,7 @@
   \fi%
 }
 
-\newcommand{\lemEnd}{\thEnd}
+\newcommand{\lmEnd}{\thEnd}
 
 % local theoremoids: local definition
 
@@ -3090,7 +3090,7 @@ involved justify making the proof explicit.
 \\ \Elab{020} \land\; \Vnat{offset}+\V{len} \le \Dom{\V{seq}}
 \\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
 \end{gather}
-\lemEnd
+\lmEnd
 \end{lemma}
 
 \begin{proof}
@@ -3139,7 +3139,7 @@ we can conclude
 \begin{gather}
 \Elab{010} \Vnat{ix} \in \Vnat{len}
 \\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
-    \quad \lemEnd
+    \quad \lmEnd
 \end{gather}
 \end{lemma}
 
@@ -3231,7 +3231,10 @@ Where $\V{ix}\in\naturals$,
 \end{theorem}
 
 \begin{proof}
-The proof is direct, assuming the hypothesis of the theorem \E{040}
+The proof is direct.
+For the empty slice, $\V{len} = 0$, we have the proof vacuously.
+For a non-empty slice,
+we assume the hypothesis of the theorem \E{040}
 to show its consequent \E{050}.
 \eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} Hypothesis of theorem \E{040}, AF proof.}
 \eqpar{110}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$
@@ -3289,7 +3292,8 @@ The Slice 1 Theorem tells us that
 \end{equation}
 \eqpar{260}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}$
     \cuz{} \E{100}, \E{250}.}
-\E{260} is the consequent, which is what we needed to show for the proof.
+\E{260} is the consequent, which is what we needed to show for the non-empty case
+and the proof.
 \myqed
 \end{proof}
 
@@ -3300,7 +3304,7 @@ A slice is a functional relation.  That is,
 \begin{gather}
 \Elab{010} \tuple{\V{ix}, \V{v1}} \in \V{slice}
 \\ \Elab{020} \land\; \tuple{\V{ix}, \V{v2}} \in \V{slice}
-\\ \Elab{040} \implies \V{v1} = \V{v2}.  \quad\lemEnd
+\\ \Elab{040} \implies \V{v1} = \V{v2}.  \quad\lmEnd
 \end{gather}
 \end{lemma}
 
@@ -3359,10 +3363,19 @@ which is what we needed to show for the proof of this lemma.
 \label{lem:slice-domain-size-containment}
 The domain of a slice contains its size.
 That is, $\V{len} \subseteq \Dom{\V{slice}}$.
-\thEnd
+\lmEnd
 \end{lemma}
 
 \begin{proof}
+The proof is direct.
+We note that we have the case where $\V{len} = 0$
+trivially.
+For the case where
+$\V{len} \neq 0$,
+we assume an arbitrary element of \V{len},
+to show that it must also be an element of
+\Dom{\V{slice}}.
+\eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} ARB $\V{ix} \in \naturals$.}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
