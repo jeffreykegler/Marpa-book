@@ -3363,10 +3363,10 @@ and the proof.
 
 \todo{Rewrite from here}
 
-\renewcommand{\labBase}{lem-slice-domain-slice-containment}
-\begin{lemma}[Slice domain size containment]
-\label{lem:slice-domain-size-containment}
-The domain of a slice contains its size.
+\renewcommand{\labBase}{lem-slice-domain-containment-of-length}
+\begin{lemma}[Slice domain containment of length]
+\label{lem:slice-domain-length-containment}
+The domain of a slice contains its length.
 That is, $\V{len} \subseteq \Dom{\V{slice}}$.
 \lmEnd
 \end{lemma}
@@ -3381,16 +3381,20 @@ we assume an arbitrary element of \V{len},
 to show that it must also be an element of
 \Dom{\V{slice}}.
 \eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} ARB $\V{ix} \in \naturals$.}
-\todo{Finish this proof.}
-\myqed
+\eqpar{110}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}$
+    \bcuz{} \Thref[Slice Theorem 2]{slice-2}, \E{100}.}
+\eqpar{120}{$\exists\; \V{v} \in \V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}$
+    \cuz{} \E{110}.}
+\eqpar{130}{$\V{ix} \in \Dom{\V{slice}}$ \cuz{} \E{120}.  \myqed}
 \end{proof}
 
-\begin{lemma}[Slice size domain containment]
-\label{th:slice-size-domain-containment}
-The size of a slice contains its domain.
+\renewcommand{\labBase}{lem-slice-length-containment-of-domain}
+\begin{lemma}[Slice length containment of domain]
+\label{th:slice-length-containment-of-domain}
+The length of a slice contains its domain.
 That is, where \V{slice} is a slice,
-$\Dom{\V{slice}} \subseteq \Vsize{slice}$
-\thEnd
+$\Dom{\V{slice}} \subseteq \V{len}$.
+\lmEnd
 \end{lemma}
 
 \begin{proof}
