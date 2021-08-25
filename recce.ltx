@@ -3365,7 +3365,7 @@ and the proof.
 
 \renewcommand{\labBase}{lem-slice-domain-containment-of-length}
 \begin{lemma}[Slice domain containment of length]
-\label{lem:slice-domain-length-containment}
+\label{lem:slice-domain-containment-of-length}
 The domain of a slice contains its length.
 That is, $\V{len} \subseteq \Dom{\V{slice}}$.
 \lmEnd
@@ -3390,7 +3390,7 @@ to show that it must also be an element of
 
 \renewcommand{\labBase}{lem-slice-length-containment-of-domain}
 \begin{lemma}[Slice length containment of domain]
-\label{th:slice-length-containment-of-domain}
+\label{lem:slice-length-containment-of-domain}
 The length of a slice contains its domain.
 That is, where \V{slice} is a slice,
 $\Dom{\V{slice}} \subseteq \V{len}$.
@@ -3398,8 +3398,39 @@ $\Dom{\V{slice}} \subseteq \V{len}$.
 \end{lemma}
 
 \begin{proof}
-% Proof template
-\todo{Finish this proof.}
+The proof is direct.
+We note that we have the case where $\Vsize{slice} = 0$
+trivially.
+For the case where
+$\Vsize{slice} \neq 0$,
+we know that there is at least one element in \Dom{\V{slice}}.
+We assume an arbitrary element of \Dom{\V{slice}},
+to show that it must also be an element of
+\V{len}.
+Let \V{ix} be an arbitrary element of \Dom{\V{slice}}.
+\eqpar{100}{$\exists\; \V{v} \in \V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}$
+    \cuz{} ARB $\V{ix} \in \naturals$.}
+\eqpar{110}{$\tuple{\V{ix}, \V{v}} \in \V{slice}$ \cuz{} EI of \V{v} in \E{100}.}
+\eqpar{120}{$\V{ix} \in \V{len}$ \cuz{} \Thref[Slice Theorem 2]{slice-2}, \E{110}.}
+\E{120} shows the non-empty subcase and the proof.
+\myqed
+\end{proof}
+
+\begin{theorem}[Slice domain length equivalence]
+\label{th:slice-domain-length-equivalence}
+The length of a slice is its domain.
+That is,
+\[ \Dom{\V{slice}} = \V{len} = \Vsize{slice}.
+    \quad \thEnd \]
+\end{theorem}
+
+\begin{proof}
+This proof follows from the
+Slice Length Containment of Domain Lemma
+\Lmref{slice-length-containment-of-domain}
+and the
+Slice Domain Containment of Length Lemma
+\Lmref{slice-domain-containment-of-length}.
 \myqed
 \end{proof}
 
