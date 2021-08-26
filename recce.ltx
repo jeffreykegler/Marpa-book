@@ -2610,8 +2610,6 @@ we will implicitly introduce a new placeholder \V{V},
 which we typically use to represent the codomain of sequences
 contained in the scope of that theoremoid.
 
-\todo{Ensure this takes into account empty and infinite sequences.}
-
 A sequence is a family (and therefore a function)
 whose domain is either a natural number or \naturals.
 In most of this book, we will only need finite sequences.
@@ -3023,8 +3021,6 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
-\todo{Checked to here}
-
 \begin{remark}[Context]
 \label{rem:cxt-sec-slice}
 The section containing this remark is a scope.
@@ -3361,8 +3357,6 @@ and the proof.
 \myqed
 \end{proof}
 
-\todo{Rewrite from here}
-
 \renewcommand{\labBase}{lem-slice-domain-containment-of-length}
 \begin{lemma}[Slice domain containment of length]
 \label{lem:slice-domain-containment-of-length}
@@ -3416,6 +3410,7 @@ Let \V{ix} be an arbitrary element of \Dom{\V{slice}}.
 \myqed
 \end{proof}
 
+\renewcommand{\labBase}{th-slice-domain-length-equivalence}
 \begin{theorem}[Slice domain length equivalence]
 \label{th:slice-domain-length-equivalence}
 The length of a slice is its domain.
@@ -3434,34 +3429,60 @@ Slice Domain Containment of Length Lemma
 \myqed
 \end{proof}
 
+\renewcommand{\labBase}{th-slice-sequence}
 \begin{theorem}[Slice sequence]
-\label{th:slice-domain}
+\label{th:slice-sequence}
 A slice is a sequence.
 \thEnd
 \end{theorem}
 
 \begin{proof}
-% Proof template
-\todo{Finish this proof.}
+By the Slice Functional Lemma \Lmref{slice-functional},
+a slice is a function and therefore a family.
+From the Slice Domain Length Equivalence Theorem
+\Thref{slice-domain-length-equivalence},
+we know that the domain of a slice in a natural number.
+Since a sequence is a family whose domain is a countable number,
+a slice is a sequence.
 \myqed
 \end{proof}
 
-\todo{Want proofs for codomain, indexing and pairs.}
-
-\begin{theorem}[Slice properties]
-\label{th:slice-properties}
+\renewcommand{\labBase}{th-slice-range}
+\begin{theorem}[Slice range]
+\label{th:slice-range}
 A slice is a sequence whose range is a subset
 of the range of its container sequence.
-\thEnd
+That is,
+\[ \Ran{\V{slice}} \subseteq \Ran{\V{seq}}.
+    \quad \thEnd \]
 \end{theorem}
 
 \begin{proof}
-% Proof template
-\todo{Finish this proof.}
+The proof is direct.
+We note that where $\Ran{\V{slice}} = 0$,
+we have the proof trivially.
+For the non-empty case,
+$\Ran{\V{slice}} \neq 0$,
+we know that there is at least one element in \Ran{\V{slice}}.
+We assume an arbitrary element of \Ran{\V{slice}},
+to show that it must also be an element of
+\Ran{\V{seq}}.
+\eqpar{100}{$\V{v} \in \Ran{\V{slice}}$ \cuz{} AF non-empty case, ARB $\V{v}\in\V{V}$.}
+\eqpar{110}{$\exists\; \Vnat{ix} : \tuple{\V{ix}, \V{v}} \in \V{slice}$ \cuz{} \E{100}.}
+\eqpar{120}{$\tuple{\V{ix}, \V{v}} \in \V{slice}$ \cuz{} EI of \E{110}.}
+\eqpar{130}{$\V{v} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \bcuz{} \Thref[Slice 1 Theorem]{slice-1}, \E{120}.}
+\eqpar{140}{$\V{v} \in \Ran{\V{seq}}$ \cuz{} \E{130}.}
+\E{140} gives us the non-empty subcase and the proof.
 \myqed
 \end{proof}
 
-\begin{theorem}[Slice Pairs]
+\todo{Rewrite from here}
+
+\todo{Want proofs for indexing and pairs.}
+
+\renewcommand{\labBase}{th-slice-pairs}
+\begin{theorem}[Slice pairs]
 \label{th:slice-pairs}
 \todo{Recheck for new definition of slice}
 The pairs of a slice are a subset of
