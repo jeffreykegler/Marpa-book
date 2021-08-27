@@ -3477,9 +3477,27 @@ to show that it must also be an element of
 \myqed
 \end{proof}
 
-\todo{Rewrite from here}
+\renewcommand{\labBase}{th-slice-indexing}
+\begin{theorem}[Slice indexing]
+\label{th:slice-indexing}
+\eqpar{020}{$\forall\; \V{ix}\in\V{len} : \VVelement{slice}{ix} =
+ \Velement{seq}{\V{offset}+\V{ix}}. \quad \thEnd$}
+\end{theorem}
 
-\todo{Want proofs for indexing and pairs.}
+\begin{proof}
+The proof is direct.
+It follows trivially where $\V{len} = 0$.
+For the non-empty case, $\V{len} > 0$,
+we assume an arbitrary \V{ix}, to show
+the quantification predicate in \E{020}.
+\eqpar{100}{$\Vnat{ix} \in \V{len}$ \cuz{} ARB $\V{ix} \in \naturals$.}
+\eqpar{110}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}$
+    \bcuz{} \Thref[Slice Theorem 2]{slice-2}, \E{100}.}
+\eqpar{120}{$\VVelement{slice}{ix} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \cuz{} \E{110}. \myqed}
+\end{proof}
+
+\todo{Rewrite from here}
 
 \renewcommand{\labBase}{th-slice-pairs}
 \begin{theorem}[Slice pairs]
@@ -3487,114 +3505,26 @@ to show that it must also be an element of
 \todo{Recheck for new definition of slice}
 The pairs of a slice are a subset of
 the pairs of the container sequence.
-More precisely,
-let \V{V} be a placeholder
-for a variable whose value is a non-empty set.
-Then
-\[
-    \begin{gathered}
-        \forall\; \V{seq} \in \V{V}\exxpOp(\naturals\cup\set{\naturals}) :
-            \forall\; \V{subseq} \in \V{V}\exxpOp\naturals :
-        \\ \left( \begin{gathered}
-            \exists\; \Vnat{offset} :
-                \forall\; \V{ix} \in \Dom{\V{subseq}} :
-            \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
-                \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
-        \end{gathered} \right)
-        \\ \implies \Pairs{\V{subseq}} \subseteq \Pairs{\V{seq}}.
-            \quad \thEnd
-    \end{gathered}
-\]
+That is,
+\[ \Pairs{\V{slice}} \subseteq \Pairs{\V{seq}}.
+            \quad \thEnd \]
 \end{theorem}
 
 \begin{proof}
-The proof is by reductio.
-We assume the existence of a pair for a slice,
-\V{subseq},
-that is not an element of the pairs for its container
-sequence, \V{seq}.
+For the case where there are no pairs in \V{slice},
+$\size{\Pairs{\V{slice}}} = 0$,
+we have the proof trivially.
+We show the non-empty case,
+$\size{\Pairs{\V{slice}}} > 0$,
+by reductio.
+For the reductio,
+we assume the existence of a pair for a slice,
+which is not a pair of the container sequence.
 \begin{gather}
-    \label{eq:th-slice-pairs-100}
-    \left( \begin{gathered}
-        \exists\; \Vnat{offset} :
-            \forall\; \V{ix} \in \Dom{\V{subseq}} :
-        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
-            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
-    \end{gathered} \right)
-    \\ \label{eq:th-slice-pairs-105}
-        \land\; \V{pair} \in \V{V}\times\V{V}
-    \\ \label{eq:th-slice-pairs-110}
-        \land\; \V{pair} \in \Pairs{\V{subseq}}
-    \\ \label{eq:th-slice-pairs-120}
-        \land\; \V{pair} \notin \Pairs{\V{seq}}
-    \\ \nonumber \myparbox{\cuz{}
-        AF reductio; ARB \V{pair};
-        \linebreak[1] ARB $\V{seq} \in \V{V}\exxpOp(\naturals\cup\set{\naturals})$;
-        ARB $\V{subseq} \in \V{V}\exxpOp\naturals$.}
+\Elab{100} \V{pair} \in \Pairs{\V{slice}}
+\\ \Elab{110} \land\; \V{pair} \notin \Pairs{\V{seq}}
+\\ \nonumber \myparbox{\cuz AF reductio, ARB $\V{pair} \in \V{V}\times\V{V}$.}
 \end{gather}
-\begin{gather}
-\label{eq:th-slice-pairs-130}
-    \begin{gathered}
-            \forall\; \V{ix} \in \Dom{\V{subseq}} :
-        \\ \V{offset} + \V{ix} \in \Dom{\V{seq}} \land
-            \VVelement{subseq}{ix} = \Velement{seq}{\V{offset} + \V{ix}}
-    \end{gathered}
-    \\ \nonumber \myparbox{\cuz{}
-        \Eref{th-slice-pairs-100}, EI of \V{offset}; ARB \Vnat{offset}.}
-\end{gather}
-\begin{equation}
-\label{eq:th-slice-pairs-140}
-\begin{gathered}
-    \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{subseq}
-    \\ \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
-    \\ \myparbox{\cuz{}
-        \longThref{Sequence Pairs Set}{sequence-pairs-set},
-        \Eref{th-slice-pairs-110}.}
-\end{gathered}
-\end{equation}
-\begin{gather}
-\label{eq:th-slice-pairs-150}
-    \Vnat{i} + 1 < \Vsize{subseq}
-\\ \label{eq:th-slice-pairs-160}
-    \land\; \V{pair} = \tuple{\VVelement{subseq}{i}, \VVelement{subseq}{\V{i}+1}}
-\\ \nonumber \myparbox{\cuz{}
-        \Eref{th-slice-pairs-140}, EI of \Vnat{i}; ARB \Vnat{i}.}
-\end{gather}
-\mypareq{eq:th-slice-pairs-170}{%
-    $\forall\;\Vnat{x} :
-        \Vnat{x} \in \Dom{\V{subseq}} \iff \V{x} < \Vsize{subseq}$
-        \cuz{} \text{ZF.}}
-\mypareq{eq:th-slice-pairs-180}{%
-    $\Vnat{i} + 1 \in \Dom{\V{subseq}}$ \cuz{} \Eref{th-slice-pairs-150},
-        \Eref{th-slice-pairs-170}.}
-\mypareq{eq:th-slice-pairs-190}{%
-    $\Vnat{offset} + \Vnat{i} + 1 \in \Dom{\V{seq}}$
-    \cuz{} \Eref{th-slice-pairs-130}, \Eref{th-slice-pairs-180}.}
-\mypareq{eq:th-slice-pairs-195}{%
-    $\Vnat{offset} + \Vnat{i} + 1 < \Vsize{seq}$ \cuz{} \Eref{th-slice-pairs-190}.}
-\mypareq{eq:th-slice-pairs-200}{%
-    $\V{pair} = \tuple{\Velement{seq}{\V{offset}+\V{i}}, \Velement{seq}{\V{offset}+\V{i}+1}}$
-        \bcuz{} \Eref{th-slice-pairs-130},
-            \Eref{th-slice-pairs-180}.}
-\begin{equation}
-\label{eq:th-slice-pairs-210}
-\begin{gathered}
-    \exists\; \Vnat{j} : \Vnat{j} + 1 < \Vsize{subseq}
-    \\ \land\; \V{pair} = \tuple{\VVelement{subseq}{j}, \VVelement{subseq}{\V{j}+1}}
-    \\ \myparbox{\cuz{}
-        EG of \Eref{th-slice-pairs-195} and
-            \Eref{th-slice-pairs-200} with bound \V{j} for
-            \V{offset} + \V{i}.}
-\end{gathered}
-\end{equation}
-\mypareq{eq:th-slice-pairs-220}{%
-        $\V{pair} \in \Pairs{\V{seq}}$ \bcuz{}
-        \longThref{Sequence Pairs Set}{sequence-pairs-set},
-        \Eref{th-slice-pairs-105},
-        \Eref{th-slice-pairs-210}.}
-Equation \Eref{th-slice-pairs-220} is
-contrary to \Eref{th-slice-pairs-120} which
-shows the reductio and therefore the current theorem.
 \todo{Recheck this}
 \myqed
 \end{proof}
