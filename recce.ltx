@@ -3682,17 +3682,18 @@ But, for the sake of completeness, here are examples:
 \end{example}
 
 \todo{Rewrite from here}
+\todo{Define offsets of a slice?}
 
 \begin{definition}[Prefix]
 \label{def:prefix}
-A slice of a sequence
+\V{slice}
 is a \dfn[Prefix@Prefix (of a sequence)]{prefix}
-of that sequence iff
+of \V{seq} iff
 there is no indexable location before the first offset
-of the slice.
-The prefix is a
+of \V{slice} within \V{seq}.
+\V{slice} is a
 \dfn[Prefix@Prefix (of a sequence)!proper]{proper prefix}
-iff it is not identical to its container sequence.
+iff $\V{slice} \neq \V{seq}$.
 We write \Pfx{\V{slice},\V{seq}} to say
 that \V{slice} is a prefix of \V{seq}.
 We write \PrPfx{\V{slice},\V{seq}} to say
@@ -3703,8 +3704,7 @@ that \V{slice} is a proper prefix of \V{seq}.
 \renewcommand{\labBase}{th-prefix}
 \begin{theorem}[Prefix]
 \label{th:prefix}
-A slice of sequence is a prefix iff
-its first offset is zero.
+\V{slice} is a prefix of \V{seq} iff $\V{offset} = 0$.
 \thEnd
 \end{theorem}
 
@@ -3713,15 +3713,13 @@ For the ``if'' direction we note that no indexable
 location is before location zero.
 So if the first offset of a slice is at location zero,
 no indexable location is before the first offset of
-that slice, and definition \Dfref{prefix} is satisfied.
+that slice, and the definition of prefix \Dfref{prefix} is satisfied.
 
 For the ``only if'' direction we assume, for a reductio,
 that there is a prefix, call it \V{prefix},
 whose first offset is greater than zero.
 Then the container sequence must have a length greater than zero,
 and zero must be an indexable location.
-We assumed the first offset was greater than zero,
-so that we have an indexable location at zero.
 If we have an indexable location at zero,
 we have an indexable location less than the first offset.
 If we have an indexable location less than the first offset,
@@ -3729,17 +3727,15 @@ then \V{prefix} does not satisfy the definition of prefix \Dfref{prefix},
 contrary to assumption for the reductio.
 With the reductio, we have both directions and the proof.
 \myqed
-\todo{Check this proof.}
 \end{proof}
 
 \begin{definition}[Suffix]
 \label{def:suffix}
-A \dfn[suffix@Suffix (of a sequence)]{suffix}
-of a sequence
-is a slice of the sequence of size $\Vsize{cntn}-\V{offset}$,
-where $\V{cntn}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$
-is the container sequence,
-and \V{offset} is the offset of the slice in \V{cntn}.
+\V{slice}
+is a \dfn[Suffix@Suffix (of a sequence)]{suffix}
+of \V{seq} iff
+there is no indexable location at or after the last offset
+of \V{slice} in \V{seq}.
 The suffix is a
 \dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
 iff it is not identical to its container sequence.
@@ -3749,6 +3745,22 @@ We write \PrSfx{\V{slice},\V{seq}} to say
 that \V{slice} is a proper suffix of \V{seq}.
 \dfEnd
 \end{definition}
+
+\renewcommand{\labBase}{th-prefix}
+\begin{theorem}[Prefix]
+\label{th:prefix}
+\V{slice} is a suffix iff
+$\V{len} = \Vsize{seq}-\V{offset}$.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\section{Concatenations}
 
 \section{Fusions}
 
