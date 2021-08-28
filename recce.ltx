@@ -2610,8 +2610,13 @@ we will implicitly introduce a new placeholder \V{V},
 which we typically use to represent the codomain of sequences
 contained in the scope of that theoremoid.
 
+\begin{definition}[Sequence]
+\label{def:sequence}
 A sequence is a family (and therefore a function)
 whose domain is either a natural number or \naturals.
+\dfEnd
+\end{definition}
+
 In most of this book, we will only need finite sequences.
 But in this chapter, we want to be more general,
 and we allow sequences to be countably infinite.
@@ -2630,6 +2635,16 @@ We often write the empty sequence as $\epsilon.$
 
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid indexes of \V{seq}.
+An element of 
+\Dom{\V{seq}} is called an
+\dfn[Indexable location (wrt a sequence)]{indexable location},
+or \dfn[Location, indexable (wrt a sequence)]{location} of \V{seq}.
+The set of
+\dfn[Offset (wrt a sequence)]{offsets} of \V{seq} is the set
+containing its indexable locations
+and its length:
+$\Dom{\V{seq}} \cup \Vsize{seq}$.
+
 \Cod{\V{seq}} is the set of valid values of \V{seq},
 and \Ran{\V{seq}} is the set of actual values of \V{seq}.
 It is therefore always the case that
@@ -3525,47 +3540,57 @@ which is not a pair of the container sequence.
 \begin{equation}
 \Elab{120}
 \begin{gathered}
-       \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{seq}
-       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{slice}
+       \\ \land\; \V{pair} = \tuple{\VVelement{slice}{i}, \VVelement{slice}{\V{i}+1}}
        \\ \myparbox{\cuz{} \Thref[Sequence Pairs Set]{sequence-pairs-set}, \E{100}.}
 \end{gathered}
 \end{equation}
 \begin{gather}
-\Elab{140} \Vnat{i} + 1 < \Vsize{seq}
-\\ \Elab{150} \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+\Elab{140} \Vnat{i} + 1 < \Vsize{slice}
+\\ \Elab{150} \land\; \V{pair} = \tuple{\VVelement{slice}{i}, \VVelement{slice}{\V{i}+1}}
 \\ \nonumber \myparbox{\cuz{} EI of \E{120}, ARB $\V{i} \in \naturals$.}
 \end{gather}
 \begin{equation}
 \Elab{160}
 \begin{gathered}
-       \nexists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{seq}
-       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \nexists\; \Vnat{i1} : \Vnat{i1} + 1 < \Vsize{seq}
+       \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i1}, \VVelement{seq}{\V{i1}+1}}
        \\ \myparbox{\cuz{} \Thref{sequence-pairs-set}, \E{110}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \Elab{170}
 \begin{gathered}
-       \forall\; \Vnat{i} : \Vnat{i} + 1 \ge \Vsize{seq}
-       \\ \lor\; \V{pair} \neq \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
+       \forall\; \Vnat{i1} : \Vnat{i1} + 1 \ge \Vsize{seq}
+       \\ \lor\; \V{pair} \neq \tuple{\VVelement{seq}{i1}, \VVelement{seq}{\V{i1}+1}}
        \\ \myparbox{\cuz{} \E{160}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
 \Elab{180}
 \begin{gathered}
-\Vnat{i} + 1 \ge \Vsize{seq}
-    \lor\; \V{pair} \neq \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}
-\\ \myparbox{\cuz{} EI of \E{170}.}
+       \V{offset} + \Vnat{i} + 1 \ge \Vsize{seq}
+       \\ \lor\; \V{pair} \neq \tuple{\Velement{seq}{\V{offset}+\V{i}}, \Velement{seq}{\V{offset}+\V{i}+1}}
+       \\ \myparbox{\cuz{} EI of \V{i1} with \V{offset}+\V{i} in \E{170}.}
 \end{gathered}
 \end{equation}
-\eqpar{190}{$\V{pair} \neq \tuple{\VVelement{seq}{i}, \VVelement{seq}{\V{i}+1}}$
-    \cuz{} \E{140}, \E{180}.}
-\E{190} is contrary to \E{150} which shows the reductio,
-the non-empty subcase and the proof.
+\eqpar{190}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$
+    \bcuz{} \Dfref[Slice]{slice}, \Rmref[Slice Section Context]{cxt-sec-slice}.}
+\eqpar{200}{$\V{offset}+\Vsize{slice} \le \Vsize{seq}$
+    \bcuz{} \Dfref[Sequence]{sequence},
+        \Thref[Slice Domain--Length Equivalence]{slice-domain-length-equivalence},
+        \E{190}.}
+\eqpar{210}{$\V{offset}+\V{i}+1 < \Vsize{seq}$ \cuz{} \E{140}, \E{190}.}
+\eqpar{220}{$\V{pair} \neq \tuple{\Velement{seq}{\V{offset}+\V{i}}, \Velement{seq}{\V{offset}+\V{i}+1}}$
+     \bcuz{} \E{180}, \E{210}.}
+\eqpar{230}{$\V{i}+1 \in \V{len}$ \cuz{} \Thref{slice-domain-length-equivalence}, \E{140}.}
+\eqpar{240}{$\V{pair} \neq \tuple{\VVelement{slice}{i}, \VVelement{slice}{\V{i}+1}}$
+     \bcuz{} \Thref[Slice Indexing]{slice-indexing}, \E{220}, \E{230}.}
+\E{240} is contrary to \E{150} which shows the reductio, the non-empty subcase and the proof.
 \myqed
 \end{proof}
 
+\todo{Eliminate slice indexing by integer?}
 \begin{remark}[Slice natural range]
 \label{rem:slice-natural-range}
 The notation
@@ -3660,11 +3685,13 @@ But, for the sake of completeness, here are examples:
 
 \begin{definition}[Prefix]
 \label{def:prefix}
-A \dfn[prefix@Prefix (of a sequence)]{prefix}
-of a sequence
-is a slice of the sequence from index zero.
+A slice of a sequence
+is a \dfn[Prefix@Prefix (of a sequence)]{prefix}
+of that sequence iff
+there is no indexable location before the first offset
+of the slice.
 The prefix is a
-\dfn[prefix@Prefix (of a sequence)!proper]{proper prefix}
+\dfn[Prefix@Prefix (of a sequence)!proper]{proper prefix}
 iff it is not identical to its container sequence.
 We write \Pfx{\V{slice},\V{seq}} to say
 that \V{slice} is a prefix of \V{seq}.
@@ -3672,6 +3699,38 @@ We write \PrPfx{\V{slice},\V{seq}} to say
 that \V{slice} is a proper prefix of \V{seq}.
 \dfEnd
 \end{definition}
+
+\renewcommand{\labBase}{th-prefix}
+\begin{theorem}[Prefix]
+\label{th:prefix}
+A slice of sequence is a prefix iff
+its first offset is zero.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+For the ``if'' direction we note that no indexable
+location is before location zero.
+So if the first offset of a slice is at location zero,
+no indexable location is before the first offset of
+that slice, and definition \Dfref{prefix} is satisfied.
+
+For the ``only if'' direction we assume, for a reductio,
+that there is a prefix, call it \V{prefix},
+whose first offset is greater than zero.
+Then the container sequence must have a length greater than zero,
+and zero must be an indexable location.
+We assumed the first offset was greater than zero,
+so that we have an indexable location at zero.
+If we have an indexable location at zero,
+we have an indexable location less than the first offset.
+If we have an indexable location less than the first offset,
+then \V{prefix} does not satisfy the definition of prefix \Dfref{prefix},
+contrary to assumption for the reductio.
+With the reductio, we have both directions and the proof.
+\myqed
+\todo{Check this proof.}
+\end{proof}
 
 \begin{definition}[Suffix]
 \label{def:suffix}
