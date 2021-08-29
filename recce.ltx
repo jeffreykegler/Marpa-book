@@ -57,6 +57,7 @@
 \newcommand{\Pipe}{\char‘\|}
 \makeindex{recce-general}
 \makeindex{recce-defienda}
+\makeindex{recce-symbol}
 % \makeindex{recce-notation}
 % \makeindex{recce-lemmas}
 
@@ -1604,6 +1605,9 @@ abbreviates ``universal generalization''.
 \rawdfn{WLOG}%
 \index{recce-defienda}{WLOG@WLOG (``without loss of generality'')}
 abbreviates ``without loss of generality''.
+\rawdfn{wrt}%
+\index{recce-defienda}{wrt@wrt (``with respect to'')}
+abbreviates ``with respect to''.
 \rawdfn{ZF}%
 \index{recce-defienda}{ZF@ZF (``Zermolo-Frankel set theory'')}
 (for Zermolo-Frankel) abbreviates ``set theory''.
@@ -2209,7 +2213,7 @@ of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
 \todo{How to define this?}
 
 We write $\V{X}\expOp\V{Y}$%
-\index{recce-defienda}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
+\index{recce-symbol}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
     is the set of functions from \V{Y} to \V{X})}
 for the set of
 functions with \V{Y} as their domain
@@ -2233,7 +2237,7 @@ of a set.
 For this we write, where \V{Yset} is a set of domains
 and \V{X} is a codomain,
 $\V{X}\exxpOp\V{Yset}$%
-\index{recce-defienda}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
+\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
     is the set of functions from an element of \V{Ys} to \V{X})}%
 , so that
 \[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
@@ -2630,19 +2634,20 @@ that is, when it has an empty domain,
 we say that it is the
 \dfn{empty sequence}.%
 \index{recce-defienda}{sequence@Sequence!empty}
-We often write the empty sequence as $\epsilon.$
-\index{recce-defienda}{e@$\epsilon$ (empty sequence)}
+We often write the empty sequence as $\epsilon$.%
+\index{recce-symbol}{e@$\epsilon$ (empty sequence)}
 
 If \V{seq} is a sequence,
-\Dom{\V{seq}} is the set of valid indexes of \V{seq}.
-An element of 
-\Dom{\V{seq}} is called an
-\dfn[Indexable location (wrt a sequence)]{indexable location},
-or \dfn[Location, indexable (wrt a sequence)]{location} of \V{seq}.
+\Dom{\V{seq}} is the set of valid
+\dfn[Index (of a sequence)]{indexes}
+of \V{seq}.
+The length of \V{seq}, seen as a location,
+is called its
+\dfn[Endpoint (of a sequence)]{endpoint}.
 The set of
-\dfn[Offset (wrt a sequence)]{offsets} of \V{seq} is the set
-containing its indexable locations
-and its length:
+\dfn[Location (of a sequence)]{locations} of \V{seq} is the set
+containing its indexes
+and its endpoint:
 $\Dom{\V{seq}} \cup \Vsize{seq}$.
 
 \Cod{\V{seq}} is the set of valid values of \V{seq},
@@ -3036,25 +3041,6 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
-\begin{remark}[Context]
-\label{rem:cxt-sec-slice}
-The section containing this remark is a scope.
-The scope of this section
-contains
-the variables
-\begin{itemize}
-\item $\V{offset}\in\naturals,$
-\item $\V{len}\in\naturals\cup\set{\naturals},$
-\item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
-\item $\V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}).$
-\end{itemize}
-Also, the scope of every theoremoid within this section
-implicitly contains its own instances of
-\V{offset}, \V{len}, \V{seq}, and \V{slice}
-with realms as just stated.
-\rmEnd
-\end{remark}
-
 \begin{definition}[Slice]
 \label{def:slice}
 we say that \V{slice} is a
@@ -3087,6 +3073,29 @@ we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container seque
 $\V{offset}+\Vdecr{len}$.
 \dfEnd
 \end{definition}
+
+\begin{remark}[Slice Section Context]
+\label{rem:cxt-sec-slice}
+This section, beginning after this remark, is a scope.
+This ``slice section scope''%
+\index{recce-defienda}{Scope, section, slice@Scope!Section!Slice}
+contains%
+\index{recce-defienda}{Context, Scope, section, slice@Context!Scope!Section!Slice}
+the variables
+\begin{itemize}
+\item $\V{offset}\in\naturals,$
+\item $\V{len}\in\naturals\cup\set{\naturals},$
+\item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
+\item $\V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})$,
+    where \V{slice} is a slice
+    of length \V{len} at offset \V{offset} of \V{seq}.
+\end{itemize}
+Also, the scope of every theoremoid within the slice section scope
+contains its own instances of
+\V{offset}, \V{len}, \V{seq}, and \V{slice},
+specified as just stated for the slice section scope.
+\rmEnd
+\end{remark}
 
 The following lemma is matter of ZF and arithmetic.
 Nonetheless,
@@ -23930,9 +23939,19 @@ J.~M. I.~M. Leo.
 
 \clearpage
 \def\indexname{Index of defined terms}
-\indexcomment{In this index, ``wrt'' abbreviates
-   ``with respect to''}
+\indexcomment{This index lists defienda,
+    together with related notions, such as scopes
+    and context.
+    Notions which do not conveniently index using the Latin
+    alphabet are in a separate index.}
 \printindex{recce-defienda}
+
+\clearpage
+\def\indexname{Index of symbols}
+\indexcomment{This index contains symbols
+    which do not conveniently
+    index using the Latin alphabet.}
+\printindex{recce-symbol}
 
 \clearpage
 \phantomsection
@@ -23971,6 +23990,10 @@ show={theorem,remark,example,definition}]
 
 \clearpage
 \def\indexname{General index}
+\indexcomment{This index includes concepts which
+    it is convenient to index
+    outside of our specialized lists and indexes,
+    such as names and dates.}
 \printindex{recce-general}
 
 \clearpage
