@@ -411,7 +411,7 @@
 
 \newcommand{\lmEnd}{\thEnd}
 
-% local theoremoids: local definition
+% local theoremoids: Ld (local definition)
 
 \newtheorem{rawLdef}[rawLemma]{Local Definition}
 \newenvironment{ldef}[1]{%
@@ -421,14 +421,16 @@
    \end{rawLdef}
 }
 
-% Lowercase "df" is tag for local definitions.
-\newcommand{\dfref}[2][]{\genref[#1]{ldef:#2}{df}}
-% some day delete \longdfref
-\newcommand{\longdfref}[2]{%
-  \ifmmode \text{``#1''\dfref{#2}}%
-  \else``#1'' \dfref{#2}%
+% "Ld" is tag for local definitions.
+\newcommand{\Ldref}[2][]{\genref[#1]{ldef:#2}{df}}
+% some day delete \longLdref
+\newcommand{\longLdref}[2]{%
+  \ifmmode \text{``#1''\Ldref{#2}}%
+  \else``#1'' \Ldref{#2}%
   \fi%
 }
+
+\newcommand{\ldEnd}{\dfEnd}
 
 %% End of theoremoid section
 
@@ -717,7 +719,6 @@
 \hyphenation{TeXbook}
 
 \begin{document}
-
 
 \title{The Marpa Book}
 \author{Jeffrey Kegler}
@@ -3043,15 +3044,16 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \begin{definition}[Slice]
 \label{def:slice}
-we say that \V{slice} is a
-\dfn[Slice (of a sequence)]{slice}
-of size \V{len}
-in \V{seq}
-from \V{offset}
-iff
+We say that \V{slice}%
+\index{recce-defienda}{Slice@Slice (of a sequence)}%
+is a slice of \V{seq} iff
 \begin{gather}
-\label{eq:def-slice-030}
-        \V{offset}+\V{len} \le \Dom{\V{seq}} \text{ and}
+\nonumber \V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})
+\\ \nonumber \land\; \V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})
+\\ \nonumber \land\; \exists\; \V{len}\in\naturals\cup\set{\naturals} :
+\\ \nonumber \land\; \exists\; \V{offset}\in\naturals :
+\\ \label{eq:def-slice-030}
+    \land\; \V{offset}+\V{len} \le \Dom{\V{seq}}
 \\ \label{eq:def-slice-040}
     \V{slice} =
     \set{ \begin{gathered}
@@ -5640,7 +5642,7 @@ That is,
 
 \begin{proof}
 The theorem follows immediately from the definition of \myfnname{NewParents}
-\dfref{new-parents}.
+\Ldref{new-parents}.
 \myqed
 \end{proof}
 
@@ -5723,7 +5725,7 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
     $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
@@ -5794,7 +5796,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\forall\; \Vnodset{b} : \V{b} = \myfn{Anc}{0,\V{b}}$
-        \cuz{} \longdfref{\myfnname{Anc}}{ancestry}.
+        \cuz{} \longLdref{\myfnname{Anc}}{ancestry}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -5822,7 +5824,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
         \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
         \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
     \end{gathered} \right)
-    \\ \because \longdfref{\myfnname{Anc}}{ancestry},
+    \\ \because \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-ancestry-addition-200}.
 \end{gathered}
 \end{equation}
@@ -5852,7 +5854,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-ancestry-addition-240}{%
     $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-ancestry-addition-230}.
 }
 \mypareq{eq:lem-ancestry-addition-250}{%
@@ -6023,7 +6025,7 @@ for this purpose.
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
-    \cuz{} \longdfref{\myfnname{Anc}}{ancestry}.
+    \cuz{} \longLdref{\myfnname{Anc}}{ancestry}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
     $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
@@ -6086,7 +6088,7 @@ We proceed to look at the other possible values for \V{bad}.
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{ancestry-from-path-330},
-        \longdfref{\myfnname{Anc}}{ancestry}.}
+        \longLdref{\myfnname{Anc}}{ancestry}.}
 \end{gather}
 Recall that if \V{bad} is a minimal counter-example,
 then \Vdecr{bad} cannot be a counter-example:
@@ -6187,7 +6189,7 @@ Now it will be helpful to consider a suffix of \V{path}.
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
     $\Velement{path}{0} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad}, \V{base}}}$
-    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
         \Eref{ancestry-from-path-500}.
 }
 Equation \Eref{ancestry-from-path-510} is contrary to
@@ -6248,12 +6250,12 @@ That is,
     $\Vmyfn{gen}{\V{N}+1,\V{base}} =
         \subtract{\myfn{Anc}{\V{N}+1,\V{base}}}
             {\myfn{Anc}{\V{N},\V{base}}}$
-            \linebreak \cuz{} \longdfref{Generation}{generation}.}
+            \linebreak \cuz{} \longLdref{Generation}{generation}.}
 \mypareq{eq:lem-generation-new-parent-equivalence-110}{%
     $\myfn{Anc}{\Vnat{N}+1,\Vnodset{base}} =
         \myfn{Anc}{\V{N},\V{base}}
         \cup \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
-    \linebreak \cuz{} \longdfref{Ancestry}{ancestry}.}
+    \linebreak \cuz{} \longLdref{Ancestry}{ancestry}.}
 \begin{equation}
 \label{eq:lem-generation-new-parent-equivalence-120}
 \begin{gathered}
@@ -6350,7 +6352,7 @@ so that we may assume
 \end{gather}
 \mypareq{eq:lem-generation-disjointness-180}{%
     $\V{nd} \in \ \myfn{Anc}{\V{lo},\V{base}}$
-        \bcuz{} Def of \myfnname{gen} \dfref{generation},
+        \bcuz{} Def of \myfnname{gen} \Ldref{generation},
             \Eref{lem-generation-disjointness-160}.
 }
 \mypareq{eq:lem-generation-disjointness-190}{%
@@ -6443,8 +6445,8 @@ We assume there is a minimal \V{bad} such that
     $\myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longdfref{\myfnname{Anc}}{ancestry},
-        Def of \myfnname{gen} \dfref{generation}.
+        \longLdref{\myfnname{Anc}}{ancestry},
+        Def of \myfnname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-generation-coverage-180}{%
     \Vmyfn{INST}{0} \cuz{} \Eref{lem-generation-coverage-150},
@@ -6466,7 +6468,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-        \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
+        \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
@@ -6602,7 +6604,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     \land\; \V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{}
-        \longdfref{\myfnname{PredecessorAnc}}{predecessor-anc},
+        \longLdref{\myfnname{PredecessorAnc}}{predecessor-anc},
         \linebreak \Eref{lem-surface-disjointness-100},
         \Eref{lem-surface-disjointness-110},
         \Eref{lem-surface-disjointness-160}.
@@ -6633,7 +6635,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longdfref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
@@ -6663,12 +6665,12 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
     $\Vnod{parent} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
         \Eref{lem-surface-disjointness-300}.
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
-        \longdfref{\myfnname{Anc}}{ancestry},
+        \longLdref{\myfnname{Anc}}{ancestry},
         \Eref{lem-surface-disjointness-320}.
 }
 Equation \Eref{lem-surface-disjointness-330}
@@ -6728,8 +6730,8 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \mypareq{eq:lem-generation-surface-containment-230}{%
     $\myfn{Anc}{0,\V{base}} = \V{base} = \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longdfref{\myfnname{Anc}}{ancestry},
-        Def of \myfnname{gen} \dfref{generation}.
+        \longLdref{\myfnname{Anc}}{ancestry},
+        Def of \myfnname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-generation-surface-containment-240}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{gen}{0,\V{base}}$
@@ -6769,7 +6771,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \mypareq{eq:lem-generation-surface-containment-290}{%
     $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}} \subseteq
         \myfn{gen}{\V{bad},\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \dfref{generation},
+    \bcuz{} Def of \myfnname{gen} \Ldref{generation},
         \Eref{lem-generation-surface-containment-280}.
         \linebreak This is the expansion of
         \Eref{lem-generation-surface-containment-100}
@@ -6977,7 +6979,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-generation-addition-170}{%
     $\V{base} = \myfn{gen}{0,\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \dfref{generation}.
+    \bcuz{} Def of \myfnname{gen} \Ldref{generation}.
 }
 \begin{equation}
 \label{eq:lem-generation-addition-180}
@@ -7166,7 +7168,7 @@ The theorem is then obtained using universal generalization.
     \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
     \\ \land\; \tuple{\V{parent},\V{child}} \in \V{E}
     \\ \myparbox{\cuz{}
-        \longdfref{\myfnname{NewParents}}{new-parents},
+        \longLdref{\myfnname{NewParents}}{new-parents},
         \Eref{surface-new-parents-inclusion-130}.}
 \end{gathered}
 \end{equation}
@@ -7245,7 +7247,7 @@ child:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} \longdfref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
     New free $\V{ndset} \in \Vpowerset{V}$.
 }
 In fact, since \V{G} is a non-unary tree,
@@ -7280,7 +7282,7 @@ from every other parent's set of children:
     \forall\; \V{parent2} \in \V{V} :
     \\ \Vmyfn{children}{parent1}
     \cap \Vmyfn{children}{parent2} = \emptyset
-    \\ \because \longdfref{\myfn{children}{}}{parents},
+    \\ \because \longLdref{\myfn{children}{}}{parents},
         \Eref{lem-surface-parents-ratio-190}.
 \end{gathered}
 \end{equation}
@@ -7325,7 +7327,7 @@ is equal to the sum of their cardinalities:
         \\ \land\; \V{parent} \in \Vmyfn{NewParents}{ndset}
     \end{gathered} }}
 \\ \ge\; 2 \times \size{\Vmyfn{NewParents}{ndset}}
-\\ \because \longdfref{\myfn{children}{}}{parents},
+\\ \because \longLdref{\myfn{children}{}}{parents},
         \Eref{lem-surface-parents-ratio-230}.
 \end{gathered}
 \end{equation}
@@ -7471,7 +7473,7 @@ we assume there is a minimal \V{bad} such that
 \end{gather}
 \mypareq{eq:lem-non-unary-subtree-size-130}{%
     $\myfn{gen}{0,\V{base}} = \V{base}$
-    \cuz{} Def of \myfnname{gen} \dfref{generation}.
+    \cuz{} Def of \myfnname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-non-unary-subtree-size-140}{%
     $\size{\myfn{gen}{0,\V{base}}} \le 2\times\Vsize{base}$
@@ -7518,7 +7520,7 @@ we assume there is a minimal \V{bad} such that
     } =
     \Vsize{base} +
     \sum \set{ 1 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
-    \bcuz{} Def of \myfnname{gen} \dfref{generation},
+    \bcuz{} Def of \myfnname{gen} \Ldref{generation},
         \Eref{lem-non-unary-subtree-size-220}.
 }
 \mypareq{eq:lem-non-unary-subtree-size-240}{%
@@ -7596,7 +7598,7 @@ we assume there is a minimal \V{bad} such that
     } \le
         2\times\Vsize{base}
     \\ \myparbox{\cuz{}
-        Def of \myfnname{gen} \dfref{generation},
+        Def of \myfnname{gen} \Ldref{generation},
         \Eref{lem-non-unary-subtree-size-290}.}
 \end{gathered}
 \end{equation}
