@@ -393,8 +393,9 @@
 % local theoremoids: Lm
 
 \newtheorem{rawLemma}{Lemma}[chapter]
-\newenvironment{lem}[1]{%
-   \begin{rawLemma}[#1]%
+\newenvironment{lem}[1][]{%
+   \begin{rawLemma}%
+        \ifthenelse{\equal{#1}{}}{}{[#1]}
    % \index{recce-lemmas}{\thechapter@\therawLemma \hspace{1em}  #1}
 }{%
    \end{rawLemma}
@@ -413,13 +414,18 @@
 
 % local theoremoids: Ld (local definition)
 
-\newtheorem{rawLdef}[rawLemma]{Local Definition}
-\newenvironment{ldef}[1]{%
-   \begin{rawLdef}[#1]%
-   %\index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
-}{%
-   \end{rawLdef}
-}
+\newtheorem{ldef}{Local Definition}[chapter]
+% \newtheorem{rawLdef}{Local Definition}[chapter]
+% \newenvironment{ldef}[1][]{%
+    % \ifthenelse{\equal{#1}{}}{%
+       % \begin{rawLdef}%
+    % }{%
+       % \begin{rawLdef}[#1]%
+    % }%
+    % %\index{recce-lemmas}{\thechapter@\therawLdef \hspace{1em}  #1}
+% }{%
+    % \end{rawLdef}%
+% }
 
 % "Ld" is tag for local definitions.
 \newcommand{\Ldref}[2][]{\genref[#1]{ldef:#2}{df}}
@@ -3042,6 +3048,14 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
+\renewcommand{\labBase}{ldef-slice}
+\begin{ldef}[Slice]
+\label{ldef:slice}
+A slice is a sequence of consecutive values from
+another sequence, called the container sequence.
+\ldEnd
+\end{ldef}
+
 \begin{definition}[Slice]
 \label{def:slice}
 We say that \V{slice}%
@@ -3860,7 +3874,7 @@ $\V{G} = \tuple{\V{V}, \V{E}}$.
 \end{itemize}
 \end{definition}
 
-\begin{ldef}{\myfn{parents}{} and \myfn{children}{}}
+\begin{ldef}[\myfn{parents}{} and \myfn{children}{}]
 \label{ldef:parents}
 \begin{gather}
 \label{eq:ldef-parents-150}
@@ -5569,7 +5583,7 @@ will be the set of leaves in \V{G}.
 
 \section{Tree ancestries}
 
-\begin{ldef}{New Parents}
+\begin{ldef}[New Parents]
 \label{ldef:new-parents}
 Let the ``new parents'' function,
 \[
@@ -5588,7 +5602,7 @@ so that
 \end{equation}
 \end{ldef}
 
-\begin{ldef}{Ancestry}
+\begin{ldef}[Ancestry]
 \label{ldef:ancestry}
 Let the ``ancestry'' function,
 \[
@@ -5610,7 +5624,7 @@ be such that
 \end{equation}
 \end{ldef}
 
-\begin{ldef}{Ancestry Predecessor}
+\begin{ldef}[Ancestry Predecessor]
 \label{ldef:predecessor-anc}
 An ancestry \Vnodset{pred}
 is the ``predecessor''
@@ -5646,7 +5660,7 @@ The theorem follows immediately from the definition of \myfnname{NewParents}
 \myqed
 \end{proof}
 
-\begin{ldef}{Ancestry of Base}
+\begin{ldef}[Ancestry of Base]
 \label{ldef:ancestry-of-base}
 We say that \Vnodset{A} is an
 \V{N}-level
@@ -6201,7 +6215,7 @@ and the lemma follows.
 
 \section{Tree generations}
 
-\begin{ldef}{Generation}
+\begin{ldef}[Generation]
 \label{ldef:generation}
 A \dfn{generation}
 is the set of nodes
@@ -6508,7 +6522,7 @@ which in turn gives us the lemma.
 \end{proof}
 
 
-\begin{ldef}{Surface}
+\begin{ldef}[Surface]
 \label{ldef:surface}
 The \dfn{surface} of a subset of \V{V}
 is the set of its elements which have parents outside of
@@ -23988,7 +24002,7 @@ show={theorem,remark,example,definition}]
 % swapnumber would be cool, but is not in the thmtools in
 % the latest Raspbian
 \listoftheorems[ignoreall,onlynamed=observation,
-    show={rawLemma,rawLdef,theorem,example,remark,definition}]
+    show={rawLemma,ldef,theorem,example,remark,definition}]
 
 \clearpage
 \def\indexname{General index}
