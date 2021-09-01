@@ -3024,67 +3024,99 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
-\renewcommand{\labBase}{ldef-slice}
-\begin{ldef}[Slice]
-\label{ldef:slice}
-A slice is a sequence of consecutive values from
-another sequence, called the container sequence.
+\renewcommand{\labBase}{ldef-offset-mapping}
+\begin{ldef}[Offset mapping]
+\label{ldef:offset-mapping}
+An \dfn{offset mapping} is a relation which maps
+a countable number to a set of natural numbers,
+preserving the successor relation between elements.
 \ldEnd
 \end{ldef}
 
-\renewcommand{\labBase}{lem-slice-relation}
-\begin{lemma}[Slice relation]
-\label{lem:slice-relation}
-\todo{Finish this}
-$\V{sliceRel} \in \naturals\times\V{V}$ is a relation
-whose domain is \Vnat{len} and whose arguments are mapped
-to successive values of \V{seq} iff
+\renewcommand{\labBase}{obs-offset-mapping}
+\begin{observation}[Offset mapping]
+\label{obs:slice}
+A relation with domain
+$\V{len} \in \naturals\cup\set{\naturals}$
+is an offset mapping,
+$\V{offMap}\in\naturals\expOp\V{len}$,
+iff it is
+\eqpar{100}{
+    $\V{offMap} = \set{ \tuple{\Vnat{ix}, \Vnat{offset}+\V{ix} } : \V{ix} \in \V{len} }$
+}
+for some natural number \V{offset}.
+We say that \V{offset}
+\dfn[Induce (an offset mapping)]{induces}
+\V{offMap},
+and also that \V{offset} is the
+\dfn[Offset (of an offset mapping)]{offset}
+of \V{offMap}.
+To justify this observation,
+we recall from ZF
+that the \V{ix}'th successor of some \V{offset}
+is $\V{offset}+\V{ix}$
+to show that \E{100} preserves the successor relation.
+\obEnd
+\end{observation}
+
+\renewcommand{\labBase}{def-slice}
+\begin{definition}[Slice]
+\label{def:slice}
+\todo{Check this}
+A \dfn{slice relation} is the relational composition
+of an offset mapping and a sequence.
+That is,
+\begin{itemize}
+\item let $\V{len} \in \naturals\cup\set{\naturals}$
+    be a countable number,
+\item let \Vnat{offset} be a natural number,
+\item let $\V{offmap}\in \naturals\expOp\V{len}$
+    be the offset mapping
+    which \V{offset} induces
+    for the domain \V{len}, and
+\item let $\V{seq} \in \V{V}\exxpOp\naturals\cup\set{\naturals}$
+    be a sequence.
+\end{itemize}
+Then the relational composition of \V{offMap} and \V{seq},
+$\V{sliceRel} \in \V{V}\expOp\V{len}$,
+such that
 \begin{gather}
 \label{eq:def-slice-040}
     \V{sliceRel} =
     \set{ \begin{gathered}
-        \tuple{\V{ix},\V{v}} \in \naturals\times\V{V} :
-        \\ \V{ix} \in \V{len} \land \V{v} = \VVelement{seq}{\V{offset}+\V{ix}}
-    \end{gathered} }.
+        \tuple{\V{ix},\V{v}} \in \V{len}\times\V{V} :
+        \\ \tuple{\V{offset}+\V{ix}, \V{v}} \in \V{seq}
+    \end{gathered} }
 \end{gather}
-\lmEnd
-\end{lemma}
+is a \dfn{slice relation}.
+
+If a slice relation is a function, we say that that slice relation
+is a \dfn{slice}.
+We say that the
+\dfn[Offset (of a slice relation)]{offset}%
+\index{recce-defienda}{Offset (of a slice)}
+of a slice relation is
+the offset of its offset mapping,
+in other words,
+that the offset of \V{sliceRel} is \V{offset}.
+We say that \V{seq} is the \dfn{container sequence}%
+\index{recce-defienda}{sequence@Sequence!container},
+of \V{sliceRel}.
+
+We say the slice relation is
+\dfn[From (of a slice relation)!from an index of the container sequence]{from}
+the index
+\V{offset} of \V{seq}.
+If \V{sliceRel} is a slice and \V{len} is finite,
+we say the \V{sliceRel} is
+\dfn[To (of a slice)!to an index of the container sequence]{to} the index
+$\V{offset}+\Vdecr{len}$ of \V{seq}.
+\dfEnd
+\end{definition}
 
 \todo{Revise from here}
 
-\begin{definition}[Slice]
-\label{def:slice}
-We say that \V{slice}%
-\index{recce-defienda}{Slice@Slice (of a sequence)}%
-is a slice of \V{seq} iff
-\begin{gather}
-\nonumber \V{slice}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})
-\\ \nonumber \land\; \V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals})
-\\ \nonumber \land\; \exists\; \V{len}\in\naturals\cup\set{\naturals} :
-\\ \nonumber \land\; \exists\; \V{offset}\in\naturals :
-\\ \label{eq:def-slice-030}
-    \land\; \V{offset}+\V{len} \le \Dom{\V{seq}}
-\\ \label{eq:def-slice-040}
-    \V{slice} =
-    \set{ \begin{gathered}
-        \V{term} \in \naturals\times\V{V} :
-        \\ \Vtupelem{term}{0} \in \V{len}
-        \\ \land\; \Vtupelem{term}{1} = \VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}
-    \end{gathered} }.
-\end{gather}
-We say that \V{offset} is the \dfn[Offset (of a slice)]{offset}.
-We say that \V{len} is the \dfn[Length (of a slice)]{length}.
-We also say that \V{len} is the \dfn[Size (of a slice)]{size}.
-We say that \V{seq} is the \dfn{container sequence}%
-\index{recce-defienda}{sequence@Sequence!container},
-of \V{slice}
-We say the \V{slice} is \dfn[from@From (of a slice)!from an index of container sequence]{from} the index
-\V{offset}.
-If \V{slice} is finite,
-we say the \V{slice} is \dfn[from@To (of a slice)!to an index of container sequence]{to} the index
-$\V{offset}+\Vdecr{len}$.
-\dfEnd
-\end{definition}
+\todo{Add proof of slice uniqueness.}
 
 \begin{remark}[Slice Section Context]
 \label{rem:cxt-sec-slice}
