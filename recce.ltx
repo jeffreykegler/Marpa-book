@@ -3078,9 +3078,9 @@ That is,
     be a sequence.
 \end{itemize}
 Then the relational composition of \V{offMap} and \V{seq},
-$\V{sliceRel} \in \V{V}\expOp\V{len}$ such that
+$\V{sliceRel} \in \powerset{\V{len}\times\V{V}}$ such that
 \begin{gather}
-\label{eq:def-slice-040}
+\Elab{040}
     \V{sliceRel} =
     \set{ \begin{gathered}
         \tuple{\V{ix},\V{v}} \in \V{len}\times\V{V} :
@@ -3125,14 +3125,14 @@ the variables
 \item $\V{offset}\in\naturals,$
 \item $\V{len}\in\naturals\cup\set{\naturals},$
 \item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
-\item $\V{sliceRel}\in\V{V}\expOp\V{len}$,
+\item $\V{sliceRel} \in \powerset{\V{len}\times\V{V}}$,
     where \V{sliceRel} is a slice relation
     at offset \V{offset} of \V{seq}.
 \end{itemize}
 Also, the scope of every theoremoid within the slice section scope
 contains its own instances of
 \V{offset}, \V{len}, \V{seq}, and \V{sliceRel},
-specified as just stated for the slice section scope.
+specified as just stated.
 \rmEnd
 \end{remark}
 
@@ -3140,26 +3140,61 @@ specified as just stated for the slice section scope.
 
 \todo{Add proof of slice uniqueness.}
 
-The following lemma is matter of ZF and arithmetic.
-Nonetheless,
-the tricky fence-post logic
-involved justify making the proof explicit.
-
 \renewcommand{\labBase}{lem-slice-helper-1}
 \begin{lemma}[Slice helper 1]
+\todo{Does this need to be helper *1*?}
 \label{lem:slice-helper-1}
-\begin{gather}
-\Elab{010} \Vnat{ix} \in \Vnat{len}
-\\ \Elab{020} \land\; \Vnat{offset}+\V{len} \le \Dom{\V{seq}}
-\\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
-\end{gather}
-\lmEnd
+\begin{equation}
+\Elab{010}
+    \begin{gathered}
+        \forall\; \V{ix} \in \naturals :
+            \forall\; \V{v} \in \V{V} :
+        \\ \tuple{ \V{ix},\V{v} } \in \V{sliceRel}
+            \implies \V{v} = \Velement{seq}{\V{offset}+\V{i}}
+            \quad \lmEnd
+    \end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
-\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} \E{010}.}
-\eqpar{130}{ $\V{offset}+\V{ix} < \Dom{\V{seq}}$ \cuz{} \E{020}, \E{120}.}
-\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{} \E{130}. \quad \myqed}
+The lemma is restatement of
+\Eref{def-slice-040}
+in the definition of slice \Dfref{slice}.
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{lem-slice-functional}
+\begin{lemma}[Slice functional]
+\label{lem:slice-functional}
+Every slice relation is functional.  That is,
+\[
+    \begin{gathered}
+    \forall\; \V{ix} \in \naturals :
+        \forall\; \V{v1} \in \V{V} :
+        \forall\; \V{v2} \in \V{V} :
+    \\ \tuple{\V{ix}, \V{v1}} \in \V{sliceRel}
+        \land \tuple{\V{ix}, \V{v2}} \in \V{sliceRel}
+        \implies \V{v1} = \V{v2}.  \quad\lmEnd
+    \end{gathered}
+\]
+\end{lemma}
+
+\begin{proof}
+The proof is by reductio,
+assuming for the reductio two elements of the slice relation
+with the same index but different values.
+\begin{gather}
+\Elab{100} \tuple{\V{ix}, \V{v1}} \in \V{sliceRel}
+\\ \Elab{110} \land\; \tuple{\V{ix}, \V{v2}} \in \V{sliceRel}
+\\ \Elab{120} \land\; \V{v1} \neq \V{v2}
+\\ \nonumber \myparbox{\cuz{} AF reductio,
+    ARB $\V{ix} \in \naturals$,
+    ARB $\V{v1} \in \V{V}$,
+    ARB $\V{v2} \in \V{V}$.}
+\end{gather}
+% Proof template
+\todo{Finish this proof.}
+\myqed
 \end{proof}
 
 \renewcommand{\labBase}{th-slice-well-definedness}
@@ -3356,70 +3391,6 @@ The Slice 1 Theorem tells us that
 \eqpar{260}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}$
     \cuz{} \E{100}, \E{250}.}
 \E{260} is the consequent, which is what we needed to show for the non-empty case
-and the proof.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{lem-slice-functional}
-\begin{lemma}[Slice functional]
-\label{lem:slice-functional}
-A slice is a functional relation.  That is,
-\begin{gather}
-\Elab{010} \tuple{\V{ix}, \V{v1}} \in \V{slice}
-\\ \Elab{020} \land\; \tuple{\V{ix}, \V{v2}} \in \V{slice}
-\\ \Elab{040} \implies \V{v1} = \V{v2}.  \quad\lmEnd
-\end{gather}
-\end{lemma}
-
-\begin{proof}
-The proof is direct.
-For the empty slice, $\V{len}=0$, we have the proof
-vacuously.
-For the non-empty slice,
-We assume an the hypothesis \E{010}--\E{020}
-to show the consequent \Eref{lem-slice-functional-040}.
-The Slice 1 Theorem tells us that
-\begin{equation}
-\Elab{100}
-\begin{gathered}
-    \forall\; \V{vB}\in\V{V} :
-    \forall\; \V{ixB}\in\naturals :
-    \tuple{\V{ixB}, \V{vB}} \in \V{slice}
-    \\ \iff \V{ixB} \in \V{len}
-        \land\; \V{vB} = \Velement{seq}{\V{offset}+\V{ixB}}.
-    \\ \myparbox{\cuz{} \Thref[Slice 1 Theorem]{slice-1}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\Elab{110}
-\begin{gathered}
-    \tuple{\V{ix}, \V{v1}} \in \V{slice}
-    \\ \iff \V{ix} \in \V{len}
-        \land\; \V{v1} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \myparbox{\cuz{} EI of \E{100} with \V{ix} for \V{ixB} and \V{v1} for \V{vB}.}
-\end{gathered}
-\end{equation}
-\eqpar{120}{$\V{ix} \in \V{len}$ \cuz{} \E{010}, \E{110}.}
-\eqpar{130}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$ \cuz{}
-    \Lmref[Slice Helper 1]{slice-helper-1}, \E{120}.}
-With \E{130}, we are now able
-to use \Velement{seq}{\V{offset}+\V{ix}}, in the confidence it is well-formed:
-\eqpar{140}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$
-    \cuz{} \E{010}, \E{110}, \E{130}.}
-\begin{equation}
-\Elab{150}
-\begin{gathered}
-    \tuple{\V{ix}, \V{v2}} \in \V{slice}
-    \\ \iff \V{ix} \in \V{len}
-        \land\; \V{v2} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \myparbox{\cuz{} EI of \E{100} with \V{ix} for \V{ixB} and \V{v2} for \V{vB}.}
-\end{gathered}
-\end{equation}
-\eqpar{160}{$\V{v2} = \Velement{seq}{\V{offset}+\V{ix}}$
-    \cuz{} \E{020}, \E{130}, \E{150}.}
-\eqpar{170}{$\V{v1} = \V{v2}$ \cuz{} \E{140}, \E{160}.}
-\E{170} is the consequent \E{040},
-which is what we needed to show for the non-empty case,
 and the proof.
 \myqed
 \end{proof}
