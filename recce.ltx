@@ -458,7 +458,7 @@
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\mapsto\!}\:$}}}
 
-\newcommand{\inr}{\mathrel{\boxed{\in}}}
+\newcommand{\inr}{\mathrel{\dot{\in}}}
 \newcommand{\incr}[1]{\ensuremath{#1\scalebox{.75}{++}}}
 \newcommand{\Vincr}[1]{\incr{\V{#1}}}
 % \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
@@ -1780,7 +1780,7 @@ set membership,
 the first statement of set membership is the one
 which establishes the realm.
 We may identify a statememt of realm membership
-explicitly by putting the membership operator in a
+explicitly by putting a dot above the membership operator
 box, so that
 \[
    \V{x} \inr \realm{R}
@@ -3193,9 +3193,9 @@ preserving the successor relation.
 \begin{observation}[Offset function]
 \label{obs:slice}
 A function with domain
-$\V{len} \in \naturals\cup\set{\naturals}$
+$\V{len} \inr \naturals\cup\set{\naturals}$
 is an offset function,
-$\V{offFn}\in\naturals\expOp\V{len}$,
+$\V{offFn}\inr\naturals\expOp\V{len}$,
 iff it is such that
 \eqpar{100}{
     $\myfn{offFn}{\Vnat{ix}} = \Vnat{offset}+\V{ix}$
@@ -3208,9 +3208,10 @@ and also that \V{offset} is the
 \dfn[Offset (of an offset function)]{offset}
 of \V{offFn}.
 To justify this observation,
-we note that \E{100} clearly defines a function,
-and we recall from ZF
-that the \V{ix}'th successor of some \V{offset}
+we first note that \E{100} clearly defines a function.
+We then recall from ZF
+that the \V{ix}'th successor of zero is \V{ix}
+and the \V{ix}'th successor of some \V{offset}
 is $\V{offset}+\V{ix}$
 to show that \E{100} preserves the successor relation.
 \obEnd
@@ -3225,18 +3226,18 @@ That is,
 \begin{itemize}
 \item let $\V{len} \inr \naturals\cup\set{\naturals}$
     be a countable number,
-\item let \Vnat{offset} be a natural number,
-\item let $\V{offmap}\in \naturals\expOp\V{len}$
+\item let $\Vnat{offset} \inr \naturals$,
+\item let $\V{offmap}\inr \naturals\expOp\V{len}$
     be the offset mapping
     which \V{offset} induces
     for the domain \V{len}, and
-\item let $\V{seq} \in \V{V}\exxpOp\naturals\cup\set{\naturals}$
+\item let $\V{seq} \inr \V{V}\exxpOp\naturals\cup\set{\naturals}$
     be a sequence.
 \end{itemize}
 Then the relational composition of \V{offMap} and \V{seq},
-$\V{sliceRel} \in \powerset{\V{len}\times\V{V}}$ such that
 \begin{gather}
-\Elab{040}
+    \V{sliceRel} \inr \powerset{\V{len}\times\V{V}} \text{ such that}
+\\ \Elab{040}
     \V{sliceRel} =
     \set{ \begin{gathered}
         \tuple{\V{ix},\V{v}} \in \V{len}\times\V{V} :
@@ -3245,7 +3246,8 @@ $\V{sliceRel} \in \powerset{\V{len}\times\V{V}}$ such that
 \end{gather}
 is a \dfn{slice relation}.
 
-If a slice relation is a function, we say that that slice relation
+If a slice relation is a function whose domain is the same as \V{offmap},
+we say that that slice relation
 is a \dfn{slice function}.
 More often, we call a slice function a \dfn{slice}.
 We say that the
@@ -3278,10 +3280,10 @@ contains%
 \index{recce-defienda}{Context, Scope, section, slice@Context!Scope!Of section!Slice}
 the variables
 \begin{itemize}
-\item $\V{offset}\in\naturals,$
-\item $\V{len}\in\naturals\cup\set{\naturals},$
-\item $\V{seq}\in\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
-\item $\V{sliceRel} \in \powerset{\V{len}\times\V{V}}$,
+\item $\V{offset}\inr\naturals,$
+\item $\V{len}\inr\naturals\cup\set{\naturals},$
+\item $\V{seq}\inr\V{V}\exxpOp(\naturals\cup\set{\naturals}),$ and
+\item $\V{sliceRel} \inr \powerset{\V{len}\times\V{V}}$,
     where \V{sliceRel} is a slice relation
     at offset \V{offset} of \V{seq}.
 \end{itemize}
@@ -3296,10 +3298,9 @@ specified as just stated.
 
 \todo{Add proof of slice uniqueness.}
 
-\renewcommand{\labBase}{lem-slice-helper-1}
-\begin{lemma}[Slice helper 1]
-\todo{Does this need to be helper *1*?}
-\label{lem:slice-helper-1}
+\renewcommand{\labBase}{lem-slice-value}
+\begin{lemma}[Slice value]
+\label{lem:slice-value}
 \begin{equation}
 \Elab{010}
     \begin{gathered}
@@ -3340,17 +3341,23 @@ The proof is by reductio,
 assuming for the reductio two elements of the slice relation
 with the same index but different values.
 \begin{gather}
-\Elab{100} \tuple{\V{ix}, \V{v1}} \in \V{sliceRel}
+\Elab{100} \tuple{\Vnat{ix}, \V{v1}} \in \V{sliceRel}
 \\ \Elab{110} \land\; \tuple{\V{ix}, \V{v2}} \in \V{sliceRel}
 \\ \Elab{120} \land\; \V{v1} \neq \V{v2}
 \\ \nonumber \myparbox{\cuz{} AF reductio,
-    ARB $\V{ix} \in \naturals$,
-    ARB $\V{v1} \in \V{V}$,
-    ARB $\V{v2} \in \V{V}$.}
+    ARB $\V{ix} \inr \naturals$,
+    ARB $\V{v1} \inr \V{V}$,
+    ARB $\V{v2} \inr \V{V}$.}
 \end{gather}
-% Proof template
-\todo{Finish this proof.}
+\eqpar{130}{$\V{v1} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \bcuz{} \Lmref[Slice Value Lemma]{slice-value}, \E{100}.}
+\eqpar{140}{$\V{v2} = \Velement{seq}{\V{offset}+\V{ix}}$
+    \cuz{} \Lmref{slice-value}, \E{110}.}
+\eqpar{150}{$\V{v1}=\V{v2}$ \cuz{} \E{130}, \E{140}.}
+\E{150} is contrary to \E{120}, which shows the reductio
+and the proof.
 \myqed
+\todo{Check this proof.}
 \end{proof}
 
 \renewcommand{\labBase}{th-slice-well-definedness}
