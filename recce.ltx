@@ -1647,7 +1647,6 @@ An example is a scope with nothing visible outside the scope.
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
 
-\todo{Revise re realms, domains of discourse}
 Following Halmos\cite{Halmos1960},
 all of the mathematical objects
 in our object-language are sets.
@@ -1697,9 +1696,8 @@ was called the "domain" for each variable%
     a function variable has a ``domain of the variable''
     but each of the variable's values also has a ``domain of the function''.
     So if \V{f} is a variable representing a boolean function of the integers,
-    the domain of the variable is $2\expOp\naturals$, while
-    the domain (``domain of the function'')
-    of each of its values is \naturals.
+    the domain of the function variable \V{f} is $2\expOp\naturals$, while
+    the domain of the function represented by the variable \V{f} is \naturals.
     This distinction arises in many of our contexts,
     and we thought it would be exasperatingly confusing.
 },
@@ -1714,9 +1712,10 @@ middle or beginning of the alphabet.
 For single-character variables,
 these schemes were awkward and restrictive.
 They also pushed the legibility envelope to its limits.
-The multi-character variables of this paper required
-an alternative.
+The multi-character variables used in this paper
+worsen all of these problems.
 
+An alternative is required.
 This book will
 use subscripts to indicate commonly occurring realms,
 as shown in
@@ -1753,14 +1752,47 @@ $\V{i}_\realm{\naturals}$ & Variable \V{i}, a non-negative integer \\
 \label{tab:realm-notation}
 \end{table}
 
-Since a realm is a set,
-we may express facts about realms using set notation.
-For example, writing
+Realm membership is set membership,
+but not all set membership is realm membership.
+Realm is a meta-linguistic notion.
+Within the object-language realms are implicit,
+never explicit.
+
+On the other hand, realm membership is always set membership
+and, as an alternative to stating
+realm membership using tags,
+we sometimes establish realm membership as a by-product
+of stating set membership, so that
 \[
-   \V{x} \in \realm{R}
+   \V{x} \in \realm{R},
 \]
-means that \V{x} has realm \realm{R},
-and is alternative to writing $\V{x}_\realm{R}$.
+which states that
+\V{x} is a member of set \V{R},
+might also state that \V{x} is in realm \V{R}.
+This is particularly useful when we want to emphasize
+realm membership,
+or where the realm is too complex to be conveniently
+expressed as a tag.
+
+By default,
+when realm membership is established via
+set membership,
+the first statement of set membership is the one
+which establishes the realm.
+We may identify a statememt of realm membership
+explicitly by putting the membership operator in a
+box, so that
+\[
+   \V{x} \inr \realm{R}
+\]
+makes clear the fact that
+it is a statement
+that \V{x} is a member of of realm \V{R},
+as well as a statement that \V{x}
+is a member of set \V{R}.
+
+The fact that realms are sets is handy for making statements about
+realms.
 We may say that realm \realm{R1} is a synonym of realm \realm{R2}
 by writing $\realm{R1} = \realm{R2}$.
 And if we write that
@@ -1813,8 +1845,7 @@ as \Vz{x}.
 Here again,
 \Vnat{x} and \Vz{x} are two distinct variables distinguished
 only by their realm.%
-\footnote{In set theory, the different classes of number are quite distinct,
-    an issue which the parsing literature generally ignores, largely without incident.
+\footnote{In set theory, the different classes of number are quite distinct.
     The classes of numbers are also, however, quite distinct in their implementation
     in software, and ignoring this distinction has not been without incident.
     Among the many problems that have resulted,
