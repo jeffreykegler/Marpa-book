@@ -458,7 +458,11 @@
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\mapsto\!}\:$}}}
 
-\newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
+\newcommand{\inr}{\mathrel{\boxed{\in}}}
+\newcommand{\incr}[1]{\ensuremath{#1\scalebox{.75}{++}}}
+\newcommand{\Vincr}[1]{\incr{\V{#1}}}
+% \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
+\newcommand{\decr}[1]{\ensuremath{#1\scalebox{1.25}{{-}{-}}}}
 \newcommand{\Vdecr}[1]{\decr{\V{#1}}}
 \newcommand{\Rseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
@@ -1979,6 +1983,332 @@ we deal with considerations from preceding disciplines
 \item that are different in our presentation from Halmos 1960~\cite{Halmos1960}.
 \end{itemize}
 
+\section{Operator precedence}
+
+In this section, we describe operator
+and operator-like symbols.
+Each set of operators has its own subsection
+stating the precedence among them.
+The subsections themselves are
+in order from tightest precedence
+to loosest,
+so that all operator mentioned in an
+earlier subsection have tighter precedence than
+the operators in later subsection.
+
+Arity and associativity follow tradition,
+unless otherwise stated.
+Bracketing symbols override precedence.
+Where an operator is written out in verbal form it has looser
+precedence than one written in math symbols.
+For example
+\[ \text{iff} \]
+has looser
+precedence than
+\[ \iff. \]
+
+\subsection{Unary operators}
+
+Unary operators have the tightest precedence.
+We adopt a
+programming language notation for
+the successor relation: \Vincr{x}.
+Similarly for the predecessor relation: \Vdecr{x}.
+We overload these notations for use as shorthands
+for incrementation by~1:
+\[
+\Vincr{x} = \V{x}+1
+\]
+and decrementation by~1:
+\[
+\Vdecr{x} = \V{x}-1.
+\]
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Unary operators
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\neg$} & \cellboxr{Logical negation} \\
+\hline
+{$\Vdecr{x}$} & \cellboxr{Decrement of \V{x}, Predecessor of \V{x}} \\
+\hline
+{$\Vincr{x}$} & \cellboxr{Increment of \V{x}, Successor of \V{x}} \\
+\hline
+{\powerset{\V{A}}} & \cellboxr{Powerset of the set \V{A}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Arithmetic operators}
+
+\FloatBarrier
+
+Multiplication is never implied in this book.
+Our implied operator is concatenation, which
+is much more convenient for our purposes.
+We overload the Cartesian product operator
+so that it represents multiplication when its
+operands are integers:
+$\V{n} \times 6$.
+
+Subtraction is always ``left subtraction''.%
+\footnote{Right subtraction and left subtraction behave identically over the
+    natural numbers,
+    but when transfinite numbers are involved,
+    the result of right subtraction is not always well-defined.
+    For example, if we seek a value for
+    $\naturals-1$, right subtraction requires us to find an ordinal
+    to replace the \V{x} in
+    $\V{x}+1 = \naturals$.
+    But there is no such ordinal \V{x}.}
+That is, where
+\V{a}, \V{b} and \V{x} are ordinals,
+the schema for subtraction is
+\begin{equation}
+\label{eq:left-subtraction}
+    \V{a}-\V{b} = \V{x} \defined \V{b}+\V{x} = \V{a}.
+\end{equation}
+For all ordinals \V{a} and \V{b} such that $\V{a} \ge \V{b}$
+the placeholder \V{x}
+in \Eref{left-subtraction}
+can be replaced with a unique ordinal.
+The only cases of interest to us in this book will be subtraction
+of finite numbers from each other,
+and subtraction of a natural number from \naturals.
+In the second case,
+$\V{a}=\naturals$ and $\V{b}\in\naturals$,
+\[ \Vnat{b}+\naturals = \naturals \text{ so that } \naturals-\V{b} = \naturals. \]
+
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Arithmetic operators, from tightest to loosest
+    }
+% Precedence is from tightest to loosest, \\
+% so that the loosest precedence is last.
+% \\[1.5ex]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\times$} & \cellboxr{Multiplication} \\
+\hline
+{$+$} {$-$} & \cellboxr{Addition, subtraction} \\
+\hline
+   {$\le$} {$<$}
+   {$\ge$} {$>$}
+   & \cellboxr{Equality, comparison} \\
+   \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\subsection{String operator}
+
+\FloatBarrier
+
+Concatenation may also be made explicit:
+$\V{a} \cat \V{b}$.
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    String operator
+    }
+% \\[1.5ex]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\V{a} \cat \V{b}$} & \cellboxr{Concatenation of \V{b} after \V{a}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Set operator}
+
+\FloatBarrier
+
+We write $\V{X}\expOp\V{Y}$%
+\index{recce-symbol}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
+    is the set of functions from \V{Y} to \V{X})}
+for the set of
+functions with \V{Y} as their domain
+and \V{X} as their codomain.
+Therefore we write
+\[
+    \V{f} \in \V{X}\expOp\V{Y}
+\]
+to say that \V{f} is a function
+such that $\Dom{\V{f}} = \V{Y}$
+and $\Cod{\V{f}} = \V{X}$.\footnote{
+    More often in the literature,
+    $\V{f} \in \V{X}\expOp\V{Y}$
+    is written as $\V{X}^\V{Y}$,
+    but we prefer a more readable notation.
+    Our notation, adopted from one that
+    many programming languages
+    use for exponentiation, avoids superscripts.}
+We often wish to speak of the set of functions whose domain is an element
+of a set.
+For this we write, where \V{Yset} is a set of domains
+and \V{X} is a codomain,
+$\V{X}\exxpOp\V{Yset}$%
+\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
+    is the set of functions from an element of \V{Ys} to \V{X})}%
+, so that
+\[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Set operators,
+    from tightest to loosest
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
+\hline
+{$\times$} & \cellboxr{Cartesian product of sets} \\
+\hline
+{$\V{C} \expOp \V{D}$} &
+    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
+\hline
+{$\V{C} \exxpOp \V{Dset}$} &
+    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Boolean result operator}
+
+\FloatBarrier
+
+$\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
+$\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
+Similarly,
+$\V{A} \supseteq \V{B}$ means that \V{A} is a superset of \V{B}, while
+$\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Boolean result operators,
+    from tightest to loosest
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\subset$} {$\subseteq$}
+    {$\supset$} {$\supseteq$}
+    & \cellboxr{Set inclusion} \\
+    \hline
+{$\in$} {$\notin$} {$\inr$}
+    & \cellboxr{Set membership} \\
+    \hline
+{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
+\hline
+{$\land$} & \cellboxr{Logical and} \\
+\hline
+{$\lor$} & \cellboxr{Logical or} \\
+\hline
+%
+% We use \implies and \iff, but to get the spacing right
+% in the cell we need to use the symbols directly.
+{${\Longrightarrow}$} & \cellboxr{Implication} \\
+\hline
+{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\subsection{Polyadic operators}
+
+\FloatBarrier
+
+We use $\existsUniq$ as a uniqueness quantification operator,
+so that
+\[
+    \existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}
+\]
+is equivalent to
+$$\exists \; \V{x} \in \V{A} : \myfn{P}{\V{x}} \land \forall \; \V{y} : \myfn{P}{\V{y}} \implies \V{y}=\V{x}.$$
+We use Russell's iota operator,
+so that
+\begin{equation}
+\label{eq:def-riota}
+\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
+\end{equation}
+is the unique \V{x} in the set \V{A} such that
+\Vmyfn{P}{x} is true.
+\Eref{def-riota}
+is well-defined iff
+$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
+
+Another useful notation that we adopt
+from programming is the
+ternary conditional operator:
+\begin{equation}
+\label{eq:conditional-op-example}
+    \cond{\V{test}}{\V{a}}{\V{b}}
+\end{equation}
+where \V{test} is a boolean.
+\V{a} is the value of \Eref{conditional-op-example}
+if \V{test} is true.
+Otherwise, the value of \Eref{conditional-op-example} is
+\V{b}.
+For example, where \V{x} is an integer,
+$\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Polyadic operators,
+    from tightest to loosest
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
+    Ternary conditional operator:\\
+    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
+    \hline
+{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
+\hline
+\end{tabular}
+\end{table}
+
+\subsection{Meta-operators}
+
+\FloatBarrier
+
+The symbols in this section are not truly operators.
+Instead they are syntax for meta-language notions.
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Meta-operators,
+    from tightest to loosest
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\rule{0em}{3.8ex}\raisebox{1.5ex}{{$\defined$} \; {$\ldefined$}}
+&
+\raisebox{.7ex}{Definition, local definition} \\
+\hline
+{$\because$} & \cellboxr{Hint separator} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
 \section{Notation and conventions}
 
 \myepi{\label{epi:naturals-discomfort}%
@@ -1997,7 +2327,6 @@ and that set of natural numbers is written \naturals{},
 whether it is used as a cardinal or an ordinal.
 The notation $\Vsize{set} = \naturals$
 indicates that \V{set} is countably infinite.
-\powerset{\V{A}} is the powerset of the set \V{A}.
 
 We use the von Neumann convention,
 according to which every natural number is the set of
@@ -2098,66 +2427,6 @@ For instance, we might discuss
 \Eref{relation-example} via the boolean binary function
 \myfn{R}{\V{x}, \V{y}}.
 
-Multiplication is never implied in this book.
-For our purposes,
-it is much more convenient if our implied operator is concatenation.
-Concatenation may also be made explicit:
-$\V{a} \cat \V{b}$.
-As stated earlier, we
-overload the Cartesian product operator
-so that it represents multiplication when its
-operands are integers:
-$\V{n} \times 6$.
-
-Subtraction is always ``left subtraction''.%
-\footnote{Right subtraction and left subtraction behave identically over the
-    natural numbers,
-    but when transfinite numbers are involved,
-    the result of right subtraction is not always well-defined.
-    For example, if we seek a value for
-    $\naturals-1$, right subtraction requires us to find an ordinal
-    to replace the \V{x} in
-    $\V{x}+1 = \naturals$.
-    But there is no such ordinal \V{x}.}
-That is, where
-\V{a}, \V{b} and \V{x} are ordinals,
-the schema for subtraction is
-\begin{equation}
-\label{eq:left-subtraction}
-    \V{a}-\V{b} = \V{x} \defined \V{b}+\V{x} = \V{a}.
-\end{equation}
-For all ordinals \V{a} and \V{b} such that $\V{a} \ge \V{b}$
-the placeholder \V{x}
-in \Eref{left-subtraction}
-can be replaced with a unique ordinal.
-The only cases of interest to us in this book will be subtraction
-of finite numbers from each other,
-and subtraction of a natural number from \naturals.
-In the second case,
-$\V{a}=\naturals$ and $\V{b}\in\naturals$,
-\[ \Vnat{b}+\naturals = \naturals \text{ so that } \naturals-\V{b} = \naturals. \]
-
-We adopt a
-programming language notation for
-decrementation by~1:
-\[
-\Vdecr{x} = \V{x}-1.
-\]
-Another useful notation that we adopt
-from programming is the
-ternary conditional operator:
-\begin{equation}
-\label{eq:conditional-op-example}
-    \cond{\V{test}}{\V{a}}{\V{b}}
-\end{equation}
-where \V{test} is a boolean.
-\V{a} is the value of \Eref{conditional-op-example}
-if \V{test} is true.
-Otherwise, the value of \Eref{conditional-op-example} is
-\V{b}.
-For example, where \V{x} is an integer,
-$\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
-
 Floor brackets are a very intuitive way to indicate terminal
 symbols:
 \Vterm{terminal}.
@@ -2181,8 +2450,6 @@ An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
 onto is a bijection.
-$\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
-$\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
 $\Dom{\V{f}}$ is the
 \dfn[Domain (wrt a function)]{domain} of \V{f},
 and $\Ran{\V{f}}$ is the
@@ -2192,38 +2459,6 @@ $\Cod{\V{f}}$ is the codomain of \V{f},
 The codomain is part of the realm of \V{f}.
 The codomain of a function must be a superset
 of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
-
-\todo{How to define this?}
-
-We write $\V{X}\expOp\V{Y}$%
-\index{recce-symbol}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
-    is the set of functions from \V{Y} to \V{X})}
-for the set of
-functions with \V{Y} as their domain
-and \V{X} as their codomain.
-Therefore we write
-\[
-    \V{f} \in \V{X}\expOp\V{Y}
-\]
-to say that \V{f} is a function
-such that $\Dom{\V{f}} = \V{Y}$
-and $\Cod{\V{f}} = \V{X}$.\footnote{
-    More often in the literature,
-    $\V{f} \in \V{X}\expOp\V{Y}$
-    is written as $\V{X}^\V{Y}$,
-    but we prefer a more readable notation.
-    Our notation, adopted from one that
-    many programming languages
-    use for exponentiation, avoids superscripts.}
-We often wish to speak of the set of functions whose domain is an element
-of a set.
-For this we write, where \V{Yset} is a set of domains
-and \V{X} is a codomain,
-$\V{X}\exxpOp\V{Yset}$%
-\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
-    is the set of functions from an element of \V{Ys} to \V{X})}%
-, so that
-\[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
 
 \section{Quantifiers}
 
@@ -2316,25 +2551,6 @@ usually be written as
     \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
 \]
 
-We use $\existsUniq$ as a uniqueness quantification operator,
-so that
-\[
-    \existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}
-\]
-is equivalent to
-$$\exists \; \V{x} \in \V{A} : \myfn{P}{\V{x}} \land \forall \; \V{y} : \myfn{P}{\V{y}} \implies \V{y}=\V{x}.$$
-We use Russell's iota operator,
-so that
-\begin{equation}
-\label{eq:def-riota}
-\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
-\end{equation}
-is the unique \V{x} in the set \V{A} such that
-\Vmyfn{P}{x} is true.
-\Eref{def-riota}
-is well-defined iff
-$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
-
 \section{Orders}
 
 Recall that an relation
@@ -2403,97 +2619,6 @@ $\sum \V{fam} = \sum \Ran{\V{fam}}$.
 we often use a family constructor
 to represent the family to which a unary family operator
 applies.
-
-\section{Operator precedence}
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[p]
-\caption{
-    \label{tab:op-precedence}
-    Precedence of symbols,
-    from tightest to loosest
-    }
-% Precedence is from tightest to loosest, \\
-% so that the loosest precedence is last.
-% \\[1.5ex]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\times$} & \cellboxr{Multiplication} \\
-\hline
-{$+$} {$-$} & \cellboxr{Addition, subtraction} \\
-\hline
-   {$\le$} {$<$}
-   {$\ge$} {$>$}
-   & \cellboxr{Equality, comparison} \\
-   \hline
-{$\V{a} \cat \V{b}$} & \cellboxr{Concatenation of \V{b} after \V{a}} \\
-\hline
-{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
-\hline
-{$\times$} & \cellboxr{Cartesian product of sets} \\
-\hline
-{$\V{C} \expOp \V{D}$} &
-    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
-\hline
-{$\V{C} \exxpOp \V{Dset}$} &
-    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
-\hline
-{$\subset$} {$\subseteq$}
-    {$\supset$} {$\supseteq$}
-    & \cellboxr{Set inclusion} \\
-    \hline
-{$\in$} {$\notin$}
-    & \cellboxr{Set membership} \\
-    \hline
-{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
-\hline
-{$\neg$} & \cellboxr{Logical negation} \\
-\hline
-{$\land$} & \cellboxr{Logical and} \\
-\hline
-{$\lor$} & \cellboxr{Logical or} \\
-\hline
-%
-% We use \implies and \iff, but to get the spacing right
-% in the cell we need to use the symbols directly.
-{${\Longrightarrow}$} & \cellboxr{Implication} \\
-\hline
-{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
-\hline
-%
-% {$\V{a}:\V{b}$}    & \cellboxr{``\V{a} such that \V{b}''} \\
-% \hline
-{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
-    Ternary conditional operator:\\
-    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
-    \hline
-{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
-\hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{{$\defined$} \; {$\ldefined$}}
-&
-\raisebox{.7ex}{Definition, local definition} \\
-\hline
-{$\because$} & \cellboxr{Hint separator} \\
-\hline
-\end{tabular}
-\end{table}
-
-Arity and associativity follow tradition.
-Binary precedence presents a special difficulty:
-There are varying traditions which
-need to be merged.
-We state our choice of precedence for binary operations
-in a ``cheatsheet'' in Table \Tbref{tab:op-precedence}.
-Otherwise precedence follows tradition:
-Unary operators have tightest precedence.
-Bracketing symbols override precedence.
-And where an operator is written out in verbal form it has looser
-precedence than one written in math symbols.
-For example
-\[ \text{iff} \]
-has looser
-precedence than
-\[ \iff. \]
 
 \section{Order of evaluation}
 
@@ -3067,7 +3192,7 @@ A \dfn{slice relation} is the relational composition
 of an offset mapping and a sequence.
 That is,
 \begin{itemize}
-\item let $\V{len} \in \naturals\cup\set{\naturals}$
+\item let $\V{len} \inr \naturals\cup\set{\naturals}$
     be a countable number,
 \item let \Vnat{offset} be a natural number,
 \item let $\V{offmap}\in \naturals\expOp\V{len}$
