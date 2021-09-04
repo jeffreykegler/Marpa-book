@@ -3355,8 +3355,6 @@ and the proof.
 \myqed
 \end{proof}
 
-\todo{Revise from here}
-
 \renewcommand{\labBase}{lem-slice-domain}
 \begin{lemma}[Slice domain]
 \label{lem:slice-domain}
@@ -3379,285 +3377,26 @@ to show the consequent \E{040}.
     \bcuz{} \Eref{def-slice-040} in \Dfref[Slice]{slice},
     ARB $\V{ix} \inr \naturals$.}
 \eqpar{110}{$\V{ix}\in\V{len} \land \V{offset}+\V{ix}\in\Dom{\V{seq}}
-    \implies \V{ix} \in \Dom{\V{sliceRel}}$
+    \linebreak \implies \V{ix} \in \Dom{\V{sliceRel}}$
     \bcuz{} \Eref{def-slice-040} in \Dfref{slice}.}
 \eqpar{120}{$\V{ix}\in\V{len} \implies \V{offset}+\V{ix}\in\Dom{\V{seq}}$
-    \cuz{} hypothesis of theorem E{020}.}
+    \bcuz{} hypothesis of theorem E{020}.}
 \eqpar{130}{$\V{ix}\in\V{len} \implies \V{ix} \in \Dom{\V{sliceRel}}$
-    \bcuz{} \E{110}, \E{120}.}
+    \cuz{} \E{110}, \E{120}.}
 \eqpar{140}{$\forall\; \Vnat{i} : \V{i}\in\V{len} \implies \V{i} \in \Dom{\V{sliceRel}}$
-        \bcuz{} UG of \E{130}.}
+        \cuz{} UG of \E{130}.}
 \eqpar{150}{$\forall\; \Vnat{i} :
         \V{i} \in \Dom{\V{sliceRel}} \implies \V{i}\in\V{len}$
-        \bcuz{} UG of \E{100}.}
+        \cuz{} UG of \E{100}.}
 And, because in ZF all sets are equivalent iff their extensions are the same,
 \eqpar{160}{$\V{len} = \Dom{\V{sliceRel}}$ \cuz{} ZF, \E{140}, \E{150}.}
 \E{160} is the consequent \E{040}, which is what we needed for the proof.
 \myqed
-\todo{Check this proof.}
 \end{proof}
+
+\todo{Revise from here}
 
 \todo{Add proofs of slice uniqueness, codomain, pairs.}
-
-\renewcommand{\labBase}{th-slice-well-definedness}
-\begin{theorem}[Slice well-definedness]
-\label{th:slice-well-definedness}
-\Dfref[Slice]{slice} is well-defined.
-\thEnd
-\end{theorem}
-
-\begin{proof}
-The only part of
-\Dfref{slice} that is problematic is the indexing
-$\VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}$
-in \Eref{def-slice-040}.
-We need to show that the index
-$\V{offset}+\Vtupelem{term}{0}$
-is in the domain \V{seq}, which we do directly.
-
-From the definition of slice we know that
-the indexing in \Eref{def-slice-040} is guarded
-by the left hand side of two conjunctions:
-\eqpar{100}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$
-         \cuz{} \Dfref{slice}.}
-\eqpar{110}{$\Vtupelem{term}{0} \in \V{len}$
-         \cuz{} \Dfref{slice}.}
-If we let set \V{ix}
-in the hypothesis
-of the Slice Helper Lemma TODO
-to \Vtupelem{term}{0},
-we can conclude
-\eqpar{130}{ $\V{offset}+\Vtupelem{term}{0} \in \Dom{\V{seq}}$
-         \cuz{} TODO, \E{100}, \E{110}.}
-\E{130} is what we needed for the proof.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{lem-slice-helper-2}
-\begin{lemma}[Slice helper 2]
-\label{lem:slice-helper-2}
-\begin{gather}
-\Elab{010} \Vnat{ix} \in \Vnat{len}
-\\ \Elab{030} \implies \V{offset}+\V{ix} \in \Dom{\V{seq}}.
-    \quad \lmEnd
-\end{gather}
-\end{lemma}
-
-\begin{proof}
-The proof is direct,
-assuming the hypothesis \E{010} to show the consequent \E{030}.
-\eqpar{120}{$\V{ix} < \V{len}$ \cuz{} Hypothesis of the theorem \E{010}, AF proof.}
-We recall the context contains \V{slice} and \V{seq}, and that \V{ix} and \V{len}
-are defined in terms of them, so that
-\eqpar{130}{$\Vnat{offset}+\V{len} \le \Dom{\V{seq}}$
-    \bcuz{} \Rmref[Slice context]{cxt-sec-slice}, \Dfref[Slice]{slice}.}
-\eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$
-    \bcuz{} TODO.}
-\E{140} is the consequent, which is what we sought to show for
-the current proof.
-\myqed
-\end{proof}
-
-\begin{observation}[Vacuous slice]
-From the definition of slice \Dfref{slice},
-it is vacuously true that if \Vsize{len} = 0, then
-\V{slice} is a slice of \V{seq}.
-\obEnd
-\end{observation}
-
-\begin{observation}[Slice offset]
-\label{obs:offset-of-a-slice}
-Where \V{cntn} is a container sequence,
-\V{offset} is the offset of a slice, \V{slice},
-iff $\V{offset} \le \Vsize{cntn}$, or, alternatively,
-$\V{offset} \in \V{cntn}+1$.
-In plainer terms, the offset of a slice may be anywhere in its
-container, or at the end.
-
-We note that that, if \V{offset}=\Vsize{cntn},
-that \VVelement{slice}{offset} is not well-defined.
-In plainer terms, the container does not have a value at every possible slice offset.
-Where the slice does not have a value at its offset, the slice must be empty.
-\obEnd
-\end{observation}
-
-The following two theorems restate the definition of slice \Dfref{slice}
-in helpful ways.
-
-\renewcommand{\labBase}{th-slice-1}
-\begin{theorem}[Slice 1]
-\label{th:slice-1}
-Where $\V{ix}\in\naturals$ and
-$\V{v}\in\V{V}$,
-\begin{gather}
-\Elab{040}
-    \tuple{\V{ix}, \V{v}} \in \V{slice} \iff
-        \V{ix} \in \V{len}
-        \land\; \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
-            \quad \dfEnd
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-The proof is direct.
-We start with a convenience variable,
-\eqpar{100}{$\V{term} = \tuple{\V{ix}, \V{v}}$
-    \cuz{} CV $\V{term}\in\naturals\times\V{V}$.}
-We now recall, from the definition of slice, that:
-\begin{equation}
-\begin{gathered}
-\Elab{110} \V{term} \in \V{slice}
-\\ \iff \Vtupelem{term}{0} \in \V{len}
-        \land\; \Vtupelem{term}{1} = \VVelement{seq}{\V{offset}+\Vtupelem{term}{0}}
-\\ \myparbox{\cuz{} \Dfref[Slice]{slice}.}
-\end{gathered}
-\end{equation}
-Substituting from \E{100} in \E{110} yields \E{040},
-which is what we sought to prove.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{th-slice-2}
-\begin{theorem}[Slice 2]
-\label{th:slice-2}
-Where $\V{ix}\in\naturals$,
-\begin{gather}
-\Elab{040}
-    \V{ix} \in \V{len}
-\\ \Elab{050} \implies
-        \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}
-         \quad \thEnd
-\end{gather}
-\end{theorem}
-
-\begin{proof}
-The proof is direct.
-For the empty slice, $\V{len} = 0$, we have the proof vacuously.
-For a non-empty slice,
-we assume the hypothesis of the theorem \E{040}
-to show its consequent \E{050}.
-\eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} Hypothesis of theorem \E{040}, AF proof.}
-\eqpar{110}{$\V{offset}+\V{ix} \in \Dom{\V{seq}}$
-    \bcuz{} \Lmref[Slice Helper Lemma 2]{slice-helper-2}, \E{100}.}
-\E{110} tells us that
-the indexing of \V{seq} in the following equation is well-defined,
-allowing us to create the convenience variable \V{v}.
-\eqpar{200}{$\V{v} = \Velement{seq}{\V{offset}+\V{ix}}$ \cuz{} \E{110}, CV $\V{v} \in \V{V}$.}
-The Slice 1 Theorem tells us that
-\begin{equation}
-\Elab{210}
-\begin{gathered}
-    \forall\; \V{vB}\in\V{V} :
-    \forall\; \V{ixB}\in\naturals :
-    \\ \tuple{\V{ixB}, \V{vB}} \in \V{slice}
-    \\ \iff \V{ixB} \in \V{len}
-        \land \V{vB} = \Velement{seq}{\V{offset}+\V{ixB}}.
-    \\ \myparbox{\cuz{} \Thref{slice-1}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\Elab{220}
-\begin{gathered}
-    \tuple{\V{ix}, \V{v} } \in \V{slice}
-    \\ \iff
-        \V{ix} \in \V{len}
-        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \myparbox{\cuz{} UI of \V{v} for \V{vB} and \V{ix} for \V{ixB} in \E{210}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\Elab{230}
-\begin{gathered}
-        \V{ix} \in \V{len}
-        \land \V{v} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \implies \tuple{\V{ix}, \V{v} } \in \V{slice}
-    \\ \myparbox{\cuz{} \E{220}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\Elab{240}
-\begin{gathered}
-        \V{ix} \in \V{len}
-        \land \Velement{seq}{\V{offset}+\V{ix}} = \Velement{seq}{\V{offset}+\V{ix}}.
-    \\ \implies \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
-    \\ \myparbox{\cuz{} \E{200}, \E{230}.}
-\end{gathered}
-\end{equation}
-\begin{equation}
-\Elab{250}
-\begin{gathered}
-    \V{ix} \in \V{len} \implies \tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}
-    \\ \myparbox{\cuz{} \E{240}.}
-\end{gathered}
-\end{equation}
-\eqpar{260}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}} } \in \V{slice}$
-    \cuz{} \E{100}, \E{250}.}
-\E{260} is the consequent, which is what we needed to show for the non-empty case
-and the proof.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{lem-slice-domain-containment-of-length}
-\begin{lemma}[Slice domain containment of length]
-\label{lem:slice-domain-containment-of-length}
-The domain of a slice contains its length.
-That is, $\V{len} \subseteq \Dom{\V{slice}}$.
-\lmEnd
-\end{lemma}
-
-\begin{proof}
-The proof is direct.
-We note that we have the case where $\V{len} = 0$
-trivially.
-For the case where
-$\V{len} \neq 0$,
-we assume an arbitrary element of \V{len},
-to show that it must also be an element of
-\Dom{\V{slice}}.
-\eqpar{100}{$\V{ix} \in \V{len}$ \cuz{} ARB $\V{ix} \in \naturals$.}
-\eqpar{110}{$\tuple{\V{ix}, \Velement{seq}{\V{offset}+\V{ix}}} \in \V{slice}$
-    \bcuz{} \Thref[Slice Theorem 2]{slice-2}, \E{100}.}
-\eqpar{120}{$\exists\; \V{v} \in \V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}$
-    \cuz{} \E{110}.}
-\eqpar{130}{$\V{ix} \in \Dom{\V{slice}}$ \cuz{} \E{120}.  \myqed}
-\end{proof}
-
-\renewcommand{\labBase}{lem-slice-length-containment-of-domain}
-\begin{lemma}[Slice length containment of domain]
-\label{lem:slice-length-containment-of-domain}
-The length of a slice contains its domain.
-That is, where \V{slice} is a slice,
-$\Dom{\V{slice}} \subseteq \V{len}$.
-\lmEnd
-\end{lemma}
-
-\begin{proof}
-The proof is direct.
-We note that we have the case where $\Vsize{slice} = 0$
-trivially.
-For the case where
-$\Vsize{slice} \neq 0$,
-we know that there is at least one element in \Dom{\V{slice}}.
-We assume an arbitrary element of \Dom{\V{slice}},
-to show that it must also be an element of
-\V{len}.
-Let \V{ix} be an arbitrary element of \Dom{\V{slice}}.
-\eqpar{100}{$\exists\; \V{v} \in \V{V} : \tuple{\V{ix}, \V{v}} \in \V{slice}$
-    \cuz{} ARB $\V{ix} \in \naturals$.}
-\eqpar{110}{$\tuple{\V{ix}, \V{v}} \in \V{slice}$ \cuz{} EI of \V{v} in \E{100}.}
-\eqpar{120}{$\V{ix} \in \V{len}$ \cuz{} \Thref[Slice Theorem 2]{slice-2}, \E{110}.}
-\E{120} shows the non-empty subcase and the proof.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{th-slice-domain-length-equivalence}
-\begin{theorem}[Slice domain length equivalence]
-\label{th:slice-domain-length-equivalence}
-The length of a slice is its domain.
-That is,
-\[ \Dom{\V{slice}} = \V{len} = \Vsize{slice}.
-    \quad \thEnd \]
-\end{theorem}
 
 \renewcommand{\labBase}{th-slice-sequence}
 \begin{theorem}[Slice sequence]
