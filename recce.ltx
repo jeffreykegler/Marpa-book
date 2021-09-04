@@ -458,7 +458,7 @@
 \newcommand{\derivrg}[2]{\mathrel{\mbox{$\:\stackrel{\!{#1}}%
         {\mapsto\!}\:$}}}
 
-\newcommand{\inr}{\mathrel{\dot{\in}}}
+\newcommand{\inr}{\mathrel{\overline{\in}}}
 \newcommand{\incr}[1]{\ensuremath{#1\scalebox{.75}{++}}}
 \newcommand{\Vincr}[1]{\incr{\V{#1}}}
 % \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
@@ -1780,8 +1780,8 @@ set membership,
 the first statement of set membership is the one
 which establishes the realm.
 We may identify a statememt of realm membership
-explicitly by putting a dot above the membership operator
-box, so that
+explicitly by putting a line above the membership operator,
+so that
 \[
    \V{x} \inr \realm{R}
 \]
@@ -3294,10 +3294,6 @@ specified as just stated.
 \rmEnd
 \end{remark}
 
-\todo{Revise from here}
-
-\todo{Add proof of slice uniqueness.}
-
 \renewcommand{\labBase}{lem-slice-value}
 \begin{lemma}[Slice value]
 \label{lem:slice-value}
@@ -3357,8 +3353,32 @@ with the same index but different values.
 \E{150} is contrary to \E{120}, which shows the reductio
 and the proof.
 \myqed
-\todo{Check this proof.}
 \end{proof}
+
+\todo{Revise from here}
+
+\renewcommand{\labBase}{lem-slice-domain}
+\begin{lemma}[Slice domain]
+\label{lem:slice-domain}
+If the offset plus the length of a slice
+relation is less than or equal to the size
+of the container sequence, then
+the length of the slice relation is the domain
+of the slice relation.
+That is,
+\begin{gather}
+\Elab{020} \V{offset}+\V{len} \le \Dom{\V{seq}}
+\\ \Elab{040} \implies \Dom{\V{sliceRel}} = \V{len}.  \quad \lmEnd
+\end{gather}
+\end{lemma}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\todo{Add proofs of slice uniqueness, codomain, pairs.}
 
 \renewcommand{\labBase}{th-slice-well-definedness}
 \begin{theorem}[Slice well-definedness]
@@ -3385,11 +3405,11 @@ by the left hand side of two conjunctions:
          \cuz{} \Dfref{slice}.}
 If we let set \V{ix}
 in the hypothesis
-of the Slice Helper Lemma \Lmref{slice-helper-1}
+of the Slice Helper Lemma TODO
 to \Vtupelem{term}{0},
 we can conclude
 \eqpar{130}{ $\V{offset}+\Vtupelem{term}{0} \in \Dom{\V{seq}}$
-         \cuz{} \Lmref{slice-helper-1}, \E{100}, \E{110}.}
+         \cuz{} TODO, \E{100}, \E{110}.}
 \E{130} is what we needed for the proof.
 \myqed
 \end{proof}
@@ -3413,7 +3433,7 @@ are defined in terms of them, so that
 \eqpar{130}{$\Vnat{offset}+\V{len} \le \Dom{\V{seq}}$
     \bcuz{} \Rmref[Slice context]{cxt-sec-slice}, \Dfref[Slice]{slice}.}
 \eqpar{140}{ $\V{offset}+\V{ix} \in \Dom{\V{seq}}$
-    \bcuz{} \Lmref[Slice Helper 1 Lemma]{slice-helper-1}, \E{120}, \E{130}.}
+    \bcuz{} TODO.}
 \E{140} is the consequent, which is what we sought to show for
 the current proof.
 \myqed
@@ -3619,16 +3639,6 @@ That is,
 \[ \Dom{\V{slice}} = \V{len} = \Vsize{slice}.
     \quad \thEnd \]
 \end{theorem}
-
-\begin{proof}
-This proof follows from the
-Slice Length Containment of Domain Lemma
-\Lmref{slice-length-containment-of-domain}
-and the
-Slice Domain Containment of Length Lemma
-\Lmref{slice-domain-containment-of-length}.
-\myqed
-\end{proof}
 
 \renewcommand{\labBase}{th-slice-sequence}
 \begin{theorem}[Slice sequence]
