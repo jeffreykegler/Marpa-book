@@ -2366,7 +2366,24 @@ $\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
 
 \subsection{Polyadic operators}
 
-\FloatBarrier
+Another useful notation that we adopt
+from programming is the
+ternary conditional operator:
+\begin{equation}
+\label{eq:conditional-op-example}
+    \cond{\V{test}}{\V{a}}{\V{b}}
+\end{equation}
+where \V{test} is a boolean.
+\V{a} is the value of \Eref{conditional-op-example}
+if \V{test} is true.
+Otherwise, the value of \Eref{conditional-op-example} is
+\V{b}.
+For example, where \V{x} is an integer,
+$\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
+
+The quantifiers have very loose precedence,
+and, in the absense of parentheses,
+their scope is to the end of the expression.
 
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
@@ -2382,25 +2399,102 @@ so that
 \riota \V{x} \in \V{A} : \Vmyfn{P}{x}
 \end{equation}
 is the unique \V{x} in the set \V{A} such that
-\Vmyfn{P}{x} is true.
-\Eref{def-riota}
-is well-defined iff
-$\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x}$.
+\Vmyfn{P}{x} is true,
+and $\Lambda$ otherwise.
+That is,
+\[
+    \riota \V{x} \in \V{A} : \Vmyfn{P}{x} \defined
+        (\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x} \land \V{x} = \V{y}) : \V{y} : \Lambda
+\]
 
-Another useful notation that we adopt
-from programming is the
-ternary conditional operator:
+We do not have a universal set, so that
+logical quantification is always with regard to a
+set that is the ``domain of quantification''.
+The domain of quantification may be specified explicitly
+or through the quantified variable's realm.
+
+In the expression
 \begin{equation}
-\label{eq:conditional-op-example}
-    \cond{\V{test}}{\V{a}}{\V{b}}
+\label{eq:quantification-by-realm-020}
+     \forall\; \Rvar{i}{T} : \Vmyfn{f}{i},
 \end{equation}
-where \V{test} is a boolean.
-\V{a} is the value of \Eref{conditional-op-example}
-if \V{test} is true.
-Otherwise, the value of \Eref{conditional-op-example} is
-\V{b}.
-For example, where \V{x} is an integer,
-$\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
+the domain of quantification
+is the realm (and therefore set) \realm{R}.
+As one example, in the expression
+\begin{equation}
+\label{eq:quantification-by-realm-030}
+     \forall\; \Vnat{i} : \Vmyfn{f}{i},
+\end{equation}
+the domain of quantification is the natural numbers.
+\Eref{quantification-by-realm-030}
+is equivalent to
+\begin{equation}
+\label{eq:quantification-by-realm-040}
+     \forall\; \V{i} \in \naturals : \Vmyfn{f}{i}.
+\end{equation}
+
+A quantified expression consists of,
+in order,
+a quantifier,
+a guard expression (or ``guard''),
+a colon,
+and a predicate.
+For example,
+in \Eref{quantification-by-realm-040},
+$\forall$ is the quantifier,
+$\V{i} \in \naturals$ is the ``guard expression'',
+and ``\Vmyfn{f}{i}'' is the predicate.
+The index of quantification (or ``index'')
+in \Eref{quantification-by-realm-040} is \V{i},
+and its domain of quantification is \naturals.
+
+\begin{remark}[Natural Number Quantification]
+\label{rem:naturals-quantification}
+The domain of quantification often is some subset of the natural numbers.
+A natural number quantified expression consists of,
+in order,
+a quantifier,
+an index variable specifier,
+a guard (inside parentheses),
+a colon,
+and a predicate.
+The index variable specifier is the name of the index variable.
+The guard is a boolean expression which describes the subset
+of the naturals that is used as the domain of quantification.
+The other elements of the quantification are as previously described.
+\rmEnd
+\end{remark}
+
+For example
+\begin{equation}
+\label{eq:quantification-by-boolean}
+    \forall \; \V{j}\; (1 \le \V{j} \le 42) : \Vmyfn{f}{j}
+\end{equation}
+is equivalent to
+\[
+\forall \; \V{j} \in \set{ \Vnat{i} : 1 \le \V{i} \le 42 } :
+    \myfn{P}{\V{j}}.
+\]
+An another example, in
+\[
+\forall\; \Vnat{ix}\; (\V{lo} \le \V{ix} \le \V{hi}) : \myfn{P}{\V{ix}}.
+\]
+the guard is ``$\V{lo} \le \V{ix} \le \V{hi}$'',
+the index variable is \V{ix},
+and the domain of quantification is
+\set{ \Vnat{j} : \V{lo} \le \V{j} \le \V{hi} }.
+
+In a quantification over the naturals,
+it is usually obvious which variable is
+the index variable.
+In such cases, the index variable specifier and
+the parentheses
+surrounding the guard may be omitted.
+For example, \Eref{quantification-by-boolean} would
+usually be written as
+\[
+    \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
+\]
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
@@ -2418,6 +2512,8 @@ $\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
 \hline
 \end{tabular}
 \end{table}
+
+\FloatBarrier
 
 \subsection{Meta-operators}
 
@@ -2532,97 +2628,6 @@ The codomain is part of the realm of \V{f}.
 The codomain of a function must be a superset
 of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
 
-\section{Quantifiers}
-
-We do not have a universal set, so that
-logical quantification is always with regard to a
-set that is the ``domain of quantification''.
-The domain of quantification may be specified explicitly
-or through the quantified variable's realm.
-
-In the expression
-\begin{equation}
-\label{eq:quantification-by-realm-020}
-     \forall\; \Rvar{i}{T} : \Vmyfn{f}{i},
-\end{equation}
-the domain of quantification
-is the realm (and therefore set) \realm{R}.
-As one example, in the expression
-\begin{equation}
-\label{eq:quantification-by-realm-030}
-     \forall\; \Vnat{i} : \Vmyfn{f}{i},
-\end{equation}
-the domain of quantification is the natural numbers.
-\Eref{quantification-by-realm-030}
-is equivalent to
-\begin{equation}
-\label{eq:quantification-by-realm-040}
-     \forall\; \V{i} \in \naturals : \Vmyfn{f}{i}.
-\end{equation}
-
-A quantified expression consists of,
-in order,
-a quantifier,
-a guard expression (or ``guard''),
-a colon,
-and a predicate.
-For example,
-in \Eref{quantification-by-realm-040},
-$\forall$ is the quantifier,
-$\V{i} \in \naturals$ is the ``guard expression'',
-and ``\Vmyfn{f}{i}'' is the predicate.
-The index of quantification (or ``index'')
-in \Eref{quantification-by-realm-040} is \V{i},
-and its domain of quantification is \naturals.
-
-\begin{remark}[Natural Number Quantification]
-\label{rem:naturals-quantification}
-The domain of quantification often is some subset of the natural numbers.
-A natural number quantified expression consists of,
-in order,
-a quantifier,
-an index variable specifier,
-a guard (inside parentheses),
-a colon,
-and a predicate.
-The index variable specifier is the name of the index variable.
-The guard is a boolean expression which describes the subset
-of the naturals that is used as the domain of quantification.
-The other elements of the quantification are as previously described.
-\rmEnd
-\end{remark}
-
-For example
-\begin{equation}
-\label{eq:quantification-by-boolean}
-    \forall \; \V{j}\; (1 \le \V{j} \le 42) : \Vmyfn{f}{j}
-\end{equation}
-is equivalent to
-\[
-\forall \; \V{j} \in \set{ \Vnat{i} : 1 \le \V{i} \le 42 } :
-    \myfn{P}{\V{j}}.
-\]
-An another example, in
-\[
-\forall\; \Vnat{ix}\; (\V{lo} \le \V{ix} \le \V{hi}) : \myfn{P}{\V{ix}}.
-\]
-the guard is ``$\V{lo} \le \V{ix} \le \V{hi}$'',
-the index variable is \V{ix},
-and the domain of quantification is
-\set{ \Vnat{j} : \V{lo} \le \V{j} \le \V{hi} }.
-
-In a quantification over the naturals,
-it is usually obvious which variable is
-the index variable.
-In such cases, the index variable specifier and
-the parentheses
-surrounding the guard may be omitted.
-For example, \Eref{quantification-by-boolean} would
-usually be written as
-\[
-    \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
-\]
-
 \section{Orders}
 
 Recall that an relation
@@ -2692,73 +2697,75 @@ we often use a family constructor
 to represent the family to which a unary family operator
 applies.
 
-\section{Order of evaluation}
-
-An mathematical expression is only well-formed
-if all of it is well-formed.
-All the expressions in this book are
-(we hope)
-well-formed.
-
-Traditionally,
-assessing whether a mathematical expression is
-well-defined is done in the same fashion as assessing
-whether it is well-formed:
-A mathematical expression is considered well-defined
-only if every part of it is well-defined.
-
-In keeping with this,
-logical operations typically
-imply no order of evaluation ---
-there is no definition of the order in which the subexpressions
-are assessed for their value,
-or their well-definedness.
-
-One workaround is to special-case potential ill-definedness,
-wherever it occurs,
-but this is awkward and verbose.
-It is often more convenient, and clearer,
-to present the math using an expression
-that contains potentially ill-defined subexpressions.
-In this book, potentially ill-defined subexpressions.
-include iota operators
-and sequence values with out-of-bounds indexes.
-
-For the purpose of assessing well-definedness,
-we treat logical expressions as if we evaluated
-them from left to right.
-Once we know what the value of the whole expression would be,
-on the assumption that there is a well-defined boolean value,
-we evaluate no further,
-ignoring even ill-defined sub-expressions.
-
-In the following examples, let \V{arr} be the sequence
-of length 1 such that $\Velement{arr}{0} = 1749$.
-Consider as an example
-\begin{equation}
-\label{eq:order-of-evaluation-100}
-    \forall\; \Vnat{x} : \V{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
-\end{equation}
-Using traditional order-free evaluation,
-\Eref{order-of-evaluation-100} is not well-defined,
-because if $\V{x}=1$, then $\V{x} \notin \Dom{\V{arr}}$.
-In this book, however,
-\Eref{order-of-evaluation-100} is well-defined and true,
-because if the left hand side of a logical ``or'' is true,
-we ignore its right hand side, even if it is ill-defined.
-As another example, in this book,
-\[
-    \forall\; \Vnat{x} : \V{x} = 0 \land \VVelement{arr}{x} \le 42
-\]
-is considered to be well-defined and false,
-because
-if the left hand side of a logical ``and'' is false,
-we ignore the right hand side.
-Similarly, we consider the equation
-\[
-    \forall\; \Vnat{x} : \V{x} = 0 \implies \VVelement{arr}{x} \ge 42
-\]
-to be well-defined and true.
+% Delete this in favor of use of Lambda?
+% \section{Order of evaluation}
+%
+% An mathematical expression is only well-formed
+% if all of it is well-formed.
+% All the expressions in this book are
+% (we hope)
+% well-formed.
+%
+% Traditionally,
+% assessing whether a mathematical expression is
+% well-defined is done in the same fashion as assessing
+% whether it is well-formed:
+% A mathematical expression is considered well-defined
+% only if every part of it is well-defined.
+%
+% In keeping with this,
+% logical operations typically
+% imply no order of evaluation ---
+% there is no definition of the order in which the subexpressions
+% are assessed for their value,
+% or their well-definedness.
+%
+% One workaround is to special-case potential ill-definedness,
+% wherever it occurs,
+% but this is awkward and verbose.
+% It is often more convenient, and clearer,
+% to present the math using an expression
+% that contains potentially ill-defined subexpressions.
+% In this book, potentially ill-defined subexpressions.
+% include iota operators
+% and sequence values with out-of-bounds indexes.
+%
+% For the purpose of assessing well-definedness,
+% we treat logical expressions as if we evaluated
+% them from left to right.
+% Once we know what the value of the whole expression would be,
+% on the assumption that there is a well-defined boolean value,
+% we evaluate no further,
+% ignoring even ill-defined sub-expressions.
+%
+% In the following examples, let \V{arr} be the sequence
+% of length 1 such that $\Velement{arr}{0} = 1749$.
+% Consider as an example
+% \begin{equation}
+% \label{eq:order-of-evaluation-100}
+%     \forall\; \Vnat{x} : \V{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
+% \end{equation}
+% Using traditional order-free evaluation,
+% \Eref{order-of-evaluation-100} is not well-defined,
+% because if $\V{x}=1$, then $\V{x} \notin \Dom{\V{arr}}$.
+% In this book, however,
+% \Eref{order-of-evaluation-100} is well-defined and true,
+% because if the left hand side of a logical ``or'' is true,
+% we ignore its right hand side, even if it is ill-defined.
+% As another example, in this book,
+% \[
+%     \forall\; \Vnat{x} : \V{x} = 0 \land \VVelement{arr}{x} \le 42
+% \]
+% is considered to be well-defined and false,
+% because
+% if the left hand side of a logical ``and'' is false,
+% we ignore the right hand side.
+% Similarly, we consider the equation
+% \[
+%     \forall\; \Vnat{x} : \V{x} = 0 \implies \VVelement{arr}{x} \ge 42
+% \]
+% to be well-defined and true.
+%
 
 \chapter{Sequences}
 \label{chap:sequences}
