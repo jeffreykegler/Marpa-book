@@ -2723,20 +2723,30 @@ of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
 \section{Families}
 
 \begin{definition}[Family Constructor]
-\label{def:family-constructor}
+\label{def:family-builder}
 To describe families,
-we sometimes use a family constructor of the form
+we sometimes use a family builder of the form
 \begin{equation}
-\label{eq:def-family-constructor-050}
+\label{eq:def-family-builder-050}
     \family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
 \end{equation}
 If \V{fam} is the family described by
-\Eref{def-family-constructor-050},
+\Eref{def-family-builder-050},
 then $\V{S}=\Dom{\V{fam}}$ is the index set,
 and the value of \VVelement{fam}{i} is
 \Vmyfn{P}{i} for every \V{i} in the set
 \V{S}.
 \dfEnd
+\end{definition}
+
+\begin{definition}[Family Indexing]
+\label{def:family-indexing}
+Let \V{I} and \V{X} be placeholder sets.
+For arbitrary family $\V{fam} \in \V{X}\expOp\V{I}$,
+arbitrary $\V{i} \in \V{I}$,
+and arbitrary $\V{x} \in \V{X}$,
+\[ \VVelement{fam}{i} \defined \riota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
+    \quad \dfEnd \]
 \end{definition}
 
 % Delete this in favor of use of Lambda?
@@ -2833,15 +2843,26 @@ sequences from basic set theory.
 In this chapter, we clarify our terminology
 and introduce additional terminology and results which
 we will use in this book.
+
+\renewcommand{\labBase}{rem-cxt-ch-sequence}
+\begin{remark}[Sequence chapter context]
+\label{rem:cxt-ch-sequence}
 So that we may speak of sequences whose values are arbitrary sets,
 this chapter is a schema.
-We let \V{V} be a placeholder for a non-empty set.
+We let \V{V} be a placeholder for a non-empty set,
+which is not $\Lambda$
+and which does not contain $\Lambda$.
 We typically use \V{V} as the codomain of sequences
 under discussion.
-Also, in every theoremoid,
-we will implicitly introduce a new placeholder \V{V},
-which we typically use to represent the codomain of sequences
+
+Additionally, in every theoremoid,
+we implicitly introduce a new placeholder \V{V},
+with the same restrictions as the chapter-wide \V{V}.
+We typically use the theoremoid-wide \V{V}
+to represent the codomain of sequences
 contained in the scope of that theoremoid.
+\rmEnd
+\end{remark}
 
 \begin{definition}[Sequence]
 \label{def:sequence}
@@ -2907,7 +2928,7 @@ $2 \expOp \V{V}$ is the set of boolean functions whose domain
 is \V{V}.
 
 We specify a sequence by specifying its elements explicitly,
-via a sequence constructor,
+via a sequence builder,
 or inductively.
 
 \begin{remark}[Explicitly specified sequence]
@@ -2928,17 +2949,17 @@ all the counting numbers.
 \rmEnd
 \end{remark}
 
-\begin{remark}[Sequence constructor]
-\label{rem:sequence-constructor}
-A \dfn{sequence constructor}
+\begin{remark}[Sequence builder]
+\label{rem:sequence-builder}
+A \dfn{sequence builder}
 follows the form already described for
 use in quantification over the natural numbers \Rmref{naturals-quantification}.
 \rmEnd
 \end{remark}
 
-\begin{example}[Sequence constructor]
-\label{ex:sequence-constructor}
-The following are examples of sequence constructors.
+\begin{example}[Sequence builder]
+\label{ex:sequence-builder}
+The following are examples of sequence builders.
 Where \Vnat{hi} and the function $\V{f} \in \V{V}\expOp\naturals$
 are bound in context,
 \begin{gather*}
@@ -3007,7 +3028,7 @@ $\Vlastix{seq} = \Vdecr{seq} = \decr{\Vsize{seq}}$.
 \end{definition}
 
 When we apply a unary family operator to a sequence,
-we often use a sequence constructor
+we often use a sequence builder
 to represent the sequence,
 so that
 \[
