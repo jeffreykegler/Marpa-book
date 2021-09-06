@@ -1989,35 +1989,140 @@ will usually be a waste of time.}
     {Lewis Carroll, {\em Through the Looking Glass}}
 
 Our preceding disciplines are
-set theory;
-logic;
+Zermolo-Frankel set theory
+(including arithmetic);
 procedures and algorithms;
 graph theory;
 the analysis of algorithms;
 and parsing theory.
 In this, the first chapter
 of the deductive exposition,
-we deal with matters
-from those preceding disciplines
-to which we mostly adhere.
+we begin to deal with matters
+from preceding disciplines.
 
-Basic terms from these preceding disciplines are generally used
+The contents of this chapter are selective.
+It does not explicitly describe all the notations,
+conventions and results that we use from
+preceding disciplines.
+Notations and conventions which are basic
+to preceding disciplines are generally used
 without explanation,
-and basic results are typically treated as ``facts''
+Results basic to our preceding disciplines
+are usually treated as ``facts''
 and used without proof.
-In this section,
-we deal with considerations from preceding disciplines
+We do make a point of describing notations
+and results
 \begin{itemize}
 \item that are non-standard;
-\item that may not be basic;
-\item that are the subject of conflicting or ambiguous standards; or
+\item that we do not consider basic;
+\item that are the subject of conflicting or ambiguous standards; and
 \item that are different in our presentation from Halmos 1960~\cite{Halmos1960}.
 \end{itemize}
 
-\section{Operator precedence}
+\section{Constants}
 
-In this section, we describe operator
-and operator-like symbols.
+\myepi{\label{epi:naturals-discomfort}%
+    The slight feeling of discomfort the reader
+    may experience with the definition of natural number
+    is quite common and in most cases temporary.
+    The trouble is [...] some irrelevant structure,
+    which seems to get in the way.
+    We want to be told the the successor of 7 is 8,
+    but to be told that 7 is a subset of 8
+    or that 7 is an element of 8 is disturbing.}
+    {{\em Naive Set Theory}, Halmos\cite[p. 45]{Halmos1960}}
+
+In this book, the natural numbers begin with 0,
+and the set of natural numbers is written \naturals{},
+whether it is used as a cardinal or an ordinal.
+We use the von Neumann convention,
+according to which every natural number is the set of
+all preceding natural numbers
+so that, for example, $0 = \emptyset = \set{}$
+and $3 = \set{0,1,2}$.
+We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
+The von Neumann convention extends to \naturals,
+so that $\V{i} \in \naturals$ is a way of saying that \V{i}
+is any natural number.
+
+% TODO: Decide what to do with this
+% We also treat
+% 0 and 1 as boolean values,
+% where the intended interpretation of 0 is ``true''
+% and 1 is ``false''.%
+%     \footnote{%
+%     We must exercise caution when calling these values
+%     ``true'' and ``false''.
+%     Due to well-known results from Tarski and G\"odel,
+%     we know that
+%     our object language, if it is consistent,
+%     cannot speak of the
+%     truth and falsity of its own expressions.
+%     Within our object language our boolean values
+%     must be considered simply as sets,
+%     so that ``true'' and ``false'' are simply names for
+%     sets, and do not have any alethic implications.
+%     Alethic implications can be brought into play
+%     for expressions in our object language
+%     only when those expressions are
+%     interpreted within our meta-language.}
+% Therefore $2 = \set{0,1}$ is the set of boolean values.
+% In general we avoid explicitly writing 0 and 1 when
+% the intended interpretation is alethic,
+% but if we do so, it is the case that
+% \begin{gather*}
+% 1 = (3 \in \set{3,4,5}),
+% \\ 0 = (3 \notin \set{3,4,5}),
+% \\ 1 = (1 = (3 \in \set{3,4,5})),
+% \\ 1 = (0 = (3 \notin \set{3,4,5})),\text{ and}
+% \\ 0 = (1 = (3 \notin \set{3,4,5})),
+% \end{gather*}
+
+The constant $\Lambda$ is used for several purposes,
+which will be specifically defined below.
+The uses of $\Lambda$ will share a general
+connotation, that of indicating a value which is ``not applicable''
+in some sense.
+$\Lambda$ is a set.
+$\Lambda$ is not in the realm of any
+variable,
+is not a relation,
+is not a tuple,
+and is not a number,
+whether natural, integral, rational or real,
+but is otherwise opaque.\footnote{%
+    Assuming that mathematical document has a finite number of realms
+    and constants,
+    there is a union of the set of all constants
+    with the union of all realms with
+    to contain all sets.
+    Call this union the document's ``compendium''.
+    Since there is no universal set, there must be
+    some set not in the compendium.
+    Any such set can be used as $\Lambda$.
+    Assuming (without a full survey) that all constants
+    and all elements of all realms
+    are numbers, relations or tuples,
+    $\set{\set{1},\set{2}}$ is such a set for this book.%
+%
+%    \V{candidate} does not contain the empty set,
+%    so it is not a transitive number and therefore not
+%    a natural number.
+%    Integral, rational and real numbers are usually
+%    defined so that they always
+%    contain infinite equivalence classes,
+%    but every set
+%    contained directly or indirectly in \V{candidate}
+%    is finite, so that \V{candidate} is not in
+%    any of the usual classes of number.
+%    \set{1} and \set{2} are disjoint, so that
+%    \V{candidate} is not a tuple.
+%    \set{1} is not a pair, so that \V{candidate}
+%    is not a relation.
+}
+
+\section{Operators}
+
 Each set of operators has its own subsection
 stating the precedence among them.
 The subsections themselves are
@@ -2025,7 +2130,7 @@ in order from tightest precedence
 to loosest,
 so that all operator mentioned in an
 earlier subsection have tighter precedence than
-the operators in later subsection.
+the operators in later subsections.
 
 Arity and associativity follow tradition,
 unless otherwise stated.
@@ -2340,67 +2445,12 @@ Instead they are syntax for meta-language notions.
 
 \FloatBarrier
 
-\section{Notation and conventions}
+\section{Bracketing notations}
 
-\myepi{\label{epi:naturals-discomfort}%
-    The slight feeling of discomfort the reader
-    may experience with the definition of natural number
-    is quite common and in most cases temporary.
-    The trouble is [...] some irrelevant structure,
-    which seems to get in the way.
-    We want to be told the the successor of 7 is 8,
-    but to be told that 7 is a subset of 8
-    or that 7 is an element of 8 is disturbing.}
-    {{\em Naive Set Theory}, Halmos\cite[p. 45]{Halmos1960}}%
-
-In this book, the natural numbers begin with 0,
-and that set of natural numbers is written \naturals{},
-whether it is used as a cardinal or an ordinal.
+The notation $\Vsize{set}$ represents the cardinality,
+or size, of the set \V{set}.
 The notation $\Vsize{set} = \naturals$
 indicates that \V{set} is countably infinite.
-
-We use the von Neumann convention,
-according to which every natural number is the set of
-all preceding natural numbers
-so that, for example, $0 = \emptyset = \set{}$
-and $3 = \set{0,1,2}$.
-We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
-The von Neumann convention extends to \naturals,
-so that $\V{i} \in \naturals$ is a way of saying that \V{i}
-is any natural number.
-
-% TODO: Decide what to do with this
-% We also treat
-% 0 and 1 as boolean values,
-% where the intended interpretation of 0 is ``true''
-% and 1 is ``false''.%
-%     \footnote{%
-%     We must exercise caution when calling these values
-%     ``true'' and ``false''.
-%     Due to well-known results from Tarski and G\"odel,
-%     we know that
-%     our object language, if it is consistent,
-%     cannot speak of the
-%     truth and falsity of its own expressions.
-%     Within our object language our boolean values
-%     must be considered simply as sets,
-%     so that ``true'' and ``false'' are simply names for
-%     sets, and do not have any alethic implications.
-%     Alethic implications can be brought into play
-%     for expressions in our object language
-%     only when those expressions are
-%     interpreted within our meta-language.}
-% Therefore $2 = \set{0,1}$ is the set of boolean values.
-% In general we avoid explicitly writing 0 and 1 when
-% the intended interpretation is alethic,
-% but if we do so, it is the case that
-% \begin{gather*}
-% 1 = (3 \in \set{3,4,5}),
-% \\ 0 = (3 \notin \set{3,4,5}),
-% \\ 1 = (1 = (3 \in \set{3,4,5})),
-% \\ 1 = (0 = (3 \notin \set{3,4,5})),\text{ and}
-% \\ 0 = (1 = (3 \notin \set{3,4,5})),
-% \end{gather*}
 
 We write tuples using double square brackets.
 For example,
@@ -2464,15 +2514,6 @@ symbols:
 We therefore represent the floor of a number
 as a function:
 $\myfn{floor}{\V{a}}$.
-
-$\Lambda$ is sometimes used as a special ``null'' value.
-Except when explicitly stated otherwise,
-the only operations allowed for $\Lambda$ are
-assignment to a variable,
-and comparison.
-When used in a comparison,
-$\Lambda$ compares equal to itself
-and unequal to any other value.
 
 \section{Functions}
 
@@ -3191,7 +3232,7 @@ preserving the successor relation.
 
 \renewcommand{\labBase}{obs-offset-function}
 \begin{observation}[Offset function]
-\label{obs:slice}
+\label{obs:offset-function}
 A function with domain
 $\V{len} \inr \naturals\cup\set{\naturals}$
 is an offset function,
@@ -3271,6 +3312,24 @@ $\V{offset}+\Vdecr{len}$ of \V{seq}.
 \dfEnd
 \end{definition}
 
+\renewcommand{\labBase}{lem-slice-relation-existence}
+\begin{lemma}[Slice relation existence]
+\label{lem:slice-relation-existence}
+For each offset, length and container sequence,
+a slice relation exists.
+\obEnd
+\end{lemma}
+
+\begin{proof}
+The proof follows from the hypothesized existence of
+the offset, length and container sequence;
+the observation about the offset function \Obref{offset-function};
+and \Eref{def-slice-040} in the definition of slice \Dfref{slice}.
+Note that the slice relation may be empty.
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{rem-cxt-sec-slice}
 \begin{remark}[Slice Section Context]
 \label{rem:cxt-sec-slice}
 This section, beginning after this remark, is a scope.
@@ -3398,21 +3457,37 @@ And, because in ZF all sets are equivalent iff their extensions are the same,
 
 \todo{Add proofs of slice uniqueness, codomain, pairs.}
 
+\renewcommand{\labBase}{th-slice-sequence-uniqueness}
+\begin{theorem}[Slice sequence uniqueness]
+\label{th:slice-sequence-uniqueness}
+For every \V{offset}, \V{len} and \V{seq},
+such that $\V{offset}+\V{len} \le \Dom{\V{seq}}$,
+\V{sliceRel} exists and is unique.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
 \renewcommand{\labBase}{th-slice-sequence}
 \begin{theorem}[Slice sequence]
 \label{th:slice-sequence}
-A slice is a sequence.
+If
+\eqpar{040}{$\V{offset}+\V{len} \le \Dom{\V{seq}}$}
+then \V{sliceRel} is a sequence.
 \thEnd
 \end{theorem}
 
 \begin{proof}
 \todo{Finish this proof}
 By the Slice Functional Lemma \Lmref{slice-functional},
-a slice is a function and therefore a family.
-TODO
-we know that the domain of a slice in a natural number.
-Since a sequence is a family whose domain is a countable number,
-a slice is a sequence.
+E{040} and the Slice Domain Lemma \Lmref{slice-domain},
+\V{sliceRel} is a function with domain \V{len}.
+A function whose domain is countable is a
+sequence, by definition.
 \myqed
 \end{proof}
 
