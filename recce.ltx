@@ -2120,6 +2120,9 @@ but is otherwise opaque.\footnote{%
 %    \set{1} is not a pair, so that \V{candidate}
 %    is not a relation.
 }
+Unless stated otherwise,
+a placeholder cannot be $\Lambda$ or contain
+$\Lambda$ as an element.
 
 \section{Operators}
 
@@ -2146,6 +2149,9 @@ precedence than
 \subsection{Unary operators}
 
 Unary operators have the tightest precedence.
+Within the Unary operators, the postfix operators
+bind tighter than the the prefix operators.
+
 We adopt a
 programming language notation for
 the successor relation: \Vincr{x}.
@@ -2160,6 +2166,32 @@ and decrementation by~1:
 \Vdecr{x} = \V{x}-1.
 \]
 
+In keeping with our avoidance of sub- and superscripts,
+we usually avoid the use of ``large operators'',
+instead writing summations and similar operations
+using unary prefix operators on sets.
+For example, our preferred notation
+for the union of the elements of the set \V{S} is $\bigcup \V{S}$.
+Similarly, we write
+$\bigcap \V{S}$ for the intersection of the elements of the set \V{S}; and
+$\sum \V{S}$ for the sum of the elements of the set \V{S}.
+
+\todo{Fix this!}
+Where the set is a family,
+unless otherwise stated,
+the operation is on the range of the family.
+That is, where \V{fam} is a placeholder for a family,
+\[
+    {\textstyle \sum \V{fam}} = \sum\limits_{\textstyle \V{ix}\in\V{fam}} \VVelement{fam}{ix},
+\]
+or, where the family is a sequence,
+\[
+    {\textstyle \sum \V{fam}} = \VVelement{fam}{0} +
+        \VVelement{fam}{1} + \ldots + \VVelement{fam}{\Vlastix{fam}}.
+\]
+
+\FloatBarrier
+
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
 \caption{
@@ -2167,20 +2199,20 @@ and decrementation by~1:
     }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\neg$} & \cellboxr{Logical negation} \\
-\hline
 {$\Vdecr{x}$} & \cellboxr{Decrement of \V{x}, Predecessor of \V{x}} \\
 \hline
 {$\Vincr{x}$} & \cellboxr{Increment of \V{x}, Successor of \V{x}} \\
+\hline
+{$\neg$} & \cellboxr{Logical negation} \\
 \hline
 {\powerset{\V{A}}} & \cellboxr{Powerset of the set \V{A}} \\
 \hline
 \end{tabular}
 \end{table}
 
-\subsection{Arithmetic operators}
-
 \FloatBarrier
+
+\subsection{Arithmetic operators}
 
 Multiplication is never implied in this book.
 Our implied operator is concatenation, which
@@ -2189,6 +2221,14 @@ We overload the Cartesian product operator
 so that it represents multiplication when its
 operands are integers:
 $\V{n} \times 6$.
+
+Division of natural numbers and integers is
+``integer division'', so that
+for natural number or integer placeholders
+\V{x}, $\V{y}>0$,
+\[
+     (\V{x} / \V{y}) \times \V{y} + \V{x} \bmod \V{y} = \V{x}.
+\]
 
 Subtraction is always ``left subtraction''.%
 \footnote{Right subtraction and left subtraction behave identically over the
@@ -2218,6 +2258,7 @@ In the second case,
 $\V{a}=\naturals$ and $\V{b}\in\naturals$,
 \[ \Vnat{b}+\naturals = \naturals \text{ so that } \naturals-\V{b} = \naturals. \]
 
+\FloatBarrier
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
@@ -2229,7 +2270,8 @@ $\V{a}=\naturals$ and $\V{b}\in\naturals$,
 % \\[1.5ex]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\times$} & \cellboxr{Multiplication} \\
+{$\times$}, {$/$}, {$\bmod$} & \cellboxr{Multiplication
+    Division, Modulo } \\
 \hline
 {$+$} {$-$} & \cellboxr{Addition, subtraction} \\
 \hline
@@ -2578,12 +2620,14 @@ Numeric indices can be hard to remember,
 and when a tuple is of a specific kind (for example, a grammar),
 we often define a mnemonic for each element of a tuple.
 
-In keeping with our avoidance of sub- and superscripts,
-our preferred notations
-are $\bigcup \V{S}$ for the union of the elements of the set \V{S},
-and $\bigcap \V{S}$ for the intersection of the elements of the set \V{S}.
-By analogy, we write
-$\sum \V{S}$ for the sum of the elements of the set \V{S}.
+Floor brackets are a very intuitive way to indicate terminal
+symbols:
+\Vterm{terminal}.
+We therefore represent the floor of a number
+as a function:
+$\myfn{floor}{\V{a}}$.
+
+\section{Relations}
 
 Multi-character variables introduce ambiguity into the standard
 notation for relations
@@ -2603,30 +2647,6 @@ or via the boolean function they induce.
 For instance, we might discuss
 \Eref{relation-example} via the boolean binary function
 \myfn{R}{\V{x}, \V{y}}.
-
-Floor brackets are a very intuitive way to indicate terminal
-symbols:
-\Vterm{terminal}.
-We therefore represent the floor of a number
-as a function:
-$\myfn{floor}{\V{a}}$.
-
-\section{Functions}
-
-Functions are total unless stated otherwise.
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
-$\Dom{\V{f}}$ is the
-\dfn[Domain (wrt a function)]{domain} of \V{f},
-and $\Ran{\V{f}}$ is the
-\dfn[Range (wrt a function)]{range} of \V{f}.
-
-$\Cod{\V{f}}$ is the codomain of \V{f},
-The codomain is part of the realm of \V{f}.
-The codomain of a function must be a superset
-of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
 
 \section{Orders}
 
@@ -2667,6 +2687,23 @@ $<$ is the strict total relation corresponding to the lax total relation $\le$.
 Where the domain is a class of sets,
 $\subseteq$ is the lax partial relation corresponding to the strict partial relation $\subset$.
 
+\section{Functions}
+
+Functions are total unless stated otherwise.
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
+$\Dom{\V{f}}$ is the
+\dfn[Domain (wrt a function)]{domain} of \V{f},
+and $\Ran{\V{f}}$ is the
+\dfn[Range (wrt a function)]{range} of \V{f}.
+
+$\Cod{\V{f}}$ is the codomain of \V{f},
+The codomain is part of the realm of \V{f}.
+The codomain of a function must be a superset
+of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
+
 \section{Families}
 
 \begin{definition}[Family Constructor]
@@ -2685,17 +2722,6 @@ and the value of \VVelement{fam}{i} is
 \V{S}.
 \dfEnd
 \end{definition}
-
-We have defined a unary operation on a set,
-for example,
-$\sum \V{S}$ is the sum of a set \V{S}.
-We extend the unary operations to families,
-applying the unary set operation to the range of the family.
-For example, if \V{fam} is a family,
-$\sum \V{fam} = \sum \Ran{\V{fam}}$.
-we often use a family constructor
-to represent the family to which a unary family operator
-applies.
 
 % Delete this in favor of use of Lambda?
 % \section{Order of evaluation}
