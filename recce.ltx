@@ -3291,26 +3291,27 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
-\renewcommand{\labBase}{def-offset-function}
-\begin{definition}[Offset function]
-\label{def:offset-function}
-Let
+\renewcommand{\labBase}{def-offset-mapping}
+\begin{definition}[Offset mapping]
+\label{def:offset-mapping}
+Where $\V{offset}\inr\naturals$
+and $\V{len}\inr\naturals\cup\set{\naturals}$,
+let
 \begin{equation}
 \Elab{100}
 \begin{gathered}
-\myfn{offFnGen}{\Vnat{offset},\Vnat{len}}
-\\ = \set{ \begin{gathered}
-            \tuple{\V{ix}, \Vnat{offset}+\V{ix}} \in \V{len}\times\naturals :
-            \\ \Vnat{ix} = \Vnat{offset}+\V{ix}
+\myfnname{offFn} = \set{ \begin{gathered}
+            \tuple{\Vnat{ix}, \Vnat{v}} \in \V{len}\times\naturals :
+               \V{v} = \Vnat{offset}+\V{ix}
         \end{gathered} }.
 \end{gathered}
 \end{equation}
-We say that \V{offFn} is an \dfn{offset function},
+We say that \V{offFn} is an \dfn{offset mapping},
 and that \V{offset} is the
-\dfn[Offset (of an offset function)]{offset}
+\dfn[Offset (of an offset mapping)]{offset}
 of \V{offFn}.
 We say that \V{offset} and \V{len}
-\dfn[Induce (an offset function)]{induce}
+\dfn[Induce (an offset mapping)]{induce}
 \V{offFn}.
 \dfEnd
 \end{definition}
@@ -3318,27 +3319,61 @@ We say that \V{offset} and \V{len}
 \renewcommand{\labBase}{lem-offset-function}
 \begin{lemma}[Offset function]
 \label{lem:offset-function}
-For every \Vnat{offset} and \Vnat{len},
-there is exactly one mapping from \V{len}
-to a range that begins at \V{offset}
-and preserves the successor relation,
-and that mapping is the offset function induced
-by \V{offset} and \V{len}.
+\Vnat{offset} and \Vnat{len} induce exactly on mapping,
+and that mapping is a function.
 \lmEnd
 \end{lemma}
 
 \begin{proof}
-\todo{fix this proof.}
-A function with domain
-$\V{len} \inr \naturals\cup\set{\naturals}$
-is an offset function,
-$\V{offFn}\inr\naturals\expOp\V{len}$,
-iff it is such that
-\eqpar{100}{
-    $\myfn{offFn}{\Vnat{ix}} = \Vnat{offset}+\V{ix}$
-}
-for some natural number \V{offset}.
+\todo{Check this proof}
+For the purpose of this proof,
+consider an arbitary
+$\V{offset}\inr\naturals$
+and an arbitrary $\V{len}\inr\naturals\cup\set{\naturals}$.
+The offset mapping that they induce is
+\begin{equation}
+\Elab{100}
+\begin{gathered}
+\myfnname{offFn} = \set{ \begin{gathered}
+            \tuple{\Vnat{ix}, \Vnat{v}} \in \V{len}\times\naturals :
+               \V{v} = \Vnat{offset}+\V{ix}
+        \end{gathered} }
+        \\ \myparbox{\cuz{} \Dfref[Offset Mapping]{offset-mapping},
+             CV $\V{offFn}\inr\naturals\expOp\V{len}$.
+        .}
+\end{gathered}
+\end{equation}
+\E{100} shows immediately that \V{offFn} is well-defined so that
+\eqpar{110}{\V{offFn} exists \cuz{} \E{100}.}
+Also immediately, \E{100}
+shows that \V{offFn} is unambiguously specified so that
+\eqpar{120}{there is at most one \V{offFn} \cuz{} \E{100}.}
+There is clearly
+exactly one value ($\Vnat{offset}+\V{ix}$)
+for every argument (\V{ix})
+in \E{100}, so that
+\eqpar{130}{\V{offFn} is a function \cuz{} \E{100}.}
+The proof follows immediately from \E{110}, \E{120}, and \E{130}.
+\myqed
+\end{proof}
 
+The following theorem attempts to show that our offset
+functions capture the intuition of what the index mapping
+of a slice should be.
+
+\todo{Another term besides 'capture'?}
+\renewcommand{\labBase}{lem-offset-function-capture}
+\begin{lemma}[Offset function capture]
+\label{lem:offset-function-capture}
+For every \Vnat{offset} and \Vnat{len},
+the offset function they induce is the only
+one that preserves the successor relation of \V{len}
+and has an initial value of \V{offset}.
+\lmEnd
+\end{lemma}
+
+\begin{proof}
+\todo{Fix this proof.}
 To justify that \V{offFn} is an offset mapping
 this observation,
 we recall from ZF
@@ -3417,9 +3452,10 @@ a slice relation exists.
 \end{lemma}
 
 \begin{proof}
+\todo{Fix this}
 The proof follows from the hypothesized existence of
 the offset, length and container sequence;
-the observation about the offset function \Obref{offset-function};
+the observation about the offset function TODO!;
 and \Eref{def-slice-040} in the definition of slice \Dfref{slice}.
 Note that the slice relation may be empty.
 \myqed
