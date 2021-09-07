@@ -3291,18 +3291,44 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 
 \section{Slices}
 
-\renewcommand{\labBase}{ldef-offset-function}
-\begin{ldef}[Offset function]
-\label{ldef:offset-function}
-An \dfn{offset function} is a function which maps
-a countable number to a set of natural numbers,
-preserving the successor relation.
-\ldEnd
-\end{ldef}
+\renewcommand{\labBase}{def-offset-function}
+\begin{definition}[Offset function]
+\label{def:offset-function}
+Let
+\begin{equation}
+\Elab{100}
+\begin{gathered}
+\myfn{offFnGen}{\Vnat{offset},\Vnat{len}}
+\\ = \set{ \begin{gathered}
+            \tuple{\V{ix}, \Vnat{offset}+\V{ix}} \in \V{len}\times\naturals :
+            \\ \Vnat{ix} = \Vnat{offset}+\V{ix}
+        \end{gathered} }.
+\end{gathered}
+\end{equation}
+We say that \V{offFn} is an \dfn{offset function},
+and that \V{offset} is the
+\dfn[Offset (of an offset function)]{offset}
+of \V{offFn}.
+We say that \V{offset} and \V{len}
+\dfn[Induce (an offset function)]{induce}
+\V{offFn}.
+\dfEnd
+\end{definition}
 
-\renewcommand{\labBase}{obs-offset-function}
-\begin{observation}[Offset function]
-\label{obs:offset-function}
+\renewcommand{\labBase}{lem-offset-function}
+\begin{lemma}[Offset function]
+\label{lem:offset-function}
+For every \Vnat{offset} and \Vnat{len},
+there is exactly one mapping from \V{len}
+to a range that begins at \V{offset}
+and preserves the successor relation,
+and that mapping is the offset function induced
+by \V{offset} and \V{len}.
+\lmEnd
+\end{lemma}
+
+\begin{proof}
+\todo{fix this proof.}
 A function with domain
 $\V{len} \inr \naturals\cup\set{\naturals}$
 is an offset function,
@@ -3312,21 +3338,21 @@ iff it is such that
     $\myfn{offFn}{\Vnat{ix}} = \Vnat{offset}+\V{ix}$
 }
 for some natural number \V{offset}.
-We say that \V{offset}
-\dfn[Induce (an offset function)]{induces}
-\V{offFn},
-and also that \V{offset} is the
-\dfn[Offset (of an offset function)]{offset}
-of \V{offFn}.
-To justify this observation,
-we first note that \E{100} clearly defines a function.
-We then recall from ZF
+
+To justify that \V{offFn} is an offset mapping
+this observation,
+we recall from ZF
 that the \V{ix}'th successor of zero is \V{ix}
 and the \V{ix}'th successor of some \V{offset}
 is $\V{offset}+\V{ix}$
-to show that \E{100} preserves the successor relation.
-\obEnd
-\end{observation}
+to show that \V{offFn},
+and only \V{offFn},
+preserves the successor relation for a given
+\V{len} and \V{offset}.
+\V{offFn} clearly is a well-defined function,
+so \V{offFn} exists.
+\myqed
+\end{proof}
 
 \renewcommand{\labBase}{def-slice}
 \begin{definition}[Slice]
