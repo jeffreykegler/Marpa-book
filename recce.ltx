@@ -172,9 +172,17 @@
 \newcommand{\basis}[1]{}
 \newcommand{\step}[1]{}
 
+% Eliminate deffn someday
 \newcommand{\deffn}[3]{\ensuremath{%
     \V{#1} \in #3 \expOp #2%
 }}
+
+\newcommand{\rawfnmap}[3]{\ensuremath{#1:#2\mapsto#3}}
+\newcommand{\fnmap}[3]{\rawfnmap{\myfnname{#1}}{#2}{#3}}
+\newcommand{\Vfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{#3}}
+\newcommand{\VVfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{\V{#3}}}
+\newcommand{\caret}{\mathord{\char`\^}}
+
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
@@ -571,10 +579,11 @@
 \newcommand{\Cw}{\V{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\V{#1}]}}}
 
-\newcommand{\myfnname}[1]{\ensuremath{\mymathop{#1}}}
+\newcommand{\rawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
+\newcommand{\bigfn}[2]{\rawfn{\myfnname{#1}}{#2}}
+\newcommand{\myfnname}[1]{\V{#1}}
 \newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
 % The \mathopen{} and \mathclose{} eliminate unwanted extra space
-\newcommand{\bigfn}[2]{\ensuremath{\myfnname{#1}\mathopen{}\left(#2\right)\mathclose{}}}
 \newcommand{\Vmyfn}[2]{\ensuremath{\myfn{#1}{\V{#2}}}}
 
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
@@ -2228,6 +2237,34 @@ and, where the family is a sequence,
 
 \FloatBarrier
 
+\subsection{Repetition operator}
+
+Where \V{rel} is a relation,
+$\myfnname{f}\caret{}\V{n}$ is the
+composition of \V{rel} repeated \V{n} times.
+We note that the composition of a function zero
+times is the identity function:
+$\rawfn{(\myfnname{f}\caret0)}{\V{x}} = \V{x}$.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\caption{
+    Repetition operator
+    }
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\myfnname{f}\caret\V{n}$} & \cellboxr{
+    \V{f} repeated \V{n} times
+} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+
 \subsection{Arithmetic operators}
 
 Multiplication is never implied in this book.
@@ -2246,6 +2283,9 @@ for natural number or integer placeholders
      (\V{x} / \V{y}) \times \V{y} + \V{x} \bmod \V{y} = \V{x}.
 \]
 
+\todo{Should I just assert that I always use cardinal arithmetic,
+even for \naturals,
+instead of this stuff about "left subtraction"?}
 Subtraction is always ``left subtraction''.%
 \footnote{Right subtraction and left subtraction behave identically over the
     natural numbers,
@@ -2424,7 +2464,20 @@ $\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
 
 \subsection{Polyadic operators}
 
-Another useful notation that we adopt
+We define the traditional function definition notation
+as a boolean operator, so that
+it is only true if \V{f} is a function
+whose domain is \V{D} and whose codomain is \V{C}.
+That is,
+\[
+    \VVfnmap{f}{D}{C} \defined
+    \left( \begin{gathered}
+        \V{f} \in \V{C}\expOp\V{D}
+        \\ \land\; \Dom{\V{f}} = \V{D} \land \Cod{\V{f}} = \V{C}
+    \end{gathered} \right).
+\]
+
+Another of the useful notations that we adopt
 from programming is the
 ternary conditional operator:
 \begin{equation}
@@ -2562,8 +2615,12 @@ usually be written as
     }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
+{$\fnmap{f}{\V{D}}{\V{C}}$} & \cellboxr{%
+    ``\myfnname{f} is a function from domain \V{D}
+    to codomain \V{C}''} \\
+    \hline
 {$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
-    Ternary conditional operator:\\
+    Conditional operator:\\
     ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
     \hline
 {$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
