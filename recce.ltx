@@ -181,6 +181,10 @@
 \newcommand{\fnmap}[3]{\rawfnmap{\myfnname{#1}}{#2}{#3}}
 \newcommand{\Vfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{#3}}
 \newcommand{\VVfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{\V{#3}}}
+
+% function composition operator
+\newcommand{\fnAfterOp}{\mathbin{\circ}}
+\newcommand{\relAfterOp}{\mathbin{\circ_R}}
 \newcommand{\caret}{\mathord{\char`\^}}
 
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
@@ -2237,7 +2241,7 @@ and, where the family is a sequence,
 
 \FloatBarrier
 
-\subsection{Repetition operator}
+\subsection{Operators on relations}
 
 Where \V{rel} is a relation,
 $\myfnname{f}\caret{}\V{n}$ is the
@@ -2246,18 +2250,57 @@ We note that the composition of a function zero
 times is the identity function:
 $\rawfn{(\myfnname{f}\caret0)}{\V{x}} = \V{x}$.
 
+\todo{What about Lambda here?}
+Where \myfnname{f} and \myfnname{g} are placeholders
+for relations,
+$\myfnname{g}\relAfterOp{}\myfnname{f}$ is
+the \dfn[Relational composition (of relations)]{relational composition},
+of \myfnname{g} and \myfnname{f}:
+\myfnname{g} ``after'' \myfnname{f}.
+That is,
+\[
+\myfnname{g}\relAfterOp{}\myfnname{f} =
+     \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
+         \tuple{\V{x}, \V{y}} \in \V{f} \land
+         \tuple{\V{y}, \V{z}} \in \V{g} }.
+\]
+
+Where \myfnname{f} are \myfnname{g} are placeholders
+for functions,
+$\myfnname{g}\fnAfterOp{}\myfnname{f}$ is
+the \dfn[Functional composition (of functions)]{functional composition},
+or simply \dfn[Composition (of functions)]{composition}
+of \myfnname{g} and \myfnname{f}:
+\myfnname{g} ``after'' \myfnname{f}.
+That is,
+\[
+\myfnname{g}\fnAfterOp{}\myfnname{f} =
+     \set{ \begin{gathered}
+         \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
+         \\ \Cod{\V{f}} = \Dom{\V{g}} \land
+             \tuple{\V{x}, \V{y}} \in \V{f} \land
+             \tuple{\V{y}, \V{z}} \in \V{g}
+     \end{gathered} }.
+\]
+
 \FloatBarrier
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
 \caption{
-    Repetition operator
+    Relation operators,
+    from tightest to loosest
     }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 {$\myfnname{f}\caret\V{n}$} & \cellboxr{
     \V{f} repeated \V{n} times
 } \\
+\hline
+$\myfnname{g}\fnAfterOp\myfnname{f} \quad \myfnname{g}\relAfterOp\myfnname{f}$ &
+    \cellboxr{
+    Functional composition, relational composition:
+    ``\V{g} after \V{f}''} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2699,6 +2742,10 @@ symbols:
 We therefore represent the floor of a number
 as a function:
 $\myfn{floor}{\V{a}}$.
+
+\section{Realms}
+
+\todo{Describe how realms are declared}
 
 \section{Relations}
 
