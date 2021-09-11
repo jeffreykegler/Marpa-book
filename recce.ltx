@@ -178,9 +178,9 @@
 }}
 
 \newcommand{\rawfnmap}[3]{\ensuremath{#1:#2\mapsto#3}}
-\newcommand{\fnmap}[3]{\rawfnmap{\myfnname{#1}}{#2}{#3}}
-\newcommand{\Vfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{#3}}
-\newcommand{\VVfnmap}[3]{\rawfnmap{\myfnname{#1}}{\V{#2}}{\V{#3}}}
+\newcommand{\fnmap}[3]{\rawfnmap{\fname{#1}}{#2}{#3}}
+\newcommand{\Vfnmap}[3]{\rawfnmap{\fname{#1}}{\V{#2}}{#3}}
+\newcommand{\VVfnmap}[3]{\rawfnmap{\fname{#1}}{\V{#2}}{\V{#3}}}
 
 % function composition operator
 \newcommand{\fnAfterOp}{\mathbin{\circ}}
@@ -584,9 +584,9 @@
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\V{#1}]}}}
 
 \newcommand{\rawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
-\newcommand{\bigfn}[2]{\rawfn{\myfnname{#1}}{#2}}
-\newcommand{\myfnname}[1]{\V{#1}}
-\newcommand{\myfn}[2]{\ensuremath{\myfnname{#1}(#2)}}
+\newcommand{\bigfn}[2]{\rawfn{\fname{#1}}{#2}}
+\newcommand{\fname}[1]{\V{#1}}
+\newcommand{\myfn}[2]{\ensuremath{\fname{#1}(#2)}}
 % The \mathopen{} and \mathclose{} eliminate unwanted extra space
 \newcommand{\Vmyfn}[2]{\ensuremath{\myfn{#1}{\V{#2}}}}
 
@@ -2244,37 +2244,37 @@ and, where the family is a sequence,
 \subsection{Operators on relations}
 
 Where \V{rel} is a relation,
-$\myfnname{f}\caret{}\V{n}$ is the
+$\fname{f}\caret{}\V{n}$ is the
 composition of \V{rel} repeated \V{n} times.
 We note that the composition of a function zero
 times is the identity function:
-$\rawfn{(\myfnname{f}\caret0)}{\V{x}} = \V{x}$.
+$\rawfn{(\fname{f}\caret0)}{\V{x}} = \V{x}$.
 
 \todo{What about Lambda here?}
-Where \myfnname{f} and \myfnname{g} are placeholders
+Where \fname{f} and \fname{g} are placeholders
 for relations,
-$\myfnname{g}\relAfterOp{}\myfnname{f}$ is
+$\fname{g}\relAfterOp{}\fname{f}$ is
 the \dfn[Relational composition (of relations)]{relational composition},
-of \myfnname{g} and \myfnname{f}:
-\myfnname{g} ``after'' \myfnname{f}.
+of \fname{g} and \fname{f}:
+\fname{g} ``after'' \fname{f}.
 That is,
 \[
-\myfnname{g}\relAfterOp{}\myfnname{f} =
+\fname{g}\relAfterOp{}\fname{f} =
      \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
          \tuple{\V{x}, \V{y}} \in \V{f} \land
          \tuple{\V{y}, \V{z}} \in \V{g} }.
 \]
 
-Where \myfnname{f} are \myfnname{g} are placeholders
+Where \fname{f} are \fname{g} are placeholders
 for functions,
-$\myfnname{g}\fnAfterOp{}\myfnname{f}$ is
+$\fname{g}\fnAfterOp{}\fname{f}$ is
 the \dfn[Functional composition (of functions)]{functional composition},
 or simply \dfn[Composition (of functions)]{composition}
-of \myfnname{g} and \myfnname{f}:
-\myfnname{g} ``after'' \myfnname{f}.
+of \fname{g} and \fname{f}:
+\fname{g} ``after'' \fname{f}.
 That is,
 \[
-\myfnname{g}\fnAfterOp{}\myfnname{f} =
+\fname{g}\fnAfterOp{}\fname{f} =
      \set{ \begin{gathered}
          \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
          \\ \Cod{\V{f}} = \Dom{\V{g}} \land
@@ -2293,11 +2293,11 @@ That is,
     }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\myfnname{f}\caret\V{n}$} & \cellboxr{
+{$\fname{f}\caret\V{n}$} & \cellboxr{
     \V{f} repeated \V{n} times
 } \\
 \hline
-$\myfnname{g}\fnAfterOp\myfnname{f} \quad \myfnname{g}\relAfterOp\myfnname{f}$ &
+$\fname{g}\fnAfterOp\fname{f} \quad \fname{g}\relAfterOp\fname{f}$ &
     \cellboxr{
     Functional composition, relational composition:
     ``\V{g} after \V{f}''} \\
@@ -2659,7 +2659,7 @@ usually be written as
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 {$\fnmap{f}{\V{D}}{\V{C}}$} & \cellboxr{%
-    ``\myfnname{f} is a function from domain \V{D}
+    ``\fname{f} is a function from domain \V{D}
     to codomain \V{C}''} \\
     \hline
 {$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
@@ -2828,6 +2828,9 @@ $\Cod{\V{f}}$ is the codomain of \V{f},
 The codomain is part of the realm of \V{f}.
 The codomain of a function must be a superset
 of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
+\todo{Note that sets compare by extension,
+    so that sets which differ only in their codomain
+    will compare equal.}
 
 \section{Families}
 
@@ -3409,7 +3412,7 @@ let
 \begin{equation}
 \Elab{100}
 \begin{gathered}
-\myfnname{offFn} = \set{ \begin{gathered}
+\fname{offFn} = \set{ \begin{gathered}
             \tuple{\Vnat{ix}, \Vnat{v}} \in \V{len}\times\naturals :
                \V{v} = \Vnat{offset}+\V{ix}
         \end{gathered} }.
@@ -3472,27 +3475,29 @@ and has an initial value of \V{offset}.
 \end{lemma}
 
 \begin{proof}
+\todo{Fix this.}
 \todo{State proof method.}
 For the purpose of this proof,
-let \myfnname{S} be the successor relation on the natural numbers,
-and let \V{n} and \V{x} be natural numbers.
-We know from ZF that,
-the \V{n}'th successor of \V{x} is $\Vnat{x}+\Vnat{n}$.
-That is
-\eqpar{100}{$(\rawfn{\myfnname{S}\caret\V{n})}{\V{x}} = \V{x}+\V{n}$}
-\todo{Fix this proof.}
-To justify that \V{offFn} is an offset mapping
-this observation,
-we recall from ZF
-that the \V{ix}'th successor of zero is \V{ix}
-and the \V{ix}'th successor of some \V{offset}
-is $\V{offset}+\V{ix}$
-to show that \V{offFn},
-and only \V{offFn},
-preserves the successor relation for a given
-\V{len} and \V{offset}.
-\V{offFn} clearly is a well-defined function,
-so \V{offFn} exists.
+let \fname{S} be the successor relation on the natural numbers.
+We know from arithmetic that,
+the \V{i}'th successor of \V{x} is $\Vnat{x}+\Vnat{i}$,
+so that
+\eqpar{100}{$\forall\;\V{i} : \forall\;\V{x} :
+    (\rawfn{\fname{S}\caret\V{i})}{\V{x}} = \V{x}+\V{i}$
+    preserves the successor relation \cuz{} ZF.}
+\eqpar{110}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
+    \cuz{} UI of \E{100}.}.
+\eqpar{120}{The initial value is the zero'th successor \cuz{} ZF.}
+\eqpar{125}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
+\eqpar{130}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
+     \cuz{} \E{110}.}
+Therefore the sequence of \V{len} successors with initial value \V{offset}
+is
+\eqpar{150}{
+    \Vfnmap{f}{len}{\naturals}, where $\Vmyfn{f}{ix} = \V{offset}+\V{ix}$
+    \cuz{} \E{100}, \E{120}, \E{130}.}
+\E{150} is exactly \V{offFn}.
+\todo{Check this proof.}
 \myqed
 \end{proof}
 
@@ -4230,7 +4235,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{th-node-induced-path-020}--\Eref{th-node-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-node-induced-path-100}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4331,7 +4336,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{th-edge-induced-path-020}--\Eref{th-edge-induced-path-040}.
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-edge-induced-path-100}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4455,7 +4460,7 @@ triple containing the data that induces the subpath:
         (\V{V}\exxpOp\naturals)
         \times\naturals\times\naturals$.}
 For this proof we define a boolean function
-$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-subpath-105}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4608,7 +4613,7 @@ duple containing the data that induces the fusion:
     \bcuz{} CV $\V{pair} \in
         (\V{V}\exxpOp\naturals) \times (\V{V}\exxpOp\naturals).$}
 Also, within the context of this proof, we define a boolean function
-$\myfnname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-fusion-105}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -5900,7 +5905,7 @@ That is,
 \end{lemma}
 
 \begin{proof}
-The theorem follows immediately from the definition of \myfnname{NewParents}
+The theorem follows immediately from the definition of \fname{NewParents}
 \Ldref{new-parents}.
 \myqed
 \end{proof}
@@ -5984,7 +5989,7 @@ we assume there is a minimal \V{bad} such that
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
     $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
-    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
@@ -6055,7 +6060,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
     $\forall\; \Vnodset{b} : \V{b} = \myfn{Anc}{0,\V{b}}$
-        \cuz{} \longLdref{\myfnname{Anc}}{ancestry}.
+        \cuz{} \longLdref{\fname{Anc}}{ancestry}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
@@ -6083,7 +6088,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
         \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
         \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
     \end{gathered} \right)
-    \\ \because \longLdref{\myfnname{Anc}}{ancestry},
+    \\ \because \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-ancestry-addition-200}.
 \end{gathered}
 \end{equation}
@@ -6113,7 +6118,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-ancestry-addition-240}{%
     $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
-    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-ancestry-addition-230}.
 }
 \mypareq{eq:lem-ancestry-addition-250}{%
@@ -6284,7 +6289,7 @@ for this purpose.
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
     $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
-    \cuz{} \longLdref{\myfnname{Anc}}{ancestry}.
+    \cuz{} \longLdref{\fname{Anc}}{ancestry}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
     $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
@@ -6347,7 +6352,7 @@ We proceed to look at the other possible values for \V{bad}.
         \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{ancestry-from-path-330},
-        \longLdref{\myfnname{Anc}}{ancestry}.}
+        \longLdref{\fname{Anc}}{ancestry}.}
 \end{gather}
 Recall that if \V{bad} is a minimal counter-example,
 then \Vdecr{bad} cannot be a counter-example:
@@ -6448,7 +6453,7 @@ Now it will be helpful to consider a suffix of \V{path}.
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
     $\Velement{path}{0} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad}, \V{base}}}$
-    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\fname{NewParents}}{new-parents},
         \Eref{ancestry-from-path-500}.
 }
 Equation \Eref{ancestry-from-path-510} is contrary to
@@ -6611,7 +6616,7 @@ so that we may assume
 \end{gather}
 \mypareq{eq:lem-generation-disjointness-180}{%
     $\V{nd} \in \ \myfn{Anc}{\V{lo},\V{base}}$
-        \bcuz{} Def of \myfnname{gen} \Ldref{generation},
+        \bcuz{} Def of \fname{gen} \Ldref{generation},
             \Eref{lem-generation-disjointness-160}.
 }
 \mypareq{eq:lem-generation-disjointness-190}{%
@@ -6704,8 +6709,8 @@ We assume there is a minimal \V{bad} such that
     $\myfn{Anc}{0,\V{base}} = \V{base} =
     \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longLdref{\myfnname{Anc}}{ancestry},
-        Def of \myfnname{gen} \Ldref{generation}.
+        \longLdref{\fname{Anc}}{ancestry},
+        Def of \fname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-generation-coverage-180}{%
     \Vmyfn{INST}{0} \cuz{} \Eref{lem-generation-coverage-150},
@@ -6727,7 +6732,7 @@ Expanding $\neg \Vmyfn{INST}{bad}$,
     $\myfn{Anc}{\V{bad},\V{base}} =
     \myfn{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-        \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
+        \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
@@ -6863,7 +6868,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     \land\; \V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{}
-        \longLdref{\myfnname{PredecessorAnc}}{predecessor-anc},
+        \longLdref{\fname{PredecessorAnc}}{predecessor-anc},
         \linebreak \Eref{lem-surface-disjointness-100},
         \Eref{lem-surface-disjointness-110},
         \Eref{lem-surface-disjointness-160}.
@@ -6894,7 +6899,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \mypareq{eq:lem-surface-disjointness-260}{%
     $\myfn{Anc}{\V{bad},\V{base}}
         = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longLdref{\myfnname{Anc}}{ancestry},
+    \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
@@ -6924,12 +6929,12 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \mypareq{eq:lem-surface-disjointness-320}{%
     $\Vnod{parent} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
-    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\fname{NewParents}}{new-parents},
         \Eref{lem-surface-disjointness-300}.
 }
 \mypareq{eq:lem-surface-disjointness-330}{%
     $\V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$ \cuz{}
-        \longLdref{\myfnname{Anc}}{ancestry},
+        \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-surface-disjointness-320}.
 }
 Equation \Eref{lem-surface-disjointness-330}
@@ -6980,7 +6985,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \mypareq{eq:lem-generation-surface-containment-210}{%
     $\forall\; \V{ndset} \in \Vpowerset{V} :
         \myfn{Surface}{\V{ndset}} \subseteq \V{ndset}$
-    \bcuz{} Def of \myfnname{Surface} \Eref{def-surface}.
+    \bcuz{} Def of \fname{Surface} \Eref{def-surface}.
 }
 \mypareq{eq:lem-generation-surface-containment-220}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{Anc}{0,\V{base}}$
@@ -6989,8 +6994,8 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \mypareq{eq:lem-generation-surface-containment-230}{%
     $\myfn{Anc}{0,\V{base}} = \V{base} = \myfn{gen}{0,\V{base}}$
     \linebreak \cuz{}
-        \longLdref{\myfnname{Anc}}{ancestry},
-        Def of \myfnname{gen} \Ldref{generation}.
+        \longLdref{\fname{Anc}}{ancestry},
+        Def of \fname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-generation-surface-containment-240}{%
     $\myfn{Surface}{\myfn{Anc}{0,\V{base}}} \subseteq \myfn{gen}{0,\V{base}}$
@@ -7030,7 +7035,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \mypareq{eq:lem-generation-surface-containment-290}{%
     $\myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}} \subseteq
         \myfn{gen}{\V{bad},\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \Ldref{generation},
+    \bcuz{} Def of \fname{gen} \Ldref{generation},
         \Eref{lem-generation-surface-containment-280}.
         \linebreak This is the expansion of
         \Eref{lem-generation-surface-containment-100}
@@ -7238,7 +7243,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
 \end{gather}
 \mypareq{eq:lem-generation-addition-170}{%
     $\V{base} = \myfn{gen}{0,\V{base}}$
-    \bcuz{} Def of \myfnname{gen} \Ldref{generation}.
+    \bcuz{} Def of \fname{gen} \Ldref{generation}.
 }
 \begin{equation}
 \label{eq:lem-generation-addition-180}
@@ -7427,7 +7432,7 @@ The theorem is then obtained using universal generalization.
     \exists\; \Vnod{child} : \V{child} \in \V{nds} \land \V{parent} \notin \V{nds}
     \\ \land\; \tuple{\V{parent},\V{child}} \in \V{E}
     \\ \myparbox{\cuz{}
-        \longLdref{\myfnname{NewParents}}{new-parents},
+        \longLdref{\fname{NewParents}}{new-parents},
         \Eref{surface-new-parents-inclusion-130}.}
 \end{gathered}
 \end{equation}
@@ -7453,7 +7458,7 @@ The theorem is then obtained using universal generalization.
         \Eref{surface-new-parents-inclusion-190}.}
 \mypareq{eq:surface-new-parents-inclusion-210}{%
     $\V{child} \in \Vmyfn{Surface}{nds}$
-    \bcuz{} Def of \myfnname{Surface} \Eref{def-surface},
+    \bcuz{} Def of \fname{Surface} \Eref{def-surface},
         \Eref{surface-new-parents-inclusion-170},
         \Eref{surface-new-parents-inclusion-200}.
 }
@@ -7506,7 +7511,7 @@ child:
 \mypareq{eq:lem-surface-parents-ratio-170}{%
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
-    \bcuz{} \longLdref{\myfnname{NewParents}}{new-parents},
+    \bcuz{} \longLdref{\fname{NewParents}}{new-parents},
     New free $\V{ndset} \in \Vpowerset{V}$.
 }
 In fact, since \V{G} is a non-unary tree,
@@ -7732,7 +7737,7 @@ we assume there is a minimal \V{bad} such that
 \end{gather}
 \mypareq{eq:lem-non-unary-subtree-size-130}{%
     $\myfn{gen}{0,\V{base}} = \V{base}$
-    \cuz{} Def of \myfnname{gen} \Ldref{generation}.
+    \cuz{} Def of \fname{gen} \Ldref{generation}.
 }
 \mypareq{eq:lem-non-unary-subtree-size-140}{%
     $\size{\myfn{gen}{0,\V{base}}} \le 2\times\Vsize{base}$
@@ -7779,7 +7784,7 @@ we assume there is a minimal \V{bad} such that
     } =
     \Vsize{base} +
     \sum \set{ 1 \le \Vnat{i} \le \V{bad} : \size{\myfn{gen}{\V{i},\V{base}}} }$
-    \bcuz{} Def of \myfnname{gen} \Ldref{generation},
+    \bcuz{} Def of \fname{gen} \Ldref{generation},
         \Eref{lem-non-unary-subtree-size-220}.
 }
 \mypareq{eq:lem-non-unary-subtree-size-240}{%
@@ -7857,7 +7862,7 @@ we assume there is a minimal \V{bad} such that
     } \le
         2\times\Vsize{base}
     \\ \myparbox{\cuz{}
-        Def of \myfnname{gen} \Ldref{generation},
+        Def of \fname{gen} \Ldref{generation},
         \Eref{lem-non-unary-subtree-size-290}.}
 \end{gathered}
 \end{equation}
@@ -13258,7 +13263,7 @@ exists and is a surjection.
 \begin{proof}
 The proof strategy is to
 define a relation \var{Source-Rel},
-to show that \var{Source-Rel} is the equivalent of \myfnname{Source},
+to show that \var{Source-Rel} is the equivalent of \fname{Source},
 and to show that the required properties hold for \var{Source-Rel}.
 \mypareq{eq:th-leo-source-fn-10-01}{%
    $\var{Source-Rel} = \set{ \tuple{ \ell, \var{src} } \in \realm{LIM} \times \realm{EIM} :
@@ -13291,7 +13296,7 @@ By the definition of Leo source \realm{EIM},
 \mypareq{eq:th-leo-source-fn-10-09-10}{%
     If \var{Source-Rel} is a function,
     then it is
-    equivalent to the function \myfnname{Source}
+    equivalent to the function \fname{Source}
     \cuz{}
         \Eref{th-leo-source-fn-05},
         \Eref{th-leo-source-fn-07},
@@ -13396,7 +13401,7 @@ By the definition of a functional relation,
     \cuz{} \Eref{th-leo-source-fn-36}.
 }
 \mypareq{eq:th-leo-source-fn-40}{%
-    The total function \myfnname{Source} exists, and is a surjection
+    The total function \fname{Source} exists, and is a surjection
     \cuz{} \Eref{th-leo-source-fn-10-01},
         \Eref{th-leo-source-fn-10-09-10},
         \Eref{th-leo-source-fn-10-09-20},
@@ -15158,34 +15163,34 @@ and the theorem.
 
 \begin{theorem}[Leo source bijection]
 \label{th:source-fn-injection}
-The \myfnname{Source} function exists,
+The \fname{Source} function exists,
 and is a total bijection.
 \thEnd
 \end{theorem}
 
 \begin{proof}
 The strategy is to show that
-\myfnname{Source} is an injection.
+\fname{Source} is an injection.
 From this the theorem will follow immediately via
-the \myfnname{Source} function theorem \Thref{leo-source-fn}.
+the \fname{Source} function theorem \Thref{leo-source-fn}.
 
-To prove that \myfnname{Source}
+To prove that \fname{Source}
 has the injection property,
-we treat \myfnname{Source} as a relation
+we treat \fname{Source} as a relation
 and consider two tuples with distinct first elements (arguments),
 but otherwise arbitrary.
 We seek to show that this pair of tuples have different second elements (values).
 
 Initially, we consider only the subcase where the size
-of the domain of \myfnname{Source} is greater than 1:
+of the domain of \fname{Source} is greater than 1:
 \mypareq{eq:th-source-fn-injection-98}{%
-    $\Dom{\myfnname{Source}} > 1$ \cuz{} AF subcase
+    $\Dom{\fname{Source}} > 1$ \cuz{} AF subcase
 }
 \begin{gather}
 \label{eq:th-source-fn-injection-100}
-\land\; \tuple{\mylim{\ell1}, \Veim{src1}} \in \myfnname{Source}
+\land\; \tuple{\mylim{\ell1}, \Veim{src1}} \in \fname{Source}
 \\ \label{eq:th-source-fn-injection-120}
-\land\; \tuple{\mylim{\ell2}, \Veim{src2}} \in \myfnname{Source}
+\land\; \tuple{\mylim{\ell2}, \Veim{src2}} \in \fname{Source}
 \\ \label{eq:th-source-fn-injection-130}
 \land\; \ell1 \ne \ell2
 \\ \nonumber \cuzbox{AF derivation;
@@ -15213,12 +15218,12 @@ of the domain of \myfnname{Source} is greater than 1:
 }
 \begin{gather}
 \label{eq:th-source-fn-injection-190}
-        \Dom{\myfnname{Source}} > 2
+        \Dom{\fname{Source}} > 2
 \\ \label{eq:th-source-fn-injection-200}
         \implies \forall\; \mylim{\ell1} : \forall\; \mylim{\ell2} : \forall\; \Veim{src1} : \forall\; \Veim{src2} :
 \\ \label{eq:th-source-fn-injection-210}
-        \tuple{\mylim{\ell1}, \Veim{src1}} \in \myfnname{Source}
-            \land \; \tuple{\mylim{\ell2}, \Veim{src2}} \in \myfnname{Source}
+        \tuple{\mylim{\ell1}, \Veim{src1}} \in \fname{Source}
+            \land \; \tuple{\mylim{\ell2}, \Veim{src2}} \in \fname{Source}
 \\ \label{eq:th-source-fn-injection-220}
             \land \; \ell1 \ne \ell2
 \\ \label{eq:th-source-fn-injection-230}
@@ -15235,13 +15240,13 @@ of an injection,
 and every function with an empty or singleton domain is an injection,
 so that
 \mypareq{eq:th-source-fn-injection-250}{%
-    \myfnname{Source} is an injection
+    \fname{Source} is an injection
         \cuz{} \Eref{th-source-fn-injection-190}--\Eref{th-source-fn-injection-230};
         vacuously; trivially.
 }
 \mypareq{eq:th-source-fn-injection-260}{%
-    The total function \myfnname{Source} exists and is a bijection
-    \cuz{} \longThref{\myfnname{Source} function theorem}{leo-source-fn}.
+    The total function \fname{Source} exists and is a bijection
+    \cuz{} \longThref{\fname{Source} function theorem}{leo-source-fn}.
     \myqed
 }
 \end{proof}
@@ -15264,11 +15269,11 @@ exists and is a bijection.
 \end{theorem}
 
 \begin{proof}
-First, we observe that \myfnname{LIM} is the inverse of \myfnname{Source} \Thref{leo-source-fn}.
-Second, with the \myfnname{Source} bijection theorem
+First, we observe that \realm{LIM} is the inverse of \fname{Source} \Thref{leo-source-fn}.
+Second, with the \fname{Source} bijection theorem
 \Thref{source-fn-injection}
 we has shown
-that \myfnname{Source} exists and is total and a bijection.
+that \fname{Source} exists and is total and a bijection.
 Third, if a total bijective function exists,
 then we know that its inverse exists and is also a
 total bijective function.
@@ -15375,7 +15380,7 @@ $\size{
 \mypareq{eq:th-es-lim-count-26}{%
     $\forall\; \Veim{x} : \left( \exists\; \mylim{\ell} : \ell = \Lim{\var{x}} \right)
         \implies \myfn{isSource}{\var{x}}$
-    \cuz{} \longThref{\myfnname{Lim} function}{lim-fn},
+    \cuz{} \longThref{\fname{Lim} function}{lim-fn},
             \longDfref{Leo source \realm{EIM}}{leo-source-eim}.
 }
 \mypareq{eq:th-es-lim-count-28}{%
@@ -15400,7 +15405,7 @@ $\size{
 \mypareq{eq:th-es-lim-count-32}{%
     $\forall\; \Veim{x} : \Current{\var{x}} = \Current{\Lim{\var{x}}}$
     \cuz{} \longDfref{LIM validity}{lim-validity},
-        \longThref{\myfnname{Lim} function}{lim-fn}.
+        \longThref{\fname{Lim} function}{lim-fn}.
 }
 \mypareq{eq:th-es-lim-count-34}{%
     $\size{
@@ -15490,7 +15495,7 @@ be a function such that
 \\ & \text{where } \var{nxtlims} = \myfn{nextLIMs}{\Veim{src}}.
 \end{aligned}
 \end{equation}
-Then \myfnname{LIMPredecessor} exists.
+Then \fname{LIMPredecessor} exists.
 \thEnd
 \end{theorem}
 
