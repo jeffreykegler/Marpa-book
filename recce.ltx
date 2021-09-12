@@ -3459,45 +3459,80 @@ The proof follows immediately from \E{120} and \E{130}.
 \myqed
 \end{proof}
 
-The following theorem attempts to show that our offset
-functions capture the intuition of what the index mapping
-of a slice should be.
+\renewcommand{\labBase}{ldef-slice-mapping-intuition}
+\begin{ldef}[Slice mapping intuition]
+\label{ldef:slice-mapping-intuition}
+We say that a function, \fname{f},
+\dfn[Slice mapping intuition, capturing]{captures the slice mapping intuition}
+at \Vnat{offset} for domain \V{len}
+iff
+its domain is \V{len} and
+it preserves the successor relationship among the elements of
+a range whose least element is \V{offset}.
+More precisely, \fname{f}
+captures the slice mapping intuition at \Vnat{offset} iff
+\begin{gather}
+\Elab{010} \V{len} = \Dom{\V{f}}
+\\ \Elab{020}
+    \left( \begin{gathered}
+        \forall\;\V{i}\in\Dom{\V{f}} : \forall\;\V{j}\in\Dom{\V{f}} :
+        \\ \V{j} = \Vincr{i} \iff \Vmyfn{f}{j} = \incr{\Vmyfn{f}{i}}
+    \end{gathered} \right)
+\\ \Elab{050} \land\; \nexists\;\V{i}\in\Ran{\V{f}} : \Vmyfn{f}{i} < \V{offset}
+    \quad \ldEnd
+\end{gather}
+\end{ldef}
 
-\renewcommand{\labBase}{lem-offset-function-equivalence}
+\renewcommand{\labBase}{lem-offset-function-intuition-1}
 \begin{lemma}[Offset function equivalence]
-\label{lem:offset-function-equivalence}
-For every \Vnat{offset} and \Vnat{len},
-\V{offFn} is the offset function they induce
-iff, for every element of \V{len},
-it preserves the successor relation of \V{len}
-and has an initial value of \V{offset}.
+\label{lem:offset-function-intuition-1}
+The offset mapping
+induced by \Vnat{offset} and \Vnat{len}
+captures the slice mapping intuition
+for domain \V{len} at \V{offset}.
 \lmEnd
 \end{lemma}
 
 \begin{proof}
-\todo{Fix this.}
 \todo{State proof method.}
-For the purpose of this proof,
-let \fname{S} be the successor relation on the natural numbers.
-We know from arithmetic that,
-the \V{i}'th successor of \V{x} is $\Vnat{x}+\Vnat{i}$,
-so that
-\eqpar{100}{$\forall\;\V{i} : \forall\;\V{x} :
+\todo{Fix this proof.}
+Let \V{offFn} be the offset mapping induced
+by \Vnat{offset} and \Vnat{len}.
+Let \Vnat{x} and
+\Vnat{y} be two arbitrary elements of
+the domain of \fname{offFn}
+\eqpar{110}{$\V{x}\in\Dom{\V{offFn}} \land \V{y}\in\Dom{\V{offFn}}$
+    \cuz{} AF proof.}
+From arithmetic we know that we can reverse an addition
+with a subtraction, so that \V{offFn} is a bijection,
+and we have
+\eqpar{120}{$\V{x} = \V{y} \iff \Vmyfn{offFn}{x} = \Vmyfn{offFn}{y}$ \cuz{} ZF.}
+\todo{Old stuff from here.}
+\eqpar{300}{$\forall\;\V{i} : \forall\;\V{x} :
     (\rawfn{\fname{S}\caret\V{i})}{\V{x}} = \V{x}+\V{i}$
     preserves the successor relation \cuz{} ZF.}
-\eqpar{110}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
-    \cuz{} UI of \E{100}.}.
-\eqpar{120}{The initial value is the zero'th successor \cuz{} ZF.}
-\eqpar{125}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
-\eqpar{130}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
-     \cuz{} \E{110}.}
-Therefore the sequence of \V{len} successors with initial value \V{offset}
-is
-\eqpar{150}{
-    \Vfnmap{f}{len}{\naturals}, where $\Vmyfn{f}{ix} = \V{offset}+\V{ix}$
-    \cuz{} \E{100}, \E{120}, \E{130}.}
-\E{150} is exactly \V{offFn}.
-\todo{Check this proof.}
+\eqpar{310}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
+    \cuz{} UI of \E{300}.}.
+\eqpar{320}{The initial value is the zero'th successor \cuz{} ZF.}
+\eqpar{325}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
+\eqpar{330}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
+     \cuz{} \E{310}.}
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{lem-offset-function-intuition-2}
+\begin{lemma}[Offset function equivalence]
+\label{lem:offset-function-intuition-2}
+If a relation captures the slice mapping intuition
+for domain \V{len} at \V{offset}, then it is
+the offset mapping
+induced by \Vnat{offset} and \Vnat{len}
+\lmEnd
+\end{lemma}
+
+\begin{proof}
+% Proof template
+\todo{Finish this proof.}
 \myqed
 \end{proof}
 
