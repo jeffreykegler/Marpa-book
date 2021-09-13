@@ -3459,9 +3459,10 @@ The proof follows immediately from \E{120} and \E{130}.
 \myqed
 \end{proof}
 
-\renewcommand{\labBase}{ldef-slice-mapping-intuition}
-\begin{ldef}[Slice mapping intuition]
-\label{ldef:slice-mapping-intuition}
+\renewcommand{\labBase}{def-slice-mapping-intuition}
+\begin{definition}[Slice mapping intuition]
+\label{def:slice-mapping-intuition}
+\todo{Rewrite this.}
 We say that a function, \fname{f},
 \dfn[Slice mapping intuition, capturing]{captures the slice mapping intuition}
 at \Vnat{offset} for domain \V{len}
@@ -3471,52 +3472,91 @@ it preserves the successor relationship among the elements of
 a range whose least element is \V{offset}.
 More precisely, \fname{f}
 captures the slice mapping intuition at \Vnat{offset} iff
-\begin{gather}
-\Elab{010} \V{len} = \Dom{\V{f}}
-\\ \Elab{020}
+\begin{equation}
+\begin{gathered}
+\forall\;\V{i}\in\V{len} : \forall\;\V{v}\in\naturals :
+\\ \tuple{ \V{i}, \V{v} } \in \V{f}
+\\ \iff \V{v} =
     \left( \begin{gathered}
-        \forall\;\V{i}\in\Dom{\V{f}} : \forall\;\V{j}\in\Dom{\V{f}} :
-        \\ \V{j} = \Vincr{i} \iff \Vmyfn{f}{j} = \incr{\Vmyfn{f}{i}}
-    \end{gathered} \right)
-\\ \Elab{050} \land\; \nexists\;\V{i}\in\Ran{\V{f}} : \Vmyfn{f}{i} < \V{offset}
-    \quad \ldEnd
-\end{gather}
-\end{ldef}
+        \V{i}=0
+        \\ \condOpA\; \V{offset}
+        \\ \condOpB\; \riota\; \Vnat{j} : \tuple{\Vdecr{i}, \V{j} } \in \V{f}
+    \end{gathered} \right). \quad \ldEnd
+\end{gathered}
+\end{equation}
+\end{definition}
 
 \renewcommand{\labBase}{lem-offset-function-intuition-1}
-\begin{lemma}[Offset function equivalence]
+\begin{lemma}[Offset function intuition 1]
 \label{lem:offset-function-intuition-1}
-The offset mapping
-induced by \Vnat{offset} and \Vnat{len}
-captures the slice mapping intuition
-for domain \V{len} at \V{offset}.
-\lmEnd
+Let $\V{g}\inr\V{len}\times\naturals$ be the slice mapping intuition
+at \V{offset}.
+Then
+\eqpar{050}{%
+     $\tuple{\V{i}, \V{v}} \in \V{g} \implies \V{v} = \V{offset}+\V{i}$.
+         \lmEnd}
 \end{lemma}
 
 \begin{proof}
-\todo{State proof method.}
-\todo{Fix this proof.}
+The proof is by minimal counter-example.
+\begin{equation}
+\Elab{110}
+\begin{gathered}
+\Vmyfn{INST}{\Vnat{ex}} \ldefined
+\\ \exists\;
+     \tuple{\V{ex}, \V{v}} \in \V{g} \implies \V{v} \neq \V{offset}+\V{ex}
+\\ \implies \V{pref1} = \V{pref2}
+    \\ \myparbox{\cuz{}
+        Macro for EI of \E{050}, setting $\Vnat{ex}=\V{i}$.}
+\end{gathered}
+\end{equation}
+We assume there is a minimal \Vnat{bad} such that
+\Vmyfn{INST}{bad} is false:
+\begin{gather}
+\Elab{120}
+    \neg \Vmyfn{INST}{bad}
+\\ \Elab{130}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+\\ \nonumber
+    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
+\end{gather}
+\todo{Finish this proof.}
+\todo{Old stuff from here.}
 Let \V{offFn} be the offset mapping induced
 by \Vnat{offset} and \Vnat{len}.
-Let \Vnat{x} and
-\Vnat{y} be two arbitrary elements of
-the domain of \fname{offFn}
-\eqpar{110}{$\V{x}\in\Dom{\V{offFn}} \land \V{y}\in\Dom{\V{offFn}}$
-    \cuz{} AF proof.}
+If $\V{len}=0$ both the offset mapping and the
+slice mapping intuition are empty, and the proof
+follows trivially.   Therefore
+\eqpar{200}{$\V{len}>0$ \cuz{} AF remaining cases.}
+\eqpar{210}{$\Dom{offFn}=\V{len}$
+    \cuz{} \Dfref[Offset mapping]{offset-mapping}.}
 From arithmetic we know that we can reverse an addition
 with a subtraction, so that \V{offFn} is a bijection,
 and we have
-\eqpar{120}{$\V{x} = \V{y} \iff \Vmyfn{offFn}{x} = \Vmyfn{offFn}{y}$ \cuz{} ZF.}
+\begin{equation}
+\Elab{220}
+\begin{gathered}
+     \forall\;\V{x}\in\Dom{\V{offFn}} : \forall\;\V{y}\in\Dom{\V{offFn}} :
+     \\ \V{x} = \V{y} \iff \Vmyfn{offFn}{x} = \Vmyfn{offFn}{y}
+     \\ \myparbox{cuz{} ZF, \Dfref{offset-mapping}.}
+\end{gathered}
+\end{equation}
+
+Let \Vnat{x} and
+\Vnat{y} be two arbitrary elements of
+the domain of \fname{offFn}
+\eqpar{310}{$\V{x}\in\Dom{\V{offFn}} \land \V{y}\in\Dom{\V{offFn}}$
+    \cuz{} AF proof.}
 \todo{Old stuff from here.}
-\eqpar{300}{$\forall\;\V{i} : \forall\;\V{x} :
+\eqpar{400}{$\forall\;\V{i} : \forall\;\V{x} :
     (\rawfn{\fname{S}\caret\V{i})}{\V{x}} = \V{x}+\V{i}$
     preserves the successor relation \cuz{} ZF.}
-\eqpar{310}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
-    \cuz{} UI of \E{300}.}.
-\eqpar{320}{The initial value is the zero'th successor \cuz{} ZF.}
-\eqpar{325}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
-\eqpar{330}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
-     \cuz{} \E{310}.}
+\eqpar{410}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
+    \cuz{} UI of \E{400}.}.
+\eqpar{420}{The initial value is the zero'th successor \cuz{} ZF.}
+\eqpar{425}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
+\eqpar{430}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
+     \cuz{} \E{410}.}
 \myqed
 \end{proof}
 
