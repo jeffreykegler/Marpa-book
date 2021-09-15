@@ -3413,103 +3413,26 @@ for
 domain $\V{len}\inr\naturals\cup\set{\naturals}$
 iff
 it maps \V{len} to the natural numbers,
-preserving the successor relationship among its elements.
+preserving
+the successor relationships among all of the elements of \V{len},
+as well as the uniqueness of the first element of \V{len}.
 That is, \fname{f},
 is a slice mapping iff
 \begin{gather}
 \V{f} \inr \powerset{\V{len}\times\naturals}
 \\ \land\; \Dom{\V{f}} = \V{len}
-\\ \land\;
-    \left( \begin{gathered}
+\\ \land\; \left( \begin{gathered}
+        \forall\; \tuple{ 0, \V{v1} } \in \V{f} :
+        \forall\; \tuple{ 0, \V{v2} } \in \V{f} :
+        \\ \V{v1} = \V{v2}
+    \end{gathered} \right)
+\\ \land\; \left( \begin{gathered}
         \forall\; \tuple{ \V{i1}, \V{v1} } \in \V{f} :
         \forall\; \tuple{ \V{i2}, \V{v2} } \in \V{f} :
         \\ \Vincr{i1} = \V{i2} \iff \Vincr{v1} = \V{v2}
     \end{gathered} \right).
         \quad \dfEnd
 \end{gather}
-\end{definition}
-
-\renewcommand{\labBase}{def-offset-mapping}
-\begin{definition}[Offset mapping]
-\label{def:offset-mapping}
-Where $\V{offset}\inr\naturals$
-and $\V{len}\inr\naturals\cup\set{\naturals}$,
-let
-\begin{equation}
-\Elab{100}
-\begin{gathered}
-\fname{offFn} = \set{ \begin{gathered}
-            \tuple{\Vnat{ix}, \Vnat{v}} \in \V{len}\times\naturals :
-               \V{v} = \Vnat{offset}+\V{ix}
-        \end{gathered} }.
-\end{gathered}
-\end{equation}
-We say that \V{offFn} is an \dfn{offset mapping},
-and that \V{offset} is the
-\dfn[Offset (of an offset mapping)]{offset}
-of \V{offFn}.
-We say that \V{offset} and \V{len}
-\dfn[Induce (an offset mapping)]{induce}
-\V{offFn}.
-\dfEnd
-\end{definition}
-
-\renewcommand{\labBase}{lem-offset-function}
-\begin{lemma}[Offset function]
-\label{lem:offset-function}
-\Vnat{offset} and \Vnat{len} induce exactly one mapping,
-and that mapping is a function.
-\lmEnd
-\end{lemma}
-
-\begin{proof}
-For the purpose of this proof,
-consider an arbitary
-$\V{offset}\inr\naturals$
-and an arbitrary $\V{len}\inr\naturals\cup\set{\naturals}$.
-The offset mapping that they induce is
-as shown in \Eref{def-offset-mapping-100},
-where $\V{offFn} \in \V{len}\times\naturals$
-is a convenience variable.
-\Eref{def-offset-mapping-100}
-shows immediately that \V{offFn} is well-defined
-and unambiguously specified so that
-\eqpar{120}{there is at exactly one \V{offFn} \cuz{} \Eref{def-offset-mapping-100}.}
-Also from \Eref{def-offset-mapping-100},
-we see that there is clearly
-exactly one value ($\Vnat{offset}+\V{ix}$)
-for every argument (\V{ix}),
-so that
-\eqpar{130}{\V{offFn} is a function \cuz{} \Eref{def-offset-mapping-100}.}
-The proof follows immediately from \E{120} and \E{130}.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{def-slice-mapping-intuition}
-\begin{definition}[Slice mapping intuition]
-\label{def:slice-mapping-intuition}
-\todo{Delete this?}
-We say that a function, \fname{f},
-\dfn[Slice mapping intuition, capturing]{captures the slice mapping intuition}
-at \Vnat{offset} for domain \V{len}
-iff
-its domain is \V{len} and
-it preserves the successor relationship among the elements of
-a range whose least element is \V{offset}.
-More precisely, \fname{f}
-captures the slice mapping intuition at \Vnat{offset} iff
-\begin{equation}
-\begin{gathered}
-\forall\;\V{i}\in\V{len} : \forall\;\V{v}\in\naturals :
-\\ \tuple{ \V{i}, \V{v} } \in \V{f}
-\\ \iff \V{v} =
-    \left( \begin{gathered}
-        \V{i}=0
-        \\ \condOpA\; \V{offset}
-        \\ \condOpB\; \riota\; \Vnat{j} : \tuple{\Vdecr{i}, \V{j} } \in \V{f}
-    \end{gathered} \right). \quad \ldEnd
-\end{gathered}
-\end{equation}
 \end{definition}
 
 \renewcommand{\labBase}{lem-offset-function-intuition-1}
@@ -3524,6 +3447,7 @@ Then
 \end{lemma}
 
 \begin{proof}
+\todo{Revise and finish this proof.}
 The proof is by minimal counter-example.
 \begin{equation}
 \Elab{110}
@@ -3546,61 +3470,10 @@ We assume there is a minimal \Vnat{bad} such that
 \\ \nonumber
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
-\todo{Finish this proof.}
-\todo{Old stuff from here.}
-Let \V{offFn} be the offset mapping induced
-by \Vnat{offset} and \Vnat{len}.
-If $\V{len}=0$ both the offset mapping and the
-slice mapping intuition are empty, and the proof
-follows trivially.   Therefore
-\eqpar{200}{$\V{len}>0$ \cuz{} AF remaining cases.}
-\eqpar{210}{$\Dom{offFn}=\V{len}$
-    \cuz{} \Dfref[Offset mapping]{offset-mapping}.}
-From arithmetic we know that we can reverse an addition
-with a subtraction, so that \V{offFn} is a bijection,
-and we have
-\begin{equation}
-\Elab{220}
-\begin{gathered}
-     \forall\;\V{x}\in\Dom{\V{offFn}} : \forall\;\V{y}\in\Dom{\V{offFn}} :
-     \\ \V{x} = \V{y} \iff \Vmyfn{offFn}{x} = \Vmyfn{offFn}{y}
-     \\ \myparbox{cuz{} ZF, \Dfref{offset-mapping}.}
-\end{gathered}
-\end{equation}
-
-Let \Vnat{x} and
-\Vnat{y} be two arbitrary elements of
-the domain of \fname{offFn}
-\eqpar{310}{$\V{x}\in\Dom{\V{offFn}} \land \V{y}\in\Dom{\V{offFn}}$
-    \cuz{} AF proof.}
-\todo{Old stuff from here.}
-\eqpar{400}{$\forall\;\V{i} : \forall\;\V{x} :
-    (\rawfn{\fname{S}\caret\V{i})}{\V{x}} = \V{x}+\V{i}$
-    preserves the successor relation \cuz{} ZF.}
-\eqpar{410}{$(\rawfn{\fname{S}\caret\V{i})}{\V{offset}} = \V{offset}+\V{i}$
-    \cuz{} UI of \E{400}.}.
-\eqpar{420}{The initial value is the zero'th successor \cuz{} ZF.}
-\eqpar{425}{$\forall\; \Vnat{x} : (\rawfn{\fname{S}\caret0)}{\V{x}} = \V{x}$ \cuz{} ZF.}
-\eqpar{430}{$(\rawfn{\fname{S}\caret0)}{\V{offset}} = \V{offset}$
-     \cuz{} \E{410}.}
 \myqed
 \end{proof}
 
-\renewcommand{\labBase}{lem-offset-function-intuition-2}
-\begin{lemma}[Offset function equivalence]
-\label{lem:offset-function-intuition-2}
-If a relation captures the slice mapping intuition
-for domain \V{len} at \V{offset}, then it is
-the offset mapping
-induced by \Vnat{offset} and \Vnat{len}
-\lmEnd
-\end{lemma}
-
-\begin{proof}
-% Proof template
-\todo{Finish this proof.}
-\myqed
-\end{proof}
+\todo{Revise from here}
 
 \renewcommand{\labBase}{def-slice}
 \begin{definition}[Slice]
