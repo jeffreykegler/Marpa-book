@@ -3419,14 +3419,14 @@ as well as the uniqueness of the first element of \V{len}.
 That is, \fname{f},
 is a slice mapping iff
 \begin{gather}
-\V{f} \inr \powerset{\V{len}\times\naturals}
-\\ \land\; \Dom{\V{f}} = \V{len}
-\\ \land\; \left( \begin{gathered}
+\Elab{010} \V{f} \inr \powerset{\V{len}\times\naturals}
+\\ \Elab{020} \land\; \Dom{\V{f}} = \V{len}
+\\ \Elab{030} \land\; \left( \begin{gathered}
         \forall\; \tuple{ 0, \V{v1} } \in \V{f} :
         \forall\; \tuple{ 0, \V{v2} } \in \V{f} :
         \\ \V{v1} = \V{v2}
     \end{gathered} \right)
-\\ \land\; \left( \begin{gathered}
+\\ \Elab{040} \land\; \left( \begin{gathered}
         \forall\; \tuple{ \V{i1}, \V{v1} } \in \V{f} :
         \forall\; \tuple{ \V{i2}, \V{v2} } \in \V{f} :
         \\ \Vincr{i1} = \V{i2} \iff \Vincr{v1} = \V{v2}
@@ -3437,7 +3437,7 @@ is a slice mapping iff
 
 \renewcommand{\labBase}{lem-slice-mapping}
 \begin{lemma}[Slice mapping]
-\label{lem:slice-mappint}
+\label{lem:slice-mapping}
 Let $\V{f}\inr\powerset{\V{len}\times\naturals}$
 be a slice mapping.
 Then
@@ -3481,8 +3481,24 @@ We assume there is a minimal \Vnat{bad} such that
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
 There is no \V{bad} in an empty \V{f},
+that is, if $\V{len}=0$,
 so that
 \eqpar{140}{$\V{len} > 0$ \cuz{} \E{120}--\E{130}.}
+\eqpar{150}{$\exists\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
+    \cuz{} \E{140}.}
+And from the definition of a slice mapping,
+\eqpar{160}{$\existsUniq\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
+    \cuz{} \Eref{def-slice-mapping-030} in \Dfref{slice-mapping}.}
+We have now shown that the ``offset'' of \V{f} is well-defined:
+\eqpar{170}{$\Vnat{offset} = \riota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
+    \bcuz{} \E{160}, CV $\V{offset}\inr\naturals$.}
+\eqpar{180}{$\tuple{0,\V{v0}}\in\V{f} \implies \V{v0} = \V{offset}$
+    \bcuz{} \E{170}.}
+\eqpar{190}{$\forall\; \tuple{0, \V{v}} \in \V{f} : \V{v} = \V{offset}$
+    \bcuz{} \E{180}.}
+\eqpar{200}{\Vmyfn{INST}{0} \cuz{} \E{110}, \E{190}.}
+\eqpar{210}{$\V{bad}>0$ \cuz{} \E{120}, \E{200}.}
+\eqpar{220}{\Vmyfn{INST}{\Vdecr{bad}} \cuz{} \E{130}, \E{210}.}
 \myqed
 \end{proof}
 
