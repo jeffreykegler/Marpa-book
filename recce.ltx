@@ -163,10 +163,11 @@
 % to save space for its own sake, but because
 % we often group equations into series, and these
 % do not look good with too much space.
-\setlength{\abovedisplayskip}{3pt}
-\setlength{\belowdisplayskip}{3pt}
-\setlength\abovedisplayshortskip{3pt}
-\setlength\belowdisplayshortskip{3pt}
+\newlength{\myDisplayskip}
+\setlength{\abovedisplayskip}{\myDisplayskip}
+\setlength{\belowdisplayskip}{\myDisplayskip}
+\setlength\abovedisplayshortskip{\myDisplayskip}
+\setlength\belowdisplayshortskip{\myDisplayskip}
 
 % Some ``temporary variables'' for custom uses
 \newcommand{\basis}[1]{}
@@ -471,10 +472,11 @@
         {\mapsto\!}\:$}}}
 
 \newcommand{\inr}{\mathrel{\overline{\in}}}
+% scale plus signs down further?
 \newcommand{\incr}[1]{\ensuremath{#1\scalebox{.75}{++}}}
 \newcommand{\Vincr}[1]{\incr{\V{#1}}}
 % \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
-\newcommand{\decr}[1]{\ensuremath{#1\scalebox{1.25}{{-}{-}}}}
+\newcommand{\decr}[1]{\ensuremath{#1\scalebox{.75}{{-}{-}}}}
 \newcommand{\Vdecr}[1]{\decr{\V{#1}}}
 \newcommand{\Rseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
@@ -674,11 +676,11 @@
 
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
-  \linespread{1.15}\selectfont
+  % \linespread{1.15}\selectfont
   %\raggedright#2\par
   \centering#2\par
-  \vspace{-\prevdepth} % remove the depth of the last line
-  \vspace{1ex} % add a fixed vertical space
+  % \vspace{-\prevdepth} % remove the depth of the last line
+  % \vspace{1ex} % add a fixed vertical space
   }%
 }
 \newcommand{\cuzbox}[1]{%
@@ -691,7 +693,7 @@
    {%
        \begin{equation*}
    }{%
-       \begin{equation}
+       \begin{equation}%
        \label{#1}
    }%
    \begin{gathered}%
