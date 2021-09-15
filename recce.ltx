@@ -3435,15 +3435,22 @@ is a slice mapping iff
 \end{gather}
 \end{definition}
 
-\renewcommand{\labBase}{lem-offset-function-intuition-1}
-\begin{lemma}[Offset function intuition 1]
-\label{lem:offset-function-intuition-1}
-Let $\V{g}\inr\V{len}\times\naturals$ be the slice mapping intuition
-at \V{offset}.
+\renewcommand{\labBase}{lem-slice-mapping}
+\begin{lemma}[Slice mapping]
+\label{lem:slice-mappint}
+Let $\V{f}\inr\powerset{\V{len}\times\naturals}$
+be a slice mapping.
 Then
-\eqpar{050}{%
-     $\tuple{\V{i}, \V{v}} \in \V{g} \implies \V{v} = \V{offset}+\V{i}$.
-         \lmEnd}
+\begin{equation}
+\Elab{050}
+\begin{gathered}
+     \forall\; \tuple{\V{i}, \V{v}} \in \V{f} :
+     \\ \V{v} = \left(
+             \riota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}
+         \right) +\V{i}.
+         \quad \lmEnd
+\end{gathered}
+\end{equation}
 \end{lemma}
 
 \begin{proof}
@@ -3453,11 +3460,14 @@ The proof is by minimal counter-example.
 \Elab{110}
 \begin{gathered}
 \Vmyfn{INST}{\Vnat{ex}} \ldefined
-\\ \exists\;
-     \tuple{\V{ex}, \V{v}} \in \V{g} \implies \V{v} \neq \V{offset}+\V{ex}
-\\ \implies \V{pref1} = \V{pref2}
+\left( \begin{gathered}
+    \exists\; \tuple{\V{ex}, \V{v}} \in \V{f} :
+    \exists\; \V{offset} \in \naturals :
+    \\ \tuple{0,\V{offset}}\in\V{f}
+    \\ \land\; \V{v} \neq \V{offset}+\V{ex}
+\end{gathered} \right)
     \\ \myparbox{\cuz{}
-        Macro for EI of \E{050}, setting $\Vnat{ex}=\V{i}$.}
+        Macro for EI of negation of \E{050}, setting $\Vnat{ex}=\V{i}$.}
 \end{gathered}
 \end{equation}
 We assume there is a minimal \Vnat{bad} such that
@@ -3470,6 +3480,9 @@ We assume there is a minimal \Vnat{bad} such that
 \\ \nonumber
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
+There is no \V{bad} in an empty \V{f},
+so that
+\eqpar{140}{$\V{len} > 0$ \cuz{} \E{120}--\E{130}.}
 \myqed
 \end{proof}
 
