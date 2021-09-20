@@ -3449,7 +3449,6 @@ and Sequence Pairs Lemma 2 \Lmref{sequence-pairs-set-2}.
 \renewcommand{\labBase}{def-slice-mapping}
 \begin{definition}[Slice mapping]
 \label{def:slice-mapping}
-\todo{Finish this}
 We say that a relation is a
 \dfn[Slice mapping]{slice mapping}
 for
@@ -3464,15 +3463,15 @@ is a slice mapping iff
 \begin{gather}
 \Elab{010} \V{f} \inr \powerset{\V{len}\times\naturals}
 \\ \Elab{020} \land\; \Dom{\V{f}} = \V{len}
-\\ \Elab{030} \land\; \left( \begin{gathered}
-        \forall\; \tuple{ 0, \V{v1} } \in \V{f} :
-        \forall\; \tuple{ 0, \V{v2} } \in \V{f} :
-        \\ \V{v1} = \V{v2}
-    \end{gathered} \right)
 \\ \Elab{040} \land\; \left( \begin{gathered}
         \forall\; \tuple{ \V{i1}, \V{v1} } \in \V{f} :
         \forall\; \tuple{ \V{i2}, \V{v2} } \in \V{f} :
         \\ \Vincr{i1} = \V{i2} \iff \Vincr{v1} = \V{v2}
+    \end{gathered} \right)
+\\ \Elab{050} \land\; \left( \begin{gathered}
+        \forall\; \tuple{ 0, \V{v1} } \in \V{f} :
+        \forall\; \tuple{ 0, \V{v2} } \in \V{f} :
+        \\ \V{v1} = \V{v2}
     \end{gathered} \right).
         \quad \dfEnd
 \end{gather}
@@ -3488,9 +3487,9 @@ Then
 \Elab{050}
 \begin{gathered}
      \forall\; \tuple{\V{i}, \V{v}} \in \V{f} :
-     \\ \V{v} = \left(
-             \riota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}
-         \right) +\V{i}.
+         \forall\; \V{offset} \in \naturals :
+     \\ \tuple{0,\V{offset}}\in\V{f}
+         \implies \V{v} = \V{offset}+\V{i}.
          \quad \lmEnd
 \end{gathered}
 \end{equation}
@@ -3499,39 +3498,40 @@ Then
 \begin{proof}
 \todo{Revise and finish this proof.}
 The proof is by minimal counter-example.
+We first define a macro for a ``bad'' instance of \V{f}:
 \begin{equation}
 \Elab{110}
 \begin{gathered}
-\Vmyfn{INST}{\Vnat{ex}} \ldefined
+\Vmyfn{BAD}{\Vnat{inst}} \ldefined
 \left( \begin{gathered}
-    \exists\; \tuple{\V{ex}, \V{v}} \in \V{f} :
+    \exists\; \tuple{\V{inst}, \V{v}} \in \V{f} :
     \exists\; \V{offset} \in \naturals :
     \\ \tuple{0,\V{offset}}\in\V{f}
-    \\ \land\; \V{v} \neq \V{offset}+\V{ex}
+    \\ \land\; \V{v} \neq \V{offset}+\V{inst}
 \end{gathered} \right)
     \\ \myparbox{\cuz{}
-        Macro for EI of negation of \E{050}, setting $\Vnat{ex}=\V{i}$.}
+        Macro for EI of negation of \E{050}, setting $\Vnat{inst}=\V{i}$.}
 \end{gathered}
 \end{equation}
-We assume there is a minimal \Vnat{bad} such that
-\Vmyfn{INST}{bad} is false:
+We then assume, for a reductio,
+that there is a minimal ``bad'' instance, \Vnat{bad}, such that
+\Vmyfn{BAD}{bad} is true:
 \begin{gather}
 \Elab{120}
-    \neg \Vmyfn{INST}{bad}
+    \Vmyfn{BAD}{bad}
 \\ \Elab{130}
-    \land\; \forall\; \Vnat{i} < \V{bad} : \Vmyfn{INST}{i}
+    \land\; \forall\; \Vnat{i} < \V{bad} : \neg \Vmyfn{BAD}{i}
 \\ \nonumber
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
-There is no \V{bad} in an empty \V{f},
-that is, if $\V{len}=0$,
-so that
+For there to be a ``bad'' instance, \V{f} must be non-empty,
+that is,
 \eqpar{140}{$\V{len} > 0$ \cuz{} \E{120}--\E{130}.}
 \eqpar{150}{$\exists\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
     \cuz{} \E{140}.}
 And from the definition of a slice mapping,
 \eqpar{160}{$\existsUniq\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
-    \cuz{} \Eref{def-slice-mapping-030} in \Dfref{slice-mapping}.}
+    \bcuz{} \Eref{def-slice-mapping-050} in \Dfref{slice-mapping}, \E{150}.}
 We have now shown that the ``offset'' of \V{f} is well-defined:
 \eqpar{170}{$\Vnat{offset} = \riota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
     \bcuz{} \E{160}, CV $\V{offset}\inr\naturals$.}
@@ -3539,9 +3539,9 @@ We have now shown that the ``offset'' of \V{f} is well-defined:
     \bcuz{} \E{170}.}
 \eqpar{190}{$\forall\; \tuple{0, \V{v}} \in \V{f} : \V{v} = \V{offset}$
     \bcuz{} \E{180}.}
-\eqpar{200}{\Vmyfn{INST}{0} \cuz{} \E{110}, \E{190}.}
+\eqpar{200}{$\neg \Vmyfn{BAD}{0}$ \cuz{} \E{110}, \E{190}.}
 \eqpar{210}{$\V{bad}>0$ \cuz{} \E{120}, \E{200}.}
-\eqpar{220}{\Vmyfn{INST}{\Vdecr{bad}} \cuz{} \E{130}, \E{210}.}
+\eqpar{220}{$\neg \Vmyfn{BAD}{\Vdecr{bad}}$ \cuz{} \E{130}, \E{210}.}
 \myqed
 \end{proof}
 
