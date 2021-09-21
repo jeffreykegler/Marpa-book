@@ -2045,6 +2045,7 @@ will usually be a waste of time.}
     {Lewis Carroll, {\em Through the Looking Glass}}
 
 Our preceding disciplines are
+logic;
 Zermolo-Frankel set theory
 (including arithmetic);
 procedures and algorithms;
@@ -2074,6 +2075,107 @@ and results
 \item that are the subject of conflicting or ambiguous standards; and
 \item that are different in our presentation from Halmos 1960~\cite{Halmos1960}.
 \end{itemize}
+
+\section{Meta-language and object-language}
+
+Tarski, in a result that is highly influential on
+modern mathematical practice, showed
+that no consistent fully formalized language can
+contain its own definition of truth.
+Since the primary point of formalization is to
+gain confidence in the truth of our deductions,
+this was dismaying.
+
+\todo{Check this against quibbles.}
+The most popular solution to the undefinability of truth
+is also Tarski's idea.
+This is to use two languages, an object language
+and a meta-language.
+The object language can be fully formalized,
+but is not consulted about questions of its own truth.
+The second meta-language contains the first language,
+along with a definition of truth for the first language.
+The question of truth in the meta-language is left to
+the intuition.\footnote{%
+    Because the math in this book has practical implications,
+    we expect a significant portion of its readers
+    to be unaccustomed to reading mathematics.
+    Although we
+    do hope the use of long form might make things easier for these
+    readers,
+    we make few concessions specifically for them.
+    One concession we do make
+    is to include occasional brief explications
+    of matters that are familiar to mathematicians,
+    but which seem likely,
+    on first encounter,
+    to strike non-mathematicians as bizarre.}
+
+Our object language is Farmer's
+Partial First-Order Logic (PFOL).cite{FG2000}.
+First-order logic (FOL) is
+the current standard for an object language,
+but does not explicitly deal with
+with ``undefined'' terms and partial functions.
+PFOL deals rigorously with terms which are not
+well-defined,
+and can be translated into first-order logic,
+which puts us in the best of both worlds.
+
+\section{Well-defined and ill-defined}
+
+While ``undefined'' terms occur frequently in mathematics,
+and in essential contexts,
+their handling has not been well documented.
+This vagueness in approach is reflected in the terminology:
+The term ``undefined'', in the tradition, can mean
+\begin{trivlist}
+\centering
+\item ``not having a definition'' (sense 1) or
+\item ``not having a defined value'' (sense 2).
+\end{trivlist}
+For example, we can define of \fnmap{goldbach}{\naturals}{\naturals}
+to be the \V{n}'th number that it is even
+and not the sum of two primes.
+But Goldbach's conjecture is that no such numbers
+exist.
+If Goldbach was right, our definition of 
+\fnmap{goldbach}{\naturals}{\naturals}
+is of a function that does not exist.
+That is,
+\begin{trivlist}
+\centering
+\item we have ``defined'' (in sense 1)
+\item an object that is not ``defined'' (in sense 2).
+\end{trivlist}
+
+In this book, we use the term ``defined'' only in sense 1 above.
+An object is \dfn{defined} iff it is the defiendum of a definition,
+either explicitly or because it is assumed to be so in a preceding discipline.
+For sense 2 above, we use the term ``well-defined''.
+An object is \dfn{well-defined} iff it has a defined value.
+An object that is not \dfn{well-defined} is \dfn{ill-defined}.
+
+The traditional approach to well-definedness is to propagate ill-definedness
+until it reaches a boolean context at which point the ill-defined value is
+treated as a boolean ``false''.
+This is not fully rigorous: the distinction between an ill-defined value
+and a well-defined boolean value of ``false''
+can be essential.\footnote{
+    We are not troubling to attempt to describe the traditional approach
+    in precise terms.
+    For this, see Farmer 2004~\cite{Farmer2004}.
+}
+But in the tradition, caution was exercised and disasters were avoided.
+
+This traditional approach to well-definedness has certainly been around
+for a long time,
+the first people to document it seem to have been
+Farmer and Guttman.\cite{FG2000}.
+They also put forward an rigorous alternate in the form of PFOL,
+and it is their approach that is used in this book.
+
+\todo{Finish this}
 
 \section{Constants}
 
@@ -24167,6 +24269,18 @@ J.~L.~Lyons.
 Dirk~Grune and Ceriel~J.H Jacobs.
 \newblock {\em Parsing Techniques: A Practical Guide}.
 \newblock Springer, Amsterdam, 2008.
+
+\bibitem{Farmer2004}
+William~M.~Farmer
+\newblock Formalizing Undefinedness Arising in Calculus
+\newblock Published in D. Basin and M. Rusinowitch, eds.,
+   {\em Automated Reasoning}, LNCS, 3097:475-489, 2004.
+
+\bibitem{FG2000}
+William~M.~Farmer and Joshua~D.~Guttman.
+\newblock A Set Theory with Support for Partial Functions.
+\newblock {\em Studia Logica: An International Journal for Symbolic Logic},
+    Vol. 66, No. 1, pp. 59-78, Oct 2000.
 
 \bibitem{Halmos1960}
 Paul~R.~Halmos.
