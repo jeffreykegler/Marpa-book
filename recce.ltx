@@ -485,8 +485,11 @@
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
 % \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
-\newcommand{\tuple}[1]{\ensuremath{\left\llbracket #1 \right\rrbracket}}
+\newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
+
+% Eliminate this, now that I follow Chiron notation?
 \newcommand{\family}[1]{\ensuremath{\left[ #1 \right]}}
+
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\Realm}[1]{\ensuremath{\mymathop{Realm}(#1)}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
@@ -515,6 +518,8 @@
 \newcommand{\Rvarset}[2]{\ensuremath{\V{#1}_{\set{\V{#2}}}}}
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 
+% A strut for use in making up symbols in boxed form
+
 \newcommand{\eim}[1]{\ensuremath{#1_\realm{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\realm{ES}}}
 \newcommand{\et}[1]{\ensuremath{#1_\realm{ET}}}
@@ -524,11 +529,15 @@
 \newcommand{\mes}[1]{\ensuremath{#1_\realm{MES}}}
 % Delete NSS?
 \newcommand{\nss}[1]{\ensuremath{#1_\realm{NSS}}}
-% \newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
-\newcommand{\str}[1]{\doublebox{\ensuremath{#1}}}
+
+% change to tagged form?  Or drop macro for "raw" str entirely?
+\newcommand{\str}[1]{\ensuremath{\langle\langle{#1}\rangle\rangle}}
+
+% change to tagged form?  Or drop macro for "raw" term entirely?
 \newcommand{\term}[1]{\sym{#1}}
-% \newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
-\newcommand{\sym}[1]{\ensuremath{\boxed{#1}}}
+
+% change to tagged form?  Or drop macro for "raw" sym entirely?
+\newcommand{\sym}[1]{\ensuremath{\langle{#1}\rangle}}
 \newcommand{\Vbool}[1]{\Rvar{#1}{BOOL}}
 \newcommand{\Vcfg}[1]{\Rvar{#1}{CFG}}
 \newcommand{\dr}[1]{\ensuremath{#1_\realm{DR}}}
@@ -559,11 +568,15 @@
 \newcommand{\Vpimset}[1]{\Rvarset{#1}{PIM}}
 \newcommand{\Vrule}[1]{\Rvar{#1}{RULE}}
 \newcommand{\Vruleset}[1]{\Rvarset{#1}{RULE}}
-\newcommand{\Vstr}[1]{\str{\V{#1}}}
+
+\newcommand{\Vstr}[1]{\doublebox{\ensuremath{\mathstrut\V{#1}}}}
+
 \newcommand{\Vstrset}[1]{\Rvarset{#1}{STR}}
-\newcommand{\Vterm}[1]{\term{\boldvar{#1}}}
+\newcommand{\Vterm}[1]{\Vsym{\boldvar{#1}}}
 \newcommand{\Vtermset}[1]{\Rvarset{\boldvar{#1}}{TERM}}
-\newcommand{\Vsym}[1]{\sym{\V{#1}}}
+
+\newcommand{\Vsym}[1]{\ensuremath{\boxed{\vphantom{\hbox{\mathstrut}} \V{#1}}}}
+
 \newcommand{\Vsymset}[1]{\Rvarset{#1}{SYM}}
 \newcommand{\Vtoken}[1]{\Rvar{#1}{TOKEN}}
 \newcommand{\Vves}[1]{\ves{\V{#1}}}
