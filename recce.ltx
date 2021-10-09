@@ -75,6 +75,7 @@
 \usepackage{algorithm}
 \usepackage{algpseudocode}
 \usepackage{amssymb}
+\usepackage{phonetic}
 \usepackage{wasysym} % Used for \Circle
 \usepackage{stmaryrd} % Used for \llbracket, \rrbracket
 \usepackage{mathtools}
@@ -192,7 +193,7 @@
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 \newcommand{\Vpowerset}[1]{\ensuremath{\mathcal{P}(\V{#1})}}
-\newcommand{\riota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
+\newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 \newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
@@ -1633,8 +1634,8 @@ abbreviates ``without loss of generality''.
 \index{recce-defienda}{wrt@wrt (``with respect to'')}
 abbreviates ``with respect to''.
 \rawdfn{ZF}%
-\index{recce-defienda}{ZF@ZF (``Zermolo-Frankel set theory'')}
-(for Zermolo-Frankel) abbreviates ``set theory''.
+\index{recce-defienda}{ZF@ZF (``Zermolo-Fraenkel set theory'')}
+(for Zermolo-Fraenkel) abbreviates ``set theory''.
 For our purposes, number theory is consider to be part of set theory.
 
 \section{Scope and realms}
@@ -1999,6 +2000,38 @@ When a proof ends,
 a universal generalization over all the relevant arbitrary
 variables in the current scope is implied.
 \todo{Discuss relevant and irrelevant variables and placeholders.}
+
+\chapter{Foundation}
+\label{chap:foundation}
+
+\todo[prepend, caption={``Foundation'' chapter is FRAGMENTARY}]{%
+This chapter is fragmentary and inconsistent
+and much of it may be deleted.
+Non-author readers are not encouraged.
+Filing pull requests
+will usually be a waste of time.}
+
+The foundation of the mathematics in this article is Chiron.\footnote{%
+    Chiron is described at length in Farmer 2012 \cite{Farmer2012}.
+    See also \cite{FG2000}, \cite{Farmer2001}, \cite{Farmer2004},
+        \cite{Farmer2007} and \cite{Farmer2012}.%
+}
+Chiron is based on von-Neumann-G{\"o}del-Bernays set theory (NBG),\footnote{
+    G{\"o}del 1940 \cite{Goedel1940} is the original article on NBG.
+    The chapter in Mendelson's logic text \cite{Mendelson1997} is a good introduction.}
+which in turn is based on Zermolo-Fraenkel set theory and first order logic (ZF).
+Chiron is a conservative extension of NBG~\cite[p. 7]{Farmer2012},
+that is, Chiron preserves all the theorems of NBG.
+NBG, in turn, is a conservative extensive of ZF.
+
+Chiron is ``safe'',
+in the sense that it has a faithful interpretation of NBG.
+Its faithful interpretation of NBG
+guarantees that Chiron is inconsistent iff NBG is.
+NBG, in turn, has a faithful interpretation of ZF,
+so that Chiron is inconsistent iff ZF is.~\cite[p. 7]{Farmer2012}
+Most modern mathematics is based on ZF, and Chiron is as ``safe''
+as ZF.
 
 \chapter{Preceding considerations}
 \label{chap:preceding-math}
@@ -2692,14 +2725,14 @@ We use Russell's iota operator,
 so that
 \begin{equation}
 \label{eq:def-riota}
-\riota \V{x} \in \V{A} : \Vmyfn{P}{x}
+\rIota \V{x} \in \V{A} : \Vmyfn{P}{x}
 \end{equation}
 is the unique \V{x} in the set \V{A} such that
 \Vmyfn{P}{x} is true,
 and $\Lambda$ otherwise.
 That is,
 \[
-    \riota \V{x} \in \V{A} : \Vmyfn{P}{x} \defined
+    \rIota \V{x} \in \V{A} : \Vmyfn{P}{x} \defined
         (\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x} \land \V{x} = \V{y}) : \V{y} : \Lambda
 \]
 
@@ -2808,7 +2841,7 @@ usually be written as
     Conditional operator:\\
     ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
     \hline
-{$\riota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
+{$\rIota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2999,7 +3032,7 @@ Let \V{I} and \V{X} be placeholder sets.
 For arbitrary family $\V{fam} \in \V{X}\expOp\V{I}$,
 arbitrary $\V{i} \in \V{I}$,
 and arbitrary $\V{x} \in \V{X}$,
-\[ \VVelement{fam}{i} \defined \riota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
+\[ \VVelement{fam}{i} \defined \rIota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
     \quad \dfEnd \]
 \end{definition}
 
@@ -3632,7 +3665,7 @@ And from the definition of a slice mapping,
 \eqpar{160}{$\existsUniq\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
     \bcuz{} \Eref{def-slice-mapping-050} in \Dfref{slice-mapping}, \E{150}.}
 We have now shown that the ``offset'' of \V{f} is well-defined:
-\eqpar{170}{$\Vnat{offset} = \riota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
+\eqpar{170}{$\Vnat{offset} = \rIota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
     \bcuz{} \E{160}, CV $\V{offset}\inr\naturals$.}
 \eqpar{180}{$\tuple{0,\V{v0}}\in\V{f} \implies \V{v0} = \V{offset}$
     \bcuz{} \E{170}.}
@@ -10548,7 +10581,7 @@ be a valid ET.
 Then
 \begin{equation}
 \label{eq:def-es-current-10}
-    \Current{\V{es}} \defined \riota \; \Vnat{i} : \VVelement{table}{i} = \V{es}.
+    \Current{\V{es}} \defined \rIota \; \Vnat{i} : \VVelement{table}{i} = \V{es}.
 \end{equation}
 Where the value of \Vet{table} is not specified,
 it is understood to be the context table.
@@ -13399,7 +13432,7 @@ The function
     \set{\Veim{src} : \myfn{isSource}{\var{src}}}
 }
 \\ \label{eq:th-leo-source-fn-07}
-    \text{such that } \Source{\mylim{\ell}} \defined \riota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
+    \text{such that } \Source{\mylim{\ell}} \defined \rIota \Veim{src} : \ell \in \myfn{lims}{\var{src}}
 \end{gather}
 exists and is a surjection.
 \thEnd
@@ -15407,7 +15440,7 @@ The function
     }$,
 }
 \mypareq{}{%
-    such that $\Lim{\Veim{src}} \defined \riota \mylim{\ell} : \ell \in \myfn{lims}{\var{src}}$,
+    such that $\Lim{\Veim{src}} \defined \rIota \mylim{\ell} : \ell \in \myfn{lims}{\var{src}}$,
 }
 exists and is a bijection.
 \thEnd
@@ -24260,21 +24293,54 @@ J.~L.~Lyons.
 \newblock{Paris, 19 July 1996}
 
 \bibitem{GJ2008}
-Dirk~Grune and Ceriel~J.H Jacobs.
+Dirk~Grune and Ceriel~J.H~Jacobs.
 \newblock {\em Parsing Techniques: A Practical Guide}.
 \newblock Springer, Amsterdam, 2008.
-
-\bibitem{Farmer2004}
-William~M.~Farmer
-\newblock Formalizing Undefinedness Arising in Calculus
-\newblock Published in D. Basin and M. Rusinowitch, eds.,
-   {\em Automated Reasoning}, LNCS, 3097:475-489, 2004.
 
 \bibitem{FG2000}
 William~M.~Farmer and Joshua~D.~Guttman.
 \newblock A Set Theory with Support for Partial Functions.
 \newblock {\em Studia Logica: An International Journal for Symbolic Logic},
     Vol. 66, No. 1, pp. 59-78, Oct 2000.
+
+\bibitem{Farmer2001}
+William~M.~Farmer.
+\newblock {STMM}: A {S}et {T}heory for {M}echanized {M}athematics.
+\newblock {\em Journal of Automated Reasoning}, 26:269--289, 2001.
+
+\bibitem{Farmer2004}
+William~M.~Farmer.
+\newblock Formalizing undefinedness arising in calculus.
+\newblock In D.~Basin and M.~Rusinowitch, editors, {\em Automated
+  Reasoning---IJCAR 2004}, volume 3097 of {\em Lecture Notes in Computer
+  Science}, pages 475--489. Springer-Verlag, 2004.
+
+\bibitem{Farmer2007}
+William~M.~Farmer.
+\newblock Chiron: {A} multi-paradigm logic.
+\newblock In R.~Matuszewski and A.~Zalewska, editors, {\em From Insight to
+  Proof: Festschrift in Honour of Andrzej Trybulec}, volume 10(23) of {\em
+  Studies in Logic, Grammar and Rhetoric}, pages 1--19. University of
+  Bia{\l}ystok, 2007.
+
+\bibitem{Farmer2012}
+William~M.~Farmer.
+\newblock Chiron: A Set Theory with Types, Undefinedness, Quotation, and Evaluation.
+\newblock SQRL Report No. 38, McMaster University, 2007 (revised 2012)
+\newblock arXiv:1305.6206
+
+\bibitem{Goedel1931}
+Kurt~G{\"o}del.
+\newblock {\"U}ber formal unentscheidbare {S}\"atze der {P}rincipia
+  {M}athematica und verwandter {S}ysteme {I}.
+\newblock {\em Monatshefte f\"ur {M}athematik und {P}hysik}, 38:173--198, 1931.
+
+\bibitem{Goedel1940}
+Kurt~G{\"o}del.
+\newblock {\em The Consistency of the Axiom of Choice and the Generalized
+  Continuum Hypothesis with the Axioms of Set Theory}, volume~3 of {\em Annals
+  of Mathematical Studies}.
+\newblock Princeton University Press, 1940.
 
 \bibitem{Halmos1960}
 Paul~R.~Halmos.
@@ -24345,13 +24411,29 @@ J.~M. I.~M. Leo.
 \newblock Addendum.
 \newblock An undated 2-page addendum to \cite{Leo1991}.
 
-\bibitem{Tarski1936}
+\bibitem{Mendelson1997}
+E.~Mendelson.
+\newblock {\em Introduction to Mathematical Logic}.
+\newblock Chapman \& Hall/CRC, fourth edition, 1997.
+
+\bibitem{Tarski1933}
 Alfred~Tarski.
-\newblock The Concept of Truth in Formalized Languages.
-\newblock English translation of Tarski's 1936 article, "Der Wahrheitsbegriff in den formalisierten Sprachen"
-    in {\em Studia Philosophica}, 1:261–405.
-\newblock In A. Tarski, ed. J. Corcoran,
-    {\em Logic, Semantics, Metamathematics}, Hackett, 1983.
+\newblock Poj\rc{e}cie prawdy w j\rc{e}zykach nauk dedukcyjnych ({The} concept
+  of truth in the languages of the deductive sciences).
+\newblock {\em Prace Towarzystwa Naukowego Warszawskiego}, 3(34), 1933.
+
+\bibitem{Tarski1935}
+Alfred~Tarski.
+\newblock {Der Wahrheitsbegriff in den formalisierten Sprachen}.
+\newblock {\em Studia Philosophica}, 1:261--405, 1935.
+\newblock Translation, with revisions, of \cite{Tarski1933}.
+
+\bibitem{Tarski1935a}
+Alfred~Tarski.
+\newblock The concept of truth in formalized languages.
+\newblock In J.~Corcoran, editor, {\em Logic, Semantics, Meta-Mathematics},
+  pages 152--278. Hackett, second edition, 1983.
+\newblock Translation, with revisions, of \cite{Tarski1935}.
 
 \bibitem{Tarski1944}
 Alfred~Tarski.
