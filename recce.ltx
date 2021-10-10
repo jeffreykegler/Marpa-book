@@ -2042,7 +2042,9 @@ This implies that Chiron is inconsistent iff ZF is.
 ~\cite[p. 289]{Mendelson1997}
 Most modern mathematics is based on ZF,
 so that Chiron is as ``safe''
-as ZF.
+as ZF.\footnote{%
+    Chiron does not require the Axiom of Choice,
+    and we make no use of it in this book.}
 
 Chiron is intended for mechanizing mathematics,
 but that is not the reason for our use of it.
@@ -2051,6 +2053,43 @@ useful for us.
 Chiron allows us the matter of ill-defined terms carefully.
 And Chiron's type system is well thought out and more than
 sufficient for our needs.
+
+\section{Meta-language and object-language}
+
+\myepi[.83\textwidth]{\label{epi:meta-language}[W]e have to use two different languages
+[...] The first of these languages is
+the language which is "talked about" and which is the subject matter
+of the whole discussion; the definition of truth which we are seeking
+applies to the sentences of this language. The second is the language
+in which we "talk about" the first language, and in terms of which we
+wish, in particular, to construct the definition of truth for the first
+language. We shall refer to the first language as "the object language,"
+and to the second as "the meta-language."}
+{Tarski~\cite[pp. 349-350]{Tarski1944}}
+
+In 1933, Tarski~\cite{Tarski1935a},
+building on a result by G\o"del of the same year~\cite{Goedel1931},
+published his famous result on the ``undefinability of truth''.
+Informally, this states that no consistent formal system containing basic
+arithmetic can define its own truth.
+This was dismaying,
+since a primary goal of formalizing mathematics is to
+enhance our confidence in its truth.
+
+The method Chiron uses to get around this problem
+also due to Tarski, and
+Its gist is given in the epigraph for this section.
+Chiron contains a fully formalized object language,
+and an extensible meta-language, with formal components.
+Our meta-language is informal English,
+and incorporates Chiron's.
+Our object language cannot
+reason about its own truth.
+But, within out meta-language,
+we can reason about the truth of statements
+in the object language.
+For our conviction regarding the truth of assertions 
+in our meta-language, we must rely on intuition.
 
 \chapter{Preceding considerations}
 \label{chap:preceding-math}
@@ -2103,73 +2142,6 @@ and results
 \item that we do not consider basic; or
 \item that are the subject of conflicting or ambiguous standards.
 \end{itemize}
-
-\section{Meta-language and object-language}
-
-\myepi[.83\textwidth]{\label{epi:meta-language}[W]e have to use two different languages
-[...] The first of these languages is
-the language which is "talked about" and which is the subject matter
-of the whole discussion; the definition of truth which we are seeking
-applies to the sentences of this language. The second is the language
-in which we "talk about" the first language, and in terms of which we
-wish, in particular, to construct the definition of truth for the first
-language. We shall refer to the first language as "the object language,"
-and to the second as "the meta-language."}
-{Tarski~\cite[pp. 349-350]{Tarski1944}}
-
-In 1933, Tarski,
-showed that no consistent fully formalized language can
-contain its own definition of truth.
-This was dismaying,
-since the primary point of formalization is to
-gain confidence in the truth of our deductions.\footnote{%
-    Because the math in this book has practical implications,
-    we expect a significant portion of its readers
-    to be unaccustomed to reading mathematics.
-    Although we
-    do hope the use of long form might make things easier for these
-    readers,
-    we make few concessions specifically for them.
-    One concession we do make
-    is to include occasional brief explications
-    of matters that familiar to mathematicians,
-    but likely to strike non-mathematicians as bizarre.}
-
-\todo{Check this against quibbles.}
-The standard way out of this quandry is also due to Tarski.
-Its gist is given in the epigraph for this section:
-This is to use two languages, an object language for
-formalizing our ideas,
-and a meta-language for general purposes,
-where the meta-language is capable of
-reasoning about their truth of the ideas
-in the object language.
-
-Foundations are not our interest in this book, and
-we do not specify our meta-language beyond identifying
-some properties it has.
-Our meta-language must be multi-layered, in order to deal with schemas.
-Its bottom layer includes a model\footnote{%
-    See \cite[pp. 63-64]{FG2000}
-    for an example of such a model.}
-of our object language, along with a logical apparatus
-to reason about the truth of assertions in our object
-language.
-At least the top layer of our meta-language is English,
-and informal.
-Our reasoning about the truth of assertions 
-in our meta-language is intuitive.
-
-Our object language is Farmer's
-Partial First-Order Logic (PFOL)\cite{FG2000}.
-First-order logic (FOL) is
-the current standard for an object language,
-but does not explicitly deal with
-with ``undefined'' terms and partial functions.
-PFOL deals rigorously with terms which are not
-well-defined,
-and can be translated into first-order logic,
-which puts us in the best of both worlds.
 
 \section{Well-defined and ill-defined}
 
