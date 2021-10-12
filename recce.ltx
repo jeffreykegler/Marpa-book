@@ -202,16 +202,13 @@
 \newcommand{\unicorn}{\bot}
 \newcommand{\IsDefApp}{\!\IsDef}
 \newcommand{\IsUndefApp}{\!\IsUndef}
-\newcommand{\TRUE}{\mbox{{\sc t}}}
-\newcommand{\FALSE}{\mbox{{\sc f}}}
-\newcommand{\truthvalues}{\{\TRUE,\FALSE\}}
+\newcommand{\TRUE}{\ensuremath{\mathbb T}}
+\newcommand{\FALSE}{\ensuremath{\mathbb F}}
 \newcommand{\LambdaApp}{\lambda\,}
 \newcommand{\LAMBDAapp}{\Lambda\,}
 \newcommand{\PiApp}{\Pi\,}
 \newcommand{\SetAbs}{\mbox{\rm S}}
 \newcommand{\SetAbsApp}{\mbox{\rm S}\,}
-\newcommand{\ClassAbs}{\mbox{\sc C}}
-\newcommand{\ClassAbsApp}{\mbox{\sc C}\,}
 % \newcommand{\DepTypeProd}{\otimes}
 % \newcommand{\DepTypeProdApp}{\otimes\,}
 
@@ -2160,7 +2157,7 @@ Chiron is based on von-Neumann-G{\"o}del-Bernays set theory (NBG),\footnote{
     The chapter in Mendelson's logic text \cite{Mendelson1997} is a good introduction.}
 which in turn is based on Zermolo-Fraenkel set theory and first order logic (ZF).
 Chiron is a conservative extension of NBG~\cite[p. 7]{Farmer2012}.
-NBG, in turn, is a conservative extensive of ZF.
+NBG, in turn, is a conservative extensive of ZF~cite{Halmos1960}.
 This implies that Chiron is inconsistent iff ZF is.
 ~\cite[p. 289]{Mendelson1997}
 Most modern mathematics is based on ZF,
@@ -2227,9 +2224,68 @@ It is important to note that a meta-domain cannot contain another meta-domain.
 
 Object-languages values in Chiron are one of the following:
 \begin{itemize}
-\item \Ds{}, the domain of superclasses;
+\item \Ds{}, the domain of superclasses.
+\Ds{} properly includes \Dc{}, the domain of classes,
+which in turn properly includes \Dv{},
+the domain of sets.
+That is, $\Dv \subset \Dc \subset \Ds$.
 \item \Don{}, the domain of built-in operators;
+\item $\set{ \unicorn }$, the singleton meta-domain containing the
+``unicorn'' constant, which is used for handling ill-definedness.
+\item $\set{ \TRUE, \FALSE }$, the meta-domain of truth-values.
 \end{itemize}
+
+We note that we use the same terms and notation for meta-domains as
+for our object language collections.
+In fact, the literature generally uses
+the same terms and notation whether
+talking at the meta-language or object language level.
+The advantage of this practice is that it avoids a very
+very tedious set of quasi-duplicate definitions and explanations,
+with an attendant proliferation of vocabulary and notations,
+and their resulting confusion.
+The disadvantage is that a burden is placed on the reader
+to track whether meta-language or object-language is in use.
+In practice, most readers fall into two classes:
+those who care little about foundational issues,
+and are therefore willing to ignore the distinction
+between languages;
+and those who are confident about their ability to
+track the distinction and regard this as a small price
+to pay for
+a less cluttered presentation.
+
+\dfn[Set]{Sets},
+the elements of \Dv{}, are the sets of ZF.
+\dfn[Class]{Classes},
+the elements of \Dc{}, are the classes of NBG.
+Classes contain sets, and every set is also a class.
+Every set is a member of a class,
+and there is a class of all sets.
+A class is a \dfn[Class!proper]{proper class}
+iff it is not a set.
+Therefore, there is no class of all classes.
+\todo{Does this follow in this way?}
+
+\dfn[Superclass]{Superclasses},
+the elements of \Ds{}, are an addition in Chiron,
+and are used for its type system.
+Analogously to classes,
+superclasses contain classes, and every class is also a superclass.
+Every class is a member of a superclass,
+and there is a superclass of all classes.
+A superclass is a \dfn[Superclass!proper]{proper superclass}
+iff it is not a class.
+Therefore, there is no superclass of all superclasses.
+
+Every class had a type.
+A \dfn{type} is a collection of the possible values that
+can be taken by variables
+of that type,
+and therefore is a collection of classes,
+or a superclass.
+Every superclass can be regarded as a type,
+and therefore type is a synonym for superclass.
 \todo{Finish this}
 
 \chapter{Preceding considerations}
