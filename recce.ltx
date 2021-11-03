@@ -460,7 +460,7 @@
 }
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
-\newcommand{\Chref}[1]{(Ch\ref{#1}:\pageref{#1})} % always include page
+\newcommand{\Chref}[1]{(Ch\ref{chap:#1}:\pageref{chap:#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
 \newcommand{\asideRef}[1]{Aside \ref{sec:aside-#1}, page \pageref{sec:aside-#1}}
@@ -945,60 +945,59 @@ the approach is practical.
 The \Rtwo{} implementation is widely available
 and has seen considerable use.
 
-Chapter \ref{chap:features} on page \pageref{chap:features}
-\Chref{chap:features}
+\Chref{features}
 describes the important features of \Marpa{}.
-\Chref{chap:using-features}
+\Chref{using-features}
 goes into detail about their application.
 The remaining chapters are incomplete and
 inconsistent and the material in them is
 subject to deletion.
 
-\todo{Extend summary of chapters at end}
+\todo{Uncomment this summary of chapters, and correct it.}
 
-% Section \Chref{chap:math-conventions}
+% Section \Chref{math-conventions}
 % describes our conventions for presenting
 % the mathematics, and includes
 % remarks on methodology and presentation.
-% Section \Chref{chap:preceding-disciplines}
+% Section \Chref{preceding-disciplines}
 % contains definitions which are ``general'',
 % that is, for the mathematics which we use as
 % a basis for our parsing discussions.
-% Section \Chref{chap:CFGs} defines context-free grammars.
-% Section \Chref{chap:lr-grammars} defines LR grammars.
-% Section \Chref{chap:EXTs} defines \Marpa{}'s external grammars.
-% Section \Chref{chap:useless-symbols} describes \Marpa{}'s handling of ``useless''
+% Section \Chref{CFGs} defines context-free grammars.
+% Section \Chref{lr-grammars} defines LR grammars.
+% Section \Chref{EXTs} defines \Marpa{}'s external grammars.
+% Section \Chref{useless-symbols} describes \Marpa{}'s handling of ``useless''
 % symbols.
 %
-% Section \Chref{chap:rewrite} describes the way in which \Marpa{}
+% Section \Chref{rewrite} describes the way in which \Marpa{}
 % rewrites its external grammars into internal grammars.
-% Section \Chref{chap:INTs} defines \Marpa{}'s internal grammars.
-% Sections \Chref{chap:earley-item} and
-% \Chref{chap:earley-table} introduce Earley parsing.
-% Section \Chref{chap:leo} describes Joop Leo's modification
+% Section \Chref{INTs} defines \Marpa{}'s internal grammars.
+% Sections \Chref{earley-item} and
+% \Chref{earley-table} introduce Earley parsing.
+% Section \Chref{leo} describes Joop Leo's modification
 % of Earley's algorithm.
-% Section \Chref{chap:ancestry} describes the tracking
+% Section \Chref{ancestry} describes the tracking
 % of the ``ancestry'' of Earley items.
-% \Chref{chap:complexity-preliminaries} lays our strategy
+% \Chref{complexity-preliminaries} lays our strategy
 % for showing the time and speed complexity of \Marpa{}.
 %
-% \Chref{chap:algorithm} describes the \Marpa{} algorithm.
+% \Chref{algorithm} describes the \Marpa{} algorithm.
 % It includes pseudocode, as well as the low-level complexity analysis.
 %
-% Section \Chref{chap:ambiguity} contains a treatment of parsing ambiguity,
+% Section \Chref{ambiguity} contains a treatment of parsing ambiguity,
 % with particular relevance to \Marpa{}.
-% Section \Chref{chap:per-set-lists} describes \Marpa{}'s
+% Section \Chref{per-set-lists} describes \Marpa{}'s
 % per-set lists.
-% Section \Chref{chap:correctness} contains
+% Section \Chref{correctness} contains
 % a correctness proof for \Marpa{}.
-% Section \Chref{chap:reverse-leo} describes our method
+% Section \Chref{reverse-leo} describes our method
 % for reversing the Leo memoizations.
-% Section \Chref{chap:lrr-complexity} shows that Marpa
+% Section \Chref{lrr-complexity} shows that Marpa
 % has linear complexity for for LRR grammars.
-% Section \Chref{chap:complexity} lays out Marpa's non-linear
+% Section \Chref{complexity} lays out Marpa's non-linear
 % complexity results, which match those of \Earley{}.
 % Finally,
-% section \Chref{chap:input}
+% section \Chref{input}
 % generalizes \Marpa{}'s input model.
 
 We\footnote{%
@@ -1033,7 +1032,7 @@ Earlier implementations of \Marpa{} allowed cycles,
 but support for them
 was removed because
 practical interest seems to be non-existent.
-For more detail, see \Chref{chap:EXTs}.
+For more detail, see \Chref{EXTs}.
 }
 Worst case time bounds are never worse than
 those of Earley~\cite{Earley1970},%
@@ -1390,7 +1389,7 @@ This makes implicit operations inconvenient so that,
 with one exception,
 operations are never implicit.
 The exception is the concatenation of strings and symbols ---
-as will be explained in \Chref{chap:preceding-math},
+as will be explained in \Chref{foundation},
 these have a special notation which makes implicit operations
 unambiguous.
 
@@ -1401,7 +1400,7 @@ when the operands are numbers:
 $\V{n} \times 6$.
 Full details of
 our notation for operations is in
-\Chref{chap:preceding-math}.
+\Chref{foundation}.
 
 \section{Intuitive versus formal}
 
@@ -1692,7 +1691,7 @@ where {\it n} is the section number),
 For example
 \Eref{restriction1} refers to equation
 \ref{eq:restriction1} on page \pageref{eq:restriction1};
-\Chref{chap:features} refers to
+\Chref{features} refers to
 chapter \ref{chap:features}
 on page \pageref{chap:features};
 and
@@ -2140,6 +2139,43 @@ a universal generalization over all the relevant arbitrary
 variables in the current scope is implied.
 \todo{Discuss relevant and irrelevant variables and placeholders.}
 
+\section{Preceding disciplines}
+
+Our preceding disciplines are
+\begin{itemize}
+\item logic,
+\item set theory,
+\item procedures and algorithms,
+\item graph theory,
+\item the analysis of algorithms, and
+\item parsing theory.
+\end{itemize}
+
+Arithmetic comes to us as part of set theory.\footnote{
+    Unlike most math papers, most readers coming to this one will have
+    no training in advanced mathematics.
+    We make few concessions to these readers.
+    One do make is that, at points where someone new to advanced mathematics might
+    be perplexed, if it seems that a brief note will clarify the matter,
+    we provide it.
+    This is one such note.
+    We hope that readers more familiar with the traditions will encounter these
+    with patience.}
+Together, logic and set theory are our foundation.
+
+Our treatment of preceding disciplines is selective.
+We use notations and conventions that are basic
+to preceding disciplines without explanation.
+We treat results basic to preceding disciplines
+as ``facts'', and use them without proof.
+We do make a point of describing notations, conventions
+and results
+\begin{itemize}
+\item that are non-standard;
+\item that we do not consider basic; or
+\item that are the subject of conflicting or ambiguous standards.
+\end{itemize}
+
 \chapter{Foundation}
 \label{chap:foundation}
 
@@ -2149,6 +2185,20 @@ and much of it may be deleted.
 Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
+
+\myepi{\label{epi:looking-glass}%
+    `When I use a word,' Humpty Dumpty said in rather a scornful tone,
+    `it means just what I choose it to mean — neither more nor less.'
+    \\[.3\baselineskip]
+    `The question is,' said Alice, `whether you can make words mean so many different things.'
+    \\[.3\baselineskip]
+    `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
+    {Lewis Carroll, {\em Through the Looking Glass}}
+\myepi[.75\textwidth]{\label{epi:corcoran}
+    [S]tipulated technical usage is powerless to completely cancel
+    metaphorical implications, overtones and connotations
+    accompanying ordinary usage.}
+    {John Corcoran~\cite[p. 223]{Corcoran2005}}
 
 The foundation of the mathematics in this article is Chiron.\footnote{%
     For sources, see \asideRef{chiron}.}
@@ -2224,12 +2274,12 @@ The collections that we will use will be sets,
 classes, superclasses or metadomains.
 
 In this book, our \dfn[set]{sets} are the sets of ZF.
-They are our ``workhorse'' objects,
+Sets are our ``workhorse'' objects.
 Sets contain other sets,
 within the restrictions imposed by the
 axioms of ZF.
-Notably, one of these restrictions is that there is no
-sets of all sets.
+One of more notable of these restrictions is that there is no
+set of all sets.
 Sets are first class objects in the Chiron object language.
 
 Our \dfn[class]{classes}
@@ -2343,58 +2393,6 @@ or a superclass.
 Every superclass can be regarded as a type,
 and therefore type is a synonym for superclass.
 \todo{Finish this}
-
-\chapter{Preceding considerations}
-\label{chap:preceding-math}
-
-\todo[prepend, caption={``Preceding Considerations'' chapter is FRAGMENTARY}]{%
-This chapter is fragmentary and inconsistent
-and much of it may be deleted.
-Non-author readers are not encouraged.
-Filing pull requests
-will usually be a waste of time.}
-
-\myepi[.7\textwidth]{\label{epi:corcoran}
-    [S]tipulated technical usage is powerless to completely cancel
-    metaphorical implications, overtones and connotations
-    accompanying ordinary usage.}
-    {Corcoran, ``Schemata: The Concept of Schema in the History of Logic''~%
-        \cite[p. 223]{Corcoran2005}}
-\myepi{\label{epi:looking-glass}%
-    `When I use a word,' Humpty Dumpty said in rather a scornful tone,
-    `it means just what I choose it to mean — neither more nor less.'
-    \\[.3\baselineskip]
-    `The question is,' said Alice, `whether you can make words mean so many different things.'
-    \\[.3\baselineskip]
-    `The question is,' said Humpty Dumpty, `which is to be master — that’s all.'}
-    {Lewis Carroll, {\em Through the Looking Glass}}
-
-Our preceding disciplines are
-\begin{itemize}
-\item logic and set theory,
-\item arithmetic, which we treat as part of set theory;
-\item procedures and algorithms;
-\item graph theory;
-\item the analysis of algorithms; and
-\item parsing theory.
-\end{itemize}
-This is the first of the chapters on preceding disciplines.
-It covers general matters and topics which do not require
-separate chapters.
-\todo{Switch to NBG}
-
-Our treatment of preceding disciplines is selective.
-We use notations and conventions that are basic
-to preceding disciplines without explanation.
-We treat results basic to preceding disciplines
-as ``facts'', and use them without proof.
-We do make a point of describing notations, conventions
-and results
-\begin{itemize}
-\item that are non-standard;
-\item that we do not consider basic; or
-\item that are the subject of conflicting or ambiguous standards.
-\end{itemize}
 
 \section{Constants}
 \todo{Write this section.}
@@ -9499,12 +9497,12 @@ is invisible to
 the user.
 
 We defined \Marpa{}'s external grammars in
-\Chref{chap:EXTs}.
+\Chref{EXTs}.
 Recall that an external grammar may be any cycle-free grammar.
 Marpa internal grammars are described by construction
 in this section.
 They will be defined more carefully
-in \Chref{chap:INTs}.
+in \Chref{INTs}.
 This section describes the rewrite
 from an external grammar
 to an internal grammar.
@@ -9905,7 +9903,7 @@ and which has no nullable symbols.
 \dfEnd
 \end{definition}
 
-The notations for CFG's \Chref{chap:CFGs}
+The notations for CFG's \Chref{CFGs}
 carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
@@ -10298,7 +10296,7 @@ so that
     \realm{PIM} = \realm{EIM} \cup \realm{LIM}.
 \]
 Leo items (realm \realm{LIM})
-will be defined in \Chref{chap:leo}.
+will be defined in \Chref{leo}.
 \end{definition}
 
 \todo{Revisit productivity, accessibility.  Require in INT?}
@@ -16191,10 +16189,10 @@ A proper adjoin of some \realm{EIM}.
 Because logic of this first phase is closely intertwined with
 the code itself,
 its details are presented alongside the pseudocode
-\Chref{chap:algorithm}.
+\Chref{algorithm}.
 
 A later chapter
-\Chref{chap:low-level-complexity-summary}
+\Chref{low-level-complexity-summary}
 presents
 the second and last phase of the low-level analysis.
 In the second phase the charges of the first phase
@@ -16997,7 +16995,7 @@ Earley sets must not contain duplicated \realm{EIM}s and
 For each Earley set,
 \var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
-For details on PSL's, see \Chref{chap:per-set-lists}.
+For details on PSL's, see \Chref{per-set-lists}.
 \myfn{Seen}{\Veim{x}} is a function which returns
 the EIM equal to \var{x} if it already exists,
 and $\Lambda$ otherwise.
@@ -17014,7 +17012,7 @@ initialization of \var{seen} consumes \Oc{} time.
 
 \begin{proof}
 The claims of this theorem are justified
-in \Chref{chap:per-set-lists}.
+in \Chref{per-set-lists}.
 \myqed
 \end{proof}
 
@@ -17029,7 +17027,7 @@ and zero space.
 
 \begin{proof}
 The claims of this theorem are justified
-in \Chref{chap:per-set-lists}.
+in \Chref{per-set-lists}.
 \myqed
 \end{proof}
 
@@ -22673,7 +22671,7 @@ that there is \Marpa{} parse that creates an invalid \realm{PIM}.
 This means that there is a first invalid \realm{PIM} created
 by that \Marpa{} parse.
 Inspection of the \Marpa{} algorithm
-\Chref{chap:algorithm} shows
+\Chref{algorithm} shows
 that \realm{PIM}s are only created by operations.
 
 We now proceed by elimination of subcases,
@@ -24459,6 +24457,7 @@ William Farmer's 2012 paper\cite{Farmer2012}
 is our primary reference for Chiron.
 Other sources are \cite{FG2000}, \cite{Farmer2001}, \cite{Farmer2004},
     \cite{Farmer2007} and \cite{Farmer2012}.
+\todo{Expand this aside.}
 
 \section{The axiom of choice}
 \label{sec:aside-choice-axiom}
