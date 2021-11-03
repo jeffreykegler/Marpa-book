@@ -95,7 +95,7 @@
 % \usepackage{glossaries} % must after hyperref
 % \makeglossaries
 
-%% From Chiron 2012 paper 
+%% From Chiron 2012 paper
 
 \newcommand{\Dv}{\ensuremath{\mathbb{D}{\rm v}}}
 \newcommand{\Dc}{\ensuremath{\mathbb{D}{\rm c}}}
@@ -179,11 +179,11 @@
 \newcommand{\Epsilon}{\mbox{\rm E}}
 \newcommand{\EpsilonApp}{\mbox{\rm E}\,}
 \newcommand{\epsilonApp}{\epsilon\,}
-\newcommand{\True}{\mbox{\sf T}} 
-\newcommand{\False}{\mbox{\sf F}} 
+\newcommand{\True}{\mbox{\sf T}}
+\newcommand{\False}{\mbox{\sf F}}
 \newcommand{\Trueword}{\sf true}
 \newcommand{\Falseword}{\sf false}
-\newcommand{\Neg}{\neg} 
+\newcommand{\Neg}{\neg}
 \newcommand{\Implies}{\supset}
 \newcommand{\ImpliesAlt}{\Rightarrow}
 % \newcommand{\Iff}{\equiv}
@@ -463,6 +463,7 @@
 \newcommand{\Chref}[1]{(Ch\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
+\newcommand{\asideRef}[1]{Aside \ref{sec:aside-#1}, page \pageref{sec:aside-#1}}
 
 % Try to gather all the stuff to do with theoremoids here
 % Start off with theorems, then the other theoremoids,
@@ -2150,16 +2151,13 @@ Filing pull requests
 will usually be a waste of time.}
 
 The foundation of the mathematics in this article is Chiron.\footnote{%
-    Chiron is described at length in Farmer 2012 \cite{Farmer2012}.
-    See also \cite{FG2000}, \cite{Farmer2001}, \cite{Farmer2004},
-        \cite{Farmer2007} and \cite{Farmer2012}.%
-}
+    For sources, see \asideRef{chiron}.}
 Chiron is based on von-Neumann-G{\"o}del-Bernays set theory (NBG),\footnote{
     G{\"o}del 1940 \cite{Goedel1940} is the original article on NBG.
     The chapter in Mendelson's logic text \cite{Mendelson1997} is a good introduction.}
 which in turn is based on Zermolo-Fraenkel set theory and first order logic (ZF).
 Chiron is a conservative extension of NBG~\cite[p. 7]{Farmer2012}.
-NBG, in turn, is a conservative extensive of ZF~cite{Halmos1960}.
+NBG, in turn, is a conservative extensive of ZF~\cite{Halmos1960}.
 This implies that Chiron is inconsistent iff ZF is.
 ~\cite[p. 289]{Mendelson1997}
 Most modern mathematics is based on ZF,
@@ -2167,7 +2165,7 @@ so that Chiron is as ``safe''
 as ZF.\footnote{%
     Chiron does not require the Axiom of Choice,
     and the Axiom of Choice is not used in this book.
-    See page \pageref{sec:choice-axiom} for details.}
+    For details, see \asideRef{choice-axiom}.}
 
 Chiron is intended for mechanizing mathematics,
 but that is not the reason for our use of it.
@@ -2195,9 +2193,9 @@ building on a result by G{\"o}del of the same year~\cite{Goedel1931},
 published his famous result on the ``undefinability of truth''.
 Informally, this states that no consistent formal system containing basic
 arithmetic can define its own truth.
-This was dismaying,
-since a primary goal of formalizing mathematics is to
-enhance our confidence in its truth.
+Tarski's ``undefinability'' result was dismaying,
+since the most important goal of formalizing mathematics is
+precisely to enhance our confidence in its truth.
 
 The method Chiron uses to get around this problem
 is also due to Tarski, who describes it
@@ -2206,13 +2204,16 @@ Chiron contains a fully formalized object language,
 and an extensible meta-language, with formal components.
 Our meta-language is informal English,
 and incorporates Chiron's meta-languge.
-Our object language is Chiron's
-and cannot reason about its own truth.
+Our object language is Chiron's.
+
+Our object language cannot reason about its own truth.
 But, within our meta-language,
 we can reason about the truth of statements
 in the object language.
-For our conviction regarding the truth of assertions 
-in our meta-language, we must rely on intuition.
+Like our object language,
+our meta-language cannot reason about its own truth.
+For our conviction regarding the truth of assertions
+we make in our meta-language, we look to our intuition.
 
 \section{Collections}
 
@@ -2222,36 +2223,48 @@ and therefore has a notion of membership.
 The collections that we will use will be sets,
 classes, superclasses or metadomains.
 
-In this book, our \dfn[set]{sets},
-are the sets of ZF.
+In this book, our \dfn[set]{sets} are the sets of ZF.
 They are our ``workhorse'' objects,
-and contain others sets,
+Sets contain other sets,
 within the restrictions imposed by the
 axioms of ZF.
 Notably, one of these restrictions is that there is no
 sets of all sets.
-Sets for first class objects of the the Chiron object language.
+Sets are first class objects in the Chiron object language.
 
-\dfn[class]{Classes},
+Our \dfn[class]{classes}
 are the classes of NBG.
-Classes contain sets, and every set is also a class.
-There is a class of all sets
-but since a class can only contain sets,
-there is not class of all classes.
-A class is a \dfn[Class!proper]{proper class}
-iff it is not a set.
+Classes contain sets.
+Every set is also a class,
+but not every class is a set.
+A class that is not a set
+is a \dfn[Class!proper]{proper class}.
+
+An example of a class that is a proper class
+class of all sets.
+Since there is not set of all sets,
+the class of all sets cannot be a set.
 As an example, since there is not sets of all sets,
-the class of all set is a proper class.
+the class of all sets is a proper class.
+
+The existence of a proper class means that there is
+no class of all classes.
+This is because every element of a class must be a set,
+and the class of all sets is not a set.
 
 Classes make it convenient to make statements about
 all sets.
-This allows us to define objects like sequences whose
-values are sets,
-without resort to schemas that describes an
-infinite number of axioms
-which are widely used but sketchily handled~\cite{Corcoran2005}.
+In this paper, we use classes to avoid resorting to infinite
+sets of theorems and axioms, described by schemas.
+Without classes, schemas would be necessary, for example,
+to define sequences of arbitrary first-class value in the natural way.
+Schemas are widely used in the literature,
+usually implicitly,
+and almost always without careful definition.\footnote{%
+    ``[N]o generally recognized
+    definition or characterization of a concept of schema is known to the
+    author.''~\cite{Corcoran2005}.}
 \todo{TO HERE}
-\todo{Check last statement vs Corcoran}
 
 \begin{itemize}
 \item \dfn{Metadomain}.
@@ -2357,7 +2370,7 @@ will usually be a waste of time.}
 
 Our preceding disciplines are
 \begin{itemize}
-\item logic and set theory, 
+\item logic and set theory,
 \item arithmetic, which we treat as part of set theory;
 \item procedures and algorithms;
 \item graph theory;
@@ -2409,7 +2422,7 @@ to be the \V{n}'th number that it is even
 and not the sum of two primes.
 But Goldbach's conjecture is that no such numbers
 exist.
-If Goldbach was right, our definition of 
+If Goldbach was right, our definition of
 \fnmap{goldbach}{\naturals}{\naturals}
 is of a function that does not exist.
 That is,
@@ -24424,12 +24437,30 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-This chapter contains material which we did not want to omit,
-but which would impair the flow if incorporated directly into
-the main presentation.
+This chapter contains material
+that would impair the flow if incorporated directly into
+the main presentation, but which it is useful or essential
+to include.
+Traditionally, these ``asides'' take the form of long footnotes.
+
+Long footnotes do occur closer to the material they reference,
+but a long list of problems outweighs this one advantage.
+Long footnotes interrupt the text flow.
+They present sometimes insoluable page break issues.
+If typeset in the traditional smaller font, they are hard to read.
+And they restrict, or make awkward,
+the use of tables, lists and other readability aids.
+
+\section{Chiron}
+\label{sec:aside-chiron}
+
+William Farmer's 2012 paper\cite{Farmer2012}
+is our primary reference for Chiron.
+Other sources are \cite{FG2000}, \cite{Farmer2001}, \cite{Farmer2004},
+    \cite{Farmer2007} and \cite{Farmer2012}.
 
 \section{The axiom of choice}
-\label{sec:choice-axiom}
+\label{sec:aside-choice-axiom}
 
 We do not use the Axiom of Choice in this book,
 and Chiron does not require it.
