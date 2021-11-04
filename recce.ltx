@@ -101,6 +101,8 @@
 \newcommand{\Dc}{\ensuremath{\mathbb{D}{\rm c}}}
 \newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}}
 \newcommand{\Df}{\ensuremath{\mathbb{D}{\rm f}}}
+\newcommand{\Dill}{\ensuremath{\mathbb{D}{\rm ill}}}
+\newcommand{\Dbool}{\ensuremath{\mathbb{D}{\rm bool}}}
 \newcommand{\Do}{\ensuremath{\mathbb{D}{\rm o}}}
 \newcommand{\De}{\ensuremath{\mathbb{D}{\rm e}}}
 \newcommand{\Don}{\ensuremath{\mathbb{D}{\rm on}}}
@@ -2341,76 +2343,49 @@ the superclass of all classes is a proper superclass.
 No proper superclass has a type,
 and a proper superclass is not a first-class object.
 
-\todo{TO HERE}
-
-\begin{itemize}
-\item \dfn{Metadomain}.
-Where, despite the heavy overloading of term ``domain'',
-we think there will be no confusion, we call metadomains
-simply \dfn[domain]{domains}.
-Metadomains are meta-language collections.
-\item \dfn{Type}, or \dfn{superclass}.
-Types are formal,
-but not first-class objects,
-in the Chiron object language.
-\todo{Finish this list.}
-\end{itemize}
-
-To describe values, we introduce the idea of
-\dfn[Meta-domain]{meta-domains},
-which we will call \dfn[Domain!in the meta-language|See{Meta-domain}]{domains}
-when we feel safe from the many overloads of the term ``domain''.
-A domain is a meta-language concept.
-It is a collection of object-language objects.
-It is important to note that a meta-domain cannot contain another meta-domain.
-
 \section{Values}
 
-Object-languages values in Chiron are one of the following:
+To describe values, we introduce the idea of
+\dfn[metadomain]{metadomains}.
+A metadomain is a meta-language concept.
+A metadomain is a collection of object-language objects,
+and therefore not metadomain can contain another metadomain.
+To deal with metadomains,
+we use the terms and notation we use for classes.\footnote{%
+    See \asideRef{meta-language-notation}.
+}
+
+\todo{TO HERE}
+
+All object-language values in Chiron are members of one
+of the following disjoin metadomains:
 \begin{itemize}
 \item \Ds{}, the domain of superclasses.
 \Ds{} properly includes \Dc{}, the domain of classes,
 which in turn properly includes \Dv{},
 the domain of sets.
 That is, $\Dv \subset \Dc \subset \Ds$.
-\item \Don{}, the domain of built-in operators;
-\item $\set{ \unicorn }$, the singleton meta-domain containing the
+\item $\Dill{} = \set{ \unicorn }$, the singleton metadomain containing the
 ``unicorn'' constant, which is used for handling ill-definedness.
-\item $\set{ \TRUE, \FALSE }$, the meta-domain of truth-values.
+For more on ill-definedness, see Section \ref{sec:ill-definedness}
+on page \pageref{sec:ill-definedness}.
+\item $\Dbool{} = \set{ \TRUE, \FALSE }$, the metadomain of truth-values.
+\item \Don{}, the domain of built-in operators;
 \end{itemize}
 
-We note that we use the same terms and notation for meta-domains as
-for our object language collections.
-In fact, the literature generally uses
-the same terms and notation whether
-talking at the meta-language or object language level.
-The advantage of this practice is that it avoids a very
-very tedious set of quasi-duplicate definitions and explanations,
-with an attendant proliferation of vocabulary and notations,
-and their resulting confusion.
-The disadvantage is that a burden is placed on the reader
-to track whether meta-language or object-language is in use.
-In practice, most readers fall into two classes:
-those who care little about foundational issues,
-and are therefore willing to ignore the distinction
-between languages;
-and those who are confident about their ability to
-track the distinction and regard this as a small price
-to pay for
-a less cluttered presentation.
+The operators of Chiron include the built-in operators and
+functions.
+\dfn[function]{Functions} in Chiron are defined as classes.
+Some built-in operators can be redefined as functions,
+but functions are more restricted than operators.
+The domain of a functional class must be a class,
+and therefore arguments of functions must be sets.
+Similarly, the range of a function must be class,
+and therefore the value of each function application
+must be a set.
 
-
-\section{Constants}
-\todo{Write this section.}
-
-\section{Operators}
-\todo{Write this section.
-``Subsections'' of
-table, then description,
-in precedence order from
-tightest.}
-
-\section{Well-defined and ill-defined}
+\section{Ill-definedness}
+\label{sec:ill-definedness}
 
 While ``undefined'' terms occur frequently in mathematics,
 and in essential contexts,
@@ -2466,6 +2441,7 @@ and it is their approach that is used in this book.
 \todo{Finish this}
 
 \section{Constants}
+\todo{Finish this section.}
 
 \myepi{\label{epi:naturals-discomfort}%
     The slight feeling of discomfort the reader
@@ -2492,6 +2468,11 @@ so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
 \section{Operators}
+\todo{Write this section.
+``Subsections'' of
+table, then description,
+in precedence order from
+tightest.}
 
 Each set of operators has its own subsection
 stating the precedence among them.
@@ -24400,6 +24381,30 @@ We amend item 3 on page 26
 of~\cite{Farmer2012} to allow this.
 Since $\xi$ is only used in indefinite descriptions,
 this amendment to Chiron is harmless.
+
+\section{Meta-language notation}
+\label{sec:aside-meta-language-notation}
+
+In fact, the literature generally uses
+the same terms and notation whether
+talking at the meta-language or object language level.
+While uneasy about this tradition,
+we follow it.
+The advantage of the traditional practice is that it avoids a very
+very tedious set of quasi-duplicate definitions and explanations,
+with an attendant proliferation of vocabulary and notations.
+The added complexity risks the same confusion it would be intended to prevent.
+
+The disadvantage is that a burden is placed on the reader
+to track whether meta-language or object-language is in use.
+But in practice, it seems that most readers fall into one of two classes:
+those who care little about foundational issues,
+and are therefore willing to ignore the distinction
+between languages;
+and those who are confident about their ability to
+track the distinction and regard this as a small price
+to pay for
+a less cluttered presentation.
 
 \chapter{About the epigraphs}
 \label{chap:epigraphs}
