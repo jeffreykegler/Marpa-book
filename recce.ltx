@@ -607,8 +607,10 @@
 \newcommand{\set}[1]{%
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
-% \newcommand{\set}[1]{{\left\lbrace #1 \right\rbrace} }
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
+\newcommand{\typed}[2]{\ensuremath{#1\mcolon#2}}
+\newcommand{\Vtyped}[2]{\ensuremath{\var{#1}\mcolon#2}}
+\newcommand{\VVtyped}[2]{\ensuremath{\var{#1}\mcolon\var{#2}}}
 
 % Eliminate this, now that I follow Chiron notation?
 \newcommand{\family}[1]{\ensuremath{\left[ #1 \right]}}
@@ -709,7 +711,7 @@
 \newcommand{\z}[1]{\ensuremath{#1_\realm{\integers}}}
 \newcommand{\Vz}[1]{\z{\V{#1}}}
 
-\newcommand{\naturals}{\ensuremath{\omega}}
+\newcommand{\naturals}{\ensuremath{\mathbb{N}}}
 \newcommand{\integers}{\ensuremath{\mathbb{Z}}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
 \newcommand{\Earley}{\algo{Earley}}
@@ -1557,7 +1559,7 @@ like this one.
 
 Because the archetypal example of these are theorems,
 labelable text blocks with headers are called
-\dfn[theoremoid]{theoremoids}.
+\dfn[Theoremoid]{theoremoids}.
 Another example of a theoremoid is a remark,
 like this one \Rmref{theoremoid}.
 
@@ -1642,8 +1644,8 @@ our confidence in the observation's truth.\footnote{%
 
 \begin{remark}[Labelable Text]
 \label{rem:labelables}
-A \dfn[labelable]{labelable text},
-or \dfn[labelable]{labelable},
+A \dfn[Labelable]{labelable text},
+or \dfn[Labelable]{labelable},
 is either a a theoremoid or a
 displayed equation.
 \rmEnd
@@ -2277,7 +2279,7 @@ classes, superclasses or metadomains.
 Sets, classes and superclasses are objects in the Chiron object language.
 Metadomains exists only in the meta-language.
 
-In this book, our \dfn[set]{sets} are the sets of ZF.
+In this book, our \dfn[Set]{sets} are the sets of ZF.
 Sets are our ``workhorse'' objects.
 Sets contain other sets,
 within the restrictions imposed by the
@@ -2286,7 +2288,7 @@ One of the more notable of these restrictions is that there is no
 set of all sets.
 Sets are first class objects in the Chiron object language.
 
-Our \dfn[class]{classes}
+Our \dfn[Class]{classes}
 are the classes of NBG.
 Classes contain sets.
 Every set is also a class,
@@ -2330,7 +2332,7 @@ can be taken by variables
 of that type.
 A type, therefore, is a collection of classes,
 Because every type is a collection of classes,
-types are also called \dfn[superclass]{superclasses}.
+types are also called \dfn[Superclass]{superclasses}.
 
 Superclasses contain classes.
 Every class is also a superclass, but not every
@@ -2343,10 +2345,15 @@ the superclass of all classes is a proper superclass.
 No proper superclass has a type,
 and a proper superclass is not a first-class object.
 
+Skipping ahead, our notation to indicate the \var{x}
+is a term of type \var{T} is \VVtyped{x}{T}.
+We will often abbreviate this by indicating the type
+with a subscript: $\var{x}_\var{T}$.
+
 \section{Values}
 
 To describe values, we introduce the idea of
-\dfn[metadomain]{metadomains}.
+\dfn[Metadomain]{metadomains}.
 A metadomain is a meta-language concept.
 A metadomain is a collection of object-language objects,
 and therefore not metadomain can contain another metadomain.
@@ -2375,7 +2382,7 @@ on page \pageref{sec:ill-definedness}.
 
 The operators of Chiron include the built-in operators and
 functions.
-\dfn[function]{Functions} in Chiron are defined as classes.
+\dfn[Function]{Functions} in Chiron are defined as classes.
 Some built-in operators can be redefined as functions,
 but functions are more restricted than operators.
 The domain of a functional class must be a class,
@@ -2467,6 +2474,24 @@ For this, our object-language has a special dedicated value, the
     or that 7 is an element of 8 is disturbing.}
     {{\em Naive Set Theory}, Halmos\cite[p. 45]{Halmos1960}}
 
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\naturals$} & \cellboxr{The set (and type) of Natural numbers} \\
+\hline
+{$\unicorn$} & \cellboxr{The ``unicorn'', the ill-defined constant} \\
+\hline
+\end{tabular}
+\end{table}%
+\index{recce-symbol}{naturals@$\naturals$ (set of natural numbers)}%
+\index{recce-defienda}{N@$\naturals$ (set of natural numbers)}%
+\index{recce-defienda}{unicorn@$\unicorn$ (ill-defined)}%
+\index{recce-symbol}{unicorn@$\unicorn$ (ill-defined)}%
+\index{recce-defienda}{unicorn@unicorn, $\unicorn$ (ill-defined constant)}%
+\FloatBarrier
+
 In this book, the natural numbers begin with 0,
 and the set of natural numbers is written \naturals{},
 whether it is used as a cardinal or an ordinal.
@@ -2487,31 +2512,37 @@ table, then description,
 in precedence order from
 tightest.}
 
-Each set of operators has its own subsection
-stating the precedence among them.
-The subsections themselves are
-in order from tightest precedence
-to loosest,
-so that all operator mentioned in an
-earlier subsection have tighter precedence than
-the operators in later subsections.
-
+Operators are given in order or precedence,
+from tightest to loosest.
+Operators in the same table has the same precedence,
+unless they are separated by a double horizontal line.
 Arity and associativity follow tradition,
 unless otherwise stated.
 Bracketing symbols override precedence.
-Where an operator is written out in verbal form it has looser
-precedence than one written in math symbols.
-For example
-\[ \text{iff} \]
-has looser
-precedence than
-\[ \iff. \]
 
-\subsection{Unary operators}
+\FloatBarrier
 
-Unary operators have the tightest precedence.
-Within the Unary operators, the postfix operators
-bind tighter than the the prefix operators.
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{\powerset{\V{A}}} & \cellboxr{Powerset of the set \V{A}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\Vdecr{x}$} & \cellboxr{Decrement of \V{x}, Predecessor of \V{x}} \\
+\hline
+{$\Vincr{x}$} & \cellboxr{Increment of \V{x}, Successor of \V{x}} \\
+\hline
+\end{tabular}
+\end{table}
 
 We adopt a
 programming language notation for
@@ -2531,14 +2562,21 @@ and decrementation by~1:
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Postfix unary operators
-    }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\Vdecr{x}$} & \cellboxr{Decrement of \V{x}, Predecessor of \V{x}} \\
+{$\neg\var{x}$} & \cellboxr{Logical negation of \var{x}} \\
 \hline
-{$\Vincr{x}$} & \cellboxr{Increment of \V{x}, Successor of \V{x}} \\
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\textstyle {\sum} \quad {\bigcap} \quad {\bigcup}$} & \cellboxr{Summation, Unary union,
+    Unary intersection} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2572,24 +2610,21 @@ and, where the family is a sequence,
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Prefix unary operators
-    }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\neg$} & \cellboxr{Logical negation} \\
+{$\fname{f}\caret\V{n}$} & \cellboxr{
+    \V{f} repeated \V{n} times
+} \\
 \hline
-{\powerset{\V{A}}} & \cellboxr{Powerset of the set \V{A}} \\
-\hline
-{$\textstyle {\sum} \quad {\bigcap} \quad {\bigcup}$} & \cellboxr{Summation, Unary union,
-    Unary intersection} \\
+$\fname{g}\fnAfterOp\fname{f} \quad \fname{g}\relAfterOp\fname{f}$ &
+    \cellboxr{
+    Functional composition, relational composition:
+    ``\V{g} after \V{f}''} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
-
-\subsection{Operators on relations}
 
 Where \V{rel} is a relation,
 $\fname{f}\caret{}\V{n}$ is the
@@ -2598,9 +2633,27 @@ We note that the composition of a function zero
 times is the identity function:
 $\rawfn{(\fname{f}\caret0)}{\V{x}} = \V{x}$.
 
-\todo{What about Lambda here?}
-Where \fname{f} and \fname{g} are placeholders
-for relations,
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\fname{f}\caret\V{n}$} & \cellboxr{
+    \V{f} repeated \V{n} times
+} \\
+\hline
+$\fname{g}\fnAfterOp\fname{f} \quad \fname{g}\relAfterOp\fname{f}$ &
+    \cellboxr{
+    Functional composition, relational composition:
+    ``\V{g} after \V{f}''} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+For relations,
 $\fname{g}\relAfterOp{}\fname{f}$ is
 the \dfn[Relational composition (of relations)]{relational composition},
 of \fname{g} and \fname{f}:
@@ -2613,8 +2666,7 @@ That is,
          \tuple{\V{y}, \V{z}} \in \V{g} }.
 \]
 
-Where \fname{f} are \fname{g} are placeholders
-for functions,
+Where \fname{f} are \fname{g} are functions,
 $\fname{g}\fnAfterOp{}\fname{f}$ is
 the \dfn[Functional composition (of functions)]{functional composition},
 or simply \dfn[Composition (of functions)]{composition}
@@ -2635,32 +2687,22 @@ That is,
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Relation operators,
-    from tightest to loosest
-    }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\fname{f}\caret\V{n}$} & \cellboxr{
-    \V{f} repeated \V{n} times
-} \\
+{$\times$} & \cellboxr{Multiplication} \\
 \hline
-$\fname{g}\fnAfterOp\fname{f} \quad \fname{g}\relAfterOp\fname{f}$ &
-    \cellboxr{
-    Functional composition, relational composition:
-    ``\V{g} after \V{f}''} \\
+{$/$} & \cellboxr{Division} \\
+\hline
+{$\bmod$} & \cellboxr{Modulo} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
-
-
-\subsection{Arithmetic operators}
-
+Arithmetic in this book is always cardinal arithmetic.
 Multiplication is never implied in this book.
-Our implied operator is concatenation, which
-is much more convenient for our purposes.
+Our only implied operator is string concatenation,
+This convention is much more convenient for our purposes.
 We overload the Cartesian product operator
 so that it represents multiplication when its
 operands are integers:
@@ -2674,58 +2716,42 @@ for natural number or integer placeholders
      (\V{x} / \V{y}) \times \V{y} + \V{x} \bmod \V{y} = \V{x}.
 \]
 
-\todo{Should I just assert that I always use cardinal arithmetic,
-even for \naturals,
-instead of this stuff about "left subtraction"?}
-Subtraction is always ``left subtraction''.%
-\footnote{Right subtraction and left subtraction behave identically over the
-    natural numbers,
-    but when transfinite numbers are involved,
-    the result of right subtraction is not always well-defined.
-    For example, if we seek a value for
-    $\naturals-1$, right subtraction requires us to find an ordinal
-    to replace the \V{x} in
-    $\V{x}+1 = \naturals$.
-    But there is no such ordinal \V{x}.}
-That is, where
-\V{a}, \V{b} and \V{x} are ordinals,
-the schema for subtraction is
-\begin{equation}
-\label{eq:left-subtraction}
-    \V{a}-\V{b} = \V{x} \defined \V{b}+\V{x} = \V{a}.
-\end{equation}
-For all ordinals \V{a} and \V{b} such that $\V{a} \ge \V{b}$
-the placeholder \V{x}
-in \Eref{left-subtraction}
-can be replaced with a unique ordinal.
-The only cases of interest to us in this book will be subtraction
-of finite numbers from each other,
-and subtraction of a natural number from \naturals.
-In the second case,
-$\V{a}=\naturals$ and $\V{b}\in\naturals$,
-\[ \Vnat{b}+\naturals = \naturals \text{ so that } \naturals-\V{b} = \naturals. \]
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$+$} & \cellboxr{Addition} \\
+\hline
+{$-$} & \cellboxr{Subtraction} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+Since arithmetic in this book is always cardinal arithmetic,
+$\naturals+1 = 1+\naturals = 1$.
+
+\todo{Distinguish numerical equality from term equivalence?}
 
 \FloatBarrier
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Arithmetic operators, from tightest to loosest
-    }
-% Precedence is from tightest to loosest, \\
-% so that the loosest precedence is last.
-% \\[1.5ex]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\times$}, {$/$}, {$\bmod$} & \cellboxr{Multiplication
-    Division, Modulo } \\
+{$\le$} & \cellboxr{Lax comparison} \\
 \hline
-{$+$} {$-$} & \cellboxr{Addition, subtraction} \\
+{$\ge$} & \cellboxr{Lax comparison} \\
 \hline
-   {$\le$} {$<$}
-   {$\ge$} {$>$}
-   & \cellboxr{Equality, comparison} \\
-   \hline
+{$<$} & \cellboxr{Strict comparison} \\
+\hline
+{$>$} & \cellboxr{Strict comparison} \\
+\hline
+{$=$} & \cellboxr{Equality} \\
+\hline
 \end{tabular}
 \end{table}
 
@@ -3084,13 +3110,6 @@ Numeric indices can be hard to remember,
 and when a tuple is of a specific kind (for example, a grammar),
 we often define a mnemonic for each element of a tuple.
 
-Floor brackets are a very intuitive way to indicate terminal
-symbols:
-\Vterm{terminal}.
-We therefore represent the floor of a number
-as a function:
-$\myfn{floor}{\V{a}}$.
-
 \section{Realms}
 
 \todo{Describe how realms are declared}
@@ -3395,7 +3414,7 @@ or inductively.
 \begin{remark}[Explicitly specified sequence]
 \label{rem:explicitly-specified-sequence}
 An example of a
-\dfn[sequence@Sequence!specified explicitly]{sequence
+\dfn[Sequence@Sequence!specified explicitly]{sequence
     with explicitly specified elements}
 is \seq{43, 1729, 1491, 1493 }.
 In explicitly specified sequences, ellipses specify continuation
@@ -4364,7 +4383,7 @@ of \V{seq} iff
 there is no indexable location at or after the last offset
 of \V{slice} in \V{seq}.
 The suffix is a
-\dfn[suffix@Suffix (of a sequence)!proper]{proper suffix}
+\dfn[Suffix@Suffix (of a sequence)!proper]{proper suffix}
 iff it is not identical to its container sequence.
 We write \Sfx{\V{slice},\V{seq}} to say
 that \V{slice} is a suffix of \V{seq}.
@@ -6266,11 +6285,11 @@ The theorem follows immediately from the definition of \fname{NewParents}
 \label{ldef:ancestry-of-base}
 We say that \Vnodset{A} is an
 \V{N}-level
-\dfn[ancestry-nodeset@Ancestry (of nodeset)!by level]{ancestry}
+\dfn[Ancestry-nodeset@Ancestry (of nodeset)!by level]{ancestry}
 of base \Vnodset{b}
 iff $\V{A}=\myfn{Anc}{\Vnat{N},\V{b}}$.
 We say that \Vnodset{A} is an
-\dfn[ancestry-nodeset@Ancestry (of nodeset)]{ancestry}
+\dfn[Ancestry-nodeset@Ancestry (of nodeset)]{ancestry}
 of \Vnodset{nds}
 iff \Vnodset{A} is an \V{N}-level ancestry of \Vnodset{nds} for
 some \Vnat{N}.
@@ -8778,8 +8797,7 @@ is a \dfn{unit rule}.
 When a string
 is a string of terminal symbols,
 we will write it in boldface and enclose it
-between a pair of the brackets traditionally used
-for the ``floor'' operation: for example,
+in a box: for example,
 \Vterm{terminal}.
 \end{definition}
 
