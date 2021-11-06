@@ -1397,37 +1397,6 @@ as will be explained in \Chref{foundation},
 these have a special notation which makes implicit operations
 unambiguous.
 
-Since multiplication is never implicit,
-we overload the Cartesian product operator
-to represent it
-when the operands are numbers:
-$\V{n} \times 6$.
-Full details of
-our notation for operations is in
-\Chref{foundation}.
-
-\section{Intuitive versus formal}
-
-\todo{Rewrite this chapter, reordering its material.}
-In this book the terms
-``intuitive'' and ``formal'' are,
-by default, relative terms,
-used as opposites.
-An \dfn{intuitive} presentation appeals to our sense of
-the semantics,
-and is not necessarily careful to avoid ambiguity.
-A \dfn{formal} presentation relies more on the syntax.
-A \dfn[Formal, fully]{fully formal} presentation relies
-entirely on the syntax and could, in theory, be checked
-by computer.
-
-In some of the literature, ``formal''\footnote{%
-    For example, Tarski~\cite{Tarski1994}.}
-usually means fully formal.
-In this book, we have no fully formal proofs.
-All of our ``formal'' statements and proofs are
-only so in the relative sense.
-
 \section{Base theories}
 
 \epigraph{%
@@ -1435,18 +1404,7 @@ only so in the relative sense.
 [Mathematical] statements are generally accompanied by arguments whose
 purpose is to demonstrate their truth.}{Tarski~\cite[p. 3]{Tarski1994}}
 
-The presentation of the deductive logic in this book is
-influenced by Tarski~\cite{Tarski1994}.
-Its basis is a naive set theory,
-consistent with that of
-Halmos\cite{Halmos1960}.
-
-Alongside the set theoretical notions,
-and in concept based on them,
-are algorithmic notions.
-The algorithmic notions are better for describing implementation
-on modern computer architectures,
-and will be essential for our complexity analysis.
+\todo{Move this section to foundations}
 
 The algorithmic notions are, in concept,
 ultimately reducible to sequences of the primitive operations
@@ -1516,39 +1474,6 @@ terminology in \cite{Earley1970}
 outweighs the risk of confusion.
 
 \section{Presentation of the deductive logic}
-
-\todo{Delete or rewrite this paragraph?}
-In principle,
-the mathematical expressions in this book can be reduced to
-basic set theory and logic.
-Expressions in this book may be written \dfn{verbally} or
-\dfn{symbolically}.
-We say that a mathematical expression is verbal,
-or that it is written ``verbally'',
-if it uses words
-of the English language.
-We say that a mathematical expression is ``symbolic'',
-or that it is written ``symbolically'',
-if it uses mathematical symbols.
-An symbolic expression is also called a \dfn{formula}.
-For example, the expression ``six times seven equals forty-two'' is verbal
---- its symbolic equivalent is ``$6\times7=42$''.
-
-\todo{Delete or rewrite this paragraph?}
-Mathematical expressions may be mixed,
-that is, they may contain both symbolic and verbal subexpressions.
-The symbol or verbal character of a expression is that of its outermost
-subexpression.
-A mathematical expression is usually referred to simply as
-an ``expression''.
-
-\todo{"Formula" instead of "sentence"}
-In this book, the word \dfn{sentence}
-refers to an expression with a boolean value,
-unless context or explicit statement makes it clear otherwise.
-A sentence is called
-a \dfn{condition} in contexts where we are emphasizing
-its boolean value.
 
 \begin{remark}[Theoremoids]
 \label{rem:theoremoid}
@@ -1826,186 +1751,41 @@ An example is a scope with nothing visible outside the scope.
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
 
-Following Halmos\cite{Halmos1960},
-all of the mathematical objects
-in our object-language are sets.
-Our object-language does not contain a universal set,
-so each variable implies
-a set that is its \dfn[Domain!of discourse]{domain of discourse}.
-Every instance of a variable also has a
-\dfn[Realm (wrt a variable)]{realm},
-which is
-the subset of the domain of discourse
-over which that variable instance
-can range.%
-\footnote{%
-    Our goal is to assure ourselves that the mathematical objects we use
-    are, in fact, elements of a domain of
-    discourse which could, if necessary,
-    be constructed using the axioms in Halmos\cite{Halmos1960}.
-    In some instances the most natural realm of variable is not
-    a set.
-    (See our discussion of ``placeholders'' below
-    \Sref{placeholders}.)
-    Rather than complicate our scheme with ``realm-less''
-    variables, we assign these variables a trivial realm ---
-    the singleton set
-    that contains that the value of that variable.}
-Almost always, the realm of a variable
-and its domain of discourse are
-equivalent.
-Finally, within the scope of a quantifier,
-the quantified variable has a \dfn[Domain!of quantification]{domain of quantification}.
-The domain of quantification is sometimes
-equivalent to the realm,
-but there are many exceptions.
+% In the parsing literature,
+% the concept analogous to our ``realms''
+% was called the "domain" for each variable%
+% \footnote{
+%     The use of term ``domain'' for the set
+%     from which a variable may take its value
+%     is well-established.
+%     But we choose to depart from it because the
+%     term ``domain'' is heavily overloaded with other
+%     even more well-established uses.
+%     For example,
+%     in the traditional terminology,
+%     a function variable has a ``domain of the variable''
+%     but each of the variable's values also has a ``domain of the function''.
+%     So if \V{f} is a variable representing a boolean function of the integers,
+%     the domain of the function variable \V{f} is $2\expOp\naturals$, while
+%     the domain of the function represented by the variable \V{f} is \naturals.
+%     This distinction arises in many of our contexts,
+%     and we thought it would be exasperatingly confusing.
+% },
+% and it was represented by a scheme
+% in which the domain
+% was suggested by a combination
+% of the language of the alphabet used,
+% the typeface,
+% and whether the single character of the variable
+% was taken from the end,
+% middle or beginning of the alphabet.
+% For single-character variables,
+% these schemes were awkward and restrictive.
+% They also pushed the legibility envelope to its limits.
+% The multi-character variables used in this paper
+% worsen all of these problems.
 
-In the parsing literature,
-the concept analogous to our ``realms''
-was called the "domain" for each variable%
-\footnote{
-    The use of term ``domain'' for the set
-    from which a variable may take its value
-    is well-established.
-    But we choose to depart from it because the
-    term ``domain'' is heavily overloaded with other
-    even more well-established uses.
-    For example,
-    in the traditional terminology,
-    a function variable has a ``domain of the variable''
-    but each of the variable's values also has a ``domain of the function''.
-    So if \V{f} is a variable representing a boolean function of the integers,
-    the domain of the function variable \V{f} is $2\expOp\naturals$, while
-    the domain of the function represented by the variable \V{f} is \naturals.
-    This distinction arises in many of our contexts,
-    and we thought it would be exasperatingly confusing.
-},
-and it was represented by a scheme
-in which the domain
-was suggested by a combination
-of the language of the alphabet used,
-the typeface,
-and whether the single character of the variable
-was taken from the end,
-middle or beginning of the alphabet.
-For single-character variables,
-these schemes were awkward and restrictive.
-They also pushed the legibility envelope to its limits.
-The multi-character variables used in this paper
-worsen all of these problems.
-
-An alternative is required.
-This book will
-use subscripts to indicate commonly occurring realms,
-as shown in
-\Tbref{tab:realm-notation}.
-Use of subscripts for other purposes is avoided.
-
-\begin{table}[t]
-\centering
-\caption{Realm notations}
-\begin{tabular}{ll}
-\hline
-$\V{X}_\V{R}$ & The variable \V{X} of realm \realm{R} \\
-$\V{agg1}_\set{\V{R}}$ & The variable \V{agg1} of realm ``set of \realm{R}'' \\
-$\V{agg1}_\Rseq{\V{R}}$ & The variable \V{agg1} of realm ``sequence of \realm{R}'' \\
-\realm{SYM} & The realm for a symbol \\
-\realm{STR} & The realm for a string \\
-\realm{EIM} & The realm for an Earley item \\
-\realm{RULE} & The realm for the rule of a grammar\\
-\Rvar{a}{SYM} & Variable \V{a} of realm \realm{SYM}, subscripted form \\
-\Vsym{a} & Variable \V{a} of realm \realm{SYM}, angle bracket form \\
-\Rvar{a}{STR} & Variable \V{a} of realm \realm{STR}, subscripted form \\
-\Vstr{a} & Variable \V{a} of realm \realm{STR}, angle bracket form \\
-\Veim{a} & Variable \V{a} of realm \realm{EIM} \\
-\Vrule{a} & Variable \V{a} of realm \realm{RULE} \\
-\Vsymset{agg2} & Variable \V{agg2}, an set  of strings \\
-\Vstrset{strings} & Variable \V{strings}, an set of strings \\
-\Veimset{agg3} & Variable \V{agg3}, an set of Earley items \\
-\Veimseq{agg3} & Variable \V{agg3}, an sequence of Earley items \\
-\Vruleset{agg4} & Variable \V{agg4}, an set of grammar rules \\
-$\V{i}_\realm{\integers}$ & Variable \V{i}, an integer \\
-$\V{i}_\realm{\naturals}$ & Variable \V{i}, a non-negative integer \\
-\hline
-\end{tabular}
-\label{tab:realm-notation}
-\end{table}
-
-Realm membership is set membership,
-but not all set membership is realm membership.
-Realm is a meta-linguistic notion.
-Within the object-language realms are implicit,
-never explicit.
-
-On the other hand, realm membership is always set membership
-and, as an alternative to stating
-realm membership using tags,
-we sometimes establish realm membership as a by-product
-of stating set membership, so that
-\[
-   \V{x} \in \realm{R},
-\]
-which states that
-\V{x} is a member of set \V{R},
-might also state that \V{x} is in realm \V{R}.
-This is particularly useful when we want to emphasize
-realm membership,
-or where the realm is too complex to be conveniently
-expressed as a tag.
-
-By default,
-when realm membership is established via
-set membership,
-the first statement of set membership is the one
-which establishes the realm.
-We may identify a statememt of realm membership
-explicitly by putting a line above the membership operator,
-so that
-\[
-   \V{x} \inr \realm{R}
-\]
-makes clear the fact that
-it is a statement
-that \V{x} is a member of of realm \V{R},
-as well as a statement that \V{x}
-is a member of set \V{R}.
-
-The fact that realms are sets is handy for making statements about
-realms.
-We may say that realm \realm{R1} is a synonym of realm \realm{R2}
-by writing $\realm{R1} = \realm{R2}$.
-And if we write that
-\[
-   \realm{R1} = \realm{R2} \cup \realm{R3} \land (\realm{R2} \cap \realm{R3} = \emptyset)
-\]
-we indicate that a variable realm \realm{R1} is either
-a variable of realm \realm{R2}
-or a variable of realm \realm{R3},
-but that no variable can be both
-of realm \realm{R2} and of realm \realm{R3}.
-
-Realm subscripts are often omitted when the realm
-is clear from the context.
-Symbols and strings
-have an alternate realm notation,
-which uses angle brackets.
-Realm names are often used in the text
-as a convenient way to refer to
-their realm.
-
-The realm subscript can often be omitted because,
-by design, it is
-not part of the identity of the variable.
-But there are a few cases,
-where it makes the presentation more readable and more intuitive
-to overload a variable name,
-so that two or more distinct variables
-are differentiated only by realm.
-Obviously, in these cases, the realm subscript
-can never be omitted.
-We overload variable names in this fashion only when the advantages for readability
-seem clearly to outweigh the potential for confusion.
-
+\todo{What to do about this?}
 For example,
 when comparing
 two tuples, we might compare
@@ -2030,86 +1810,6 @@ only by their realm.%
     Among the many problems that have resulted,
     the explosion of the Ariane 5 rocket
     is particularly well-documented.\cite{Lyons1996}}
-
-Realms are defined explicitly, when they are introduced.
-In addition, for every realm \realm{R},
-\begin{itemize}
-\item \powerset{\V{T}} is a realm; and
-\item the sequence whose range is \V{T} and
-whose index set is
-$\naturals$ is a realm.
-\end{itemize}
-
-\FloatBarrier
-
-\section{Placeholders}
-\label{sec:placeholders}
-
-\todo{Delete or rewrite this now that I use Chiron.}
-A schema is a mathematical text with \dfn[Placeholder]{placeholders}.
-In concept, the mathematical text is not deductive mathematics until
-the placeholders in it are replaced,
-in a way that is described.\footnote{%
-    For more on the traditional uses of schemas see \cite{Corcoran2005}.
-    Note that our placeholders are usually
-    part of our meta-language,
-    so that the text in which the placeholder is specified must
-    be read as on level above our meta-language ---
-    as part of a meta-language of our meta-language.
-    The term ``schematic variable'' is more common for placeholder ---
-    "regrettably" says Corcoran \cite[p. 220]{Corcoran2005}.
-    And in fact the two types of symbol
-    often end up being lumped together as ``variables''.}
-
-Schemas are pervasive in the mathematical literature on which
-this paper is based.
-Some of the axioms of our set theory are, in fact, axiom schemas.
-But the parsing literature
-typically makes no note of which of its symbols are variables and which
-are placeholders.
-
-Our aggressive use of realms suggests that
-some extra caution
-is advisable in our case.
-The most frequent reason that we resort to schemas is when
-the natural realm for a variable would not be a set.
-
-As an example, when we deal with sequences, the most natural
-way to describe them allows the values of the sequence to be
-arbitrary sets.
-But that would mean that the natural realm
-of the codomain
-todo{codomain not yet defined, so add a forward reference}
-of the sequence would
-be the set of all non-empty sets,
-which is not well-defined in our set theory.
-We work around this by letting the domain of the sequences
-in our discussion be a placeholder, which may be replaced
-by any non-empty set.
-
-In this book,
-a \dfn[Macro]{macro}
-is an expression that looks like a function,
-but is evaluated at the meta-linguistic level.
-For example, we recall that we
-refer to the realm of the variable \V{v} as
-\Realm{\V{v}}.
-\Realm{} cannot be a function,
-because its domain would have to be
-the set of all variables,
-which is not well-defined.
-Instead we define \Realm{} as a macro,
-which is replaced at the meta-linguistic level,
-with the realm of \V{v}.
-\todo{Expand on macro discussion.
-Note argument of Realm() could be a placeholder,
-in which case there are two levels of meta-linguistic
-evaluation.}
-
-In order to be able to claim that all of our variables have a realm,
-we assign a trivial realm to every variable that replaces a placeholder.
-The realm of a placeholder replacement variable
-is the singleton set containing that variable.
 
 \section{Arbitrary and convenience variables}
 
