@@ -643,8 +643,6 @@
 \newcommand{\Rvarset}[2]{\ensuremath{\V{#1}_{\set{\V{#2}}}}}
 \newcommand{\wRange}[2]{\boldRange{w}{#1}{#2}}
 
-% A strut for use in making up symbols in boxed form
-
 \newcommand{\eim}[1]{\ensuremath{#1_\realm{EIM}}}
 \newcommand{\es}[1]{\ensuremath{#1_\realm{ES}}}
 \newcommand{\et}[1]{\ensuremath{#1_\realm{ET}}}
@@ -2442,13 +2440,13 @@ $\naturals+1 = 1+\naturals = 1$.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\le$} & \cellboxr{Lax comparison} \\
+{$\le$} & \cellboxr{Lax less than} \\
 \hline
-{$\ge$} & \cellboxr{Lax comparison} \\
+{$\ge$} & \cellboxr{Lax greater than} \\
 \hline
-{$<$} & \cellboxr{Strict comparison} \\
+{$<$} & \cellboxr{Strict less than} \\
 \hline
-{$>$} & \cellboxr{Strict comparison} \\
+{$>$} & \cellboxr{Strict greater than} \\
 \hline
 {$=$} & \cellboxr{Equality} \\
 \hline
@@ -2457,29 +2455,43 @@ $\naturals+1 = 1+\naturals = 1$.
 
 \FloatBarrier
 
-\subsection{String operator}
-
-\FloatBarrier
-
-Concatenation may also be made explicit:
-$\V{a} \cat \V{b}$.
-
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    String operator
-    }
-% \\[1.5ex]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\V{a} \cat \V{b}$} & \cellboxr{Concatenation of \V{b} after \V{a}} \\
+\rule{0em}{5.1ex}\raisebox{1.5ex}{$\Vstr{a} \Vstr{b}$} &
+    \raisebox{1.4ex}
+        {\cellboxr{Implicit concatenation of string \V{b} after string \V{a}}} \\
+\hline
+{$\V{a} \cat \V{b}$} & \cellboxr{Explicit concatenation of \V{b} after \V{a}} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
 
-\subsection{Set operator}
+Concatenation is the only implied operator in this paper:
+multiplication is always explicit.
+Concatenation may also be made explicit.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
+\hline
+{$\times$} & \cellboxr{Cartesian product of sets} \\
+\hline
+{$\V{C} \expOp \V{D}$} &
+    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
+\hline
+{$\V{C} \exxpOp \V{Dset}$} &
+    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
+\hline
+\end{tabular}
+\end{table}
 
 \FloatBarrier
 
@@ -2513,45 +2525,10 @@ $\V{X}\exxpOp\V{Yset}$%
 , so that
 \[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
 
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\caption{
-    Set operators,
-    from tightest to loosest
-    }
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
-\hline
-{$\times$} & \cellboxr{Cartesian product of sets} \\
-\hline
-{$\V{C} \expOp \V{D}$} &
-    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
-\hline
-{$\V{C} \exxpOp \V{Dset}$} &
-    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
-\hline
-\end{tabular}
-\end{table}
 
 \FloatBarrier
-
-\subsection{Boolean result operator}
-
-\FloatBarrier
-
-$\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
-$\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
-Similarly,
-$\V{A} \supseteq \V{B}$ means that \V{A} is a superset of \V{B}, while
-$\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
-
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Boolean result operators,
-    from tightest to loosest
-    }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 {$\subset$} {$\subseteq$}
@@ -2579,7 +2556,11 @@ $\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
 
 \FloatBarrier
 
-\subsection{Polyadic operators}
+$\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
+$\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
+Similarly,
+$\V{A} \supseteq \V{B}$ means that \V{A} is a superset of \V{B}, while
+$\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
 
 We define the traditional function definition notation
 as a boolean operator, so that
@@ -24099,8 +24080,8 @@ pages 1-60 of~\cite{Farmer2012}.
 \cite{Farmer2007} is an earlier version of \cite{Farmer2012}.
 
 Farmer calls his approach to ill-definedness the ``traditional
-approach'' because it handles ill-definedness in a way that was traditional,
-but usually left implicit.
+approach'' because it handles ill-definedness in a way that conforms
+to the usually implicit practice of the literature.
 In~\cite{FG2000} Farmer introduced his ``traditional approach'',
 and in~\cite{Farmer2004} he applied it
 to examples taken from a basic calculus text.
