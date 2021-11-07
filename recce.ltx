@@ -97,6 +97,8 @@
 
 %% From Chiron 2012 paper
 
+\newcommand{\sets}{\ensuremath{\mathbb{V}}}
+\newcommand{\classes}{\ensuremath{\mathbb{C}}}
 \newcommand{\Dv}{\ensuremath{\mathbb{D}{\rm v}}}
 \newcommand{\Dc}{\ensuremath{\mathbb{D}{\rm c}}}
 \newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}}
@@ -162,15 +164,9 @@
 \newcommand{\uni}{\mname{univocal}}
 \newcommand{\fun}{\mname{function}}
 \newcommand{\card}{\mname{card}}
-\newcommand{\sets}{\mname{sets}}
 \newcommand{\monotone}{\mname{monotone}}
 \newcommand{\continuous}{\mname{continuous}}
 \newcommand{\chain}{\mname{chain}}
-\newcommand{\mub}{\mname{ub}}
-\newcommand{\mlub}{\mname{lub}}
-\newcommand{\fixedpoint}{\mname{fp}}
-\newcommand{\leastfixedpoint}{\mname{lfp}}
-\newcommand{\strongfixedpoint}{\mname{sfp}}
 \newcommand{\emptyfun}{\triangle}
 \newcommand{\emptylist}{[\,]}
 
@@ -178,9 +174,6 @@
 \newcommand{\IotaApp}{\mbox{\rm I}\,}
 \newcommand{\iotaApp}{\iota\,}
 \newcommand{\invertediota}{\rotatebox[origin=c]{180}{$\iota$}}
-\newcommand{\Epsilon}{\mbox{\rm E}}
-\newcommand{\EpsilonApp}{\mbox{\rm E}\,}
-\newcommand{\epsilonApp}{\epsilon\,}
 \newcommand{\True}{\mbox{\sf T}}
 \newcommand{\False}{\mbox{\sf F}}
 \newcommand{\Trueword}{\sf true}
@@ -2130,13 +2123,13 @@ treated as a boolean ``false''.
 This is not fully rigorous: the distinction between an ill-defined value
 and a well-defined boolean value of ``false''
 can be essential.\footnote{
-    We are not troubling to attempt to describe the traditional approach
-    in precise terms.
-    For this, see Farmer 2004~\cite{Farmer2004}.
+    Farmer 2004~\cite{Farmer2004} contains
+    a more precise description of the traditional approach.
 }
-But in the tradition, caution was exercised and disasters were avoided.
+But in the tradition, caution was usually exercised
+and disasters mostly avoided.
 
-This traditional approach to well-definedness has certainly been around
+While, this traditional approach to well-definedness has certainly been around
 for a long time,
 the first people to document it seem to have been
 Farmer and Guttman.\cite{FG2000}.
@@ -2145,8 +2138,9 @@ and it is their approach that is used in this book.
 
 Sometimes it will be convenient to treat ill-definedness as a value.
 For this, our object-language has a special dedicated value, the
-\hbox{\dfn{unicorn}: $\unicorn$}.%
-\index{recce-symbol}{unicorn@$\unicorn$ (ill-defined)}%
+\hbox{unicorn: $\unicorn$.}%
+\index{recce-symbol}{Unicorn@$\unicorn$ (the ``unicorn'', the ill-defined constant)}%
+\index{recce-defienda}{Unicorn@Unicorn, $\unicorn$ (ill-defined constant)}%
 \footnote{%
     Our use of the term ``unicorn'' is derived from the usage of that term
     in the philosophy literature.
@@ -2177,18 +2171,31 @@ For this, our object-language has a special dedicated value, the
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\naturals$} & \cellboxr{The set (and type) of Natural numbers} \\
+{$\classes$} & \cellboxr{The universal type} \\
+\hline
+{$\naturals$} & \cellboxr{The set of natural numbers} \\
+\hline
+{$\sets$} & \cellboxr{The class of all sets} \\
 \hline
 {$\unicorn$} & \cellboxr{The ``unicorn'', the ill-defined constant} \\
 \hline
 \end{tabular}
 \end{table}%
-\index{recce-symbol}{naturals@$\naturals$ (set of natural numbers)}%
+\index{recce-symbol}{C@$\classes$ (the universal type)}%
+\index{recce-defienda}{C@$\classes$ (the universal type)}%
+\index{recce-symbol}{N@$\naturals$ (set of natural numbers)}%
 \index{recce-defienda}{N@$\naturals$ (set of natural numbers)}%
-\index{recce-defienda}{unicorn@$\unicorn$ (ill-defined)}%
-\index{recce-symbol}{unicorn@$\unicorn$ (ill-defined)}%
-\index{recce-defienda}{unicorn@unicorn, $\unicorn$ (ill-defined constant)}%
+\index{recce-symbol}{V@$\sets$ (the class of all sets)}%
+\index{recce-defienda}{V@$\sets$ (the class of all sets)}%
+\index{recce-symbol}{Unicorn@$\unicorn$ (the ``unicorn'', the ill-defined constant)}%
+\index{recce-defienda}{Unicorn@Unicorn, $\unicorn$ (ill-defined constant)}%
 \FloatBarrier
+
+\classes{}, the universal type, is also the superclass of
+all classes.
+Since every set or class is also a type,
+\naturals{} is the type for a natural number,
+and \sets{} is the type for a sets.
 
 In this book, the natural numbers begin with 0,
 and the set of natural numbers is written \naturals{},
@@ -8986,8 +8993,10 @@ A symbol is \dfn{unproductive} if it is not
 productive.
 In the current version of \Marpa{},
 unproductive symbols can be implemented by
-defining \dfn{unicorn} terminals.
-A unicorn terminal is a terminal symbol
+defining
+unicorn terminals.
+A \dfn[Unicorn@Unicorn terminal]{unicorn terminal}
+is a terminal symbol
 which can never be
 found in the input.
 
