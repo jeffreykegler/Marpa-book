@@ -1439,7 +1439,7 @@ we will break it down no further.\footnote{%
 \Earley{} will refer to the Earley's%
 \index{recce-general}{Earley, Jay}
 original
-recognizer\cite{Earley1970}
+recognizer~\cite{Earley1970}
 with zero characters of lookahead.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
@@ -1800,7 +1800,7 @@ only by their realm.%
     in software, and ignoring this distinction has not been without incident.
     Among the many problems that have resulted,
     the explosion of the Ariane 5 rocket
-    is particularly well-documented.\cite{Lyons1996}}
+    is particularly well-documented.~\cite{Lyons1996}}
 
 \section{Arbitrary and convenience variables}
 
@@ -2132,7 +2132,7 @@ and disasters mostly avoided.
 While, this traditional approach to well-definedness has certainly been around
 for a long time,
 the first people to document it seem to have been
-Farmer and Guttman.\cite{FG2000}.
+Farmer and Guttman.~\cite{FG2000}.
 They also put forward an rigorous alternate in the form of PFOL,
 and it is their approach that is used in this book.
 
@@ -2164,7 +2164,9 @@ For this, our object-language has a special dedicated value, the
     We want to be told the the successor of 7 is 8,
     but to be told that 7 is a subset of 8
     or that 7 is an element of 8 is disturbing.}
-    {{\em Naive Set Theory}, Halmos\cite[p. 45]{Halmos1960}}
+    {{\em Naive Set Theory}, Halmos~\cite[p. 45]{Halmos1960}}
+
+For built-ins, a constant is a nullary built-in operator.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{3in}
@@ -2217,13 +2219,22 @@ table, then description,
 in precedence order from
 tightest.}
 
-Operators are given in order or precedence,
-from tightest to loosest.
-Operators in the same table has the same precedence,
-unless they are separated by a double horizontal line.
-Arity and associativity follow tradition,
+Operators are given in non-tightening order of precedence.
+The operator of a row following a double-line separator has
+looser precedence than the operator in the preceding rows.
+The operator of a row following a single-line separator has
+tighter precedence than the operator in the preceding rows.
+Parentheses override precedence.
+
+We do not explicitly state only matters in which we are following
+an unambiguous tradition.
+For example, operator associativity follows tradition,
 unless otherwise stated.
-Bracketing symbols override precedence.
+We do state recedence explicitly,
+because the mixture of operators
+from various preceding disciplines and traditions
+would often leave it unclear what precedence
+two operators should have relative to each other.
 
 \FloatBarrier
 
@@ -2447,6 +2458,7 @@ $\naturals+1 = 1+\naturals = 1$.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
+\hline
 {$\le$} & \cellboxr{Lax less than} \\
 \hline
 {$\ge$} & \cellboxr{Lax greater than} \\
@@ -2465,6 +2477,7 @@ $\naturals+1 = 1+\naturals = 1$.
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
+\hline
 \hline
 \rule{0em}{5.1ex}\raisebox{1.5ex}{$\Vstr{a} \Vstr{b}$} &
     \raisebox{1.4ex}
@@ -2487,9 +2500,17 @@ Concatenation may also be made explicit.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\cup$ $\cap$ $-$} & \cellboxr{Set union, intersection, difference} \\
-\hline
 {$\times$} & \cellboxr{Cartesian product of sets} \\
+\hline
+\hline
+{$-$} & \cellboxr{Set difference} \\
+\hline
+\hline
+{$\cup$} & \cellboxr{Set union} \\
+\hline
+\hline
+{$\cap$} & \cellboxr{Set intersection} \\
+\hline
 \hline
 {$\V{C} \expOp \V{D}$} &
     \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
@@ -9113,7 +9134,7 @@ at Earley%
 \index{recce-general}{Earley, Jay}
 parsing.
 
-Marpa follows Aycock and Horspool\cite{AH2002} in using
+Marpa follows Aycock and Horspool~\cite{AH2002} in using
 grammar rewrites to handle these issues.
 Marpa's recognizer works using
 Marpa internal grammars, but
@@ -9142,9 +9163,9 @@ instead that paper centered on revising Earley's%
 \index{recce-general}{Earley, Jay}
 algorithm
 to use LR(0) states.
-The first version of \Marpa{}\cite{Kegler2019}
+The first version of \Marpa{}~\cite{Kegler2019}
 used the LR(0) states of \cite{AH2002},
-combining them with Joop Leo's improvements\cite{Leo1991}.
+combining them with Joop Leo's improvements~\cite{Leo1991}.
 
 Adding the LR(0) states to the first version of \Marpa{}
 made its theory much more complex,
@@ -10969,14 +10990,14 @@ providing for.
 
 Omission of a Leo memoization does not affect correctness,
 so \Marpa{}'s restriction of Leo memoization
-preserves the correctness as shown in Leo\cite{Leo1991}.
+preserves the correctness as shown in Leo~\cite{Leo1991}.
 \todo{Refer to later proof that omission of memoization does not affect correctness}
 Later in this book
 we will prove this,
 and we will also
 show that this change also leaves
 the complexity results of
-Leo\cite{Leo1991} intact.
+Leo~\cite{Leo1991} intact.
 
 The current \Marpa{} implementation does not perform
 Leo memoization in Earley set 0.
@@ -16490,7 +16511,7 @@ In practice, for efficiency,
 \Velement{S}{\Vloc{j}} accesses are not actually used
 by the \Marpa{} implementation during parsing.
 During parsing
-\Rtwo\cite{Marpa-R2}
+\Rtwo~\cite{Marpa-R2}
 builds Earley sets as a linked list of structures,
 and a dynamic array indexing them is only created
 when needed.
@@ -17831,7 +17852,7 @@ the transition array
 \begin{observation}[Original Earley algorithm: Predicter Operation]
 \label{obs:earley-predicter-op}
 \Marpa{}'s predicter op has the same effect as the ``Predicter''
-operation of \Earley{}\cite{Earley1970}.
+operation of \Earley{}~\cite{Earley1970}.
 \end{observation}
 
 \section{Scanner op}
@@ -19147,7 +19168,7 @@ and \ref{line:leo-reducer-op-10}.
 \label{obs:earley-completer-op}
 When there are no \realm{LIM}s in \Ves{predecessor}
 \Marpa{}'s \var{Reducer} op has the same effect as the ``Completer''
-operation of \Earley{}\cite{Earley1970}.\footnote{
+operation of \Earley{}~\cite{Earley1970}.\footnote{
 For all other \Marpa{} ops we have used the name of its
 equivalent in \Earley{}.
 It is convenient to use a different name
@@ -19647,7 +19668,7 @@ and the observation on \realm{LIM} ancestry \Obref{lim-ancestry}.
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-op}
-\Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}\cite{Earley1970}.
+\Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}~\cite{Earley1970}.
 \obEnd{}
 \end{observation}
 
@@ -19691,7 +19712,7 @@ shown in \Aref{alg:marpa}.
 If line \ref{line:marpa-line-memoizer},
 calling the \op{Memoizer} op,
 is removed,
-\Aref{alg:marpa} has the same effect as \Earley{}\cite{Earley1970}.
+\Aref{alg:marpa} has the same effect as \Earley{}~\cite{Earley1970}.
 This can be seen from
 \Aref{alg:marpa},
 \Obref{earley-set-0},
@@ -20954,7 +20975,7 @@ will usually be a waste of time.}
     Board is in favour of the opposite view, that software should be assumed
     to be faulty until applying the currently accepted best practice methods
     can demonstrate that it is correct.}
-    {Ariane 5, Flight 501, Failure Report\cite[section 2.2]{Lyons1996}}%
+    {Ariane 5, Flight 501, Failure Report~\cite[section 2.2]{Lyons1996}}%
 
 In this book,
 we call a parsing algorithm \dfn{correct} if and
@@ -24082,7 +24103,7 @@ the use of tables, lists and other readability aids.
 \section{Chiron}
 \label{sec:aside-chiron}
 
-William Farmer's 2012 paper\cite{Farmer2012}
+William Farmer's 2012 paper~\cite{Farmer2012}
 is our primary reference for Chiron.
 The material we use as our foundation is in Chapters 1 through 5,
 pages 1-60 of~\cite{Farmer2012}.
