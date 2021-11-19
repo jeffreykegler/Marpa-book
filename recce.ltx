@@ -591,10 +591,12 @@
 
 \newcommand{\inr}{\mathrel{\overline{\in}}}
 % scale plus signs down further?
-\newcommand{\incr}[1]{\ensuremath{#1\scalebox{.75}{++}}}
+% \newcommand{\plusplus}{\mathbin{++}}
+\newcommand{\minusminus}{\mathbin{--}}
+\newcommand{\incr}[1]{\ensuremath{#1\plusplus}}
 \newcommand{\Vincr}[1]{\incr{\V{#1}}}
 % \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
-\newcommand{\decr}[1]{\ensuremath{#1\scalebox{.75}{{-}{-}}}}
+\newcommand{\decr}[1]{\ensuremath{#1\minusminus}}
 \newcommand{\Vdecr}[1]{\decr{\V{#1}}}
 \newcommand{\Rseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
@@ -2266,25 +2268,25 @@ a given pair of operators should have relative to each other.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\Vdecr{x}$} & \cellboxr{Decrement of \V{x}, Predecessor of \V{x}} \\
+{$\Vdecr{X}$} & \cellboxr{Decrement of \V{X}, Predecessor of \V{X}} \\
 \hline
-{$\Vincr{x}$} & \cellboxr{Increment of \V{x}, Successor of \V{x}} \\
+{$\Vincr{X}$} & \cellboxr{Increment of \V{X}, Successor of \V{X}} \\
 \hline
 \end{tabular}
 \end{table}
 
 We adopt a
 programming language notation for
-the successor relation: \Vincr{x}.
-Similarly for the predecessor relation: \Vdecr{x}.
+the successor relation: \Vincr{X}.
+Similarly for the predecessor relation: \Vdecr{X}.
 We overload these notations for use as shorthands
 for incrementation by~1:
 \[
-\Vincr{x} = \V{x}+1
+\Vincr{X} = \V{X}+1
 \]
 and decrementation by~1:
 \[
-\Vdecr{x} = \V{x}-1.
+\Vdecr{X} = \V{X}-1.
 \]
 
 \FloatBarrier
@@ -2304,8 +2306,11 @@ and decrementation by~1:
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\textstyle {\sum} \quad {\bigcap} \quad {\bigcup}$} & \cellboxr{Summation, Unary union,
-    Unary intersection} \\
+{$\textstyle {\sum}$} & \cellboxr{Summation} \\
+\hline
+{$\textstyle {\bigcap}$} & \cellboxr{Unary union} \\
+\hline
+{$\textstyle {\bigcup}$} & \cellboxr{Unary intersection} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2365,10 +2370,8 @@ $\rawfn{(\fname{f}\caret0)}{\V{x}} = \V{x}$.
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-$\fname{g}\fnAfterOp\fname{f} \quad \fname{g}\relAfterOp\fname{f}$ &
-    \cellboxr{
-    Functional composition, relational composition:
-    ``\V{g} after \V{f}''} \\
+$\fname{g}\relAfterOp\fname{f}$ &
+    \cellboxr{Relational composition: ``\V{g} after \V{f}''} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2387,6 +2390,21 @@ That is,
          \tuple{\V{x}, \V{y}} \in \V{f} \land
          \tuple{\V{y}, \V{z}} \in \V{g} }.
 \]
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+$\fname{g}\fnAfterOp\fname{f}$ &
+    \cellboxr{ Functional composition ``\V{g} after \V{f}''} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 
 Where \fname{f} are \fname{g} are functions,
 $\fname{g}\fnAfterOp{}\fname{f}$ is
@@ -2506,6 +2524,7 @@ Concatenation may also be made explicit.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
+\hline
 {$\times$} & \cellboxr{Cartesian product of sets} \\
 \hline
 \hline
@@ -2520,9 +2539,6 @@ Concatenation may also be made explicit.
 \hline
 {$\V{to} \expOp \V{from}$} &
     \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
-\hline
-{$\V{to} \exxpOp \V{fromClass}$} &
-    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2549,6 +2565,22 @@ but we prefer a more readable notation.
 Our notation, adopted from one that
 many programming languages
 use for exponentiation, avoids superscripts.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\V{to} \exxpOp \V{fromClass}$} &
+    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
 We often wish to speak of the type for functions whose domain is an element
 of a class.
 For this we write, where \V{Ycl} is a class of domains
@@ -2589,12 +2621,7 @@ $\V{X}\exxpOp\V{Ycl}$%
 
 \FloatBarrier
 
-$\V{A} \subseteq \V{B}$ means that \V{A} is a subset of \V{B}, while
-$\V{A} \subset \V{B}$ means that \V{A} is a proper subset of \V{B}.
-Similarly,
-$\V{A} \supseteq \V{B}$ means that \V{A} is a superset of \V{B}, while
-$\V{A} \supset \V{B}$ means that \V{A} is a proper superset of \V{B}.
-
+\todo{Do I want this now that I use Chiron?}
 We define the traditional function definition notation
 as a boolean operator, so that
 it is only true if \V{f} is a function
