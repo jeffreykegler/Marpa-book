@@ -600,6 +600,10 @@
 \newcommand{\set}[1]{%
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
+\newcommand{\midOp}{|}
+\newcommand{\setM}[2]{% collection, with mid op
+    \ensuremath{\left\lbrace #1 \;\middle\midOp\; #2 \right\rbrace}%
+}
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
 \newcommand{\typed}[2]{\ensuremath{#1\mcolon#2}}
 \newcommand{\Vtyped}[2]{\ensuremath{\var{#1}\mcolon#2}}
@@ -2514,11 +2518,11 @@ Concatenation may also be made explicit.
 {$\cap$} & \cellboxr{Set intersection} \\
 \hline
 \hline
-{$\V{C} \expOp \V{D}$} &
-    \cellboxr{Set of functions from domain \V{D} to codomain \V{C}} \\
+{$\V{to} \expOp \V{from}$} &
+    \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
 \hline
-{$\V{C} \exxpOp \V{Dset}$} &
-    \cellboxr{Set of functions from domain in set \V{Dset} to codomain \V{C}} \\
+{$\V{to} \exxpOp \V{fromClass}$} &
+    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2527,8 +2531,8 @@ Concatenation may also be made explicit.
 
 We write $\V{X}\expOp\V{Y}$%
 \index{recce-symbol}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
-    is the set of functions from \V{Y} to \V{X})}
-for the set of
+    is the type for functions from \V{Y} to \V{X})}
+for the type of
 functions with \V{Y} as their domain
 and \V{X} as their codomain.
 Therefore we write
@@ -2537,24 +2541,23 @@ Therefore we write
 \]
 to say that \V{f} is a function
 such that $\Dom{\V{f}} = \V{Y}$
-and $\Cod{\V{f}} = \V{X}$.\footnote{
-    More often in the literature,
-    $\V{f} \in \V{X}\expOp\V{Y}$
-    is written as $\V{X}^\V{Y}$,
-    but we prefer a more readable notation.
-    Our notation, adopted from one that
-    many programming languages
-    use for exponentiation, avoids superscripts.}
-We often wish to speak of the set of functions whose domain is an element
-of a set.
-For this we write, where \V{Yset} is a set of domains
+and $\Cod{\V{f}} = \V{X}$.
+More often in the literature,
+$\V{f} \in \V{X}\expOp\V{Y}$
+is written as $\V{X}^\V{Y}$,
+but we prefer a more readable notation.
+Our notation, adopted from one that
+many programming languages
+use for exponentiation, avoids superscripts.
+We often wish to speak of the type for functions whose domain is an element
+of a class.
+For this we write, where \V{Ycl} is a class of domains
 and \V{X} is a codomain,
-$\V{X}\exxpOp\V{Yset}$%
-\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ys}$
-    is the set of functions from an element of \V{Ys} to \V{X})}%
+$\V{X}\exxpOp\V{Ycl}$%
+\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ycl}$
+    is the type for functions from an element of \V{Ycl} to \V{X})}%
 , so that
-\[ \V{X}\exxpOp\V{Yset} = \set{ \V{X}\expOp\V{Y} : \V{Y} \in \V{Yset} }. \]
-
+\[ \V{X}\exxpOp\V{Ycl} = \bigcup \setM{ \V{X}\expOp\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{3in}
@@ -2892,7 +2895,7 @@ $\subseteq$ is the lax partial relation corresponding to the strict partial rela
 
 \section{Functions}
 
-Functions are total unless stated otherwise.
+Functions are partial unless stated otherwise.
 An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
@@ -3035,26 +3038,6 @@ In this chapter, we clarify our terminology
 and introduce additional terminology and results which
 we will use in this book.
 
-\renewcommand{\labBase}{rem-cxt-ch-sequence}
-\begin{remark}[Sequence chapter context]
-\label{rem:cxt-ch-sequence}
-So that we may speak of sequences whose values are arbitrary sets,
-this chapter is a schema.
-We let \V{V} be a placeholder for a non-empty set,
-which is not $\Lambda$
-and which does not contain $\Lambda$.
-We typically use \V{V} as the codomain of sequences
-under discussion.
-
-Additionally, in every theoremoid,
-we implicitly introduce a new placeholder \V{V},
-with the same restrictions as the chapter-wide \V{V}.
-We typically use the theoremoid-wide \V{V}
-to represent the codomain of sequences
-contained in the scope of that theoremoid.
-\rmEnd
-\end{remark}
-
 \begin{definition}[Sequence]
 \label{def:sequence}
 A sequence is a family (and therefore a function)
@@ -3062,7 +3045,7 @@ whose domain is either a natural number or \naturals.
 \dfEnd
 \end{definition}
 
-In most of this book, we will only need finite sequences.
+In most of this book, we will need only finite sequences.
 But in this chapter, we want to be more general,
 and we allow sequences to be countably infinite.
 This means that codomain of the cardinality operator for sequences
@@ -3078,6 +3061,8 @@ we say that it is the
 We often write the empty sequence as $\epsilon$.%
 \index{recce-symbol}{e@$\epsilon$ (empty sequence)}
 
+Since a sequence is a function,
+we can repurpose function notations to deal with sequences.
 If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid
 \dfn[Index (of a sequence)]{indexes}
@@ -3090,28 +3075,24 @@ The set of
 containing its indexes
 and its endpoint:
 $\Dom{\V{seq}} \cup \Vsize{seq}$.
-
 \Cod{\V{seq}} is the set of valid values of \V{seq},
 and \Ran{\V{seq}} is the set of actual values of \V{seq}.
-It is therefore always the case that
-$\V{seq} \in \Cod{\V{seq}} \expOp \Dom{\V{seq}}$,
-that $\Ran{\V{seq}} \subseteq \Cod{\V{seq}}$.
 
-Since a sequence is a function,
-we can repurpose function notations to deal with sequences.
-For example, $\V{V} \expOp 5$ is the set of all sequences
-of length 5 whose codomain is \V{V}.
+For example, $\sets{} \expOp 5$ is the set of all sequences
+of length 5 whose codomain is \sets{}.
 (We recall that $5 = \set{0,1,2,3,4}$.)
-We write $\V{V}\exxpOp\naturals$
+We write $\sets{}\exxpOp\naturals$
 for the set of all finite sequences
-whose codomain is \V{V}.
-We write $\V{V}\expOp\naturals$
-for the infinite sequence whose codomain is \V{V}.
-We write $\V{V}\exxpOp(\naturals\cup\set{\naturals})$
+whose codomain is \sets{}.
+We write $\sets{}\expOp\naturals$
+for the infinite sequence whose codomain is \sets{}.
+We write $\sets{}\exxpOp(\naturals\cup\set{\naturals})$
 for the set of all sequences
-whose codomain is \V{V}.
+whose codomain is \sets{}.
 
-Recall that we defined 0 as boolean false and
+Recall
+\todo{Fix this to be consistent with Chiron}
+that we defined 0 as boolean false and
 1 as boolean true;
 and that therefore $2 = \set{0,1}$ is the set of boolean values.
 This means that
@@ -24184,7 +24165,7 @@ included there.
 In our the use of epigraphs,
 many readers will detect the influence of Knuth \cite{Knuth1986}.
 Knuth's epigraphs are often jokes or puns
-and act as comic relief from material
+and act as as contrast to his exposition,
 which can be very demanding.
 While we enjoy Knuth's sense of humor,
 and benefited by his example,
