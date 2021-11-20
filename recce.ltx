@@ -77,6 +77,7 @@
 \usepackage{algpseudocode}
 \usepackage{amssymb}
 \usepackage{phonetic} % For Polish accent in bibliography
+\usepackage{mathabx}
 \usepackage{wasysym} % Used for \Circle
 \usepackage{stmaryrd} % Used for \llbracket, \rrbracket
 \usepackage{mathtools}
@@ -143,7 +144,8 @@
 % \newcommand{\provesin}[3]{#1 \vdash_{#2} #3}
 % \newcommand{\notprovesin}[3]{#1 \not\vdash_{#2} #3}
 %\newcommand{\leqq}[1]{\mathrel{\preceq_{#1}}}
-\newcommand{\parrow}{\rightharpoonup}
+\newcommand{\fnMap}{\rightharpoonup}
+\newcommand{\fnMMap}{\rightrightharpoons}
 \newcommand{\tarrow}{\rightarrow}
 % \newcommand{\term}{\seq}
 \newcommand{\lub}{\sqcup}
@@ -712,7 +714,7 @@
 \newcommand{\integers}{\ensuremath{\mathbb{Z}}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
 \newcommand{\Earley}{\algo{Earley}}
-\newcommand{\Leo}{\algo{Leo}}
+\renewcommand{\Leo}{\algo{Leo}} % overwrites mathabx symbol
 \newcommand{\Marpa}{\algo{Marpa}}
 \newcommand{\Rtwo}{\texttt{Marpa::R2}}
 
@@ -2257,10 +2259,19 @@ a given pair of operators should have relative to each other.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{\powerset{\V{A}}} & \cellboxr{Powerset of the set \V{A}} \\
+{\powerset{\V{A}}} & \cellboxr{Powerset of the collection \V{A}} \\
+\hline
+{\Cod{\V{A}}} & \cellboxr{Codomain of the relation \V{A}} \\
+\hline
+{\Dom{\V{A}}} & \cellboxr{Domain of the relation \V{A}} \\
+\hline
+{\Ran{\V{A}}} & \cellboxr{Range of the relation \V{A}} \\
 \hline
 \end{tabular}
-\end{table}
+\end{table}%
+\index{recce-defienda}{\Cod{\V{r}}, codomain of function \V{r}}%
+\index{recce-defienda}{\Dom{\V{r}}, domain of relation \V{r}}%
+\index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}
 
 \FloatBarrier
 
@@ -2536,6 +2547,94 @@ Concatenation may also be made explicit.
 \hline
 {$\cap$} & \cellboxr{Set intersection} \\
 \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\V{to} \fnMap \V{from}$} &
+    \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+In this book a function is a partial function, unless otherwise stated.
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
+
+We recall that we regard any two collections as equivalent
+iff their extensions are identical, and
+that equivalent class objects may have different types.
+The following is true of functions:
+\begin{itemize}
+\item Two functions are never equivalent unless both have the same range.
+\item Two equivalent total functions must have the same domain.
+\item Two functions may have different domains
+and still be equivalent, if the functions are non-total.
+\item Two equivalent functions may have different codomains,
+even if both functions are total.
+\end{itemize}
+
+We write $\V{X}\fnMap\V{Y}$%
+\index{recce-symbol}{function map 1@$\fnMap$ ($\V{X}\fnMap\V{Y}$
+    is the type for functions from \V{Y} to \V{X})}
+for the type of
+functions with \V{Y} as their domain
+and \V{X} as their codomain.
+Therefore we can write
+\[
+    \Vtyped{f}{\V{X}\fnMap\V{Y}}
+\]
+to say that \V{f} is a function variable
+whose type is the superclass of all
+functions such that $\Dom{\V{f}} = \V{Y}$
+and $\Cod{\V{f}} = \V{X}$.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\V{to} \fnMMap \V{fromClass}$} &
+    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+We may wish to specify the domain of a function type by type,
+instead of explicitly.
+That is,
+we may wish to specify that \V{f} is a function variable whose
+type is $\V{X}\fnMap\V{Y1}$ for some
+$\VVtyped{Y1}{Ys}$,
+where \V{Ys} is a superclass.
+For this we write
+$\V{X}\fnMMap\V{Ys}$%
+\index{recce-symbol}{function map 2@$\fnMMap$ ($\V{X}\fnMMap\V{Ys}$
+    is the type for functions from an element of \V{Ys} to \V{X})}%
+,
+\todo{Add reference if use of unary union is cataphoric}
+so that
+\[ \V{X}\fnMMap\V{Ys} = \bigcup \setM{ \V{X}\fnMap\V{Y} }{ \V{Y} \in \V{Ys} }. \]
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
 \hline
 {$\V{to} \expOp \V{from}$} &
     \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
@@ -2546,7 +2645,7 @@ Concatenation may also be made explicit.
 \FloatBarrier
 
 We write $\V{X}\expOp\V{Y}$%
-\index{recce-symbol}{**@$\expOp$ ($\V{X}\expOp\V{Y}$
+\index{recce-symbol}{function map 1@$\expOp$ ($\V{X}\expOp\V{Y}$
     is the type for functions from \V{Y} to \V{X})}
 for the type of
 functions with \V{Y} as their domain
@@ -2558,13 +2657,13 @@ Therefore we write
 to say that \V{f} is a function
 such that $\Dom{\V{f}} = \V{Y}$
 and $\Cod{\V{f}} = \V{X}$.
-More often in the literature,
+In Halmos,
 $\V{f} \in \V{X}\expOp\V{Y}$
 is written as $\V{X}^\V{Y}$,
-but we prefer a more readable notation.
-Our notation, adopted from one that
+but we prefer to avoid subscripts.
+Our $\expOp$ notation is adopted from one that
 many programming languages
-use for exponentiation, avoids superscripts.
+use for exponentiation.
 
 \FloatBarrier
 
@@ -2574,20 +2673,18 @@ use for exponentiation, avoids superscripts.
 \hline
 \hline
 {$\V{to} \exxpOp \V{fromClass}$} &
-    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
+    \cellboxr{Type for total functions from some domain in class \V{fromClass} to codomain \V{to}} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
 
-We often wish to speak of the type for functions whose domain is an element
-of a class.
-For this we write, where \V{Ycl} is a class of domains
+Where \V{Ycl} is a class of domains
 and \V{X} is a codomain,
 $\V{X}\exxpOp\V{Ycl}$%
-\index{recce-symbol}{***@$\exxpOp$ ($\V{X}\exxpOp\V{Ycl}$
-    is the type for functions from an element of \V{Ycl} to \V{X})}%
+\index{recce-symbol}{total function map 2@$\exxpOp$ ($\V{X}\exxpOp\V{Ycl}$
+    is the type for total functions from an element of \V{Ycl} to \V{X})}%
 , so that
 \[ \V{X}\exxpOp\V{Ycl} = \bigcup \setM{ \V{X}\expOp\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
 
@@ -2919,26 +3016,6 @@ For example, where the domain is the natural numbers,
 $<$ is the strict total relation corresponding to the lax total relation $\le$.
 Where the domain is a class of sets,
 $\subseteq$ is the lax partial relation corresponding to the strict partial relation $\subset$.
-
-\section{Functions}
-
-Functions are partial unless stated otherwise.
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
-$\Dom{\V{f}}$ is the
-\dfn[Domain!wrt a function]{domain} of \V{f},
-and $\Ran{\V{f}}$ is the
-\dfn[Range (wrt a function)]{range} of \V{f}.
-
-$\Cod{\V{f}}$ is the codomain of \V{f},
-The codomain is part of the realm of \V{f}.
-The codomain of a function must be a superset
-of its range: $\Ran{\V{f}} \subseteq \Cod{\V{f}}$.
-\todo{Note that sets compare by extension,
-    so that sets which differ only in their codomain
-    will compare equal.}
 
 \section{Families}
 
