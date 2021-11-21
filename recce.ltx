@@ -135,6 +135,7 @@
 \newcommand{\bsembrack}[1]{\lceil\!\!\lceil#1\rceil\!\!\rceil}
 \newcommand{\mname}[1]{\mbox{\sf #1}}
 \newcommand{\mcolon}{\mathrel:}
+\newcommand{\mcoloncolon}{\mathrel{\vcenter{\hbox{$::$}}}}
 \newcommand{\mdot}{\mathrel.}
 % \newcommand{\modpar}{\models_{\rm par}}
 % \newcommand{\modreg}{\models_{\rm reg}}
@@ -171,10 +172,6 @@
 \newcommand{\emptyfun}{\triangle}
 \newcommand{\emptylist}{[\,]}
 
-\newcommand{\Iota}{\mbox{\rm I}}
-\newcommand{\IotaApp}{\mbox{\rm I}\,}
-\newcommand{\iotaApp}{\iota\,}
-\newcommand{\invertediota}{\rotatebox[origin=c]{180}{$\iota$}}
 \newcommand{\True}{\mbox{\sf T}}
 \newcommand{\False}{\mbox{\sf F}}
 \newcommand{\Trueword}{\sf true}
@@ -310,8 +307,6 @@
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
 \newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
 \newcommand{\Vpowerset}[1]{\ensuremath{\mathcal{P}(\V{#1})}}
-\newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
-\newcommand{\existsUniq}{\ensuremath{\mathop{\exists!}}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -593,11 +588,11 @@
 \newcommand{\inr}{\mathrel{\overline{\in}}}
 % scale plus signs down further?
 % \newcommand{\plusplus}{\mathbin{++}}
-\newcommand{\minusminus}{\mathbin{--}}
-\newcommand{\incr}[1]{\ensuremath{#1\plusplus}}
+% \newcommand{\minusminus}{\mathbin{--}}
+\newcommand{\incr}[1]{\ensuremath{#1+1}}
 \newcommand{\Vincr}[1]{\incr{\V{#1}}}
 % \newcommand{\decr}[1]{\ensuremath{#1\text{\kern .04em{-}\kern .07em{-}}}}
-\newcommand{\decr}[1]{\ensuremath{#1\minusminus}}
+\newcommand{\decr}[1]{\ensuremath{#1-1}}
 \newcommand{\Vdecr}[1]{\decr{\V{#1}}}
 \newcommand{\Rseq}[1]{{\left[ #1 \right]} }
 \newcommand{\set}[1]{%
@@ -607,6 +602,16 @@
 \newcommand{\setM}[2]{% collection, with mid op
     \ensuremath{\left\lbrace #1 \;\middle\midOp\; #2 \right\rbrace}%
 }
+\newcommand{\quantify}[3]{% quantifier, variable, predicte
+    \ensuremath{#1#2 \mcoloncolon #3}%
+}
+\newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
+\newcommand{\existsUniq}{\mathop{\exists{!}}}
+\newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
+\newcommand{\existQ}[2]{\quantify{\mathop{\exists}}{#1}{#2}}
+\newcommand{\existUniqQ}[2]{\quantify{\existsUniq}{#1}{#2}}
+\newcommand{\univQ}[2]{\quantify{\mathop{\forall}}{#1}{#2}}
+
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
 \newcommand{\typed}[2]{\ensuremath{#1\mcolon#2}}
 \newcommand{\Vtyped}[2]{\ensuremath{\var{#1}\mcolon#2}}
@@ -2753,65 +2758,26 @@ their scope is to the end of the expression.
 We use $\existsUniq$ as a uniqueness quantification operator,
 so that
 \[
-    \existsUniq \V{x} \in \V{A} : \myfn{P}{\V{x}}
+    \existUniqQ{\VVtyped{x}{A}}{\myfn{P}{\V{x}}}
 \]
 is equivalent to
-$$\exists \; \V{x} \in \V{A} : \myfn{P}{\V{x}} \land \forall \; \V{y} : \myfn{P}{\V{y}} \implies \V{y}=\V{x}.$$
+$$\existQ{\VVtyped{x}{A}}{\myfn{P}{\V{x}}} \land
+    \univQ{\V{y}}{\myfn{P}{\V{y}}} \implies \V{y}=\V{x}.$$
 We use Russell's iota operator,
 so that
 \begin{equation}
 \label{eq:def-riota}
-\rIota \V{x} \in \V{A} : \Vmyfn{P}{x}
+\iotaQ{\VVtyped{x}{A}}{\Vmyfn{P}{x}}
 \end{equation}
 is the unique \V{x} in the set \V{A} such that
 \Vmyfn{P}{x} is true,
 and $\Lambda$ otherwise.
 That is,
+\todo{Fix this.  It is wrong!}
 \[
-    \rIota \V{x} \in \V{A} : \Vmyfn{P}{x} \defined
-        (\existsUniq \V{x} \in \V{A} : \Vmyfn{P}{x} \land \V{x} = \V{y}) : \V{y} : \Lambda
+    \iotaQ{\VVtyped{x}{A}}{\Vmyfn{P}{x}} \defined
+        \cond{(\existUniqQ{\VVtyped{x}{A}}{\Vmyfn{P}{x} \land \V{x} = \Vtyped{y}{A})}}{\V{y}}{\unicorn}
 \]
-
-We do not have a universal set, so that
-logical quantification is always with regard to a
-set that is the ``domain of quantification''.
-The domain of quantification may be specified explicitly
-or through the quantified variable's realm.
-
-In the expression
-\begin{equation}
-\label{eq:quantification-by-realm-020}
-     \forall\; \Rvar{i}{T} : \Vmyfn{f}{i},
-\end{equation}
-the domain of quantification
-is the realm (and therefore set) \realm{R}.
-As one example, in the expression
-\begin{equation}
-\label{eq:quantification-by-realm-030}
-     \forall\; \Vnat{i} : \Vmyfn{f}{i},
-\end{equation}
-the domain of quantification is the natural numbers.
-\Eref{quantification-by-realm-030}
-is equivalent to
-\begin{equation}
-\label{eq:quantification-by-realm-040}
-     \forall\; \V{i} \in \naturals : \Vmyfn{f}{i}.
-\end{equation}
-
-A quantified expression consists of,
-in order,
-a quantifier,
-a guard expression (or ``guard''),
-a colon,
-and a predicate.
-For example,
-in \Eref{quantification-by-realm-040},
-$\forall$ is the quantifier,
-$\V{i} \in \naturals$ is the ``guard expression'',
-and ``\Vmyfn{f}{i}'' is the predicate.
-The index of quantification (or ``index'')
-in \Eref{quantification-by-realm-040} is \V{i},
-and its domain of quantification is \naturals.
 
 \begin{remark}[Natural Number Quantification]
 \label{rem:naturals-quantification}
