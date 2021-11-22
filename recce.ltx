@@ -146,6 +146,8 @@
 %\newcommand{\leqq}[1]{\mathrel{\preceq_{#1}}}
 \newcommand{\fnMap}{\rightharpoonup}
 \newcommand{\fnMMap}{\xrightharpoonup{*}}
+\newcommand{\tfnMap}{\rightarrow}
+\newcommand{\tfnMMap}{\xrightarrow{*}}
 \newcommand{\tarrow}{\rightarrow}
 % \newcommand{\term}{\seq}
 \newcommand{\lub}{\sqcup}
@@ -290,13 +292,8 @@
 
 % Eliminate deffn someday
 \newcommand{\deffn}[3]{\ensuremath{%
-    \V{#1} \in #3 \expOp #2%
+    \Vtyped{#1}{#3\fnMap#2}%
 }}
-
-\newcommand{\rawfnmap}[3]{\ensuremath{#1:#2\mapsto#3}}
-\newcommand{\fnmap}[3]{\rawfnmap{\fname{#1}}{#2}{#3}}
-\newcommand{\Vfnmap}[3]{\rawfnmap{\fname{#1}}{\V{#2}}{#3}}
-\newcommand{\VVfnmap}[3]{\rawfnmap{\fname{#1}}{\V{#2}}{\V{#3}}}
 
 % function composition operator
 \newcommand{\fnAfterOp}{\mathbin{\circ}}
@@ -549,7 +546,6 @@
 % I now need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
-\newcommand{\expOp}{\mathbin{{\ast}{\ast}}}
 \newcommand{\exxpOp}{\mathbin{{\ast}{\ast}{\ast}}}
 
 \newcommand{\condOpA}{\mathbin{?}}
@@ -1777,7 +1773,7 @@ The entire book is the \dfn{global scope}.
 %     a function variable has a ``domain of the variable''
 %     but each of the variable's values also has a ``domain of the function''.
 %     So if \V{f} is a variable representing a boolean function of the integers,
-%     the domain of the function variable \V{f} is $2\expOp\naturals$, while
+%     the domain of the function variable \V{f} is $2\tfnMap\naturals$, while
 %     the domain of the function represented by the variable \V{f} is \naturals.
 %     This distinction arises in many of our contexts,
 %     and we thought it would be exasperatingly confusing.
@@ -2115,13 +2111,13 @@ The term ``undefined'', in the tradition, can mean
 \item ``not having a definition'' (sense 1) or
 \item ``not having a defined value'' (sense 2).
 \end{trivlist}
-For example, we can define of \fnmap{goldbach}{\naturals}{\naturals}
+For example, we can define of \Vtyped{goldbach}{\naturals\tfnMap\naturals}
 to be the \V{n}'th number that it is even
 and not the sum of two primes.
 But Goldbach's conjecture is that no such numbers
 exist.
 If Goldbach was right, our definition of
-\fnmap{goldbach}{\naturals}{\naturals}
+\Vtyped{goldbach}{\naturals\tfnMap\naturals}
 is of a function that does not exist.
 That is,
 \begin{trivlist}
@@ -2640,34 +2636,27 @@ so that
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\V{to} \expOp \V{from}$} &
-    \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
+{$\V{to} \tfnMap \V{from}$} &
+    \cellboxr{Type for total functions from domain \V{D} to codomain \V{C}} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
 
-We write $\V{X}\expOp\V{Y}$%
-\index{recce-symbol}{function map 1@$\expOp$ ($\V{X}\expOp\V{Y}$
+We write $\V{X}\tfnMap\V{Y}$%
+\index{recce-symbol}{total function map 1@$\tfnMap$ ($\V{X}\tfnMap\V{Y}$
     is the type for functions from \V{Y} to \V{X})}
 for the type of
-functions with \V{Y} as their domain
+total functions with \V{Y} as their domain
 and \V{X} as their codomain.
 Therefore we write
 \[
-    \V{f} \in \V{X}\expOp\V{Y}
+    \Vtyped{f}{\V{X}\tfnMap\V{Y}}
 \]
 to say that \V{f} is a function
 such that $\Dom{\V{f}} = \V{Y}$
 and $\Cod{\V{f}} = \V{X}$.
-In Halmos,
-$\V{f} \in \V{X}\expOp\V{Y}$
-is written as $\V{X}^\V{Y}$,
-but we prefer to avoid subscripts.
-Our $\expOp$ notation is adopted from one that
-many programming languages
-use for exponentiation.
 
 \FloatBarrier
 
@@ -2690,7 +2679,7 @@ $\V{X}\exxpOp\V{Ycl}$%
 \index{recce-symbol}{total function map 2@$\exxpOp$ ($\V{X}\exxpOp\V{Ycl}$
     is the type for total functions from an element of \V{Ycl} to \V{X})}%
 , so that
-\[ \V{X}\exxpOp\V{Ycl} = \bigcup \setM{ \V{X}\expOp\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
+\[ \V{X}\exxpOp\V{Ycl} = \bigcup \setM{ \V{X}\tfnMap\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{3in}
@@ -2721,20 +2710,6 @@ $\V{X}\exxpOp\V{Ycl}$%
 \end{table}
 
 \FloatBarrier
-
-\todo{Do I want this now that I use Chiron?}
-We define the traditional function definition notation
-as a boolean operator, so that
-it is only true if \V{f} is a function
-whose domain is \V{D} and whose codomain is \V{C}.
-That is,
-\[
-    \VVfnmap{f}{D}{C} \defined
-    \left( \begin{gathered}
-        \V{f} \in \V{C}\expOp\V{D}
-        \\ \land\; \Dom{\V{f}} = \V{D} \land \Cod{\V{f}} = \V{C}
-    \end{gathered} \right).
-\]
 
 Another of the useful notations that we adopt
 from programming is the
@@ -2835,10 +2810,7 @@ usually be written as
     }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\fnmap{f}{\V{D}}{\V{C}}$} & \cellboxr{%
-    ``\fname{f} is a function from domain \V{D}
-    to codomain \V{C}''} \\
-    \hline
+\hline
 {$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
     Conditional operator:\\
     ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
@@ -3005,7 +2977,7 @@ and the value of \VVelement{fam}{i} is
 \begin{definition}[Family Indexing]
 \label{def:family-indexing}
 Let \V{I} and \V{X} be placeholder sets.
-For arbitrary family $\V{fam} \in \V{X}\expOp\V{I}$,
+For arbitrary family $\V{fam} \in \V{X}\tfnMap\V{I}$,
 arbitrary $\V{i} \in \V{I}$,
 and arbitrary $\V{x} \in \V{X}$,
 \[ \VVelement{fam}{i} \defined \rIota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
@@ -3147,13 +3119,13 @@ $\Dom{\V{seq}} \cup \Vsize{seq}$.
 \Cod{\V{seq}} is the set of valid values of \V{seq},
 and \Ran{\V{seq}} is the set of actual values of \V{seq}.
 
-For example, $\sets{} \expOp 5$ is the set of all sequences
+For example, $\sets{} \tfnMap 5$ is the set of all sequences
 of length 5 whose codomain is \sets{}.
 (We recall that $5 = \set{0,1,2,3,4}$.)
 We write $\sets{}\exxpOp\naturals$
 for the set of all finite sequences
 whose codomain is \sets{}.
-We write $\sets{}\expOp\naturals$
+We write $\sets{}\tfnMap\naturals$
 for the infinite sequence whose codomain is \sets{}.
 We write $\sets{}\exxpOp(\naturals\cup\set{\naturals})$
 for the set of all sequences
@@ -3165,7 +3137,7 @@ that we defined 0 as boolean false and
 1 as boolean true;
 and that therefore $2 = \set{0,1}$ is the set of boolean values.
 This means that
-$2 \expOp \V{V}$ is the set of boolean functions whose domain
+$2 \tfnMap \V{V}$ is the set of boolean functions whose domain
 is \V{V}.
 
 We specify a sequence by specifying its elements explicitly,
@@ -3201,7 +3173,7 @@ use in quantification over the natural numbers \Rmref{naturals-quantification}.
 \begin{example}[Sequence builder]
 \label{ex:sequence-builder}
 The following are examples of sequence builders.
-Where \Vnat{hi} and the function $\V{f} \in \V{V}\expOp\naturals$
+Where \Vnat{hi} and the function $\V{f} \in \V{V}\tfnMap\naturals$
 are bound in context,
 \begin{gather*}
     \begin{gathered}
@@ -3643,7 +3615,7 @@ That is,
 \item let $\V{len} \inr \naturals\cup\set{\naturals}$
     be a countable number,
 \item let $\Vnat{offset} \inr \naturals$,
-\item let $\V{offmap}\inr \naturals\expOp\V{len}$
+\item let $\V{offmap}\inr \naturals\tfnMap\V{len}$
     be the offset mapping
     which \V{offset} induces
     for the domain \V{len}, and
@@ -4367,7 +4339,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{th-node-induced-path-020}--\Eref{th-node-induced-path-040}.
 For this proof we define a boolean function
-$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \tfnMap (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-node-induced-path-100}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4380,7 +4352,7 @@ is, in fact, a sequence induced by \V{nd}.
     $\V{singleton} = \seq{\V{nd}}$
         \cuz{} CV \Rvarseq{singleton}{V}.}
 \mypareq{eq:th-node-induced-path-120}{%
-    $\V{singleton} \in \ \V{V} \expOp 1$
+    $\V{singleton} \in \ \V{V} \tfnMap 1$
         \cuz{} \Eref{th-node-induced-path-110}.}
 \mypareq{eq:th-node-induced-path-130}{%
     $\Vmyfn{Induced}{singleton}$
@@ -4468,7 +4440,7 @@ assuming the hypothesis
 to show the consequent
 \Eref{th-edge-induced-path-020}--\Eref{th-edge-induced-path-040}.
 For this proof we define a boolean function
-$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \tfnMap (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-edge-induced-path-100}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4482,7 +4454,7 @@ is, in fact, a sequence induced by \V{edge}.
     $\V{duple} = \seq{\V{from},\V{to}}$
         \cuz{} CV \Rvarseq{duple}{V}.}
 \mypareq{eq:th-edge-induced-path-120}{%
-    $\V{duple} \in \ \V{V} \expOp 2$
+    $\V{duple} \in \ \V{V} \tfnMap 2$
         \cuz{} \Eref{th-edge-induced-path-110}.}
 \mypareq{eq:th-edge-induced-path-130}{%
     $\Vmyfn{Induced}{duple}$
@@ -4592,7 +4564,7 @@ triple containing the data that induces the subpath:
         (\V{V}\exxpOp\naturals)
         \times\naturals\times\naturals$.}
 For this proof we define a boolean function
-$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \tfnMap (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-subpath-105}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4605,7 +4577,7 @@ is, in fact, a sequence induced by \V{splice}.
     $\V{subpath} = \Velement{path}{\V{lo}\ldots \V{hi}}$
         \cuz{} CV \Rvarseq{subpath}{V}.}
 \mypareq{eq:th-subpath-120}{%
-    $\V{subpath} \in \V{V} \expOp \left( (\subtract{\V{hi}}{\V{lo}})+1 \right)$
+    $\V{subpath} \in \V{V} \tfnMap \left( (\subtract{\V{hi}}{\V{lo}})+1 \right)$
         \cuz{} \Eref{th-subpath-110}.}
 \mypareq{eq:th-subpath-130}{%
     $\Vmyfn{Induced}{subpath}$
@@ -4745,7 +4717,7 @@ duple containing the data that induces the fusion:
     \bcuz{} CV $\V{pair} \in
         (\V{V}\exxpOp\naturals) \times (\V{V}\exxpOp\naturals).$}
 Also, within the context of this proof, we define a boolean function
-$\fname{Induced} \in 2 \expOp (\V{V} \exxpOp \naturals)$
+$\fname{Induced} \in 2 \tfnMap (\V{V} \exxpOp \naturals)$
 such that
 \mypareq{eq:th-fusion-105}{%
     for all \Rvarseq{seq}{V}, \Vmyfn{Induced}{\V{seq}} is true iff
@@ -4756,7 +4728,7 @@ sequence by constructing a new free sequence, and proving that our construction
 is, in fact, a sequence induced by \V{pair}.
 \begin{gather}
 \label{eq:th-fusion-110}
-    \V{fusion} \in \V{V} \expOp
+    \V{fusion} \in \V{V} \tfnMap
         \decr{\left( \Vsize{path1} + \Vsize{path2} \right) }
 \\ \label{eq:th-fusion-112}
     \begin{gathered}
@@ -5637,7 +5609,7 @@ be a cycle in \V{G}.
     \myparbox{\cuz{} AF reductio.
         \longDfref{Cycle}{cycle}.
         \linebreak
-        New free $\V{cycle} \in \V{V} \expOp \naturals$.
+        New free $\V{cycle} \in \V{V} \tfnMap \naturals$.
         New free $\V{dup} \in \V{V}$.}
 \end{gather}
 Let \V{root} be the root of \V{G}:
@@ -5703,7 +5675,7 @@ We now look at the rootpath to \V{dup}.
 \\ \nonumber
     \myparbox{\cuz{} \Eref{def-tree-rootpath} in \Dfref{tree},
     \Eref{th-tree-acyclicity-100}.
-    New free $\V{rootpath} \in \V{V} \expOp \naturals$.}
+    New free $\V{rootpath} \in \V{V} \tfnMap \naturals$.}
 \end{gather}
 Next we consider the first occurrence of a value of \V{cycle} in
 \V{rootpath}.
