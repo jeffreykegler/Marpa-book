@@ -599,13 +599,16 @@
 \newcommand{\quantify}[3]{% quantifier, variable, predicte
     \ensuremath{#1#2 \mcoloncolon #3}%
 }
+
+% raisebox for existQOP and uniqQOp 
+
 \newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 \newcommand{\iotaQOp}{\rIota}
 \newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
-\newcommand{\existsUniq}{\mathop{\exists{!}}}
-\newcommand{\existsUniqOp}{\mathop{\exists{!}}}
-\newcommand{\existUniqQ}[2]{\quantify{\existsUniqOp}{#1}{#2}}
-\newcommand{\existQOp}[2]{\mathop{\exists}}{#1}{#2}
+\newcommand{\existUniq}{\mathop{\exists{!}}}
+\newcommand{\existUniqQOp}{\mathop{\exists{!}}}
+\newcommand{\existUniqQ}[2]{\quantify{\existUniqQOp}{#1}{#2}}
+\newcommand{\existQOp}{\mathop{\exists}}
 \newcommand{\existQ}[2]{\quantify{\mathop{\exists}}{#1}{#2}}
 \newcommand{\univQOp}{\mathop{\forall}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
@@ -1968,15 +1971,17 @@ and an extensible meta-language, with formal components.
 Our meta-language is informal English,
 and incorporates Chiron's meta-languge.
 Our object language is Chiron's.
+We use the abbreviation \dfn[COL, ``Chiron object language'']{COL} to refer to Chiron's object
+language.
 
-Our object language cannot reason about its own truth.
+COL cannot reason about its own truth.
 But, within our meta-language,
 we can reason about the truth of statements
-in the object language.
-Like our object language,
+in COL.
+Like COL,
 our meta-language cannot reason about its own truth.
 For our conviction regarding the truth of assertions
-we make in our meta-language, we look to our intuition.
+we make in our meta-language, we must look to our intuition.
 
 \section{Collections}
 
@@ -2728,34 +2733,6 @@ Otherwise, the value of \Eref{conditional-op-example} is
 For example, where \V{x} is an integer,
 $\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
 
-The quantifiers have very loose precedence,
-and, in the absense of parentheses,
-their scope is to the end of the expression.
-
-We use $\existsUniq$ as a uniqueness quantification operator,
-so that
-\[
-    \existUniqQ{\VVtyped{x}{A}}{\myfn{P}{\V{x}}}
-\]
-is equivalent to
-$$\existQ{\VVtyped{x}{A}}{\myfn{P}{\V{x}}} \land
-    \univQ{\V{y}}{\myfn{P}{\V{y}}} \implies \V{y}=\V{x}.$$
-We use Russell's iota operator,
-so that
-\begin{equation}
-\label{eq:def-riota}
-\iotaQ{\VVtyped{x}{A}}{\Vmyfn{P}{x}}
-\end{equation}
-is the unique \V{x} in the set \V{A} such that
-\Vmyfn{P}{x} is true,
-and $\Lambda$ otherwise.
-That is,
-\todo{Fix this.  It is wrong!}
-\[
-    \iotaQ{\VVtyped{x}{A}}{\Vmyfn{P}{x}} \defined
-        \cond{(\existUniqQ{\VVtyped{x}{A}}{\Vmyfn{P}{x} \land \V{x} = \Vtyped{y}{A})}}{\V{y}}{\unicorn}
-\]
-
 \begin{remark}[Natural Number Quantification]
 \label{rem:naturals-quantification}
 The domain of quantification often is some subset of the natural numbers.
@@ -2804,44 +2781,85 @@ usually be written as
     \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
 \]
 
+\FloatBarrier
+
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Polyadic operators,
-    from tightest to loosest
-    }
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
 {$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
     Conditional operator:\\
     ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
-    \hline
-{$\rIota$ $\exists$ $\existsUniq$ $\forall$} & \cellboxr{Quantifiers} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
 
-\subsection{Meta-operators}
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+    \hline
+    \hline
+{$\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
+    \cellboxr{Definite descriptor:
+        the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+{$\existQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
+    \cellboxr{Existential quantifer:
+        true if there exists some \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+{$\existUniqQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
+    \cellboxr{Uniqueness quantifier:
+        true if there exists a unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+{$\univQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
+    \cellboxr{Universal quantifier:
+        true if, for every \Vtyped{x}{\alpha}, \Vmyfn{P}{x} is true} \\
+\hline
+\end{tabular}
+\end{table}
 
 \FloatBarrier
 
-The symbols in this section are not truly operators.
-Instead they are syntax for meta-language notions.
+The quantifiers
+$\iotaQOp$, $\existQOp$, $\existUniqQOp$, and $\univQOp$
+have very loose precedence,
+and, in the absense of parentheses,
+their scope is to the end of the expression.
+
+\FloatBarrier
+
+\todo{Why is this table too narrow?}
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
+    & \raisebox{.7ex}{Definition} \\
+\hline
+\rule{0em}{3.8ex}\raisebox{1.5ex}{$\ldefined$}
+    & \raisebox{.7ex}{Local definition} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+The definition symbols have the same effect as the logical
+equivalence operators, plus two others.
+The $\defined$ operator specifies global scope for the defiendum,
+while the 
+$\ldefined$ operator gives it local scope.
+And both specify that the that they are not simply
+logical equivalences of the COL, but definitions at the meta-language level.
+
+\FloatBarrier
 
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
-\caption{
-    Meta-operators,
-    from tightest to loosest
-    }
 \begin{tabular}{|p{1.5in}|l|}
-\hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{{$\defined$} \; {$\ldefined$}}
-&
-\raisebox{.7ex}{Definition, local definition} \\
 \hline
 {$\because$} & \cellboxr{Hint separator} \\
 \hline
@@ -2849,6 +2867,14 @@ Instead they are syntax for meta-language notions.
 \end{table}
 
 \FloatBarrier
+
+The hint separator ($\because$) is informal notion,
+and not a real operator.
+We often follow a mathematical statement in a line
+of deduction with a list of some of the justifications
+for that statement.
+The hint separator serves to separate a statement
+from its justifications.
 
 \section{Bracketing notations}
 
@@ -3586,7 +3612,7 @@ that is,
 \eqpar{150}{$\exists\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
     \cuz{} \E{140}.}
 And from the definition of a slice mapping,
-\eqpar{160}{$\existsUniq\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
+\eqpar{160}{$\existUniq\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
     \bcuz{} \Eref{def-slice-mapping-050} in \Dfref{slice-mapping}, \E{150}.}
 We have now shown that the ``offset'' of \V{f} is well-defined:
 \eqpar{170}{$\Vnat{offset} = \rIota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
@@ -4321,7 +4347,7 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-node-induced-path-020}
-    \existsUniq\; \V{induced} \in \Vmyfn{paths}{G} :
+    \existUniq\; \V{induced} \in \Vmyfn{paths}{G} :
 \\ \label{eq:th-node-induced-path-030}
     \V{induced} = \seq{\V{nd}}
 \\ \label{eq:th-node-induced-path-040}
@@ -4422,7 +4448,7 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-edge-induced-path-020}
-    \existsUniq\; \V{induced} \in \Vmyfn{paths}{G} :
+    \existUniq\; \V{induced} \in \Vmyfn{paths}{G} :
 \\ \label{eq:th-edge-induced-path-030}
     \V{induced} = \seq{\V{from},\V{to}}
 \\ \label{eq:th-edge-induced-path-040}
@@ -4541,7 +4567,7 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-subpath-040}
-\existsUniq\; \V{subpath} \in \Vmyfn{paths}{G}
+\existUniq\; \V{subpath} \in \Vmyfn{paths}{G}
 \\ \label{eq:th-subpath-050}
     \land\; \V{subpath} = \VVelement{path}{\V{lo} \ldots \V{hi}}
 \\ \label{eq:th-subpath-060}
@@ -4693,7 +4719,7 @@ That is, if
 then
 \begin{gather}
 \label{eq:th-fusion-040}
-   \existsUniq\; \V{fusion} \in \Vmyfn{paths}{G} :
+   \existUniq\; \V{fusion} \in \Vmyfn{paths}{G} :
 \\ \label{eq:th-fusion-050}
    \Velement{fusion}{0\ldots \Vlastix{path1}} = \V{path1}
 \\ \label{eq:th-fusion-060}
@@ -4900,7 +4926,7 @@ That is,
 \forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
 \\ \tuple{\V{nd},\Velement{old}{0}} \in \V{E} \implies
 \\ \left(\begin{gathered}
-        \existsUniq \V{new} \in \Vmyfn{paths}{G} :
+        \existUniq \V{new} \in \Vmyfn{paths}{G} :
         \\ \V{new} = \seq{\V{nd},\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}}
         \\ \land\; \Vsize{new} = \Vsize{old}+1
     \end{gathered}\right).
@@ -4930,7 +4956,7 @@ That is,
 \forall\; \V{old} \in \Vmyfn{paths}{G} : \forall\; \V{nd} \in \V{V} :
 \\ \tuple{\Velement{old}{\Vlastix{old}}, \V{nd}} \in \V{E} \implies
 \\ \left(\begin{gathered}
-        \existsUniq \V{new} \in \Vmyfn{paths}{G} :
+        \existUniq \V{new} \in \Vmyfn{paths}{G} :
         \\ \V{new} = \seq{\Velement{old}{0} \ldots \Velement{old}{\Vlastix{old}}, \V{nd}}
         \\ \land\; \Vsize{new} = \Vsize{old}+1
     \end{gathered}\right).
@@ -5093,7 +5119,7 @@ That is,
 \begin{equation}
 \label{eq:def-tree-root}
 \begin{gathered}
-    \existsUniq\; \V{root} \in \V{V} : \forall\; \V{parent} \in \V{V} :
+    \existUniq\; \V{root} \in \V{V} : \forall\; \V{parent} \in \V{V} :
         \nexists\; \tuple{\V{parent}, \V{root}} \in \V{E}.
 \end{gathered}
 \end{equation}
@@ -13566,7 +13592,7 @@ Every \realm{LSS} is identical to exactly one \realm{LES}.
 That is,
 \[
 \begin{gathered}
-    \forall \; \Vlss{lss} : \existsUniq \; \Vles{les} : \var{lss} = \var{les}.
+    \forall \; \Vlss{lss} : \existUniq \; \Vles{les} : \var{lss} = \var{les}.
     \quad \thEnd
 \end{gathered}
 \]
