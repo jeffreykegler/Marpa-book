@@ -600,15 +600,16 @@
     \ensuremath{#1#2 \mcoloncolon #3}%
 }
 
-% raisebox for existQOP and uniqQOp 
 
 \newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 \newcommand{\iotaQOp}{\rIota}
 \newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
 \newcommand{\existUniqQOp}{\mathop{\exists{!}}}
 \newcommand{\existUniqQ}[2]{\quantify{\existUniqQOp}{#1}{#2}}
+% extra {} in existQOP and uniqQOp to raise to baseline
 \newcommand{\existQOp}{\mathop{\exists{}}}
 \newcommand{\existQ}[2]{\quantify{\mathop{\existQOp}}{#1}{#2}}
+% extra {} in existQOP and univQOp to raise to baseline
 \newcommand{\univQOp}{\mathop{\forall{}}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
 
@@ -2285,33 +2286,6 @@ a given pair of operators should have relative to each other.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\Vdecr{X}$} & \cellboxr{Decrement of \V{X}, Predecessor of \V{X}} \\
-\hline
-{$\Vincr{X}$} & \cellboxr{Increment of \V{X}, Successor of \V{X}} \\
-\hline
-\end{tabular}
-\end{table}
-
-We adopt a
-programming language notation for
-the successor relation: \Vincr{X}.
-Similarly for the predecessor relation: \Vdecr{X}.
-We overload these notations for use as shorthands
-for incrementation by~1:
-\[
-\Vincr{X} = \V{X}+1
-\]
-and decrementation by~1:
-\[
-\Vdecr{X} = \V{X}-1.
-\]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
 {$\neg\var{x}$} & \cellboxr{Logical negation of \var{x}} \\
 \hline
 \end{tabular}
@@ -2692,45 +2666,40 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\subset$} {$\subseteq$}
-    {$\supset$} {$\supseteq$}
-    & \cellboxr{Set inclusion} \\
-    \hline
-{$\in$} {$\notin$} {$\inr$}
-    & \cellboxr{Set membership} \\
-    \hline
-{$=$} {$\neq$} & \cellboxr{Equality, inequality} \\
 \hline
+{$\subset$} & \cellboxr{Subcollection} \\
+\hline
+{$\subseteq$} & \cellboxr{Proper subcollection} \\
+\hline
+{$\supset$} & \cellboxr{Supercollection} \\
+\hline
+{$\supseteq$} & \cellboxr{Proper supercollection} \\
+\hline
+\hline
+{$\in$} & \cellboxr{Collection membership} \\
+    \hline
+{$\notin$} & \cellboxr{Collection non-membership} \\
+\hline \hline
+{$=$} & \cellboxr{Equality} \\
+\hline
+{$\neq$} & \cellboxr{Inequality} \\
+\hline \hline
 {$\land$} & \cellboxr{Logical and} \\
-\hline
+\hline \hline
 {$\lor$} & \cellboxr{Logical or} \\
-\hline
+\hline \hline
 %
-% We use \implies and \iff, but to get the spacing right
-% in the cell we need to use the symbols directly.
+% We use \implies, but to get the spacing right
+% in the cell we need to use the symbol directly.
 {${\Longrightarrow}$} & \cellboxr{Implication} \\
-\hline
-{${\Longleftrightarrow}$} & \cellboxr{Logical equivalence} \\
+% {${\implies}$} & \cellboxr{Implication} \\
+\hline \hline
+{${\equiv}$} & \cellboxr{Logical equivalence} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
-
-Another of the useful notations that we adopt
-from programming is the
-ternary conditional operator:
-\begin{equation}
-\label{eq:conditional-op-example}
-    \cond{\V{test}}{\V{a}}{\V{b}}
-\end{equation}
-where \V{test} is a boolean.
-\V{a} is the value of \Eref{conditional-op-example}
-if \V{test} is true.
-Otherwise, the value of \Eref{conditional-op-example} is
-\V{b}.
-For example, where \V{x} is an integer,
-$\cond{\V{x} \ge 0}{\V{x}}{-\V{x}}$ is its absolute value.
 
 \begin{remark}[Natural Number Quantification]
 \label{rem:naturals-quantification}
@@ -2787,12 +2756,27 @@ usually be written as
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{%
-    Conditional operator:\\
-    ``\V{v1} if \V{bool}, otherwise \V{v2}''} \\
+{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{Conditional operator} \\
 \hline
 \end{tabular}
 \end{table}
+
+\FloatBarrier
+
+The ternary conditional operator
+is a notation adopted
+from programming languges.
+Where \V{test} is a formula,
+\[ \cond{\V{test}}{\Vtyped{a}{\alpha}}{\Vtyped{b}{\beta}} \text{ is} \]
+\begin{itemize}
+\item[] \Vtyped{a}{\alpha} iff \V{test} is true and $\alpha = \beta$;
+\item[] \Vtyped{b}{\beta} iff \V{test} is false and $\alpha = \beta$;
+\item[] \Vtyped{a}{\classes} iff \V{test} is true and $\alpha \neq \beta$; and
+\item[] \Vtyped{b}{\classes} iff \V{test} is false and $\alpha \neq \beta$.
+\end{itemize}
+For example,
+$\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
+of \Vnat{x}.
 
 \FloatBarrier
 
@@ -2830,16 +2814,15 @@ their scope is to the end of the expression.
 
 \FloatBarrier
 
-\todo{Why is this table too narrow?}
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
-    & \raisebox{.7ex}{Definition} \\
+    & \cellboxr{\raisebox{.7ex}{Definition}} \\
 \hline
 \rule{0em}{3.8ex}\raisebox{1.5ex}{$\ldefined$}
-    & \raisebox{.7ex}{Local definition} \\
+    & \cellboxr{\raisebox{.7ex}{Local definition}} \\
 \hline
 \end{tabular}
 \end{table}
