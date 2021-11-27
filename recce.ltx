@@ -1800,32 +1800,6 @@ The entire book is the \dfn{global scope}.
 % The multi-character variables used in this paper
 % worsen all of these problems.
 
-\todo{What to do about this?}
-For example,
-when comparing
-two tuples, we might compare
-$\tuple{\Rvar{a}{R}, \Rvar{a}{S}, \Rvar{a}{T}}$ with
-$\tuple{\Rvar{b}{R}, \Rvar{b}{S}, \Rvar{b}{T}}$,
-where the name of each variable indicates its tuple,
-and the realm subscript of each variable indicates its position
-within its tuple.
-(We use double brackets to indicate tuples.)
-
-As another example,
-it seems very intuitive
-to represent a natural number as \Vnat{x}
-and its canonical embedding in the integers
-as \Vz{x}.
-Here again,
-\Vnat{x} and \Vz{x} are two distinct variables distinguished
-only by their realm.%
-\footnote{In set theory, the different classes of number are quite distinct.
-    The classes of numbers are also, however, quite distinct in their implementation
-    in software, and ignoring this distinction has not been without incident.
-    Among the many problems that have resulted,
-    the explosion of the Ariane 5 rocket
-    is particularly well-documented.~\cite{Lyons1996}}
-
 \section{Arbitrary and convenience variables}
 
 We often, especially in proofs,
@@ -2903,12 +2877,47 @@ Numeric indices can be hard to remember,
 and when a tuple is of a specific kind (for example, a grammar),
 we often define a mnemonic for each element of a tuple.
 
-\section{Relations}
+\section{Notes about types}
 
-\todo{Lambda is never in a domain or range}
-\todo{well-defined vs. handled}
-\todo{Define domains/ranges/codomains,
-    handled domains/ranges/codomains}
+Our rule is that types do not share variable names,
+so that, in every scope,
+we can uniquely determine the type of a variable from its name.
+However, there are two cases, 
+where breaking our rule seemed to promote readability
+much more than it risked confusion.
+We therefore make local, sparing departures
+from our rule, in these two cases.
+
+In the first case, sometimes the most natural way to describe two
+tuples is to use the same name for every element of a tuple,
+and disambiguate them by type.
+For example,
+when comparing
+two tuples, we might compare
+$\tuple{\Rvar{a}{R}, \Rvar{a}{S}, \Rvar{a}{T}}$ with
+$\tuple{\Rvar{b}{R}, \Rvar{b}{S}, \Rvar{b}{T}}$,
+where the name of each variable indicates its tuple,
+and the type of each variable is sufficient to
+determine its position
+within its tuple.
+
+\todo{What to do about this?}
+As another example,
+it seems very intuitive
+to represent a natural number as \Vnat{x}
+and its canonical embedding in the integers
+as \Vz{x}.
+Here again,
+\Vnat{x} and \Vz{x} are two distinct variables distinguished
+only by their type.%
+\footnote{In set theory, the different classes of number are quite distinct.
+    The classes of numbers are also, however, quite distinct in their implementation
+    in software, and ignoring this distinction has not been without incident.
+    Among the many problems that have resulted,
+    the explosion of the Ariane 5 rocket
+    is particularly well-documented.~\cite{Lyons1996}}
+
+\section{Relations}
 
 Multi-character variables introduce ambiguity into the standard
 notation for relations
@@ -2928,8 +2937,6 @@ or via the boolean function they induce.
 For instance, we might discuss
 \Eref{relation-example} via the boolean binary function
 \myfn{R}{\V{x}, \V{y}}.
-
-\section{Orders}
 
 Recall that an relation
 $\V{R}$ is \dfn{anti-symmetric} if
