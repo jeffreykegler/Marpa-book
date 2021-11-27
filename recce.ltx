@@ -2063,9 +2063,9 @@ No proper superclass has a type,
 and a proper superclass is not a first-class object.
 
 Skipping ahead, our notation to indicate the \var{x}
-is a term of type \var{T} is \VVtyped{x}{T}.
+is a term of type $\alpha$ is \Vtyped{x}{\alpha}.
 We will often abbreviate this by indicating the type
-with a subscript: $\var{x}_\var{T}$.
+with a subscript: $\var{x}_\alpha$.
 
 \section{Values}
 
@@ -2262,6 +2262,32 @@ from various disciplines and traditions
 makes it likely that it will often be unclear
 what precedence
 a given pair of operators should have relative to each other.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\V{x}_\alpha$} & \cellboxr{Variable \V{x} of type $\alpha$} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+The atomic expression $\V{x}_\alpha$
+indicates a first class COL variable of type $\alpha$
+and abbreviates the expression of looser precedence,
+$\Vtyped{x}{\alpha}$.
+We prefer to avoid subscripts,
+and $\Vtyped{x}{\alpha}$ is used only when the type is readable 
+in a subscript font,
+and only to remind ourselves
+of a previously stated type,
+or for stating types which that are suggested
+by the context.
 
 \FloatBarrier
 
@@ -2711,53 +2737,15 @@ $\V{X}\tfnMMap\V{Ycl}$%
 
 \FloatBarrier
 
-\begin{remark}[Natural Number Quantification]
-\label{rem:naturals-quantification}
-The domain of quantification often is some subset of the natural numbers.
-A natural number quantified expression consists of,
-in order,
-a quantifier,
-an index variable specifier,
-a guard (inside parentheses),
-a colon,
-and a predicate.
-The index variable specifier is the name of the index variable.
-The guard is a boolean expression which describes the subset
-of the naturals that is used as the domain of quantification.
-The other elements of the quantification are as previously described.
-\rmEnd
-\end{remark}
-
-For example
-\begin{equation}
-\label{eq:quantification-by-boolean}
-    \forall \; \V{j}\; (1 \le \V{j} \le 42) : \Vmyfn{f}{j}
-\end{equation}
-is equivalent to
-\[
-\forall \; \V{j} \in \set{ \Vnat{i} : 1 \le \V{i} \le 42 } :
-    \myfn{P}{\V{j}}.
-\]
-An another example, in
-\[
-\forall\; \Vnat{ix}\; (\V{lo} \le \V{ix} \le \V{hi}) : \myfn{P}{\V{ix}}.
-\]
-the guard is ``$\V{lo} \le \V{ix} \le \V{hi}$'',
-the index variable is \V{ix},
-and the domain of quantification is
-\set{ \Vnat{j} : \V{lo} \le \V{j} \le \V{hi} }.
-
-In a quantification over the naturals,
-it is usually obvious which variable is
-the index variable.
-In such cases, the index variable specifier and
-the parentheses
-surrounding the guard may be omitted.
-For example, \Eref{quantification-by-boolean} would
-usually be written as
-\[
-    \forall \; 1 \le \V{j} \le 42 : \Vmyfn{f}{j}.
-\]
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\Vtyped{x}{\alpha}$} & \cellboxr{Variable \V{x} of type $\alpha$} \\
+\hline
+\end{tabular}
+\end{table}
 
 \FloatBarrier
 
@@ -2821,6 +2809,21 @@ $\iotaQOp$, $\existQOp$, $\existUniqQOp$, and $\univQOp$
 have very loose precedence,
 and, in the absense of parentheses,
 their scope is to the end of the expression.
+When quantification is over a number variable,
+we may express its type using a formula,
+so that, for example,
+\begin{equation}
+\label{eq:number-quantification-example}
+\univQ{\typed{\Vnat{j}}{42 < \Vnat{j} \le \Vnat{k}}}{\Vmyfn{P}{j}}
+\end{equation}
+is equivalent to
+\[ \univQ{\Vtyped{i}{\setM{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}}}}{\Vmyfn{P}{i}}. \]
+When the quantification variable is first in the formula,
+we often treat the name operand of a type expression as redundant,
+and abbreviate the typed quantification variable to the formula,
+so that \Eref{number-quantification-example} becomes
+\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \]
+
 
 \FloatBarrier
 
