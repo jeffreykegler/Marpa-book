@@ -191,14 +191,14 @@
 \newcommand{\Forsome}{\exists}
 \newcommand{\ForsomeApp}{\exists\,}
 \newcommand{\ForsomeUniqueApp}{\exists\,!\,}
-\newcommand{\IsDef}{\downarrow}
-\newcommand{\IsUndef}{\uparrow}
+
+\newcommand{\isDef}{\mathop{\downarrow}}
+\newcommand{\isUndef}{\mathop{\uparrow}}
+
 \newcommand{\Equal}{=}
 \newcommand{\QuasiEqual}{\simeq}
 % \newcommand{\Undefined}{\bot}
 \newcommand{\unicorn}{\bot}
-\newcommand{\IsDefApp}{\!\IsDef}
-\newcommand{\IsUndefApp}{\!\IsUndef}
 \newcommand{\TRUE}{\ensuremath{\mathbb T}}
 \newcommand{\FALSE}{\ensuremath{\mathbb F}}
 \newcommand{\LambdaApp}{\lambda\,}
@@ -298,7 +298,8 @@
 }}
 
 % function composition operator
-\newcommand{\fnAfterOp}{\mathbin{\circ}}
+\newcommand{\afterOp}{\mathbin{\circ}}
+\newcommand{\fnAfterOp}{\afterOp}
 \newcommand{\relAfterOp}{\mathbin{\circ_R}}
 \newcommand{\caret}{\mathord{\char`\^}}
 
@@ -596,8 +597,11 @@
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
 \newcommand{\midOp}{|}
-\newcommand{\setM}[2]{% collection, with mid op
+\newcommand{\collB}[2]{% collection builder, with mid op
     \ensuremath{\left\lbrace #1 \;\middle\midOp\; #2 \right\rbrace}%
+}
+\newcommand{\famB}[2]{% family builder, with mid op
+    \ensuremath{\left[ #1 \;\middle\midOp\; #2 \right]}%
 }
 \newcommand{\quantify}[3]{% quantifier, variable, predicte
     \ensuremath{#1#2 \mcoloncolon #3}%
@@ -734,12 +738,13 @@
 \newcommand{\Cw}{\V{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\V{#1}]}}}
 
-\newcommand{\rawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
-\newcommand{\bigfn}[2]{\rawfn{\fname{#1}}{#2}}
-\newcommand{\fname}[1]{\V{#1}}
-\newcommand{\myfn}[2]{\ensuremath{\fname{#1}(#2)}}
+\newcommand{\rawfn}[2]{\ensuremath{#1(#2)}}
 % The \mathopen{} and \mathclose{} eliminate unwanted extra space
-\newcommand{\Vmyfn}[2]{\ensuremath{\myfn{#1}{\V{#2}}}}
+\newcommand{\bigrawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
+\newcommand{\fname}[1]{\V{#1}}
+\newcommand{\bigfn}[2]{\bigrawfn{\fname{#1}}{#2}}
+\newcommand{\myfn}[2]{\rawfn{\fname{#1}}{#2}}
+\newcommand{\Vmyfn}[2]{\myfn{#1}{\V{#2}}}
 
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
@@ -2619,7 +2624,7 @@ $\V{X}\fnMMap\V{Ys}$%
 ,
 \todo{Add reference if use of unary union is cataphoric}
 so that
-\[ \V{X}\fnMMap\V{Ys} = \bigcup \setM{ \V{X}\fnMap\V{Y} }{ \V{Y} \in \V{Ys} }. \]
+\[ \V{X}\fnMMap\V{Ys} = \bigcup \collB{ \V{X}\fnMap\V{Y} }{ \V{Y} \in \V{Ys} }. \]
 
 \FloatBarrier
 
@@ -2670,7 +2675,7 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \index{recce-symbol}{total function map 2@$\tfnMMap$ ($\V{X}\tfnMMap\V{Ycl}$
     is the type for total functions from an element of \V{Ycl} to \V{X})}%
 , so that
-\[ \V{X}\tfnMMap\V{Ycl} = \bigcup \setM{ \V{X}\tfnMap\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
+\[ \V{X}\tfnMMap\V{Ycl} = \bigcup \collB{ \V{X}\tfnMap\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{3in}
@@ -2783,6 +2788,9 @@ $\iotaQOp$, $\existQOp$, $\existUniqQOp$, and $\univQOp$
 have very loose precedence,
 and, in the absense of parentheses,
 their scope is to the end of the expression.
+
+\begin{remark}
+\label{rem:number-quantification}
 When quantification is over a number variable,
 we may express its type using a formula,
 so that, for example,
@@ -2791,13 +2799,13 @@ so that, for example,
 \univQ{\typed{\Vnat{j}}{42 < \Vnat{j} \le \Vnat{k}}}{\Vmyfn{P}{j}}
 \end{equation}
 is equivalent to
-\[ \univQ{\Vtyped{i}{\setM{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}}}}{\Vmyfn{P}{i}}. \]
+\[ \univQ{\Vtyped{i}{\collB{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}}}}{\Vmyfn{P}{i}}. \]
 When the quantification variable is first in the formula,
 we often treat the name operand of a type expression as redundant,
 and abbreviate the typed quantification variable to the formula,
 so that \Eref{number-quantification-example} becomes
-\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \]
-
+\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \quad \rmEnd \]
+\end{remark}
 
 \FloatBarrier
 
@@ -2845,39 +2853,53 @@ for that statement.
 The hint separator serves to separate a statement
 from its justifications.
 
-\section{Bracketing notations}
+\section{Tuples}
 
-We write tuples using double square brackets.
-For example,
+We define a tuple recursively:
+\begin{itemize}
+\item The empty set is a 0-tuple: $\emptyset = \tuple{}$.
+\item The ordered pair consisting of a element, call it \V{h}, followed by an
+\V{n}-tuple, call it \V{before}, is a ($\V{n}+1$)-tuple, call it \V{after},
+so that $\V{after} = \set{\V{h}}\times\V{before}$.
+We say that \V{h} is the \dfn{head} of \V{after}.
+We say that \V{before} is the \dfn{tail} of \V{after}.
+\end{itemize}
+
+The head of a tuple \V{S} can be written \Vmyfn{hd}{S}.
+The tail of a tuple \V{S} can be written \Vmyfn{tl}{S}.
+We write tuples using angle brackets.
+For example, where
 \mypareq{eq:tuple-example}{%
-    \tuple{ 42, 1729 }
+    \V{S} = \tuple{ 42, 1729, 42 },
 }
-is a duple.
-We may refer to tuple element by numeric indices,
-so that the first element of
-\Eref{tuple-example}
-\todo{Move footnote to first use of element macro}
-is $\Vtupelem{t}{0}=42$,%
+\V{S} is a 3-tuple, or triple.
+The head of \V{S} is $\Vmyfn{hd}{S} = 42$.
+The tail of \V{S} is $\Vmyfn{tl}{S} = \set{1729, 42}$.
+Using the $\fname{hd}$ and $\fname{tl}$ operators,
+tuples can be treated as lists.
+We occasionally refer to tuple element by numeric indices where,
+if \V{S1} is a tuple,%
 \footnote{%
    Our use of \VVelement{S}{i} instead of the more traditional
-   $\V{S}_\V{i}$ is one of the choices that we
+   $\V{S}_\V{i}$ is another of the choices that we
    made hoping to save
-   eyesight as well as reading time.
-   We are particularly motivated by our memory of
-   a paper in which the traditional notation
-   converted the statement of one of the paper's
-   major theorems into an exercise.
-   The notation used a subscript to a subscript, and
-   much depended on whether the second level subscript was
-   the numeral 1 or the letter l.}
-and the 43rd element of
-\Eref{tuple-example}
-is $\tupelem{t}{42}=1729$.
-Numeric indices can be hard to remember,
-and when a tuple is of a specific kind (for example, a grammar),
-we often define a mnemonic for each element of a tuple.
+   eyesight as well as reading time.}
+$$\VVtupelem{S1}{n} = \rawfn{\left(
+        \fname{hd}\afterOp\fname{tl}\caret\V{n}
+    \right)}{
+        \V{S1}
+    }$$
+so that, where $\V{S} = \tuple{ 42, 1729, 42 }$,
+\begin{gather*}
+\Vtupelem{S}{0}=42, \\
+\Vtupelem{S}{1}=1729, \\
+\Vtupelem{S}{2}=42, \text{ and} \\
+\Vtupelem{S}{3}\isUndef.
+\end{gather*}
+\todo{Add isUndef, isDef operators to table.}
+\todo{Move footnote to first use of element macro?}
 
-\section{Notes about types}
+\section{Extended uses of type notation}
 
 Our rule is that types do not share variable names,
 so that, in every scope,
@@ -3187,8 +3209,18 @@ all the counting numbers.
 \label{rem:sequence-builder}
 A \dfn{sequence builder}
 follows the form already described for
-use in quantification over the natural numbers \Rmref{naturals-quantification}.
-\rmEnd
+use in quantification over numbers \Rmref{number-quantification},
+so that
+\begin{equation}
+\label{eq:rem-sequence-builder-10}
+    \famB{\typed{\Vnat{j}}{42 < \Vnat{j} < 45}}{\V{j}} = \seq{42, 43, 44}.
+\end{equation}
+As with quantifiers, the variable name may be omitted
+if the variable bound within the sequence builder
+is the first variable of the formula, so that
+\Eref{rem-sequence-builder-10} may be abbreviated to
+\[ \famB{42 < \Vnat{j} < 45}{\V{j}} = \seq{42, 43, 44}.
+    \quad \rmEnd \]
 \end{remark}
 
 \begin{example}[Sequence builder]
