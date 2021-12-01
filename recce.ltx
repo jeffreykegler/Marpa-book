@@ -137,8 +137,6 @@
 \newcommand{\mcolon}{\mathrel:}
 \newcommand{\mcoloncolon}{\mathrel{\vcenter{\hbox{$::$}}}}
 
-\newcommand{\eqColon}{\mathrel{\vcenter{\hbox{$=:$}}}}
-
 \newcommand{\mdot}{\mathrel.}
 % \newcommand{\modpar}{\models_{\rm par}}
 % \newcommand{\modreg}{\models_{\rm reg}}
@@ -2522,25 +2520,10 @@ $\naturals+1 = 1+\naturals = 1$.
 \hline
 {$>$} & \cellboxr{Strict greater than} \\
 \hline
-{$\eqTy$} & \cellboxr{Equality of types} \\
-\hline
-{$\eqColon{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
-\hline
-{$=$} & \cellboxr{Equality (overloaded)} \\
-\hline
-{$=$} & \cellboxr{Equality} \\
-\hline
-{$\neq$} & \cellboxr{Equality} \\
-\hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
-
-In the COL, the operator $=$
-is overloaded:
-$=$ can be a synonym of either $\eqColon{\classes}$
-or $\eqTy$.
 
 
 \FloatBarrier
@@ -2718,6 +2701,7 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \[ \V{X}\tfnMMap\V{Ycl} = \bigcup \collB{ \V{X}\tfnMap\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
 
 \FloatBarrier
+
 \renewcommand{\cellboxrWidth}{3in}
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
@@ -2735,9 +2719,69 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \hline
 {$\notin$} & \cellboxr{Collection non-membership} \\
 \hline
-{$=$} & \cellboxr{Equality} \\
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\eqTy$} & \cellboxr{Equality of types} \\
+\hline
+{$\eqColon{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
+\hline
+{$=$} & \cellboxr{General Equality} \\
 \hline
 {$\neq$} & \cellboxr{Inequality} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+The operator general equality operator $=$
+represents equality in the meta-language,
+as well as $\eqColon{\classes}$ and $\eqTy$
+in the COL.
+From a foundational point of view,
+$\eqColon{\classes}$ and $\eqTy$
+are two distinct
+built-in operators.
+The operator $\eqTy$ is equality of types,
+which are not necessarily first-class variables.
+The operator $\eqColon{\alpha}$,
+where $\alpha$ is a type,
+is equality between first-class variables of type $\alpha$.
+Since $\classes$ is the universal type,
+$\eqColon{\classes}$ is the operator for equality between Chiron's
+first class variables.
+$\eqColon{\sets}$ is the operator for equality between sets.
+
+Since foundations are not our focus, we often use simply use the
+traditional equality operator ($=$) for all these purposes.
+This works as expected most of the time,
+since every first class object is also a type,
+and types which are first class objects are equivalent
+iff they are equivalent as first class objects.
+If $\alpha$ and $\beta$ are types which are not first class objects, however,
+we may have both $\alpha (\eqTy) \beta$ and $\neg (\alpha (\eqColon{\classes}) \beta)$.
+For example, let the types $\alpha$ and $\beta$ both be the superclass of all
+classes which are not natural numbers.
+That is, let $\alpha (\eqTy) \classes \setminus \naturals$
+and $\beta (\eqTy) \classes \setminus \naturals$.
+Then $\alpha (\eqTy) \beta$, as expected.
+\todo{Finish this.}
+
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
 \hline \hline
 {$\land$} & \cellboxr{Logical and} \\
 \hline \hline
