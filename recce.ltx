@@ -551,8 +551,12 @@
 % I now need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
-\newcommand{\eqColon}[1]{\ensuremath{\mathrel{=:\joinrel{#1}}}}
-\newcommand{\eqTy}{\eqColon{\Ds}}
+\newcommand{\eqWClOp}[1]{\mathrel{=:\joinrel{#1}}}
+\newcommand{\eqWCl}[2]{\ensuremath{#1\eqWClOp{#2}}}
+\newcommand{\eqCl}[2]{\ensuremath{#1_#2}}
+\newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
+\newcommand{\eqWTy}[1]{\ensuremath{#1\eqWTyOp}}
+\newcommand{\eqTy}[1]{\ensuremath{#1_\Ds}}
 
 \newcommand{\condOpA}{\mathbin{?}}
 \newcommand{\condOpB}{\mathbin{:}}
@@ -931,13 +935,31 @@ a Creative Commons Attribution-NoDerivs 3.0 United States License.
 
 \chapter{Introduction}
 
+\myepi[.83\textwidth]{%
+\label{epi:dewey}
+[W]ith
+the development of speech (usually in the second year) adaptation of the
+baby's activities to and with those of other persons gives the keynote
+of mental life. His range of possible activities is indefinitely widened
+as he watches what other persons do, and as he tries to understand and
+to do what they encourage him to attempt. The outline pattern of mental
+life is thus set in the first four or five years. Years, centuries,
+generations of invention and planning, may have gone to the development of
+the performances and occupations of the adults surrounding the child. [...]
+Were it not for this process by which the achievements of one
+generation form the stimuli that direct the activities of the next,
+the story of civilization would be writ in water, and each
+generation would have laboriously to make for itself, if it could,
+its way out of savagery.}
+{John~Dewey~\footnotemark}
+\footnotetext{Sources and other details for the epigraphs are given
+starting at page \pageref{chap:epigraphs}.}
+
 \myepi{%
 \label{epi:goedel}
 The more I think about language,
 the more it amazes me that people ever understand each other at all.}
-{Kurt G{\"o}del~\footnotemark}
-\footnotetext{Sources and other details for the epigraphs are given
-starting at page \pageref{chap:epigraphs}.}
+{Kurt G{\"o}del}
 
 The \Marpa{} project was intended to create
 a practical and highly available tool
@@ -951,7 +973,7 @@ But, despite an encouraging academic literature,
 no such tool had existed for context-free parsing.
 
 The first stable version of \Marpa{} was uploaded to
-a public archive on Solstice Day 2011.%
+a public archive on Solstice Day 2011%
 \index{recce-general}{Solstice Day 2011}.
 This book
 describes the algorithm used
@@ -960,8 +982,8 @@ in the most recent version of \Marpa{},
 It is a simplification of the algorithm presented
 in the paper which originally described Marpa~\cite{Kegler2019}.
 
-While the presentation in this book is theoretical,
-the approach is practical.
+The presentation in this book is theoretical,
+but the approach is practical.
 The \Rtwo{} implementation is widely available
 and has seen considerable use.
 
@@ -2512,27 +2534,6 @@ $\naturals+1 = 1+\naturals = 1$.
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\le$} & \cellboxr{Lax less than} \\
-\hline
-{$\ge$} & \cellboxr{Lax greater than} \\
-\hline
-{$<$} & \cellboxr{Strict less than} \\
-\hline
-{$>$} & \cellboxr{Strict greater than} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
 \rule{0em}{5.1ex}\raisebox{1.5ex}{$\Vstr{a} \Vstr{b}$} &
     \raisebox{1.4ex}
         {\cellboxr{Implicit concatenation of string \V{b} after string \V{a}}} \\
@@ -2730,13 +2731,35 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\eqTy$} & \cellboxr{Equality of types} \\
+{$\le$} & \cellboxr{Lax less than} \\
 \hline
-{$\eqColon{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
+{$\ge$} & \cellboxr{Lax greater than} \\
 \hline
-{$=$} & \cellboxr{General Equality} \\
+{$<$} & \cellboxr{Strict less than} \\
 \hline
-{$\neq$} & \cellboxr{Inequality} \\
+{$>$} & \cellboxr{Strict greater than} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\eqWTy$} & \cellboxr{Equality of types} \\
+\hline
+{$\eqTy$} & \cellboxr{Synonym of $eqWTy$} \\
+\hline
+{$\eqWClOp{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
+\hline
+{$\eqClOp{\alpha}$} & \cellboxr{Synonym of $\eqWClOp{\alpha$} \\
+\hline
+{$=$} & \cellboxr{Synonym of $\eqWClOp{\classes}} \\
+\hline
+{$\neq$} & \cellboxr{$(\V{a} \neq \V{b})$ means $\neg(\V{a} = \V{b})$} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2745,36 +2768,39 @@ $\V{X}\tfnMMap\V{Ycl}$%
 
 The operator general equality operator $=$
 represents equality in the meta-language,
-as well as $\eqColon{\classes}$ and $\eqTy$
-in the COL.
-From a foundational point of view,
+as well as $\eqWClOp{\classes}$ in the COL.
+From a foundational point of view, within the COL,
 $\eqColon{\classes}$ and $\eqTy$
 are two distinct
 built-in operators.
-The operator $\eqTy$ is equality of types,
+The operator $\eqWTy$ is equality of types,
 which are not necessarily first-class variables.
-The operator $\eqColon{\alpha}$,
+The operator $\eqWColon{\alpha}$,
 where $\alpha$ is a type,
 is equality between first-class variables of type $\alpha$.
 Since $\classes$ is the universal type,
-$\eqColon{\classes}$ is the operator for equality between Chiron's
+$\eqWClOp{\classes}$ is the operator for equality between Chiron's
 first class variables.
-$\eqColon{\sets}$ is the operator for equality between sets.
+$\eqWClOp{\sets}$ is the operator for equality between sets.
 
-Since foundations are not our focus, we often use simply use the
-traditional equality operator ($=$) for all these purposes.
-This works as expected most of the time,
-since every first class object is also a type,
-and types which are first class objects are equivalent
-iff they are equivalent as first class objects.
+Not that if
+types which are first class objects are equivalent
+iff they are equivalent as first class objects,
+and in this case we have both
+$\alpha (\eqTy) \beta$ and $\alpha = \beta$.
 If $\alpha$ and $\beta$ are types which are not first class objects, however,
-we may have both $\alpha (\eqTy) \beta$ and $\neg (\alpha (\eqColon{\classes}) \beta)$.
+we may have both $\alpha (\eqTy) \beta$ and $\alpha \neg \beta$.
 For example, let the types $\alpha$ and $\beta$ both be the superclass of all
 classes which are not natural numbers.
-That is, let $\alpha (\eqTy) \classes \setminus \naturals$
-and $\beta (\eqTy) \classes \setminus \naturals$.
-Then $\alpha (\eqTy) \beta$, as expected.
-\todo{Finish this.}
+That is, let $\gamma \eqTy \classes \setminus \naturals$
+and $\delta \eqTy \classes \setminus \naturals$.
+Then $\gamma \eqTy \delta$, as expected.
+But, if either $\gamma$ or $\delta$ is not well-defined in $\classes$,
+$\gamma \neg \delta$.
+In fact we have both
+$\gamma \isIllDef \classes$,
+and $\delta \isIllDef \classes$,
+so that $\gamma \neg \delta$.
 
 
 \FloatBarrier
@@ -24281,20 +24307,31 @@ Chiron.
 
 \todo{Add more Farmer sources here?}
 
-\section{The axiom of choice}
-\label{sec:aside-choice-axiom}
+Many of the features of Chiron are not used in this
+book, and may be ignored for our purposes.
+These include the 
+\begin{itemize}
+\item the \mname{eval} built-in operator;
+\item the Axiom of Choice;
+\item ``indefinite descriptions'';
+\item the ``choice function'', or $\xi$ element,
+    of the structure defining
+    a Chiron language~\cite[p. 25]{Farmer2012});
+\item dependent function types; and
+\item type application.
+\end{itemize}
 
-We do not use the Axiom of Choice in this book,
-and Chiron does not require it.
+Dependent function types (also called dependent product types)
+would allow the type of the result
+of a function application to vary with its argument.
+For our purposes the type of the result of a function application
+does not depend on its argument.
+This is the traditional, and far more common, approach.
 
-We also do not use Chiron's ``indefinite descriptions''.
-In our Chiron structure
-(see~\cite[p. 25]{Farmer2012}),
-we use an empty ``choice function'', $\xi$.
-We amend item 3 on page 26
-of~\cite{Farmer2012} to allow this.
-Since $\xi$ is only used in indefinite descriptions,
-this amendment to Chiron is harmless.
+Type application is used to implement dependent functions types.
+It allows the application of a type to a class to produce another type.
+Since we do not use dependent function types, we do not need or use
+type application.
 
 \section{Meta-language notation}
 \label{sec:aside-meta-language-notation}
@@ -24354,6 +24391,25 @@ understanding of the motivation for,
 implications of, or background to this book.
 Usually an epigraph is particularly relevant to the surrounding material.
 
+Those epigraph sources which also contribute directly to the
+main presentation of this book
+are included in the traditional bibliographic apparatus.
+To avoid clutter,
+those sources which only contribute indirectly,
+though the epigraphs,
+are documented in this chapter.
+In what follows, {\bf Duhem} is
+Pierre Duhem,
+{\em The Aim and Structure of Physical Theory},
+Princeton University Press, 1991.
+
+\epiSource{John Dewey}{dewey}
+From Chapter 12, ``Activity and the Training of Thought'',
+of John Dewey's book
+{\em How We Think}, the Gutenberg HTML edition.
+According to Gutenberg this is on pages 159-160
+of the D.C.~Heath 1910 edition.
+
 \epiSource{Kurt G{\"o}del}{goedel}
 From page 75 of Hao Wang's book,
 {\em A Logical Journey: From G{\"o}del to Philosophy},
@@ -24362,9 +24418,7 @@ The MIT Press, 1997.
 % at my copy of Wang.
 
 \epiSource{Pierre Duhem}{duhem}
-From page 133 in Chapter 3, Part II of Pierre Duhem's book,
-{{\em The Aim and Structure of Physical Theory},
-Princeton University Press, 1991.}
+From page 133 in Chapter 3, Part II of {\bf Duhem}.
 
 \epiSource{Lewis Carroll}{looking-glass}
 In Chapter 6 of

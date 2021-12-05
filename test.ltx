@@ -7,18 +7,32 @@
 \usepackage{refcount}
 \usepackage{ifdraft}
 
-\newcommand{\eqColon}[1]{\ensuremath{\mathrel{=:\joinrel{#1}}}}
+\newcommand{\setFns}{\ensuremath{\mathrel{\ni\joinrel\rightarrow}}}
+\newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}}
+\newcommand{\eqWClOp}[1]{\mathrel{=:\joinrel{#1}}}
+\newcommand{\eqWCl}[2]{\ensuremath{#1\eqWClOp{#2}}}
+\newcommand{\eqCl}[2]{\ensuremath{#1_eqWCnOp#2}}
+\newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
+\newcommand{\eqWTy}[1]{\ensuremath{#1\eqWTyOp}}
+\newcommand{\eqTy}[1]{\ensuremath{#1_\Ds}}
+
 \begin{document}
 
 \chapter{TEST}
 \tracingmacros=1
 
-Normal size tyhpe for comparison
-\eqColon{\ensuremath{\alpha}}
-\eqColon{\text{ty}}
-$$ X \eqColon{\ensuremath{\alpha}} Y $$
-$$ X \eqColon{\text{ty}} Y $$
-$$ x \eqColon{\ensuremath{\alpha}} y $$
-$$ x \eqColon{\text{ty}} y $$
+Normal size type for comparison
+\eqWCl{a}{\ensuremath{\alpha}}
+\eqWCl{abc}{\text{ty}}
+\eqWCl{\text{abc}}{\text{ty}}
+$$ X \eqWClOp{\ensuremath{\alpha}} Y $$
+$$ X \eqWClOp{\text{ty}} Y $$
+$$ x \eqWClOp{\ensuremath{\alpha}} y $$
+$$ x \eqWClOp{\text{ty}} y $$
+
+
+Wide type equality: \eqWTy{$a$}
+
+Fork arrow: \setFns
 
 \end{document}
