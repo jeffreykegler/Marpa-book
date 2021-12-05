@@ -147,9 +147,9 @@
 %\newcommand{\leqq}[1]{\mathrel{\preceq_{#1}}}
 
 \newcommand{\fnMap}{\rightharpoonup}
-\newcommand{\fnMMap}{\xrightharpoonup{*}}
+\newcommand{\fnMMap}{\mathbin{\ni\joinrel\rightharpoonup}}
 \newcommand{\tfnMap}{\rightarrow}
-\newcommand{\tfnMMap}{\xrightarrow{*}}
+\newcommand{\tfnMMap}{\mathbin{\ni\joinrel\rightarrow}}
 
 \newcommand{\tarrow}{\rightarrow}
 % \newcommand{\term}{\seq}
@@ -2574,8 +2574,7 @@ Concatenation may also be made explicit.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-\hline
-{$\V{to} \fnMap \V{from}$} &
+{$\V{D} \fnMap \V{C}$} &
     \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
 \hline
 \end{tabular}
@@ -2602,20 +2601,20 @@ and still be equivalent, if the functions are non-total.
 even if both functions are total.
 \end{itemize}
 
-We write $\V{X}\fnMap\V{Y}$%
-\index{recce-symbol}{function map 1@$\fnMap$ ($\V{X}\fnMap\V{Y}$
-    is the type for functions from \V{Y} to \V{X})}
+We write $\V{D}\fnMap\V{C}$%
+\index{recce-symbol}{function map 1@$\fnMap$ ($\V{D}\fnMap\V{C}$
+    is the type for functions from \V{D} to \V{C})}
 for the type of
-functions with \V{Y} as their domain
-and \V{X} as their codomain.
+functions with \V{D} as their domain
+and \V{C} as their codomain.
 Therefore we can write
 \[
-    \Vtyped{f}{\V{X}\fnMap\V{Y}}
+    \Vtyped{f}{\V{D}\fnMap\V{C}}
 \]
 to say that \V{f} is a function variable
 whose type is the superclass of all
-functions such that $\Dom{\V{f}} = \V{Y}$
-and $\Cod{\V{f}} = \V{X}$.
+functions such that $\Dom{\V{f}} = \V{D}$
+and $\Cod{\V{f}} = \V{C}$.
 
 \FloatBarrier
 
@@ -2623,9 +2622,8 @@ and $\Cod{\V{f}} = \V{X}$.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-\hline
-{$\V{to} \fnMMap \V{fromClass}$} &
-    \cellboxr{Type for functions from some domain in class \V{fromClass} to codomain \V{to}} \\
+{$\V{Dt} \fnMMap \V{C}$} &
+    \cellboxr{Type for functions from some domain of type \V{Dt} to codomain \V{C}} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2636,17 +2634,16 @@ We may wish to specify the domain of a function type by type,
 instead of explicitly.
 That is,
 we may wish to specify that \V{f} is a function variable whose
-type is $\V{X}\fnMap\V{Y1}$ for some
-$\VVtyped{Y1}{Ys}$,
-where \V{Ys} is a superclass.
+type is $\V{D1}\fnMap\V{C}$ for some
+$\VVtyped{D1}{Dt}$.
 For this we write
-$\V{X}\fnMMap\V{Ys}$%
-\index{recce-symbol}{function map 2@$\fnMMap$ ($\V{X}\fnMMap\V{Ys}$
-    is the type for functions from an element of \V{Ys} to \V{X})}%
+$\V{Dt}\fnMMap\V{C}$%
+\index{recce-symbol}{function map 2@$\fnMMap$ ($\V{Dt}\fnMMap\V{C}$
+    is the type for functions from an element of \V{Dt} to \V{C})}%
 ,
 \todo{Add reference if use of unary union is cataphoric}
 so that
-\[ \V{X}\fnMMap\V{Ys} = \bigcup \collB{ \V{X}\fnMap\V{Y} }{ \V{Y} \in \V{Ys} }. \]
+\[ \V{Dt}\fnMMap\V{C} = \bigcup \collB{ \V{D}\fnMap\V{C} }{ \V{D} \in \V{Dt} }. \]
 
 \FloatBarrier
 
@@ -2654,7 +2651,7 @@ so that
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\V{to} \tfnMap \V{from}$} &
+{$\V{D} \tfnMap \V{C}$} &
     \cellboxr{Type for total functions from domain \V{D} to codomain \V{C}} \\
 \hline
 \end{tabular}
@@ -2662,19 +2659,19 @@ so that
 
 \FloatBarrier
 
-We write $\V{X}\tfnMap\V{Y}$%
-\index{recce-symbol}{total function map 1@$\tfnMap$ ($\V{X}\tfnMap\V{Y}$
-    is the type for functions from \V{Y} to \V{X})}
+We write $\V{D}\tfnMap\V{C}$%
+\index{recce-symbol}{total function map 1@$\tfnMap$ ($\V{D}\tfnMap\V{C}$
+    is the type for functions from \V{D} to \V{C})}
 for the type of
-total functions with \V{Y} as their domain
-and \V{X} as their codomain.
+total functions with \V{D} as their domain
+and \V{C} as their codomain.
 Therefore we write
 \[
-    \Vtyped{f}{\V{X}\tfnMap\V{Y}}
+    \Vtyped{f}{\V{D}\tfnMap\V{C}}
 \]
 to say that \V{f} is a function
-such that $\Dom{\V{f}} = \V{Y}$
-and $\Cod{\V{f}} = \V{X}$.
+such that $\Dom{\V{f}} = \V{X}$
+and $\Cod{\V{f}} = \V{C}$.
 
 \FloatBarrier
 
@@ -2682,22 +2679,21 @@ and $\Cod{\V{f}} = \V{X}$.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-\hline
-{$\V{to} \tfnMMap \V{fromClass}$} &
-    \cellboxr{Type for total functions from some domain in class \V{fromClass} to codomain \V{to}} \\
+{$\V{D} \tfnMMap \V{C}$} &
+    \cellboxr{Type for total functions from some domain in class \V{D} to codomain \V{C}} \\
 \hline
 \end{tabular}
 \end{table}
 
 \FloatBarrier
 
-Where \V{Ycl} is a class of domains
-and \V{X} is a codomain,
-$\V{X}\tfnMMap\V{Ycl}$%
-\index{recce-symbol}{total function map 2@$\tfnMMap$ ($\V{X}\tfnMMap\V{Ycl}$
-    is the type for total functions from an element of \V{Ycl} to \V{X})}%
+Where \V{Dt} is a type to which the domains belong
+and \V{C} is a codomain,
+$\V{Dt}\tfnMMap\V{C}$%
+\index{recce-symbol}{total function map 2@$\tfnMMap$ ($\V{Dt}\tfnMMap\V{C}$
+    is the type for total functions from a domain of type \V{Dt} to \V{C})}%
 , so that
-\[ \V{X}\tfnMMap\V{Ycl} = \bigcup \collB{ \V{X}\tfnMap\V{Y} }{ \V{Y} \in \V{Ycl} }. \]
+\[ \V{Dt}\tfnMMap\V{C} = \bigcup \collB{ \V{D}\tfnMap\V{C} }{ \V{D} \in \V{Dt} }. \]
 
 \FloatBarrier
 
