@@ -15,7 +15,7 @@
 
 # See below for the list Debian packages required to 'make' this
 
-.phony: all clean recce-indexes full travis stage aspell arxiv
+.phony: all clean recce-indexes full travis stage aspell arxiv test
 
 LATEX = pdflatex
 MAKEINDEX = makeindex
@@ -26,6 +26,8 @@ INDEX_LIST = general defienda symbol
 
 all: recce.pdf
 
+test: test.pdf
+
 # Stage for testing arxiv.org build
 arxiv:
 	-mkdir stage_arxiv
@@ -34,6 +36,9 @@ arxiv:
 	for ix in $(INDEX_LIST); do cp recce-$$ix.ind stage_arxiv; done
 
 full: ah2002_notes.pdf recce.pdf finite.pdf
+
+test:
+	$(LATEX) test.ltx
 
 travis:
 	$(LATEX) recce.ltx
