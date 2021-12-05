@@ -552,11 +552,9 @@
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
 \newcommand{\eqWClOp}[1]{\mathrel{=:\joinrel{#1}}}
-\newcommand{\eqWCl}[2]{\ensuremath{#1\eqWClOp{#2}}}
-\newcommand{\eqCl}[2]{\ensuremath{#1_#2}}
+\newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
 \newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
-\newcommand{\eqWTy}[1]{\ensuremath{#1\eqWTyOp}}
-\newcommand{\eqTy}[1]{\ensuremath{#1_\Ds}}
+\newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
 
 \newcommand{\condOpA}{\mathbin{?}}
 \newcommand{\condOpB}{\mathbin{:}}
@@ -2289,7 +2287,7 @@ indicates a first class COL variable of type $\alpha$
 and abbreviates the expression of looser precedence,
 $\Vtyped{x}{\alpha}$.
 We prefer to avoid subscripts,
-and $\Vtyped{x}{\alpha}$ is used only when the type is readable 
+and $\Vtyped{x}{\alpha}$ is used only when the type is readable
 in a subscript font,
 and only to remind ourselves
 of a previously stated type,
@@ -2749,15 +2747,17 @@ $\V{X}\tfnMMap\V{Ycl}$%
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\eqWTy$} & \cellboxr{Equality of types} \\
+{$\eqWTyOp$} & \cellboxr{Equality of types} \\
 \hline
-{$\eqTy$} & \cellboxr{Synonym of $eqWTy$} \\
+{$\eqTyOp$} & \cellboxr{$\eqTyOp$ is a synonym for $\eqWTyOp$} \\
 \hline
 {$\eqWClOp{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
 \hline
-{$\eqClOp{\alpha}$} & \cellboxr{Synonym of $\eqWClOp{\alpha$} \\
+{$\eqClOp{\alpha}$} & \cellboxr{$\eqClOp{\alpha}$ is a synonym for $\eqWClOp{\alpha}$} \\
 \hline
-{$=$} & \cellboxr{Synonym of $\eqWClOp{\classes}} \\
+{$\eqClOp{\classes}$} & \cellboxr{$\eqClOp{\classes}$ is a synonym for $\eqWClOp{\classes}$} \\
+\hline
+{$=$} & \cellboxr{$=$ is a synonym for $\eqClOp{\classes}$} \\
 \hline
 {$\neq$} & \cellboxr{$(\V{a} \neq \V{b})$ means $\neg(\V{a} = \V{b})$} \\
 \hline
@@ -2770,12 +2770,15 @@ The operator general equality operator $=$
 represents equality in the meta-language,
 as well as $\eqWClOp{\classes}$ in the COL.
 From a foundational point of view, within the COL,
-$\eqColon{\classes}$ and $\eqTy$
-are two distinct
+$\eqWClOp{\classes}$ and $\eqWTyOp$
+are represented by two distinct
 built-in operators.
-The operator $\eqWTy$ is equality of types,
+\mname{type-equal} for \classes{} represents
+$\eqWClOp{\classes}$;
+and \mname{type-equal} represents $\eqWTyOp$.
+The operator $\eqWTyOp$ is equality of types,
 which are not necessarily first-class variables.
-The operator $\eqWColon{\alpha}$,
+The operator $\eqWClOp{\alpha}$,
 where $\alpha$ is a type,
 is equality between first-class variables of type $\alpha$.
 Since $\classes$ is the universal type,
@@ -2783,24 +2786,23 @@ $\eqWClOp{\classes}$ is the operator for equality between Chiron's
 first class variables.
 $\eqWClOp{\sets}$ is the operator for equality between sets.
 
-Not that if
-types which are first class objects are equivalent
+Note that types which are first class objects are equivalent
 iff they are equivalent as first class objects,
 and in this case we have both
-$\alpha (\eqTy) \beta$ and $\alpha = \beta$.
+$\alpha \eqTyOp \beta$ and $\alpha = \beta$.
 If $\alpha$ and $\beta$ are types which are not first class objects, however,
-we may have both $\alpha (\eqTy) \beta$ and $\alpha \neg \beta$.
+we may have both $\alpha \eqTyOp \beta$ and $\alpha \neq \beta$.
 For example, let the types $\alpha$ and $\beta$ both be the superclass of all
 classes which are not natural numbers.
-That is, let $\gamma \eqTy \classes \setminus \naturals$
-and $\delta \eqTy \classes \setminus \naturals$.
-Then $\gamma \eqTy \delta$, as expected.
+That is, let $\gamma \eqTyOp \classes \setminus \naturals$
+and $\delta \eqTyOp \classes \setminus \naturals$.
+Then $\gamma \eqTyOp \delta$, as expected.
 But, if either $\gamma$ or $\delta$ is not well-defined in $\classes$,
-$\gamma \neg \delta$.
+$\gamma \neq \delta$.
 In fact we have both
 $\gamma \isIllDef \classes$,
 and $\delta \isIllDef \classes$,
-so that $\gamma \neg \delta$.
+so that $\gamma \neq \delta$.
 
 
 \FloatBarrier
@@ -2937,7 +2939,7 @@ so that \Eref{number-quantification-example} becomes
 The definition symbols have the same effect as the logical
 equivalence operators, plus two others.
 The $\defined$ operator specifies global scope for the defiendum,
-while the 
+while the
 $\ldefined$ operator gives it local scope.
 And both specify that the that they are not simply
 logical equivalences of the COL, but definitions at the meta-language level.
@@ -3013,7 +3015,7 @@ so that, where $\V{S} = \tuple{ 42, 1729, 42 }$,
 Our rule is that types do not share variable names,
 so that, in every scope,
 we can uniquely determine the type of a variable from its name.
-However, there are two cases, 
+However, there are two cases,
 where breaking our rule seemed to promote readability
 much more than it risked confusion.
 We therefore make local, sparing departures
@@ -24309,7 +24311,7 @@ Chiron.
 
 Many of the features of Chiron are not used in this
 book, and may be ignored for our purposes.
-These include the 
+These include the
 \begin{itemize}
 \item the \mname{eval} built-in operator;
 \item the Axiom of Choice;
