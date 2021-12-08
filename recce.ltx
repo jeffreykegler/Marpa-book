@@ -95,6 +95,9 @@
 % \usepackage{glossaries} % must after hyperref
 % \makeglossaries
 
+\newcommand{\COL}{\ensuremath{\mathbb{COL}}}
+\newcommand{\MtL}{\ensuremath{\mathbb{M}\text{t}\mathbb{L}}}
+
 %% From Chiron 2012 paper
 
 \newcommand{\sets}{\ensuremath{\mathbb{V}}}
@@ -555,6 +558,21 @@
 \newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
 \newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
 \newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
+
+\newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
+\newcommand{\DRel}[1]{\ensuremath{\mathrel{\rawDRel{#1}}}}
+\newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
+  \mkern-1mu{#1}}
+\newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
+\newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=:\joinrel{#1}}}}
+\newcommand{\DEqClOp}[1]{\DRel{\ensuremath{=_{#1}}}}
+\newcommand{\DEqWTyOp}{\DRel{\ensuremath{\eqWClOp{\Ds}}}}
+\newcommand{\DEqTyOp}{\DRel{\ensuremath{\eqClOp{\Ds}}}}
+\newcommand{\DDEqWClOp}[1]{\DDRel{\mathrel{=:\joinrel{#1}}}}
+\newcommand{\DDEqClOp}[1]{\DDRel{\ensuremath{=_{#1}}}}
+\newcommand{\DDEqWTyOp}{\DDRel{\ensuremath{\eqWClOp{\Ds}}}}
+\newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
+
 
 \newcommand{\condOpA}{\mathbin{?}}
 \newcommand{\condOpB}{\mathbin{:}}
@@ -1939,7 +1957,7 @@ so that Chiron is as ``safe''
 as ZF.\footnote{%
     Chiron does not require the Axiom of Choice,
     and the Axiom of Choice is not used in this book.
-    For details, see \asideRef{choice-axiom}.}
+    For details, see \asideRef{chiron}.}
 
 Chiron is intended for mechanizing mathematics,
 but that is not the reason for our use of it.
@@ -1979,14 +1997,16 @@ and an extensible meta-language, with formal components.
 Our meta-language is informal English,
 and incorporates Chiron's meta-languge.
 Our object language is Chiron's.
-We use the abbreviation \dfn[COL, ``Chiron object language'']{COL} to refer to Chiron's object
+We use the abbreviation \dfn[COL, ``Chiron object language'']{\COL} to refer to Chiron's object
+language.
+MT use the abbreviation \dfn[MtL, ``the meta language of this presentation'']{\MtL} to refer to Chiron's object
 language.
 
-COL cannot reason about its own truth.
+\COL cannot reason about its own truth.
 But, within our meta-language,
 we can reason about the truth of statements
-in COL.
-Like COL,
+in \COL.
+Like \COL,
 our meta-language cannot reason about its own truth.
 For our conviction regarding the truth of assertions
 we make in our meta-language, we must look to our intuition.
@@ -2771,6 +2791,31 @@ $\V{Dt}\tfnMMap\V{C}$%
 \hline
 {$=$} & \cellboxr{A synonym for $\eqClOp{\classes}$} \\
 \hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+Our notation for the equivalence operators ``puns'' our notation for
+typing first-class variables.  The equivalent operators are built-in
+operators or derived from them, and do not actually have types.
+We feel that the virtues as a mnemonic of pseudo-typing the equivalence operands,
+justifies the overloading of the typing notation.
+
+The equivalence operators all have variants in which they are prefixed with a single
+diamond ($\rawDRel{}$) or a double diamond ($\rawDDRel{}$).
+These ``diamond variants'', in addition to their COL significance,
+act as definitions in the \MtL.
+They are described at their precedence level.
+\todo{Add ref}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
 {$\neq$} & \cellboxr{$(\V{a} \neq \V{b})$ means $\neg(\V{a} = \V{b})$} \\
 \hline
 \end{tabular}
@@ -2937,6 +2982,18 @@ so that \Eref{number-quantification-example} becomes
 \end{table}
 
 \FloatBarrier
+
+\todo{Finish and rewrite}
+Equivalences prefixed with a single diamond, in addition to their COL significance,
+are global definitions in the meta-language.
+Equivalences prefixed with a double diamond, in addition to their COL significance,
+are global definitions in the meta-language.
+For example,
+\begin{gather}
+\label{eq:dequiv1} \V{ANSWER} \DEqTyOp  \set{42} \\
+\label{eq:dequiv2} \V{myAnswer} \defined 42 \\
+\label{eq:dequiv3} \V{yourAnswer} \ldefined 42
+\end{gather}
 
 The definition symbols have the same effect as the logical
 equivalence operators, plus two others.
