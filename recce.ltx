@@ -419,6 +419,8 @@
 % "full" ref -- that is, always include page
 \newcommand{\AFref}[1]{(a\ref{#1}:\pageref{#1})}
 
+% "full" ref -- that is, always include page and chapter
+\newcommand{\EFref}[1]{(e\ref{eq:#1}:\pageref{eq:#1})}
 \newcommand{\Eref}[2][]{%
     \ifthenelse{\equal{#1}{}}{}{%
          \ifmmode \text{``#1''}%
@@ -2313,6 +2315,36 @@ and only to remind ourselves
 of a previously stated type,
 or for stating types which that are suggested
 by the context.
+
+We overload the typing notation in \MtL{} to allow
+pseudo-types after the colon.
+If the pseudo-type is a meta-domain, it indicates that
+the variable is in that meta-domain.
+For example, $\Vtyped{metaX}{\Ds}$ indicates that \V{metaX}
+is in the metadomain \Ds{}. 
+\Ds{} is not a \COL{} value.
+Unless specified more narrowly elsewhere,
+\V{metaX} is not a first-class COL variable;
+and \V{metaX} does not have a \COL{} type.
+
+If the pseudo-type is \MtL{}, it indicates that
+the variable is a variable of the meta-language.
+For example,
+\begin{equation}
+\label{eq:pseudo-type-notation2}
+\Vtyped{metaY}{\MtL}
+\end{equation}
+indicates that \V{metaY} is a variable in the meta-language.
+As a pseudo-type, \MtL{} is a special notation,
+and is not a collection.
+Since all variables are in the metalanguage,
+\EFref{pseudo-type-notation2} tells us very little about \V{metaY},
+and we may expect
+that \V{metaY} will be specified more narrowly elsewhere.
+Based on \EFref{pseudo-type-notation2} by itself,
+\V{metaY} is not necessarily a part of the \COL{},
+and therefore will not necessarily be
+a first-class \COL{} with a type.
 
 \FloatBarrier
 
