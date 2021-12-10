@@ -550,9 +550,11 @@
 
 \newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
 \newcommand{\DRel}[1]{\ensuremath{\mathrel{\rawDRel{#1}}}}
+\newcommand{\DefOp}{\ensuremath{\mathrel{\rawDRel{}}}}
 \newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
   \mkern-1mu{#1}}
 \newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
+\newcommand{\LDefOp}{\ensuremath{\mathrel{\rawDDRel{}}}}
 \newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=:\joinrel{#1}}}}
 \newcommand{\DEqClOp}[1]{\DRel{\ensuremath{=_{#1}}}}
 \newcommand{\DEqWTyOp}{\DRel{\ensuremath{\eqWClOp{\Ds}}}}
@@ -563,7 +565,7 @@
 \newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
 
 \newcommand{\defined}{\DRel{\mathrel{=}}}
-\newcommand{\ldefined}{\underset{\text{ldef}}{\equiv}}
+\newcommand{\ldefined}{\DDRel{\mathrel{=}}}
 
 \newcommand{\condOpA}{\mathbin{?}}
 \newcommand{\condOpB}{\mathbin{:}}
@@ -3012,11 +3014,9 @@ so that \Eref{number-quantification-example} becomes
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{$\defined$}
-    & \cellboxr{\raisebox{.7ex}{Definition}} \\
+{$\DefOp$} & \cellboxr{Definition} \\
 \hline
-\rule{0em}{3.8ex}\raisebox{1.5ex}{$\ldefined$}
-    & \cellboxr{\raisebox{.7ex}{Local definition}} \\
+{$\LDefOp$} & \cellboxr{Local definition} \\
 \hline
 \end{tabular}
 \end{table}
@@ -3045,24 +3045,56 @@ so that \Eref{number-quantification-example} becomes
 \FloatBarrier
 
 \todo{Finish and rewrite}
-Equivalences prefixed with a single diamond, in addition to their COL significance,
-are global definitions in the meta-language.
-Equivalences prefixed with a double diamond, in addition to their COL significance,
-are global definitions in the meta-language.
-For example,
-\begin{gather}
-\label{eq:dequiv1} \V{ANSWER} \DEqTyOp  \set{42} \\
-\label{eq:dequiv2} \V{myAnswer} \defined 42 \\
-\label{eq:dequiv3} \V{yourAnswer} \ldefined 42
-\end{gather}
+The single-diamond variants of the equivalence operators
+have the same effect as their corresponding equivalence opertor.
+In addition,
+equivalences prefixed with a single diamond
+act as global definitions in the meta-language.
 
-The definition symbols have the same effect as the logical
-equivalence operators, plus two others.
-The $\defined$ operator specifies global scope for the defiendum,
-while the
-$\ldefined$ operator gives it local scope.
-And both specify that the that they are not simply
-logical equivalences of the COL, but definitions at the meta-language level.
+For example,
+\[ \V{ANSWER} \DEqTyOp  \set{42} \]
+states that the \COL{} type \V{ANSWER} is a
+singleton superclass containing the number 42,
+that this is the definition of \V{ANSWER},
+and that this definition has global scope.
+And
+\[ \V{myAnswer} \defined 42 \]
+states that \V{myanswer} is a first-class \COL{} variable whose value
+is 42 and that, in addition to establishing this in the local scope in the \COL{},
+this is a global definition.
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{3in}
+\begin{table}[H]
+\begin{tabular}{|p{1.5in}|l|}
+\hline
+\hline
+{$\DDEqWTyOp$} & \cellboxr{Local definition of a type; \COL{} synonym of $\eqWTyOp$} \\
+\hline
+{$\DDEqTyOp$} & \cellboxr{A synonym for $\DDEqWTyOp$} \\
+\hline
+{$\DDEqWClOp{\alpha}$} & \cellboxr{Local definition of a class of type $\alpha$;
+    \COL{} synonym of $\eqWClOp{\alpha}$} \\
+\hline
+{$\DDEqClOp{\alpha}$} & \cellboxr{A synonym for $\DDEqWClOp{\alpha}$} \\
+\hline
+{$\DDEqClOp{\classes}$} & \cellboxr{A synonym for $\DDEqWClOp{\classes}$} \\
+\hline
+{$\ldefined$} & \cellboxr{A synonym for $\DDEqClOp{\classes}$} \\
+\hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+\todo{Finish and rewrite}
+The double-diamond variants of equivalences are like the single-diamong equivalences,
+except that the definitions they establish are local instead of global.
+The scope of a local definition is the current context, unless otherwise stated.
+For example,
+\[ \V{yourAnswer} \ldefined 42 \]
+states that \V{myanswer} is a first-class \COL{} variable whose value
+is 42 and that, in addition to establishing this in the local scope in the \COL{},
+this is a local definition.
 
 \FloatBarrier
 
