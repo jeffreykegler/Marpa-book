@@ -2202,26 +2202,149 @@ For this, our object-language has a special dedicated value, the
 
 \todo{Finish this}
 
-\section{Operators}
-\todo{Finish this section.}
+\section{Precedence}
 
-Associativity of operators follows tradition.
-We cannot rely on tradition to determine
-our order of precedence, however,
-because our operators
-come from multiple traditions,
-and, for a given pair of operators,
-it would often be unclear
-what precedence
-a given pair of operators they should have relative to each other.
+Our toolbox of operators is large enough that
+we would find it useful to state explicitly our order
+of precedence, simply as a reminder.
+And in fact, tradition does not fully determine
+our order of precedence.
+For example, if two operators are drawn
+from multiple traditions, no source will state
+their precedence
+relative to each other.
 
-Operators are given in non-tightening order of precedence.
+In the following boxed displays,
+operators are given in non-tightening order of precedence.
 The operator of a row following a double-line separator has
 looser precedence than the operator in the preceding rows.
 The operator of a row following a single-line separator has
 the same precedence as the operator in the preceding row.
-Parentheses override precedence.
 
+First come the various ``atomic'' elements:
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\cellboxr{Constants, such as $\classes$,
+    $\naturals$, $\sets$, and $\unicorn$} \\
+\hline
+\cellboxr{Variables, such as (possibly) \V{x}, $\mathbb{ABC}$, $\alpha$ and \V{multichar}} \\
+\hline
+\cellboxr{Literals, such as 0, -12, and 42} \\
+\hline
+\end{tabular}
+\end{table}%
+\index{recce-symbol}{C@$\classes$ (the universal type)}%
+\index{recce-defienda}{C@$\classes$ (the universal type)}%
+\index{recce-symbol}{N@$\naturals$ (set of natural numbers)}%
+\index{recce-defienda}{N@$\naturals$ (set of natural numbers)}%
+\index{recce-symbol}{V@$\sets$ (the class of all sets)}%
+\index{recce-defienda}{V@$\sets$ (the class of all sets)}%
+\index{recce-symbol}{Unicorn@$\unicorn$ (the ``unicorn'', the ill-defined constant)}%
+\index{recce-defienda}{Unicorn@Unicorn, $\unicorn$ (ill-defined constant)}%
+\FloatBarrier
+
+The bracketing operators bind as tightly as the atomic operators:
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\cellboxr{Parenthesized expressions like $(42)$} \\
+\hline
+\cellboxr{Tuples like $\tuple{42, 43}$} \\
+\hline
+\cellboxr{Sequences like $\seq{43, 1729, 1491, 1493 }$} \\
+\hline
+\cellboxr{Families like $\family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }$} \\
+\hline
+\cellboxr{Cardinalty of a collection, \rule{0em}{2.7ex}$\Vsize{Col}$\rule[-1.5ex]{0em}{0in}} \\
+\hline
+\end{tabular}
+\end{table}%
+\index{recce-symbol}{cardinality@\Vsize{C}, cardinality of collection \V{C}}
+
+The next tightest level of precedence includes the application operators:
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{Operator application, such as \powerset{\V{A}},
+  \Cod{\V{A}}, \Dom{\V{A}}, and \Ran{\V{A}}} \\
+\hline
+\cellboxr{Function application, such as \Vmyfn{f}{x},
+    $\Vmyfn{multicharFn}{v1}$, \Vmyfn{g}{x}, and \Vmyfn{f2}{maxV}} \\
+\hline
+\end{tabular}
+\end{table}%
+\index{recce-defienda}{\Cod{\V{r}}, codomain of function \V{r}}%
+\index{recce-defienda}{\Dom{\V{r}}, domain of relation \V{r}}%
+\index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}
+
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{Arithmetic negation of \var{x}: $-\var{x}$} \\
+\hline
+\cellboxr{Logical negation of \var{x}: $\neg\var{x}$} \\
+\hline
+\hline
+{Unary set operators:
+  $\textstyle {\sum}$, $\textstyle {\bigcap}$, $\textstyle {\bigcup}$} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+Next in precedence are binary operators whose results are relations.
+Their associativity is right to left.
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{\V{f} repeated \V{n} times: $\fname{f}\caret\V{n}$} \\
+\hline
+  \cellboxr{Relational composition, ``\V{g} after \V{f}'':
+  $\fname{g}\relAfterOp\fname{f}$} \\
+\hline
+    \cellboxr{Functional composition ``\V{g} after \V{f}''
+    $\fname{g}\fnAfterOp\fname{f}$ } \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{Multiplication: $\mult$} \\
+\hline
+\cellboxr{Division: $/$} \\
+\hline
+\cellboxr{Modulo: $\bmod$} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
+
+\section{Operators}
+\todo{Finish this section.}
+
+Associativity of operators follows tradition.
 We include constants in the table entries of the section,
 for this purpose treating them as nullary operators.
 In fact, where the constant is a Chiron built-in,
@@ -3289,76 +3412,6 @@ and arbitrary $\V{x} \in \V{X}$,
 \[ \VVelement{fam}{i} \defined \rIota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
     \quad \dfEnd \]
 \end{definition}
-
-% Delete this in favor of use of Lambda?
-% \section{Order of evaluation}
-%
-% An mathematical expression is only well-formed
-% if all of it is well-formed.
-% All the expressions in this book are
-% (we hope)
-% well-formed.
-%
-% Traditionally,
-% assessing whether a mathematical expression is
-% well-defined is done in the same fashion as assessing
-% whether it is well-formed:
-% A mathematical expression is considered well-defined
-% only if every part of it is well-defined.
-%
-% In keeping with this,
-% logical operations typically
-% imply no order of evaluation ---
-% there is no definition of the order in which the subexpressions
-% are assessed for their value,
-% or their well-definedness.
-%
-% One workaround is to special-case potential ill-definedness,
-% wherever it occurs,
-% but this is awkward and verbose.
-% It is often more convenient, and clearer,
-% to present the math using an expression
-% that contains potentially ill-defined subexpressions.
-% In this book, potentially ill-defined subexpressions.
-% include iota operators
-% and sequence values with out-of-bounds indexes.
-%
-% For the purpose of assessing well-definedness,
-% we treat logical expressions as if we evaluated
-% them from left to right.
-% Once we know what the value of the whole expression would be,
-% on the assumption that there is a well-defined boolean value,
-% we evaluate no further,
-% ignoring even ill-defined sub-expressions.
-%
-% In the following examples, let \V{arr} be the sequence
-% of length 1 such that $\Velement{arr}{0} = 1749$.
-% Consider as an example
-% \begin{equation}
-% \label{eq:order-of-evaluation-100}
-%     \forall\; \Vnat{x} : \V{x} \ne 0 \lor \VVelement{arr}{x} \ge 42.
-% \end{equation}
-% Using traditional order-free evaluation,
-% \Eref{order-of-evaluation-100} is not well-defined,
-% because if $\V{x}=1$, then $\V{x} \notin \Dom{\V{arr}}$.
-% In this book, however,
-% \Eref{order-of-evaluation-100} is well-defined and true,
-% because if the left hand side of a logical ``or'' is true,
-% we ignore its right hand side, even if it is ill-defined.
-% As another example, in this book,
-% \[
-%     \forall\; \Vnat{x} : \V{x} = 0 \land \VVelement{arr}{x} \le 42
-% \]
-% is considered to be well-defined and false,
-% because
-% if the left hand side of a logical ``and'' is false,
-% we ignore the right hand side.
-% Similarly, we consider the equation
-% \[
-%     \forall\; \Vnat{x} : \V{x} = 0 \implies \VVelement{arr}{x} \ge 42
-% \]
-% to be well-defined and true.
-%
 
 \chapter{Sequences}
 \label{chap:sequences}
