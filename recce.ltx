@@ -840,7 +840,7 @@
 }
 \newcommand{\cellboxrWidth}[1]{4.5in}
 \newcommand{\cellboxr}[2][\cellboxrWidth]{%
-    \parbox{#1}{\raggedright\cellRule{#2}}%
+    \parbox{#1}{\raggedright\cellRule{\ignorespaces#2}}%
 }
 \newcommand{\mylegend}[1]{%
     \parbox{\textwidth}{\leavevmode\\[1ex]#1}}
@@ -884,6 +884,17 @@
   \myparbox[#1]{$\triangleright$ #2}%
 }
 \newcommand{\lcomment}[1]{\hspace\algorithmicindent$\triangleright$ #1}
+
+\newsavebox{\myBox}
+\newlength{\myHt}
+\newlength{\myDp}
+\newlength{\myWd}
+\newcommand{\padBoxC}[3]{%
+    \savebox{\myBox}{\ignorespaces#3}%
+    \usebox{\myBox} \myHt=\ht\myBox \myDp=\dp\myBox%
+    \vrule height\dimexpr\myHt+#1 depth\dimexpr\myDp+#2 width0pt%
+}
+\newcommand{\padBox}[2]{\padBoxC{#1}{#1}{#2}}
 
 \hyphenation{oper-and oper-ands}
 \hyphenation{look-ahead}
@@ -2374,7 +2385,8 @@ a convention which is much more convenient for our purposes.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Implicit concatenation of string \V{b} after string \V{a}: $\Vstr{a} \Vstr{b}$} \\
+\cellboxr{Implicit concatenation of string \V{b} after string \V{a}:
+        \padBox{2pt}{$\Vstr{a} \Vstr{b}$}}\\
 \hline
 \cellboxr{Explicit concatenation of \V{b} after \V{a}: $\V{a} \cat \V{b}$} \\
 \hline

@@ -5,68 +5,41 @@
 \usepackage{calc} % calc is required by todonotes
 \usepackage{xstring}
 \usepackage{refcount}
+\usepackage{fancybox}
 \usepackage{ifdraft}
 
 \newcommand{\setFns}{\ensuremath{\mathrel{\ni\joinrel\rightarrow}}}
-\newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}}
-\newcommand{\eqWClOp}[1]{\mathrel{=:\joinrel{#1}}}
-\newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
-\newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
-\newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
 
-\newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
-\newcommand{\DRel}[1]{\ensuremath{\mathrel{\rawDRel{#1}}}}
-\newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
-  \mkern-1mu{#1}}
-\newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
-\newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=:\joinrel{#1}}}}
-\newcommand{\DEqClOp}[1]{\DRel{\ensuremath{=_{#1}}}}
-\newcommand{\DEqWTyOp}{\DRel{\ensuremath{\eqWClOp{\Ds}}}}
-\newcommand{\DEqTyOp}{\DRel{\ensuremath{\eqClOp{\Ds}}}}
-\newcommand{\DDEqWClOp}[1]{\DDRel{\mathrel{=:\joinrel{#1}}}}
-\newcommand{\DDEqClOp}[1]{\DDRel{\ensuremath{=_{#1}}}}
-\newcommand{\DDEqWTyOp}{\DDRel{\ensuremath{\eqWClOp{\Ds}}}}
-\newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
+\newcommand{\V}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\Vstr}[1]{\doublebox{\ensuremath{\mathstrut\V{#1}}}}
+\newcommand{\cellboxrWidth}{4.5in}
+\setlength{\fboxsep}{0pt}
+
+
+\newsavebox{\myBox}
+\newlength{\myHt}
+\newlength{\myDp}
+\newlength{\myWd}
+\newcommand{\padBox}[3]{%
+    \savebox{\myBox}{\ignorespaces#3}%
+    \usebox{\myBox} \myHt=\ht\myBox \myDp=\dp\myBox%
+    \vrule height\dimexpr\myHt+#1 depth\dimexpr\myDp+#2 width0pt%
+}
 
 \begin{document}
 
 \chapter{TEST}
 \tracingmacros=1
 
-Normal size type for comparison: $\rawDRel{} \qquad \rawDDRel{}$
+\the\dimexpr\linewidth-4pt\relax
 
-Normal size type for comparison
-$\eqWClOp{\ensuremath{\alpha}}$
-$\eqWClOp{\text{ty}}$
+\renewcommand{\cellboxrWidth}{4.5in}
+\the\myHt{} \the\myDp
 
-Normal size type for comparison
-\DEqWClOp{\ensuremath{\alpha}}
-\DEqWClOp{\text{ty}}
-
-Normal size type for comparison
-\DDEqWClOp{\ensuremath{\alpha}}
-\DDEqWClOp{\text{ty}}
-
-$$ X \eqWClOp{\ensuremath{\alpha}} Y
-  \qquad X \eqWClOp{\text{ty}} Y
-  \qquad x \eqWClOp{\ensuremath{\alpha}} y
-  \qquad x \eqWClOp{\text{ty}} y $$
-
-$$ X \DEqWClOp{\ensuremath{\alpha}} Y
-  \qquad X \DEqWClOp{\text{ty}} Y
-  \qquad x \DEqWClOp{\ensuremath{\alpha}} y
-  \qquad x \DEqWClOp{\text{ty}} y $$
-
-$$ X \DDEqWClOp{\ensuremath{\alpha}} Y
-  \qquad X \DDEqWClOp{\text{ty}} Y
-  \qquad x \DDEqWClOp{\ensuremath{\alpha}} y
-  \qquad x \DDEqWClOp{\text{ty}} y $$
-
-Wide type equality: $\eqWTyOp{a}$
-
-Wide type equality: $\DEqWTyOp{a}$
-
-Wide type equality: $\DDEqWTyOp{a}$
+\fbox{\parbox{\cellboxrWidth}{\raggedright
+    string \V{b} after string \V{a}:
+    \padBox{2pt}{2pt}{$\Vstr{a} \Vstr{b}$}
+    }}
 
 Fork arrow: \setFns
 
