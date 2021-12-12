@@ -4,6 +4,7 @@
 \documentclass[draft,openany,12pt]{amsbook}
 \usepackage{calc} % calc is required by todonotes
 \usepackage{xstring}
+\usepackage{xspace}
 \usepackage{needspace}
 \usepackage{mfirstuc}
 \usepackage{ifdraft}
@@ -95,8 +96,8 @@
 % \usepackage{glossaries} % must after hyperref
 % \makeglossaries
 
-\newcommand{\COL}{\ensuremath{\mathbb{COL}}}
-\newcommand{\MtL}{\ensuremath{\mathbb{M}\text{t}\mathbb{L}}}
+\newcommand{\COL}{\ensuremath{\mathbb{COL}}\xspace}
+\newcommand{\MtL}{\ensuremath{\mathbb{M}\text{t}\mathbb{L}}\xspace}
 
 %% From Chiron 2012 paper
 
@@ -742,10 +743,10 @@
 \newcommand{\naturals}{\ensuremath{\mathbb{N}}}
 \newcommand{\integers}{\ensuremath{\mathbb{Z}}}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}}
-\newcommand{\Earley}{\algo{Earley}}
-\newcommand{\Leo}{\algo{Leo}} % overwrites mathabx symbol
-\newcommand{\Marpa}{\algo{Marpa}}
-\newcommand{\Rtwo}{\texttt{Marpa::R2}}
+\newcommand{\Earley}{\algo{Earley}\xspace}
+\newcommand{\Leo}{\algo{Leo}\xspace}
+\newcommand{\Marpa}{\algo{Marpa}\xspace}
+\newcommand{\Rtwo}{\texttt{Marpa::R2}\xspace}
 
 % I want to use 'call' outside of pseudocode
 \newcommand\mycallname[1]{\textproc{#1}}
@@ -981,7 +982,7 @@ The more I think about language,
 the more it amazes me that people ever understand each other at all.}
 {Kurt G{\"o}del}
 
-The \Marpa{} project was intended to create
+The \Marpa project was intended to create
 a practical and highly available tool
 to generate and use general context-free
 parsers.
@@ -992,12 +993,12 @@ regular expressions.
 But, despite an encouraging academic literature,
 no such tool had existed for context-free parsing.
 
-The first stable version of \Marpa{} was uploaded to
+The first stable version of \Marpa was uploaded to
 a public archive on Solstice Day 2011%
 \index{recce-general}{Solstice Day 2011}.
 This book
 describes the algorithm used
-in the most recent version of \Marpa{},
+in the most recent version of \Marpa,
 \Rtwo~\cite{Marpa-R2}.
 It is a simplification of the algorithm presented
 in the paper which originally described Marpa~\cite{Kegler2019}.
@@ -1008,7 +1009,7 @@ The \Rtwo{} implementation is widely available
 and has seen considerable use.
 
 \Chref{features}
-describes the important features of \Marpa{}.
+describes the important features of \Marpa.
 \Chref{using-features}
 goes into detail about their application.
 The remaining chapters are incomplete and
@@ -1075,7 +1076,7 @@ We\footnote{%
 assume familiarity with the theory of parsing,
 as well as Earley's algorithm.
 \cite{Timeline}
-contains a full description of \Marpa{}'s relationship to
+contains a full description of \Marpa's relationship to
 prior work.
 Readers may find it helpful to read
 \cite{Timeline}
@@ -1085,12 +1086,12 @@ before this book.
 \label{chap:features}
 
 \section{General context-free parsing}
-The \Marpa{} algorithm is capable of parsing all
+The \Marpa algorithm is capable of parsing all
 context-free grammars.
-\Marpa{}'s \Rtwo{} implementation~\cite{Marpa-R2}
+\Marpa's \Rtwo{} implementation~\cite{Marpa-R2}
 parses all cycle-free context-free
 grammars.\footnote{
-Earlier implementations of \Marpa{} allowed cycles,
+Earlier implementations of \Marpa allowed cycles,
 but support for them
 was removed because
 practical interest seems to be non-existent.
@@ -1105,12 +1106,12 @@ that is, never worse than $\order{\V{n}^3}$.
 Currently, the grammars suitable for practical
 use are thought to be a subset
 of the deterministic context-free grammars (DCFG's).
-\Marpa{} uses a technique discovered by
+\Marpa uses a technique discovered by
 Leo~\cite{Leo1991}
 to run in
 \On{} time for LR-regular (LRR) grammars,
 a superset of the DCFG's.
-\Marpa{}
+\Marpa
 also parses many ambiguous grammars in linear
 time.
 
@@ -1123,7 +1124,7 @@ in its tables.
 At every parse location,
 before any symbols
 are scanned,
-\Marpa{}'s parse engine makes available
+\Marpa's parse engine makes available
 its
 information about the current state of the parse.
 This information is available
@@ -1132,7 +1133,7 @@ and can be accessed efficiently during the parse.
 
 \section{Recoverable from read errors}
 When
-\Marpa{} reads a token that it cannot accept,
+\Marpa reads a token that it cannot accept,
 the error is fully recoverable.
 An application can attempt to read another
 token,
@@ -1143,7 +1144,7 @@ parsing will continue
 as if the unsuccessful attempts had never been made.
 
 \section{Ambiguous tokens}
-\Marpa{} allows ambiguous tokens.
+\Marpa allows ambiguous tokens.
 These are often useful. In natural language processing,
 for example,
 the same word might be a verb or a noun.
@@ -1166,12 +1167,12 @@ texts when one is a translated version of the other.}
 \section{Error reporting}
 An obvious application of left-eideticism is error
 reporting.
-\Marpa{}'s abilities in this respect are
+\Marpa's abilities in this respect are
 ground-breaking.
 For example,
 users typically regard an ambiguity as an error
 in the grammar.
-\Marpa{}, as implemented in \Rtwo{}~\cite{Marpa-R2},
+\Marpa, as implemented in \Rtwo{}~\cite{Marpa-R2},
 can detect an ambiguity and report
 specifically where it occurred
 and what the alternative parses were.
@@ -1196,7 +1197,7 @@ feedback from the parser.
 In traditional parser practice,
 error detection is an act of desperation.
 In contrast,
-\Marpa{}'s error detection is so painless
+\Marpa's error detection is so painless
 that it can be used as the foundation
 of new parsing techniques.
 
@@ -1262,13 +1263,13 @@ A parser would never warn the user about typos,
 because all typos in such a language would have unintended
 meanings.
 
-With \Marpa{}, ambiguity can be dealt with in the same way
+With \Marpa, ambiguity can be dealt with in the same way
 that syntax errors are dealt with in current practice.
-A \Marpa{}-powered
+A \Marpa-powered
 language can be designed to allow ambiguity,
 and any actual ambiguity will be detected
 and reported at parse time.
-This exploits \Marpa{}'s ability
+This exploits \Marpa's ability
 to report exactly where
 and what the ambiguity is.
 \Rtwo's own parser description language, the SLIF,
@@ -1292,7 +1293,7 @@ have not been seen as practical,
 since there was no guarantee that the auto-generated
 language could be efficiently parsed.
 
-With \Marpa{}, this barrier is lifted.
+With \Marpa, this barrier is lifted.
 As an example,
 \Rtwo's own parser description language, the SLIF,
 allows ``precedenced rules''.
@@ -1311,7 +1312,7 @@ the SLIF does a standard parsing textbook transformation,
 translating explicitly specified precedence and associativity
 into pure BNF that implicitly implements
 that precedence and associativity.
-Since the SLIF is powered by \Marpa{}, which is
+Since the SLIF is powered by \Marpa, which is
 linear for LRR,
 the SLIF can easily ensure that the grammar
 that it auto-generates will
@@ -1518,7 +1519,7 @@ recognizer~\cite{Earley1970}
 with zero characters of lookahead.
 \Leo{} will refer to Leo's revision of \Earley{}
 as described in~\cite{Leo1991}.
-\Marpa{} will refer to the recognizer described in
+\Marpa will refer to the recognizer described in
 this book, and implemented in
 \Rtwo~\cite{Marpa-R2}.
 
@@ -1527,8 +1528,8 @@ a \dfn{function} is never an algorithm ---
 it always refers to the set theoretic notion.
 Algorithms are also referred to as \dfn{procedures}.
 The procedures which are major building blocks
-of \Marpa{} will be called \dfn{ops}.
-A second level of \Marpa{} building blocks will
+of \Marpa will be called \dfn{ops}.
+A second level of \Marpa building blocks will
 be called \dfn{sub-ops}.
 
 The building blocks of \Earley{} will be
@@ -1734,7 +1735,7 @@ A definition may also be stated as part of a theorem if it
 is closely tied in with that theorem,
 in order to avoid unnecessary cross-referencing.
 This is often done for definitions which are of details
-of the \Marpa{} algorithm,
+of the \Marpa algorithm,
 or which are a matter of tactical choice within a proof strategy,
 such as the details of resource charging in our complexity
 analysis.
@@ -2627,11 +2628,11 @@ a convention which is much more convenient for our purposes.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Definition of a type; \COL{} synonym of $\eqWTyOp$: $\DEqWTyOp$} \\
+\cellboxr{Definition of a type; \COL synonym of $\eqWTyOp$: $\DEqWTyOp$} \\
 \hline
 \cellboxr{A synonym for $\DEqWTyOp$: $\DEqTyOp$} \\
 \hline
-\cellboxr{Definition of a class of type $\alpha$; \COL{} synonym of $\eqWClOp{\alpha}$: $\DEqWClOp{\alpha}$} \\
+\cellboxr{Definition of a class of type $\alpha$; \COL synonym of $\eqWClOp{\alpha}$: $\DEqWClOp{\alpha}$} \\
 \hline
 \cellboxr{A synonym for $\DEqWClOp{\alpha}$: $\DEqClOp{\alpha}$} \\
 \hline
@@ -2649,11 +2650,11 @@ a convention which is much more convenient for our purposes.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Local definition of a type; \COL{} synonym of $\eqWTyOp$: $\DDEqWTyOp$} \\
+\cellboxr{Local definition of a type; \COL synonym of $\eqWTyOp$: $\DDEqWTyOp$} \\
 \hline
 \cellboxr{A synonym for $\DDEqWTyOp$: $\DDEqTyOp$} \\
 \hline
-\cellboxr{Local definition of a class of type $\alpha$; \COL{} synonym of $\eqWClOp{\alpha}$: $\DDEqWClOp{\alpha}$} \\
+\cellboxr{Local definition of a class of type $\alpha$; \COL synonym of $\eqWClOp{\alpha}$: $\DDEqWClOp{\alpha}$} \\
 \hline
 \cellboxr{A synonym for $\DDEqWClOp{\alpha}$: $\DDEqClOp{\alpha}$} \\
 \hline
@@ -2689,18 +2690,18 @@ In fact, where the constant is a Chiron built-in,
 it is a nullary operator as a matter of definition.
 
 Unless otherwise stated, the operator meaning in
-each row is the \COL{} meaning.
-The \MtL{} includes a copy of the \COL{},
-so every \COL{} operator is a \MtL operator.
-In addition, the \MtL{} overloads many of the \COL{}
-operators for use with \MtL{} variables.
+each row is the \COL meaning.
+The \MtL includes a copy of the \COL,
+so every \COL operator is a \MtL operator.
+In addition, the \MtL overloads many of the \COL
+operators for use with \MtL variables.
 Often, the overloading is intuitively obvious,
-as when two \MtL{} variables are added using the $+$
+as when two \MtL variables are added using the $+$
 operator,
 or when the element operator ($\in$) is used
 with metadomains.
 In cases where the meaning of an operator overloaded
-for the \MtL{} is not obvious,
+for the \MtL is not obvious,
 we state it explicitly.
 
 \FloatBarrier
@@ -2784,18 +2785,18 @@ of a previously stated type,
 or for stating types which that are suggested
 by the context.
 
-We overload the typing notation in \MtL{} to allow
+We overload the typing notation in \MtL to allow
 pseudo-types after the colon.
 If the pseudo-type is a meta-domain, it indicates that
 the variable is in that meta-domain.
 For example, $\Vtyped{metaX}{\Ds}$ indicates that \V{metaX}
 is in the metadomain \Ds{}. 
-\Ds{} is not a \COL{} value.
+\Ds{} is not a \COL value.
 Unless specified more narrowly elsewhere,
 \V{metaX} is not a first-class COL variable;
-and \V{metaX} does not have a \COL{} type.
+and \V{metaX} does not have a \COL type.
 
-If the pseudo-type is \MtL{}, it indicates that
+If the pseudo-type is \MtL, it indicates that
 the variable is a variable of the meta-language.
 For example,
 \begin{equation}
@@ -2803,16 +2804,16 @@ For example,
 \Vtyped{metaY}{\MtL}
 \end{equation}
 indicates that \V{metaY} is a variable in the meta-language.
-As a pseudo-type, \MtL{} is a special notation,
+As a pseudo-type, \MtL is a special notation,
 and is not a collection.
 Since all variables are in the metalanguage,
 \EFref{pseudo-type-notation2} tells us very little about \V{metaY},
 and we may expect
 that \V{metaY} will be specified more narrowly elsewhere.
 Based on \EFref{pseudo-type-notation2} by itself,
-\V{metaY} is not necessarily a part of the \COL{},
+\V{metaY} is not necessarily a part of the \COL,
 and therefore will not necessarily be
-a first-class \COL{} with a type.
+a first-class \COL with a type.
 
 \FloatBarrier
 
@@ -3488,12 +3489,12 @@ so that \Eref{number-quantification-example} becomes
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\DEqWTyOp$} & \cellboxr{Definition of a type; \COL{} synonym of $\eqWTyOp$} \\
+{$\DEqWTyOp$} & \cellboxr{Definition of a type; \COL synonym of $\eqWTyOp$} \\
 \hline
 {$\DEqTyOp$} & \cellboxr{A synonym for $\DEqWTyOp$} \\
 \hline
 {$\DEqWClOp{\alpha}$} & \cellboxr{Definition of a class of type $\alpha$;
-    \COL{} synonym of $\eqWClOp{\alpha}$} \\
+    \COL synonym of $\eqWClOp{\alpha}$} \\
 \hline
 {$\DEqClOp{\alpha}$} & \cellboxr{A synonym for $\DEqWClOp{\alpha}$} \\
 \hline
@@ -3514,14 +3515,14 @@ act as global definitions in the meta-language.
 
 For example,
 \[ \V{ANSWER} \DEqTyOp  \set{42} \]
-states that the \COL{} type \V{ANSWER} is a
+states that the \COL type \V{ANSWER} is a
 singleton superclass containing the number 42,
 that this is the definition of \V{ANSWER},
 and that this definition has global scope.
 And
 \[ \V{myAnswer} \defined 42 \]
-states that \V{myanswer} is a first-class \COL{} variable whose value
-is 42 and that, in addition to establishing this in the local scope in the \COL{},
+states that \V{myanswer} is a first-class \COL variable whose value
+is 42 and that, in addition to establishing this in the local scope in the \COL,
 this is a global definition.
 
 \FloatBarrier
@@ -3530,12 +3531,12 @@ this is a global definition.
 \begin{tabular}{|p{1.5in}|l|}
 \hline
 \hline
-{$\DDEqWTyOp$} & \cellboxr{Local definition of a type; \COL{} synonym of $\eqWTyOp$} \\
+{$\DDEqWTyOp$} & \cellboxr{Local definition of a type; \COL synonym of $\eqWTyOp$} \\
 \hline
 {$\DDEqTyOp$} & \cellboxr{A synonym for $\DDEqWTyOp$} \\
 \hline
 {$\DDEqWClOp{\alpha}$} & \cellboxr{Local definition of a class of type $\alpha$;
-    \COL{} synonym of $\eqWClOp{\alpha}$} \\
+    \COL synonym of $\eqWClOp{\alpha}$} \\
 \hline
 {$\DDEqClOp{\alpha}$} & \cellboxr{A synonym for $\DDEqWClOp{\alpha}$} \\
 \hline
@@ -3553,8 +3554,8 @@ except that the definitions they establish are local instead of global.
 The scope of a local definition is the current context, unless otherwise stated.
 For example,
 \[ \V{yourAnswer} \ldefined 42 \]
-states that \V{myanswer} is a first-class \COL{} variable whose value
-is 42 and that, in addition to establishing this in the local scope in the \COL{},
+states that \V{myanswer} is a first-class \COL variable whose value
+is 42 and that, in addition to establishing this in the local scope in the \COL,
 this is a local definition.
 
 \FloatBarrier
@@ -9498,7 +9499,7 @@ and \V{tokenValue} is the \dfn{token value}.
 
 The token value is irrelevant to parsing --- it exists
 in order to be passed on to the semantics.
-In \Marpa{},
+In \Marpa,
 the implementation of the token is a pointer to a structure
 containing a pointer to the token symbol,
 and a pointer to the token value,
@@ -9670,8 +9671,8 @@ both \Vstr{pre} and \Vstr{post} are the null string:
  \Vstr{pre} = \Vstr{post} = \epsilon.
 \end{equation*}
 
-Earlier implementations of \Marpa{} have supported cycles,
-but the current implementation of \Marpa{} does not.
+Earlier implementations of \Marpa have supported cycles,
+but the current implementation of \Marpa does not.
 When the current implementation finds a cycle in a grammar,
 it print a message describing the cycle and throws
 a fatal error.
@@ -9683,7 +9684,7 @@ them.
 Support for cycles did require complicated extra code,
 and removing the support of cycles seems to be cost-free.
 
-When \Marpa{} did support cycles,
+When \Marpa did support cycles,
 it did so by cutting the cycle short at cycle depth 1.
 Intuitively, the cycle depth is the number of times the cycle
 string returns to itself.
@@ -9720,9 +9721,9 @@ will usually be a waste of time.}
 
 \section{Unproductive symbols}
 The current implementation of
-\Marpa{} supports unproductive
+\Marpa supports unproductive
 symbols.
-By default, \Marpa{} treats an unproductive symbol
+By default, \Marpa treats an unproductive symbol
 as a fatal error,
 but the user may bypass the fatal error
 by marking the unproductive symbol as a ``unicorn''.
@@ -9743,7 +9744,7 @@ symbols are productive.
 
 A symbol is \dfn{unproductive} if it is not
 productive.
-In the current version of \Marpa{},
+In the current version of \Marpa,
 unproductive symbols can be implemented by
 defining
 unicorn terminals.
@@ -9752,7 +9753,7 @@ is a terminal symbol
 which can never be
 found in the input.
 
-In the \Marpa{} implementation,
+In the \Marpa implementation,
 a terminal can be made into a unicorn by
 requiring that
 a terminal match a regular expression that does not match
@@ -9767,7 +9768,7 @@ This is, of course, not possible
 and therefore any terminal required to match that POSIX expression
 will never match anything in the input.
 
-Unproductive symbols often prove useful in \Marpa{}
+Unproductive symbols often prove useful in \Marpa
 applications.
 One example of the utility of unproductive symbols
 is interaction with custom lexers.
@@ -9775,10 +9776,10 @@ Marpa allows custom lexers, and these can feed lexemes
 to the parser under application control,
 observe the result,
 and react accordingly.
-The custom lexer can hand control back to \Marpa{}'s
+The custom lexer can hand control back to \Marpa's
 own lexer at any point.
 
-It is often convenient for \Marpa{} to use its internal lexer
+It is often convenient for \Marpa to use its internal lexer
 in most situations,
 switching over to custom lexer only at certain points.
 To do this, unicorn terminals can
@@ -9796,7 +9797,7 @@ we treat all symbols as if they were productive.
 This is consistent with being conservative,
 since a ``unicorn'' can always be feed to the parser
 by a custom lexer and,
-in that sense, all \Marpa{} symbols are productive.
+in that sense, all \Marpa symbols are productive.
 
 \section{Inaccessible symbols}
 
@@ -9807,8 +9808,8 @@ That is, \Vsym{noacc} is inaccessible in \Vext{g} iff
 \neg \; \exists \; \Vstr{pre}, \Vstr{post} \; \mid \; \Accept{\V{g}} \destar \Vstr{pre} \Vsym{noacc} \Vstr{post}.
 \end{equation*}
 
-The current implementation of \Marpa{} supports inaccessible symbols.
-The user can specify \Marpa{}'s treatment
+The current implementation of \Marpa supports inaccessible symbols.
+The user can specify \Marpa's treatment
 of inaccessible symbols:
 inaccessible symbols can be silently ignored,
 they can be reported as warnings,
@@ -9819,7 +9820,7 @@ and the default treatment can also be specified.
 The ``factory default'' is
 to report inaccessible symbols as warnings.
 
-Inaccessible symbols have been found useful in \Marpa{} applications
+Inaccessible symbols have been found useful in \Marpa applications
 that use higher-level languages ---
 languages which generate other languages.
 Often the generated grammar consists of
@@ -9871,13 +9872,13 @@ Marpa's recognizer works using
 Marpa internal grammars, but
 Marpa's grammar rewriting allows the user to specify
 their parse in terms of an external grammar.
-In \Marpa{}, parsing, evaluation and
+In \Marpa, parsing, evaluation and
 run-time events are performed
 in such a way that the internal grammar
 is invisible to
 the user.
 
-We defined \Marpa{}'s external grammars in
+We defined \Marpa's external grammars in
 \Chref{EXTs}.
 Recall that an external grammar may be any cycle-free grammar.
 Marpa internal grammars are described by construction
@@ -9894,11 +9895,11 @@ instead that paper centered on revising Earley's%
 \index{recce-general}{Earley, Jay}
 algorithm
 to use LR(0) states.
-The first version of \Marpa{}~\cite{Kegler2019}
+The first version of \Marpa~\cite{Kegler2019}
 used the LR(0) states of \cite{AH2002},
 combining them with Joop Leo's improvements~\cite{Leo1991}.
 
-Adding the LR(0) states to the first version of \Marpa{}
+Adding the LR(0) states to the first version of \Marpa
 made its theory much more complex,
 and the change offered
 no complexity gains in terms of Landau notation.
@@ -9906,7 +9907,7 @@ The hope was that benefits would be seen in practice.
 
 Unfortunately, these benefits did not emerge.
 Marpa's experience in using, developing and maintaining
-LR(0) states in \Marpa{}'s early versions showed
+LR(0) states in \Marpa's early versions showed
 that LR(0) states added
 greatly to the complexity of the code;
 were an obstacle to the implementation of run-time features
@@ -9917,7 +9918,7 @@ Aycock and Horspool's idea
 of using grammar rewriting
 to deal with
 with nullable symbols became
-fundamental to the \Marpa{} algorithm.
+fundamental to the \Marpa algorithm.
 
 Rewriting grammars is a common
 technique
@@ -9955,15 +9956,15 @@ but at run-time as well.
 and
 \Sref{trivial-grammars}
 describe the rewrites
-applied by \Marpa{}.
-We will state \Marpa{}'s definition
+applied by \Marpa.
+We will state \Marpa's definition
 of semantics-safe more precisely
 in section \Sref{semantics-safe}.
 
 \section{Augmenting the grammar}
 \label{sec:augmentation}
 
-Let \Vint{g} be a \Marpa{} internal grammar
+Let \Vint{g} be a \Marpa internal grammar
 such that $\Vsym{accept} = \Accept{\Vint{g}}$.
 There must be
 a dedicated \dfn{accept rule} for \Vint{g},
@@ -9988,7 +9989,7 @@ the semantics of \Vsym{top} are passed up to
 \Vsym{accept}.
 This is obviously semantics-safe.
 
-In the \Marpa{} implementation,
+In the \Marpa implementation,
 the general method
 described in section \Sref{semantics-safe}
 for dealing with the semantics of rewritten rules
@@ -10005,7 +10006,7 @@ Marpa eliminates proper nullables with an improved
 version of the rewrite
 of~\cite[Algorithm 2.10, p. 148]{AU1972}
 and~\cite{AH2002}.
-In \Marpa{}'s rewrite,
+In \Marpa's rewrite,
 rules with proper nullables are identified
 and a new grammar is created
 in which the external grammar's rules are divided
@@ -10062,7 +10063,7 @@ other than
 the presence and absence of the nodes for the nulling symbols themselves,
 the parse trees generated from \Vext{g} are the same as those generated from \varprime{g}{'}.
 
-Thus, \Marpa{} may rewrite its grammars to eliminate nulling symbols.
+Thus, \Marpa may rewrite its grammars to eliminate nulling symbols.
 For the purposes of evaluation and to allow the generation of parse-time events
 based on nulled symbols,
 Marpa records the locations of the eliminated nulling symbols.
@@ -10077,13 +10078,13 @@ Less clean theoretically,
 but easier in practice,
 is to have the implementation treat rules as distinct
 even if they differ only in their recorded nulling symbols.
-This is what the \Marpa{} implementation does.
+This is what the \Marpa implementation does.
 
 \section{Trivial grammars and null parses}
 \label{sec:trivial-grammars}
 
 Null parses are parses of zero length inputs.
-The \Marpa{} implementation
+The \Marpa implementation
 handles null parses by treating them
 as a special case.
 
@@ -10092,7 +10093,7 @@ A degenerate grammar is treated as a fatal error.
 
 \dfn{Trivial grammars} are grammars which only accept
 zero length inputs.
-No \Marpa{} internal grammar can be a trivial grammar.
+No \Marpa internal grammar can be a trivial grammar.
 Trivial grammars are handled as a special case.
 
 \section{Semantics-safe rewriting}
@@ -10266,10 +10267,10 @@ is a one-to-one correspondence
 (bijection). \dfEnd{}
 \end{definition}
 
-\chapter{\Marpa{} internal grammars}
+\chapter{\Marpa internal grammars}
 \label{chap:INTs}
 
-\todo[prepend, caption={``\Marpa{} internal grammars'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``\Marpa internal grammars'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -10289,7 +10290,7 @@ carry over to internal grammars,
 although with the changes imposed
 by the restricted form of INT's.
 Noteworthy among these changes are
-that \Marpa{} internal grammars
+that \Marpa internal grammars
 
 \begin{itemize}
 \item do not allow nulling symbols,
@@ -10301,7 +10302,7 @@ In the rest of this book,
 unless otherwise stated,
 we will be assuming that the grammar
 we are discussing
-is a \Marpa{} internal grammar.
+is a \Marpa internal grammar.
 The restrictions imposed on INT's allow us
 to state some
 definitions, for example \Dfref{rr},
@@ -10342,7 +10343,7 @@ we have
 \end{equation}
 
 \begin{theorem}[Right-recursive step uses right recursive rule]
-Let \Vint{g} be a \Marpa{} internal grammar.
+Let \Vint{g} be a \Marpa internal grammar.
 If \Vrule{r} is a rule used in a step of a right recursive derivation,
 then \Vrule{r} is right recursive.
 \thEnd
@@ -10422,14 +10423,14 @@ of every context scope are
 the partial parse $[\Vint{g}, \Vstr{w}]$.
 The difference between this and \Dfref{context-scope}
 is that the grammar of the context parse is now
-a \Marpa{} internal grammar.
+a \Marpa internal grammar.
 \dfEnd
 \end{definition}
 
-Since this book is intended to describe \Marpa{},
+Since this book is intended to describe \Marpa,
 many of our results take advantage of Marpa{}'s rewriting,
 and simplify the presentation by
-assuming \Marpa{} internal grammars.
+assuming \Marpa internal grammars.
 Descriptions of
 \Earley{} for more general CFGs
 are plentiful.%
@@ -11676,7 +11677,7 @@ where the right recursion might end.
 At those locations where the right recursion does not end,
 most of these \realm{EIM}s will be useless.
 
-\section{\Marpa{} and right recursion}
+\section{\Marpa and right recursion}
 
 Leo's solution was to
 memoize penults.
@@ -11690,14 +11691,14 @@ a \dfn{penult}, if $\Penult{\V{d}} \neq \Lambda$.
 In Leo's original algorithm, any penult
 was treated as a potential right-recursion.
 
-\Marpa{} applies the Leo memoizations in more restricted circumstances.
-For \Marpa{} to consider a dotted rule
+\Marpa applies the Leo memoizations in more restricted circumstances.
+For \Marpa to consider a dotted rule
 \Vdr{candidate} for Leo memoization,
 not only must \Vdr{candidate} be a penult
 but \Rule{\V{candidate}} must be right-recursive.
 
 By restricting Leo memoization to right-recursive rules,
-\Marpa{} incurs the cost of Leo memoization only in cases
+\Marpa incurs the cost of Leo memoization only in cases
 where Leo sequences could be arbitrarily
 long.
 This more careful targeting of the memoization is for efficiency reasons.
@@ -11720,7 +11721,7 @@ but they may occur often enough to be worth
 providing for.
 
 Omission of a Leo memoization does not affect correctness,
-so \Marpa{}'s restriction of Leo memoization
+so \Marpa's restriction of Leo memoization
 preserves the correctness as shown in Leo~\cite{Leo1991}.
 \todo{Refer to later proof that omission of memoization does not affect correctness}
 Later in this book
@@ -11730,7 +11731,7 @@ show that this change also leaves
 the complexity results of
 Leo~\cite{Leo1991} intact.
 
-The current \Marpa{} implementation does not perform
+The current \Marpa implementation does not perform
 Leo memoization in Earley set 0.
 Earley set 0 memoization
 would have to be implemented as a special case,
@@ -16444,9 +16445,9 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-\Marpa{}, like other variants of \Earley{}, performs
+\Marpa, like other variants of \Earley{}, performs
 ``operations'' on the Earley sets to produce new
-Earley items and, in \Marpa{}'s case,
+Earley items and, in \Marpa's case,
 new Leo items.
 A operation may require that one or two other
 \realm{PIM}s already exist in the Earley sets before
@@ -16483,14 +16484,14 @@ If the predecessor or the cause is not applicable
 to a particular operation, we represent it as a
 $\Lambda$ value.
 
-The \Marpa{} implementation tracks the ancestry of
+The \Marpa implementation tracks the ancestry of
 \realm{PIM}s.
 The reasons are tracked in \dfn{link pairs},%
 \footnote{The concept of link pairs was present
 in
 \cite{Earley1968} and
 \cite{Earley1970},
-but \Marpa{} owes much to the
+but \Marpa owes much to the
 careful elaboration of the idea in
 \cite{AH2002}.
 }
@@ -16507,10 +16508,10 @@ is a duple of predecessor and cause:
 \[
 [ \var{predecessor}, \var{cause} ]
 \]
-In the \Marpa{} implementation,
+In the \Marpa implementation,
 the elements of link pairs are pointers
 which are used as ``links'' to other data.
-The \Marpa{} implementation
+The \Marpa implementation
 represents
 $\Lambda$ elements
 as C language null pointers.
@@ -16545,7 +16546,7 @@ will usually be a waste of time.}
 \todo{Rewrite ``Complexity preliminaries'' section.}
 
 We follow the tradition in the \Earley{} literature by dividing
-the complexity analysis of \Marpa{} into a low-level,
+the complexity analysis of \Marpa into a low-level,
 and a high-level, analysis.
 In the complexity context,
 \dfn{resource} means time or space.
@@ -17025,7 +17026,7 @@ All of these operations are accesses and none consume space.
 \subsection{Earley set}
 \label{sec:es-complexity}
 
-When \Marpa{} reaches a new current location,
+When \Marpa reaches a new current location,
 it creates an empty Earley set.
 For complexity analysis purposes,
 an Earley set can be regarded as a linked list
@@ -17223,7 +17224,7 @@ incurs \Oc{} time and zero space.
 \begin{proof}
 Our computation model, conceptually, is a random access machine,
 but it will be more useful to justify
-the theorem in terms of the \Marpa{} implementation.
+the theorem in terms of the \Marpa implementation.
 The implementation description is equivalent to,
 or straightforwardly translates to, a description in
 terms of a RAM.
@@ -17240,7 +17241,7 @@ every \realm{PIM}.
 
 In practice, for efficiency,
 \Velement{S}{\Vloc{j}} accesses are not actually used
-by the \Marpa{} implementation during parsing.
+by the \Marpa implementation during parsing.
 During parsing
 \Rtwo~\cite{Marpa-R2}
 builds Earley sets as a linked list of structures,
@@ -18134,12 +18135,12 @@ the \Oc{} time may be ignored.
 
 \begin{observation}[Ancestry]
 \label{obs:initializer-ancestry}
-The \Marpa{} implementation does not keep
+The \Marpa implementation does not keep
 any link pairs for any \realm{PIM} in Earley set 0.
 \Veim{start} does not have any non-trivial ancestor,
 so that a link pair does not exist for it,
 even conceptually.
-And \Marpa{} does not track link pairs for
+And \Marpa does not track link pairs for
 predictions
 \Obref{prediction-ancestry}.
 \obEnd{}
@@ -18147,7 +18148,7 @@ predictions
 
 \begin{observation}[\Earley{}'s Earley set 0]
 \label{obs:earley-set-0}
-\Marpa{}'s % \linebreak
+\Marpa's % \linebreak
 \op{Ini\-tial\-iza\-tion} op has the same effect as the construction
 of Earley set 0 by \Earley{}.
 \obEnd{}
@@ -18284,21 +18285,21 @@ may be charged as \Oc{} space to the \realm{ES}
     \cuz{} \Tbref{tab:predict1-space}.
 }
 \mypareq{eq:th-predict1-space-110}{%
-    During the course of any run of \Marpa{},
+    During the course of any run of \Marpa,
     line \ref{line:predict1-5} of \AFref{alg:predict1},
     is invoked at most once per rule-\realm{ES} pair
     \bcuz{} \AFref{alg:predict1},
     \longThref{Prediction Rule Non-Duplication}{prediction-rule-non-duplication}.
 }
 \mypareq{eq:th-predict1-space-120}{%
-    During the course of any run of \Marpa{},
+    During the course of any run of \Marpa,
     line \ref{line:predict1-5} of \AFref{alg:predict1}
     is invoked at most \size{\Rules{\Vint{g}}} times for each
     \realm{ES}
     \bcuz{} \Eref{th-predict1-space-110}.
 }
 \mypareq{eq:th-predict1-space-130}{%
-    During the course of any run of \Marpa{},
+    During the course of any run of \Marpa,
     calls of \myfn{Predict1}{} incur at most
     $\size{\Rules{\Vint{g}}}\times\Oc{}=\Oc{}$ space for each \realm{ES}
     \cuz{} \Eref{th-predict1-space-100},
@@ -18533,7 +18534,7 @@ will clearly run no worse than
 
 \begin{observation}[Prediction ancestry]
 \label{obs:prediction-ancestry}
-The \Marpa{} implementation does not track
+The \Marpa implementation does not track
 link pairs
 for predictions.
 \obEnd{}
@@ -18582,7 +18583,7 @@ the transition array
 
 \begin{observation}[Original Earley algorithm: Predicter Operation]
 \label{obs:earley-predicter-op}
-\Marpa{}'s predicter op has the same effect as the ``Predicter''
+\Marpa's predicter op has the same effect as the ``Predicter''
 operation of \Earley{}~\cite{Earley1970}.
 \end{observation}
 
@@ -18933,7 +18934,7 @@ the \op{Scanner} Space Worksheet
 
 \begin{observation}[Original Earley algorithm: Scanner Operation]
 \label{obs:earley-scanner-op}
-\Marpa{}'s scanner op has the same effect as the ``Scanner''
+\Marpa's scanner op has the same effect as the ``Scanner''
 operation of \Earley{}.
 \obEnd
 \end{observation}
@@ -19804,7 +19805,7 @@ This theorem follows immediately from
 
 \begin{theorem}[Reducer Ancestry Tracking]
 \label{th:reducer-ancestry-tracking}
-    The \Marpa{} implementation records a link pair for every
+    The \Marpa implementation records a link pair for every
     adjoin of an \realm{EIM} generated by \op{Reducer}.
 \thEnd
 \end{theorem}
@@ -19898,12 +19899,12 @@ and \ref{line:leo-reducer-op-10}.
 \begin{observation}[Original Earley algorithm: Completer Operation]
 \label{obs:earley-completer-op}
 When there are no \realm{LIM}s in \Ves{predecessor}
-\Marpa{}'s \var{Reducer} op has the same effect as the ``Completer''
+\Marpa's \var{Reducer} op has the same effect as the ``Completer''
 operation of \Earley{}~\cite{Earley1970}.\footnote{
-For all other \Marpa{} ops we have used the name of its
+For all other \Marpa ops we have used the name of its
 equivalent in \Earley{}.
 It is convenient to use a different name
-for \Marpa{}'s \var{Reducer} op,
+for \Marpa's \var{Reducer} op,
 however,
 because it differs in effect from the \Earley{}
 ``Completer'' operation,
@@ -19912,7 +19913,7 @@ overloaded in confusing ways.
 For example, the result of an \Earley{} ``Completer'' operation
 is not necessarily an \realm{EIM} completion.
 }
-Put another way, \Marpa{}'s \var{Reducer} op
+Put another way, \Marpa's \var{Reducer} op
 is the same as the Completer operation of \Earley{},
 if there never is a \realm{LIM} in \Vpimset{matches} on
 line \ref{line:reducer-op-3} of \Aref{alg:reducer-op}.
@@ -20373,7 +20374,7 @@ the \Source{} Theorem \Thref{leo-source-fn}.
 
 \begin{observation}[\realm{LIM} Ancestry]
 \label{obs:lim-ancestry}
-The \Marpa{} implementation tracks the ancestry
+The \Marpa implementation tracks the ancestry
 of \realm{LIM}s.
 The ancestry of a \realm{LIM} is a single link pair.
 In the link pair for a \realm{LIM} $\ell$,
@@ -20399,21 +20400,21 @@ and the observation on \realm{LIM} ancestry \Obref{lim-ancestry}.
 
 \begin{observation}[Original Earley algorithm: Memorizer Operation]
 \label{obs:earley-memoizer-op}
-\Marpa{}'s \var{Memoizer} operation does not exist in \Earley{}~\cite{Earley1970}.
+\Marpa's \var{Memoizer} operation does not exist in \Earley{}~\cite{Earley1970}.
 \obEnd{}
 \end{observation}
 
-\section{Top level of \Marpa{}}
+\section{Top level of \Marpa}
 
-\todo{Rewrite \Marpa{} top level section}
+\todo{Rewrite \Marpa top level section}
 
-The top-level view of \Marpa{} is
+The top-level view of \Marpa is
 shown in \Aref{alg:marpa}.
 
 \FloatBarrier
 
 \begin{algorithm}[H]
-\caption{The \Marpa{} Algorithm}
+\caption{The \Marpa Algorithm}
 \label{alg:marpa}
 \begin{algorithmic}[1]
 \Procedure{Main}{}
@@ -20643,36 +20644,36 @@ and \Eref{th-memoizer-op-maximum-130}.
 
 \todo{Rewrite operations summary}
 
-\begin{observation}[\Marpa{} operation by type of result]
+\begin{observation}[\Marpa operation by type of result]
 \label{obs:marpa-op-by-result}
-Let \Vpim{rez} be the result of a \Marpa{} operation.
-Every \realm{PIM} is the result of exactly \Marpa{} operation,
+Let \Vpim{rez} be the result of a \Marpa operation.
+Every \realm{PIM} is the result of exactly \Marpa operation,
 as follows:
 \begin{itemize}
 \item $\Current{\Vpim{rez}} = 0$
 iff \Vpim{rez} is the result of the
-\Marpa{} \var{Initializer} operation.
+\Marpa \var{Initializer} operation.
 \item \Vpim{rez} is an \realm{EIM},
 $\Predot{\Veim{rez}} = \Lambda$, and
 $\Current{\var{rez}} > 0$,
 iff
 \var{rez} is the result of a
-\Marpa{} \var{Predicter} operation.
+\Marpa \var{Predicter} operation.
 \item \Vpim{rez} is an \realm{EIM},
 $\Predot{\Veim{rez}} \in \Term{\var{g}}$, and
 $\Current{\var{rez}} > 0$,
 iff
 \var{rez} is the result of a
-\Marpa{} \var{Scanner} operation.
+\Marpa \var{Scanner} operation.
 \item \Vpim{rez} is an \realm{EIM},
 $\Predot{\Veim{rez}} \in \NT{\var{g}}$, and
 $\Current{\var{rez}} > 0$
 iff \var{rez} is the result of a
-\Marpa{} \var{Reducer} operation.
+\Marpa \var{Reducer} operation.
 \item \Vpim{rez} is a \realm{LIM}
 iff
 \var{rez} is the result of a
-\Marpa{} \var{Memoizer} operation.
+\Marpa \var{Memoizer} operation.
 \end{itemize}
 This observation follows from
 \Aref{alg:initializer-op},
@@ -20701,11 +20702,11 @@ This follows from
 \obEnd
 \end{observation}
 
-\begin{observation}[\Marpa{} operation by direct ancestor]
+\begin{observation}[\Marpa operation by direct ancestor]
 \label{obs:marpa-op-by-direct-ancestor}
-If a completion is a direct ancestor of a \Marpa{}
+If a completion is a direct ancestor of a \Marpa
 operation, that operation is the \var{Reducer} operation.
-If a token is a direct ancestor of a \Marpa{}
+If a token is a direct ancestor of a \Marpa
 operation, that operation is the \var{Scanner} operation.
 This observation follows from
 \Aref{alg:initializer-op},
@@ -20720,7 +20721,7 @@ This observation follows from
 \label{obs:earley-op-by-direct-ancestor}
 If a completion is a direct ancestor of an \Earley{}
 operation, that operation is the Completer operation.
-If a token is a direct ancestor of a \Marpa{}
+If a token is a direct ancestor of a \Marpa
 operation, that operation is the Scanner operation.
 This observation follows from
 \Obref{earley-set-0},
@@ -21563,13 +21564,13 @@ A PSL is a fixed-length array of
 integers, indexed by an integer,
 and kept as part of the structure
 that implements each Earley set.
-While \Marpa{} is building a new Earley set,
+While \Marpa is building a new Earley set,
 \VVelement{S}{j},
 a PSL is kept for every previous Earley set ---
 that is, for every
 $\Vloc{i} < \Vloc{j}$.
 
-\Marpa{} uses a PSL for its \var{seen} data structure.
+\Marpa uses a PSL for its \var{seen} data structure.
 In the case of \var{seen},
 there is one fixed-size entry for every dotted rule in the grammar,
 so that the size of \var{seen} for each ES
@@ -21584,7 +21585,7 @@ and therefore the space consumed by \var{seen}
 For the same reasons, the time used to allocate \var{seen}
 for each ES is \Oc{}.
 
-While \Marpa{} is adjoining \realm{EIM}s into \VVelement{S}{j},
+While \Marpa is adjoining \realm{EIM}s into \VVelement{S}{j},
 the PSL for \VVelement{S}{i}
 keeps track of the Earley items in \VVelement{S}{j} that have \Vloc{i}
 as their origin.
@@ -21610,7 +21611,7 @@ Intuitively, the idea is avoid most re-computation
 of the PSL's by keeping timestamps with the PSL data.
 To illustrate the use of PSL's,
 we will consider the case
-where \Marpa{} is building \VVelement{S}{j}
+where \Marpa is building \VVelement{S}{j}
 and wants to check whether Earley item,
 \begin{equation*}
 \Veim{x} = [ \Vdr{x}, \Vorig{x} ],
@@ -21668,12 +21669,12 @@ if a PSL entry exists, its boolean may be assumed to be \var{true}.
 This means that an explicit boolean is not actually needed.
 The simpler approach, which omits the boolean,
 is the one that
-the \Marpa{} implementation sometimes uses.
+the \Marpa implementation sometimes uses.
 
-\chapter{\Marpa{} is consistent}
+\chapter{\Marpa is consistent}
 \label{chap:consistent}
 
-\todo[prepend, caption={``\Marpa{} is consistent'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``\Marpa is consistent'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -21687,10 +21688,10 @@ To show consistency, we must show
 \var{dotZeroUsed} and \myfn{Seen}{} CORRECTNESS,
 not just consistency. ]
 
-\chapter{\Marpa{} is correct}
+\chapter{\Marpa is correct}
 \label{chap:correctness}
 
-\todo[prepend, caption={``\Marpa{} is correct'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``\Marpa is correct'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -21928,7 +21929,7 @@ $\because$ Def \var{Next} \Eref{def-next},
 \end{proof}
 
 % \TODO{Delete this?}
-% Let \Ves{physical} be an Earley set as produced by \Marpa{},
+% Let \Ves{physical} be an Earley set as produced by \Marpa,
 % and let \Vves{virtual} be \Ves{physical} with its Leo memoized
 % items restored.
 % We will call \Ves{physical} a \dfn{physical} Earley set, and
@@ -22118,11 +22119,11 @@ Then
 
 \begin{theorem}[Memoizer consistency]
 \label{th:memoizer-consistency}
-The \Marpa{} \var{Memoizer} operation preserves validity.
+The \Marpa \var{Memoizer} operation preserves validity.
 \end{theorem}
 
 \begin{proof}
-Call the \realm{LIM} added by an arbitrary \Marpa{} \var{Memoizer}
+Call the \realm{LIM} added by an arbitrary \Marpa \var{Memoizer}
 operation \mylim{\ell},
 and call its valid ancestry $[\Vlim{previous}, \Veim{source}]$.
 \begin{equation}
@@ -22149,7 +22150,7 @@ assumption for the theorem.}
 
 % \begin{theorem}[LIM chain dotted rule and origin]
 % \label{th:LIM-chain-dr-origin}
-% In a \Marpa{} parse,
+% In a \Marpa parse,
 % let \Vlimset{chain} be a valid partial \realm{LIM} chain.
 % For every element \mylim{\ell} of \var{chain},
 % \begin{equation}
@@ -22176,7 +22177,7 @@ The proof is by a reductio.
 \begin{equation}
 \label{eq:th-LIM-chain-dr-origin-12}
 \myparbox{\realm{LIM}s are only added by the
-\Marpa{} \var{Memoizer} operation
+\Marpa \var{Memoizer} operation
 $\because$ \Obref{marpa-op-by-result}.%
 }
 \end{equation}
@@ -22331,13 +22332,13 @@ as a function of chain index $\because$
 
 \begin{theorem}[Leo chain source properties]
 \label{th:leo-chain-source-properties}
-In a \Marpa{} internal grammar,
+In a \Marpa internal grammar,
 the source of a Leo chain element is a penult in the same
 Earley set as the element.
 \end{theorem}
 
 \begin{proof}
-Let \Vint{g} be a \Marpa{} internal grammar.
+Let \Vint{g} be a \Marpa internal grammar.
 \begin{equation}
 \label{eq:th-leo-chain-source-properties-10}
 \myparbox{$\mylim{\ell}@\Vloc{j}$ is a Leo chain element
@@ -22387,7 +22388,7 @@ The theorem follows directly from
 
 \begin{theorem}[Edge properties]
 \label{th:edge-elements-are-complete}
-In a \Marpa{} internal grammar,
+In a \Marpa internal grammar,
 let \Vlimset{chain} be a valid Leo chain,
 and \Veim{base} a valid \realm{EIM} matching \var{chain}.
 Every element of the edge of \var{chain} and \var{base}
@@ -22396,7 +22397,7 @@ and the edge is valid.
 \end{theorem}
 
 \begin{proof}
-Let \Vint{g} be a \Marpa{} internal grammar,
+Let \Vint{g} be a \Marpa internal grammar,
 let \Vlimset{chain} be a valid Leo chain
 and let \Veim{base} be a valid \realm{EIM} which matches \var{chain}.
 Let \Veimset{edge} be the edge of \var{chain} and \var{base}.
@@ -22930,7 +22931,7 @@ theorem. \myqed
 
 \begin{theorem}[Leo edge top]
 \label{th:leo-edge-top}
-In a \Marpa{} parse,
+In a \Marpa parse,
 let \Vlimset{chain} be a valid \realm{LIM} chain,
 and let \Veim{base} be a valid \realm{EIM} which matches \var{chain}.
 Then the top of their edge is
@@ -23032,7 +23033,7 @@ $\left[ \Veim{source}, \Velement{edge}{\Vlastix{chain}} \right]_\realm{LP}$%
 \begin{theorem}[\op{LeoReducer} is consistent]
 \label{th:leo-reducer-is-consistent}
 The \op{LeoReducer} sub-op
-of the \Marpa{} \op{Reducer} operation
+of the \Marpa \op{Reducer} operation
 preserves validity.
 \end{theorem}
 \begin{proof}
@@ -23040,29 +23041,29 @@ preserves validity.
 \myqed
 \end{proof}
 
-\begin{theorem}[\Marpa{} is consistent]
-\Marpa{} is consistent.
-That is, every \realm{PIM} created by a \Marpa{} parser
+\begin{theorem}[\Marpa is consistent]
+\Marpa is consistent.
+That is, every \realm{PIM} created by a \Marpa parser
 is valid.
 \end{theorem}
 
 \begin{proof}
 We assume for a reductio,
-that there is \Marpa{} parse that creates an invalid \realm{PIM}.
+that there is \Marpa parse that creates an invalid \realm{PIM}.
 This means that there is a first invalid \realm{PIM} created
-by that \Marpa{} parse.
-Inspection of the \Marpa{} algorithm
+by that \Marpa parse.
+Inspection of the \Marpa algorithm
 \Chref{algorithm} shows
 that \realm{PIM}s are only created by operations.
 
 We now proceed by elimination of subcases,
 where our subcases are the operations
-of the \Marpa{} algorithm.
+of the \Marpa algorithm.
 We first note that an operation creates
 the first invalid \realm{PIM} only if it does not preserve
 validity.
 
-The \Marpa{} initializer operation creates the
+The \Marpa initializer operation creates the
 same \realm{PIM}s as the \Earley{} initializer operation
 \Obref{earley-set-0}.
 The \Earley{} initializer operation preserves
@@ -23074,11 +23075,11 @@ validity is preserved vacuously ---
 no \realm{PIM} is in the ancestry of the Initializer
 operation.
 
-The \Marpa{} scanner operation
+The \Marpa scanner operation
 creates the same \realm{PIM}s as the \Earley{}
 scanner operations
 \Obref{earley-scanner-op}.
-The \Marpa{} predicter operation
+The \Marpa predicter operation
 creates the same \realm{PIM}s as the \Earley{}
 predicter operations
 \Obref{earley-predicter-op}.
@@ -23090,9 +23091,9 @@ correct
 We have shown that the memoizer operation
 preserves validity
 \Thref{memoizer-consistency}.
-The remaining subcase is the \Marpa{} \op{Reducer} operation.
+The remaining subcase is the \Marpa \op{Reducer} operation.
 
-The \Marpa{} \op{Reducer} operation consists of two
+The \Marpa \op{Reducer} operation consists of two
 sub-ops:
 \op{Earley-reducer} and
 \op{LeoReducer}.
@@ -23106,9 +23107,9 @@ and \Aref{alg:earley-reducer-op},
 \op{Earley-reducer}, creates the \realm{EIM} that
 the \Earley{} completer operation would have
 created, unless there is a \realm{LIM} that ``blocks''
-\Marpa{}'s \op{Earley-reducer}.
+\Marpa's \op{Earley-reducer}.
 Therefore the \realm{PIM}s created by
-the \Marpa{} \op{Earley-reducer} sub-op
+the \Marpa \op{Earley-reducer} sub-op
 are a subset of those created by the \Earley{}
 completer operation.
 We know the \Earley{} completer operation preserves
@@ -23120,11 +23121,11 @@ the \Earley{} completer operation creates also
 preserves validity.
 
 With this we have shown the last subcase,
-and may conclude that no \Marpa{} operation creates the
+and may conclude that no \Marpa operation creates the
 first invalid \realm{PIM},
-and therefore no \Marpa{} operation creates
+and therefore no \Marpa operation creates
 an invalid \realm{PIM}.
-Therefore, \Marpa{} is consistent.
+Therefore, \Marpa is consistent.
 \myqed
 \end{proof}
 
@@ -23134,8 +23135,8 @@ of a Leo edge.
 All other \realm{PIM}s are \dfn{visible}.
 \end{definition}
 
-\begin{theorem}[\Marpa{} visible \realm{PIM}s are complete]
-\Marpa{} is complete, except for the hidden
+\begin{theorem}[\Marpa visible \realm{PIM}s are complete]
+\Marpa is complete, except for the hidden
 \realm{PIM}s.
 \end{theorem}
 
@@ -23146,14 +23147,14 @@ All other \realm{PIM}s are \dfn{visible}.
 
 Intuitively
 the Earley tables are ``complete as far as X'',
-where X is some point in running of the \Marpa{} algorithm,
+where X is some point in running of the \Marpa algorithm,
 if they contain all the visible valid \realm{PIM}s
 for X and every prior to it in
-in the \Marpa{} algorithm.
+in the \Marpa algorithm.
 \todo{Replace DFPP ("definition for the purpose of presentation")
     throughout, with something more sensible and less awkward.}
 \begin{equation}
-\myparbox{The Earley tables of a \Marpa{} parse
+\myparbox{The Earley tables of a \Marpa parse
 are ``complete as far as''
 Earley set \var{j},
 if every Earley set, \VVelement{S}{i}, $0 \le \var{i} \le \var{j}$,
@@ -23162,18 +23163,18 @@ $\because$ DFPP.
 }
 \end{equation}
 \begin{equation}
-\myparbox{The Earley tables of a \Marpa{} parse
+\myparbox{The Earley tables of a \Marpa parse
 are ``complete as far as''
-the \Marpa{} \var{Scanner} operation of Earley set \var{j},
+the \Marpa \var{Scanner} operation of Earley set \var{j},
 if they are complete as far as Earley set $\Vdecr{j}$,
 and if they contain all the visible valid \realm{EIM}s with a predot terminal
 $\because$ DFPP.
 }
 \end{equation}
 \begin{equation}
-\myparbox{The Earley tables of a \Marpa{} parse
+\myparbox{The Earley tables of a \Marpa parse
 are ``complete as far as''
-the \Marpa{} \op{Reducer} operation of Earley set \var{j},
+the \Marpa \op{Reducer} operation of Earley set \var{j},
 if they are complete as far as Earley set $\Vdecr{j}$,
 and if they contain all the visible valid confirmed \realm{EIM}s
 $\because$ DFPP.
@@ -23253,13 +23254,13 @@ $\because$ DFPP.
 
 \begin{theorem}
 \label{th:marpa-reducer-completeness}
-Let \VVelement{S}{j} be an Earley set in a \Marpa{} parse,
+Let \VVelement{S}{j} be an Earley set in a \Marpa parse,
 $\var{j} > 0$.
 If the parse is complete as far as the
-\Marpa{} \var{Scanner} operation of
+\Marpa \var{Scanner} operation of
 Earley set \VVelement{S}{j},
 then the parse is complete as far as the
-\Marpa{} \op{Reducer} operation of
+\Marpa \op{Reducer} operation of
 Earley set \VVelement{S}{j}.
 \end{theorem}
 
@@ -23270,7 +23271,7 @@ visible depth.
 We take for the induction hypothesis
 \begin{equation}
 \label{th:marpa-reducer-completeness-28}
-\myparbox{After a \Marpa{} \op{Reducer} operation at \VVelement{S}{j},
+\myparbox{After a \Marpa \op{Reducer} operation at \VVelement{S}{j},
 \VVelement{S}{j} is complete
 with respect to the
 the \realm{EIM}s of visible depth \var{ix}.}
@@ -23282,7 +23283,7 @@ the \realm{EIM}s of visible depth \var{ix}.}
 
 \begin{theorem}
 \label{th:marpa-visible-depth-completeness}
-Let \VVelement{S}{j} be an Earley set in a \Marpa{} parse,
+Let \VVelement{S}{j} be an Earley set in a \Marpa parse,
 $\var{j} > 0$.
 If the parse is complete as far as
 visible depth \var{n}
@@ -23381,7 +23382,7 @@ only the useful \realm{EIM}s
 need to be expanded.
 
 \begin{theorem}[Useful \realm{EIM} count]
-Let $[\Vint{g}, \Vstr{partial}]$ be a \Marpa{} partial parse.
+Let $[\Vint{g}, \Vstr{partial}]$ be a \Marpa partial parse.
 the number of useful \realm{EIM}s is \On{},
 where $\var{n} = \Vsize{partial}$.
 \end{theorem}
@@ -23462,7 +23463,7 @@ Confirmed \realm{EIM}s are only adjoined by the Scanner and the Completer.
 % TODO: Is this theorem used?
 \begin{theorem}[Right recursion bound]
 \label{th:leo-right-recursion}
-In a \Marpa{} internal grammar,
+In a \Marpa internal grammar,
 either
 a right derivation has a step
 that uses a right recursive rule,
@@ -23472,7 +23473,7 @@ on the grammar.
 \end{theorem}
 
 \begin{proof}
-Let \Vint{g} be a \Marpa{} internal grammar.
+Let \Vint{g} be a \Marpa internal grammar.
 and let the constant $\var{c} = \NT{\var{g}}$.
 Assume, for a reductio, that a right derivation
 expands to a
@@ -23483,7 +23484,7 @@ Because it is of length $\var{c}+1$,
 the same symbol must appear twice as the rightmost symbol of
 a derivation step.
 Since we assumed for the theorem that \var{g}
-is a \Marpa{} internal grammar,
+is a \Marpa internal grammar,
 there will be no nulling symbols,
 and therefore
 the rightmost symbol of a string will also be its rightmost
@@ -24017,8 +24018,8 @@ Then we must have
 \label{eq:equal-prefix11}
 \Vstr{rhs2} \destar \epsilon.
 \end{equation}
-But, since \Vint{g} is a \Marpa{} internal grammar,
-and there are no nullable symbols in a \Marpa{}  grammar,
+But, since \Vint{g} is a \Marpa internal grammar,
+and there are no nullable symbols in a \Marpa  grammar,
 we have \Eref{equal-prefix11} only if
 \begin{equation}
 \label{eq:equal-prefix12}
@@ -24105,7 +24106,7 @@ we see that
 \label{eq:equal-prefix30}
 \Vstr{shim}\Vstr{rhs1} \destar \epsilon,
 \end{equation}
-which in a \Marpa{} internal grammar means the
+which in a \Marpa internal grammar means the
 \begin{equation}
 \label{eq:equal-prefix31}
 \Vstr{shim}\Vstr{rhs1} = \epsilon.
@@ -24360,7 +24361,7 @@ of $\var{chain}[\var{i}+1]$.
 but they may share causes.
 Call a cause chain where no \realm{EIM} is the cause of more than one other
 \realm{EIM}, a ``single-cause chain''.  We will now consider the maximum length
-of a single-cause chain in a \Marpa{} parse.
+of a single-cause chain in a \Marpa parse.
 
 In a single-cause chain, every \realm{EIM} after the first has exactly one link pair
 and therefore is Leo-unique.
@@ -24466,9 +24467,9 @@ and we have the theorem.
 \myqed
 \end{proof}
 
-\begin{theorem}[\Marpa{} LRR time and space is linear]
+\begin{theorem}[\Marpa LRR time and space is linear]
 For every LRR grammar,
-\Marpa{} runs in $\On{}$ time and space.
+\Marpa runs in $\On{}$ time and space.
 \end{theorem}
 
 \begin{proof}
@@ -24486,9 +24487,9 @@ Non-author readers are not encouraged.
 Filing pull requests
 will usually be a waste of time.}
 
-\begin{theorem}[\Marpa{} unambiguous time and space is quadratic]
+\begin{theorem}[\Marpa unambiguous time and space is quadratic]
 For every unambiguous grammar,
-\Marpa{} runs in $\order{n^2}$ time and space.
+\Marpa runs in $\order{n^2}$ time and space.
 \thEnd
 \end{theorem}
 
@@ -24497,9 +24498,9 @@ For every unambiguous grammar,
 \myqed
 \end{proof}
 
-\begin{theorem}[\Marpa{} context-free time is cubic]
+\begin{theorem}[\Marpa context-free time is cubic]
 For every context-free grammar,
-\Marpa{} runs in $\order{\var{n}^3}$ time.
+\Marpa runs in $\order{\var{n}^3}$ time.
 \thEnd
 \end{theorem}
 
@@ -24508,10 +24509,10 @@ For every context-free grammar,
 \myqed
 \end{proof}
 
-\begin{theorem}[\Marpa{} context-free space is cubic]
+\begin{theorem}[\Marpa context-free space is cubic]
 \label{th:cfg-space-is-cubic}
 For every context-free grammar,
-\Marpa{} runs in $\order{\var{n}^3}$ space,
+\Marpa runs in $\order{\var{n}^3}$ space,
 including the space for tracking links.
 \thEnd
 \end{theorem}
@@ -24526,20 +24527,20 @@ The result of
 in the literature,
 because the literature traditionally reports the space consumed without
 link pairs.
-Space without link pairs is more relevant when \Marpa{} is used
+Space without link pairs is more relevant when \Marpa is used
 as a language recognizer,
 but this is rarely the case in practice.
-In practice, \Marpa{} and its competitors are almost used to
+In practice, \Marpa and its competitors are almost used to
 parse.
 The next theorem
 \Thref{cfg-space-is-quadratic-wo-links}
-shows that, in an apples-to-applies, \Marpa{} has
+shows that, in an apples-to-applies, \Marpa has
 the same space bound for CFG's as \Earley{}.
 
-\begin{theorem}[\Marpa{} context-free space is quadratic without links]
+\begin{theorem}[\Marpa context-free space is quadratic without links]
 \label{th:cfg-space-is-quadratic-wo-links}
 For every context-free grammar,
-\Marpa{} runs in $\order{\var{n}^2}$ space,
+\Marpa runs in $\order{\var{n}^2}$ space,
 if it does not track links.
 \thEnd
 \end{theorem}
@@ -24556,14 +24557,14 @@ without links, as in
 This is sufficiently relevant
 if the parser is only used as a recognizer.
 In practice, however,
-algorithms like \Marpa{}
+algorithms like \Marpa
 are typically used in anticipation
 of an evaluation phase,
 for which links are necessary.
 
-\begin{theorem}[\Marpa{} context-free space is cubic]
+\begin{theorem}[\Marpa context-free space is cubic]
 For every context-free grammar,
-\Marpa{} runs in $\order{\var{n}^3}$ space,
+\Marpa runs in $\order{\var{n}^3}$ space,
 including the space for tracking links.
 \thEnd
 \end{theorem}
@@ -24573,10 +24574,10 @@ including the space for tracking links.
 \myqed
 \end{proof}
 
-\chapter{The \Marpa{} input model}
+\chapter{The \Marpa input model}
 \label{chap:input}
 
-\todo[prepend, caption={``The \Marpa{} Input Model'' chapter is FRAGMENTARY}]{%
+\todo[prepend, caption={``The \Marpa Input Model'' chapter is FRAGMENTARY}]{%
 This chapter is fragmentary and inconsistent
 and much of it may be deleted.
 Non-author readers are not encouraged.
@@ -24588,11 +24589,11 @@ up to this point,
 the traditional input stream model
 has been assumed.
 As implemented,
-\Marpa{} generalizes the idea of
+\Marpa generalizes the idea of
 input streams beyond the traditional
 model.
 
-\Marpa{}'s generalized input model
+\Marpa's generalized input model
 replaces the input \Cw{}
 with a set of tokens,
 \var{tokens},
@@ -24610,10 +24611,10 @@ is the maximum over
 \var{tokens} of $\Vloc{start}+\var{length}$.
 
 Multiple tokens can start at a single location.
-(This is how \Marpa{} supports ambiguous tokens.)
+(This is how \Marpa supports ambiguous tokens.)
 The variable-length,
 ambiguous and overlapping tokens
-of \Marpa{}
+of \Marpa
 bend the conceptual framework of ``parse location''
 beyond its breaking point,
 and a new term for parse location is needed.
@@ -24635,7 +24636,7 @@ properly inside at least one token.
 Here ``properly inside'' means after the token's start earleme
 and before the token's end earleme.
 
-In the \Marpa{} input stream, tokens
+In the \Marpa input stream, tokens
 may interweave and overlap freely,
 but gaps are not allowed.
 That is, for all \Vloc{i} such
@@ -24650,14 +24651,14 @@ such that
          \Vloc{start} \le \Vloc{i} < \Vloc{start}+\var{length}.
 \end{gather*}
 
-The intent of \Marpa{}'s generalized input model is to allow
+The intent of \Marpa's generalized input model is to allow
 users to define alternative input models for special
 applications.
 An example that arises in current practice is natural
 language, features of which are most
 naturally expressed with ambiguous tokens.
 The traditional input stream can be seen as the special case of
-the \Marpa{} input model where
+the \Marpa input model where
 for all \Vsym{x}, \Vsym{y}, \Vloc{x}, \Vloc{y},
 \var{xlength}, \var{ylength},
 if we have both of
@@ -24671,7 +24672,7 @@ then we have both of
      \Vloc{x} = \Vloc{y} \implies \Vsym{x} = \Vsym{y}.
 \end{gather*}
 
-The correctness results hold for \Marpa{} input streams,
+The correctness results hold for \Marpa input streams,
 but to preserve the time complexity bounds,
 restrictions must be imposed.
 In stating them,
@@ -24706,9 +24707,9 @@ be less than \var{c},
 and \Eref{restriction2}
 impose little or no obstacle
 to the practical use
-of \Marpa{}'s generalized input model.
+of \Marpa's generalized input model.
 And with them,
-the complexity results for \Marpa{} stand.
+the complexity results for \Marpa stand.
 
 \chapter{Acknowledgments}
 \label{chap:Acknowledgments}
@@ -24729,7 +24730,7 @@ While we always feared that this section would
 be an exhibition of our negligence and ingratitude as anything else,
 there had been plans for it to be otherwise.
 We took care to thank those who helped us
-in \Marpa{}'s IRC channel,
+in \Marpa's IRC channel,
 expecting to use its backlog
 as a source for this chapter.
 
@@ -24737,7 +24738,7 @@ In 2018, the European Union (EU),
 via its General Data Protection Regulation (GDPR),
 suddenly brought these plans to nought.
 Under the GDPR,
-logs like that for \Marpa{}'s IRC channel could not possibly be made
+logs like that for \Marpa's IRC channel could not possibly be made
 conformant in a way that kept their administrators safe from
 legal action.
 In theory this applied to similar, highly-profitable databases maintained
@@ -24762,7 +24763,7 @@ and no measure to save our IRC backlogs
 could be taken
 without inviting legal action.
 
-Many members of the \Marpa{} community
+Many members of the \Marpa community
 have helped me in many ways,
 and it is risky
 to single out one of them.
@@ -24771,23 +24772,23 @@ Ron Savage has been unstinting in
 his support.
 
 Jean-Damien Durand's assistance included several ambitious
-\Marpa{} applications.
+\Marpa applications.
 Deyan Ginev provided advice on \LaTeX{} and
 on deeper matters which proved essential for this book.
 Lenz Moritz quietly and effectively maintained our IRC channel.
-Andrew Rodland stood in for me as the face of \Marpa{},
-and he pioneered the use of one \Marpa{} grammar
+Andrew Rodland stood in for me as the face of \Marpa,
+and he pioneered the use of one \Marpa grammar
 to feed another.
 Ruslan Shvedov provided many hours of assistance,
 ranging from linguistic insights to details of code testing.
-Luc St-Louis moderated the \Marpa{} IRC channel,
+Luc St-Louis moderated the \Marpa IRC channel,
 saving me time,
 and the channel's other users from having to put up with
 my less than fully competent,
 and often too heavy-handed efforts.
-Peter Stuifzand wrote the prototype on which \Marpa{}'s
+Peter Stuifzand wrote the prototype on which \Marpa's
 SLIF interface is based.
-Ruslan Zakirov was a very early \Marpa{} supporter
+Ruslan Zakirov was a very early \Marpa supporter
 who made many useful suggestions
 that are incorporated in this book.
 Larry Wall has always made himself available,
