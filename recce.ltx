@@ -101,22 +101,22 @@
 
 %% From Chiron 2012 paper
 
-\newcommand{\sets}{\ensuremath{\mathbb{V}}}
-\newcommand{\classes}{\ensuremath{\mathbb{C}}}
-\newcommand{\Dv}{\ensuremath{\mathbb{D}{\rm v}}}
-\newcommand{\Dc}{\ensuremath{\mathbb{D}{\rm c}}}
-\newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}}
-\newcommand{\Df}{\ensuremath{\mathbb{D}{\rm f}}}
-\newcommand{\Dill}{\ensuremath{\mathbb{D}{\rm ill}}}
-\newcommand{\Dbool}{\ensuremath{\mathbb{D}{\rm bool}}}
-\newcommand{\Do}{\ensuremath{\mathbb{D}{\rm o}}}
-\newcommand{\De}{\ensuremath{\mathbb{D}{\rm e}}}
-\newcommand{\Don}{\ensuremath{\mathbb{D}{\rm on}}}
-\newcommand{\Dsy}{\ensuremath{\mathbb{D}{\rm sy}}}
-\newcommand{\Dop}{\ensuremath{\mathbb{D}{\rm op}}}
-\newcommand{\Dty}{\ensuremath{\mathbb{D}{\rm ty}}}
-\newcommand{\Dte}{\ensuremath{\mathbb{D}{\rm te}}}
-\newcommand{\Dfo}{\ensuremath{\mathbb{D}{\rm fo}}}
+\newcommand{\sets}{\ensuremath{\mathbb{V}}\xspace}
+\newcommand{\classes}{\ensuremath{\mathbb{C}}\xspace}
+\newcommand{\Dv}{\ensuremath{\mathbb{D}{\rm v}}\xspace}
+\newcommand{\Dc}{\ensuremath{\mathbb{D}{\rm c}}\xspace}
+\newcommand{\Ds}{\ensuremath{\mathbb{D}{\rm s}}\xspace}
+\newcommand{\Df}{\ensuremath{\mathbb{D}{\rm f}}\xspace}
+\newcommand{\Dill}{\ensuremath{\mathbb{D}{\rm ill}}\xspace}
+\newcommand{\Dbool}{\ensuremath{\mathbb{D}{\rm bool}}\xspace}
+\newcommand{\Do}{\ensuremath{\mathbb{D}{\rm o}}\xspace}
+\newcommand{\De}{\ensuremath{\mathbb{D}{\rm e}}\xspace}
+\newcommand{\Don}{\ensuremath{\mathbb{D}{\rm on}}\xspace}
+\newcommand{\Dsy}{\ensuremath{\mathbb{D}{\rm sy}}\xspace}
+\newcommand{\Dop}{\ensuremath{\mathbb{D}{\rm op}}\xspace}
+\newcommand{\Dty}{\ensuremath{\mathbb{D}{\rm ty}}\xspace}
+\newcommand{\Dte}{\ensuremath{\mathbb{D}{\rm te}}\xspace}
+\newcommand{\Dfo}{\ensuremath{\mathbb{D}{\rm fo}}\xspace}
 
 \newcommand{\TypeLE}{\ll}
 \newcommand{\TypeEqual}{=_{\rm ty}}
@@ -2049,10 +2049,12 @@ but not every class is a set.
 A class that is not a set
 is a \dfn[Class!proper]{proper class}.
 
-An example of a class that is a proper class
-is the class of all sets.
-Since there is not set of all sets,
-the class of all sets cannot be a set.
+The class of all sets is \sets.%
+\index{recce-symbol}{V@$\sets$ (the class of all sets)}%
+\index{recce-defienda}{V@$\sets$ (the class of all sets)}
+\sets is an example of a proper class.
+Since there is no set of all sets,
+\sets cannot be a set.
 
 The existence of a proper class means that there is
 no class of all classes.
@@ -2090,13 +2092,25 @@ types are also called \dfn[Superclass]{superclasses}.
 Superclasses contain classes.
 Every class is also a superclass, but not every
 superclass is a class.
-There is a superclass of all classes.
+\classes{}%
+\index{recce-symbol}{C@$\classes$ (the universal type)}%
+\index{recce-defienda}{C@$\classes$ (the universal type)}
+is the superclass of all classes.
 A superclass is a \dfn[Superclass!proper]{proper superclass}
 iff it is not a class.
 Since there is no class of all classes,
-the superclass of all classes is a proper superclass.
+\classes is a proper superclass.
 No proper superclass has a type,
 and a proper superclass is not a first-class object.
+
+There is a ``universal'' type, that is,
+the type of all first-class variables.
+Since a type is a superclass,
+and \classes is the superclass of all classes,
+\classes{}%
+\index{recce-symbol}{C@$\classes$ (the universal type)}%
+\index{recce-defienda}{C@$\classes$ (the universal type)}
+is also the universal type.
 
 Skipping ahead, our notation to indicate the \var{x}
 is a term of type $\alpha$ is \Vtyped{x}{\alpha}.
@@ -2118,7 +2132,7 @@ we use the terms and notation we use for classes.\footnote{%
 \todo{TO HERE}
 
 All object-language values in Chiron are members of one
-of the following disjoin metadomains:
+of the following disjoint metadomains:
 \begin{itemize}
 \item \Ds{}, the domain of superclasses.
 \Ds{} properly includes \Dc{}, the domain of classes,
@@ -2234,6 +2248,22 @@ The operator of a row following a single-line separator has
 the same precedence as the operator in the preceding row.
 Unless specifically stated, all operators and pseudo-operators
 associate left to right.
+
+In the boxed displays,
+the second column of each row is the \COL meaning,
+unless stated otherwise.
+The \MtL includes a copy of the \COL,
+so every \COL operator is also a \MtL operator.
+In addition, the \MtL overloads many of the \COL
+operators for use with \MtL variables.
+Often, the overloading is intuitively obvious,
+as when two \MtL variables are added using the $+$
+operator,
+or when the element operator ($\in$) is used
+with metadomains.
+In cases where the meaning of an operator overloaded
+for the \MtL is not obvious,
+we state it explicitly.
 
 First come the various ``atomic'' elements:
 \FloatBarrier
@@ -2452,6 +2482,48 @@ produce functions types.
 \FloatBarrier
 
 Next in precedence is a pseudo-operation for declaring type.
+The atomic expression $\V{x}_\alpha$
+indicates a first class \COL variable of type $\alpha$
+and abbreviates the expression of looser precedence,
+$\Vtyped{x}{\alpha}$.
+We prefer to avoid subscripts,
+and $\Vtyped{x}{\alpha}$ is used only when the type is readable
+in a subscript font,
+and only to remind ourselves
+of a previously stated type,
+or for stating types which that are suggested
+by the context.
+
+We overload the typing notation in \MtL to allow
+pseudo-types after the colon.
+If the pseudo-type is a meta-domain, it indicates that
+the variable is in that meta-domain.
+For example, $\Vtyped{metaX}{\Ds}$ indicates that \V{metaX}
+is in the metadomain \Ds{}. 
+\Ds{} is not a \COL value.
+Unless specified more narrowly elsewhere,
+\V{metaX} is not a first-class COL variable;
+and \V{metaX} does not have a \COL type.
+
+If the pseudo-type is \MtL, it indicates that
+the variable is a variable of the meta-language.
+For example,
+\begin{equation}
+\label{eq:pseudo-type-notation2}
+\Vtyped{metaY}{\MtL}
+\end{equation}
+indicates that \V{metaY} is a variable in the meta-language.
+As a pseudo-type, \MtL is a special notation,
+and is not a collection.
+Since all variables are in the metalanguage,
+\EFref{pseudo-type-notation2} tells us very little about \V{metaY},
+and we may expect
+that \V{metaY} will be specified more narrowly elsewhere.
+Based on \EFref{pseudo-type-notation2} by itself,
+\V{metaY} is not necessarily a part of the \COL,
+and therefore will not necessarily be
+a first-class \COL with a type.
+
 
 \FloatBarrier
 
@@ -2696,60 +2768,7 @@ the ``hints'' that justify it.
 \end{table}
 \FloatBarrier
 
-\section{Operators}
-\todo{Finish this section.}
-
-Associativity of operators follows tradition.
-We include constants in the table entries of the section,
-for this purpose treating them as nullary operators.
-In fact, where the constant is a Chiron built-in,
-it is a nullary operator as a matter of definition.
-
-Unless otherwise stated, the operator meaning in
-each row is the \COL meaning.
-The \MtL includes a copy of the \COL,
-so every \COL operator is a \MtL operator.
-In addition, the \MtL overloads many of the \COL
-operators for use with \MtL variables.
-Often, the overloading is intuitively obvious,
-as when two \MtL variables are added using the $+$
-operator,
-or when the element operator ($\in$) is used
-with metadomains.
-In cases where the meaning of an operator overloaded
-for the \MtL is not obvious,
-we state it explicitly.
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\classes$} & \cellboxr{The universal type} \\
-\hline
-{$\naturals$} & \cellboxr{The set of natural numbers} \\
-\hline
-{$\sets$} & \cellboxr{The class of all sets} \\
-\hline
-{$\unicorn$} & \cellboxr{The ``unicorn'', the ill-defined constant} \\
-\hline
-\end{tabular}
-\end{table}%
-\index{recce-symbol}{C@$\classes$ (the universal type)}%
-\index{recce-defienda}{C@$\classes$ (the universal type)}%
-\index{recce-symbol}{N@$\naturals$ (set of natural numbers)}%
-\index{recce-defienda}{N@$\naturals$ (set of natural numbers)}%
-\index{recce-symbol}{V@$\sets$ (the class of all sets)}%
-\index{recce-defienda}{V@$\sets$ (the class of all sets)}%
-\index{recce-symbol}{Unicorn@$\unicorn$ (the ``unicorn'', the ill-defined constant)}%
-\index{recce-defienda}{Unicorn@Unicorn, $\unicorn$ (ill-defined constant)}%
-\FloatBarrier
-
-\classes{}, the universal type, is also the superclass of
-all classes.
-Since every set or class is also a type,
-\naturals{} is the type for a natural number,
-and \sets{} is the type for a sets.
+\section{Constants}
 
 \myepi{\label{epi:naturals-discomfort}%
     The slight feeling of discomfort the reader
@@ -2763,7 +2782,9 @@ and \sets{} is the type for a sets.
     {{\em Naive Set Theory}, Halmos~\cite[p. 45]{Halmos1960}}
 
 In this book, the natural numbers begin with 0,
-and the set of natural numbers is written \naturals{},
+and the set of natural numbers is written \naturals{},%
+\index{recce-symbol}{N@$\naturals$ (set of natural numbers)}%
+\index{recce-defienda}{N@$\naturals$ (set of natural numbers)}
 whether it is used as a cardinal or an ordinal.
 We use the von Neumann convention,
 according to which every natural number is the set of
@@ -2775,61 +2796,7 @@ The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\V{x}_\alpha$} & \cellboxr{Variable \V{x} of type $\alpha$} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The atomic expression $\V{x}_\alpha$
-indicates a first class COL variable of type $\alpha$
-and abbreviates the expression of looser precedence,
-$\Vtyped{x}{\alpha}$.
-We prefer to avoid subscripts,
-and $\Vtyped{x}{\alpha}$ is used only when the type is readable
-in a subscript font,
-and only to remind ourselves
-of a previously stated type,
-or for stating types which that are suggested
-by the context.
-
-We overload the typing notation in \MtL to allow
-pseudo-types after the colon.
-If the pseudo-type is a meta-domain, it indicates that
-the variable is in that meta-domain.
-For example, $\Vtyped{metaX}{\Ds}$ indicates that \V{metaX}
-is in the metadomain \Ds{}. 
-\Ds{} is not a \COL value.
-Unless specified more narrowly elsewhere,
-\V{metaX} is not a first-class COL variable;
-and \V{metaX} does not have a \COL type.
-
-If the pseudo-type is \MtL, it indicates that
-the variable is a variable of the meta-language.
-For example,
-\begin{equation}
-\label{eq:pseudo-type-notation2}
-\Vtyped{metaY}{\MtL}
-\end{equation}
-indicates that \V{metaY} is a variable in the meta-language.
-As a pseudo-type, \MtL is a special notation,
-and is not a collection.
-Since all variables are in the metalanguage,
-\EFref{pseudo-type-notation2} tells us very little about \V{metaY},
-and we may expect
-that \V{metaY} will be specified more narrowly elsewhere.
-Based on \EFref{pseudo-type-notation2} by itself,
-\V{metaY} is not necessarily a part of the \COL,
-and therefore will not necessarily be
-a first-class \COL with a type.
+\section{Operators and pseudo-operators}
 
 \FloatBarrier
 
