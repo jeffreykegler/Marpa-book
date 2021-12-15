@@ -127,10 +127,6 @@
 % \newcommand{\provesast}[2]{#1 \vdash^\ast #2}
 
 % \renewcommand{\phi}{\varphi}
-% \newcommand{\seq}[1]{{\langle #1 \rangle}}
-% \newcommand{\set}[1]{{\{ #1 \}}}
-% \newcommand{\tuple}[1]{{( #1 )}}
-% \newcommand{\mlist}[1]{{[ #1 ]}}
 \newcommand{\sembrack}[1]{\llbracket#1\rrbracket}
 %\newcommand{\sembrack}[1]{[\![#1]\!]}
 \newcommand{\synbrack}[1]{\ulcorner#1\urcorner}
@@ -644,10 +640,9 @@
 \newcommand{\Vtyped}[2]{\ensuremath{\var{#1}\mcolon#2}}
 \newcommand{\VVtyped}[2]{\ensuremath{\var{#1}\mcolon\var{#2}}}
 
-% Eliminate this, now that I follow Chiron notation?
-\newcommand{\family}[1]{\ensuremath{\left[ #1 \right]}}
-
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
+% function builder
+\newcommand{\fnB}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
 \newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
 \newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
@@ -2306,7 +2301,7 @@ The bracketing operators bind as tightly as the atomic operators:
 \hline
 \cellboxr{Sequences like $\seq{43, 1729, 1491, 1493 }$} \\
 \hline
-\cellboxr{Families like $\family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }$} \\
+\cellboxr{Functions like $\fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }$} \\
 \hline
 \cellboxr{Cardinalty of a collection, \rule{0em}{2.7ex}$\Vsize{Col}$\rule[-1.5ex]{0em}{0in}} \\
 \hline
@@ -3042,6 +3037,8 @@ $\naturals+1 = 1+\naturals = 1$.
 Concatenation is the only implied operator in this paper:
 multiplication is always explicit.
 Concatenation may also be made explicit.
+\todo{Also, have operator for concatenation of sequences}
+
 
 \FloatBarrier
 
@@ -3720,7 +3717,7 @@ To describe families,
 we sometimes use a family builder of the form
 \begin{equation}
 \label{eq:def-family-builder-050}
-    \family{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
+    \fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
 \end{equation}
 If \V{fam} is the family described by
 \Eref{def-family-builder-050},
@@ -4971,7 +4968,7 @@ where
         \\ \exists\; \Vnat{length} > 0 : \Dom{\V{pth}} = \V{length}
         \\ \land\; \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vlastix{pth} :
-                \\ \family{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
+                \\ \tuple{ \VVelement{pth}{ix}, \Velement{pth}{\V{ix}+1} } \in \V{E}
             \end{gathered} \right)
     \end{gathered} }.
 \end{gathered}
@@ -6555,7 +6552,7 @@ that \V{max1} is not a leaf path.
     \bcuz{} EI of bound \V{oneMore} in \Eref{th-tree-leaf-path-190}
     with new free \V{oneMore}.}
 \mypareq{eq:th-tree-leaf-path-210}{%
-    $\V{evenLonger} \ldefined \family{
+    $\V{evenLonger} \ldefined \seq{
             \Velement{max1}{0} \ldots \Velement{max1}{\Vlastix{max1}},
             \V{oneMore} }$
     \bcuz{} New \V{evenLonger} for convenience.}
@@ -7203,7 +7200,7 @@ the last index of the path and the level of the ancestry
 Now it will be helpful to consider a suffix of \V{path}.
 \begin{gather}
 \label{eq:ancestry-from-path-410}
-    \left( \V{suffix} \ldefined \family{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
+    \left( \V{suffix} \ldefined \fnB{ 1 \le \Vnat{i} \le \Vlastix{path} : \VVelement{path}{i} }
         \right)
 \\ \label{eq:ancestry-from-path-412}
     \land\; \V{suffix} \in \Vmyfn{paths}{G}
@@ -7992,7 +7989,7 @@ That is if \V{genset} is a set of generations such that
 then
 \begin{equation}
     \size{\bigcup \Vnodset{genset} } =
-    \sum \family{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
+    \sum \fnB{ \Vnodset{gen} \in \V{genset} : \Vsize{gen} }.
     \quad \thEnd
 \end{equation}
 \end{lemma}
@@ -8364,7 +8361,7 @@ is equal to the sum of their cardinalities:
 \begin{gathered}
 \forall\; \Vnodset{ndset1} :
 \\ \size{\bigcup \set{ \Vmyfn{children}{parent} : \V{parent} \in \V{ndset1} }}
-\\ =\; \sum \family{\V{parent} \in \V{ndset1} : \size{\Vmyfn{children}{parent}} }
+\\ =\; \sum \fnB{\V{parent} \in \V{ndset1} : \size{\Vmyfn{children}{parent}} }
 \\ \because \Eref{lem-surface-parents-ratio-200}.
 \end{gathered}
 \end{equation}
@@ -8372,7 +8369,7 @@ is equal to the sum of their cardinalities:
 \label{eq:lem-surface-parents-ratio-220}
 \begin{gathered}
 \size{\bigcup \set{ \Vmyfn{children}{parent} : \V{parent} \in \Vmyfn{NewParents}{ndset} }}
-\\ =\; \sum \family{\V{parent} \in \Vmyfn{NewParents}{ndset} : \size{\Vmyfn{children}{parent}} }
+\\ =\; \sum \fnB{\V{parent} \in \Vmyfn{NewParents}{ndset} : \size{\Vmyfn{children}{parent}} }
 \\ \myparbox{\cuz{}
     \Eref{lem-surface-parents-ratio-210}, UI with \Vmyfn{NewParents}{ndset}.}
 \end{gathered}
@@ -12492,13 +12489,14 @@ The theorem is
 \label{th:les-slice}
 Every slice of an \realm{LES} is an \realm{LES}.
 That is,
+\todo{Fix setting of \V{subseq}}
 \begin{gather}
 \label{eq:th-les-slice-02}
 \V{seq} \in \realm{LES}
 \\ \label{eq:th-les-slice-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-les-slice-06}
-\land \; \V{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
+\land \; \V{subseq} = \fnB{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
 \\ \nonumber
 \implies
 \\ \label{eq:th-les-slice-08}
@@ -12593,7 +12591,7 @@ Let \V{les} be an \realm{EIM} sequence,
 and let \V{next} be an \realm{EIM}.
 Then
 \mypareq{eq:th-les-extension-02}{%
-   $\family{\Velement{\V{les}}{0}\ldots
+   $\seq{\Velement{\V{les}}{0}\ldots
        \Velement{les}{\Vlastix{les}}, \V{next}} \in \realm{LES}$
 }
 iff
@@ -13105,7 +13103,7 @@ showing it directly.
     new \Vles{lesB}.
 }
 \mypareq{eq:th-les-unit-derivation-12}{%
-    $\Vles{lesB} = \family{\Veim{prev}, \Veim{middle}, \Veim{next}}$
+    $\Vles{lesB} = \seq{\Veim{prev}, \Veim{middle}, \Veim{next}}$
     \cuz{} \Eref{th-les-unit-derivation-11},
     new \Veim{prev}, \Veim{middle}, \Veim{next}
     for convenience.
@@ -13218,7 +13216,7 @@ to show \myfn{INDH}{\V{n}+1}.
      new \V{locP} for convenience.
 }
 \mypareq{eq:th-les-unit-derivation-38}{%
-    $\Vles{pre} = \family{\Velement{lesP}{0} \ldots \Velement{lesP}{\V{n}+2}}$
+    $\Vles{pre} = \Velement{lesP}{0 \ldots \V{n}+2}$
     \linebreak \cuz{} \longThref{LES slice}{les-slice},
     \Eref{th-les-unit-derivation-32};
     new \Vles{pre} for convenience.
@@ -13700,8 +13698,8 @@ We show the first subcase directly.
         \Eref{th-les-uniqueness-10-12}.
 }
 \mypareq{eq:th-les-uniqueness-10-16}{%
-   $\var{les1} = \family{\Velement{les1}{0}}
-       = \family{\Velement{les2}{0}} = \var{les2}$
+   $\var{les1} = \seq{\Velement{les1}{0}}
+       = \seq{\Velement{les2}{0}} = \var{les2}$
    \linebreak \cuz{} \Eref{th-les-uniqueness-06},
         \Eref{th-les-uniqueness-10-12},
         \Eref{th-les-uniqueness-10-14}.
@@ -14346,7 +14344,7 @@ The theorem will follow immediately by existential generalization.
 }
 Our example of an \realm{LSS} containing \var{eim} as its base element is
 \mypareq{eq:th-source-eim-containment-12}{%
-   $\var{example} = \family{\var{eim}}$ \cuz{} AF construction.
+   $\var{example} = \seq{\var{eim}}$ \cuz{} AF construction.
 }
 \mypareq{eq:th-source-eim-containment-13}{%
     $\Velement{example}{0} = \var{eim}$ \cuz{}
@@ -14488,7 +14486,7 @@ That is, if
 \\ \label{eq:th-lss-slice-04}
 \land \; \Vnat{a} \le \Vnat{b} \le \Vlastix{seq}
 \\ \label{eq:th-lss-slice-06}
-\land \; \var{subseq} = \family{\VVelement{seq}{a} \ldots \VVelement{seq}{b}}
+\land \; \var{subseq} = \VVelement{seq}{a \ldots b}
 \end{gather}
 then
 \begin{gather}
@@ -14541,9 +14539,9 @@ then
 Let \var{lss} be an \realm{LSS},
 and let \var{next} be an \realm{EIM}.
 Then
+\todo{Make sure the concatenation in the next eq is correct}
 \mypareq{eq:th-lss-extension-02}{%
-   $\family{\Velement{\var{lss}}{0}\ldots
-       \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \realm{LSS}$
+   $\seq{\Velement{\var{lss}}{0 \ldots \Vlastix{lss}}, \var{next}} \in \realm{LSS}$
 }
 iff
 \mypareq{eq:th-lss-extension-07}{%
@@ -14578,8 +14576,9 @@ the antecedent to show the consequent.
         \cuz{} \longDfref{LSS}{lss},
         \Eref{th-lss-extension-14}.
 }
+\todo{Fix the notation in the next?}
 \mypareq{eq:th-lss-extension-18}{%
-   $\var{extended} = \family{\Velement{\var{lss}}{0}\ldots
+   $\var{extended} = \seq{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}}$,
        new \var{extended} for convenience.
 }
@@ -14613,7 +14612,7 @@ and with both directions we have the theorem.
 Let \var{lss} be an \realm{LSS}.
 Then
 \mypareq{eq:th-lss-generalized-extension-02}{%
-   $\exists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
+   $\exists \; \Veim{next} : \seq{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \realm{LSS}$
 }
 iff
@@ -14631,7 +14630,7 @@ to show the consequent.
 \begin{equation}
 \label{eq:th-lss-generalized-extension-10}
 \begin{gathered}
-   \family{\Velement{\var{lss}}{0}\ldots
+   \seq{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \Veim{next}} \in \realm{LSS}
    \\ \myparbox{\cuz{}
        antecedent \Eref{th-lss-generalized-extension-02} of forward
@@ -14694,7 +14693,7 @@ We prove the mutual implication directly.
 \begin{gathered}
    \Maximal{\var{lss}} \iff
    \\
-   \nexists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
+   \nexists \; \Veim{next} : \seq{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \realm{LSS}
        \\ \because \longDfref{Maximal LSS}{maximal-lss}.
 \end{gathered}
@@ -14702,7 +14701,7 @@ We prove the mutual implication directly.
 \begin{equation}
 \label{eq:th-maximal-lss-termination-12}
 \begin{gathered}
-   \left( \nexists \; \Veim{next} : \family{\Velement{\var{lss}}{0}\ldots
+   \left( \nexists \; \Veim{next} : \seq{\Velement{\var{lss}}{0}\ldots
        \Velement{lss}{\Vlastix{lss}}, \var{next}} \in \realm{LSS} \right)
         \\ \iff \nexists \; \Veim{next} :
         \\ \myfn{isSource}{\var{next}}
@@ -15703,7 +15702,7 @@ to show \myfn{INDH}{\var{n}+1}.
 \begin{gathered}
     \myfn{lims}{\Velement{max}{0}} =
     \\ \left\lbrace \begin{gathered}
-        \family{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
+        \tuple{ \Vdr{dr}, \Postdot{\Velement{max}{0}}, \Vorig{orig}, \Current{\Velement{max}{0}}} :
         \\ \Valid{\Velement{max}{0}} \land \myfn{IsLeoEligible}{\Velement{max}{0}}
         \\ \land \; \mylim{\ell} \in \myfn{nextLIMs}{\Velement{max}{0}}
         \\ \land \; \var{dr} = \DR{\ell} \land \var{orig} = \Origin{\ell}
