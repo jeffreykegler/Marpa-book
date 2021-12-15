@@ -2345,11 +2345,8 @@ The next tightest level of precedence includes the application operators:
 
 \FloatBarrier
 
-Next in precedence are binary operators whose results are relations.
-Their associativity is right to left.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2357,16 +2354,68 @@ Their associativity is right to left.
 \hline
 \cellboxr{\V{f} repeated \V{n} times: $\fname{f}\caret\V{n}$} \\
 \hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+Next in precedence are binary operators whose results are relations.
+Their associativity is right to left.
+Note that the composition of a function zero
+times is the identity function.
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
   \cellboxr{Relational composition, ``\V{g} after \V{f}'':
   $\fname{g}\relAfterOp\fname{f}$} \\
+\hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+For relations,
+$\fname{g}\relAfterOp{}\fname{f}$ is
+the \dfn[Relational composition (of relations)]{relational composition},
+of \fname{g} and \fname{f}:
+\fname{g} ``after'' \fname{f}.
+That is,
+\[
+\fname{g}\relAfterOp{}\fname{f} =
+     \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
+         \tuple{\V{x}, \V{y}} \in \V{f} \land
+         \tuple{\V{y}, \V{z}} \in \V{g} }.
+\]
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
 \hline
     \cellboxr{Functional composition ``\V{g} after \V{f}''
     $\fname{g}\fnAfterOp\fname{f}$ } \\
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
+
+Where \fname{f} are \fname{g} are functions,
+$\fname{g}\fnAfterOp{}\fname{f}$ is
+the \dfn[Functional composition (of functions)]{functional composition},
+or simply \dfn[Composition (of functions)]{composition}
+of \fname{g} and \fname{f}:
+\fname{g} ``after'' \fname{f}.
+That is,
+\[
+\fname{g}\fnAfterOp{}\fname{f} =
+     \set{ \begin{gathered}
+         \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
+         \\ \Cod{\V{f}} = \Dom{\V{g}} \land
+             \tuple{\V{x}, \V{y}} \in \V{f} \land
+             \tuple{\V{y}, \V{z}} \in \V{g}
+     \end{gathered} }.
+\]
 
 At the next loosest priority is exponentiation,
 which associates right to left.
@@ -2686,6 +2735,21 @@ The conditional operator has its own level of precedence.
 
 \FloatBarrier
 
+The ternary conditional operator
+is a notation adopted
+from programming languges.
+Where \V{test} is a formula,
+\[ \cond{\V{test}}{\Vtyped{a}{\alpha}}{\Vtyped{b}{\beta}} \text{ is} \]
+\begin{itemize}
+\item[] \Vtyped{a}{\alpha} iff \V{test} is true and $\alpha = \beta$;
+\item[] \Vtyped{b}{\beta} iff \V{test} is false and $\alpha = \beta$;
+\item[] \Vtyped{a}{\classes} iff \V{test} is true and $\alpha \neq \beta$; and
+\item[] \Vtyped{b}{\classes} iff \V{test} is false and $\alpha \neq \beta$.
+\end{itemize}
+For example,
+$\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
+of \Vnat{x}.
+
 The next looser level of precedence is occupied by the definite
 descriptors, and the quanitifiers.
 
@@ -2797,6 +2861,11 @@ The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
 
+The only transfinite cardinality we use directly is that
+of the natural numbers, $\size{\naturals}$.
+For example, the notation $\Vsize{set} = \naturals$
+indicates that \V{set} is countably infinite.
+
 \section{Operators and pseudo-operators}
 
 \FloatBarrier
@@ -2824,25 +2893,6 @@ is any natural number.
 \index{recce-defienda}{\Dom{\V{r}}, domain of relation \V{r}}%
 \index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}%
 \index{recce-symbol}{cardinality@\Vsize{C}, cardinality of collection \V{C}}
-
-\FloatBarrier
-
-The only transfinite cardinality we use directly is that
-of the natural numbers, $\size{\naturals}$.
-For example, the notation $\Vsize{set} = \naturals$
-indicates that \V{set} is countably infinite.
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\neg\var{x}$} & \cellboxr{Logical negation of \var{x}} \\
-\hline
-\end{tabular}
-\end{table}
 
 \FloatBarrier
 
@@ -2887,179 +2937,20 @@ and, where the family is a sequence,
 
 \FloatBarrier
 
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\fname{f}\caret\V{n}$} & \cellboxr{
-    \V{f} repeated \V{n} times
-} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-Where \V{rel} is a relation,
-$\fname{f}\caret{}\V{n}$ is the
-composition of \V{rel} repeated \V{n} times.
-We note that the composition of a function zero
-times is the identity function:
-$\rawfn{(\fname{f}\caret0)}{\V{x}} = \V{x}$.
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-$\fname{g}\relAfterOp\fname{f}$ &
-    \cellboxr{Relational composition: ``\V{g} after \V{f}''} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-For relations,
-$\fname{g}\relAfterOp{}\fname{f}$ is
-the \dfn[Relational composition (of relations)]{relational composition},
-of \fname{g} and \fname{f}:
-\fname{g} ``after'' \fname{f}.
-That is,
-\[
-\fname{g}\relAfterOp{}\fname{f} =
-     \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
-         \tuple{\V{x}, \V{y}} \in \V{f} \land
-         \tuple{\V{y}, \V{z}} \in \V{g} }.
-\]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-$\fname{g}\fnAfterOp\fname{f}$ &
-    \cellboxr{ Functional composition ``\V{g} after \V{f}''} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-Where \fname{f} are \fname{g} are functions,
-$\fname{g}\fnAfterOp{}\fname{f}$ is
-the \dfn[Functional composition (of functions)]{functional composition},
-or simply \dfn[Composition (of functions)]{composition}
-of \fname{g} and \fname{f}:
-\fname{g} ``after'' \fname{f}.
-That is,
-\[
-\fname{g}\fnAfterOp{}\fname{f} =
-     \set{ \begin{gathered}
-         \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
-         \\ \Cod{\V{f}} = \Dom{\V{g}} \land
-             \tuple{\V{x}, \V{y}} \in \V{f} \land
-             \tuple{\V{y}, \V{z}} \in \V{g}
-     \end{gathered} }.
-\]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\mult$} & \cellboxr{Multiplication} \\
-\hline
-{$/$} & \cellboxr{Division} \\
-\hline
-{$\bmod$} & \cellboxr{Modulo} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
 Arithmetic in this book is always cardinal arithmetic.
-Multiplication is never implied in this book.
-Our only implied operator is string concatenation,
-a convention that is much more convenient for our purposes.
-Division of natural numbers and integers is
-``integer division'', so that
-for natural number or integer placeholders
-\V{x}, $\V{y}>0$,
-\[
-     (\V{x} / \V{y}) \mult \V{y} + \V{x} \bmod \V{y} = \V{x}.
-\]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$+$} & \cellboxr{Addition} \\
-\hline
-{$-$} & \cellboxr{Subtraction} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
 Since arithmetic in this book is always cardinal arithmetic,
 $\naturals+1 = 1+\naturals = 1$.
-
-\todo{Distinguish numerical equality from term equivalence?}
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-\rule{0em}{5.1ex}\raisebox{1.5ex}{$\Vstr{a} \Vstr{b}$} &
-    \raisebox{1.4ex}
-        {\cellboxr{Implicit concatenation of string \V{b} after string \V{a}}} \\
-\hline
-{$\V{a} \cat \V{b}$} & \cellboxr{Explicit concatenation of \V{b} after \V{a}} \\
-\hline
-\end{tabular}
-\end{table}
+Division of natural numbers and integers is
+``integer division'', so that
+for 
+\Vtyped{x}{\naturals},
+\Vtyped{y}{\naturals},
+\[
+    \V{y}>0 \implies
+        (\V{x} / \V{y}) \mult \V{y} + \V{x} \bmod \V{y} = \V{x}.
+\]
 
 \FloatBarrier
-
-Concatenation is the only implied operator in this paper:
-multiplication is always explicit.
-Concatenation may also be made explicit.
-\todo{Also, have operator for concatenation of sequences}
-
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\times$} & \cellboxr{Cartesian product} \\
-\hline
-\hline
-{$\setminus$} & \cellboxr{Set difference} \\
-\hline
-\hline
-{$\cup$} & \cellboxr{Set union} \\
-\hline
-\hline
-{$\cap$} & \cellboxr{Set intersection} \\
-\hline
-\end{tabular}
-\end{table}
 
 \FloatBarrier
 
@@ -3074,12 +2965,6 @@ Concatenation may also be made explicit.
 \end{table}
 
 \FloatBarrier
-
-In this book a function is a partial function, unless otherwise stated.
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
 
 We recall that we regard any two collections as equivalent
 iff their extensions are identical, and
@@ -3187,77 +3072,6 @@ $\V{Dt}\tfnMMap\V{C}$%
     is the type for total functions from a domain of type \V{Dt} to \V{C})}%
 , so that
 \[ \V{Dt}\tfnMMap\V{C} = \bigcup \collB{ \V{D}\tfnMap\V{C} }{ \V{D} \in \V{Dt} }. \]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\Vtyped{x}{\alpha}$} & \cellboxr{Variable \V{x} of type $\alpha$} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\V{x}\isWellDef\alpha$} & \cellboxr{\V{x} is of type $\alpha$ and is well-defined} \\
-\hline
-{$\V{x}\isIllDef\alpha$} & \cellboxr{$\neg(\V{x} \isWellDef \alpha)$} \\
-\hline
-{$\V{x}\isWellDef$} & \cellboxr{$\V{x} \isWellDef \classes$} \\
-\hline
-{$\V{x}\isIllDef$} & \cellboxr{$\neg(\V{x} \isWellDef)$} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\subset$} & \cellboxr{Subcollection} \\
-\hline
-{$\subseteq$} & \cellboxr{Proper subcollection} \\
-\hline
-{$\supset$} & \cellboxr{Supercollection} \\
-\hline
-{$\supseteq$} & \cellboxr{Proper supercollection} \\
-\hline
-{$\in$} & \cellboxr{Collection membership} \\
-\hline
-{$\notin$} & \cellboxr{Collection non-membership} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\le$} & \cellboxr{Lax less than} \\
-\hline
-{$\ge$} & \cellboxr{Lax greater than} \\
-\hline
-{$<$} & \cellboxr{Strict less than} \\
-\hline
-{$>$} & \cellboxr{Strict greater than} \\
-\hline
-\end{tabular}
-\end{table}
 
 \FloatBarrier
 
@@ -3374,35 +3188,6 @@ so that $\gamma \neq \delta$.
 \end{table}
 
 \FloatBarrier
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\cond{\V{bool}}{\V{v1}}{\V{v2}}$} & \cellboxr{Conditional operator} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The ternary conditional operator
-is a notation adopted
-from programming languges.
-Where \V{test} is a formula,
-\[ \cond{\V{test}}{\Vtyped{a}{\alpha}}{\Vtyped{b}{\beta}} \text{ is} \]
-\begin{itemize}
-\item[] \Vtyped{a}{\alpha} iff \V{test} is true and $\alpha = \beta$;
-\item[] \Vtyped{b}{\beta} iff \V{test} is false and $\alpha = \beta$;
-\item[] \Vtyped{a}{\classes} iff \V{test} is true and $\alpha \neq \beta$; and
-\item[] \Vtyped{b}{\classes} iff \V{test} is false and $\alpha \neq \beta$.
-\end{itemize}
-For example,
-$\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
-of \Vnat{x}.
 
 \FloatBarrier
 
@@ -3739,6 +3524,12 @@ and arbitrary $\V{x} \in \V{X}$,
 \end{definition}
 
 \section{Functions}
+
+In this book a function is a partial function, unless otherwise stated.
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
 
 \todo{Finish this section}
 
