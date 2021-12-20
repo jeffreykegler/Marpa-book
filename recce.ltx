@@ -2139,17 +2139,6 @@ on page \pageref{sec:ill-definedness}.
 \item \Don{}, the domain of built-in operators;
 \end{itemize}
 
-The operators of Chiron include the built-in operators and
-functions.
-\dfn[Function]{Functions} in Chiron are defined as classes.
-Some built-in operators can be redefined as functions,
-but functions are more restricted than operators.
-The domain of a functional class must be a class,
-and therefore arguments of functions must be sets.
-Similarly, the range of a function must be class,
-and therefore the value of each function application
-must be a set.
-
 \section{Ill-definedness}
 \label{sec:ill-definedness}
 
@@ -2219,6 +2208,36 @@ For this, our object-language has a special dedicated value, the
     are unanimous on this point of cryptozoology.}
 
 \todo{Finish this}
+
+\section{Operators}
+
+The operators of Chiron include the built-in operators, the abbreviating operators,
+meta-language operators and syntactic operators.
+Built-in operators are Chiron values, and were
+introduced earlier.
+
+Abbreviating operators have the same lexical form as operators,
+but they are not directly part of the \COL.
+Instead they expand to expressions of the \COL.
+The expansion of an abbreviating operator must be,
+before substitution of parameters, be a constant.
+
+Meta-language operators are operators that are
+part of the \MtL, and not part of the \COL.
+A syntactic operator behaves like an operator syntactically,
+but cannot usefully be
+described as operators in any other sense.
+Syntactic operators are \MtL concepts,
+and are not part of the \COL.
+
+Some of the built-in and abbreviating operators
+can be redefined as functions,
+but functions are more restricted than operators.
+The domain of a functional class must be a class,
+and therefore arguments of functions must be sets.
+Similarly, the range of a function must be class,
+and therefore the value of each function application
+must be a set.
 
 \section{Precedence}
 
@@ -2522,6 +2541,21 @@ produce functions types.
 
 \FloatBarrier
 
+
+\FloatBarrier
+
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{$\Vtyped{x}{\alpha}$ states that expression \V{x}
+    is of type $\alpha$} \\
+\hline
+\end{tabular}
+\end{table}
+
+\FloatBarrier
 Next in precedence is a pseudo-operation for declaring type.
 The atomic expression $\V{x}_\alpha$
 indicates a first class \COL variable of type $\alpha$
@@ -2565,27 +2599,7 @@ Based on \EFref{pseudo-type-notation2} by itself,
 and therefore will not necessarily be
 a first-class \COL with a type.
 
-
 \FloatBarrier
-
-\renewcommand{\cellboxrWidth}{4.5in}
-\begin{table}[H]
-\begin{tabular}{|l|}
-\hline
-\hline
-\cellboxr{$\Vtyped{x}{\alpha}$ states that expression \V{x}
-    is of type $\alpha$} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The next precedence contains boolean-result operations
-dealing with well-definedness.
-
-\FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2601,14 +2615,12 @@ dealing with well-definedness.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
-The next loosest precedence contains boolean-result
-operations on collections.
+The next precedence contains boolean-result operations
+dealing with well-definedness.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2628,13 +2640,12 @@ operations on collections.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
-Equivalences form the next precedence group.
+The next loosest precedence contains boolean-result
+operations on collections.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2656,19 +2667,11 @@ Equivalences form the next precedence group.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
-Non-equivalence comparisons come next.
-This precedence group does not assoicate.
-Instead, in case of an ambiguity about order of precedence involving
-two of these relations, the expression is rewritten into
-a conjunction of two comparisons.
-For example, $0 < \V{x} \le 42$ is interpreted as
-\[ 0 < \V{x} \land \V{x} \le 42. \]
+Equivalences form the next precedence group.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2688,7 +2691,14 @@ For example, $0 < \V{x} \le 42$ is interpreted as
 \end{table}
 \FloatBarrier
 
-At the next precedence are the operators on truth values.
+Non-equivalence comparisons come next.
+This precedence group does not assoicate.
+Instead, in case of an ambiguity about order of precedence involving
+two of these relations, the expression is rewritten into
+a conjunction of two comparisons.
+For example, $0 < \V{x} \le 42$ is interpreted as
+\[ 0 < \V{x} \land \V{x} \le 42. \]
+
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2709,13 +2719,11 @@ At the next precedence are the operators on truth values.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
-The conditional operator has its own level of precedence.
+At the next precedence are the operators on truth values.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2725,9 +2733,9 @@ The conditional operator has its own level of precedence.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
+The conditional operator has its own level of precedence.
 The ternary conditional operator
 is a notation adopted
 from programming languges.
@@ -2743,11 +2751,7 @@ For example,
 $\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
 of \Vnat{x}.
 
-The next looser level of precedence is occupied by the definite
-descriptors, and the quanitifiers.
-
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2763,16 +2767,13 @@ descriptors, and the quanitifiers.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
+The next looser level of precedence is occupied by the definite
+descriptors, and the quanitifiers.
+
+
 \todo{Add rule declaration and derivation operators}
-
-The next loosest level of precedence is occupied by the diamond and double-diamond variants
-of the equivalence operations.
-In the \COL these function identically to their underlying equivalences
-while in the \MtL these signify definitions.
-
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2791,9 +2792,10 @@ while in the \MtL these signify definitions.
 \end{table}
 \FloatBarrier
 
-The verbal forms of the logical operators have the same meaning
-as their equivalents in notation,
-but looser priority.
+The next loosest level of precedence is occupied by the diamond and double-diamond variants
+of the equivalence operations.
+In the \COL these function identically to their underlying equivalences
+while in the \MtL these signify definitions.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2811,6 +2813,12 @@ but looser priority.
 \end{tabular}
 \end{table}
 \FloatBarrier
+
+The next series of priorities contains
+the verbal forms of the logical operators.
+These have the same meaning
+as their equivalents in notation,
+but looser priority.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -3476,39 +3484,37 @@ $<$ is the strict total relation corresponding to the lax total relation $\le$.
 Where the domain is a class of sets,
 $\subseteq$ is the lax partial relation corresponding to the strict partial relation $\subset$.
 
-\section{Families}
+\section{Functions}
 
-\begin{definition}[Family Constructor]
-\label{def:family-builder}
-\todo{Change this to follow Chiron conventions?}
-To describe families,
-we sometimes use a family builder of the form
+\dfn[Function]{Functions} in Chiron are defined as classes.
+
+\begin{definition}[Function Indexing]
+\label{def:function-indexing}
+For arbitrary classes \V{X} and \V{Y},
+arbitrary function $\Vtyped{exFn}{\fnMap{\V{X}}{\V{Y}}}$
+and arbitrary \VVtyped{i}{X},
+\[ \VVelement{exFn}{i} \defined \rIota \V{y} \in \V{Y} : \tuple{\V{i}, \V{y}} \in \V{exFn}.
+    \quad \dfEnd \]
+\end{definition}
+
+\begin{definition}[Function Constructor]
+\label{def:function-builder}
+To describe function,
+we sometimes use a
+\dfn{function builder} of the form
 \begin{equation}
-\label{eq:def-family-builder-050}
+\label{eq:def-function-builder-050}
     \fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
 \end{equation}
-If \V{fam} is the family described by
-\Eref{def-family-builder-050},
-then $\V{S}=\Dom{\V{fam}}$ is the index set,
-and the value of \VVelement{fam}{i} is
+If \V{exFn} is the function described by
+\Eref{def-function-builder-050},
+the value of \VVelement{exFn}{i} is
 \Vmyfn{P}{i} for every \V{i} in the set
 \V{S}.
 \dfEnd
 \end{definition}
 
-\begin{definition}[Family Indexing]
-\label{def:family-indexing}
-Let \V{I} and \V{X} be placeholder sets.
-For arbitrary family $\V{fam} \in \V{X}\tfnMap\V{I}$,
-arbitrary $\V{i} \in \V{I}$,
-and arbitrary $\V{x} \in \V{X}$,
-\[ \VVelement{fam}{i} \defined \rIota \V{y} \in \V{X} : \tuple{\V{i}, \V{y}} \in \V{fam}.
-    \quad \dfEnd \]
-\end{definition}
-
-\section{Functions}
-
-In this book a function is a partial function, unless otherwise stated.
+In this book a function is a total function, unless otherwise stated.
 An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
