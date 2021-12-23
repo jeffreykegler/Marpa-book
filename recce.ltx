@@ -96,6 +96,21 @@
 % \usepackage{glossaries} % must after hyperref
 % \makeglossaries
 
+% A complete set of Greek capial letters, for convenience
+\DeclareMathSymbol{\Alpha}{\mathalpha}{operators}{"41}
+\DeclareMathSymbol{\Beta}{\mathalpha}{operators}{"42}
+\DeclareMathSymbol{\Epsilon}{\mathalpha}{operators}{"45}
+\DeclareMathSymbol{\Zeta}{\mathalpha}{operators}{"5A}
+\DeclareMathSymbol{\Eta}{\mathalpha}{operators}{"48}
+\DeclareMathSymbol{\Iota}{\mathalpha}{operators}{"49}
+\DeclareMathSymbol{\Kappa}{\mathalpha}{operators}{"4B}
+\DeclareMathSymbol{\Mu}{\mathalpha}{operators}{"4D}
+\DeclareMathSymbol{\Nu}{\mathalpha}{operators}{"4E}
+\DeclareMathSymbol{\Omicron}{\mathalpha}{operators}{"4F}
+\DeclareMathSymbol{\Rho}{\mathalpha}{operators}{"50}
+\DeclareMathSymbol{\Tau}{\mathalpha}{operators}{"54}
+\DeclareMathSymbol{\Chi}{\mathalpha}{operators}{"58}
+
 \newcommand{\COL}{\ensuremath{\mathbb{COL}}\xspace}
 \newcommand{\MtL}{\ensuremath{\mathbb{M}\text{t}\mathbb{L}}\xspace}
 
@@ -161,7 +176,8 @@
 \newcommand{\StarApp}{\star\,}
 
 \newcommand{\com}{\mname{complement}}
-\newcommand{\dom}{\mname{domain}}
+\newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
+\newcommand{\Range}[1]{\mname{range}\left(#1\right)}
 \newcommand{\sumcl}{\mname{sum}}
 \newcommand{\pow}{\mname{power}}
 \newcommand{\pair}{\mname{pair}}
@@ -1449,16 +1465,6 @@ useful history.
 And we are careful with our use of superscripts
 and subscripts to avoid those traditional uses
 which pose legibility and ophthalmological challenges.
-
-We make heavy use of multi-character variable names.
-This makes implicit operations inconvenient so that,
-with one exception,
-operations are never implicit.
-The exception is the concatenation of strings and symbols ---
-as will be explained in \Chref{preceding-disciplines},
-these have a special notation which makes implicit operations
-unambiguous.
-
 \section{Base theories}
 
 \epigraph{%
@@ -1808,40 +1814,6 @@ An example is a scope with nothing visible outside the scope.
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
 
-% In the parsing literature,
-% the concept analogous to our ``realms''
-% was called the "domain" for each variable%
-% \footnote{
-%     The use of term ``domain'' for the set
-%     from which a variable may take its value
-%     is well-established.
-%     But we choose to depart from it because the
-%     term ``domain'' is heavily overloaded with other
-%     even more well-established uses.
-%     For example,
-%     in the traditional terminology,
-%     a function variable has a ``domain of the variable''
-%     but each of the variable's values also has a ``domain of the function''.
-%     So if \V{f} is a variable representing a boolean function of the integers,
-%     the domain of the function variable \V{f} is $2\tfnMap\naturals$, while
-%     the domain of the function represented by the variable \V{f} is \naturals.
-%     This distinction arises in many of our contexts,
-%     and we thought it would be exasperatingly confusing.
-% },
-% and it was represented by a scheme
-% in which the domain
-% was suggested by a combination
-% of the language of the alphabet used,
-% the typeface,
-% and whether the single character of the variable
-% was taken from the end,
-% middle or beginning of the alphabet.
-% For single-character variables,
-% these schemes were awkward and restrictive.
-% They also pushed the legibility envelope to its limits.
-% The multi-character variables used in this paper
-% worsen all of these problems.
-
 \section{Arbitrary and convenience variables}
 
 We often, especially in proofs,
@@ -1941,6 +1913,12 @@ useful for us.
 Chiron allows us the matter of ill-defined terms carefully.
 And Chiron's type system is well thought out and more than
 sufficient for our needs.
+
+The notation of this paper is a close variant of
+Chiron's compact form.
+Readers interested in Chiron from a foundational
+aspect and the full Chiron language should consult
+Farmer 2012~\cite{Farmer2012}.
 
 \section{Meta-language and object-language}
 
@@ -2111,6 +2089,31 @@ is a term of type $\alpha$ is \Vtyped{x}{\alpha}.
 We will often abbreviate this by indicating the type
 with a subscript: $\var{x}_\alpha$.
 
+\section{Symbols}
+
+Symbols denote values, either in the \MtL or in the \COL.
+This book departs from tradition in making heavy use
+of multi-character symbol names.
+We follow tradition in using multiple typefaces and
+alphabets to differentiate symbol names,
+so that \V{ABC}, $\Alpha\Beta\Gamma$, $\mathbb{ABC}$,
+\V{abc}, and $\alpha\beta\gamma$ are the names of distinct
+symbols, which may have distinct values.
+
+We also follow tradition in using different types of glyphs
+to suggest the the role the symbol plays in the presentation.
+Symbols with ``blackboard'' characters are usually ``meta''
+in some sense, either because they are important types in the
+\COL, or because they denote only in the \MtL,
+and not in the \COL.
+Single Greek letters usually denote types.
+But these are not fixed rules.
+Our use of different alphabets and typeface is intended merely as a reading
+aid, and is only suggestive.
+When what one of our symbol represent is not clear from context,
+it will be explicitly stated.
+
+
 \section{Values}
 
 To describe values, we introduce the idea of
@@ -2238,6 +2241,28 @@ and therefore arguments of functions must be sets.
 Similarly, the range of a function must be class,
 and therefore the value of each function application
 must be a set.
+
+To describe \COL operators, we use the notation
+\[ \mname{opName}(\V{parm0}, \V{parm1}, \ldots \V{parmN}) \]
+where \mname{opName} is the name of the \COL built-in
+or abbreviated operator,
+and $\V{parm0}, \V{parm1}, \ldots \V{parmN}$
+is a series of zero or more \dfn{metatypes}.
+Metatypes are \MtL collections which contain
+\COL values.
+The metatypes may be
+$\Ds$, $\Dc$,
+$\Dc\cup\set{unicorn}$,
+\Dbool or a \COL types.
+
+Metatypes allow us to characterize the possible values
+of \COL objects,
+and even when the \COL objects are not first class-objects,
+something which cannot, in general, be done with a \COL type.
+Our \COL operator descriptors use a notation which overlaps
+that for \COL operator and \COL function application,
+but context will always make it clear when \COL object description
+is intended.
 
 \section{Precedence}
 
@@ -2899,8 +2924,6 @@ indicates that \V{set} is countably infinite.
 \hline
 \end{tabular}
 \end{table}%
-\index{recce-defienda}{\Cod{\V{r}}, codomain of function \V{r}}%
-\index{recce-defienda}{\Dom{\V{r}}, domain of relation \V{r}}%
 \index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}%
 \index{recce-symbol}{cardinality@\Vsize{C}, cardinality of collection \V{C}}
 
@@ -3110,12 +3133,6 @@ $\V{Dt}\tfnMMap\V{C}$%
 
 \FloatBarrier
 
-Our notation for the equivalence operators ``puns'' our notation for
-typing first-class variables.  The equivalent operators are built-in
-operators or derived from them, and do not actually have types.
-We feel that the virtues as a mnemonic of pseudo-typing the equivalence operands,
-justifies the overloading of the typing notation.
-
 The equivalence operators all have variants in which they are prefixed with a single
 diamond ($\rawDRel{}$) or a double diamond ($\rawDDRel{}$).
 These ``diamond variants'', in addition to their COL significance,
@@ -3174,64 +3191,6 @@ In fact we have both
 $\gamma \isIllDef \classes$,
 and $\delta \isIllDef \classes$,
 so that $\gamma \neq \delta$.
-
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline \hline
-{$\land$} & \cellboxr{Logical and} \\
-\hline \hline
-{$\lor$} & \cellboxr{Logical or} \\
-\hline \hline
-%
-% We use \implies, but to get the spacing right
-% in the cell we need to use the symbol directly.
-{${\Longrightarrow}$} & \cellboxr{Implication} \\
-% {${\implies}$} & \cellboxr{Implication} \\
-\hline \hline
-{${\equiv}$} & \cellboxr{Logical equivalence} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-    \hline
-    \hline
-{$\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
-    \cellboxr{Definite descriptor:
-        the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
-    \hline
-{$\existQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
-    \cellboxr{Existential quantifer:
-        true if there exists some \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
-    \hline
-{$\existUniqQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
-    \cellboxr{Uniqueness quantifier:
-        true if there exists a unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
-    \hline
-{$\univQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} &
-    \cellboxr{Universal quantifier:
-        true if, for every \Vtyped{x}{\alpha}, \Vmyfn{P}{x} is true} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The quantifiers
-$\iotaQOp$, $\existQOp$, $\existUniqQOp$, and $\univQOp$
-have very loose precedence,
-and, in the absense of parentheses,
-their scope is to the end of the expression.
 
 \begin{remark}
 \label{rem:number-quantification}
@@ -3519,6 +3478,22 @@ An onto function is a surjection.
 A one-to-one function is an injection.
 A function that is both one-to-one and
 onto is a bijection.
+
+$\Dom{f}$%
+\index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
+abbreviates the domain given in the current type declaration
+of a function \V{f}.
+Similarly, $\Cod{\V{f}}$%
+\index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
+abbreviates the domain given in the current type declaration
+of a function \V{f}.
+That is, if $\V{X} \fnMap \V{Y}$ is the most recent declaration of \V{f}
+in the current scope, then $\Dom{V{f}} = \V{X}$ and $\Cod{V{f}} = \V{Y}$.
+
+Notice that $\Dom{\V{f}} \subseteq \Domain{\V{f}}$
+and $\Cod{\V{f}} \subseteq \Range{\V{f}}$.
+Also, if \V{f} is total, then $\Dom{\V{f}} = \Domain{\V{f}}$;
+and, if \V{f} is a surjection, then $\Cod{\V{f}} = \Range{\V{f}}$.
 
 \todo{Finish this section}
 
