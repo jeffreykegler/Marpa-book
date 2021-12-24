@@ -213,9 +213,9 @@
 \newcommand{\isIllDef}{\mathop{\uparrow}}
 
 \newcommand{\qeq}{\simeq}
-\newcommand{\unicorn}{\bot}
-\newcommand{\TRUE}{\ensuremath{\mathbb T}}
-\newcommand{\FALSE}{\ensuremath{\mathbb F}}
+\newcommand{\unicorn}{\ensuremath{\bot}\xspace}
+\newcommand{\TRUE}{\ensuremath{\mathbb T}\xspace}
+\newcommand{\FALSE}{\ensuremath{\mathbb F}\xspace}
 
 \allowdisplaybreaks[3]
 
@@ -2242,27 +2242,50 @@ Similarly, the range of a function must be class,
 and therefore the value of each function application
 must be a set.
 
-To describe \COL operators, we use the notation
-\[ \mname{opName}(\V{parm0}, \V{parm1}, \ldots \V{parmN}) \]
+We describe the \dfn[Signature, of \COL operator]{signature}
+of a \COL operator with the \MtL notation
+\begin{equation}
+\label{eq:col-operator-signature}
+    (\V{resMT}, \Velement{parmMT}{0}, \Velement{parmMT}{1}, \ldots \VVelement{parmMT}{N}),
+\end{equation}
 where \mname{opName} is the name of the \COL built-in
 or abbreviated operator,
-and $\V{parm0}, \V{parm1}, \ldots \V{parmN}$
-is a series of zero or more \dfn{metatypes}.
+\V{resMT} is a metatype
+and $\V{parmMT}$
+is a sequence of zero or more \dfn[Metatype]{metatypes}.
 Metatypes are \MtL collections which contain
 \COL values.
-The metatypes may be
-$\Ds$, $\Dc$,
-$\Dc\cup\set{unicorn}$,
-\Dbool or a \COL types.
-
+Examples of metatypes are
+$\Ds$, $\classes$,
+$\classes\cup\set{\unicorn}$,
+\Dbool.
+In addition, any \COL type can be used as a metatype.
 Metatypes allow us to characterize the possible values
 of \COL objects,
-and even when the \COL objects are not first class-objects,
+even when the \COL objects are not first class-objects,
 something which cannot, in general, be done with a \COL type.
-Our \COL operator descriptors use a notation which overlaps
-that for \COL operator and \COL function application,
-but context will always make it clear when \COL object description
-is intended.
+
+In \Eref{col-operator-signature},
+the arity of the operator signature in is $\Vdecr{N}$,
+and the result of any well-defined application of the operator must be an element of \V{resMT}.
+Also, for every $0 \le \V{i} < \V{N}$,
+the \V{i}-th operand must be an element of \VVelement{parmMT}{i}.
+
+Notice that, when \unicorn is an element of one of the operand metatypes,
+we can define an operator which is an exception to our rules for the well-definedness
+of operator applications.
+One such operator is quasi-equality ($\qeq$) \Rmref{quasi-equality-well-definedness}.
+Exceptions to the rules for operator well-definedness will be explicitly noted.
+
+We may also state the signature of a \COL operator \V{opName} is \Eref{col-operator-signature}
+using a ``descriptor'' notation:
+\[ \V{opName}(\V{resMT}, \Velement{parmMT}{0}, \Velement{parmMT}{1}, \ldots \VVelement{parmMT}{N}) \]
+The \MtL signature and descriptor notations for \COL operators overlaps
+\COL notations, notation
+those for the application
+of \COL operators and functions,
+but our context will always make it clear when the
+notation is intended as \MtL.
 
 \section{Precedence}
 
@@ -2695,6 +2718,13 @@ operations on collections.
 \FloatBarrier
 
 Equivalences form the next precedence group.
+
+\begin{remark}
+\label{rem:quasi-equality-well-definedness}
+Notice that $\qeq$ does not obey the default rule for well-definedness of operator
+applications,
+in that it may have a well-defined result even if it has an ill-defined operand.
+\end{remark}
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -3450,7 +3480,7 @@ $\subseteq$ is the lax partial relation corresponding to the strict partial rela
 \begin{definition}[Function Indexing]
 \label{def:function-indexing}
 For arbitrary classes \V{X} and \V{Y},
-arbitrary function $\Vtyped{exFn}{\fnMap{\V{X}}{\V{Y}}}$
+arbitrary function $\Vtyped{exFn}{\V{X}\fnMap\V{Y}}$
 and arbitrary \VVtyped{i}{X},
 \[ \VVelement{exFn}{i} \defined \rIota \V{y} \in \V{Y} : \tuple{\V{i}, \V{y}} \in \V{exFn}.
     \quad \dfEnd \]
@@ -3479,16 +3509,18 @@ A one-to-one function is an injection.
 A function that is both one-to-one and
 onto is a bijection.
 
-$\Dom{f}$%
+$\Dom{\V{f}}$,%
 \index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
+signature $(\classes, \classes)$,
 abbreviates the domain given in the current type declaration
 of a function \V{f}.
-Similarly, $\Cod{\V{f}}$%
+Similarly, $\Cod{\V{f}}$,%
 \index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
+signature $(\classes, \classes)$,
 abbreviates the domain given in the current type declaration
 of a function \V{f}.
 That is, if $\V{X} \fnMap \V{Y}$ is the most recent declaration of \V{f}
-in the current scope, then $\Dom{V{f}} = \V{X}$ and $\Cod{V{f}} = \V{Y}$.
+in the current scope, then $\Dom{\V{f}} = \V{X}$ and $\Cod{\V{f}} = \V{Y}$.
 
 Notice that $\Dom{\V{f}} \subseteq \Domain{\V{f}}$
 and $\Cod{\V{f}} \subseteq \Range{\V{f}}$.
