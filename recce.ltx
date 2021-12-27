@@ -176,6 +176,7 @@
 \newcommand{\StarApp}{\star\,}
 
 \newcommand{\com}{\mname{complement}}
+\newcommand{\Rel}[1]{\mname{rel}\left(#1\right)}
 \newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
 \newcommand{\Range}[1]{\mname{range}\left(#1\right)}
 \newcommand{\sumcl}{\mname{sum}}
@@ -253,7 +254,7 @@
 % Epigraph epi:
 % Theorem th:
 % Lemma lem:
-% Remark rem:
+% Remark rm:
 % Observation obs:
 % Example ex:
 % Page page:
@@ -519,7 +520,7 @@
 % theoremoids: Rm
 
 \newtheorem{remark}[theorem]{Remark}
-\newcommand{\Rmref}[2][]{\genref[#1]{rem:#2}{Rm}}
+\newcommand{\Rmref}[2][]{\genref[#1]{rm:#2}{Rm}}
 \newcommand{\rmEnd}{\Circle}
 
 % local theoremoids: Lm
@@ -647,7 +648,7 @@
 \newcommand{\existQOp}{\mathop{\exists{}}}
 \newcommand{\existQ}[2]{\quantify{\existQOp}{#1}{#2}}
 % extra {} in existQOP and univQOp to raise to baseline
-\newcommand{\univQOp}{\mathop{\forall{}}}
+\newcommand{\univQOp}{\mathop{\forall{}\,}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
 
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
@@ -1544,7 +1545,7 @@ outweighs the risk of confusion.
 \section{Presentation of the deductive logic}
 
 \begin{remark}[Theoremoids]
-\label{rem:theoremoid}
+\label{rm:theoremoid}
 Much of the deductive presentation of this paper
 is made in the form of labelable text blocks with
 headers,
@@ -1638,7 +1639,7 @@ our confidence in the observation's truth.\footnote{%
 \end{remark}
 
 \begin{remark}[Labelable Text]
-\label{rem:labelables}
+\label{rm:labelables}
 A \dfn[Labelable]{labelable text},
 or \dfn[Labelable]{labelable},
 is either a a theoremoid or a
@@ -2657,6 +2658,17 @@ of a previously stated type,
 or for stating types which that are suggested
 by the context.
 
+\begin{remark}[Multi-variable shorthand for types]
+\label{rm:type-multiv-shorthand}
+When several variables have the same type,
+we can use a short hand that allows multiple comma-separated 
+operands on the LHS.
+For example,
+\[ \typed{\V{u}, \V{v}}{\sets} \]
+is equivalent to
+\[ \Vtyped{u}{\sets} \land \Vtyped{v}{\sets}. \quad \rmEnd \]
+\end{remark}
+
 We overload the typing notation in \MtL to allow
 pseudo-types after the colon.
 If the pseudo-type is a meta-domain, it indicates that
@@ -2760,10 +2772,11 @@ operations on collections.
 Equivalences form the next precedence group.
 
 \begin{remark}
-\label{rem:quasi-equality-well-definedness}
+\label{rm:quasi-equality-well-definedness}
 Notice that $\qeq$ does not obey the default rule for well-definedness of operator
 applications,
 in that it may have a well-defined result even if it has an ill-defined operand.
+\rmEnd
 \end{remark}
 
 \FloatBarrier
@@ -2867,6 +2880,26 @@ of \Vnat{x}.
 The next looser level of precedence is occupied by the definite
 descriptors, and the quanitifiers.
 
+\begin{remark}[Shorthands for multiple quantifiers]
+\label{Shorthands for multiple quantifiers}
+As a shorthand for multiple quantifiers, we allow several comma-separated
+typed variables in the quantifiers scoping descriptor,
+so that, for example,
+\[ \existQ{ \VVtyped{x}{T1}, \VVtyped{y}{T2} }{
+    \tuple{\V{x},\V{y}} = \V{z} } \]
+is a shorthand for 
+\[ \existQ{ \VVtyped{u}{T1}}{ \existQ{ \VVtyped{v}{T2}}{
+    \tuple{\V{u},\V{v}} = \V{z} }}. \]
+Where the quantification variables share a type,
+we may further shorten our notation using the multi-variable
+shorthand for typing \Rmref{rm:type-multiv-shorthand},
+so that, for example,
+    \[ \existQ{ \typed{\V{u},\V{v}}{\sets}}{
+    \tuple{\V{u},\V{v}} = \V{z} } \]
+is a shorthand for 
+\[ \existQ{ \Vtyped{u}{\sets}}{ \existQ{ \Vtyped{v}{\sets}}{
+    \tuple{\V{u},\V{v}} = \V{z} }}. \quad \rmEnd \]
+\end{remark}
 
 \todo{Add rule declaration and derivation operators}
 \FloatBarrier
@@ -2971,7 +3004,7 @@ of the natural numbers, $\size{\naturals}$.
 For example, the notation $\Vsize{set} = \naturals$
 indicates that \V{set} is countably infinite.
 
-\section{Operators and pseudo-operators}
+\section{FRAGMENTS}
 
 \FloatBarrier
 
@@ -3263,7 +3296,7 @@ and $\delta \isIllDef \classes$,
 so that $\gamma \neq \delta$.
 
 \begin{remark}
-\label{rem:number-quantification}
+\label{rm:number-quantification}
 When quantification is over a number variable,
 we may express its type using a formula,
 so that, for example,
@@ -3457,6 +3490,16 @@ only by their type.%
 
 \section{Relations}
 
+We say that \V{r} is a \dfn[Relation!binary]{binary relation},
+or \dfn[Relation]{relation},
+iff $\Rel{\V{r}}$,
+where the signature of \mname{rel} is $(\Dbool,\classes)$ and $\Rel{\V{r}}$
+abbreviates
+\[ \univQ{ \Vtyped{x} {\sets} }{ \V{x}\in\V{r} \implies
+    \existQ{ \Vtyped{u}{\sets}}{
+    \existQ{ \Vtyped{v}{\sets}}{
+    \tuple{\V{u},\V{v}} = \V{x} }}}. \]
+
 Multi-character variables introduce ambiguity into the standard
 notation for relations
 so that,
@@ -3512,6 +3555,21 @@ For example, where the domain is the natural numbers,
 $<$ is the strict total relation corresponding to the lax total relation $\le$.
 Where the domain is a class of sets,
 $\subseteq$ is the lax partial relation corresponding to the strict partial relation $\subset$.
+
+We say that $\Domain{\V{r}}$
+is the \dfn[Domain (of a relation)]{domain} of a relation \V{r}
+iff the signature of \mname{domain} is $(\classes,\classes)$ and $\Domain{\V{r}}$
+abbreviates
+\[ \iotaQ{ \Vtyped{x} {\classes} }{ \univQ { \Vtyped{u}{\sets} }{
+    \V{u} \in \V{x} \iff \existQ{ \Vtyped{v}{\sets} }{
+    \tuple{\V{u},\V{v}} \in \V{r} }}}. \]
+We say that $\Range{\V{r}}$
+is the \dfn[Range (of a relation)]{range} of a relation \V{r}
+iff the signature of \mname{range} is $(\classes,\classes)$ and $\Range{\V{r}}$
+abbreviates
+\[ \iotaQ{ \Vtyped{x} {\classes} }{ \univQ { \Vtyped{v}{\sets} }{
+    \V{v} \in \V{x} \iff \existQ{ \Vtyped{u}{\sets} }{
+    \tuple{\V{u},\V{v}} \in \V{r} }}}. \]
 
 \section{Functions}
 
@@ -3660,7 +3718,7 @@ via a sequence builder,
 or inductively.
 
 \begin{remark}[Explicitly specified sequence]
-\label{rem:explicitly-specified-sequence}
+\label{rm:explicitly-specified-sequence}
 An example of a
 \dfn[Sequence@Sequence!specified explicitly]{sequence
     with explicitly specified elements}
@@ -3678,7 +3736,7 @@ all the counting numbers.
 \end{remark}
 
 \begin{remark}[Sequence builder]
-\label{rem:sequence-builder}
+\label{rm:sequence-builder}
 A \dfn{sequence builder}
 follows the form already described for
 use in quantification over numbers \Rmref{number-quantification},
@@ -3736,7 +3794,7 @@ and
 \end{example}
 
 \begin{remark}[Sequence by induction]
-\label{rem:sequence-by-induction}
+\label{rm:sequence-by-induction}
 The sequence \V{seq} is
 specified by induction by stating
 an \dfn{initial value} from the codomain of \V{seq},
@@ -4204,7 +4262,7 @@ Note that the slice relation may be empty.
 
 \renewcommand{\labBase}{rem-cxt-sec-slice}
 \begin{remark}[Slice Section Context]
-\label{rem:cxt-sec-slice}
+\label{rm:cxt-sec-slice}
 This section, beginning after this remark, is a scope.
 This ``slice section scope''%
 \index{recce-defienda}{Scope, by section, slice@Scope!Of section!Slice}
@@ -4496,7 +4554,7 @@ which is not a pair of the container sequence.
 
 \todo{Eliminate slice indexing by integer?}
 \begin{remark}[Slice natural range]
-\label{rem:slice-natural-range}
+\label{rm:slice-natural-range}
 The notation
 \[ \V{subseq} = \V{s}[\Vnat{a} \ldots \Vnat{z}], \]
 where \Vnat{a} and \Vnat{z} are natural numbers,
@@ -4522,7 +4580,7 @@ then $\V{subseq} = \epsilon.$
 \end{remark}
 
 \begin{remark}[Slice integer range]
-\label{rem:slice-integer-range}
+\label{rm:slice-integer-range}
 We recall that, when \Vz{x} is a non-negative integer, \Vnat{x} is
 the representation of \Vz{x} in the canonical embedding from \naturals.
 The notation
