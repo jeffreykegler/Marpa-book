@@ -177,6 +177,8 @@
 
 \newcommand{\com}{\mname{complement}}
 \newcommand{\Rel}[1]{\mname{rel}\left(#1\right)}
+\newcommand{\Fun}[1]{\mname{fun}\left(#1\right)}
+\newcommand{\Univocal}[1]{\mname{univocal}\left(#1\right)}
 \newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
 \newcommand{\Range}[1]{\mname{range}\left(#1\right)}
 \newcommand{\sumcl}{\mname{sum}}
@@ -185,8 +187,6 @@
 \newcommand{\opair}{\mname{ordered-pair}}
 \newcommand{\inters}{\mname{intersection}}
 \newcommand{\emp}{\mname{empty}}
-\newcommand{\uni}{\mname{univocal}}
-\newcommand{\fun}{\mname{function}}
 \newcommand{\card}{\mname{card}}
 \newcommand{\monotone}{\mname{monotone}}
 \newcommand{\continuous}{\mname{continuous}}
@@ -2892,7 +2892,7 @@ is a shorthand for
     \tuple{\V{u},\V{v}} = \V{z} }}. \]
 Where the quantification variables share a type,
 we may further shorten our notation using the multi-variable
-shorthand for typing \Rmref{rm:type-multiv-shorthand},
+shorthand for typing \Rmref{type-multiv-shorthand},
 so that, for example,
     \[ \existQ{ \typed{\V{u},\V{v}}{\sets}}{
     \tuple{\V{u},\V{v}} = \V{z} } \]
@@ -3496,9 +3496,7 @@ iff $\Rel{\V{r}}$,
 where the signature of \mname{rel} is $(\Dbool,\classes)$ and $\Rel{\V{r}}$
 abbreviates
 \[ \univQ{ \Vtyped{x} {\sets} }{ \V{x}\in\V{r} \implies
-    \existQ{ \Vtyped{u}{\sets}}{
-    \existQ{ \Vtyped{v}{\sets}}{
-    \tuple{\V{u},\V{v}} = \V{x} }}}. \]
+    \existQ{ \typed{\V{u}, \V{v}}{\sets}}{ \tuple{\V{u},\V{v}} = \V{x} }}. \]
 
 Multi-character variables introduce ambiguity into the standard
 notation for relations
@@ -3570,13 +3568,25 @@ abbreviates
 \[ \iotaQ{ \Vtyped{x} {\classes} }{ \univQ { \Vtyped{v}{\sets} }{
     \V{v} \in \V{x} \iff \existQ{ \Vtyped{u}{\sets} }{
     \tuple{\V{u},\V{v}} \in \V{r} }}}. \]
+We say the \V{r} is \dfn{univocal} iff $\Univocal{\V{r}}$, where
+the signature of \mname{univocal} is $(\Dbool, \classes)$
+and $\Univocal{\V{r}}$ abbreviates
+\[ \univQ{ \typed{ \V{x}, \V{u}, \V{v} }{\sets} }{
+    \tuple{\V{x}, \V{u}} \in \V{r}
+    \land \tuple{\V{x}, \V{v}} \in \V{r}
+    \implies \V{u} = \V{r} }. \]
 
 \section{Functions}
 
-\dfn[Function]{Functions} in Chiron are defined as classes.
+A \dfn{function} is a univocal binary relation.
+More precisely, \V{r} is a function, $\Fun{\V{r}}$, iff
+where the signature of \mname{fun} is $(\Dbool, \classes)$
+and $\Fun{\V{r}}$ abbreviates 
+\[ \Rel{\V{r}} \land \Univocal{\V{r}}. \]
 
 \begin{definition}[Function Indexing]
 \label{def:function-indexing}
+\todo{Update this for Chiron}
 For arbitrary classes \V{X} and \V{Y},
 arbitrary function $\Vtyped{exFn}{\V{X}\fnMap\V{Y}}$
 and arbitrary \VVtyped{i}{X},
@@ -3586,6 +3596,7 @@ and arbitrary \VVtyped{i}{X},
 
 \begin{definition}[Function Constructor]
 \label{def:function-builder}
+\todo{Expand this and update for Chiron}
 To describe function,
 we sometimes use a
 \dfn{function builder} of the form
