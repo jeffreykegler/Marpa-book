@@ -181,8 +181,9 @@
 \newcommand{\Univocal}[1]{\mname{univocal}\left(#1\right)}
 \newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
 \newcommand{\Range}[1]{\mname{range}\left(#1\right)}
+\newcommand{\Pow}[1]{\ensuremath{\mathcal{P}\left(#1\right)}}
+\newcommand{\VPow}[1]{\Pow{\V{#1}}}
 \newcommand{\sumcl}{\mname{sum}}
-\newcommand{\pow}{\mname{power}}
 \newcommand{\pair}{\mname{pair}}
 \newcommand{\opair}{\mname{ordered-pair}}
 \newcommand{\inters}{\mname{intersection}}
@@ -312,8 +313,6 @@
 
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
-\newcommand{\powerset}[1]{\ensuremath{\mathcal{P}(#1)}}
-\newcommand{\Vpowerset}[1]{\ensuremath{\mathcal{P}(\V{#1})}}
 
 % \newcommand{\TODO}[1]{\par{\bf TODO}: #1\par}
 \newcommand{\mymathop}[1]{\mathop{\texttt{#1}}}
@@ -2419,7 +2418,7 @@ The bracketing operators bind as tightly as the atomic operators.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Operator application, such as \powerset{\V{A}},
+\cellboxr{Operator application, such as \Pow{\V{A}},
   \Cod{\V{A}}, \Dom{\V{A}}, and \Ran{\V{A}}} \\
 \hline
 \cellboxr{Function application, such as \Vmyfn{f}{x},
@@ -2444,11 +2443,11 @@ The next tightest level of precedence includes the application operators.
 \hline
 \cellboxr{Logical negation of \var{x}: $\neg\var{x}$} \\
 \hline
-\cellboxr{Unary union: $\bigcap$} \\
+\cellboxr{Unary union: \padBox{4pt}{$\bigcap$}} \\
 \hline
-\cellboxr{Unary intersection: $\bigcup$} \\
+\cellboxr{Unary intersection: \padBox{4pt}{$\bigcup$}} \\
 \hline
-\cellboxr{Summation: $\sum$} \\
+\cellboxr{Summation: \padBox{4pt}{$\sum$}} \\
 \hline
 \end{tabular}
 \end{table}
@@ -3597,6 +3596,19 @@ and $\Cod{\V{f}} \subseteq \Range{\V{f}}$.
 Also, if \V{f} is total, then $\Dom{\V{f}} = \Domain{\V{f}}$;
 and, if \V{f} is a surjection, then $\Cod{\V{f}} = \Range{\V{f}}$.
 
+\todo{Which kind of operator are these?}
+Several infix binary \MtL operators are useful for describing function types.
+All have the signature $(\classes, \sets, \sets)$.
+The $(\fnMap)$ operator returns
+the type for partial functions, given the function's domain and codomain.
+$\V{D} \fnMap \V{C}$ is defined as
+\[ \iotaQ{ \Vtyped{T}{\Pow{\Pow{\V{D}\times\V{C}}}} }{
+    \V{f}\in\V{T} \implies \Univocal{\V{f}} }. \]
+\todo{TO HERE}
+The $(\tfnMap)$ operator returns
+the type for total functions, given the function's domain and codomain.
+$(\tfnMap)$ and $(\tfnMMap)$ are total function types.
+
 \todo{Finish this section}
 
 \chapter{Sequences}
@@ -4074,7 +4086,7 @@ as well as the uniqueness of the first element of \V{len}.
 That is, \fname{f},
 is a slice mapping iff
 \begin{gather}
-\Elab{010} \V{f} \inr \powerset{\V{len}\times\naturals}
+\Elab{010} \V{f} \inr \Pow{\V{len}\times\naturals}
 \\ \Elab{020} \land\; \Dom{\V{f}} = \V{len}
 \\ \Elab{040} \land\; \left( \begin{gathered}
         \forall\; \tuple{ \V{i1}, \V{v1} } \in \V{f} :
@@ -4093,7 +4105,7 @@ is a slice mapping iff
 \renewcommand{\labBase}{lem-slice-mapping}
 \begin{lemma}[Slice mapping]
 \label{lem:slice-mapping}
-Let $\V{f}\inr\powerset{\V{len}\times\naturals}$
+Let $\V{f}\inr\Pow{\V{len}\times\naturals}$
 be a slice mapping.
 Then
 \begin{equation}
@@ -4179,7 +4191,7 @@ That is,
 \end{itemize}
 Then the relational composition of \V{offMap} and \V{seq},
 \begin{gather}
-    \V{sliceRel} \inr \powerset{\V{len}\times\V{V}} \text{ such that}
+    \V{sliceRel} \inr \Pow{\V{len}\times\V{V}} \text{ such that}
 \\ \Elab{040}
     \V{sliceRel} =
     \set{ \begin{gathered}
@@ -4245,7 +4257,7 @@ the variables
 \item $\V{offset}\inr\naturals,$
 \item $\V{len}\inr\naturals\cup\set{\naturals},$
 \item $\V{seq}\inr\V{V}\tfnMMap(\naturals\cup\set{\naturals}),$ and
-\item $\V{sliceRel} \inr \powerset{\V{len}\times\V{V}}$,
+\item $\V{sliceRel} \inr \Pow{\V{len}\times\V{V}}$,
     where \V{sliceRel} is a slice relation
     at offset \V{offset} of \V{seq}.
 \end{itemize}
@@ -4762,7 +4774,7 @@ for directed graphs.
 A \dfn{directed graph} is a pair
 $\tuple{\V{V}, \V{E}}$,
 where \V{V} is a finite set of \dfn{vertices},
-and $\V{E} \in \powerset{\V{V}\times\V{V}}$.
+and $\V{E} \in \Pow{\V{V}\times\V{V}}$.
 \dfEnd
 \end{definition}
 
@@ -4821,7 +4833,7 @@ where
 \label{eq:def-path}
 \begin{gathered}
     \Vmyfn{paths}{G} \defined \set{ \begin{gathered}
-        \V{pth} \in \powerset{\naturals\times\V{V}} :
+        \V{pth} \in \Pow{\naturals\times\V{V}} :
         \\ \exists\; \Vnat{length} > 0 : \Dom{\V{pth}} = \V{length}
         \\ \land\; \left( \begin{gathered}
                 \forall\; \Vnat{ix} < \Vlastix{pth} :
@@ -6496,7 +6508,7 @@ will be the set of leaves in \V{G}.
 \label{ldef:new-parents}
 Let the ``new parents'' function,
 \[
-    \deffn{NewParents}{\powerset{\Vnodset{V}}}{\powerset{\Vnodset{V}}},
+    \deffn{NewParents}{\Pow{\Vnodset{V}}}{\Pow{\Vnodset{V}}},
 \]
 be the set of the direct parents of a node set that are not already in that node set,
 so that
@@ -6517,9 +6529,9 @@ Let the ``ancestry'' function,
 \[
     \deffn{Anc}{%
         \left(
-            \naturals \times \powerset{\Vnodset{V}}
+            \naturals \times \Pow{\Vnodset{V}}
         \right)}
-        {\powerset{\V{V}}},
+        {\Pow{\V{V}}},
 \]
 be such that
 \begin{equation}
@@ -6820,7 +6832,7 @@ Let
     \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{Anc}{\V{i},\V{base}}}
 \\ \myparbox{\cuz{}
     UI of \Eref{lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.
-    New free $\V{base} \in \Vpowerset{V}.$}
+    New free $\V{base} \in \VPow{V}.$}
 \end{gathered}
 \end{equation}
 We assume there is a minimal \V{bad} such that
@@ -6862,8 +6874,8 @@ It follows from a basic fact of set theory that
         \Eref{lem-ancestry-closure-270}.
 }
 \mypareq{eq:lem-ancestry-closure-290}{%
-        $\forall\;\V{whole} \in \powerset{\V{V}} :
-        \forall\;\V{part} \in \powerset{\V{V}} :
+        $\forall\;\V{whole} \in \Pow{\V{V}} :
+        \forall\;\V{part} \in \Pow{\V{V}} :
 	\linebreak
         \V{part} \subseteq \V{whole} \implies \V{whole} = \V{whole} \cup \V{part}$
         \bcuz{} Fact of set theory.
@@ -6912,7 +6924,7 @@ That is,
 
 \begin{proof}
 The proof is by minimal counterexample.
-Let $\V{base} \in \Vpowerset{V}$ be an arbitrary nodeset.
+Let $\V{base} \in \VPow{V}$ be an arbitrary nodeset.
 Where
 \begin{equation}
 \label{eq:ancestry-from-path-150}
@@ -7132,8 +7144,8 @@ added to the set of ancestors of \V{leaves} at ancestry level \V{N}.
 That is,
 \[
     \deffn{gen}{ \left(
-            \naturals\times\Vpowerset{V}
-    \right) } {\Vpowerset{V}}
+            \naturals\times\VPow{V}
+    \right) } {\VPow{V}}
 \]
 is the function whose value is the \V{N}'th generation of \V{G}
 from \V{base},
@@ -7159,7 +7171,7 @@ the new parents of the predecessor.
 That is,
 \begin{equation}
 \begin{gathered}
-\forall\; \V{base} \in \Vpowerset{V} :
+\forall\; \V{base} \in \VPow{V} :
     \forall\; \Vnat{N} :
 \\ \myfn{gen}{\V{N}+1,\V{base}} =
     \myfn{NewParents}{\V{N},\V{base}}.
@@ -7197,9 +7209,9 @@ That is,
 \begin{equation}
 \label{eq:lem-generation-new-parent-equivalence-130}
 \begin{gathered}
-     \forall\; \V{part1} \in \Vpowerset{V} :
-     \forall\; \V{part2} \in \Vpowerset{V} :
-     \\ \forall\; \V{nextGen} \in \Vpowerset{V} :
+     \forall\; \V{part1} \in \VPow{V} :
+     \forall\; \V{part2} \in \VPow{V} :
+     \\ \forall\; \V{nextGen} \in \VPow{V} :
      \\ \V{part1} \cap \V{part2} = \emptyset
      \\ \land\; \V{nextGen} = \subtract{(\V{part1} \cup \V{part2})}{\V{part1}}
      \\ \implies \V{nextGen} = \V{part2}
@@ -7233,7 +7245,7 @@ That is,
 \begin{gathered}
     \forall\;\Vnat{a} :
     \forall\;\Vnat{b} :
-    \forall\;\V{base}\in\Vpowerset{V} :
+    \forall\;\V{base}\in\VPow{V} :
     \\ \V{a} \ne \V{b} \implies
     \myfn{gen}{\V{a},\V{base}} \cap \myfn{gen}{\V{b},\V{base}} = \emptyset.
     \quad \thEnd
@@ -7251,7 +7263,7 @@ The proof is by reductio.
 \\ \nonumber
     \because \text{AF reductio.
         New free \Vnat{lo}, \Vnat{hi}.
-        New free $\V{base} \in \Vpowerset{V}$.}
+        New free $\V{base} \in \VPow{V}$.}
 \end{gather}
 We need to choose one of the two variables, \V{lo} and \V{hi},
 to be first in numeric order.
@@ -7439,7 +7451,7 @@ that subset.
 This is,
 let
 \[
-    \deffn{Surface}{\Vpowerset{V}}{\Vpowerset{V}}
+    \deffn{Surface}{\VPow{V}}{\VPow{V}}
 \]
 be such that
 \begin{equation}
@@ -7469,7 +7481,7 @@ That is,
 \begin{equation}
 \label{eq:lem-surface-disjointness-050}
 \begin{gathered}
-    \forall\;\V{base} \in \Vpowerset{V} :
+    \forall\;\V{base} \in \VPow{V} :
         \forall\;\Vnat{N} :
     \\ \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
         \cap \myfn{PredecessorAnc}{\V{N},\V{base}} = \emptyset.
@@ -7642,7 +7654,7 @@ We assume there is a minimal counter-example to the lemma, \Vnat{bad}:
     New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-generation-surface-containment-210}{%
-    $\forall\; \V{ndset} \in \Vpowerset{V} :
+    $\forall\; \V{ndset} \in \VPow{V} :
         \myfn{Surface}{\V{ndset}} \subseteq \V{ndset}$
     \bcuz{} Def of \fname{Surface} \Eref{def-surface}.
 }
@@ -7718,7 +7730,7 @@ That is,
 \label{eq:lem-generation-union-tree-containment-050}
 \V{V} = \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
+        \V{g} \in \VPow{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}.  \quad \thEnd
 \end{equation}
@@ -7732,7 +7744,7 @@ every element of the union of generations is an element of \V{V}:
 \label{eq:lem-generation-union-tree-containment-100}
 \V{V} \subseteq \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
+        \V{g} \in \VPow{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}
     \because \Eref{lem-generation-union-tree-containment-050}.
@@ -7838,9 +7850,9 @@ That is if \V{genset} is a set of generations such that
 \[
     \V{genset} =
         \set{ \begin{gathered}
-            \Vnodset{nds} \in \Vpowerset{V} :
+            \Vnodset{nds} \in \VPow{V} :
             \\ \V{nds} = \myfn{gen}{\V{i},\V{base}}
-                \land \Vnat{i} \in \powerset{\naturals}
+                \land \Vnat{i} \in \Pow{\naturals}
         \end{gathered} }
 \]
 then
@@ -8153,7 +8165,7 @@ then
 \begin{equation}
 \label{eq:lem-surface-parents-ratio-050}
 \begin{gathered}
-    \forall\; \V{ndset} \in \Vpowerset{V} :
+    \forall\; \V{ndset} \in \VPow{V} :
     \\ \size{\myfn{Surface}{\V{ndset}}} \ge
         2 \times
         \size{\myfn{NewParents}{\V{ndset}}}.
@@ -8171,7 +8183,7 @@ child:
     $\forall\; \V{parent} \in \Vmyfn{NewParents}{ndset} :
                  \size{\Vmyfn{children}{parent}} \ge 1$
     \bcuz{} \longLdref{\fname{NewParents}}{new-parents},
-    New free $\V{ndset} \in \Vpowerset{V}$.
+    New free $\V{ndset} \in \VPow{V}$.
 }
 In fact, since \V{G} is a non-unary tree,
 every direct parent node of \V{ndset} must have at least two
@@ -8291,7 +8303,7 @@ That is, if \V{G} is non-unary,
 \begin{equation}
 \label{eq:lem-generation-predecessor-size-050}
 \begin{gathered}
-     \forall\; \Vnat{N} : \forall\; \V{base} \in \Vpowerset{V} :
+     \forall\; \Vnat{N} : \forall\; \V{base} \in \VPow{V} :
      \\ \size{\myfn{gen}{\V{N},\V{base}}} \ge
      2 \times \size{\myfn{gen}{\V{N}+1,\V{base}}}.
      \quad \thEnd
@@ -8557,7 +8569,7 @@ then
 \begin{gathered}
 \V{V} = \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
+        \V{g} \in \VPow{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}
     \\ \myparbox{\cuz{}
@@ -8569,7 +8581,7 @@ then
 \begin{gathered}
  \size{ \bigcup \set{
     \begin{gathered}
-        \V{g} \in \Vpowerset{V} : \forall\; \Vnat{N} < \Vsize{V} :
+        \V{g} \in \VPow{V} : \forall\; \Vnat{N} < \Vsize{V} :
             \\ \V{g} = \myfn{gen}{\V{N},\V{leaves}}
     \end{gathered}}}
         \le 2\times\V{leaves}.
@@ -8909,7 +8921,7 @@ The proof is direct.
 Let \V{usuffs} be the set of unary suffixes of \V{nd}:
 \mypareq{eq:th-maximal-unary-suffix-uniqueness-135}{%
     $\V{usuffs} = \set{
-        \V{usuf} \in \powerset{\naturals \times \V{V}} :
+        \V{usuf} \in \Pow{\naturals \times \V{V}} :
         \text{\V{usuf} is a unary suffix}
     }$
     \bcuz{} New \V{suffs} for convenience.}
@@ -9400,13 +9412,13 @@ for some $\Vterm{lookahead} \in \Term{\V{g}}^\ast$,
 
 Let $\Vtermset{phrases} = \Term{\V{g}}^\ast$.
 In this book, a \dfn{partition}, call it $\pi$,
-is a subset of \powerset{\V{phrases}},
+is a subset of \Pow{\V{phrases}},
 where all of the elements of $\pi$ are non-empty and disjoint,
 and where the elements of $\pi$ ``cover'' \V{phrases} in the sense that
 their union is equal to \V{phrases}.
 That is,
 \begin{gather}
-\pi \subseteq \powerset{\V{phrases}},
+\pi \subseteq \Pow{\V{phrases}},
 \\ \forall \; \V{x} \in \pi : \V{x} \neq \emptyset,
 \\ \V{phrases} = \bigcup \set{\V{x} : \Vtermset{x} \in \pi} \text{, and}
 \\ \forall \; \Vtermset{x} \in \pi : \forall \; \Vtermset{y} \in \pi : \V{x} \cap \V{y} = \emptyset \lor \V{x} = \V{y}.
@@ -9459,7 +9471,7 @@ Every LR($\pi$) grammar is unambiguous.
 If a grammar is unambiguous then it is LR($\pi$)
 for the partition of infinite cardinality,
 \[
-\pi = \set{ \V{cell} \in \powerset{\Term{\V{g}}^\ast} : \Vsize{cell} = 1 }.
+\pi = \set{ \V{cell} \in \Pow{\Term{\V{g}}^\ast} : \Vsize{cell} = 1 }.
 \]
 
 We say that an LR($\pi$) grammar is LR-regular (LRR)
@@ -9470,7 +9482,7 @@ iff
 \pi =
 \set{
     \begin{gathered}
-        \V{cell} \in \powerset{\Term{\V{g}}^\ast} :
+        \V{cell} \in \Pow{\Term{\V{g}}^\ast} :
             \exists\; \Vterm{u} :
         \\ \left(\begin{gathered}
                 \Vsize{u} < \V{k} \condOpA \V{cell} = \set{\V{u}} \condOpB
@@ -10936,7 +10948,7 @@ An Earley set
 is as a set of \dfn{parse items}.
 That is,
 \[
-\realm{ES} = \powerset{\realm{PIM}}. \quad \dfEnd
+\realm{ES} = \Pow{\realm{PIM}}. \quad \dfEnd
 \]
 \end{definition}
 
@@ -10989,7 +11001,7 @@ An Earley table, realm \realm{ET},
 is a finite sequence of Earley sets.
 That is,
 \[
-    \realm{ET} = \set{ \V{et} \in \powerset{\naturals\times\realm{ES}} :
+    \realm{ET} = \set{ \V{et} \in \Pow{\naturals\times\realm{ES}} :
         \exists\; \V{length} \in \naturals :
         (\deffn{et}{\V{length}}{\realm{ES}})}. \quad \dfEnd
 \]
