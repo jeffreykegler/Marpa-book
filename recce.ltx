@@ -213,6 +213,10 @@
 
 \newcommand{\isWellDef}{\mathop{\downarrow}}
 \newcommand{\isIllDef}{\mathop{\uparrow}}
+\newcommand{\wellDefBOp}{\mathbin{\downarrow}}
+\newcommand{\illDefBOp}{\mathbin{\uparrow}}
+\newcommand{\wellDefB}[2]{#1\wellDefBOp#2}
+\newcommand{\illDefB}[2]{#1\illDefBOp#2}
 
 \newcommand{\qeq}{\simeq}
 \newcommand{\unicorn}{\ensuremath{\bot}\xspace}
@@ -3539,10 +3543,54 @@ and, where the binary relation is a sequence,
 \section{Functions}
 
 A \dfn{function} is a univocal binary relation.
-More precisely, \V{r} is a function, $\Fun{\V{r}}$, iff
+More precisely, \V{r} is a function iff $\Fun{\V{r}}$,
 where the signature of \mname{fun} is $(\Dbool, \classes)$
 and $\Fun{\V{r}}$ abbreviates
 \[ \Rel{\V{r}} \land \Univocal{\V{r}}. \]
+
+$\Dom{\V{f}}$,%
+\index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
+signature $(\classes, \classes)$,
+abbreviates the domain given in the current type declaration
+of a function \V{f}.
+Similarly, $\Cod{\V{f}}$,%
+\index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
+signature $(\classes, \classes)$,
+abbreviates the domain given in the current type declaration
+of a function \V{f}.
+An example of a type declaration of a function is $\Vtyped{f}{\V{X} \fnMap \V{Y}}$,
+which states that $\Dom{\V{f}} = \V{X}$ and $\Cod{\V{f}} = \V{Y}$.
+It will always be the case that
+\[ \Dom{\V{f}}\isWellDef \land\; \Domain{\V{f}}\isWellDef
+    \implies \Dom{\V{f}} \subseteq \Domain{\V{f}} \]
+and that
+\[ \Cod{\V{f}}\isWellDef \land\;\Range{\V{f}}\isWellDef
+    \implies \Cod{\V{f}} \subseteq \Range{\V{f}}. \]
+
+and, if \V{f} is a surjection, then $\Cod{\V{f}} = \Range{\V{f}}$.
+
+A function \V{f} is \dfn{Total (function}]{total}
+iff $\Dom{\V{f}} = \Domain{\V{f}}$.
+In this book a function is total, unless otherwise stated.
+
+An onto function is a surjection.
+A one-to-one function is an injection.
+A function that is both one-to-one and
+onto is a bijection.
+
+Several infix binary \MtL operators are useful for describing function types.
+All have the signature $(\Ds, \classes, \classes)$.
+The $(\fnMap)$ operator returns
+the type for partial functions, given the function's domain and codomain.
+$\V{D} \fnMap \V{C}$ is the unique type such that
+\[ \univQ{ \Vtyped{f}{\classes} }{
+     \wellDefB{\V{f}}{( \V{D} \fnMap \V{C} )}
+     \iff \Fun{\V{f}} \land \Domain{\V{f}} \subseteq \V{D}
+     \land \Range{\V{f}} \subseteq \V{C} }. \]
+\todo{TO HERE}
+The $(\tfnMap)$ operator returns
+the type for total functions, given the function's domain and codomain.
+$(\tfnMap)$ and $(\tfnMMap)$ are total function types.
 
 \begin{definition}[Function Indexing]
 \label{def:function-indexing}
@@ -3571,43 +3619,6 @@ the value of \VVelement{exFn}{i} is
 \V{S}.
 \dfEnd
 \end{definition}
-
-In this book a function is a total function, unless otherwise stated.
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
-
-$\Dom{\V{f}}$,%
-\index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
-signature $(\classes, \classes)$,
-abbreviates the domain given in the current type declaration
-of a function \V{f}.
-Similarly, $\Cod{\V{f}}$,%
-\index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
-signature $(\classes, \classes)$,
-abbreviates the domain given in the current type declaration
-of a function \V{f}.
-That is, if $\V{X} \fnMap \V{Y}$ is the most recent declaration of \V{f}
-in the current scope, then $\Dom{\V{f}} = \V{X}$ and $\Cod{\V{f}} = \V{Y}$.
-
-Notice that $\Dom{\V{f}} \subseteq \Domain{\V{f}}$
-and $\Cod{\V{f}} \subseteq \Range{\V{f}}$.
-Also, if \V{f} is total, then $\Dom{\V{f}} = \Domain{\V{f}}$;
-and, if \V{f} is a surjection, then $\Cod{\V{f}} = \Range{\V{f}}$.
-
-\todo{Which kind of operator are these?}
-Several infix binary \MtL operators are useful for describing function types.
-All have the signature $(\classes, \sets, \sets)$.
-The $(\fnMap)$ operator returns
-the type for partial functions, given the function's domain and codomain.
-$\V{D} \fnMap \V{C}$ is defined as
-\[ \iotaQ{ \Vtyped{T}{\Pow{\Pow{\V{D}\times\V{C}}}} }{
-    \V{f}\in\V{T} \implies \Univocal{\V{f}} }. \]
-\todo{TO HERE}
-The $(\tfnMap)$ operator returns
-the type for total functions, given the function's domain and codomain.
-$(\tfnMap)$ and $(\tfnMMap)$ are total function types.
 
 \todo{Finish this section}
 
