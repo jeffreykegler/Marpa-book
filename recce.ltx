@@ -179,6 +179,10 @@
 \newcommand{\Rel}[1]{\mname{rel}\left(#1\right)}
 \newcommand{\Fun}[1]{\mname{fun}\left(#1\right)}
 \newcommand{\Univocal}[1]{\mname{univocal}\left(#1\right)}
+\newcommand{\Total}[1]{\mname{total}\left(#1\right)}
+\newcommand{\Surjective}[1]{\mname{surjective}\left(#1\right)}
+\newcommand{\Injective}[1]{\mname{injective}\left(#1\right)}
+\newcommand{\Bijective}[1]{\mname{bijective}\left(#1\right)}
 \newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
 \newcommand{\Range}[1]{\mname{range}\left(#1\right)}
 \newcommand{\Pow}[1]{\ensuremath{\mathcal{P}\left(#1\right)}}
@@ -3550,16 +3554,17 @@ and $\Fun{\V{r}}$ abbreviates
 
 $\Dom{\V{f}}$,%
 \index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
-signature $(\classes, \classes)$,
+with signature $(\classes, \classes)$,
 abbreviates the domain given in the current type declaration
 of a function \V{f}.
 Similarly, $\Cod{\V{f}}$,%
 \index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
-signature $(\classes, \classes)$,
+with signature $(\classes, \classes)$,
 abbreviates the domain given in the current type declaration
 of a function \V{f}.
 An example of a type declaration of a function is $\Vtyped{f}{\V{X} \fnMap \V{Y}}$,
 which states that $\Dom{\V{f}} = \V{X}$ and $\Cod{\V{f}} = \V{Y}$.
+The type declarations of functions will be described further below.
 It will always be the case that
 \[ \Dom{\V{f}}\isWellDef \land\; \Domain{\V{f}}\isWellDef
     \implies \Dom{\V{f}} \subseteq \Domain{\V{f}} \]
@@ -3567,16 +3572,26 @@ and that
 \[ \Cod{\V{f}}\isWellDef \land\;\Range{\V{f}}\isWellDef
     \implies \Cod{\V{f}} \subseteq \Range{\V{f}}. \]
 
-and, if \V{f} is a surjection, then $\Cod{\V{f}} = \Range{\V{f}}$.
 
-A function \V{f} is \dfn{Total (function}]{total}
-iff $\Dom{\V{f}} = \Domain{\V{f}}$.
+\V{f} is a \dfn[Total (function)]{total function},
+iff $\Total{\V{f}}$, where \mname{total},
+with signature $(\Dbool, \classes)$
+abbreviates $\Fun{\V{f}} \land \Dom{\V{f}} = \Domain{\V{f}}$.
 In this book a function is total, unless otherwise stated.
-
-An onto function is a surjection.
-A one-to-one function is an injection.
-A function that is both one-to-one and
-onto is a bijection.
+\V{f} is a \dfn[Surjective (function)]{surjective function},
+iff $\Surjective{\V{f}}$, where \mname{surjective},
+with signature $(\Dbool, \classes)$
+abbreviates $\Fun{\V{f}} \land \Cod{\V{f}} = \Range{\V{f}}$.
+\V{f} is a \dfn[Injective (function)]{injective function},
+iff $\Injective{\V{f}}$, where \mname{injective},
+with signature $(\Dbool, \classes)$
+abbreviates
+\[ \Fun{\V{f}} \land \univQ{\typed{\V{u},\V{v}}{\sets}}{
+       \Vmyfn{f}{u} = \Vmyfn{f}{v} \implies \V{u} = \V{v} }. \]
+\V{f} is a \dfn[Bijective (function)]{bijective function}
+iff $\Bijective{\V{f}}$, where \mname{bijective},
+with signature $(\Dbool, \classes)$
+abbreviates $\Total{\V{f}} \land \Injective{\V{f}} \land \Bijective{\V{f}}$.
 
 Several infix binary \MtL operators are useful for describing function types.
 All have the signature $(\Ds, \classes, \classes)$.
