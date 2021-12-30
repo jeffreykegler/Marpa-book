@@ -148,7 +148,6 @@
 \newcommand{\commabrack}[1]{\lfloor#1\rfloor}
 \newcommand{\bsynbrack}[1]{\lceil#1\rceil}
 \newcommand{\bsembrack}[1]{\lceil\!\!\lceil#1\rceil\!\!\rceil}
-\newcommand{\mname}[1]{\mbox{\sf #1}}
 \newcommand{\mcolon}{\mathrel:}
 \newcommand{\mcoloncolon}{\mathrel{\vcenter{\hbox{$::$}}}}
 
@@ -175,27 +174,6 @@
 \newcommand{\BOX}{\mathrel{\Box}}
 \newcommand{\StarApp}{\star\,}
 
-\newcommand{\com}{\mname{complement}}
-\newcommand{\Rel}[1]{\mname{rel}\left(#1\right)}
-\newcommand{\Fun}[1]{\mname{fun}\left(#1\right)}
-\newcommand{\Univocal}[1]{\mname{univocal}\left(#1\right)}
-\newcommand{\Total}[1]{\mname{total}\left(#1\right)}
-\newcommand{\Surjective}[1]{\mname{surjective}\left(#1\right)}
-\newcommand{\Injective}[1]{\mname{injective}\left(#1\right)}
-\newcommand{\Bijective}[1]{\mname{bijective}\left(#1\right)}
-\newcommand{\Domain}[1]{\mname{domain}\left(#1\right)}
-\newcommand{\Range}[1]{\mname{range}\left(#1\right)}
-\newcommand{\Pow}[1]{\ensuremath{\mathcal{P}\left(#1\right)}}
-\newcommand{\VPow}[1]{\Pow{\V{#1}}}
-\newcommand{\sumcl}{\mname{sum}}
-\newcommand{\pair}{\mname{pair}}
-\newcommand{\opair}{\mname{ordered-pair}}
-\newcommand{\inters}{\mname{intersection}}
-\newcommand{\emp}{\mname{empty}}
-\newcommand{\card}{\mname{card}}
-\newcommand{\monotone}{\mname{monotone}}
-\newcommand{\continuous}{\mname{continuous}}
-\newcommand{\chain}{\mname{chain}}
 \newcommand{\emptyfun}{\triangle}
 \newcommand{\emptylist}{[\,]}
 
@@ -667,10 +645,6 @@
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
 % function builder
 \newcommand{\fnB}[1]{\ensuremath{\left[ #1 \right]}}
-\newcommand{\Dom}[1]{\ensuremath{\mymathop{Dom}(#1)}}
-\newcommand{\Cod}[1]{\ensuremath{\mymathop{Cod}(#1)}}
-\newcommand{\Ran}[1]{\ensuremath{\mymathop{Ran}(#1)}}
-\newcommand{\Pairs}[1]{\ensuremath{\mymathop{Pairs}(#1)}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
 \newcommand{\Vfrontier}[1]{\frontier{\boldvar{#1}}}
 \newcommand{\boldElement}[2]{\textbf{#1[#2]}}
@@ -780,8 +754,42 @@
 \newcommand{\bigrawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
 \newcommand{\fname}[1]{\V{#1}}
 \newcommand{\bigfn}[2]{\bigrawfn{\fname{#1}}{#2}}
+% Eliminate myfn and Vmyfn
 \newcommand{\myfn}[2]{\rawfn{\fname{#1}}{#2}}
 \newcommand{\Vmyfn}[2]{\myfn{#1}{\V{#2}}}
+\newcommand{\mname}[1]{\mbox{\sf #1}}
+\newcommand{\Oname}[1]{\mname{#1}}
+\newcommand{\OA}[2]{\ensuremath{\mathop{\Oname{#1}}\left(#2\right)}}
+\newcommand{\VOA}[2]{\OA{#1}{\V{#2}}}
+\newcommand{\Fname}[1]{\V{#1}}
+\newcommand{\FA}[2]{\ensuremath{\mathop{\Fname{#1}}\left(#2\right)}}
+\newcommand{\VFA}[2]{\FA{#1}{\V{#2}}}
+
+\newcommand{\Dom}[1]{\OA{Dom}{#1}}
+\newcommand{\Cod}[1]{\OA{Cod}{#1}}
+\newcommand{\Ran}[1]{\OA{Ran}{#1}}
+\newcommand{\Pairs}[1]{\OA{Pair}{#1}}
+\newcommand{\Rel}[1]{\OA{rel}{#1}}
+\newcommand{\Fun}[1]{\OA{fun}{#1}}
+\newcommand{\Univocal}[1]{\OA{univocal}{#1}}
+\newcommand{\Total}[1]{\OA{total}{#1}}
+\newcommand{\Surjective}[1]{\OA{surjective}{#1}}
+\newcommand{\Injective}[1]{\OA{injective}{#1}}
+\newcommand{\Bijective}[1]{\OA{bijective}{#1}}
+\newcommand{\Domain}[1]{\OA{domain}{#1}}
+\newcommand{\Range}[1]{\OA{range}{#1}}
+\newcommand{\Pow}[1]{\ensuremath{\mathcal{P}\left(#1\right)}}
+\newcommand{\VPow}[1]{\Pow{\V{#1}}}
+\newcommand{\card}{\mname{card}}
+\newcommand{\chain}{\mname{chain}}
+\newcommand{\com}{\mname{complement}}
+\newcommand{\continuous}{\mname{continuous}}
+\newcommand{\emp}{\mname{empty}}
+\newcommand{\inters}{\mname{intersection}}
+\newcommand{\monotone}{\mname{monotone}}
+\newcommand{\opair}{\mname{ordered-pair}}
+\newcommand{\pair}{\mname{pair}}
+\newcommand{\sumcl}{\mname{sum}}
 
 \newcommand{\Accept}[1]{\ensuremath{\mymathop{Accept}(#1)}}
 \newcommand{\Cause}[1]{\ensuremath{\mymathop{Cause}(#1)}}
@@ -3056,19 +3064,6 @@ is any natural number.
 \end{table}
 \FloatBarrier
 
-We recall that we regard any two collections as equivalent
-iff their extensions are identical, and
-that equivalent class objects may have different types.
-The following is true of functions:
-\begin{itemize}
-\item Two functions are never equivalent unless both have the same range.
-\item Two equivalent total functions must have the same domain.
-\item Two functions may have different domains
-and still be equivalent, if the functions are non-total.
-\item Two equivalent functions may have different codomains,
-even if both functions are total.
-\end{itemize}
-
 We write $\V{D}\fnMap\V{C}$%
 \index{recce-symbol}{function map 1@$\fnMap$ ($\V{D}\fnMap\V{C}$
     is the type for functions from \V{D} to \V{C})}
@@ -3611,26 +3606,18 @@ It is often useful to have a function type that allows not just one domain,
 but a collection of them.
 The harpoon-with-tail operator ($\fnMMap$),
 with signature $(\Ds, \Ds, \classes)$,
-return the type for partial functions,
+returns the type for partial functions,
 given the type of the function's domain and the codomain of the function.
 $\wellDefB{\V{f}}{\alpha \fnMMap \V{C}}$ abbreviates
-\[ \Total{\V{f}} \land
-    \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \fnMap \V{C}} \land \Total{\V{f}} }. \]
+\[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \fnMap \V{C}}}. \]
+Similarly, the right-arrow-with-tail operator ($\tfnMMap$),
+with signature $(\Ds, \Ds, \classes)$,
+returns the type for total functions,
+given the type of the function's domain and the codomain of the function.
+$\wellDefB{\V{f}}{\alpha \tfnMMap \V{C}}$ abbreviates
+\[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}}. \]
 
 \todo{TO HERE}
-The $(\tfnMap)$ operator returns
-the type for total functions, given the function's domain and codomain.
-$(\tfnMap)$ and $(\tfnMMap)$ are total function types.
-
-\begin{definition}[Function Indexing]
-\label{def:function-indexing}
-\todo{Update this for Chiron}
-For arbitrary classes \V{X} and \V{Y},
-arbitrary function $\Vtyped{exFn}{\V{X}\fnMap\V{Y}}$
-and arbitrary \VVtyped{i}{X},
-\[ \VVelement{exFn}{i} \defined \rIota \V{y} \in \V{Y} : \tuple{\V{i}, \V{y}} \in \V{exFn}.
-    \quad \dfEnd \]
-\end{definition}
 
 \begin{definition}[Function Constructor]
 \label{def:function-builder}
@@ -3640,15 +3627,45 @@ we sometimes use a
 \dfn{function builder} of the form
 \begin{equation}
 \label{eq:def-function-builder-050}
-    \fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }.
+    \fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} },
 \end{equation}
-If \V{exFn} is the function described by
-\Eref{def-function-builder-050},
-the value of \VVelement{exFn}{i} is
-\Vmyfn{P}{i} for every \V{i} in the set
-\V{S}.
-\dfEnd
+which abbreviates
+\[ \collB{ \Vtyped{duple}{\sets} }{ \V{duple} = \tuple{ \V{i}, \Vmyfn{P}{i}} \land \V{i} \in \V{S}  }.
+    \quad \dfEnd
+\]
 \end{definition}
+
+It is worth noting that two objects with different types may be equivalent.
+This is because, following NBG,
+we regard any two collections as equivalent
+iff their extensions are identical.
+The following facts are true of two equivalent functions $\V{f} = \V{g}$:
+\[ \begin{gathered}
+\Range{\V{f}}=\Range{\V{g}} \\
+\mathrel{\land} \Domain{\V{f}}=\Domain{\V{g}} \\
+\mathrel{\land} \Total{\V{f}} \implies \Dom{\V{f}} = \Dom{\V{g}}.
+\end{gathered} \]
+On the other hand,
+if one of the functions is non-total,
+equivalent functions may have different domains, that is,
+\[
+\existQ{ \typed{\V{f1}, \V{f2}}{\classes} }
+     {
+     \V{f1} = \V{f2} \land
+     \Dom{\V{f1}} \neq \Dom{\V{f2}} } \]
+and
+\todo{Is this right?}
+\[ \univQ{ \typed{\V{f1}, \V{f2}}{\classes} }
+     { \V{f1} = \V{f2} \land \Dom{\V{f1}} \neq \Dom{\V{f2}}
+         \implies \neg\Total{\V{f}} }. \]
+Note that a function is total iff all of its equivalents are total:
+\[ \univQ{ \typed{\V{f1}, \V{f2}}{\classes} }{
+    \Total{\V{f1}} \land \V{f1}=\V{f2} \implies \Total{\V{f2}} }. \]
+Additionally, two equivalent functions may have different codomains,
+even if both functions are total:
+\[ \existQ{ \typed{\V{f1}, \V{f2}}{\classes} }
+     { \V{f1} = \V{f2} \land \Cod{\V{f1}} \neq \Cod{\V{f2}} \land \Total{\V{f1}}
+     \land \Total{\V{f2}}}. \]
 
 \todo{Finish this section}
 
