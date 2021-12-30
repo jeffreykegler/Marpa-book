@@ -3594,14 +3594,29 @@ with signature $(\Dbool, \classes)$
 abbreviates $\Total{\V{f}} \land \Injective{\V{f}} \land \Bijective{\V{f}}$.
 
 Several infix binary \MtL operators are useful for describing function types.
-All have the signature $(\Ds, \classes, \classes)$.
-The $(\fnMap)$ operator returns
-the type for partial functions, given the function's domain and codomain.
-$\V{D} \fnMap \V{C}$ is the unique type such that
-\[ \univQ{ \Vtyped{f}{\classes} }{
-     \wellDefB{\V{f}}{( \V{D} \fnMap \V{C} )}
-     \iff \Fun{\V{f}} \land \Domain{\V{f}} \subseteq \V{D}
-     \land \Range{\V{f}} \subseteq \V{C} }. \]
+The harpoon operator ($\fnMap$),
+with signature $(\Ds, \classes, \classes)$,
+returns the type for partial functions,
+given the function's domain and codomain.
+$\wellDefB{\V{f}}{\V{D} \fnMap \V{C}}$ abbreviates
+\[ \Fun{\V{f}} \land \Domain{\V{f}} \subseteq \V{D} \land \Range{\V{f}} \subseteq \V{C} . \]
+The right arrow operator ($\tfnMap$),
+with signature $(\Ds, \classes, \classes)$,
+returns the type for total functions,
+given the function's domain and codomain.
+$\wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}$ abbreviates
+\[ \V{D} \fnMap \V{C} \land \Total{\V{f}}. \]
+
+It is often useful to have a function type that allows not just one domain,
+but a collection of them.
+The harpoon-with-tail operator ($\fnMMap$),
+with signature $(\Ds, \Ds, \classes)$,
+return the type for partial functions,
+given the type of the function's domain and the codomain of the function.
+$\wellDefB{\V{f}}{\alpha \fnMMap \V{C}}$ abbreviates
+\[ \Total{\V{f}} \land
+    \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \fnMap \V{C}} \land \Total{\V{f}} }. \]
+
 \todo{TO HERE}
 The $(\tfnMap)$ operator returns
 the type for total functions, given the function's domain and codomain.
