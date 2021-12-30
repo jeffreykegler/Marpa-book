@@ -3057,113 +3057,6 @@ is any natural number.
 \begin{table}[H]
 \begin{tabular}{|p{1.5in}|l|}
 \hline
-{$\V{D} \fnMap \V{C}$} &
-    \cellboxr{Type for functions from domain \V{D} to codomain \V{C}} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-We write $\V{D}\fnMap\V{C}$%
-\index{recce-symbol}{function map 1@$\fnMap$ ($\V{D}\fnMap\V{C}$
-    is the type for functions from \V{D} to \V{C})}
-for the type of
-functions with \V{D} as their domain
-and \V{C} as their codomain.
-Therefore we can write
-\[
-    \Vtyped{f}{\V{D}\fnMap\V{C}}
-\]
-to say that \V{f} is a function variable
-whose type is the superclass of all
-functions such that $\Dom{\V{f}} = \V{D}$
-and $\Cod{\V{f}} = \V{C}$.
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\V{Dt} \fnMMap \V{C}$} &
-    \cellboxr{Type for functions from some domain of type \V{Dt} to codomain \V{C}} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-We may wish to specify the domain of a function type by type,
-instead of explicitly.
-That is,
-we may wish to specify that \V{f} is a function variable whose
-type is $\V{D1}\fnMap\V{C}$ for some
-$\VVtyped{D1}{Dt}$.
-For this we write
-$\V{Dt}\fnMMap\V{C}$%
-\index{recce-symbol}{function map 2@$\fnMMap$ ($\V{Dt}\fnMMap\V{C}$
-    is the type for functions from an element of \V{Dt} to \V{C})}%
-,
-\todo{Add reference if use of unary union is cataphoric}
-so that
-\[ \V{Dt}\fnMMap\V{C} = \bigcup \collB{ \V{D}\fnMap\V{C} }{ \V{D} \in \V{Dt} }. \]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\V{D} \tfnMap \V{C}$} &
-    \cellboxr{Type for total functions from domain \V{D} to codomain \V{C}} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-We write $\V{D}\tfnMap\V{C}$%
-\index{recce-symbol}{total function map 1@$\tfnMap$ ($\V{D}\tfnMap\V{C}$
-    is the type for functions from \V{D} to \V{C})}
-for the type of
-total functions with \V{D} as their domain
-and \V{C} as their codomain.
-Therefore we write
-\[
-    \Vtyped{f}{\V{D}\tfnMap\V{C}}
-\]
-to say that \V{f} is a function
-such that $\Dom{\V{f}} = \V{X}$
-and $\Cod{\V{f}} = \V{C}$.
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\V{D} \tfnMMap \V{C}$} &
-    \cellboxr{Type for total functions from some domain in class \V{D} to codomain \V{C}} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-Where \V{Dt} is a type to which the domains belong
-and \V{C} is a codomain,
-$\V{Dt}\tfnMMap\V{C}$%
-\index{recce-symbol}{total function map 2@$\tfnMMap$ ($\V{Dt}\tfnMMap\V{C}$
-    is the type for total functions from a domain of type \V{Dt} to \V{C})}%
-, so that
-\[ \V{Dt}\tfnMMap\V{C} = \bigcup \collB{ \V{D}\tfnMap\V{C} }{ \V{D} \in \V{Dt} }. \]
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
 \hline
 {$\eqWTyOp$} & \cellboxr{Equality of types} \\
 \hline
@@ -3617,11 +3510,8 @@ given the type of the function's domain and the codomain of the function.
 $\wellDefB{\V{f}}{\alpha \tfnMMap \V{C}}$ abbreviates
 \[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}}. \]
 
-\todo{TO HERE}
-
 \begin{definition}[Function Constructor]
 \label{def:function-builder}
-\todo{Expand this and update for Chiron}
 To describe function,
 we sometimes use a
 \dfn{function builder} of the form
@@ -3654,13 +3544,11 @@ equivalent functions may have different domains, that is,
      \V{f1} = \V{f2} \land
      \Dom{\V{f1}} \neq \Dom{\V{f2}} } \]
 and
-\todo{Is this right?}
-\[ \univQ{ \typed{\V{f1}, \V{f2}}{\classes} }
-     { \V{f1} = \V{f2} \land \Dom{\V{f1}} \neq \Dom{\V{f2}}
-         \implies \neg\Total{\V{f}} }. \]
-Note that a function is total iff all of its equivalents are total:
-\[ \univQ{ \typed{\V{f1}, \V{f2}}{\classes} }{
-    \Total{\V{f1}} \land \V{f1}=\V{f2} \implies \Total{\V{f2}} }. \]
+\[ \begin{gathered}
+\univQ{ \typed{\V{f1}, \V{f2}}{\classes} } { \\
+    \V{f1} = \V{f2} \land \Dom{\V{f1}} \neq \Dom{\V{f2}} \land \Total{\V{f1}} \\
+         \implies \neg\Total{\V{f2}} }.
+\end{gathered} \]
 Additionally, two equivalent functions may have different codomains,
 even if both functions are total:
 \[ \existQ{ \typed{\V{f1}, \V{f2}}{\classes} }
