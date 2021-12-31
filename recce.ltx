@@ -2862,6 +2862,58 @@ Equivalences form the next precedence group.
 \end{table}
 \FloatBarrier
 
+Our set of equivalences may look bewildering,
+but all be the traditional $=$ are for special cases.
+$\V{x}=\V{y}$ is the equality of first-class objects,
+and most of the objects that we will need to compare
+are first-class objects
+The general equality operator $=$
+is also used to represent equality in the meta-language,
+
+Technically, the \COL expression $\V{x}=\V{y}$
+abbreviates $\V{x}\eqWClOp{\classes}\V{y}$.
+$\eqWClOp{\classes}$ is the operator for equality between Chiron's
+first class objects,
+\classes being the type for first-class objects.
+$\V{x}\eqClOp{\classes}\V{y}$ is a synonym for
+$\V{x}\eqWClOp{\classes}\V{y}$.
+
+Less frequently used in the operator $\eqWTyOp$,
+representing the equality of types.
+Types are not necessarily first-class variables.
+The operator $\eqWClOp{\alpha}$,
+where $\alpha$ is a type,
+is equality between first-class variables of type $\alpha$,
+and is used for special cases.
+For example, if we wanted an equality operator that is
+true only if both operands are sets,
+we would use $\eqWClOp{\sets}$,
+which is the operator for equality between sets.
+
+Notice that types which are first class objects are equivalent
+iff they are equivalent as first class objects,
+and in this case we have both
+$\alpha \eqTyOp \beta$ and $\alpha = \beta$.
+If $\alpha$ and $\beta$ are types which are not first class objects, however,
+we may have both $\alpha \eqTyOp \beta$ and $\alpha \neq \beta$.
+For example,
+\[
+\gamma \eqTyOp \classes \setminus \naturals \land 
+    \gamma \eqTyOp \delta \implies \gamma \neq \delta,
+\]
+because $\gamma = \delta$ only if both $\wellDefB{\gamma}{\classes}$
+and $\wellDefB{\delta}{\classes}$,
+and 
+$\illDefB{(\classes \setminus \naturals)}{\classes}$.
+That is,
+$\gamma = \delta$
+abbreviates $\gamma \eqWClOp{\classes} \delta$.
+And $\classes \setminus \naturals$,
+the superclass of all
+classes which are not natural numbers,
+is not well-defined in $\classes$,
+so that $\gamma \eqWClOp{\classes} \delta$ is false.
+
 \begin{remark}
 \label{rm:quasi-equality-well-definedness}
 Notice that $\qeq$ does not obey the default rule for well-definedness of operator
@@ -3085,91 +3137,6 @@ is any natural number.
 
 
 \section{FRAGMENTS}
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\eqWTyOp$} & \cellboxr{Equality of types} \\
-\hline
-{$\eqTyOp$} & \cellboxr{A synonym for $\eqWTyOp$} \\
-\hline
-{$\eqWClOp{\alpha}$} & \cellboxr{Equality of classes of type $\alpha$} \\
-\hline
-{$\eqClOp{\alpha}$} & \cellboxr{A synonym for $\eqWClOp{\alpha}$} \\
-\hline
-{$\eqClOp{\classes}$} & \cellboxr{A synonym for $\eqWClOp{\classes}$} \\
-\hline
-{$=$} & \cellboxr{A synonym for $\eqClOp{\classes}$} \\
-\hline
-{$\qeq$} & \cellboxr{$\V{a}\qeq\V{b}$ means
-    $(\V{a} \isWellDef \mathrel{\land} \V{b} \isWellDef) \implies \V{a} = \V{b}$ } \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The equivalence operators all have variants in which they are prefixed with a single
-diamond ($\rawDRel{}$) or a double diamond ($\rawDDRel{}$).
-These ``diamond variants'', in addition to their COL significance,
-act as definitions in the \MtL.
-They are described at their precedence level.
-\todo{Add ref}
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\neq$} & \cellboxr{$(\V{a} \neq \V{b})$ means $\neg(\V{a} = \V{b})$} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-
-The operator general equality operator $=$
-represents equality in the meta-language,
-as well as $\eqWClOp{\classes}$ in the COL.
-From a foundational point of view, within the COL,
-$\eqWClOp{\classes}$ and $\eqWTyOp$
-are represented by two distinct
-built-in operators.
-\mname{type-equal} for \classes{} represents
-$\eqWClOp{\classes}$;
-and \mname{type-equal} represents $\eqWTyOp$.
-The operator $\eqWTyOp$ is equality of types,
-which are not necessarily first-class variables.
-The operator $\eqWClOp{\alpha}$,
-where $\alpha$ is a type,
-is equality between first-class variables of type $\alpha$.
-Since $\classes$ is the universal type,
-$\eqWClOp{\classes}$ is the operator for equality between Chiron's
-first class variables.
-$\eqWClOp{\sets}$ is the operator for equality between sets.
-
-Note that types which are first class objects are equivalent
-iff they are equivalent as first class objects,
-and in this case we have both
-$\alpha \eqTyOp \beta$ and $\alpha = \beta$.
-If $\alpha$ and $\beta$ are types which are not first class objects, however,
-we may have both $\alpha \eqTyOp \beta$ and $\alpha \neq \beta$.
-For example, let the types $\alpha$ and $\beta$ both be the superclass of all
-classes which are not natural numbers.
-That is, let $\gamma \eqTyOp \classes \setminus \naturals$
-and $\delta \eqTyOp \classes \setminus \naturals$.
-Then $\gamma \eqTyOp \delta$, as expected.
-But, if either $\gamma$ or $\delta$ is not well-defined in $\classes$,
-$\gamma \neq \delta$.
-In fact we have both
-$\gamma \isIllDef \classes$,
-and $\delta \isIllDef \classes$,
-so that $\gamma \neq \delta$.
 
 \begin{remark}
 \label{rm:number-quantification}
