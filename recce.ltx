@@ -85,6 +85,7 @@
 \usepackage{url}
 \usepackage[final]{hyperref} % ignore draft status
 \hypersetup{pdfborder=0 0 .1}
+\hypersetup{bookmarksdepth=3}
 
 \usepackage{ragged2e}
 \usepackage{placeins}
@@ -2380,6 +2381,10 @@ In cases where the meaning of an operator overloaded
 for the \MtL is not obvious,
 we state it explicitly.
 
+\subsection{Atomic Elements}
+
+The first, or tightest level of precedence contains the various ``atomic'' elements.
+
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2404,7 +2409,9 @@ we state it explicitly.
 \index{recce-defienda}{Unicorn@Unicorn, $\unicorn$ (ill-defined constant)}%
 \FloatBarrier
 
-The first, or tightest level of precedence contains the various ``atomic'' elements.
+\subsection{Bracketing operators}
+
+The bracketing operators bind as tightly as the atomic operators.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2426,7 +2433,9 @@ The first, or tightest level of precedence contains the various ``atomic'' eleme
 \index{recce-symbol}{cardinality@\Vsize{C}, cardinality of collection \V{C}}
 \FloatBarrier
 
-The bracketing operators bind as tightly as the atomic operators.
+\subsection{Application operators}
+
+The next tightest level of precedence includes the application operators.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2447,7 +2456,9 @@ The bracketing operators bind as tightly as the atomic operators.
 \index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}
 \FloatBarrier
 
-The next tightest level of precedence includes the application operators.
+\subsection{Unary prefix operators}
+
+The next precedence includes unary prefix operators.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2469,7 +2480,6 @@ The next tightest level of precedence includes the application operators.
 \end{table}
 \FloatBarrier
 
-The next precedence includes prefix unary operations.
 In keeping with our avoidance of sub- and superscripts,
 we avoid the use of ``large operators'',
 instead writing summations and similar operations
@@ -2479,6 +2489,11 @@ for the union of the elements of the set \V{S} is $\bigcup \V{S}$.
 Similarly, we write
 $\bigcap \V{S}$ for the intersection of the elements of the set \V{S}; and
 $\sum \V{S}$ for the sum of the elements of the set \V{S}.
+
+\subsection{Binary relation builders}
+
+Next in precedence are binary operators on results are relations.
+Their associativity is right to left.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2492,8 +2507,6 @@ $\sum \V{S}$ for the sum of the elements of the set \V{S}.
 \end{table}
 \FloatBarrier
 
-Next in precedence are binary operators whose results are relations.
-Their associativity is right to left.
 Note that the composition of a function zero
 times is the identity function.
 
@@ -2551,11 +2564,12 @@ That is,
      \end{gathered} }.
 \]
 
+\subsection{Exponentiation}
+
 At the next loosest priority is exponentiation,
 which associates right to left.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2565,14 +2579,15 @@ which associates right to left.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
 
-Next come a set of precedences containing binary operations
-on numbers.
-Much more convenient for our purposes is to make
-string concatenation our only implicit operation.
+\subsection{Basic Arithmetic Operators}
 
+Next come a set of precedences containing
+well-known binary operations on numbers.
+These associate left to right.
+
+\FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2593,8 +2608,10 @@ string concatenation our only implicit operation.
 \end{table}
 \FloatBarrier
 
-Arithmetic in this book is always cardinal arithmetic.
-This is relevant if at least one of the arguments is transfinite.
+In this book, multiplication is always explicit,
+and all arithmetic is cardinal arithmetic.
+The difference between cardinal and ordinal arithmetic
+is relevant when at least one of the arguments is transfinite.
 
 The notations $\Vtyped{n}{\naturals}$ indicates that \V{n} is
 a finite natural number.
@@ -2618,6 +2635,11 @@ for
         (\V{x} / \V{y}) \mult \V{y} + \V{x} \bmod \V{y} = \V{x}.
 \]
 
+\subsection{String concatenation}
+
+The next looser precedence is string concatendation.
+String concatenation is usually implicit.
+
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2633,8 +2655,10 @@ for
 \end{table}
 \FloatBarrier
 
-The next looser precedence is string concatendation.
-String concatenation is usually implicit.
+\subsection{Binary operators on sets}
+
+Next looser are a set of precedences
+containing binary operations on sets.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2655,10 +2679,12 @@ String concatenation is usually implicit.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
-Next looser are a set of precedences
-containing binary operations on sets.
+
+\subsection{Function type builders}
+
+The next looser precedence contains operations which
+produce functions types.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2678,11 +2704,11 @@ containing binary operations on sets.
 \end{table}
 \FloatBarrier
 
-The next looser precedence contains operations which
-produce functions types.
+\subsection{Type declarator}
+
+Next in precedence is a pseudo-operation for declaring type.
 
 \FloatBarrier
-
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
 \begin{tabular}{|l|}
@@ -2693,9 +2719,8 @@ produce functions types.
 \hline
 \end{tabular}
 \end{table}
-
 \FloatBarrier
-Next in precedence is a pseudo-operation for declaring type.
+
 The atomic expression $\V{x}_\alpha$
 indicates a first class \COL variable of type $\alpha$
 and abbreviates the expression of looser precedence,
@@ -2749,6 +2774,11 @@ Based on \EFref{pseudo-type-notation2} by itself,
 and therefore will not necessarily be
 a first-class \COL with a type.
 
+\subsection{Well-definedness tests}
+
+The next precedence contains boolean-result operations
+dealing with well-definedness.
+
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2767,8 +2797,10 @@ a first-class \COL with a type.
 \end{table}
 \FloatBarrier
 
-The next precedence contains boolean-result operations
-dealing with well-definedness.
+\subsection{Binary tests of collections}
+
+The next loosest precedence contains boolean-result
+operations on collections.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2792,8 +2824,9 @@ dealing with well-definedness.
 \end{table}
 \FloatBarrier
 
-The next loosest precedence contains boolean-result
-operations on collections.
+\subsection{Equality operators}
+
+Equivalences form the next precedence group.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2818,8 +2851,6 @@ operations on collections.
 \end{tabular}
 \end{table}
 \FloatBarrier
-
-Equivalences form the next precedence group.
 
 \begin{remark}
 \label{rm:quasi-equality-well-definedness}
