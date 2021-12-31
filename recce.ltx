@@ -1676,6 +1676,20 @@ What we in this book call an equation
 frequently is not an equation in the
 traditional mathematical sense.
 
+Equations are often followed by a ``hint''.
+The ``hint'' is a list of considerations,
+such as theorems, definitions
+and other equations,
+intended to justify the assertion of the equation
+in that context.
+The ``hint'' is separated
+from the body of the equation by a ``because'' symbol ($\because$).
+The hint separator represents an informal notion.
+Syntactically it often resembles an operator,
+especially when it immediately follows an equation.
+But the hint separator does not
+act as an operator in any sense.
+
 References internal to this book are often of the form
 ({\it Xn:p}),
 where {\it X} is the reference type,
@@ -2232,7 +2246,7 @@ For this, our object-language has a special dedicated value, the
 \section{Operators}
 
 The operators of Chiron include the built-in operators, the abbreviating operators,
-meta-language operators and syntactic operators.
+and the meta-language operators.
 Built-in operators are Chiron values, and were
 introduced earlier.
 
@@ -2243,12 +2257,8 @@ The expansion of an abbreviating operator must be,
 before substitution of parameters, be a constant.
 
 Meta-language operators are operators that are
-part of the \MtL, and not part of the \COL.
-A syntactic operator behaves like an operator syntactically,
-but cannot usefully be
-described as operators in any other sense.
-Syntactic operators are \MtL concepts,
-and are not part of the \COL.
+part of the \MtL.
+Meta-language operators are not part of the \COL.
 
 Some of the built-in and abbreviating operators
 can be redefined as functions,
@@ -2362,7 +2372,7 @@ The operator of a row following a double-line separator has
 looser precedence than the operator in the preceding rows.
 The operator of a row following a single-line separator has
 the same precedence as the operator in the preceding row.
-Unless specifically stated, all operators and pseudo-operators
+Unless specifically stated, all operators
 associate left to right.
 
 In the boxed displays,
@@ -2860,6 +2870,16 @@ in that it may have a well-defined result even if it has an ill-defined operand.
 \rmEnd
 \end{remark}
 
+\subsection{Comparison operators}
+
+Non-equivalence comparisons come next.
+This precedence group does not assoicate.
+Instead, in case of an ambiguity about order of precedence involving
+two of these relations, the expression is rewritten into
+a conjunction of two comparisons.
+For example, $0 < \V{x} \le 42$ is interpreted as
+\[ 0 < \V{x} \land \V{x} \le 42. \]
+
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2880,14 +2900,9 @@ in that it may have a well-defined result even if it has an ill-defined operand.
 \end{table}
 \FloatBarrier
 
-Non-equivalence comparisons come next.
-This precedence group does not assoicate.
-Instead, in case of an ambiguity about order of precedence involving
-two of these relations, the expression is rewritten into
-a conjunction of two comparisons.
-For example, $0 < \V{x} \le 42$ is interpreted as
-\[ 0 < \V{x} \land \V{x} \le 42. \]
+\subsection{Logical operators}
 
+At the next precedence are the operators on truth values.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2910,7 +2925,9 @@ For example, $0 < \V{x} \le 42$ is interpreted as
 \end{table}
 \FloatBarrier
 
-At the next precedence are the operators on truth values.
+\subsection{Conditional operator}
+
+The conditional operator has its own level of precedence.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2924,7 +2941,6 @@ At the next precedence are the operators on truth values.
 \end{table}
 \FloatBarrier
 
-The conditional operator has its own level of precedence.
 The ternary conditional operator
 is a notation adopted
 from programming languges.
@@ -2939,6 +2955,11 @@ Where \V{test} is a formula,
 For example,
 $\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
 of \Vnat{x}.
+
+\subsection{Quantifiers and definite descriptor}
+
+The next looser level of precedence is occupied by the definite
+descriptors, and the quantifiers.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2957,9 +2978,6 @@ of \Vnat{x}.
 \end{tabular}
 \end{table}
 \FloatBarrier
-
-The next looser level of precedence is occupied by the definite
-descriptors, and the quanitifiers.
 
 \begin{remark}[Shorthands for multiple quantifiers]
 \label{Shorthands for multiple quantifiers}
@@ -2982,7 +3000,15 @@ is a shorthand for
     \tuple{\V{u},\V{v}} = \V{z} }}. \quad \rmEnd \]
 \end{remark}
 
+\subsection{Rule and derivation operators}
+
 \todo{Add rule declaration and derivation operators}
+
+\subsection{Defining operators}
+
+The next loosest level of precedence is occupied by the diamond and double-diamond variants
+of the equivalence operations.
+
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -3001,10 +3027,16 @@ is a shorthand for
 \end{table}
 \FloatBarrier
 
-The next loosest level of precedence is occupied by the diamond and double-diamond variants
-of the equivalence operations.
-In the \COL these function identically to their underlying equivalences
+In the \COL the defining operators function identically to their underlying equivalences,
 while in the \MtL these signify definitions.
+
+\subsection{Loose logical operators}
+
+The next series of priorities contains
+the verbal forms of the logical operators.
+These have the same meaning
+as their equivalents in notation,
+but looser priority.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -3022,35 +3054,6 @@ while in the \MtL these signify definitions.
 \end{tabular}
 \end{table}
 \FloatBarrier
-
-The next series of priorities contains
-the verbal forms of the logical operators.
-These have the same meaning
-as their equivalents in notation,
-but looser priority.
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{4.5in}
-\begin{table}[H]
-\begin{tabular}{|l|}
-\hline
-\hline
-    \cellboxr{(\MtL only) Hint separator: $\because$} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-Equations are often followed by a ``hint''.
-The ``hint'' is a list of considerations,
-such as theorems, definitions
-and other equations,
-intended to justify the assertion of the equation
-in that context.
-The ``hint'' is separated
-from the body of the equation by a ``because'' symbol ($\because$).
-The hint separator represents an informal notion.
-It is not a real operator, and is not part of the \COL.
 
 \section{Constants}
 
