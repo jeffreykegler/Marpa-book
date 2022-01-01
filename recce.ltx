@@ -2834,7 +2834,7 @@ operations on collections.
 \end{table}
 \FloatBarrier
 
-\subsection{Equality operators}
+\subsection{Equivalence operators}
 
 Equivalences form the next precedence group.
 
@@ -2856,23 +2856,34 @@ Equivalences form the next precedence group.
 \hline
 \cellboxr{$=$ is a synonym for $\eqClOp{\classes}$} \\
 \hline
-\cellboxr{$\V{a}\qeq\V{b}$ means $(\V{a} \isWellDef \mathrel{\land} \V{b} \isWellDef) \implies \V{a} = \V{b}$ : $\qeq$} \\
+\cellboxr{$\V{a}\qeq\V{b}$ means
+    $(\V{a} \isWellDef \mathrel{\land} \V{b} \isWellDef) \implies \V{a} = \V{b}$} \\
 \hline
 \end{tabular}
 \end{table}
 \FloatBarrier
 
 Our set of equivalences may look bewildering,
-but all be the traditional $=$ are for special cases.
-$\V{x}=\V{y}$ is the equality of first-class objects,
+but all of them, except the traditional $=$, are for special cases.
+$\V{x}=\V{y}$ represents the equality of first-class objects,
 and most of the objects that we will need to compare
-are first-class objects
+are first-class objects.
 The general equality operator $=$
 is also used to represent equality in the meta-language,
 
-Technically, the \COL expression $\V{x}=\V{y}$
+More formally, 
+the \COL expression $\V{x}=\V{y}$
 abbreviates $\V{x}\eqWClOp{\classes}\V{y}$.
-$\eqWClOp{\classes}$ is the operator for equality between Chiron's
+$\eqWClOp{\classes}$ has signature $(\Dbool,\classes,\classes)$
+and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
+\begin{equation}
+\label{eq:def-eq-classes}
+    \univQ{ \Vtyped{el}{\sets} }{ \V{el}\in\V{x} \iff \V{el}\in\V{y}}.
+\end{equation}
+We recall from NBG that 
+\Eref{def-eq-classes} is the Axiom of Extension for classes.
+
+is the operator for equality between Chiron's
 first class objects,
 \classes being the type for first-class objects.
 $\V{x}\eqClOp{\classes}\V{y}$ is a synonym for
