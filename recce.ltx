@@ -2672,8 +2672,8 @@ String concatenation is usually implicit.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Implicit concatenation of string \V{b} after string \V{a}:
-        \padBox{2pt}{$\Vstr{a} \Vstr{b}$}}\\
+\cellboxrUP{Implicit concatenation of string \V{b} after string \V{a}:
+        \padBox{4pt}{$\Vstr{a} \Vstr{b}$}}\\
 \hline
 \cellboxr{Explicit concatenation of \V{b} after \V{a}: $\V{a} \cat \V{b}$} \\
 \hline
@@ -2885,9 +2885,21 @@ $\V{x}=\V{y}$ represents the equality of first-class objects,
 and most of the objects that we will need to compare
 are first-class objects.
 The general equality operator $=$
-is also used to represent equality in the meta-language,
+is also used to represent equality in the meta-language.
 
-More formally, 
+The equivalence operators ``pun'' our type notation.
+As operators, they are not typed,
+but their metatype ``tags'' suggest their signature.
+Each tagged equivalence operator has a ``wide'' form
+and a ``narrow'' form.
+The wide form operator for the equivalence of classes is $\eqWClOp{\classes}$.
+Its narrow form synonym is $\eqClOp{\classes}$.
+We sometimes surround the wide form operator with parentheses for clarity,
+so that instead of
+$\V{x}\eqWClOp{\classes}\V{y}$ we write
+$\V{x} \mathbin{(\eqWClOp{\classes})} \V{y}$.
+
+More formally,
 the \COL expression $\V{x}=\V{y}$
 abbreviates $\V{x}\eqWClOp{\classes}\V{y}$.
 $\eqWClOp{\classes}$ has signature $(\Dbool,\classes,\classes)$
@@ -2896,7 +2908,7 @@ and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
 \label{eq:def-eq-classes}
     \univQ{ \Vtyped{el}{\sets} }{ \V{el}\in\V{x} \iff \V{el}\in\V{y}}.
 \end{equation}
-We recall from NBG that 
+We recall from NBG that
 \Eref{def-eq-classes} is the Axiom of Extension for classes.
 
 is the operator for equality between Chiron's
@@ -2925,12 +2937,12 @@ If $\alpha$ and $\beta$ are types which are not first class objects, however,
 we may have both $\alpha \eqTyOp \beta$ and $\alpha \neq \beta$.
 For example,
 \[
-\gamma \eqTyOp \classes \setminus \naturals \land 
+\gamma \eqTyOp \classes \setminus \naturals \land
     \gamma \eqTyOp \delta \implies \gamma \neq \delta,
 \]
 because $\gamma = \delta$ only if both $\wellDefB{\gamma}{\classes}$
 and $\wellDefB{\delta}{\classes}$,
-and 
+and
 $\illDefB{(\classes \setminus \naturals)}{\classes}$.
 That is,
 $\gamma = \delta$
