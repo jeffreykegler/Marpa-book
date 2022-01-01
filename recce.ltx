@@ -858,6 +858,7 @@
 % space above and below for parentheses, etc.  It need only be called
 % once per row, and sometimes is used for an empty cell ("\cellrule{}")
 % just in order to set the vertical spacing for the row.
+% TODO: Replace this with padBox?
 \newcommand{\cellRule}[1]{%
         \rule{0em}{2.3ex}%
         #1\rule[-1.05ex]{0em}{0in}%
@@ -868,8 +869,21 @@
     \parbox{#1}{\centering\cellRule{#2}}%
 }
 \newcommand{\cellboxrWidth}[1]{4.5in}
+% non-optional-argument version of right-adjusted cellbox
+\newcommand{\cellboxrB}[2]{%
+    \parbox{#1}{\raggedright{\ignorespaces#2}}%
+}
+% "Unpadded right-adjusted cellbox"
+\newcommand{\cellboxrUP}[2][\cellboxrWidth]{%
+    \cellboxrB{#1}{#2}%
+}
+% Padded right-adjusted cellbox
 \newcommand{\cellboxr}[2][\cellboxrWidth]{%
-    \parbox{#1}{\raggedright\cellRule{\ignorespaces#2}}%
+    \cellboxrB{#1}{%
+        \padBoxC{4pt}{0pt}{\vphantom{(}}%
+        {\ignorespaces#2}%
+        \padBoxC{0pt}{4pt}{\vphantom{(}}%
+    }%
 }
 \newcommand{\mylegend}[1]{%
     \parbox{\textwidth}{\leavevmode\\[1ex]#1}}
@@ -920,7 +934,9 @@
 \newlength{\myWd}
 \newcommand{\padBoxC}[3]{%
     \savebox{\myBox}{\ignorespaces#3}%
-    \usebox{\myBox} \myHt=\ht\myBox \myDp=\dp\myBox%
+    \usebox{\myBox}%
+    \myHt=\ht\myBox%
+    \myDp=\dp\myBox%
     \vrule height\dimexpr\myHt+#1 depth\dimexpr\myDp+#2 width0pt%
 }
 \newcommand{\padBox}[2]{\padBoxC{#1}{#1}{#2}}
@@ -2434,9 +2450,9 @@ The bracketing operators bind as tightly as the atomic operators.
 \hline
 \cellboxr{Sequences like $\seq{43, 1729, 1491, 1493 }$} \\
 \hline
-\cellboxr{Functions like $\fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }$} \\
+\cellboxrUP{Functions like \padBox{4pt}{$\fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} }$}} \\
 \hline
-\cellboxr{Cardinalty of a collection, \rule{0em}{2.7ex}$\Vsize{Col}$\rule[-1.5ex]{0em}{0in}} \\
+\cellboxr{Cardinality of a collection, $\Vsize{Col}$} \\
 \hline
 \end{tabular}
 \end{table}%
