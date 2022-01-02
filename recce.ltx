@@ -3150,8 +3150,32 @@ of the equivalence operations.
 \end{table}
 \FloatBarrier
 
-In the \COL the defining operators function identically to their underlying equivalences,
-while in the \MtL these signify definitions.
+In the \COL the defining operators function identically to their underlying equivalences.
+In addition, in the \MtL, they act as definitions,
+with the LHS being the defiendum,
+and the RHS being the defiens.
+
+For example,
+\[ \Vtyped{ANSWER}{\Ds} \DEqTyOp  \set{42} \]
+states that the \COL type \V{ANSWER} is a
+singleton superclass containing the number 42;
+that this is the definition of \V{ANSWER};
+and that this definition has global scope.
+And
+\[ \Vtyped{myAnswer}{\naturals} \defined 42 \]
+states that \V{myanswer} is a first-class \COL variable
+(in fact, a set of type \naturals)
+whose value
+is 42 and that the defiedum \V{myAnswer} is visible globally.
+
+The double-diamond variants of equivalences are like the single-diamond equivalences,
+except that the definitions they establish are local instead of global.
+If not otherwise stated,
+The scope of a local definition is the current scope.
+For example,
+\[ \Vtyped{yourAnswer}{\naturals} \ldefined 42 \]
+states that \V{yourAnswer} is a \COL variable of type \naturals
+and that this is a local definition.
 
 \subsection{Loose logical operators}
 
@@ -3205,99 +3229,6 @@ We will often write $\Vnat{i} \in 3$ instead of $\Vnat{i} < 3$.
 The von Neumann convention extends to \naturals,
 so that $\V{i} \in \naturals$ is a way of saying that \V{i}
 is any natural number.
-
-
-\section{FRAGMENTS}
-
-\FloatBarrier
-
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-{$\DefOp$} & \cellboxr{Definition} \\
-\hline
-{$\LDefOp$} & \cellboxr{Local definition} \\
-\hline
-\end{tabular}
-\end{table}
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\DEqWTyOp$} & \cellboxr{Definition of a type; \COL synonym of $\eqWTyOp$} \\
-\hline
-{$\DEqTyOp$} & \cellboxr{A synonym for $\DEqWTyOp$} \\
-\hline
-{$\DEqWClOp{\alpha}$} & \cellboxr{Definition of a class of type $\alpha$;
-    \COL synonym of $\eqWClOp{\alpha}$} \\
-\hline
-{$\DEqClOp{\alpha}$} & \cellboxr{A synonym for $\DEqWClOp{\alpha}$} \\
-\hline
-{$\DEqClOp{\classes}$} & \cellboxr{A synonym for $\DEqWClOp{\classes}$} \\
-\hline
-{$\defined$} & \cellboxr{A synonym for $\DEqClOp{\classes}$} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-\todo{Finish and rewrite}
-The single-diamond variants of the equivalence operators
-have the same effect as their corresponding equivalence opertor.
-In addition,
-equivalences prefixed with a single diamond
-act as global definitions in the meta-language.
-
-For example,
-\[ \V{ANSWER} \DEqTyOp  \set{42} \]
-states that the \COL type \V{ANSWER} is a
-singleton superclass containing the number 42,
-that this is the definition of \V{ANSWER},
-and that this definition has global scope.
-And
-\[ \V{myAnswer} \defined 42 \]
-states that \V{myanswer} is a first-class \COL variable whose value
-is 42 and that, in addition to establishing this in the local scope in the \COL,
-this is a global definition.
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{3in}
-\begin{table}[H]
-\begin{tabular}{|p{1.5in}|l|}
-\hline
-\hline
-{$\DDEqWTyOp$} & \cellboxr{Local definition of a type; \COL synonym of $\eqWTyOp$} \\
-\hline
-{$\DDEqTyOp$} & \cellboxr{A synonym for $\DDEqWTyOp$} \\
-\hline
-{$\DDEqWClOp{\alpha}$} & \cellboxr{Local definition of a class of type $\alpha$;
-    \COL synonym of $\eqWClOp{\alpha}$} \\
-\hline
-{$\DDEqClOp{\alpha}$} & \cellboxr{A synonym for $\DDEqWClOp{\alpha}$} \\
-\hline
-{$\DDEqClOp{\classes}$} & \cellboxr{A synonym for $\DDEqWClOp{\classes}$} \\
-\hline
-{$\ldefined$} & \cellboxr{A synonym for $\DDEqClOp{\classes}$} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-\todo{Finish and rewrite}
-The double-diamond variants of equivalences are like the single-diamong equivalences,
-except that the definitions they establish are local instead of global.
-The scope of a local definition is the current context, unless otherwise stated.
-For example,
-\[ \V{yourAnswer} \ldefined 42 \]
-states that \V{myanswer} is a first-class \COL variable whose value
-is 42 and that, in addition to establishing this in the local scope in the \COL,
-this is a local definition.
-
-\FloatBarrier
 
 \section{Tuples}
 
