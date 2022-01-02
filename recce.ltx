@@ -630,7 +630,7 @@
 \newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
 \newcommand{\existUniqQOp}{\mathop{\exists{!}}}
 \newcommand{\existUniqQ}[2]{\quantify{\existUniqQOp}{#1}{#2}}
-% extra {} in existQOP and uniqQOp to raise to baseline
+% extra {} in existQOP and univQOp to raise to baseline
 \newcommand{\existQOp}{\mathop{\exists{}}}
 \newcommand{\existQ}[2]{\quantify{\existQOp}{#1}{#2}}
 % extra {} in existQOP and univQOp to raise to baseline
@@ -2911,25 +2911,38 @@ and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
 We recall from NBG that
 \Eref{def-eq-classes} is the Axiom of Extension for classes.
 
-is the operator for equality between Chiron's
-first class objects,
-\classes being the type for first-class objects.
-$\V{x}\eqClOp{\classes}\V{y}$ is a synonym for
-$\V{x}\eqWClOp{\classes}\V{y}$.
+$\eqWClOp{\classes}$ generalizes to
+$\eqWClOp{\alpha}$, the equivalence operator for this type $\alpha$.
+The narrow form of $\eqWClOp{\alpha}$ is $\eqClOp{\alpha}$.
+For example, $\eqWClOp{\sets}$ and $\eqClOp{\sets}$, are the two forms
+of the operator for the ZF concept of equality,
+the equality of sets.
 
-Less frequently used in the operator $\eqWTyOp$,
-representing the equality of types.
-Types are not necessarily first-class variables.
-The operator $\eqWClOp{\alpha}$,
-where $\alpha$ is a type,
-is equality between first-class variables of type $\alpha$,
-and is used for special cases.
-For example, if we wanted an equality operator that is
-true only if both operands are sets,
-we would use $\eqWClOp{\sets}$,
-which is the operator for equality between sets.
+The $\eqWClOp{\alpha}$ operator has signature $(\Dbool,\classes,\classes)$
+and the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$ 
+abbreviates
+\[  \wellDefB{\V{x}}{\alpha} \land \wellDefB{\V{y}}{\alpha} \land \V{x}\eqClOp{\classes}\V{y}. \]
 
-Notice that types which are first class objects are equivalent
+\begin{remark}[Alternative definition of equivalence by type]
+An alternative, if trickier, way of defining
+$\V{x}\eqWClOp{\alpha}\V{y}$, when $\alpha$ is a constant,
+is to let its signature be $(\Dbool,\alpha,\alpha)$
+and to say that the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$ 
+abbreviates $\V{x}=\V{y}$.
+\rmEnd \end{remark}
+
+It remains to define
+the less frequently used operator $\eqWTyOp$,
+which represents the equality of types.
+We recall that types are not necessarily first-class variables.
+The narrow form of $\eqWTyOp$
+is $\eqTyOp$, and their signature is $(\Dbool,\Ds,\Ds)$.
+The \COL expression $\V{x}\eqTyOp\V{y}$ abbreviates
+\[ \univQ{ \Vtyped{cl}{\classes} }{
+    \wellDefB{\V{cl}}{\V{x}} \iff \wellDefB{\V{cl}}{\V{y}} }. \]
+
+\begin{remark}[Type equivalence versus first class object equivalence]
+We notice that types which are first class objects are equivalent
 iff they are equivalent as first class objects,
 and in this case we have both
 $\alpha \eqTyOp \beta$ and $\alpha = \beta$.
@@ -2944,20 +2957,21 @@ because $\gamma = \delta$ only if both $\wellDefB{\gamma}{\classes}$
 and $\wellDefB{\delta}{\classes}$,
 and
 $\illDefB{(\classes \setminus \naturals)}{\classes}$.
-That is,
+That is because
 $\gamma = \delta$
-abbreviates $\gamma \eqWClOp{\classes} \delta$.
-And $\classes \setminus \naturals$,
+abbreviates $\gamma \eqClOp{\classes} \delta$;
+and $\classes \setminus \naturals$,
 the superclass of all
 classes which are not natural numbers,
-is not well-defined in $\classes$,
-so that $\gamma \eqWClOp{\classes} \delta$ is false.
+is not well-defined in $\classes$.
+Therefore, $\illDefB{\gamma}{\classes}$, and
+$\gamma \eqClOp{\classes} \delta$ is false.
+\rmEnd
+\end{remark}
 
 \begin{remark}
 \label{rm:quasi-equality-well-definedness}
-Notice that $\qeq$ does not obey the default rule for well-definedness of operator
-applications,
-in that it may have a well-defined result even if it has an ill-defined operand.
+The operator $\qeq$ is not strict for well-definedness.
 \rmEnd
 \end{remark}
 
