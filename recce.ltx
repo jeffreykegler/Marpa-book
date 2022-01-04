@@ -161,10 +161,16 @@
 % \newcommand{\notprovesin}[3]{#1 \not\vdash_{#2} #3}
 %\newcommand{\leqq}[1]{\mathrel{\preceq_{#1}}}
 
+% [f]u[n]ction [M]ap operator
 \newcommand{\fnMap}{\rightharpoonup}
-\newcommand{\fnMMap}{\mathbin{\ni\joinrel\rightharpoonup}}
+% [f]u[n]ction [M]ultidomain [M]ap operator
+% \hbox shifts from math to text vertical alignment, which is what we want
+\newcommand{\fnMMap}{\hbox{$\mathbin{\ni\joinrel\rightharpoonup}$}}
+% [t]otal [f]u[n]ction [M]ap operator
 \newcommand{\tfnMap}{\rightarrow}
-\newcommand{\tfnMMap}{\mathbin{\ni\joinrel\rightarrow}}
+% [t]otal [f]u[n]ction [M]ultidomain [M]ap operator
+% \hbox shifts from math to text vertical alignment, which is what we want
+\newcommand{\tfnMMap}{\hbox{$\mathbin{\ni\joinrel\rightarrow}$}}
 
 \newcommand{\tarrow}{\rightarrow}
 % \newcommand{\term}{\seq}
@@ -549,10 +555,10 @@
 \newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
 
 \newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
-\newcommand{\DRel}[1]{\ensuremath{\mathrel{\rawDRel{#1}}}}
-\newcommand{\DefOp}{\ensuremath{\mathrel{\rawDRel{}}}}
 \newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
   \mkern-1mu{#1}}
+\newcommand{\DRel}[1]{\ensuremath{\mathrel{\rawDRel{#1}}}}
+\newcommand{\DefOp}{\ensuremath{\mathrel{\rawDRel{}}}}
 \newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
 \newcommand{\LDefOp}{\ensuremath{\mathrel{\rawDDRel{}}}}
 \newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=:\joinrel{#1}}}}
@@ -563,6 +569,11 @@
 \newcommand{\DDEqClOp}[1]{\DDRel{\ensuremath{=_{#1}}}}
 \newcommand{\DDEqWTyOp}{\DDRel{\ensuremath{\eqWClOp{\Ds}}}}
 \newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
+
+% operators for declarators of "arbitrary", or non-deterministic,
+% variables
+\newcommand{\gArbOp}{\mathrel{\rawDRel}
+\newcommand{\arbOp}{\mathrel{\rawDDRel}
 
 \newcommand{\defined}{\DRel{\mathrel{=}}}
 \newcommand{\ldefined}{\DDRel{\mathrel{=}}}
@@ -628,6 +639,7 @@
 \newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
 \newcommand{\iotaQOp}{\rIota}
 \newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
+
 \newcommand{\existUniqQOp}{\mathop{\exists{!}}}
 \newcommand{\existUniqQ}[2]{\quantify{\existUniqQOp}{#1}{#2}}
 % extra {} in existQOP and univQOp to raise to baseline
@@ -1655,7 +1667,7 @@ Ad hoc reasoning based on programming experience would be less rigorous,
 but the reasoning involved is more familiar,
 it reaches its results in fewer steps,
 and, since it can be performed more quickly,
-can be repeatedly checked.
+it can easily be checked repeatedly
 As a result, careful proofs may not noticeably increase
 our confidence in the observation's truth.\footnote{%
     Some readers might wonder, given the advantages of ad hoc
@@ -1860,38 +1872,6 @@ An example is a scope with nothing visible outside the scope.
 
 Scopes may be introduced explicitly.
 The entire book is the \dfn{global scope}.
-
-\section{Arbitrary and convenience variables}
-
-We often, especially in proofs,
-find it helpful to notate the point at which we introduce a free variable.
-In that introductory note,
-a new variable is labeled ``ARB'' if it is chosen arbitrarily from a set
-of values.
-If the ``ARB'' introduction is made via a displayed equation,
-the new variable is subject to the restrictions of that equation,
-which often states the realm of the variable.
-The realm of a new variable may also be stated in its introductory note.
-
-If, in its introductory note, a new variable is labeled ``CV'',
-it is a convenience variable, introduced to abbreviate an expression
-and avoid repetition.
-An instance of a convenience variable
-can always be eliminated by expanding it back into
-the expression that it abbreviates.
-Convenience variables are similar to definitions.
-In fact,
-especially for functions and macros,
-a variable is sometimes introduced via a local definition
-as an alternative to treating it as a convenience variable.
-
-Context variables are arbitrary variables unless otherwise stated.
-New variables in the statements of theorems and of lemmas are arbitrary variables
-unless otherwise stated.
-When a proof ends,
-a universal generalization over all the relevant arbitrary
-variables in the current scope is implied.
-\todo{Discuss relevant and irrelevant variables and placeholders.}
 
 \chapter{Preceding disciplines}
 \label{chap:preceding-disciplines}
@@ -2257,7 +2237,45 @@ For this, our object-language has a special dedicated value, the
     But philosophers, who can agree on nothing else,
     are unanimous on this point of cryptozoology.}
 
-\todo{Finish this}
+
+\section{Variables}
+
+\todo{Rewrite this section}
+
+\COL variables are non-deterministic.
+That is, each variable, in addition to having a type,
+is a non-determististic member of a collection determined by a predicate.
+For example,
+
+We often, especially in proofs,
+find it helpful to notate the point at which we introduce a free variable.
+In that introductory note,
+a new variable is labeled ``ARB'' if it is chosen arbitrarily from a set
+of values.
+If the ``ARB'' introduction is made via a displayed equation,
+the new variable is subject to the restrictions of that equation,
+which often states the realm of the variable.
+The realm of a new variable may also be stated in its introductory note.
+
+If, in its introductory note, a new variable is labeled ``CV'',
+it is a convenience variable, introduced to abbreviate an expression
+and avoid repetition.
+An instance of a convenience variable
+can always be eliminated by expanding it back into
+the expression that it abbreviates.
+Convenience variables are similar to definitions.
+In fact,
+especially for functions and macros,
+a variable is sometimes introduced via a local definition
+as an alternative to treating it as a convenience variable.
+
+Context variables are arbitrary variables unless otherwise stated.
+New variables in the statements of theorems and of lemmas are arbitrary variables
+unless otherwise stated.
+When a proof ends,
+a universal generalization over all the relevant arbitrary
+variables in the current scope is implied.
+\todo{Discuss relevant and irrelevant variables and placeholders.}
 
 \section{Operators}
 
@@ -2759,15 +2777,25 @@ of a previously stated type,
 or for stating types which that are suggested
 by the context.
 
-\begin{remark}[Multi-variable shorthand for types]
+\begin{remark}[Shorthands for type expressions]
 \label{rm:type-multiv-shorthand}
+\todo{Rewrite this}
 When several variables have the same type,
-we can use a short hand that allows multiple comma-separated
-operands on the LHS.
+we allow
+multi-variable type expressions as a shorthand.
+\dfn{Multi-variable type expressions}
+allow multiple comma-separated variables to the left of the colon.
 For example,
 \[ \typed{\V{u}, \V{v}}{\sets} \]
 is equivalent to
 \[ \Vtyped{u}{\sets} \land \Vtyped{v}{\sets}. \quad \rmEnd \]
+\end{remark}
+As a shorthand for multiple quantifiers, we allow several comma-separated
+multi-variable type expressions in a type expression.
+For example,
+\[ \VVtyped{x}{T1}, \VVtyped{y}{T2} \]
+is a compound type expression, as is
+    \[ \typed{\V{a},\V{b}}{\sets}, \typed{\V{c},\V{d}}{\classes}. \]
 \end{remark}
 
 We overload the typing notation in \MtL to allow
@@ -3083,27 +3111,6 @@ descriptors, and the quantifiers.
 \end{tabular}
 \end{table}
 \FloatBarrier
-
-\begin{remark}[Shorthands for multiple quantifiers]
-\label{Shorthands for multiple quantifiers}
-As a shorthand for multiple quantifiers, we allow several comma-separated
-typed variables in the quantifiers scoping descriptor,
-so that, for example,
-\[ \existQ{ \VVtyped{x}{T1}, \VVtyped{y}{T2} }{
-    \tuple{\V{x},\V{y}} = \V{z} } \]
-is a shorthand for
-\[ \existQ{ \VVtyped{u}{T1}}{ \existQ{ \VVtyped{v}{T2}}{
-    \tuple{\V{u},\V{v}} = \V{z} }}. \]
-Where the quantification variables share a type,
-we may further shorten our notation using the multi-variable
-shorthand for typing \Rmref{type-multiv-shorthand},
-so that, for example,
-    \[ \existQ{ \typed{\V{u},\V{v}}{\sets}}{
-    \tuple{\V{u},\V{v}} = \V{z} } \]
-is a shorthand for
-\[ \existQ{ \Vtyped{u}{\sets}}{ \existQ{ \Vtyped{v}{\sets}}{
-    \tuple{\V{u},\V{v}} = \V{z} }}. \quad \rmEnd \]
-\end{remark}
 
 \begin{remark}
 \label{rm:number-quantification}
@@ -3495,7 +3502,7 @@ given the type of the function's domain and the codomain of the function.
 $\wellDefB{\V{f}}{\alpha \tfnMMap \V{C}}$ abbreviates
 \[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}}. \]
 
-\begin{definition}[Function Constructor]
+\begin{definition}[Function builder]
 \label{def:function-builder}
 To describe function,
 we sometimes use a
@@ -3563,13 +3570,16 @@ and the notation undergo radical alterations.}
 
 We assume that we are familiar with
 sequences from basic set theory.
-In this chapter, we clarify our terminology
-and introduce additional terminology and results which
-we will use in this book.
+Unfortunately, the details of terminology and results,
+which are important to us, are fully standard.
+In this chapter, we present a theory of sequences,
+restricted to our purposes in this book,
+in order to clarify our terminology
+and introduce additional results.
 
 \begin{definition}[Sequence]
 \label{def:sequence}
-A sequence is a family (and therefore a function)
+A sequence is a function
 whose domain is either a natural number or \naturals.
 \dfEnd
 \end{definition}
@@ -3619,16 +3629,9 @@ We write $\sets{}\tfnMMap(\naturals\cup\set{\naturals})$
 for the set of all sequences
 whose codomain is \sets{}.
 
-Recall
-\todo{Fix this to be consistent with Chiron}
-that we defined 0 as boolean false and
-1 as boolean true;
-and that therefore $2 = \set{0,1}$ is the set of boolean values.
-This means that
-$2 \tfnMap \V{V}$ is the set of boolean functions whose domain
-is \V{V}.
+\todo{\set{0,1} as proxy for \Dbool?}
 
-We specify a sequence by specifying its elements explicitly,
+We can specify a sequence by specifying its elements explicitly,
 via a sequence builder,
 or inductively.
 
