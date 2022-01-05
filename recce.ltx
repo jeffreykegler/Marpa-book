@@ -449,9 +449,10 @@
         }%
     })%
 }
-\newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
-\newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
 \newcommand{\Chref}[1]{(Ch\ref{chap:#1}:\pageref{chap:#1})} % always include page
+\newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
+\newcommand{\SSref}[1]{(SS\ref{ss:#1}:\pageref{ss:#1})} % always include page
+\newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
 \newcommand{\asideRef}[1]{Aside \ref{sec:aside-#1}, page \pageref{sec:aside-#1}}
@@ -572,8 +573,8 @@
 
 % operators for declarators of "arbitrary", or non-deterministic,
 % variables
-\newcommand{\gArbOp}{\mathrel{\rawDRel}
-\newcommand{\arbOp}{\mathrel{\rawDDRel}
+\newcommand{\gArbOp}{\mathrel{\rawDRel{}}}
+\newcommand{\arbOp}{\mathrel{\rawDDRel{}}}
 
 \newcommand{\defined}{\DRel{\mathrel{=}}}
 \newcommand{\ldefined}{\DDRel{\mathrel{=}}}
@@ -1797,34 +1798,38 @@ analysis.
 \index{recce-defienda}{AF@AF (``assumed for'')}
 abbreviates ``assumed for''.
 For example, ``AF theorem'' abbreviates ``assumed for the theorem''.
+
 \rawdfn{Def}%
 \index{recce-defienda}{Def@Def (``definition'')}
 abbreviates ``definition''.
+
 \rawdfn{iff}%
 \index{recce-defienda}{iff@iff (``if and only if'')}
 abbreviates ``if and only if''.
+
 \rawdfn{EI}%
 \index{recce-defienda}{EI@EI (``existential instantiation'')}
 abbreviates ``existential instantiation''.
+
 \rawdfn{EG}%
 \index{recce-defienda}{EG@EG (``existential generalization'')}
 abbreviates ``existential generalization''.
+
 \rawdfn{UI}%
 \index{recce-defienda}{UI@UI (``universal instantiation'')}
 abbreviates ``universal instantiation''.
+
 \rawdfn{UG}%
 \index{recce-defienda}{UG@UG (``universal generalization'')}
 abbreviates ``universal generalization''.
+
 \rawdfn{WLOG}%
 \index{recce-defienda}{WLOG@WLOG (``without loss of generality'')}
 abbreviates ``without loss of generality''.
+
 \rawdfn{wrt}%
 \index{recce-defienda}{wrt@wrt (``with respect to'')}
 abbreviates ``with respect to''.
-\rawdfn{ZF}%
-\index{recce-defienda}{ZF@ZF (``Zermolo-Fraenkel set theory'')}
-(for Zermolo-Fraenkel) abbreviates ``set theory''.
-For our purposes, number theory is consider to be part of set theory.
 
 \section{Scope and realms}
 \label{sec:scope-and-realm}
@@ -1839,9 +1844,8 @@ These setups are repetitive, tedious,
 and usually obvious in their details.
 In this book we try to avoid them in favor of
 a system of ``contextual binding''.
-We believe
-that the reader will find this system intuitive,
-to the degree that the reader is able to ignore it.
+We hope the this system is not just helpful,
+but obvious and natural.
 
 Variables in this book,
 as in most of the parsing literature,
@@ -1909,7 +1913,11 @@ The foundation of the mathematics in this article is Chiron.\footnote{%
 Chiron is based on von-Neumann-G{\"o}del-Bernays set theory (NBG),\footnote{
     G{\"o}del 1940 \cite{Goedel1940} is the original article on NBG.
     The chapter in Mendelson's logic text \cite{Mendelson1997} is a good introduction.}
-which in turn is based on Zermolo-Fraenkel set theory and first order logic (ZF).
+which in turn is based on Zermolo-Fraenkel set theory (ZF)%
+\index{recce-defienda}{ZF@ZF (``Zermolo-Fraenkel set theory'')}
+and first order logic (FOL).%
+\index{recce-defienda}{FOL@FOL (``First order logic'')}
+
 Chiron is a conservative extension of NBG~\cite[p. 7]{Farmer2012}.
 NBG, in turn, is a conservative extensive of ZF~\cite{Halmos1960}.
 Arithmetic comes to us as part of ZF.\footnote{
@@ -2240,38 +2248,79 @@ For this, our object-language has a special dedicated value, the
 
 \section{Variables}
 
+Each instance of a first-class \COL variable has the form
+\begin{equation}
+\label{eq:wide-variable-instance}
+    \Vtyped{x}{\alpha},
+\end{equation}
+where \V{x} is the name of a variable,
+and $\alpha$ is its type.
+For compactness, the type may be represented as a subscript,
+so that \Eref{wide-variable-instance} becomes
+\begin{equation}
+\label{eq:narrow-variable-instance}
+    \V{x}_\alpha.
+\end{equation}
+\Eref{wide-variable-instance} is in \dfn[Wide (notation for variable instances)]{wide} notation and
+\Eref{narrow-variable-instance} is in \dfn[Narrow (notation for variable instances)]{narrow} notation.
+We prefer to avoid subscripts,
+and the narrow notation is not used unless the type is readable
+at a subscript font size,
+and then only to remind ourselves
+of a previously stated type,
+or for stating types which that are suggested
+by the context.
+Often, as for example when a variable is repeatedly used,
+the type is well-known in context,
+and \Eref{wide-variable-instance} is written without a type tag:
+\[ \V{x}. \]
+
+In some contexts, a list of variable instances is expected.
+Lists of variable instances are comma-separated:
+\begin{equation}
+\label{eq:variable-list-1}
+    \Vtyped{a}{\sets},\;\Vtyped{b}{\sets},\;\Vtyped{c}{\classes},\;\Vtyped{d}{\classes}.
+\end{equation}
+Wide variable instances in a comma-separated list may share type tags,
+so that for example, \Eref{variable-list-1} may be written as
+\begin{equation}
+\label{eq:variable-list-2}
+    \typed{{\V{a},}\V{b}}{\sets},\;\typed{{\V{c},}\V{d}}{\classes}.
+\end{equation}
+
+\todo{Finish this}
+
+
 \todo{Rewrite this section}
 
-\COL variables are non-deterministic.
+\COL first-class variables are non-deterministic.
 That is, each variable, in addition to having a type,
-is a non-determististic member of a collection determined by a predicate.
-For example,
+is a non-deterministic member of a collection.
 
-We often, especially in proofs,
-find it helpful to notate the point at which we introduce a free variable.
-In that introductory note,
-a new variable is labeled ``ARB'' if it is chosen arbitrarily from a set
-of values.
-If the ``ARB'' introduction is made via a displayed equation,
-the new variable is subject to the restrictions of that equation,
-which often states the realm of the variable.
-The realm of a new variable may also be stated in its introductory note.
+\begin{definition}[Non-deterministic variable instantiator]
+\label{non-deterministic-variable-instantiator}
+\todo{Write this}
+\end{definition}
 
-If, in its introductory note, a new variable is labeled ``CV'',
-it is a convenience variable, introduced to abbreviate an expression
-and avoid repetition.
-An instance of a convenience variable
-can always be eliminated by expanding it back into
-the expression that it abbreviates.
-Convenience variables are similar to definitions.
-In fact,
-especially for functions and macros,
-a variable is sometimes introduced via a local definition
-as an alternative to treating it as a convenience variable.
+\begin{example}[Variable instantiations]
+For example, the instantiator
+\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
+would instantiate \V{x}, an even number.
+We can instantiate a constant as a special case of non-determinism,
+so that
+\[ \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43 \]
+introduces a variable \V{answer}, whose value must be 42.
+An another example,
+\[ \Vtyped{y}{\naturals} \arbOp \True \]
+instantiates \V{y} so that its value can be any natural number.
+\exEnd
+\end{example}
 
-Context variables are arbitrary variables unless otherwise stated.
-New variables in the statements of theorems and of lemmas are arbitrary variables
-unless otherwise stated.
+Variable instantiators are described below \SSref{variable-instantiator}.
+\COL variables are either instantiated explicitly,
+via a variable instantiator, or implicitly,
+as context variables.
+
 When a proof ends,
 a universal generalization over all the relevant arbitrary
 variables in the current scope is implied.
@@ -2424,6 +2473,12 @@ with metadomains.
 In cases where the meaning of an operator overloaded
 for the \MtL is not obvious,
 we state it explicitly.
+
+Included in this section are some syntaxes which are not
+operators, but which look like operators,
+and which it is convenient to include in the order or
+precedence.
+We call these \dfn{pseudo-operators}.
 
 \subsection{Atomic Elements}
 
@@ -2748,9 +2803,11 @@ produce functions types.
 \end{table}
 \FloatBarrier
 
-\subsection{Type declarator}
+\subsection{Variable instance}
+\label{ss:variable-instantiator}
 
-Next in precedence is a pseudo-operation for declaring type.
+Next in precedence is the pseudo-operation for instantiating variables.
+\todo{Refer back to "Variables" section}
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -2765,17 +2822,7 @@ Next in precedence is a pseudo-operation for declaring type.
 \end{table}
 \FloatBarrier
 
-The atomic expression $\V{x}_\alpha$
-indicates a first class \COL variable of type $\alpha$
-and abbreviates the expression of looser precedence,
-$\Vtyped{x}{\alpha}$.
-We prefer to avoid subscripts,
-and $\Vtyped{x}{\alpha}$ is used only when the type is readable
-in a subscript font,
-and only to remind ourselves
-of a previously stated type,
-or for stating types which that are suggested
-by the context.
+\todo{Explain \MtL and \COL implications}
 
 \begin{remark}[Shorthands for type expressions]
 \label{rm:type-multiv-shorthand}
@@ -2789,7 +2836,6 @@ For example,
 \[ \typed{\V{u}, \V{v}}{\sets} \]
 is equivalent to
 \[ \Vtyped{u}{\sets} \land \Vtyped{v}{\sets}. \quad \rmEnd \]
-\end{remark}
 As a shorthand for multiple quantifiers, we allow several comma-separated
 multi-variable type expressions in a type expression.
 For example,
