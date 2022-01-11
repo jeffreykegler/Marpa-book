@@ -2342,20 +2342,28 @@ The restriction for all variables in definitions and quantifier bindings is triv
 \begin{example}[Variable declarators]
 For example, the variable declarator
 \[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
-instantiate \V{x}, an even number.
-We can instantiate a constant as a special case of non-determinism,
+instantiates the local variable \V{x},
+with type \naturals and restriction $\Fname{R} = \lambda \V{x} \suchthat (\V{x} \bmod 2 = 0)$
+so that \V{x} must be an even number.
+The variable declarator
 so that
 \[ \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43 \]
-introduces a variable \V{answer}, whose value must be 42.
-An another example,
-\[ \Vtyped{y}{\naturals} \arbOp \True \]
-instantiates \V{y} so that its value can be any natural number.
+introduces a local variable \V{answer}, whose value must be 42.
+In a variable declarator, a single diamond operator indicates
+a global variable, so that
+\[ \Vtyped{y}{\naturals} \gArbOp \True \]
+instantiates the global variable \V{y} with the trivial restriction,
+so that its value can be any natural number.
 \exEnd
 \end{example}
 
-\COL first-class variables are non-deterministic.
+\COL first-class variables are
+\dfn[Non-determinism (of a variable)!trivial]{non-deterministic}.
 That is, each variable, in addition to having a type,
 is a non-deterministic member of a collection.
+The collection may be a singleton, in which case we say
+that the non-determinism is
+\dfn[Non-determinism (of a variable)!trivial]{trivial}.
 
 When a proof ends,
 a universal generalization over all the relevant arbitrary
