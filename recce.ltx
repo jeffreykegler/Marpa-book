@@ -625,21 +625,22 @@
 \newcommand{\set}[1]{%
     \ensuremath{{\left\lbrace #1 \right\rbrace}}%
 }
-\newcommand{\midOp}{|}
-\newcommand{\collB}[2]{% collection builder, with mid op
-    \ensuremath{\left\lbrace #1 \;\middle\midOp\; #2 \right\rbrace}%
-}
-\newcommand{\famB}[2]{% family builder, with mid op
-    \ensuremath{\left[ #1 \;\middle\midOp\; #2 \right]}%
-}
+
 \newcommand{\suchthat}{\mcoloncolon}
 \newcommand{\quantify}[3]{% quantifier, binding, predicate
     \ensuremath{#1#2 \suchthat #3}%
 }
 
 \newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
-\newcommand{\iotaQOp}{\rIota}
-\newcommand{\iotaQ}[2]{\quantify{\rIota}{#1}{#2}}
+\newcommand{\iotaQOp}{\mathop{\rIota}}
+\newcommand{\iotaQ}[2]{\quantify{\iotaQOp}{#1}{#2}}
+
+\newcommand{\epsQOp}{\mathop{\varepsilon}}
+\newcommand{\epsQ}[2]{\quantify{\epsQOp}{#1}{#2}}
+
+% collection builder, or descriptor
+\newcommand{\setQOp}{\mathop{\mathsection}}
+\newcommand{\setQ}[2]{\quantify{\setQOp}{#1}{#2}}
 
 \newcommand{\existUniqQOp}{\mathop{\exists{!}}}
 \newcommand{\existUniqQ}[2]{\quantify{\existUniqQOp}{#1}{#2}}
@@ -2267,6 +2268,8 @@ For this, our object-language has a special dedicated value, the
 
 \section{Variables}
 
+\todo{Rewrite this section}
+
 Every reference to a first-class \COL variable implies a
 \dfn[Wide (notation for variable references)]{wide} reference
 of the form
@@ -2336,8 +2339,6 @@ The \dfn[Restriction (of a variable)!trivial]{trivial restriction} is
 which indicates that all values of the correct type
 for the variable are valid.
 The restriction for all variables in definitions and quantifier bindings is trivial.
-
-\todo{Rewrite rest of this section}
 
 \begin{example}[Variable declarators]
 For example, the variable declarator
@@ -3037,7 +3038,7 @@ of the operator for the ZF concept of equality,
 the equality of sets.
 
 The $\eqWClOp{\alpha}$ operator has signature $(\Dbool,\classes,\classes)$
-and the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$ 
+and the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$
 abbreviates
 \[  \wellDefB{\V{x}}{\alpha} \land \wellDefB{\V{y}}{\alpha} \land \V{x}\eqClOp{\classes}\V{y}. \]
 
@@ -3045,7 +3046,7 @@ abbreviates
 An alternative, if trickier, way of defining
 $\V{x}\eqWClOp{\alpha}\V{y}$, when $\alpha$ is a constant,
 is to let its signature be $(\Dbool,\alpha,\alpha)$
-and to say that the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$ 
+and to say that the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$
 abbreviates $\V{x}=\V{y}$.
 \rmEnd \end{remark}
 
@@ -3179,12 +3180,11 @@ For example,
 $\cond{\Vnat{x} \ge 0}{\Vnat{x}}{-\Vnat{x}}$ is the absolute value
 of \Vnat{x}.
 
-\subsection{Quantifiers and definite descriptor}
-\label{ss:quantifiers}
+\subsection{Traditional descriptors}
+\label{ss:traditional-descriptors}
 
-The next looser level of precedence contains the quantifiers.
-(For this purpose, we consider the definite descriptor
-a quantifier.)
+The next looser level of precedence contains descriptors
+taken from preceding disciplines.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -3192,7 +3192,64 @@ a quantifier.)
 \begin{tabular}{|l|}
     \hline
     \hline
-\cellboxr{Definite descriptor: the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}: $\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
+\cellboxr{Definite descriptor:
+    $\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$
+    is the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+\cellboxr{Indefinite descriptor:
+    $\epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$ is
+    some nondeterministic \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+\cellboxr{Collection descriptor:
+    $\setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$
+    is the collection \Vtyped{x}{\Pow{\alpha}}
+    that contains all \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}} \\
+    \hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+The traditional descriptor expressions consists of, in order
+\begin{itemize}
+\item the descriptor symbol;
+\item a quantification variable binding, or \dfn[Binding (of quantification)]{binding};
+\item the ``such that'' separator ($\suchthat$); and
+\item the descriptor predicate, or \dfn[Predicate (of descriptor)]{predicate}
+\end{itemize}
+
+\todo{Elaborate re eps and set descriptors}
+
+\begin{remark}
+\label{rm:number-descriptor}
+When the quantification variable is a number,
+we may express the quantification binding using a formula,
+so that, for example,
+\begin{equation}
+\label{eq:number-descriptor-example}
+\setQ{\typed{\Vnat{j}}{42 < \Vnat{j} \le \Vnat{k}}}{\Vmyfn{P}{j}}
+\end{equation}
+abbreviates
+\[ \setQ{\Vtyped{i}{
+        ( \setQ{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}} )
+    }}{\Vmyfn{P}{i}}. \]
+When the quantification variable is first in the formula,
+we often treat the name operand of a type expression as redundant,
+and abbreviate the typed quantification variable to the formula,
+so that \Eref{number-descriptor-example} is further abbreviated to
+\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \quad \rmEnd \]
+\end{remark}
+
+\subsection{Quantifiers}
+\label{ss:quantifiers}
+
+In the same level of precedence as the desciptors
+are the quantifiers.
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+    \hline
     \hline
 \cellboxr{Existential quantifer: true if there exists some \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}: $\existQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
     \hline
@@ -3204,7 +3261,8 @@ a quantifier.)
 \end{table}
 \FloatBarrier
 
-A quantifier formula or expression consists of, in order
+The syntax of a quantifier formula is similar to that of a descriptor expression,
+and consists of, in order
 \begin{itemize}
 \item the quantification symbol itself;
 \item the quantification variable binding, or \dfn[Binding (of quantification)]{binding};
@@ -3214,24 +3272,28 @@ A quantifier formula or expression consists of, in order
 Where there is no confusion, either the quantification symbol,
 or the entire quantification formula or expression,
 may be called the \dfn{quantifier}.
+When the quantification variable in a quantifier is numeric,
+we may abbreviate the quantifier formula by expressing the
+quantifier binding as a formula,
+employing the same syntax that we used for descriptors
+\Rmref{number-descriptor}.
 
-\begin{remark}
-\label{rm:number-quantification}
-When quantification is over a number variable,
-we may express its type using a formula,
-so that, for example,
+\begin{example}
+\label{ex:number-quantification}
 \begin{equation}
-\label{eq:number-quantification-example}
+\label{eq:number-quantification-example-1}
 \univQ{\typed{\Vnat{j}}{42 < \Vnat{j} \le \Vnat{k}}}{\Vmyfn{P}{j}}
 \end{equation}
 is equivalent to
-\[ \univQ{\Vtyped{i}{\collB{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}}}}{\Vmyfn{P}{i}}. \]
-When the quantification variable is first in the formula,
-we often treat the name operand of a type expression as redundant,
-and abbreviate the typed quantification variable to the formula,
-so that \Eref{number-quantification-example} is further abbreviated to
-\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \quad \rmEnd \]
-\end{remark}
+\begin{equation}
+\label{eq:number-quantification-example-2}
+    \univQ{\Vtyped{i}{\setQ{\Vtyped{j}{\naturals}}{42 < \V{j} \le \V{k}}}}{\Vmyfn{P}{i}}.
+\end{equation}
+and both \Eref{number-quantification-example-1}
+and \Eref{number-quantification-example-2}
+are equivalent to
+\[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\Vmyfn{P}{j}}. \quad \exEnd \]
+\end{example}
 
 \subsection{Rule and derivation operators}
 
@@ -3613,6 +3675,7 @@ $\wellDefB{\V{f}}{\alpha \tfnMMap \V{C}}$ abbreviates
 
 \begin{definition}[Function builder]
 \label{def:function-builder}
+\todo{I changed notations and need to fix this}
 To describe function,
 we sometimes use a
 \dfn{function builder} of the form
@@ -3621,7 +3684,7 @@ we sometimes use a
     \fnB{ \V{i} \in \V{S} : \Vmyfn{P}{i} },
 \end{equation}
 which abbreviates
-\[ \collB{ \Vtyped{duple}{\sets} }{ \V{duple} = \tuple{ \V{i}, \Vmyfn{P}{i}} \land \V{i} \in \V{S}  }.
+\[ \setQ{ \Vtyped{duple}{\sets} }{ \V{duple} = \tuple{ \V{i}, \Vmyfn{P}{i}} \land \V{i} \in \V{S}  }.
     \quad \dfEnd
 \]
 \end{definition}
@@ -3764,19 +3827,20 @@ all the counting numbers.
 
 \begin{remark}[Sequence builder]
 \label{rm:sequence-builder}
+\todo{I changed notations and need to fix this}
 A \dfn{sequence builder}
 follows the form already described for
-use in quantification over numbers \Rmref{number-quantification},
+use in quantification over numbers \Rmref{number-descriptor},
 so that
 \begin{equation}
 \label{eq:rem-sequence-builder-10}
-    \famB{\typed{\Vnat{j}}{42 < \Vnat{j} < 45}}{\V{j}} = \seq{42, 43, 44}.
+    \setQ{\typed{\Vnat{j}}{42 < \Vnat{j} < 45}}{\V{j}} = \seq{42, 43, 44}.
 \end{equation}
 As with quantifiers, the variable name may be omitted
 if the variable bound within the sequence builder
 is the first variable of the formula, so that
 \Eref{rem-sequence-builder-10} may be abbreviated to
-\[ \famB{42 < \Vnat{j} < 45}{\V{j}} = \seq{42, 43, 44}.
+\[ \setQ{42 < \Vnat{j} < 45}{\V{j}} = \seq{42, 43, 44}.
     \quad \rmEnd \]
 \end{remark}
 
