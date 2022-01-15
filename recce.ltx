@@ -2316,59 +2316,14 @@ so that for example, \Eref{variable-list-1} may be written as
 Every reference to a variable is a reference to an \dfn[Instance (of a variable)]{instance}
 of a variable, which is uniquely determined by the variable's symbol and scope.
 Therefore, every variable must be \dfn[Instantiation (of a variable)]{instantiated}.
-Variable instantiation is either explicity or implicit.
+Variable instantiation is either explicit or implicit.
 \todo{reference discussion of implicit variable instantiation}
 Explicit variable instantiation is made by
 \begin{itemize}
-\item a variable declarator \SSref{variable-declarators}, see below in this section; or
-\item a definition \SSref{defining-operators}; or
+\item a variable declarator \SSref{variable-declarators},
+\item a definition \SSref{defining-operators}, or
 \item a quantifier binding \SSref{quantifiers}.
 \end{itemize}
-
-Every instance of a variable has a fixed type and \dfn[Restriction (of a variable)]{restriction}.
-The restriction is a unary predicate,
-whose argument is the variable,
-and which narrows the valid values of the variable within the type,
-and is helpful for universal generalization.
-The \dfn[Restriction (of a variable)!trivial]{trivial restriction} is
-\begin{equation}
-\label{eq:restriction}
-    \VFA{P}{x} = \True,
-\end{equation}
-which indicates that all values of the correct type
-for the variable are valid.
-The restriction for all variables in definitions and quantifier bindings is trivial.
-
-\begin{example}[Variable declarators]
-For example, the variable declarator
-\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
-instantiates the local variable \V{x},
-with type \naturals and restriction $\Fname{R} = \lambda \V{x} \suchthat (\V{x} \bmod 2 = 0)$
-so that \V{x} must be an even number.
-The variable declarator
-so that
-\[ \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43 \]
-introduces a local variable \V{answer}, whose value must be 42.
-In a variable declarator, a single diamond operator indicates
-a global variable, so that
-\[ \Vtyped{y}{\naturals} \gArbOp \True \]
-instantiates the global variable \V{y} with the trivial restriction,
-so that its value can be any natural number.
-\exEnd
-\end{example}
-
-\COL first-class variables are
-\dfn[Non-determinism (of a variable)!trivial]{non-deterministic}.
-That is, each variable, in addition to having a type,
-is a non-deterministic member of a collection.
-The collection may be a singleton, in which case we say
-that the non-determinism is
-\dfn[Non-determinism (of a variable)!trivial]{trivial}.
-
-When a proof ends,
-a universal generalization over all the relevant arbitrary
-variables in the current scope is implied.
-\todo{Discuss relevant and irrelevant variables and placeholders.}
 
 \section{Operators}
 
@@ -3343,7 +3298,29 @@ are equivalent to
 \subsection{Variable declarators}
 \label{ss:variable-declarators}
 
-\todo{Write this section}
+\todo{Write this section from following fragments}
+\begin{example}[Variable declarators]
+For example, the variable declarator
+\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
+instantiates the local variable \V{x},
+with type \naturals and restriction $\Fname{R} = \lambda \V{x} \suchthat (\V{x} \bmod 2 = 0)$
+so that \V{x} must be an even number.
+The variable declarator
+so that
+\[ \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43 \]
+introduces a local variable \V{answer}, whose value must be 42.
+In a variable declarator, a single diamond operator indicates
+a global variable, so that
+\[ \Vtyped{y}{\naturals} \gArbOp \True \]
+instantiates the global variable \V{y} with the trivial restriction,
+so that its value can be any natural number.
+\exEnd
+\end{example}
+
+When a proof ends,
+a universal generalization over all the relevant arbitrary
+variables in the current scope is implied.
+\todo{Discuss relevant and irrelevant variables and placeholders.}
 
 \subsection{Defining operators}
 \label{ss:defining-operators}
