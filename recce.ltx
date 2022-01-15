@@ -772,14 +772,13 @@
 % [F]unction [A]pplication, replaces \myfn
 \newcommand{\smallrawfn}[2]{\ensuremath{\mathop{#1}(#2)}}
 % The \mathopen{} and \mathclose{} eliminate unwanted extra space
-\newcommand{\rawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
+\newcommand{\rawfn}[2]{\ensuremath{\mathop{#1}\mathopen{}\left(#2\right)\mathclose{}}}
 \newcommand{\Fname}[1]{\V{#1}}
 \newcommand{\FA}[2]{\ensuremath{\rawfn{\mathop{\Fname{#1}}}{#2}}}
 \newcommand{\VFA}[2]{\FA{#1}{\V{#2}}}
 
-% Delete these 4 macros
+% Delete these 2 macros
 \newcommand{\fname}[1]{\V{#1}}
-\newcommand{\bigfn}[2]{\bigrawfn{\Fname{#1}}{#2}}
 \newcommand{\Vmyfn}[2]{\FA{#1}{\V{#2}}}
 
 \newcommand{\Dom}[1]{\OA{Dom}{#1}}
@@ -3222,9 +3221,9 @@ and is \unicorn otherwise.
 The collection descriptor is the traditional restricted comprehension
 of set theory.\footnote{%
    Often the notation for this is \set{\Vtyped{x}{\alpha} \mid \Vmyfn{P}{x}}.
-   We avoid this notation in the fear it that it is too ``lightweight'',
-   believing that collection descriptors deserve more emphasis in most
-   contexts.}
+   We avoid this notation, fearing that it is too ``lightweight''.
+   We believe that collection descriptors will often want more emphasis in
+   the contexts of this book.}
 The value of $\setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$ \\
 is the set of all \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}.
 This is the empty set if there is no \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}.
@@ -3239,15 +3238,17 @@ and is \unicorn otherwise.
 We notice that, as a consequence of our definitions, that
 \begin{equation}
 \label{eq:quantifier-fact-1}
-\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \isWellDef \implies
-( \setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} ) =
-\set{ \epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} } =
-\set{ \iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} }.
+\begin{gathered}
+\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \isWellDef \implies \\
+    \left( \setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \right) =
+    \set{ \epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} } =
+    \set{ \iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} }.
+\end{gathered}
 \end{equation}
 Also, from \Eref{quantifier-fact-1},
 we notice that
 \begin{gather}
-\label{eq:quantifier-fact-2}
+\nonumber
 \iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \isWellDef \implies \\
 \label{eq:quantifier-fact-3}
  \epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}  = \\
@@ -24922,53 +24923,71 @@ The indefinite descriptor that we use in
 is adapted from both
 the epsilon notation in Farmer~2012~\cite[pp. 18,29]{Farmer2012}
 and the Hilbert calculus.
-In~\cite[pp. 18,29]{Farmer2012},
+In~\cite{Farmer2012},
 the epsilon notation produces, when well-defined,
-a deterministic value, one that is the value of a \MtL choice function, $\Xi$,
+a deterministic value, one that is the value of an \MtL choice function, $\xi$,
 which the Chiron user is expected to supply.
 The value of
+\begin{equation}
+\label{eq:epsilon-witness-template}
+   \rawfn{\xi}{\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}}
+\end{equation}
+can be called the ``witness'' to the set
+\begin{equation}
+\label{eq:epsilon-set-template}
+   \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}.
+\end{equation}
 
 In this book, the value of the epsilon notation follows the
 original Hilbert calculus in being non-deterministic.
-In the case of \Eref{epsilon-template}, by ``non-determinism'',
-we mean that, while we know some facts about a well-defined \Eref{epsilon-template},
+In the case of \Eref{epsilon-template},
+what we mean by ``non-determinism'' is that,
+while we know some facts about a well-defined \Eref{epsilon-template},
 specifically that it is an element of $\alpha$ such that \VFA{P}{x},
-we have, in general, no way of deciding which of the possible values is  our actual value.
-We note that, in the cases where the value of that the set of possible values is a singleton,
+but we have, in general, no ``witness''.
+That is, we know that a witness exists,
+but we cannot decide its actual value.
+We note that, in the cases where \Eref{epsilon-set-template} is a singleton,
 \[
     \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 1
 \]
-we can decide the value of \Eref{epsilon-template},
-so that in this definition of ``non-determinism'',
-some determinism occurs as a special case.
+that
+\[
+    \iotaQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} = \epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}
+\]
+so that we know that $\iotaQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$
+is the witness of the set \Eref{epsilon-set-template}.
+Thus, in the Hilbert non-deterministic interpretation of the epsilon notation,
+determinism can occur as a special case.
 
 One reason we choose the non-deterministic interpretation of the epsilon
 notation over the ``witness'' interpretation
 is that it becomes more directly obvious why we may apply UG to variables
 if they are non-deterministic.
 A second reason is that we wish to
-avoid showing the existence of a $\Xi$ function.
+avoid showing the existence of a $\xi$ function.
 
-The witness function $\Xi$ does not exist in all subtheories of ZF, unless additional assumptions,
+The witness function $\xi$ does not exist in all subtheories of ZF, unless additional assumptions,
 such as the Axiom of Choice (AC), are made.
 The \COL classes used in this book may, in fact,
-all be well-ordered, making the assumption of a $\Xi$ safe
+all be well-ordered, making the assumption of a $\xi$ safe
 even in the absence of AC.
-But even so, defining a $\Xi$ would mean those who prefer to avoid
-AC could not use this book's results without taking special precautions,
+But even so, defining a $\xi$ would mean those who prefer to avoid
+AC could not incorporate this book's results into their work
+without taking special measures,
 and we see no reason to pay this price.
 
 For the case where the epsilon notation is ill-defined, we follow~\cite{Farmer2012}
 instead of Hilbert.
 Hilbert defined \Eref{epsilon-template},
-when 
+when
 \[
     \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 0
 \]
 to be any value whatsoever.
 This apparent carelessness worked because Hilbert always used the epsilon notation
-inside its own predicate, so that $\VFA{P}{\epsQ{\V{typed}{x}}{\VFA{P}{x}}}$
-was the equivalent of $\existQ{\V{typed}{x}}{\VFA{P}{x}}$.
+inside its own predicate, so that $\VFA{P}{\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}}$
+was the equivalent of $\existQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$.
 In this book,
 \[
     \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 0
