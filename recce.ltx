@@ -764,23 +764,24 @@
 \newcommand{\Cw}{\V{w}}
 \newcommand{\CVw}[1]{\ensuremath{\Vsym{\Cw[\V{#1}]}}}
 
-\newcommand{\rawfn}[2]{\ensuremath{#1(#2)}}
-% The \mathopen{} and \mathclose{} eliminate unwanted extra space
-\newcommand{\bigrawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
-\newcommand{\fname}[1]{\V{#1}}
-\newcommand{\bigfn}[2]{\bigrawfn{\fname{#1}}{#2}}
-% Eliminate myfn and Vmyfn
-\newcommand{\myfn}[2]{\rawfn{\fname{#1}}{#2}}
-\newcommand{\Vmyfn}[2]{\myfn{#1}{\V{#2}}}
 \newcommand{\mname}[1]{\mbox{\sf #1}}
 % [O]perator [A]pplication
 \newcommand{\Oname}[1]{\mname{#1}}
 \newcommand{\OA}[2]{\ensuremath{\mathop{\Oname{#1}}\left(#2\right)}}
 \newcommand{\VOA}[2]{\OA{#1}{\V{#2}}}
 % [F]unction [A]pplication, replaces \myfn
+\newcommand{\smallrawfn}[2]{\ensuremath{\mathop{#1}(#2)}}
+% The \mathopen{} and \mathclose{} eliminate unwanted extra space
+\newcommand{\rawfn}[2]{\ensuremath{#1\mathopen{}\left(#2\right)\mathclose{}}}
 \newcommand{\Fname}[1]{\V{#1}}
-\newcommand{\FA}[2]{\ensuremath{\mathop{\Fname{#1}}\left(#2\right)}}
+\newcommand{\FA}[2]{\ensuremath{\rawfn{\mathop{\Fname{#1}}}{#2}}}
 \newcommand{\VFA}[2]{\FA{#1}{\V{#2}}}
+
+% Delete these 4 macros
+\newcommand{\fname}[1]{\V{#1}}
+\newcommand{\bigfn}[2]{\bigrawfn{\Fname{#1}}{#2}}
+\newcommand{\myfn}[2]{\smallrawfn{\Fname{#1}}{#2}}
+\newcommand{\Vmyfn}[2]{\myfn{#1}{\V{#2}}}
 
 \newcommand{\Dom}[1]{\OA{Dom}{#1}}
 \newcommand{\Cod}[1]{\OA{Cod}{#1}}
@@ -2645,7 +2646,7 @@ Their associativity is right to left.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{\V{f} repeated \V{n} times: $\fname{f}\caret\V{n}$} \\
+\cellboxr{\V{f} repeated \V{n} times: $\Fname{f}\caret\V{n}$} \\
 \hline
 \end{tabular}
 \end{table}
@@ -2660,20 +2661,20 @@ times is the identity function.
 \begin{tabular}{|l|}
 \hline
   \cellboxr{Relational composition, ``\V{g} after \V{f}'':
-  $\fname{g}\relAfterOp\fname{f}$} \\
+  $\Fname{g}\relAfterOp\Fname{f}$} \\
 \hline
 \end{tabular}
 \end{table}
 \FloatBarrier
 
 For relations,
-$\fname{g}\relAfterOp{}\fname{f}$ is
+$\Fname{g}\relAfterOp{}\Fname{f}$ is
 the \dfn[Relational composition (of relations)]{relational composition},
-of \fname{g} and \fname{f}:
-\fname{g} ``after'' \fname{f}.
+of \Fname{g} and \Fname{f}:
+\Fname{g} ``after'' \Fname{f}.
 That is,
 \[
-\fname{g}\relAfterOp{}\fname{f} =
+\Fname{g}\relAfterOp{}\Fname{f} =
      \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
          \tuple{\V{x}, \V{y}} \in \V{f} \land
          \tuple{\V{y}, \V{z}} \in \V{g} }.
@@ -2685,21 +2686,21 @@ That is,
 \begin{tabular}{|l|}
 \hline
     \cellboxr{Functional composition ``\V{g} after \V{f}''
-    $\fname{g}\fnAfterOp\fname{f}$ } \\
+    $\Fname{g}\fnAfterOp\Fname{f}$ } \\
 \hline
 \end{tabular}
 \end{table}
 \FloatBarrier
 
-Where \fname{f} are \fname{g} are functions,
-$\fname{g}\fnAfterOp{}\fname{f}$ is
+Where \Fname{f} are \Fname{g} are functions,
+$\Fname{g}\fnAfterOp{}\Fname{f}$ is
 the \dfn[Functional composition (of functions)]{functional composition},
 or simply \dfn[Composition (of functions)]{composition}
-of \fname{g} and \fname{f}:
-\fname{g} ``after'' \fname{f}.
+of \Fname{g} and \Fname{f}:
+\Fname{g} ``after'' \Fname{f}.
 That is,
 \[
-\fname{g}\fnAfterOp{}\fname{f} =
+\Fname{g}\fnAfterOp{}\Fname{f} =
      \set{ \begin{gathered}
          \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
          \\ \Cod{\V{f}} = \Dom{\V{g}} \land
@@ -3192,14 +3193,14 @@ taken from preceding disciplines.
 \begin{tabular}{|l|}
     \hline
     \hline
-\cellboxr{Definite descriptor (Russell's iota):
+\cellboxr{Definite descriptor:
     $\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
     \hline
-\cellboxr{Indefinite descriptor (Hilbert's epsilon):
-    $\epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
-    \hline
-\cellboxr{Collection descriptor (restricted comprehension):
+\cellboxr{Collection descriptor:
     $\setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
+    \hline
+\cellboxr{Indefinite descriptor:
+    $\epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$} \\
     \hline
 \end{tabular}
 \end{table}
@@ -3213,16 +3214,48 @@ The traditional descriptor expressions consists of, in order
 \item the descriptor predicate, or \dfn[Predicate (of descriptor)]{predicate}
 \end{itemize}
 
-The value of the definite descriptor $\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$,
-if the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}, if it exists;
+The definite descriptor is Russell's iota, adapted to Chiron's conventions
+for well-definedness.
+The value of $\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$,
+is the unique \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}, if it exists;
 and is \unicorn otherwise.
+
+The collection descriptor is the traditional restricted comprehension
+of set theory.\footnote{%
+   Often the notation for this is \set{\Vtyped{x}{\alpha} \mid \Vmyfn{P}{x}}.
+   We avoid this notation in the fear it that it is too ``lightweight'',
+   believing that collection descriptors deserve more emphasis in most
+   contexts.}
+The value of $\setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$ \\
+is the set of all \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}.
+This is the empty set if there is no \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}.
+
+Our indefinite descriptor is Hilbert's epsilon,
+adapted to Chiron's conventions for well-definedness.\footnote{%
+    For more on our choice here, see \asideRef{epsilon-notation}.}
 The value of the indefinite descriptor $\epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$ is
 some nondeterministic \Vtyped{x}{\alpha} such that \Vmyfn{P}{x}, if one exists;
 and is \unicorn otherwise.
-The value of the collection descriptor
-$\setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}$
-is the collection that contains all \Vtyped{x}{\alpha} such that \Vmyfn{P}{x},
-which may be empty.
+
+We notice that, as a consequence of our definitions, that
+\begin{equation}
+\label{eq:quantifier-fact-1}
+\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \isWellDef \implies
+( \setQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} ) =
+\set{ \epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} } =
+\set{ \iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} }.
+\end{equation}
+Also, we notice that in \Eref{quantifer-fact}, that
+\begin{gather}
+\label{eq:quantifier-fact-2}
+\iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} \isWellDef \implies \\
+\label{eq:quantifier-fact-3}
+ \epsQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}}  = \\
+\label{eq:quantifier-fact-4}
+ \iotaQ{\Vtyped{x}{\alpha}}{\Vmyfn{P}{x}} ,
+\end{gather}
+so that the determinedness of \Eref{quantifier-fact-3}
+is a special case of the non-determinism of \Eref{quantifier-fact-4}.
 
 \todo{Elaborate re eps and set descriptors}
 
@@ -3437,7 +3470,7 @@ For example, where
 \V{S} is a 3-tuple, or triple.
 The head of \V{S} is $\Vmyfn{hd}{S} = 42$.
 The tail of \V{S} is $\Vmyfn{tl}{S} = \set{1729, 42}$.
-Using the $\fname{hd}$ and $\fname{tl}$ operators,
+Using the $\Fname{hd}$ and $\Fname{tl}$ operators,
 tuples can be treated as lists.
 We occasionally refer to tuple element by numeric indices where,
 if \V{S1} is a tuple,%
@@ -3447,7 +3480,7 @@ if \V{S1} is a tuple,%
    made hoping to save
    eyesight as well as reading time.}
 $$\VVtupelem{S1}{n} = \rawfn{\left(
-        \fname{hd}\afterOp\fname{tl}\caret\V{n}
+        \Fname{hd}\afterOp\Fname{tl}\caret\V{n}
     \right)}{
         \V{S1}
     }$$
@@ -6649,11 +6682,11 @@ Let the ``ancestry'' function,
 \]
 be such that
 \begin{equation}
-    \myfn{Anc}{\Vnat{N},\Vnodset{base}} =
+    \FA{Anc}{\Vnat{N},\Vnodset{base}} =
     \left(\begin{gathered}
     \V{N}=0 \condOpA \V{base} \condOpB
-    \\ \myfn{Anc}{\Vdecr{N},\V{base}}
-    \\ \cup\; \bigfn{NewParents}{\myfn{Anc}{\Vdecr{N},\V{base}}}
+    \\ \FA{Anc}{\Vdecr{N},\V{base}}
+    \\ \cup\; \bigfn{NewParents}{\FA{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}\right).
         \quad \dfEnd
 \end{equation}
@@ -6671,8 +6704,8 @@ Symbolically,
 \begin{equation}
     \label{eq:def-ancestry-predecessor}
 \begin{gathered}
-    \myfn{PredecessorAnc}{\Vnat{N},\Vnodset{base}} \ldefined
-    \\ \cond{\V{N} = 0}{\emptyset}{\myfn{Anc}{\Vdecr{N},\V{base}}}.
+    \FA{PredecessorAnc}{\Vnat{N},\Vnodset{base}} \ldefined
+    \\ \cond{\V{N} = 0}{\emptyset}{\FA{Anc}{\Vdecr{N},\V{base}}}.
     \quad \dfEnd
 \end{gathered}
 \end{equation}
@@ -6683,8 +6716,8 @@ Symbolically,
 An ancestry and its new parents are disjoint.
 That is,
 \[
-    \myfn{Anc}{\Vnat{N},\Vnodset{base}} \cap
-    \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset.
+    \FA{Anc}{\Vnat{N},\Vnodset{base}} \cap
+    \bigfn{NewParents}{\FA{Anc}{\V{N},\V{base}}} = \emptyset.
     \quad \thEnd
 \]
 \end{lemma}
@@ -6701,7 +6734,7 @@ We say that \Vnodset{A} is an
 \V{N}-level
 \dfn[Ancestry-nodeset@Ancestry (of nodeset)!by level]{ancestry}
 of base \Vnodset{b}
-iff $\V{A}=\myfn{Anc}{\Vnat{N},\V{b}}$.
+iff $\V{A}=\FA{Anc}{\Vnat{N},\V{b}}$.
 We say that \Vnodset{A} is an
 \dfn[Ancestry-nodeset@Ancestry (of nodeset)]{ancestry}
 of \Vnodset{nds}
@@ -6719,7 +6752,7 @@ and are at the same or a lower level.
 That is,
 \mypareq{eq:lem-ancestry-monotonicity-050}{%
     $\forall\; \Vnat{N} : \forall\; \Vnat{i} \le \V{N} :
-        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\Vnat{N},\V{base}}$.
+        \FA{Anc}{\V{i},\Vnodset{base}} \subseteq \FA{Anc}{\Vnat{N},\V{base}}$.
         \thEnd
 }
 \end{lemma}
@@ -6732,7 +6765,7 @@ Where
 \begin{gathered}
     \Vmyfn{INST}{\Vnat{ex}} \defined
     \\ \forall\; \Vnat{i} \le \V{ex} :
-        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\Vnat{ex},\V{base}}
+        \FA{Anc}{\V{i},\Vnodset{base}} \subseteq \FA{Anc}{\Vnat{ex},\V{base}}
     \\ \myparbox{\cuz{} UI of
         \Eref{lem-ancestry-monotonicity-050} with \Vnat{ex},}
 \end{gathered}
@@ -6748,52 +6781,52 @@ we assume there is a minimal \V{bad} such that
     \myparbox{\cuz{} AF reductio. New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-ancestry-monotonicity-170}{%
-        $\myfn{Anc}{0,\V{base}} \subseteq \myfn{Anc}{0,\V{base}}$
+        $\FA{Anc}{0,\V{base}} \subseteq \FA{Anc}{0,\V{base}}$
         \cuz{} Fact of set theory.}
 \mypareq{eq:lem-ancestry-monotonicity-180}{%
     $\forall\; \Vnat{i} \le 0 :
-        \myfn{Anc}{\V{i},\V{base}} \subseteq \myfn{Anc}{0,\V{base}}$
+        \FA{Anc}{\V{i},\V{base}} \subseteq \FA{Anc}{0,\V{base}}$
         \bcuz{} UG of \Eref{lem-ancestry-monotonicity-170}.}
 \mypareq{eq:lem-ancestry-monotonicity-190}{%
-        \myfn{INST}{0} \cuz{} \Eref{lem-ancestry-monotonicity-150},
+        \FA{INST}{0} \cuz{} \Eref{lem-ancestry-monotonicity-150},
             \Eref{lem-ancestry-monotonicity-180}.}
 \mypareq{eq:lem-ancestry-monotonicity-200}{%
         $\Vnat{bad} > 0$ \cuz{}
             \Eref{lem-ancestry-monotonicity-160},
             \Eref{lem-ancestry-monotonicity-190}.}
 \mypareq{eq:lem-ancestry-monotonicity-205}{%
-    $\myfn{INST}{\Vdecr{bad}}$
+    $\FA{INST}{\Vdecr{bad}}$
     \cuz{} \Eref{lem-ancestry-monotonicity-165},
         \Eref{lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-210}{%
     $\forall\; \Vnat{i} \le \Vdecr{bad} :
-        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\Vdecr{bad},\V{base}}$
+        \FA{Anc}{\V{i},\Vnodset{base}} \subseteq \FA{Anc}{\Vdecr{bad},\V{base}}$
     \bcuz{} \Eref{lem-ancestry-monotonicity-150},
         \Eref{lem-ancestry-monotonicity-205}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-220}{%
-    $\myfn{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+    $\FA{Anc}{\Vdecr{bad},\Vnodset{base}} \subseteq \FA{Anc}{\V{bad},\V{base}}$
     \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-ancestry-monotonicity-200}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-230}{%
     $\forall\; \Vnat{i} \le \Vdecr{bad} :
-        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+        \FA{Anc}{\V{i},\Vnodset{base}} \subseteq \FA{Anc}{\V{bad},\V{base}}$
     \bcuz{} \Eref{lem-ancestry-monotonicity-210},
         \Eref{lem-ancestry-monotonicity-220}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-240}{%
-        $\myfn{Anc}{\V{bad},\V{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+        $\FA{Anc}{\V{bad},\V{base}} \subseteq \FA{Anc}{\V{bad},\V{base}}$
         \cuz{} Fact of set theory.}
 \mypareq{eq:lem-ancestry-monotonicity-250}{%
     $\forall\; \Vnat{i} \le \V{bad} :
-        \myfn{Anc}{\V{i},\Vnodset{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+        \FA{Anc}{\V{i},\Vnodset{base}} \subseteq \FA{Anc}{\V{bad},\V{base}}$
     \bcuz{} \Eref{lem-ancestry-monotonicity-230},
         \Eref{lem-ancestry-monotonicity-240}.
 }
 \mypareq{eq:lem-ancestry-monotonicity-260}{%
-    $\myfn{INST}{\V{bad}}$ \cuz{} \Eref{lem-ancestry-monotonicity-150},
+    $\FA{INST}{\V{bad}}$ \cuz{} \Eref{lem-ancestry-monotonicity-150},
         \Eref{lem-ancestry-monotonicity-250}.
 }
 Equation \Eref{lem-ancestry-monotonicity-160} is contrary to
@@ -6813,8 +6846,8 @@ the first and second ancestry.
 That is,
 \begin{equation}
 \label{eq:lem-ancestry-addition-050}
-    \myfn{Anc}{\V{x}, \myfn{Anc}{\V{y}, \V{base}}}
-    = \myfn{Anc}{\V{x}+\V{y},\V{base}}.
+    \FA{Anc}{\V{x}, \FA{Anc}{\V{y}, \V{base}}}
+    = \FA{Anc}{\V{x}+\V{y},\V{base}}.
     \quad \thEnd
 \end{equation}
 \end{lemma}
@@ -6826,8 +6859,8 @@ Let
 \label{eq:lem-ancestry-addition-100}
 \begin{gathered}
     \Vmyfn{INST}{ex} \defined
-    \\ \myfn{Anc}{\V{ex}, \myfn{Anc}{\V{y}, \V{base}}}
-        = \myfn{Anc}{\V{ex}+\V{y},\V{base}}
+    \\ \FA{Anc}{\V{ex}, \FA{Anc}{\V{y}, \V{base}}}
+        = \FA{Anc}{\V{ex}+\V{y},\V{base}}
     \\ \text{\cuz{} \Eref{lem-ancestry-addition-050}
          with \Vnat{ex} for \Vnat{x}.
          New free \Vnodset{base};
@@ -6844,20 +6877,20 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-ancestry-addition-170}{%
-    $\forall\; \Vnodset{b} : \V{b} = \myfn{Anc}{0,\V{b}}$
+    $\forall\; \Vnodset{b} : \V{b} = \FA{Anc}{0,\V{b}}$
         \cuz{} \longLdref{\fname{Anc}}{ancestry}.
 }
 \begin{equation}
 \label{eq:lem-ancestry-addition-180}
 \begin{gathered}
-    \myfn{Anc}{0, \myfn{Anc}{\V{y}, \V{base}}}
-        = \myfn{Anc}{\V{y},\V{base}}
-        = \myfn{Anc}{0+\V{y},\V{base}}
+    \FA{Anc}{0, \FA{Anc}{\V{y}, \V{base}}}
+        = \FA{Anc}{\V{y},\V{base}}
+        = \FA{Anc}{0+\V{y},\V{base}}
     \\ \myparbox{\cuz{} \Eref{lem-ancestry-addition-170}.}
 \end{gathered}
 \end{equation}
 \mypareq{eq:lem-ancestry-addition-190}{%
-    $\myfn{INST}{0}$ \cuz{}
+    $\FA{INST}{0}$ \cuz{}
         \Eref{lem-ancestry-addition-100},
         \Eref{lem-ancestry-addition-180}.
 }
@@ -6868,7 +6901,7 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{equation}
 \label{eq:lem-ancestry-addition-210}
 \begin{gathered}
-    \myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
+    \FA{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \\ \left( \begin{gathered}
         \bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}
         \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{(\Vdecr{bad})+\Vnat{y},\V{base}}}
@@ -6880,10 +6913,10 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{equation}
 \label{eq:lem-ancestry-addition-220}
 \begin{gathered}
-    \bigfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}
+    \bigfn{Anc}{\Vdecr{bad}, \FA{Anc}{\V{y}, \V{base}}}
         = \bigfn{Anc}{(\Vdecr{bad})+\V{y},\V{base}}
     \\ \myparbox{\cuz{}
-        expansion of \myfn{INST}{\Vdecr{bad}},
+        expansion of \FA{INST}{\Vdecr{bad}},
         \Eref{lem-ancestry-addition-100},
         \Eref{lem-ancestry-addition-120}.}
 \end{gathered}
@@ -6891,18 +6924,18 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \begin{equation}
 \label{eq:lem-ancestry-addition-230}
 \begin{gathered}
-    \myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
+    \FA{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
     \\ \left( \begin{gathered}
-        \bigfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}
-        \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{\Vdecr{bad}, \myfn{Anc}{\V{y}, \V{base}}}}
+        \bigfn{Anc}{\Vdecr{bad}, \FA{Anc}{\V{y}, \V{base}}}
+        \\ \cup\; \bigfn{NewParents}{\bigfn{Anc}{\Vdecr{bad}, \FA{Anc}{\V{y}, \V{base}}}}
     \end{gathered} \right)
     \\ \because \Eref{lem-ancestry-addition-210},
         \Eref{lem-ancestry-addition-220}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:lem-ancestry-addition-240}{%
-    $\myfn{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
-    \bigfn{Anc}{\V{bad}, \myfn{Anc}{\V{y}, \V{base}}}$
+    $\FA{Anc}{\Vnat{bad}+\Vnat{y},\Vnodset{base}} =
+    \bigfn{Anc}{\V{bad}, \FA{Anc}{\V{y}, \V{base}}}$
     \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-ancestry-addition-230}.
 }
@@ -6929,8 +6962,8 @@ let \V{base} be an arbitrary subset of \V{V}.
 Then
 \mypareq{eq:lem-ancestry-closure-050}{%
     $\forall\; \Vnat{N} :
-        \myfn{Anc}{\Vnat{N},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \myfn{Anc}{\V{i},\V{base}}}$.
+        \FA{Anc}{\Vnat{N},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \FA{Anc}{\V{i},\V{base}}}$.
     \thEnd
 }
 \end{lemma}
@@ -6942,8 +6975,8 @@ Let
 \label{eq:lem-ancestry-closure-150}
 \begin{gathered}
 \Vmyfn{INST}{\Vnat{ex}} \ldefined
-        \myfn{Anc}{\V{ex},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{Anc}{\V{i},\V{base}}}
+        \FA{Anc}{\V{ex},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \FA{Anc}{\V{i},\V{base}}}
 \\ \myparbox{\cuz{}
     UI of \Eref{lem-ancestry-closure-050} with \Vnat{ex} for \Vnat{N}.
     New free $\V{base} \in \VPow{V}.$}
@@ -6961,29 +6994,29 @@ We assume there is a minimal \V{bad} such that
 \end{gather}
 It follows from a basic fact of set theory that
 \mypareq{eq:lem-ancestry-closure-170}{%
-        $\myfn{Anc}{0,\V{base}}
-	  = \bigcup \set{ \forall\; \Vnat{i} \le 0 : \myfn{Anc}{\V{i},\V{base}}}$
-        \linebreak \cuz{} Trivial.  This is \myfn{INST}{0}.
+        $\FA{Anc}{0,\V{base}}
+	  = \bigcup \set{ \forall\; \Vnat{i} \le 0 : \FA{Anc}{\V{i},\V{base}}}$
+        \linebreak \cuz{} Trivial.  This is \FA{INST}{0}.
 }
 \mypareq{eq:lem-ancestry-closure-180}{%
     $\V{bad} > 0$ \cuz{}
     \Eref{lem-ancestry-closure-160},
     \Eref{lem-ancestry-closure-170}.}
 \mypareq{eq:lem-ancestry-closure-250}{%
-        $\myfn{Anc}{\Vdecr{bad},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}$
+        $\FA{Anc}{\Vdecr{bad},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \FA{Anc}{\V{i},\V{base}}}$
         \linebreak \cuz{} \Eref{lem-ancestry-closure-150},
             \Eref{lem-ancestry-closure-165}, \Eref{lem-ancestry-closure-180}.
-            This is \myfn{INST}{\Vdecr{bad}}.
+            This is \FA{INST}{\Vdecr{bad}}.
 }
 \mypareq{eq:lem-ancestry-closure-270}{%
-    $\myfn{Anc}{\Vdecr{bad},\V{base}} \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+    $\FA{Anc}{\Vdecr{bad},\V{base}} \subseteq \FA{Anc}{\V{bad},\V{base}}$
         \linebreak \cuz{} \longLmref{Ancestry Monotonicity}{ancestry-monotonicity},
             \Eref{lem-ancestry-closure-180}.
 }
 \mypareq{eq:lem-ancestry-closure-280}{%
-    $\bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}
-      \subseteq \myfn{Anc}{\V{bad},\V{base}}$
+    $\bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \FA{Anc}{\V{i},\V{base}}}
+      \subseteq \FA{Anc}{\V{bad},\V{base}}$
         \linebreak \cuz{} \Eref{lem-ancestry-closure-250},
         \Eref{lem-ancestry-closure-270}.
 }
@@ -6995,17 +7028,17 @@ It follows from a basic fact of set theory that
         \bcuz{} Fact of set theory.
 }
 \mypareq{eq:lem-ancestry-closure-200}{%
-      $\myfn{Anc}{\V{bad},\V{base}} =
-      \myfn{Anc}{\V{bad},\V{base}} \cup
+      $\FA{Anc}{\V{bad},\V{base}} =
+      \FA{Anc}{\V{bad},\V{base}} \cup
         \left(
-            \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{Anc}{\V{i},\V{base}}}
+            \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \FA{Anc}{\V{i},\V{base}}}
         \right)$
         \linebreak \cuz{} \Eref{lem-ancestry-closure-280},
             \Eref{lem-ancestry-closure-290}.
 }
 \mypareq{eq:lem-ancestry-closure-210}{%
-      $\myfn{Anc}{\V{bad},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{Anc}{\V{i},\V{base}}}$
+      $\FA{Anc}{\V{bad},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \FA{Anc}{\V{i},\V{base}}}$
         \linebreak \cuz{} \Eref{lem-ancestry-closure-200}.
         This is \Vmyfn{INST}{bad}.
 }
@@ -7030,7 +7063,7 @@ That is,
 \forall\; \Vnodset{base} :
 \\ \Vlastix{path} \le \V{N}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{N}, \V{base}}.
+\\ \implies \Velement{path}{0} \in \FA{Anc}{\V{N}, \V{base}}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -7046,7 +7079,7 @@ Where
 \Vmyfn{INST}{ex} \defined \forall\; \V{path} \in \Vmyfn{paths}{G} :
 \\ \Vlastix{path} \le \V{ex}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{\V{ex}, \V{base}}.
+\\ \implies \Velement{path}{0} \in \FA{Anc}{\V{ex}, \V{base}}.
 \\ \myparbox{\cuz{}
         UI of \Eref{ancestry-from-path-050} with \V{ex}.}
 \end{gathered}
@@ -7073,11 +7106,11 @@ for this purpose.
     \because \text{AF subcase.  New free \V{pathZero}.}
 \end{gather}
 \mypareq{eq:ancestry-from-path-180}{%
-    $\V{base} = \myfn{Anc}{0,\Vnodset{base}}$
+    $\V{base} = \FA{Anc}{0,\Vnodset{base}}$
     \cuz{} \longLdref{\fname{Anc}}{ancestry}.
 }
 \mypareq{eq:ancestry-from-path-190}{%
-    $\Velement{pathZero}{0} \in \myfn{Anc}{0,\Vnodset{base}}$
+    $\Velement{pathZero}{0} \in \FA{Anc}{0,\Vnodset{base}}$
     \bcuz{} \Eref{ancestry-from-path-170},
         \Eref{ancestry-from-path-175}, \Eref{ancestry-from-path-180}.
 }
@@ -7086,7 +7119,7 @@ for this purpose.
 \begin{gathered}
 \Vlastix{pathZero} \le 0
     \land \Velement{pathZero}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{pathZero}{0} \in \myfn{Anc}{0, \V{base}}.
+\\ \implies \Velement{pathZero}{0} \in \FA{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
         Implication from \Eref{ancestry-from-path-170}--%
             \Eref{ancestry-from-path-175}
@@ -7099,7 +7132,7 @@ for this purpose.
 \forall\; \V{path} \in \Vmyfn{paths}{G}
 \\ \Vlastix{path} \le 0
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{0, \V{base}}.
+\\ \implies \Velement{path}{0} \in \FA{Anc}{0, \V{base}}.
 \\ \myparbox{\cuz{}
     UG of \V{pathZero} in \Eref{ancestry-from-path-200}.}
 \end{gathered}
@@ -7122,7 +7155,7 @@ We proceed to look at the other possible values for \V{bad}.
 \\ \label{eq:ancestry-from-path-320}
     \land\; \Velement{path}{\Vlastix{path}} \in \V{base}
 \\ \label{eq:ancestry-from-path-330}
-    \land\; \Velement{path}{0} \notin \myfn{Anc}{\V{bad}, \V{base}}.
+    \land\; \Velement{path}{0} \notin \FA{Anc}{\V{bad}, \V{base}}.
 \\ \nonumber
    \myparbox{\cuz{} \Eref{ancestry-from-path-150},
        \Eref{ancestry-from-path-160}.
@@ -7131,10 +7164,10 @@ We proceed to look at the other possible values for \V{bad}.
 \end{gather}
 \begin{gather}
 \label{eq:ancestry-from-path-340}
-    \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
+    \Velement{path}{0} \notin \FA{Anc}{\Vdecr{bad}, \V{base}}
 \\ \label{eq:ancestry-from-path-345}
     \land\; \Velement{path}{0} \notin
-        \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}
+        \bigfn{NewParents}{\FA{Anc}{\Vdecr{bad},\V{base}}}
 \\ \nonumber
     \myparbox{\cuz{} \Eref{ancestry-from-path-330},
         \longLdref{\fname{Anc}}{ancestry}.}
@@ -7152,7 +7185,7 @@ then \Vdecr{bad} cannot be a counter-example:
 \forall\; \V{path} \in \Vmyfn{paths}{G} :
 \\ \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}.
+\\ \implies \Velement{path}{0} \in \FA{Anc}{\Vdecr{bad}, \V{base}}.
 \\ \myparbox{\cuz{} Expansion of
     \Eref{ancestry-from-path-350} using \Eref{ancestry-from-path-165}.}
 \end{gathered}
@@ -7162,7 +7195,7 @@ then \Vdecr{bad} cannot be a counter-example:
 \begin{gathered}
 \Vlastix{path} \le \Vdecr{bad}
     \land \Velement{path}{\Vlastix{path}} \in \V{base}
-\\ \implies \Velement{path}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
+\\ \implies \Velement{path}{0} \in \FA{Anc}{\Vdecr{bad}, \V{base}}
 \\ \myparbox{\cuz{} UI of bound \V{path} in \Eref{ancestry-from-path-360}
     with \V{path} from
     \Eref{ancestry-from-path-310}--\Eref{ancestry-from-path-330}.}
@@ -7206,7 +7239,7 @@ Now it will be helpful to consider a suffix of \V{path}.
     \cuz{} \Eref{ancestry-from-path-320},
         \Eref{ancestry-from-path-440}.}
 \mypareq{eq:ancestry-from-path-460}{%
-    $\Velement{suffix}{0} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}$
+    $\Velement{suffix}{0} \in \FA{Anc}{\Vdecr{bad}, \V{base}}$
     \bcuz{} UI  of \V{path} in \Eref{ancestry-from-path-360}
              with \V{suffix},
         \linebreak \Eref{ancestry-from-path-412}, \Eref{ancestry-from-path-430},
@@ -7228,8 +7261,8 @@ Now it will be helpful to consider a suffix of \V{path}.
 \label{eq:ancestry-from-path-500}
 \begin{gathered}
     \exists\; \Vnod{child} :
-    \\ \V{child} \in \myfn{Anc}{\Vdecr{bad}, \V{base}}
-    \\ \land\; \Velement{path}{0} \notin \myfn{Anc}{\Vdecr{bad}, \V{base}}
+    \\ \V{child} \in \FA{Anc}{\Vdecr{bad}, \V{base}}
+    \\ \land\; \Velement{path}{0} \notin \FA{Anc}{\Vdecr{bad}, \V{base}}
     \\ \land\; \tuple{\Velement{path}{0}, \V{child}} \in \V{E}
     \\ \myparbox{\cuz{} \Eref{ancestry-from-path-340},
         EG of \Velement{suffix}{0} with \V{child} in \Eref{ancestry-from-path-460} and
@@ -7237,7 +7270,7 @@ Now it will be helpful to consider a suffix of \V{path}.
 \end{gathered}
 \end{equation}
 \mypareq{eq:ancestry-from-path-510}{%
-    $\Velement{path}{0} \in \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad}, \V{base}}}$
+    $\Velement{path}{0} \in \FA{NewParents}{\FA{Anc}{\Vdecr{bad}, \V{base}}}$
     \bcuz{} \longLdref{\fname{NewParents}}{new-parents},
         \Eref{ancestry-from-path-500}.
 }
@@ -7270,8 +7303,8 @@ if
     \set{
     \begin{gathered}
      \V{N}= 0 \condOpA \V{base} \condOpB
-        \\ \subtract{\myfn{Anc}{\V{N},\V{base}}}
-            {\myfn{Anc}{\Vdecr{N},\V{base}}}
+        \\ \subtract{\FA{Anc}{\V{N},\V{base}}}
+            {\FA{Anc}{\Vdecr{N},\V{base}}}
     \end{gathered}
     }. \quad \dfEnd
 \end{equation}
@@ -7287,8 +7320,8 @@ That is,
 \begin{gathered}
 \forall\; \V{base} \in \VPow{V} :
     \forall\; \Vnat{N} :
-\\ \myfn{gen}{\V{N}+1,\V{base}} =
-    \myfn{NewParents}{\V{N},\V{base}}.
+\\ \FA{gen}{\V{N}+1,\V{base}} =
+    \FA{NewParents}{\V{N},\V{base}}.
     \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -7297,21 +7330,21 @@ That is,
 \begin{proof}
 \mypareq{eq:lem-generation-new-parent-equivalence-100}{%
     $\Vmyfn{gen}{\V{N}+1,\V{base}} =
-        \subtract{\myfn{Anc}{\V{N}+1,\V{base}}}
-            {\myfn{Anc}{\V{N},\V{base}}}$
+        \subtract{\FA{Anc}{\V{N}+1,\V{base}}}
+            {\FA{Anc}{\V{N},\V{base}}}$
             \linebreak \cuz{} \longLdref{Generation}{generation}.}
 \mypareq{eq:lem-generation-new-parent-equivalence-110}{%
-    $\myfn{Anc}{\Vnat{N}+1,\Vnodset{base}} =
-        \myfn{Anc}{\V{N},\V{base}}
-        \cup \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
+    $\FA{Anc}{\Vnat{N}+1,\Vnodset{base}} =
+        \FA{Anc}{\V{N},\V{base}}
+        \cup \bigfn{NewParents}{\FA{Anc}{\V{N},\V{base}}}$
     \linebreak \cuz{} \longLdref{Ancestry}{ancestry}.}
 \begin{equation}
 \label{eq:lem-generation-new-parent-equivalence-120}
 \begin{gathered}
     \Vmyfn{gen}{\V{N}+1,\V{base}} =
-    \\ \left( \myfn{Anc}{\V{N},\V{base}} \cup
-            \myfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} \right)
-    \\ - \, \myfn{Anc}{\V{N},\V{base}}
+    \\ \left( \FA{Anc}{\V{N},\V{base}} \cup
+            \FA{NewParents}{\FA{Anc}{\V{N},\V{base}}} \right)
+    \\ - \, \FA{Anc}{\V{N},\V{base}}
     \\ \because \Eref{lem-generation-new-parent-equivalence-100},
         \Eref{lem-generation-new-parent-equivalence-110}.
 \end{gathered}
@@ -7333,13 +7366,13 @@ That is,
 \end{gathered}
 \end{equation}
 \mypareq{eq:lem-generation-new-parent-equivalence-140}{%
-    $\myfn{Anc}{\Vnat{N},\Vnodset{base}} \cap
-        \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}} = \emptyset$
+    $\FA{Anc}{\Vnat{N},\Vnodset{base}} \cap
+        \bigfn{NewParents}{\FA{Anc}{\V{N},\V{base}}} = \emptyset$
     \linebreak \cuz{}
         \longLmref{Predecessor--Parent Disjointness}{predecessor-parent-disjointness}.}
 \mypareq{eq:lem-generation-new-parent-equivalence-150}{%
     $\Vmyfn{gen}{\V{N}+1,\V{base}} =
-        \bigfn{NewParents}{\myfn{Anc}{\V{N},\V{base}}}$
+        \bigfn{NewParents}{\FA{Anc}{\V{N},\V{base}}}$
         \linebreak \cuz{} \Eref{lem-generation-new-parent-equivalence-120},
             \Eref{lem-generation-new-parent-equivalence-130},
             \Eref{lem-generation-new-parent-equivalence-140}.}
@@ -7361,7 +7394,7 @@ That is,
     \forall\;\Vnat{b} :
     \forall\;\V{base}\in\VPow{V} :
     \\ \V{a} \ne \V{b} \implies
-    \myfn{gen}{\V{a},\V{base}} \cap \myfn{gen}{\V{b},\V{base}} = \emptyset.
+    \FA{gen}{\V{a},\V{base}} \cap \FA{gen}{\V{b},\V{base}} = \emptyset.
     \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -7373,7 +7406,7 @@ The proof is by reductio.
 \label{eq:lem-generation-disjointness-100}
     \V{lo} \ne \V{hi}
 \\ \label{eq:lem-generation-disjointness-110}
-     \land\; \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} \ne \emptyset.
+     \land\; \FA{gen}{\V{lo},\V{base}} \cap \FA{gen}{\V{hi},\V{base}} \ne \emptyset.
 \\ \nonumber
     \because \text{AF reductio.
         New free \Vnat{lo}, \Vnat{hi}.
@@ -7387,20 +7420,20 @@ so that we may assume
      $\V{lo} < \V{hi}$ \cuz{} \text{WLOG}.
 }
 \mypareq{eq:lem-generation-disjointness-150}{%
-    $\exists\; \V{nd} : \V{nd} \in \ \myfn{gen}{\V{lo},\V{base}}
-        \land \V{nd} \in \ \myfn{gen}{\V{hi},\V{base}}$
+    $\exists\; \V{nd} : \V{nd} \in \ \FA{gen}{\V{lo},\V{base}}
+        \land \V{nd} \in \ \FA{gen}{\V{hi},\V{base}}$
     \bcuz{} \Eref{lem-generation-disjointness-110}.
 }
 \begin{gather}
 \label{eq:lem-generation-disjointness-160}
-    \V{nd} \in \ \myfn{gen}{\V{lo},\V{base}}
+    \V{nd} \in \ \FA{gen}{\V{lo},\V{base}}
 \\ \label{eq:lem-generation-disjointness-170}
-        \land\; \V{nd} \in \ \myfn{gen}{\V{hi},\V{base}}
+        \land\; \V{nd} \in \ \FA{gen}{\V{hi},\V{base}}
 \\ \nonumber
     \text{\cuz{} \Eref{lem-generation-disjointness-150}, EI of \V{nd}.}
 \end{gather}
 \mypareq{eq:lem-generation-disjointness-180}{%
-    $\V{nd} \in \ \myfn{Anc}{\V{lo},\V{base}}$
+    $\V{nd} \in \ \FA{Anc}{\V{lo},\V{base}}$
         \bcuz{} Def of \fname{gen} \Ldref{generation},
             \Eref{lem-generation-disjointness-160}.
 }
@@ -7408,23 +7441,23 @@ so that we may assume
      $\V{lo} \le \Vdecr{hi}$ \cuz{} \Eref{lem-generation-disjointness-120}.
 }
 \mypareq{eq:lem-generation-disjointness-200}{%
-    $\V{nd} \in \myfn{Anc}{\Vdecr{hi},\V{base}}$
+    $\V{nd} \in \FA{Anc}{\Vdecr{hi},\V{base}}$
     \bcuz{} \longLmref{Ancestry monotonicity}{ancestry-monotonicity},
             \Eref{lem-generation-disjointness-180},
             \Eref{lem-generation-disjointness-190}.
 }
 \mypareq{eq:lem-generation-disjointness-210}{%
-    $\myfn{Anc}{\Vdecr{hi},\Vnodset{base}} \cap
-    \bigfn{NewParents}{\myfn{Anc}{\Vdecr{hi},\V{base}}} = \emptyset$
+    $\FA{Anc}{\Vdecr{hi},\Vnodset{base}} \cap
+    \bigfn{NewParents}{\FA{Anc}{\Vdecr{hi},\V{base}}} = \emptyset$
     \bcuz{} \longLmref{Predecessor--Parent Disjointness}{predecessor-parent-disjointness}.
 }
 \mypareq{eq:lem-generation-disjointness-220}{%
-    $\V{nd} \notin \myfn{NewParents}{\myfn{Anc}{\Vdecr{hi},\V{base}}}$
+    $\V{nd} \notin \FA{NewParents}{\FA{Anc}{\Vdecr{hi},\V{base}}}$
        \cuz{} \Eref{lem-generation-disjointness-200},
             \Eref{lem-generation-disjointness-210}.
 }
 \mypareq{eq:lem-generation-disjointness-230}{%
-    $\V{nd} \notin \myfn{gen}{\var{hi},\V{base}}$
+    $\V{nd} \notin \FA{gen}{\var{hi},\V{base}}$
         \bcuz{} \longLmref{Generation--New-Parent Equivalence}
             {generation-new-parent-equivalence},
         \Eref{lem-generation-disjointness-220}.
@@ -7435,19 +7468,19 @@ which shows the
 reductio.
 \mypareq{eq:lem-generation-disjointness-240}{%
     $\neg (\V{lo} \ne \V{hi}
-     \land \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} \ne \emptyset)$
+     \land \FA{gen}{\V{lo},\V{base}} \cap \FA{gen}{\V{hi},\V{base}} \ne \emptyset)$
     \bcuz{} Reductio from \Eref{lem-generation-disjointness-100}--%
     \Eref{lem-generation-disjointness-110} to
     \Eref{lem-generation-disjointness-230}.
 }
 \mypareq{eq:lem-generation-disjointness-250}{%
     $\V{lo} = \V{hi}
-     \lor \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} = \emptyset$
+     \lor \FA{gen}{\V{lo},\V{base}} \cap \FA{gen}{\V{hi},\V{base}} = \emptyset$
      \cuz{} \Eref{lem-generation-disjointness-240}.
 }
 \mypareq{eq:lem-generation-disjointness-260}{%
     $\V{lo} \ne \V{hi}
-     \implies \myfn{gen}{\V{lo},\V{base}} \cap \myfn{gen}{\V{hi},\V{base}} = \emptyset$
+     \implies \FA{gen}{\V{lo},\V{base}} \cap \FA{gen}{\V{hi},\V{base}} = \emptyset$
      \cuz{} \Eref{lem-generation-disjointness-250}.
 }
 The lemma is the universal generalization of \Eref{lem-generation-disjointness-260}
@@ -7464,8 +7497,8 @@ if \V{base} is an arbitrary subset of \V{V},
 then
 \mypareq{eq:lem-generation-coverage-050}{%
     $\forall\; \Vnat{N} :
-    \myfn{Anc}{\V{N},\V{base}} =
-    \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \myfn{gen}{\V{i},\V{base}}}$.
+    \FA{Anc}{\V{N},\V{base}} =
+    \bigcup \set{ \forall\; \Vnat{i} \le \V{N} : \FA{gen}{\V{i},\V{base}}}$.
     \thEnd
 }
 \end{lemma}
@@ -7475,8 +7508,8 @@ The proof is by minimal counterexample.
 Let
 \mypareq{eq:lem-generation-coverage-150}{%
     $\Vmyfn{INST}{ex} \defined
-        \myfn{Anc}{\V{ex},\V{base}} =
-        \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \myfn{gen}{\V{i},\V{base}}}$
+        \FA{Anc}{\V{ex},\V{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \V{ex} : \FA{gen}{\V{i},\V{base}}}$
     \cuz{} UI of
         \Eref{lem-generation-coverage-050} with \V{ex}.
 }
@@ -7491,8 +7524,8 @@ We assume there is a minimal \V{bad} such that
     \because \text{AF reduction.  New free \V{bad}.}
 \end{gather}
 \mypareq{eq:lem-generation-coverage-170}{%
-    $\myfn{Anc}{0,\V{base}} = \V{base} =
-    \myfn{gen}{0,\V{base}}$
+    $\FA{Anc}{0,\V{base}} = \V{base} =
+    \FA{gen}{0,\V{base}}$
     \linebreak \cuz{}
         \longLdref{\fname{Anc}}{ancestry},
         Def of \fname{gen} \Ldref{generation}.
@@ -7508,40 +7541,40 @@ We assume there is a minimal \V{bad} such that
 }
 Expanding $\neg \Vmyfn{INST}{bad}$,
 \mypareq{eq:lem-generation-coverage-200}{%
-    $\myfn{Anc}{\V{bad},\V{base}} \ne
-        \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}}}$
+    $\FA{Anc}{\V{bad},\V{base}} \ne
+        \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \FA{gen}{\V{i},\V{base}}}$
         \bcuz{} \Eref{lem-generation-coverage-150},
             \Eref{lem-generation-coverage-160}.
 }
 \mypareq{eq:lem-generation-coverage-210}{%
-    $\myfn{Anc}{\V{bad},\V{base}} =
-    \myfn{Anc}{\Vdecr{bad},\V{base}}
-    \cup \bigfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
+    $\FA{Anc}{\V{bad},\V{base}} =
+    \FA{Anc}{\Vdecr{bad},\V{base}}
+    \cup \bigfn{NewParents}{\FA{Anc}{\Vdecr{bad},\V{base}}}$
         \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-generation-coverage-180}.
 }
 \mypareq{eq:lem-generation-coverage-220}{%
-    $\myfn{Anc}{\V{bad},\V{base}} =
-    \myfn{Anc}{\Vdecr{bad},\V{base}}
+    $\FA{Anc}{\V{bad},\V{base}} =
+    \FA{Anc}{\Vdecr{bad},\V{base}}
     \cup \bigfn{gen}{\var{bad},\V{base}}$
         \bcuz{} \longLmref{Generation--New-Parent Equivalence}
             {generation-new-parent-equivalence},
         \Eref{lem-generation-coverage-210}.
 }
 \mypareq{eq:lem-generation-coverage-230}{%
-    $\myfn{Anc}{\Vdecr{bad},\V{base}} =
-        \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \myfn{gen}{\V{i},\V{base}}}$
+    $\FA{Anc}{\Vdecr{bad},\V{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \Vdecr{bad} : \FA{gen}{\V{i},\V{base}}}$
     \bcuz{} \Eref{lem-generation-coverage-150},
         \Eref{lem-generation-coverage-165}.
 }
 \mypareq{eq:lem-generation-coverage-240}{%
-    $\myfn{Anc}{\V{bad},\V{base}} =
-        \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \myfn{gen}{\V{i},\V{base}}}$
+    $\FA{Anc}{\V{bad},\V{base}} =
+        \bigcup \set{ \forall\; \Vnat{i} \le \V{bad} : \FA{gen}{\V{i},\V{base}}}$
     \bcuz{} \Eref{lem-generation-coverage-220},
         \Eref{lem-generation-coverage-230}.
 }
 \mypareq{eq:lem-generation-coverage-250}{%
-    $\myfn{INST}{\V{bad},\V{base}}$
+    $\FA{INST}{\V{bad},\V{base}}$
     \cuz{} \Eref{lem-generation-coverage-150},
         \Eref{lem-generation-coverage-240}.
 }
@@ -7571,7 +7604,7 @@ be such that
 \begin{equation}
 \label{eq:def-surface}
 \begin{gathered}
-\myfn{Surface}{\V{ndset}} \ldefined
+\FA{Surface}{\V{ndset}} \ldefined
 \\ \set{
     \begin{gathered}
     \V{child} \in \V{ndset} :
@@ -7597,8 +7630,8 @@ That is,
 \begin{gathered}
     \forall\;\V{base} \in \VPow{V} :
         \forall\;\Vnat{N} :
-    \\ \myfn{Surface}{\myfn{Anc}{\V{N},\V{base}}}
-        \cap \myfn{PredecessorAnc}{\V{N},\V{base}} = \emptyset.
+    \\ \FA{Surface}{\FA{Anc}{\V{N},\V{base}}}
+        \cap \FA{PredecessorAnc}{\V{N},\V{base}} = \emptyset.
         \quad \thEnd
 \end{gathered}
 \end{equation}
@@ -7612,8 +7645,8 @@ Let
 \begin{gathered}
     \Vmyfn{INST}{ex} \defined
     \\ \left( \begin{gathered}
-    \myfn{Surface}{\myfn{Anc}{\V{ex},\Vnodset{base}}}
-        \\ \cap\; \myfn{PredecessorAnc}{\V{ex},\V{base}}
+    \FA{Surface}{\FA{Anc}{\V{ex},\Vnodset{base}}}
+        \\ \cap\; \FA{PredecessorAnc}{\V{ex},\V{base}}
     \end{gathered} \right) = \emptyset
     \\ \text{\cuz{} EI of \Eref{lem-surface-disjointness-050}
          with \Vnat{ex} for \Vnat{N}.
@@ -7630,16 +7663,16 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
     \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
 \end{gather}
 \mypareq{eq:lem-surface-disjointness-130}{%
-    $\myfn{PredecessorAnc}{0,\V{base}} = \emptyset$
+    $\FA{PredecessorAnc}{0,\V{base}} = \emptyset$
     \bcuz{} Def of ancestry predecessor \Eref{def-ancestry-predecessor}.
 }
 \mypareq{eq:lem-surface-disjointness-140}{%
-    $\myfn{Surface}{\myfn{Anc}{0,\V{base}}}
-        \cap \myfn{PredecessorAnc}{0,\V{base}} = \emptyset$
+    $\FA{Surface}{\FA{Anc}{0,\V{base}}}
+        \cap \FA{PredecessorAnc}{0,\V{base}} = \emptyset$
     \bcuz{} \Eref{lem-surface-disjointness-130}.
 }
 \mypareq{eq:lem-surface-disjointness-150}{%
-    $\myfn{INST}{0}$ \cuz{} \Eref{lem-surface-disjointness-100},
+    $\FA{INST}{0}$ \cuz{} \Eref{lem-surface-disjointness-100},
         \Eref{lem-surface-disjointness-140}.
 }
 \mypareq{eq:lem-surface-disjointness-160}{%
@@ -7648,9 +7681,9 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 }
 \begin{gather}
 \label{eq:lem-surface-disjointness-200}
-    \V{nd} \in \myfn{Surface}{\myfn{Anc}{\V{bad},\V{base}}}
+    \V{nd} \in \FA{Surface}{\FA{Anc}{\V{bad},\V{base}}}
 \\ \label{eq:lem-surface-disjointness-210}
-    \land\; \V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}
+    \land\; \V{nd} \in \FA{Anc}{\Vdecr{bad},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{}
         \longLdref{\fname{PredecessorAnc}}{predecessor-anc},
@@ -7661,12 +7694,12 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \end{gather}
 \begin{gather}
 \label{eq:lem-surface-disjointness-220}
-    \V{nd} \in \myfn{Anc}{\V{bad},\V{base}}
+    \V{nd} \in \FA{Anc}{\V{bad},\V{base}}
 \\ \label{eq:lem-surface-disjointness-230}
     \land\; \exists\; \Vnod{parent} :
     \left( \begin{gathered}
         \tuple{\V{parent},\V{nd}} \in \V{E}
-        \\ \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
+        \\ \land\; \V{parent} \notin \FA{Anc}{\V{bad},\V{base}}
     \end{gathered} \right)
     \\ \nonumber
         \myparbox{\cuz{} Def of ``surface'' \Eref{def-surface},
@@ -7676,37 +7709,37 @@ We assume there is a minimal counter-example to the theorem, \Vnat{bad}:
 \label{eq:lem-surface-disjointness-240}
     \tuple{\Vnod{parent},\V{nd}} \in \V{E}
 \\ \label{eq:lem-surface-disjointness-250}
-        \land\; \V{parent} \notin \myfn{Anc}{\V{bad},\V{base}}
+        \land\; \V{parent} \notin \FA{Anc}{\V{bad},\V{base}}
 \\ \nonumber
     \myparbox{\cuz{} EI of \Eref{lem-surface-disjointness-230}.
         New free \Vnod{parent}.}
 \end{gather}
 \mypareq{eq:lem-surface-disjointness-260}{%
-    $\myfn{Anc}{\V{bad},\V{base}}
-        = \myfn{Anc}{\Vdecr{bad},\V{base}} \cup \myfn{NewParents}{\myfn{Anc}{\Vdecr{bad},\V{base}}}$
+    $\FA{Anc}{\V{bad},\V{base}}
+        = \FA{Anc}{\Vdecr{bad},\V{base}} \cup \FA{NewParents}{\FA{Anc}{\Vdecr{bad},\V{base}}}$
     \bcuz{} \longLdref{\fname{Anc}}{ancestry},
         \Eref{lem-surface-disjointness-160}.
 }
 \mypareq{eq:lem-surface-disjointness-270}{%
-     $\V{parent} \in \myfn{Anc}{\Vdecr{bad},\V{base}} \implies
-     \V{parent} \in \myfn{Anc}{\V{bad},\V{base}}$
+     $\V{parent} \in \FA{Anc}{\Vdecr{bad},\V{base}} \implies
+     \V{parent} \in \FA{Anc}{\V{bad},\V{base}}$
      \bcuz{} \Eref{lem-surface-disjointness-260}.
 }
 \mypareq{eq:lem-surface-disjointness-280}{%
-     $\V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
+     $\V{parent} \notin \FA{Anc}{\Vdecr{bad},\V{base}}$
      \bcuz{} \Eref{lem-surface-disjointness-250},
          \Eref{lem-surface-disjointness-270}.
 }
 \mypareq{eq:lem-surface-disjointness-290}{%
-    $\V{nd} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
-    \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    $\V{nd} \in \FA{Anc}{\Vdecr{bad},\V{base}}$
+    \linebreak $\land\; \V{parent} \notin \FA{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \tuple{\V{parent},\V{nd}} \in \V{E}$
     \bcuz{} \Eref{lem-surface-disjointness-210},
         \Eref{lem-surface-disjointness-240},
         \Eref{lem-surface-disjointness-280}.
 }
 \mypareq{eq:lem-surface-disjointness-300}{%
-    $\exists\; \Vnod{child} : \V{child} \in \myfn{Anc}{\Vdecr{bad},\V{base}}$
+    $\exists\; \Vnod{child} : \V{child} \in \FA{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \V{parent} \notin \myfn{Anc}{\Vdecr{bad},\V{base}}$
     \linebreak $\land\; \tuple{\V{parent},\V{child}} \in \V{E}$
     \bcuz{} EG of \Eref{lem-surface-disjointness-290} with \Vnod{child}
@@ -24877,6 +24910,71 @@ and those who are confident about their ability to
 track the distinction and regard this as a small price
 to pay for
 a less cluttered presentation.
+
+\section{Hilbert's epsilon}
+\label{aside:epsilon-notation}
+
+The indefinite descriptor that we use in
+\begin{equation}
+\label{eq:epsilon-template}
+\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}
+\end{equation}
+is adapted from both
+the epsilon notation in Farmer~2012~\cite[pp. 18,29]{Farmer2012}
+and the Hilbert calculus.
+In~\cite[pp. 18,29]{Farmer2012},
+the epsilon notation produces, when well-defined,
+a deterministic value, one that is the value of a \MtL choice function, \Xi,
+which the Chiron user is expected to supply.
+The value of
+
+In this book, the value of the epsilon notation follows the
+original Hilbert calculus in being non-deterministic.
+In the case of \Eref{epsilon-template}, by ``non-determinism'',
+we mean that, while we know some facts about a well-defined \Eref{epsilon-template},
+specifically that it is an element of \alpha such that \VFA{P}{x},
+we have, in general, no way of deciding which of the possible values is  our actual value.
+We note that, in the cases where the value of that the set of possible values is a singleton,
+\[
+    \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 1
+\]
+we can decide the value of \Eref{epsilon-template},
+so that in this definition of ``non-determinism'',
+some determinism occurs as a special case.
+
+One reason we choose the non-deterministic interpretation of the epsilon
+notation over the ``witness'' interpretation
+is that it becomes more directly obvious why we may apply UG to variables
+if they are non-deterministic.
+A second reason is that we wish to
+avoid showing the existence of a \Xi function.
+
+The witness function \Xi does not exist in all subtheories of ZF, unless additional assumptions,
+such as the Axiom of Choice (AC), are made.
+The \COL classes used in this book may, in fact,
+all be well-ordered, making the assumption of a \Xi safe
+even in the absence of AC.
+But even so, defining a \Xi would mean those who prefer to avoid
+AC could not use this book's results without taking special precautions,
+and we see no reason to pay this price.
+
+For the case where the epsilon notation is ill-defined, we follow~\cite{Farmer2012}
+instead of Hilbert.
+Hilbert defined \Eref{epsilon-template},
+when 
+\[
+    \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 0
+\]
+to be any value whatsoever.
+This apparent carelessness worked because Hilbert always used the epsilon notation
+inside its own predicate, so that $\VFA{P}{\epsQ{\V{typed}{x}}{\VFA{P}{x}}}$
+was the equivalent of $\existQ{\V{typed}{x}}{\VFA{P}{x}}$.
+In this book,
+\[
+    \size{ \setQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}} } = 0
+    \implies
+    (\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}) \isIllDef.
+\]
 
 \chapter{About the epigraphs}
 \label{chap:epigraphs}
