@@ -3294,6 +3294,57 @@ are equivalent to
 \subsection{Variable declarators}
 \label{ss:variable-declarators}
 
+The next loosest level of precedence contains,
+the variable declarators.
+These is a new notation,
+which enables us to abbreviate and clarify the
+instantiation of non-deterministic variables.
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{Global variable declarator: $\Vtyped{x}{\alpha}  \gArbOp \VFA{P}{x}$} \\
+\hline
+\cellboxr{Local variable declarator: $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$} \\
+\hline
+\end{tabular}
+\end{table}
+\FloatBarrier
+
+$\Vtyped{x}{\alpha} \gArbOp \VFA{P}{x}$ abbreviates
+\[  \Vtyped{x}{\alpha} \defined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} } \]
+and
+$\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$ abbreviates
+\[  \Vtyped{x}{\alpha} \ldefined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} }. \]
+
+It is very common for a proof to instantiate one or more non-deterministic (aka ``arbitrary'')
+variables,
+for the purpose of a later universal generalization (UG).
+In traditional presentations these instantiations are often
+mixed with other considerations.
+It is very common for a presentation to not identify a variable
+as non-deterministic
+until, many lines later, that fact is required for a UG.
+This makes it difficult for a reader who is trying to follow the overall
+strategy of such a proof.
+Our variable declarator notation isolates the crucial information about
+non-deterministic variables, and presents it in a uniform format.
+
+Often a proof uses several non-deterministic variable instantiations
+in immediate succession:
+\begin{equation}
+\label{eq:variable-declarator-2}
+\begin{gathered}
+    \VVtyped{v1}{Ty1} \arbOp \VFA{P1}{v1} \\
+    \VVtyped{v2}{Ty2} \arbOp \FA{P2}{\V{v1},\V{v2}} \\
+    \vdots \\
+    \VVtyped{vN}{TyN} \arbOp \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
+\end{gathered}
+\end{equation}
+
 \todo{Write this section from following fragments}
 \begin{example}[Variable declarators]
 For example, the variable declarator
