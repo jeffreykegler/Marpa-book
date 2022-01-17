@@ -451,7 +451,8 @@
 }
 \newcommand{\Chref}[1]{(Ch\ref{chap:#1}:\pageref{chap:#1})} % always include page
 \newcommand{\Sref}[1]{(S\ref{sec:#1}:\pageref{sec:#1})} % always include page
-\newcommand{\SSref}[1]{(SS\ref{ss:#1}:\pageref{ss:#1})} % always include page
+\newcommand{\bareSSref}[1]{SS\ref{ss:#1}:\pageref{ss:#1}} % always include page
+\newcommand{\SSref}[1]{\bareSSref{#1}}
 \newcommand{\Lref}[1]{(L\ref{#1}:\pageref{#1})} % always include page
 \newcommand{\Tbref}[1]{(Tb\ref{#1}\colonpageref{#1})}
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
@@ -2316,7 +2317,7 @@ Variable instantiation is either explicit or implicit.
 \todo{reference discussion of implicit variable instantiation}
 Explicit variable instantiation is made by
 \begin{itemize}
-\item a variable declarator \SSref{variable-declarators},
+\item a non-deterministic variable declarator (or NDD, see \bareSSref{ndd}),
 \item a definition \SSref{defining-operators}, or
 \item a quantifier binding \SSref{quantifiers}.
 \end{itemize}
@@ -3291,14 +3292,22 @@ are equivalent to
 
 \todo{Write section on rule declaration and derivation operators}
 
-\subsection{Variable declarators}
-\label{ss:variable-declarators}
+\subsection{Non-deterministic declarators}
+\label{ss:ndd}
 
-The next loosest level of precedence contains,
-the variable declarators.
-These is a new notation,
-which enables us to abbreviate and clarify the
+The next loosest level of precedence contains
+a new notation
+which allows us to abbreviate and clarify the
 instantiation of non-deterministic variables.
+This notation is the non-deterministic variable declarator,
+or 
+\dfn[Non-deterministic declarator (of a variable)]{non-deterministic declarator}%
+\index{recce-defienda}{Declarator, non-deterministic variable@
+ Declarator, non-deterministic variable}%
+\index{recce-defienda}{Declarator, non-deterministic@Declarator, non-deterministic}%
+.
+We often abbreviate ``non-deterministic declarator''
+as \dfn[NDD (non-deterministic variable declarator)]{NDD}.
 
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
@@ -3320,6 +3329,29 @@ and
 $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$ abbreviates
 \[  \Vtyped{x}{\alpha} \ldefined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} }. \]
 
+\begin{example}[Variable declarators]
+The variable declarator
+\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
+instantiates the local variable \V{x},
+with type \naturals, subject to the restriction that $\V{x} \bmod 2 = 0$,
+so that \V{x} is an even number, and is otherwise non-deterministic.
+The variable declarator
+\begin{equation}
+\label{eq:ex-variable-declarator-2}
+    \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43
+\end{equation}
+instantiates a local variable \V{answer}, whose value must be 42.
+Variable \V{answer} is also constant,
+and \Eref{ex-variable-declarator-2} demonstrates
+that constants can be special case of non-determinism.
+A single diamond operator indicates
+a global variable, so that
+\[ \Vtyped{y}{\naturals} \gArbOp \True \]
+instantiates the global variable \V{y} with the trivial restriction,
+so that value of \V{y} can be any natural number.
+\exEnd
+\end{example}
+
 It is very common for a proof to instantiate one or more non-deterministic (aka ``arbitrary'')
 variables,
 for the purpose of a later universal generalization (UG).
@@ -3333,8 +3365,7 @@ strategy of such a proof.
 Our variable declarator notation isolates the crucial information about
 non-deterministic variables, and presents it in a uniform format.
 
-Often a proof uses several non-deterministic variable instantiations
-in immediate succession:
+When a series of variable declarators follows the schema
 \begin{equation}
 \label{eq:variable-declarator-2}
 \begin{gathered}
@@ -3344,26 +3375,23 @@ in immediate succession:
     \VVtyped{vN}{TyN} \arbOp \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
 \end{gathered}
 \end{equation}
+we will find it very convenient to abbreviate it to the form
+\begin{equation}
+\label{eq:variable-declarator-3}
+\begin{gathered}
+    \VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}
+    \arbOp \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \\
+    \text{where } \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \iff
+    \VFA{P1}{v1} \land
+    \FA{P2}{\V{v1},\V{v2}} \land \ldots
+    \land \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
+\end{gathered}
+\end{equation}
+Single-variable non-deterministic declarators can be seen as a special case
+of the form \Eref{variable-declarator-2}.
+In an NDD like \Eref{variable-declarator-2}, we call
 
 \todo{Write this section from following fragments}
-\begin{example}[Variable declarators]
-For example, the variable declarator
-\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
-instantiates the local variable \V{x},
-with type \naturals and restriction $\Fname{R} = \lambda \V{x} \suchthat (\V{x} \bmod 2 = 0)$
-so that \V{x} must be an even number.
-The variable declarator
-so that
-\[ \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43 \]
-introduces a local variable \V{answer}, whose value must be 42.
-In a variable declarator, a single diamond operator indicates
-a global variable, so that
-\[ \Vtyped{y}{\naturals} \gArbOp \True \]
-instantiates the global variable \V{y} with the trivial restriction,
-so that its value can be any natural number.
-\exEnd
-\end{example}
-
 When a proof ends,
 a universal generalization over all the relevant arbitrary
 variables in the current scope is implied.
