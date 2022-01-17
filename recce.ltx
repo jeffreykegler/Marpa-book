@@ -3315,9 +3315,9 @@ as \dfn[NDD (non-deterministic variable declarator)]{NDD}.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Global variable declarator: $\Vtyped{x}{\alpha}  \gArbOp \VFA{P}{x}$} \\
+\cellboxr{Global non-deterministic declarator: $\Vtyped{x}{\alpha}  \gArbOp \VFA{P}{x}$} \\
 \hline
-\cellboxr{Local variable declarator: $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$} \\
+\cellboxr{Local non-deterministic declarator: $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$} \\
 \hline
 \end{tabular}
 \end{table}
@@ -3328,21 +3328,25 @@ $\Vtyped{x}{\alpha} \gArbOp \VFA{P}{x}$ abbreviates
 and
 $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$ abbreviates
 \[  \Vtyped{x}{\alpha} \ldefined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} }. \]
+In an NDD, the predicate to the right of the diamond or double-diamond
+operator, \VFA{P}{x} in the examples above,
+is often call the
+\dfn[Hypothesis (of an NDD)]{hypothesis}.
 
-\begin{example}[Variable declarators]
-The variable declarator
+\begin{example}[NDDs]
+The NDD
 \[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
 instantiates the local variable \V{x},
 with type \naturals, subject to the restriction that $\V{x} \bmod 2 = 0$,
-so that \V{x} is an even number, and is otherwise non-deterministic.
-The variable declarator
+so that \V{x} is an even number, gut is otherwise non-deterministic.
+The NDD
 \begin{equation}
-\label{eq:ex-variable-declarator-2}
+\label{eq:ex-ndd-2}
     \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43
 \end{equation}
 instantiates a local variable \V{answer}, whose value must be 42.
 Variable \V{answer} is also constant,
-and \Eref{ex-variable-declarator-2} demonstrates
+and \Eref{ex-ndd-2} demonstrates
 that constants can be special case of non-determinism.
 A single diamond operator indicates
 a global variable, so that
@@ -3362,12 +3366,12 @@ as non-deterministic
 until, many lines later, that fact is required for a UG.
 This makes it difficult for a reader who is trying to follow the overall
 strategy of such a proof.
-Our variable declarator notation isolates the crucial information about
+Our NDD notation isolates the crucial information about
 non-deterministic variables, and presents it in a uniform format.
 
-When a series of variable declarators follows the schema
+When a series of NDDs follows the schema
 \begin{equation}
-\label{eq:variable-declarator-2}
+\label{eq:ndd-2}
 \begin{gathered}
     \VVtyped{v1}{Ty1} \arbOp \VFA{P1}{v1} \\
     \VVtyped{v2}{Ty2} \arbOp \FA{P2}{\V{v1},\V{v2}} \\
@@ -3377,19 +3381,18 @@ When a series of variable declarators follows the schema
 \end{equation}
 we will find it very convenient to abbreviate it to the form
 \begin{equation}
-\label{eq:variable-declarator-3}
+\label{eq:ndd-3}
 \begin{gathered}
     \VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}
-    \arbOp \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \\
-    \text{where } \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \iff
-    \VFA{P1}{v1} \land
-    \FA{P2}{\V{v1},\V{v2}} \land \ldots
-    \land \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
+    \arbOp \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} }, \\
+    \text{where } \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \iff \\
+        \VFA{P1}{v1} \land
+        \FA{P2}{\V{v1},\V{v2}} \land \ldots
+        \land \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }.
 \end{gathered}
 \end{equation}
-Single-variable non-deterministic declarators can be seen as a special case
-of the form \Eref{variable-declarator-2}.
-In an NDD like \Eref{variable-declarator-2}, we call
+Single-variable NDDs can be seen as a special case
+of the form \Eref{ndd-2}.
 
 \todo{Write this section from following fragments}
 When a proof ends,
