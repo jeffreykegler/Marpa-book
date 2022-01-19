@@ -134,13 +134,8 @@
 \newcommand{\Dte}{\ensuremath{\mathbb{D}{\rm te}}\xspace}
 \newcommand{\Dfo}{\ensuremath{\mathbb{D}{\rm fo}}\xspace}
 
-\newcommand{\TypeLE}{\ll}
-\newcommand{\TypeEqual}{=_{\rm ty}}
-
 \newcommand{\cnbg}{\mbox{\sc cnbg}}
 \newcommand{\subvaluation}{\sqsubseteq}
-% \newcommand{\qmname}[1]{\synbrack{\mname{#1}}}
-% \newcommand{\provesast}[2]{#1 \vdash^\ast #2}
 
 % \renewcommand{\phi}{\varphi}
 \newcommand{\sembrack}[1]{\llbracket#1\rrbracket}
@@ -165,12 +160,18 @@
 \newcommand{\fnMap}{\rightharpoonup}
 % [f]u[n]ction [M]ultidomain [M]ap operator
 % \hbox shifts from math to text vertical alignment, which is what we want
-\newcommand{\fnMMap}{\hbox{$\mathbin{\ni\joinrel\rightharpoonup}$}}
+\newcommand{\fnMMap}{\ensuremath{
+        \mathrel{\raise.75pt\hbox{\ensuremath{
+          \raise1.33pt\hbox{\scalebox{.60}{$\ni$}} \mkern-12mu \rightharpoonup}}}
+}}
 % [t]otal [f]u[n]ction [M]ap operator
 \newcommand{\tfnMap}{\rightarrow}
 % [t]otal [f]u[n]ction [M]ultidomain [M]ap operator
 % \hbox shifts from math to text vertical alignment, which is what we want
-\newcommand{\tfnMMap}{\hbox{$\mathbin{\ni\joinrel\rightarrow}$}}
+\newcommand{\tfnMMap}{\ensuremath{
+    \mathrel{\raise.75pt\hbox{\ensuremath{
+          \raise1.19pt\hbox{\scalebox{.60}{$\ni$}} \mkern-12mu \rightarrow}}}
+    }}
 
 \newcommand{\tarrow}{\rightarrow}
 % \newcommand{\term}{\seq}
@@ -584,7 +585,7 @@
 \newcommand{\condOpB}{\mathbin{:}}
 \newcommand{\cond}[3]{\ensuremath{#1\condOpA#2\condOpB#3}}
 
-\newcommand{\V}[1]{\ensuremath{\texttt{#1}}}
+\newcommand{\V}[1]{\ensuremath{\texttt{\mbox{#1}}}}
 \newcommand{\var}[1]{\V{#1}}
 \newcommand{\varprime}[2]{\ensuremath{\texttt{#1}#2}}
 \newcommand{\boldvar}[1]{\ensuremath{\textbf{#1}}}
@@ -659,6 +660,7 @@
 \newcommand{\VVtyped}[2]{\ensuremath{\var{#1}\mcolon\var{#2}}}
 
 \newcommand{\seq}[1]{\ensuremath{\left[ #1 \right]}}
+\newcommand{\seqB}[2]{\seq{#1 \suchthat #2}}
 % function builder
 \newcommand{\fnB}[1]{\ensuremath{\left[ #1 \right]}}
 \newcommand{\frontier}[1]{{\left\lfloor #1 \right\rfloor} }
@@ -768,7 +770,10 @@
 \newcommand{\mname}[1]{\mbox{\sf #1}}
 % [O]perator [A]pplication
 \newcommand{\Oname}[1]{\mname{#1}}
-\newcommand{\OA}[2]{\ensuremath{\mathop{\Oname{#1}}\left(#2\right)}}
+% The \mathopen{} and \mathclose{} eliminate unwanted extra space
+\newcommand{\OA}[2]{\ensuremath{%
+    \mathop{\Oname{#1}}\mathopen{}\left(#2\right)\mathclose{}%
+}}
 \newcommand{\VOA}[2]{\OA{#1}{\V{#2}}}
 % [F]unction [A]pplication, replaces \myfn
 \newcommand{\smallrawfn}[2]{\ensuremath{\mathop{#1}(#2)}}
@@ -3874,14 +3879,14 @@ and the notation undergo radical alterations.}
 {{\em Naive Set Theory},
     \\ Halmos~\cite[p.~34]{Halmos1960}}
 
-We assume that we are familiar with
+We assume familiarity with
 sequences from basic set theory.
-Unfortunately, the details of terminology and results,
-which are important to us, are fully standard.
+The details of terminology and results will be important to us.
+Unfortunately, they are not fully standardized.
 In this chapter, we present a theory of sequences,
-restricted to our purposes in this book,
-in order to clarify our terminology
-and introduce additional results.
+adequate for our purposes in this book,
+in order to spell out our terminology
+and to introduce additional results.
 
 \begin{definition}[Sequence]
 \label{def:sequence}
@@ -3912,16 +3917,19 @@ If \V{seq} is a sequence,
 \Dom{\V{seq}} is the set of valid
 \dfn[Index (of a sequence)]{indexes}
 of \V{seq}.
-The length of \V{seq}, seen as a location,
-is called its
-\dfn[Endpoint (of a sequence)]{endpoint}.
-The set of
-\dfn[Location (of a sequence)]{locations} of \V{seq} is the set
-containing its indexes
-and its endpoint:
-$\Dom{\V{seq}} \cup \Vsize{seq}$.
 \Cod{\V{seq}} is the set of valid values of \V{seq},
 and \Ran{\V{seq}} is the set of actual values of \V{seq}.
+
+If \V{fseq} is finite,
+then the length of \V{fseq}, seen as a location,
+is called the
+\dfn[Endpoint (of a sequence)]{endpoint} of \V{fseq}.
+Note that its endpoint is {\em not} a valid index of \V{fseq}.
+The set of
+\dfn[Location (of a sequence)]{locations} of \V{fseq} is the set
+containing its indexes
+and its endpoint:
+$\Dom{\V{fseq}} \cup \Vsize{fseq}$.
 
 For example, $\sets{} \tfnMap 5$ is the set of all sequences
 of length 5 whose codomain is \sets{}.
@@ -3961,20 +3969,27 @@ all the counting numbers.
 
 \begin{remark}[Sequence builder]
 \label{rm:sequence-builder}
-\todo{I changed notations and need to fix this}
 A \dfn{sequence builder}
-follows the form already described for
-use in quantification over numbers \Rmref{number-descriptor},
+follows a form similar to that for
+function builders \Dfref{function-builder},
+with quantification over numbers as described
+earlier \Rmref{number-descriptor},
 so that
 \begin{equation}
 \label{eq:rem-sequence-builder-10}
-    \setQ{\typed{\Vnat{j}}{42 < \Vnat{j} < 45}}{\V{j}} = \seq{42, 43, 44}.
+    \seqB{\Vtyped{j}{\naturals},\; 42 < \V{j} < 45}{\V{j}},
 \end{equation}
-As with quantifiers, the variable name may be omitted
+when explicitly specified, is
+\begin{equation}
+\nonumber
+     \seq{42, 43, 44}.
+\end{equation}
+As with numeric quantifiers for sets,
+the variable name may be omitted
 if the variable bound within the sequence builder
-is the first variable of the formula, so that
+is the first variable of the variable binding formula, so that
 \Eref{rem-sequence-builder-10} may be abbreviated to
-\[ \setQ{42 < \Vnat{j} < 45}{\V{j}} = \seq{42, 43, 44}.
+\[ \seqB{42 < \Vnat{j} < 45}{\V{j}}.
     \quad \rmEnd \]
 \end{remark}
 
@@ -3985,23 +4000,31 @@ Where \Vnat{hi} and the function $\V{f} \in \V{V}\tfnMap\naturals$
 are bound in context,
 \begin{gather*}
     \begin{gathered}
-        \seq{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} : \VFA{f}{ix} }
-        = \seq{ \VFA{f}{0}, \VFA{f}{1}, \ldots  \VFA{f}{hi}}
-            \\ = \set{ \begin{gathered}
-                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
-                \\ \V{ix} \le \Vnat{hi} \land
-                \V{element} = \tuple {\V{ix}, \VFA{f}{ix} }
-            \end{gathered} };
+        \seqB{ \Vnat{ix},\; \V{ix} \le \Vnat{hi} }{ \VFA{f}{ix} }
+        = \seq{ \FA{f}{0}, \FA{f}{1}, \ldots  \VFA{f}{hi}}
+            \\ = \setQ{ \Vtyped{element}{ \naturals\times\V{V} } }
+                {
+                    \left( \begin{gathered}
+                    \existQ{\Vnat{ix}}{
+                        \V{ix} \le \Vnat{hi} \\
+                        \land\; \V{element} = \tuple {\V{ix}, \VFA{f}{ix} }
+                    }
+                    \end{gathered} \right)
+                };
     \end{gathered}
 \\[2ex]
     \begin{gathered}
-        \seq{ \Vnat{ix} < 42 : \VFA{f}{ix+1} }
-        = \seq{ \VFA{f}{1} \ldots \VFA{f}{42} }
-            \\ = \set{ \begin{gathered}
-                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
-                \\ \V{ix} < 42 \land
-                \V{element} = \tuple {\V{ix}, \VFA{f}{ix+1} }
-            \end{gathered} };
+        \seq{ \Vnat{ix} < 42 : \FA{f}{\V{ix}+1} }
+        = \seq{ \FA{f}{1} \ldots \FA{f}{42} }
+            \\ = \setQ{ \Vtyped{element}{ \naturals\times\V{V} } }
+                {
+                    \left( \begin{gathered}
+                    \existQ{\Vnat{ix}}{
+                        \V{ix} < 42 \\
+                        \land\; \V{element} = \tuple {\V{ix}, \FA{f}{\V{ix}+1} }
+                    }
+                    \end{gathered} \right)
+                };
     \end{gathered}
 \end{gather*}
 and
@@ -4009,10 +4032,14 @@ and
     \begin{gathered}
     \seq{ \Vnat{ix} : \VFA{f}{ix+1} }
     = \seq{ \VFA{f}{1}, \VFA{f}{2}, \VFA{f}{3}, \ldots }
-            \\ = \set{ \begin{gathered}
-                \V{element} \in \naturals\times\V{V} : \exists\; \Vnat{ix} :
-                \V{element} = \tuple {\V{ix}, \VFA{f}{ix+1} }
-            \end{gathered} }.
+            \\ = \setQ{ \Vtyped{element}{ \naturals\times\V{V} } }
+                {
+                    \left( \begin{gathered}
+                    \existQ{\Vnat{ix}}{
+                        \V{element} = \tuple {\V{ix}, \FA{f}{\V{ix}+1} }
+                    }
+                    \end{gathered} \right)
+                };
                 \quad \exEnd
     \end{gathered}
 \]
