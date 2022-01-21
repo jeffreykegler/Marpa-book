@@ -3783,6 +3783,19 @@ iff $\Bijective{\V{f}}$, where \mname{bijective},
 with signature $(\Dbool, \classes)$
 abbreviates $\Total{\V{f}} \land \Injective{\V{f}} \land \Bijective{\V{f}}$.
 
+\begin{remark}[Function size identities]
+\label{rm:Function size identities}
+We note that, if a relation is univocal, the size of its relational
+domain is also the size of the relation:
+\[ \Univocal{\V{r}} \implies \size{\Domain{\V{r}}} = \Vsize{r}; \]
+so that
+we have the following identity for
+total functions:
+\[ \Total{\V{fn}} \implies \size{\Domain{\V{fn}}} = \size{\Dom{\V{fn}}} = \Vsize{fn}.
+    \quad \rmEnd
+\]
+\end{remark}
+
 Several infix binary \MtL operators are useful for describing function types.
 The harpoon operator ($\fnMap$),
 with signature $(\Ds, \classes, \classes)$,
@@ -4067,11 +4080,11 @@ and
 \label{def:last-index}
 Where \V{seq} is a non-empty sequence,
 the first element of \V{seq} is \Velement{seq}{0}.
-Where \V{seq} is a finite non-empty sequence,
-the last index is \Vlastix{seq},
-so that the last element is \Velement{seq}{\Vlastix{seq}}.
-This means that, when \V{seq} is well-defined,
-$\Vlastix{seq} = \Vdecr{seq} = \decr{\Vsize{seq}}$.
+Where \V{fseq} is a finite non-empty sequence,
+the last index is \Vlastix{fseq},
+so that the last element is \Velement{fseq}{\Vlastix{fseq}}.
+This means that, when \V{fseq} is finite and well-defined,
+$\Vlastix{fseq} = \Vsize{fseq}-1$.
 \dfEnd
 \end{definition}
 
@@ -4080,11 +4093,11 @@ we often use a sequence builder
 to represent the sequence,
 so that
 \[
-\sum \seq{\V{ix} < 100 : \V{ix} }
+\sum \seqB{\Vnat{ix} < 100}{\V{ix}}
 \]
 is the sum of the first 100 natural numbers and
 \[
-\prod \seq{\V{ix} < 100 : \V{ix}+100 }
+\prod \seqB{\Vnat{ix} < 100 }{ \V{ix}+100 }
 \]
 is the product of the next 100.
 
@@ -4104,23 +4117,25 @@ is clear in context and left implicit.
 
 \begin{definition}[Sequence Pairs]
 \label{def:sequence-pairs}
-Let \V{V} be a non-empty set of objects,
-and let $\Rvarseq{seq}{V}$ be a finite sequence.
+Let $\Vtyped{seq}{\set{\naturals}\cup\naturals\tfnMMap\sets}$
+be a sequence.
 The set of \dfn{pairs} of \V{seq}, \Pairs{\V{seq}},
-is the set of duples containing the values
+is the set of duples whose elements
+are the values
 of consecutive elements of \V{seq}.
 That is,
 \[
+   \begin{gathered}
    \Pairs{\V{seq}} =
-       \set{
-       \begin{gathered}
-       \tuple{\V{from},\V{to}} \in \V{V}\times\V{V} :
-       \\ \exists\; \V{i} \in \Dom{\V{seq}} :
-           \exists\; \V{j} \in \Dom{\V{seq}} :
+   \\ \setQ{ \Vtyped{element}{\V{V}\times\V{V}} }{
+       \left( \begin{gathered}
+       \\ \existQ{ \Vtyped{i}{\Dom{\V{seq}} } }{
+           \existQ{ \Vtyped{j}{\Dom{\V{seq}} } }{
        \\ \V{j} = \V{i}+1
-       \land \V{from} = \VVelement{seq}{i}
-       \land \V{to} = \VVelement{seq}{j}
-       \end{gathered} }. \quad \dfEnd
+       \\ \land \V{from} = \VVelement{seq}{i}
+           \land \V{to} = \VVelement{seq}{j} } }
+       \end{gathered} \right) }. \quad \dfEnd
+   \end{gathered}
 \]
 \end{definition}
 
