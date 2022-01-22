@@ -3784,7 +3784,7 @@ with signature $(\Dbool, \classes)$
 abbreviates $\Total{\V{f}} \land \Injective{\V{f}} \land \Bijective{\V{f}}$.
 
 \begin{remark}[Function size identities]
-\label{rm:Function size identities}
+\label{rm:function-size-identities}
 We note that, if a relation is univocal, the size of its relational
 domain is also the size of the relation:
 \[ \Univocal{\V{r}} \implies \size{\Domain{\V{r}}} = \Vsize{r}; \]
@@ -3903,7 +3903,7 @@ and to introduce additional results.
 
 \begin{definition}[Sequence]
 \label{def:sequence}
-A sequence is a function
+A sequence is a total function
 whose domain is either a natural number or \naturals.
 \dfEnd
 \end{definition}
@@ -4114,6 +4114,24 @@ is clear in context and left implicit.
 \dfEnd
 \end{definition}
 
+\begin{remark}[Sequence size identity]
+\label{rm:sequence-size-identity}
+We recall from ZF that every countable number is a set of all
+the countable numbers less than itself,
+so that every countable number is equal to its own cardinality.
+From this, the definition of a sequence,
+and \Rmref{function-size-identities},
+we have, for every sequence \Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets},
+the following identity:
+\[
+\begin{gathered}
+\size{\Dom{\V{seq}}} = \Dom{\V{seq}}
+    = \left( \setQ{\Vnat{i} < \Dom{\V{seq}}}{\V{i}} \right) \\
+    = \size{\Domain{\V{seq}}} = \Domain{\V{seq}} = \size{\V{seq}}. \quad \rmEnd
+\end{gathered}
+    \]
+\end{remark}
+
 
 \begin{definition}[Sequence Pairs]
 \label{def:sequence-pairs}
@@ -4126,24 +4144,20 @@ of consecutive elements of \V{seq}.
 That is,
 \[
    \begin{gathered}
-   \Pairs{\V{seq}} =
-   \\ \setQ{ \Vtyped{element}{\V{V}\times\V{V}} }{
+   \Pairs{\V{seq}} = \\
+   \setQ{ \Vtyped{element}{\V{V}\times\V{V}} }{
        \left( \begin{gathered}
-       \\ \existQ{ \Vtyped{i}{\Dom{\V{seq}} } }{
-           \existQ{ \Vtyped{j}{\Dom{\V{seq}} } }{
-       \\ \V{j} = \V{i}+1
-       \\ \land \V{from} = \VVelement{seq}{i}
-           \land \V{to} = \VVelement{seq}{j} } }
-       \end{gathered} \right) }. \quad \dfEnd
+       \existQ{ \Vtyped{i}{\Dom{\V{seq}} } }{ \\
+         \V{element} = \tuple{ \VVelement{seq}{i}, \VVelement{seq}{\V{i}+1} }
+        } \end{gathered} \right)
+        }. \quad \dfEnd
    \end{gathered}
 \]
 \end{definition}
 
 \begin{lemma}[Sequence Pairs Set 1]
 \label{lem:sequence-pairs-set-1}
-Let \V{V} be a placeholder
-for a variable whose value is a non-empty set.
-Let $\V{seq} \in \naturals\cup\set{\naturals}$
+Let $\Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets}$
 be a sequence.
 Then
 \begin{gather}
