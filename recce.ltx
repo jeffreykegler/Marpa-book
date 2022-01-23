@@ -374,7 +374,7 @@
     \mathrel{\because}%
   \else%
     $\because$%
-  \fi%
+  \fi\xspace%
 }
 \newcommand{\bcuz}{%
     \linebreak[1]\cuz{}%
@@ -908,10 +908,7 @@
 \newcommand{\myparbox}[2][\mathparwidth]{%
   \parbox[t]{#1}{%
   % \linespread{1.15}\selectfont
-  %\raggedright#2\par
-  \centering#2\par
-  % \vspace{-\prevdepth} % remove the depth of the last line
-  % \vspace{1ex} % add a fixed vertical space
+  \centering\ignorespaces#2\par%
   }%
 }
 \newcommand{\cuzbox}[1]{%
@@ -4155,22 +4152,55 @@ That is,
 \]
 \end{definition}
 
-\begin{theorem}[Sequence Bound]
-\label{th:sequence-bound}
+\begin{theorem}[Sequence index bound]
+\label{th:sequence-index-bound}
 A sequence index is valid iff it is a natural number
 less than the sequence size.
 That is,
 \[ \begin{gathered}
 \univQ{\Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets}}{ \\
     \univQ{\Vtyped{ix}{\sets}}{ \\
-    \V{ix} < \Vsize{seq} \iff \VVelement{seq}{ix} \isWellDef.
-    \quad \thEnd } }
+        \VVelement{seq}{ix} \isWellDef \iff \V{ix} < \Vsize{seq}
+    } }. \quad \thEnd
 \end{gathered} \]
 \end{theorem}
 
 \begin{proof}
-\todo{Write this}
+The proof is by generalization of a chain of equivalences.
+\eqpar{100}{
+    $\Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets},\,
+        \Vtyped{ix}{\sets} \arbOp \True$
+    \cuz AF theorem.
+}
+The rest of this proof is valid for the corner cases
+\begin{gather}
+\label{eq:th-sequence-index-bound-corner1}\tag{corner1}
+\Vsize{seq}=\naturals \text{ and} \\
+\label{eq:th-sequence-index-bound-corner2}\tag{corner2}
+\V{ix}\notin\naturals,
+\end{gather}
+so that we not need to treat
+\refeq{eq:th-sequence-index-bound-corner1}
+and \refeq{eq:th-sequence-index-bound-corner2} separately.
+\eqpar{110}{
+    $\VVelement{seq}{ix} \isWellDef \iff \V{ix} \in \Dom{\V{seq}}$
+    \cuz definition of \Oname{Dom} for sequences.}
+\eqpar{120}{
+    $\Dom{\V{seq}}
+    = \left( \setQ{\Vnat{i} < \Dom{\V{seq}}}{\V{i}} \right) = \Vsize{seq}$
+    \cuz Sequence size identity \Rmref{sequence-size-identity}.}
+\eqpar{130}{
+    $\VVelement{seq}{ix} \isWellDef \iff \V{ix} \in \left( \setQ{\Vnat{i} < \Dom{\V{seq}}}{\V{i}} \right)$
+    \cuz \E{110}, \E{120}.}
+\eqpar{140}{
+    $\VVelement{seq}{ix} \isWellDef \iff \V{ix} < \Dom{\V{seq}}$
+    \cuz \E{130}.}
+\eqpar{150}{
+    $\VVelement{seq}{ix} \isWellDef \iff \V{ix} < \Vsize{seq}$
+    \cuz \E{110}, \E{140}.}
+The theorem is the UG of \E{150}. \myqed
 \end{proof}
+
 
 \begin{lemma}[Sequence Pairs Set 1]
 \label{lem:sequence-pairs-set-1}
