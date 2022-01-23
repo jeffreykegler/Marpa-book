@@ -3332,15 +3332,18 @@ $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$ abbreviates
 \[  \Vtyped{x}{\alpha} \ldefined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} }. \]
 In an NDD, the predicate to the right of the diamond or double-diamond
 operator, \VFA{P}{x} in the examples above,
-is often call the
+is often called the
 \dfn[Hypothesis (of an NDD)]{hypothesis}.
+When the hypothesis of an NDI is $\True$,
+we say that the hypothesis is
+\dfn[Trivial (hypothesis of an NDD)]{trivial}.
 
 \begin{example}[NDDs]
 The NDD
 \[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
 instantiates the local variable \V{x},
 with type \naturals, subject to the restriction that $\V{x} \bmod 2 = 0$,
-so that \V{x} is an even number, gut is otherwise non-deterministic.
+so that \V{x} is an even number, but is otherwise non-deterministic.
 The NDD
 \begin{equation}
 \label{eq:ex-ndd-2}
@@ -3353,7 +3356,7 @@ that constants can be special case of non-determinism.
 A single diamond operator indicates
 a global variable, so that
 \[ \Vtyped{y}{\naturals} \gArbOp \True \]
-instantiates the global variable \V{y} with the trivial restriction,
+instantiates the global variable \V{y} with the trivial hypothesis,
 so that value of \V{y} can be any natural number.
 \exEnd
 \end{example}
@@ -3363,7 +3366,7 @@ variables,
 for the purpose of a later universal generalization (UG).
 In traditional presentations these instantiations are often
 mixed with other considerations.
-It is very common for a presentation to not identify a variable
+It is also common for a presentation to not identify a variable
 as non-deterministic
 until, many lines later, that fact is required for a UG.
 This makes it difficult for a reader who is trying to follow the overall
@@ -3371,6 +3374,8 @@ strategy of such a proof.
 Our NDD notation isolates the crucial information about
 non-deterministic variables, and presents it in a uniform format.
 
+\begin{remark}[Non-deterministic implication]
+\label{rm:non-deterministic-implication}
 When a series of NDDs follows the schema
 \begin{equation}
 \label{eq:ndd-2}
@@ -3395,14 +3400,7 @@ we will find it very convenient to abbreviate it to the form
 \end{equation}
 Single-variable NDDs can be seen as a special case
 of the form \Eref{ndd-2}.
-As stated, we call
-\begin{equation}
-\label{eq:ndd-3-2}
-    \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} }
-\end{equation}
-in \Eref{ndd-2} the hypothesis of the NDD \Eref{ndd-2}.
-We also say the \Eref{ndd-3-2} is the
-\dfn[Hypothesis (of an NDD schema)]{hypothesis} of the schema.
+
 Let
 \begin{equation}
 \label{eq:ndd-4}
@@ -3410,17 +3408,27 @@ Let
 \end{equation}
 be a mathematical statement that we can deduce from
 \Eref{ndd-3}.
-Within this schema, we call such a statement a
+In an instance of this schema, we call such a statement a
 \dfn[Consequent (of an NDD)]{consequent}%
-\index{recce-defienda}{Consequent (of an NDD schema)@Consequent (of an NDD schema)}%
 \index{recce-defienda}{Consequent (of an NDD)@Consequent (of an NDD)}
-of the schema,
-of the NDD \Eref{ndd-3},
-and of their hypothesis \Eref{ndd-3-2}.
-The chain of deduction from NDD \Eref{ndd-3} to consequent \Eref{ndd-4}
-in this schema
+of its NDD \Eref{ndd-3},
+and of the hypothesis of the NDD.
+
+An instance of this schema is called a
+\dfn{non-deterministic implication}
+or \dfn[NDI (non-deterministic implication)]{NDI}.
+An expression is a \dfn[Hypothesis (of an NDI)]{hypothesis} of an NDI
+iff it is the hypothesis of the NDD of the NDI.
+A mathematical statement is a \dfn[Consequent (of an NDI)]{consequent} of an NDI
+iff it is a consequent of the NDD of the NDI. \rmEnd
+\end{remark}
+
+\begin{remark}[Non-deterministic generalization]
+\label{rm:non-deterministic-ggeneralization}
+The chain of deduction in an NDI
 allows
-us to conclude the schema's universal generalization:
+us to make a universal generalization of the following form
+from the NDI schema of \Eref{ndd-5}.
 \begin{equation}
 \label{eq:ndd-5}
 \begin{gathered}
@@ -3430,14 +3438,33 @@ us to conclude the schema's universal generalization:
     }.
 \end{gathered}
 \end{equation}
-We call the UG in \Eref{ndd-5}
-the \dfn[Goal (of an NDD schema)]{goal} of this schema.
 
-It is common for a theorem to be the goal of
-an NDD schema.
+When the hypothesis of the NDI is trivial, so
+that in \Eref{ndd-5},
+$\FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } = \True$,
+we typically simplify \Eref{ndd-5} to
+\begin{equation}
+\label{eq:ndd-6}
+    \univQ{\VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}}{
+        \FA{Csq}{\V{v1},\V{v2}, \ldots \V{vN} }
+    }.
+\end{equation}
+
+When instance of the NDI schema is extended with a UG
+as described in this remark,
+we call that instance a \dfn{non-deterministic generalization}
+or \dfn[NDG (non-deterministic generalization)]{NDG}.
+Every property of an NDI is a property of its NDG
+so that, for example,
+a mathematical statement is a \dfn[Consequent (of an NDG)]{consequent}
+iff it is a consequent of the NDI of the NDG.  \rmEnd
+\end{remark}
+
+It is common for a theorem to be the generalization of
+the consequent of an NDI.
 In the literature, the last mathematical statement
-in proofs of these theorems is often the consequent \Eref{ndd-4},
-the step deducing the goal \Eref{ndd-5} being seen as obvious.
+in proofs of these theorems is often the consequent of an NDI,
+the NDG being seen as obvious.
 This is a practice that we will follow.
 
 \subsection{Defining operators}
