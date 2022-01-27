@@ -4231,41 +4231,29 @@ The theorem is the UG of \E{150}. \myqed
 \section{Slices}
 
 \renewcommand{\labBase}{def-slice-mapping}
-\begin{definition}[Slice mapping]
-\label{def:slice-mapping}
-We say that a relation is a
-\dfn[Slice mapping]{slice mapping}
-for
-domain $\V{len}\inr\naturals\cup\set{\naturals}$
+\begin{definition}[Offset mapping]
+\label{def:offset-mapping}
+We say that a relation is an
+\dfn[Offset mapping]{offset mapping}
 iff
-it maps \V{len} to the natural numbers,
-preserving
-the successor relationships among all of the elements of \V{len},
-as well as the uniqueness of the first element of \V{len}.
+it maps a countable number \V{len} to the natural numbers,
+preserving successor relationships.
 That is, \Fname{f},
-is a slice mapping iff
-\begin{gather}
-\Elab{010} \V{f} \inr \Pow{\V{len}\times\naturals}
-\\ \Elab{020} \land\; \Dom{\V{f}} = \V{len}
-\\ \Elab{040} \land\; \left( \begin{gathered}
-        \forall\; \tuple{ \V{i1}, \V{v1} } \in \V{f} :
-        \forall\; \tuple{ \V{i2}, \V{v2} } \in \V{f} :
-        \\ \Vincr{i1} = \V{i2} \iff \Vincr{v1} = \V{v2}
-    \end{gathered} \right)
-\\ \Elab{050} \land\; \left( \begin{gathered}
-        \forall\; \tuple{ 0, \V{v1} } \in \V{f} :
-        \forall\; \tuple{ 0, \V{v2} } \in \V{f} :
-        \\ \V{v1} = \V{v2}
-    \end{gathered} \right).
-        \quad \dfEnd
-\end{gather}
+is a offset mapping iff
+\[ \begin{gathered}
+    \V{f} \isWellDef \naturals\cup\set{\naturals}  \tfnMMap \naturals
+        \\ \land\; \univQ{ \Vtyped{i1}{\naturals} }{
+           \univQ{ \Vtyped{i2}{\naturals} }{
+        \\ \V{i1}+1 = \V{i2} \iff \V{v1}+1 = \V{v2}
+    } }.  \quad \dfEnd
+\end{gathered} \]
 \end{definition}
 
-\renewcommand{\labBase}{lem-slice-mapping}
-\begin{lemma}[Slice mapping]
-\label{lem:slice-mapping}
+\renewcommand{\labBase}{lem-offset-mapping}
+\begin{lemma}[Offset mapping]
+\label{lem:offset-mapping}
 Let $\V{f}\inr\Pow{\V{len}\times\naturals}$
-be a slice mapping.
+be an offset mapping.
 Then
 \begin{equation}
 \Elab{050}
@@ -4313,9 +4301,9 @@ that is,
 \eqpar{140}{$\V{len} > 0$ \cuz{} \E{120}--\E{130}.}
 \eqpar{150}{$\exists\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
     \cuz{} \E{140}.}
-And from the definition of a slice mapping,
+And from the definition of an offset mapping,
 \eqpar{160}{$\existUniqQOp\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
-    \bcuz{} \Eref{def-slice-mapping-050} in \Dfref{slice-mapping}, \E{150}.}
+    \bcuz{} \Dfref{offset-mapping}, \E{150}.}
 We have now shown that the ``offset'' of \V{f} is well-defined:
 \eqpar{170}{$\Vnat{offset} = \rIota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
     \bcuz{} \E{160}, CV $\V{offset}\inr\naturals$.}
@@ -4648,7 +4636,7 @@ which is not a pair of the container sequence.
 \begin{gathered}
        \exists\; \Vnat{i} : \Vnat{i} + 1 < \Vsize{slice}
        \\ \land\; \V{pair} = \tuple{\VVelement{slice}{i}, \VVelement{slice}{\V{i}+1}}
-       \\ \myparbox{\cuz{} \Thref[Sequence Pairs Set]{sequence-pairs-set}, \E{100}.}
+       \\ \myparbox{\cuz{} \Dfref[Sequence Pairs]{sequence-pairs}, \E{100}.}
 \end{gathered}
 \end{equation}
 \begin{gather}
@@ -4661,7 +4649,7 @@ which is not a pair of the container sequence.
 \begin{gathered}
        \nexists\; \Vnat{i1} : \Vnat{i1} + 1 < \Vsize{seq}
        \\ \land\; \V{pair} = \tuple{\VVelement{seq}{i1}, \VVelement{seq}{\V{i1}+1}}
-       \\ \myparbox{\cuz{} \Thref{sequence-pairs-set}, \E{110}.}
+       \\ \myparbox{\cuz{} \Dfref{sequence-pairs}, \E{110}.}
 \end{gathered}
 \end{equation}
 \begin{equation}
