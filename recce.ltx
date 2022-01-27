@@ -294,15 +294,17 @@
 \newcommand{\basis}[1]{}
 \newcommand{\step}[1]{}
 
-% Eliminate deffn someday
+% TODO: Eliminate deffn someday
 \newcommand{\deffn}[3]{\ensuremath{%
     \Vtyped{#1}{#3\fnMap#2}%
 }}
 
 % function composition operator
+% TODO: Eliminate these?
 \newcommand{\afterOp}{\mathbin{\circ}}
 \newcommand{\fnAfterOp}{\afterOp}
 \newcommand{\relAfterOp}{\mathbin{\circ_R}}
+
 \newcommand{\caret}{\mathord{\char`\^}}
 
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
@@ -639,6 +641,9 @@
 
 \newcommand{\epsQOp}{\mathop{\varepsilon}}
 \newcommand{\epsQ}[2]{\quantify{\epsQOp}{#1}{#2}}
+
+\newcommand{\lambdaQOp}{\mathop{\lambda}}
+\newcommand{\lambdaQ}[2]{\quantify{\lambdaQOp}{#1}{#2}}
 
 % collection builder, or descriptor
 \newcommand{\setQOp}{\mathop{\mathsection}}
@@ -2607,6 +2612,7 @@ Their associativity is right to left.
 Note that the composition of a function zero
 times is the identity function.
 
+\todo{Delete relational composition?}
 \FloatBarrier
 \renewcommand{\cellboxrWidth}{4.5in}
 \begin{table}[H]
@@ -2644,6 +2650,7 @@ That is,
 \end{table}
 \FloatBarrier
 
+\todo{Delete functional composition?}
 Where \Fname{f} are \Fname{g} are functions,
 $\Fname{g}\fnAfterOp{}\Fname{f}$ is
 the \dfn[Functional composition (of functions)]{functional composition},
@@ -3154,6 +3161,9 @@ taken from preceding disciplines.
 \cellboxr{Indefinite descriptor:
     $\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$} \\
     \hline
+\cellboxr{Lamdba descriptor:
+    $\lambdaQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$} \\
+    \hline
 \end{tabular}
 \end{table}
 \FloatBarrier
@@ -3188,6 +3198,12 @@ adapted to Chiron's conventions for well-definedness.\footnote{%
 The value of the indefinite descriptor $\epsQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$ is
 some nondeterministic \Vtyped{x}{\alpha} such that \VFA{P}{x}, if one exists;
 and is \unicorn otherwise.
+
+The lambda descriptor is from lambda calculus.
+The value of the lambda descriptor $\lambdaQ{\Vtyped{x}{\alpha}}{\VFA{P}{x}}$ is
+a function, call it \Fname{f}, such that $\VFA{f}{x} = \VFA{P}{x}$
+if $\V{x} \isWellDef \Dom{\V{f}}$ and $\VFA{P}{x} \isWellDef \Cod{\V{f}}$;
+and $\VFA{f}{x} \isIllDef$ otherwise.
 
 We notice that, as a consequence of our definitions, that
 \begin{equation}
@@ -4230,23 +4246,30 @@ The theorem is the UG of \E{150}. \myqed
 
 \section{Slices}
 
-\renewcommand{\labBase}{def-slice-mapping}
-\begin{definition}[Offset mapping]
-\label{def:offset-mapping}
-We say that a relation is an
-\dfn[Offset mapping]{offset mapping}
-iff
-it maps a countable number \V{len} to the natural numbers,
-preserving successor relationships.
-That is, \Fname{f},
-is a offset mapping iff
+\renewcommand{\labBase}{def-successor-preserving-mapping}
+\begin{definition}[Successor-preserving mapping]
+\label{def:successor-preserving-mapping}
+An \dfn[Offset mapping]{successor-preserving mapping}
+is a total function from countable number \V{len} to the natural numbers
+that preserves successor relationships.
+That is
+\[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
+is an successor-preserving mapping iff
 \[ \begin{gathered}
-    \V{f} \isWellDef \naturals\cup\set{\naturals}  \tfnMMap \naturals
-        \\ \land\; \univQ{ \Vtyped{i1}{\naturals} }{
-           \univQ{ \Vtyped{i2}{\naturals} }{
-        \\ \V{i1}+1 = \V{i2} \iff \V{v1}+1 = \V{v2}
+        \univQ{ \Vtyped{i1}{\Dom{\V{f}}} }{ \univQ{ \Vtyped{i2}{\Dom{\V{f}}} }{
+        \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
     } }.  \quad \dfEnd
 \end{gathered} \]
+\end{definition}
+
+\renewcommand{\labBase}{def-offset-mapping}
+\begin{definition}[Offset mapping]
+\label{def:offset-mapping}
+An \dfn[Offset mapping]{offset mapping}
+is a total function
+\[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
+such that
+\[ \Fname{f} = \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \V{x}+1 }.  \quad \dfEnd \]
 \end{definition}
 
 \renewcommand{\labBase}{lem-offset-mapping}
