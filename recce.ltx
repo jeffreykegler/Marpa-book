@@ -209,6 +209,7 @@
 \newcommand{\illDefB}[2]{#1\illDefBOp#2}
 
 \newcommand{\qeq}{\simeq}
+\newcommand{\nqeq}{\not\simeq}
 \newcommand{\unicorn}{\ensuremath{\bot}\xspace}
 \newcommand{\TRUE}{\ensuremath{\mathbb T}\xspace}
 \newcommand{\FALSE}{\ensuremath{\mathbb F}\xspace}
@@ -4308,28 +4309,35 @@ That is,
          \quad \lmEnd
 \end{gathered}
 \end{equation}
-\todo{Finish this.}
 \end{lemma}
 
 \begin{proof}
+\todo{Summarize proof strategy.}
+\begin{gather}
+\Elab{100}
+     \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \arbOp
+    \\
+        \univQ{ \Vtyped{\V{i1},\V{i2}}{\naturals} }{
+            \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
+        }.
+\end{gather}
+\eqpar{105}{
+     \typed{\Fname{g}}{ \Dom{\V{f}}\tfnMap\naturals }
+         \ldefined \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }.
+}
 \todo{Revise and finish this proof.}
-The proof is by minimal counter-example.
-We first define a macro for a ``bad'' instance of \V{f}:
+Within this proof we define the abbreviating operator \Oname{BAD},
+with signature $(\Dbool,\naturals)$,
+to identify a counter-example to the theorem:
 \begin{equation}
 \Elab{110}
-\begin{gathered}
-\VFA{BAD}{\Vnat{inst}} \ldefined
-\left( \begin{gathered}
-    \exists\; \tuple{\V{inst}, \V{v}} \in \V{f} :
-    \exists\; \V{offset} \in \naturals :
-    \\ \tuple{0,\V{offset}}\in\V{f}
-    \\ \land\; \V{v} \neq \V{offset}+\V{inst}
-\end{gathered} \right)
-    \\ \myparbox{\cuz{}
-        Macro for EI of negation of \E{050}, setting $\Vnat{inst}=\V{i}$.}
-\end{gathered}
+\VFA{BAD}{\V{inst}} \ldefined \VFA{f}{inst} \nqeq \VFA{g}{inst}
 \end{equation}
-We then assume, for a reductio,
+Since the possible counter-examples are a non-empty,
+countable, set,
+we know that is there is a counter-example,
+there is a minimal counter-example.
+We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VFA{BAD}{bad} is true:
 \begin{gather}
