@@ -4274,7 +4274,7 @@ where we say that \V{off} is the \dfn[offset (of an offset mapping)]{offset}
 and that $\Dom{\V{f}}$ is its \dfn[length (of an offset mapping)]{length}.
 Where \Fname{spm} is a successor-preserving mapping,
 we call
-\[ \Fname{g} = \lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} } \]
+\[ (\Vtyped{g}{\Dom{\V{spm}}\tfnMap\naturals}) = \lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} } \]
 the \dfn[offset mapping!induced by a successor-preserving mapping]{
     offset mapping induced by the successor preserving mapping} \V{spm},
 so that \Dom{\V{spm}} is the length of \V{g},
@@ -4285,19 +4285,27 @@ and \FA{spm}{0} is the offset of \V{g}.
 \renewcommand{\labBase}{lem-offset-mapping}
 \begin{lemma}[Offset mapping]
 \label{lem:offset-mapping}
-Let $\V{f}\inr\Pow{\V{len}\times\naturals}$
-be an offset mapping.
-Then
+A successor-preserving mapping is equivalent to the
+offset mapping that it induces.
+That is,
 \begin{equation}
 \Elab{050}
 \begin{gathered}
-     \forall\; \tuple{\V{i}, \V{v}} \in \V{f} :
-         \forall\; \V{offset} \in \naturals :
-     \\ \tuple{0,\V{offset}}\in\V{f}
-         \implies \V{v} = \V{offset}+\V{i}.
+     \univQ{\Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} }{
+    \\ \left( \begin{gathered}
+        \univQ{ \Vtyped{i1}{\Dom{\V{f}}} }{ \univQ{ \Vtyped{i2}{\Dom{\V{f}}} }{
+        \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
+    } }
+    \end{gathered} \right)
+         \\ \implies \Fname{f} =
+         \typed{
+             \left( \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} } \right)
+         }{\Dom{\V{f}}\tfnMap\naturals }
+         }.
          \quad \lmEnd
 \end{gathered}
 \end{equation}
+\todo{Finish this.}
 \end{lemma}
 
 \begin{proof}
