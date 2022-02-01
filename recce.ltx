@@ -372,16 +372,9 @@
 \newcommand{\Vtupelem}[2]{\tupelem{\V{#1}}{#2}}
 \newcommand{\VVtupelem}[2]{\Vtupelem{#1}{\V{#2}}}
 
-\newcommand{\cuz}{%
-  \ifmmode%
-    \mathrel{\because}%
-  \else%
-    $\because$%
-  \fi\xspace%
-}
-\newcommand{\bcuz}{%
-    \linebreak[1]\cuz{}%
-}
+\newcommand{\cuz}{\ensuremath{\mathrel{\because}}\xspace}
+\newcommand{\bcuz}{\linebreak[1]\cuz}
+
 % \newcommand{\tightMath}[1]{%
 %     {%
 %     \medmuskip=0mu
@@ -2382,8 +2375,18 @@ The result of an application of \V{op} must be either
 And, for every $0 < \V{i} \le \V{N}$,
 the \V{i}'th operand of \V{op} must be an element of \VVelement{sig}{i}.
 
+Especially within hints,
+we abbreviate ``abbreviating operator with local scope''
+as
+\dfn[LABBR (abbreviating operator with local scope)]{LABBR},
+and
+``abbreviating operator with global scope'' as
+\dfn[ABBR (abbreviating operator with global scope)]{ABBR}.
+We abbreviate ``operator signature'' as \dfn[SIG (operator signature)]{SIG}.
+
 We can associate \V{op} with its signature using a ``descriptor'' notation:
 \[ \V{op}( \Velement{sig}{0}, \Velement{sig}{1}, \ldots \VVelement{sig}{N}). \]
+\todo{Do I use the abbreviating operator ``descriptor'' notation?  If not, eliminate.}
 We note the \MtL signature and descriptor notations for \COL signatures and operators overload
 \COL notations ---
 as one example,
@@ -4325,47 +4328,38 @@ That is,
      \typed{\Fname{g}}{ \Dom{\V{f}}\tfnMap\naturals }
          \ldefined \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }.
 }
-\todo{Revise and finish this proof.}
-Within this proof we define the abbreviating operator \Oname{BAD},
-with signature $(\Dbool,\naturals)$,
-to identify a counter-example to the theorem:
-\begin{equation}
-\Elab{110}
-\VFA{BAD}{\V{inst}} \ldefined \VFA{f}{inst} \nqeq \VFA{g}{inst}
-\end{equation}
+To identify counter-examples to the theorem,
+we define the operator \Oname{BAD}:
+\eqpar{110}{
+    \VFA{BAD}{\V{inst}} abbreviates $\VFA{f}{inst} \nqeq \VFA{g}{inst}$
+    \bcuz LABBR, SIG $(\Dbool,\naturals)$.}
 Since the possible counter-examples are a non-empty,
 countable, set,
-we know that is there is a counter-example,
+we know that if there is a counter-example,
 there is a minimal counter-example.
 We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VFA{BAD}{bad} is true:
-\begin{gather}
-\Elab{120}
-    \VFA{BAD}{bad}
-\\ \Elab{130}
-    \land\; \forall\; \Vnat{i} < \V{bad} : \neg \VFA{BAD}{i}
-\\ \nonumber
-    \text{\cuz{} AF reductio.  New free \Vnat{bad}.}
-\end{gather}
-For there to be a ``bad'' instance, \V{f} must be non-empty,
-that is,
-\eqpar{140}{$\V{len} > 0$ \cuz{} \E{120}--\E{130}.}
-\eqpar{150}{$\exists\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
-    \cuz{} \E{140}.}
-And from the definition of an offset mapping,
-\eqpar{160}{$\existUniqQOp\;\Vnat{v0} : \tuple{0, \V{v0}} \in \V{f}$
-    \bcuz{} \Dfref{offset-mapping}, \E{150}.}
-We have now shown that the ``offset'' of \V{f} is well-defined:
-\eqpar{170}{$\Vnat{offset} = \rIota\; \Vnat{offset}:\tuple{0,\V{offset}}\in\V{f}$
-    \bcuz{} \E{160}, CV $\V{offset}\inr\naturals$.}
-\eqpar{180}{$\tuple{0,\V{v0}}\in\V{f} \implies \V{v0} = \V{offset}$
-    \bcuz{} \E{170}.}
-\eqpar{190}{$\forall\; \tuple{0, \V{v}} \in \V{f} : \V{v} = \V{offset}$
-    \bcuz{} \E{180}.}
-\eqpar{200}{$\neg \VFA{BAD}{0}$ \cuz{} \E{110}, \E{190}.}
+\eqpar{120}{
+    $\Vtyped{bad}{\naturals} \arbOp \VFA{BAD}{bad}
+        \land \forall\; \Vnat{i} < \V{bad} : \neg \VFA{BAD}{i}$
+    \bcuz AF reductio.}
+\begin{equation}
+\Elab{130}
+\begin{gathered}
+        \FA{g}{0} \qeq
+             \rawfn{ \left(
+                 \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} } \right)
+             }{0}
+         \\ \qeq \FA{f}{0}+0 \qeq \FA{f}{0}
+         \\ \cuz \E{105}.
+\end{gathered}
+\end{equation}
+We note that \E{130} is true even when $\FA{f}{0} \isIllDef$.
+\eqpar{200}{$\neg \VFA{BAD}{0}$ \cuz{} \E{110}, \E{130}.}
 \eqpar{210}{$\V{bad}>0$ \cuz{} \E{120}, \E{200}.}
-\eqpar{220}{$\neg \VFA{BAD}{\Vdecr{bad}}$ \cuz{} \E{130}, \E{210}.}
+\eqpar{220}{$\neg \VFA{BAD}{\Vdecr{bad}}$ \cuz{} \E{120}, \E{210}.}
+\todo{Revise and finish this proof.}
 \myqed
 \end{proof}
 
