@@ -652,6 +652,9 @@
 \newcommand{\univQOp}{\mathop{\forall{}\,}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
 
+\newcommand{\existDecl}[2]{\existQOp#1\mathrel{\arbOp}#2}
+\newcommand{\existGDecl}[2]{\existQOp#1\mathrel{\gArbOp}#2}
+
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
 
 \newcommand{\typed}[2]{\ensuremath{#1\mcolon#2}}
@@ -3287,11 +3290,15 @@ and consists of, in order
 Where there is no confusion, either the quantification symbol,
 or the entire quantification formula or expression,
 may be called the \dfn{quantifier}.
+
+\begin{remark}[Numeric quantification variable]
+\label{rm:numeric-quantification-variable}
 When the quantification variable in a quantifier is numeric,
 we may abbreviate the quantifier formula by expressing the
 quantifier binding as a formula,
 employing the same syntax that we used for descriptors
-\Rmref{number-descriptor}.
+\Rmref{number-descriptor}. \rmEnd
+\end{remark}
 
 \begin{example}
 \label{ex:number-quantification}
@@ -3309,6 +3316,37 @@ and \Eref{number-quantification-example-2}
 are equivalent to
 \[ \univQ{42 < \Vnat{j} \le \Vnat{k}}{\VFA{P}{j}}. \quad \exEnd \]
 \end{example}
+
+\begin{remark}[Non-determistic existential instantion]
+\label{rm:non-determistic-existential-instantion}
+It is common to instantiate a non-deterministic variable immediately
+after an existential quantifier,
+where the quantfication variable has the same type as the instantiated
+variable;
+where the symbol name of the quantification variable is the same as
+the name of the instantiated variable; and
+where the predicate of the quanitifier is the same as the
+hypothesis of the instantiation.
+We can abbreviate these two statments by prepending the existential quantifier symbol
+($\existQOp$)%
+\index{recce-symbol}{exists@$\existQOp$
+    (existence quantifier)!abbreviated before non-deterministic declarator}%
+\index{recce-symbol}{diamond@$\arbOp$
+    (local non-deterministic declarator)!abbreviated after existence quantifier}%
+\index{recce-symbol}{diamonddiamond@$\gArbOp$
+    (global non-deterministic declarator)!abbreviated after existence quantifier}
+to the non-deterministic declarator.
+That is, where $\alpha$ is a type and \Oname{P} is some operator,
+we might abbreviate the two statements
+\begin{gather*}
+\existQ{ \Vtyped{x}{\alpha} }{ \VOA{P}{x}} \\
+\Vtyped{x}{\alpha} \mathrel{\arbOp} \VOA{P}{x}
+\end{gather*}
+as the single statement
+\begin{gather*}
+\existDecl{ \Vtyped{x}{\alpha} }{ \VOA{P}{x}}. \quad \rmEnd
+\end{gather*}
+\end{remark}
 
 \subsection{Rule and derivation operators}
 
@@ -4318,15 +4356,20 @@ That is,
 \todo{Summarize proof strategy.}
 \begin{gather}
 \Elab{100}
+\begin{gathered}
      \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \arbOp
     \\
         \univQ{ \Vtyped{\V{i1},\V{i2}}{\naturals} }{
             \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
         }.
+\end{gathered}
+\\ \nonumber \cuz \E{050}.
 \end{gather}
+
 \eqpar{105}{
      \typed{\Fname{g}}{ \Dom{\V{f}}\tfnMap\naturals }
-         \ldefined \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }.
+         \ldefined \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }
+     \bcuz \E{050}.
 }
 To identify counter-examples to the theorem,
 we define the operator \Oname{BAD}:
@@ -4341,24 +4384,9 @@ We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VFA{BAD}{bad} is true:
 \eqpar{120}{
-    $\Vtyped{bad}{\naturals} \arbOp \VFA{BAD}{bad}
-        \land \forall\; \Vnat{i} < \V{bad} : \neg \VFA{BAD}{i}$
+    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VFA{BAD}{bad}
+        \land \forall\; \Vnat{i} < \V{bad} : \neg \VFA{BAD}{i}}$
     \bcuz AF reductio.}
-\begin{equation}
-\Elab{130}
-\begin{gathered}
-        \FA{g}{0} \qeq
-             \rawfn{ \left(
-                 \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} } \right)
-             }{0}
-         \\ \qeq \FA{f}{0}+0 \qeq \FA{f}{0}
-         \\ \cuz \E{105}.
-\end{gathered}
-\end{equation}
-We note that \E{130} is true even when $\FA{f}{0} \isIllDef$.
-\eqpar{200}{$\neg \VFA{BAD}{0}$ \cuz{} \E{110}, \E{130}.}
-\eqpar{210}{$\V{bad}>0$ \cuz{} \E{120}, \E{200}.}
-\eqpar{220}{$\neg \VFA{BAD}{\Vdecr{bad}}$ \cuz{} \E{120}, \E{210}.}
 \todo{Revise and finish this proof.}
 \myqed
 \end{proof}
