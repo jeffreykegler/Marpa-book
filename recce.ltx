@@ -25373,8 +25373,22 @@ of the Deductive Sciences}.
 
 } % RaggedRight
 
-\clearpage
-\def\indexname{Index of defined terms}
+% redefine this to replace cleardoublepage with clearpage
+\makeatletter
+\renewcommand{\Printindex}[2]{%
+    \begingroup
+        \clearpage
+        % \cleardoublepage
+        \def\indexname{#2}%
+        \raggedright
+        \hyphenpenalty=10000
+        \renewcommand{\seename}{see~also}
+        \renewcommand{\subitem}{\par\hangindent 3em\hspace*{1em}}
+        \@input{#1.ind}%
+    \endgroup
+}
+\makeatother
+
 \setindexprenote{\normalsize
     This index lists defienda,
     together with related notions, such as scopes
@@ -25384,10 +25398,8 @@ of the Deductive Sciences}.
 \idxlayout{columns=2,
     initsep=10pt plus 5pt minus 3pt,
     notesep=10pt plus 5pt minus 3pt}
-\printindex{recce-defienda}
+\Printindex{recce-defienda}{Index of defined terms}
 
-\clearpage
-\def\indexname{Index of symbols}
 \setindexprenote{\normalsize
     This index contains symbols
     which do not conveniently
@@ -25395,7 +25407,7 @@ of the Deductive Sciences}.
 \idxlayout{columns=1,
     initsep=0pt,
     notesep=10pt plus 5pt minus 3pt}
-\printindex{recce-symbol}
+\Printindex{recce-symbol}{Index of symbols}
 
 \clearpage
 \phantomsection
@@ -25432,8 +25444,6 @@ show={theorem,remark,example,definition}]
 \listoftheorems[ignoreall,onlynamed=observation,
     show={lemma,ldef,theorem,example,remark,definition}]
 
-\clearpage
-\def\indexname{General index}
 \setindexprenote{\normalsize
     This index includes concepts which
     it is convenient to index
@@ -25442,7 +25452,7 @@ show={theorem,remark,example,definition}]
 \idxlayout{columns=2,
     initsep=10pt plus 5pt minus 3pt,
     notesep=10pt plus 5pt minus 3pt}
-\printindex{recce-general}
+\Printindex{recce-general}{General index}
 
 \clearpage
 \tableofcontents
