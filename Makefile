@@ -22,7 +22,7 @@ MAKEINDEX = makeindex
 INDEX_LIST = general defienda symbol
 
 .SUFFIXES:
-.SUFFIXES: .pdf .ltx .ind .idx .ilg
+.SUFFIXES: .pdf .ltx .ind .idx .ilg .ist
 
 all: recce.pdf
 
@@ -63,7 +63,7 @@ recce.pdf: recce.ltx
 
 recce-indexes:
 	for ix in $(INDEX_LIST); do \
-	  $(MAKEINDEX) -s recce.mst -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
+	  $(MAKEINDEX) -s recce-$$ix.ist -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
 	done
 
 finite.pdf: finite.ltx
