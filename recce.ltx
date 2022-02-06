@@ -4375,7 +4375,7 @@ That is,
 To identify counter-examples to the theorem,
 we define the operator \Oname{BAD}:
 \eqpar{110}{
-    \VFA{BAD}{\V{inst}} abbreviates $\VFA{f}{inst} \nqeq \VFA{g}{inst}$
+    \VOA{BAD}{\V{inst}} abbreviates $\VFA{f}{inst} \nqeq \VFA{g}{inst}$
     \bcuz LABBR, SIG $(\Dbool,\naturals)$.}
 Since the possible counter-examples are a non-empty,
 countable, set,
@@ -4383,18 +4383,26 @@ we know that if there is a counter-example,
 there is a minimal counter-example.
 We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
-\VFA{BAD}{bad} is true:
+\VOA{BAD}{bad} is true:
 \eqpar{120}{
-    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VFA{BAD}{bad}
-        \land \forall\; \Vnat{i} < \V{bad} : \neg \VFA{BAD}{i}}$
+    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VOA{BAD}{bad}
+        \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}}$
     \bcuz AF reductio.}
 \eqpar{130}{$\Dom{\V{f}}\isWellDef(\naturals\cup\set{\naturals})$ \cuz AF theorem.}
 \begin{align}
-\Elab{140} \V{f}=\set{} & \iff \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef} && \text{ZF, \E{130}.} \\
-\Elab{150} \V{f}=\set{} & \implies \FA{f}{0}\isIllDef && \E{140}. \\
-\Elab{160} \V{f}=\set{} & \implies (\lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }) \isIllDef && \E{150}. \\
-\Elab{170} \V{f}=\set{} & \implies \V{g} \isIllDef && \E{105}, \E{160}.
+\Elab{140} \V{f}=\set{} & \iff \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef} && \cuz \text{ZF, \E{130}.} \\
+\Elab{150} \V{f}=\set{} & \implies \FA{f}{0}\isIllDef && \cuz \E{140}. \\
+\Elab{160} \V{f}=\set{} & \implies (\lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }) \isIllDef
+    && \cuz \E{150}. \\
+\Elab{170} \V{f}=\set{} & \implies \V{g} \isIllDef && \cuz \E{105}, \E{160}. \\
+\Elab{180} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef \land \VFA{g}{x}\isIllDef}
+    && \cuz \E{140}, \E{170}. \\
+\Elab{190} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x} \qeq \VFA{g}{x}}
+    && \cuz \E{180}. \\
+\Elab{200} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\neg \VOA{BAD}{x}}
+    && \cuz \E{110}, \E{190}.
 \end{align}
+\eqpar{210}{$\V{f} \neq \set{}$ \cuz \E{120}, \E{200}.}
 \todo{Revise and finish this proof.}
 \myqed
 \end{proof}
