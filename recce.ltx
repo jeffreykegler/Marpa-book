@@ -159,12 +159,18 @@
 
 % [f]u[n]ction [M]ap operator
 \newcommand{\fnMap}{\rightharpoonup}
+
+% I am not sure that partial functions from a type is a coherent
+% notion.  In particular, what is the type domain of an individual
+% function of this type.  For total functions, Dom(f)=domain(f),
+% but there is no such clue for partial functions.
 % [f]u[n]ction [M]ultidomain [M]ap operator
 % \hbox shifts from math to text vertical alignment, which is what we want
-\newcommand{\fnMMap}{\ensuremath{
-        \mathrel{\raise.75pt\hbox{\ensuremath{
-          \raise1.33pt\hbox{\scalebox{.60}{$\ni$}} \mkern-12mu \rightharpoonup}}}
-}}
+% \newcommand{\fnMMap}{\ensuremath{
+%        \mathrel{\raise.75pt\hbox{\ensuremath{
+%          \raise1.33pt\hbox{\scalebox{.60}{$\ni$}} \mkern-12mu \rightharpoonup}}}
+% }}
+
 % [t]otal [f]u[n]ction [M]ap operator
 \newcommand{\tfnMap}{\rightarrow}
 % [t]otal [f]u[n]ction [M]ultidomain [M]ap operator
@@ -2806,8 +2812,10 @@ produce functions types.
 \hline
 \cellboxr{Type for functions from domain \V{D} to codomain \V{C}: $\V{D} \fnMap \V{C}$} \\
 \hline
-\cellboxr{Type for functions from some domain of type \V{Dt} to codomain \V{C}: $\V{Dt} \fnMMap \V{C}$} \\
-\hline
+% Is the type of partial functions whose domain is a type coherent?  I think perhaps not.
+% See the discussion for \newcommand{\fnMMap} above.
+% \cellboxr{Type for functions from some domain of type \V{Dt} to codomain \V{C}: $\V{Dt} \fnMMap \V{C}$} \\
+% \hline
 \cellboxr{Type for total functions from domain \V{D} to codomain \V{C}: $\V{D} \tfnMap \V{C}$} \\
 \hline
 \cellboxr{Type for total functions from some domain of type \V{Dt} to codomain \V{C}: $\V{Dt} \tfnMMap \V{C}$} \\
@@ -3893,15 +3901,16 @@ given the function's domain and codomain.
 $\wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}$ abbreviates
 \[ \V{D} \fnMap \V{C} \land \Total{\V{f}}. \]
 
-It is often useful to have a function type that allows not just one domain,
+It can be useful to have a function type that allows not just one domain,
 but a collection of them.
-The harpoon-with-tail operator ($\fnMMap$),
-with signature $(\Ds, \Ds, \classes)$,
-returns the type for partial functions,
-given the type of the function's domain and the codomain of the function.
-$\wellDefB{\V{f}}{\alpha \fnMMap \V{C}}$ abbreviates
-\[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \fnMap \V{C}}}. \]
-Similarly, the right-arrow-with-tail operator ($\tfnMMap$),
+% Delete partial functions by domain type?
+% The harpoon-with-tail operator ($\fnMMap$),
+% with signature $(\Ds, \Ds, \classes)$,
+% returns the type for partial functions,
+% given the type of the function's domain and the codomain of the function.
+% $\wellDefB{\V{f}}{\alpha \fnMMap \V{C}}$ abbreviates
+% \[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \fnMap \V{C}}}. \]
+The right-arrow-with-tail operator ($\tfnMMap$),
 with signature $(\Ds, \Ds, \classes)$,
 returns the type for total functions,
 given the type of the function's domain and the codomain of the function.
@@ -4292,7 +4301,24 @@ The theorem is the UG of \E{150}. \myqed
 \renewcommand{\labBase}{def-successor-preserving-mapping}
 \begin{definition}[Successor-preserving mapping]
 \label{def:successor-preserving-mapping}
-An \dfn[Offset mapping]{successor-preserving mapping}
+Intuitively,
+an \dfn[Successor preserving mapping]{successor-preserving mapping}
+is a mapping from a countable number to the natural numbers,
+which preserves successor relationships within its domain.
+The countable number is called
+the \dfn[Length (of a successor-preserving mapping]{Length} of the mapping.
+We recall from ZF that every countable number is an initial segment
+of the countable numbers,
+which means that every successor-preserving mapping relates elements
+of a 0-based range of countable numbers to the natural numbers.
+Formally, $\Vtyped{spm}{\V{len}\times\naturals}$,
+is a successor preserving mapping iff
+\[
+\begin{gathered}
+    \V{len} \mathbin{\isWellDef} (\naturals\cup\set{\naturals}) \text{ and}
+\end{gathered}
+\]
+\todo{Finish this}
 is a total function from countable number \V{len} to the natural numbers
 that preserves successor relationships.
 That is
