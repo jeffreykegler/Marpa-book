@@ -462,6 +462,9 @@
 \newcommand{\Pgref}[1]{(page \pageref{#1})}
 \newcommand{\asideRef}[1]{Aside \ref{sec:aside-#1}, page \pageref{sec:aside-#1}}
 
+% TODO: Once I used this instead of a diamond -- delete it?
+% \newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
+
 % Try to gather all the stuff to do with theoremoids here
 % Start off with theorems, then the other theoremoids,
 % mostly alphabetically.
@@ -471,7 +474,6 @@
 % theoremoids: Th
 
 \newtheorem{theorem}{Theorem}
-\newcommand{\rotatedSquare}{\mathop{\rotatebox[origin=c]{45}{$\square$}}}
 \newcommand{\Thref}[2][]{%
     \genref[#1]{th:#2}{Th}%
 }
@@ -483,11 +485,7 @@
 }
 % "full" ref -- always includes page
 \newcommand{\ThFref}[1]{(\textrm{Th}\ref{#1}:\pageref{#1})}
-\newcommand{\thEnd}{%
-  \ifmmode\rotatedSquare
-  \else$\rotatedSquare$
-  \fi%
-}
+\newcommand{\thEnd}{\Circle}
 
 % theoremoids: Df
 
@@ -4303,33 +4301,97 @@ The theorem is the UG of \E{150}. \myqed
 \label{def:successor-preserving-mapping}
 Intuitively,
 an \dfn[Successor preserving mapping]{successor-preserving mapping}
-is a mapping from a countable number to the natural numbers,
-which preserves successor relationships within its domain.
-The countable number is called
-the \dfn[Length (of a successor-preserving mapping]{Length} of the mapping.
+is a mapping between a countable number and the natural numbers,
+which preserves successor relationships within its domain,
+as well as the uniqueness of the zero element.
+The countable number that is the domain, is also called
+the \dfn[Length (of a successor-preserving mapping]{length} of the mapping.
 We recall from ZF that every countable number is an initial segment
-of the countable numbers,
+of the natural numbers,
 which means that every successor-preserving mapping relates elements
-of a 0-based range of countable numbers to the natural numbers.
+of a 0-based range of natural numbers to the natural numbers.
 Formally, $\Vtyped{spm}{\V{len}\times\naturals}$,
 is a successor preserving mapping iff
-\[
-\begin{gathered}
-    \V{len} \mathbin{\isWellDef} (\naturals\cup\set{\naturals}) \text{ and}
-\end{gathered}
-\]
+\begin{gather}
+\Elab{100} \V{len} \mathbin{\isWellDef} (\naturals\cup\set{\naturals}) \\
+\Elab{110} \land\; \left( \begin{gathered}
+    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{0,\V{j1}} \in \V{spm} \land
+        \tuple{0,\V{j2}} \in \V{spm}
+        \\ \implies \V{j1} = \V{j2}}
+        \end{gathered} \right) \\
+\Elab{120} \land\; \left( \begin{gathered}
+    \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{i},\V{j1}} \in \V{spm} \land
+        \tuple{\V{i}+1,\V{j2}} \in \V{spm}
+        \\ \implies \V{j1}+1 = \V{j2}}
+        \end{gathered} \right). \quad \dfEnd
+\end{gather}
 \todo{Finish this}
-is a total function from countable number \V{len} to the natural numbers
-that preserves successor relationships.
-That is
-\[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
-is an successor-preserving mapping iff
-\[ \begin{gathered}
-        \univQ{ \typed{\V{i1}, \V{i2}}{\naturals} }{
-        \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
-     }.  \quad \dfEnd
-\end{gathered} \]
 \end{definition}
+
+\renewcommand{\labBase}{lm-spm-univocal}
+\begin{lemma}
+Every successor preserving mapping is univocal. \lmEnd
+\end{lemma}
+
+\begin{proof}
+\todo{Summarize proof.}
+To identify counter-examples to the theorem,
+we define the operator \Oname{BAD}:
+\begin{equation}
+\Elab{110}
+\begin{gathered}
+    \text{\VOA{BAD}{\V{inst}} abbreviates} \\
+    \existQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{inst},\V{j1}} \in \V{spm} \land
+        \tuple{\V{inst},\V{j2}} \in \V{spm}
+        \land \V{j1} \nqeq \V{j2}} \\
+    \cuz \text{LABBR, SIG $(\Dbool,\naturals)$}.
+\end{gathered}
+\end{equation}
+Since the possible counter-examples are the natural
+numbers,
+we know that if there is a counter-example,
+there is a minimal counter-example.
+We assume, for a reductio,
+that there is a minimal ``bad'' instance, \Vnat{bad}, such that
+\VOA{BAD}{bad} is true:
+\eqpar{120}{
+    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VOA{BAD}{bad}
+        \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}}$
+    \bcuz AF reductio.}
+\todo{Finish this proof.}
+\myqed
+\end{proof}
+
+\renewcommand{\labBase}{th-successor-preserving-mapping}
+\begin{theorem}
+A successor preserving mapping is a total function.
+That is, where \V{len} is a countable number
+and $\Vtyped{spm}{\V{len}\times\naturals}$
+is a successor-preserving mapping,
+\[ \V{spm} \isWellDef (\V{len} \tfnMap \naturals). \quad \thEnd \]
+\end{theorem}
+
+\begin{proof}
+Where \V{spm} is as in the statement of the theorem,
+we need to show that \V{spm} is a binary relation,
+that it is univocal,
+and that it is well defined for the domain \V{len}.
+We have the first of these because \V{spm} is a
+successor preserving mapping and every successor preserving mapping
+is a binary relation:
+\eqpar{100}{\Rel{spm} \cuz \Dfref{successor-preserving-mapping}}
+To show that \V{spm} we consider two non-deterministically chosen
+natural numbers, \V{x} and \V{y} such that that
+\VFA{spm}{x} and \VFA{spm}{y} are both well-defined.
+\todo{Finish this proof.}
+It remains to show that \V{spm} is univocal, and
+that
+\univQ{ \Vnat{x} }{ \VFA{spm}{x} \isWellDef \iff \V{x}\in\Dom{spm} }
+\myqed
+\end{proof}
 
 \renewcommand{\labBase}{def-offset-mapping}
 \begin{definition}[Offset mapping]
