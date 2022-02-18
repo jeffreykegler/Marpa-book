@@ -135,8 +135,8 @@
 \newcommand{\Dte}{\ensuremath{\mathbb{D}{\rm te}}\xspace}
 \newcommand{\Dfo}{\ensuremath{\mathbb{D}{\rm fo}}\xspace}
 
-\newcommand{\cnbg}{\mbox{\sc cnbg}}
-\newcommand{\subvaluation}{\sqsubseteq}
+\newcommand{\ABBR}[1]{\ensuremath{\text{ABBR}(#1)}}
+\newcommand{\LABBR}[1]{\ensuremath{\text{LABBR}(#1)}}
 
 % \renewcommand{\phi}{\varphi}
 \newcommand{\sembrack}[1]{\llbracket#1\rrbracket}
@@ -657,8 +657,8 @@
 \newcommand{\univQOp}{\mathop{\forall{}\,}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
 
-\newcommand{\existDecl}[2]{\existQOp#1\mathrel{\arbOp}#2}
-\newcommand{\existGDecl}[2]{\existQOp#1\mathrel{\gArbOp}#2}
+\newcommand{\existDecl}[2]{\quantify{\existQOp\arbOp}{#1}{#2}}
+\newcommand{\existGDecl}[2]{\quantify{\existQOp\gArbOp}{#1}{#2}}
 
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
 
@@ -921,6 +921,9 @@
 \newcommand{\cuzbox}[1]{%
    \myparbox{\cuz{} #1}
 }
+% Shortcut for gathered inside equation, which I use a lot
+\newcommand{\eqgath}[2]{\begin{equation}\Elab{#1}\begin{gathered}
+    #2\end{gathered}\end{equation}}
 % A "My paragraph-based equation"
 \newcommand{\eqpar}[2]{\mypareq{eq:\labBase-#1}{#2}}
 \newcommand{\mypareq}[2]{%
@@ -2390,7 +2393,11 @@ as
 and
 ``abbreviating operator with global scope'' as
 \dfn[ABBR (abbreviating operator with global scope)]{ABBR}.
-We abbreviate ``operator signature'' as \dfn[SIG (operator signature)]{SIG}.
+After these abbreviations, we often include the signature
+in parentheses so that, for example,
+    \[ \LABBR{\Dbool,\naturals} \]
+abbreviates
+``abbreviating operator with local scope and signature $(\Dbool,\naturals)$''.
 
 We can associate \V{op} with its signature using a ``descriptor'' notation:
 \[ \V{op}( \Velement{sig}{0}, \Velement{sig}{1}, \ldots \VVelement{sig}{N}). \]
@@ -4345,9 +4352,9 @@ we define the operator \Oname{BAD}:
     \text{\VOA{BAD}{\V{inst}} abbreviates} \\
     \existQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
         \tuple{\V{inst},\V{j1}} \in \V{spm} \land
-        \tuple{\V{inst},\V{j2}} \in \V{spm}
-        \implies \V{j1} \nqeq \V{j2}} \\
-    \text{\cuz LABBR, SIG $(\Dbool,\naturals)$}.
+        \tuple{\V{inst},\V{j2}} \in \V{spm} \land
+        \V{j1} \nqeq \V{j2}} \\
+    \text{\cuz \LABBR{\Dbool,\naturals}.}
 \end{gathered}
 \end{equation}
 Since the possible counter-examples are the natural
@@ -4357,10 +4364,21 @@ there is a minimal counter-example.
 We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VOA{BAD}{bad} is true:
-\eqpar{120}{
-    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VOA{BAD}{bad}
-        \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}}$
-    \bcuz AF reductio.}
+\eqgath{120}{
+    \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} \\
+        }{ \VOA{BAD}{bad}
+            \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
+    \text{\cuz AF reductio.} }
+\eqgath{130}{
+    \V{bad} \notin \Domain{\V{spm}} \\
+    \implies \univQ{\Vnat{i}}{
+    \tuple{\V{bad},\V{i}} \notin \V{spm}} \\
+    \text{\cuz  ZF.} }
+\eqpar{140}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$ \cuz \E{130}.}
+\eqpar{150}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{110}, \E{120}, \E{140}.}
+\eqpar{160}{$\Domain{\V{spm}} > 0$ \cuz \E{150}.}
+\eqpar{170}{$0 \in \Domain{\V{spm}}$ \cuz \E{160}.}
+\eqpar{180}{$\neg \OA{bad}{0}$ \cuz \E{110}, \Eref{def-successor-preserving-mapping-110}.}
 \todo{Finish this proof.}
 \myqed
 \end{proof}
@@ -4464,7 +4482,7 @@ To identify counter-examples to the theorem,
 we define the operator \Oname{BAD}:
 \eqpar{110}{
     \VOA{BAD}{\V{inst}} abbreviates $\VFA{f}{inst} \nqeq \VFA{g}{inst}$
-    \bcuz LABBR, SIG $(\Dbool,\naturals)$.}
+    \bcuz \LABBR{\Dbool,\naturals}.}
 Since the possible counter-examples are a non-empty,
 countable, set,
 we know that if there is a counter-example,
