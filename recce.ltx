@@ -3499,8 +3499,9 @@ iff it is a consequent of the NDD of the NDI. \rmEnd
 \label{rm:non-deterministic-ggeneralization}
 The chain of deduction in an NDI
 allows
-us to make a universal generalization of the following form
-from the NDI schema of \Eref{ndd-5}.
+us to make a universal generalization
+from the NDI schema of \Rmref{non-deterministic-implication}.
+of the following form:
 \begin{equation}
 \label{eq:ndd-5}
 \begin{gathered}
@@ -3510,34 +3511,57 @@ from the NDI schema of \Eref{ndd-5}.
     }.
 \end{gathered}
 \end{equation}
-
-When the hypothesis of the NDI is trivial, so
-that in \Eref{ndd-5},
-$\FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } = \True$,
-we typically simplify \Eref{ndd-5} to
-\begin{equation}
-\label{eq:ndd-6}
-    \univQ{\VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}}{
-        \FA{Csq}{\V{v1},\V{v2}, \ldots \V{vN} }
-    }.
-\end{equation}
-
-When instance of the NDI schema is extended with a UG
+When an instance of an NDI schema is extended with a UG
 as described in this remark,
-we call that instance a \dfn{non-deterministic generalization}
+we call that instance,
+as well as its UG,
+a \dfn{non-deterministic generalization}
 or \dfn[NDG (non-deterministic generalization)]{NDG}.
 Every property of an NDI is a property of its NDG
 so that, for example,
-a mathematical statement is a \dfn[Consequent (of an NDG)]{consequent}
-iff it is a consequent of the NDI of the NDG.  \rmEnd
+a mathematical statement is the \dfn[Hypothesis (of an NDG)]{hypothesis}
+iff it is the hypothesis of the NDI of the NDG.  \rmEnd
+\end{remark}
+
+\begin{remark}[Non-deterministic generalization, simplification 1]
+\label{rm:non-deterministic-simplification-1}
+When the hypothesis of an NDI is trivial, so
+that in \Eref{ndd-3} of \Rmref{non-deterministic-implication},
+\[ \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } = \True, \]
+we typically simplify the generalization to
+\begin{equation}
+\label{eq:ndd-8}
+    \univQ{\VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}}{
+        \FA{Csq}{\V{v1},\V{v2}, \ldots \V{vN} }
+    }. \quad \rmEnd
+\end{equation}
+\end{remark}
+
+\begin{remark}[Non-deterministic generalization, simplification by reductio]
+\label{rm:non-deterministic-reductio}
+When the consequent of the NDI is a contradiction, so
+that in \Eref{ndd-4} of \Rmref{non-deterministic-implication},
+\[ \FA{Csq}{\V{v1},\V{v2}, \ldots \V{vN} } = \False, \]
+we typically simplify the generalization to
+\begin{equation}
+\label{eq:ndd-10}
+    \univQ{\VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}}{
+        \neg \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} }
+    }.
+\end{equation}
+This simplification of an NDG is a form of reductio. \rmEnd
 \end{remark}
 
 It is common for a theorem to be the generalization of
-the consequent of an NDI.
+the consequent of an NDI,
+or one of its simplifications.
 In the literature, the last mathematical statement
 in proofs of these theorems is often the consequent of an NDI,
-the NDG being seen as obvious.
-This is a practice that we will follow.
+because the NDG, or one of its simplifications in
+\Rmref{non-deterministic-simplification-1} or
+\Rmref{non-deterministic-reductio},
+is seen as obvious, and omitted.
+This is a practice that we will sometimes follow.
 
 \subsection{Defining operators}
 \label{ss:defining-operators}
@@ -4353,7 +4377,7 @@ we define the operator \Oname{BAD}:
     \existQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
         \tuple{\V{inst},\V{j1}} \in \V{spm} \land
         \tuple{\V{inst},\V{j2}} \in \V{spm} \land
-        \V{j1} \nqeq \V{j2}} \\
+        \V{j1} \neq \V{j2}} \\
     \text{\cuz \LABBR{\Dbool,\naturals}.}
 \end{gathered}
 \end{equation}
@@ -4365,21 +4389,54 @@ We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VOA{BAD}{bad} is true:
 \eqgath{120}{
-    \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} \\
-        }{ \VOA{BAD}{bad}
-            \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
+    \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} }{ \\
+        \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
     \text{\cuz AF reductio.} }
 \eqgath{130}{
     \V{bad} \notin \Domain{\V{spm}} \\
     \implies \univQ{\Vnat{i}}{
     \tuple{\V{bad},\V{i}} \notin \V{spm}} \\
-    \text{\cuz  ZF.} }
+    \text{\cuz \E{120}.} }
 \eqpar{140}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$ \cuz \E{130}.}
 \eqpar{150}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{110}, \E{120}, \E{140}.}
 \eqpar{160}{$\Domain{\V{spm}} > 0$ \cuz \E{150}.}
 \eqpar{170}{$0 \in \Domain{\V{spm}}$ \cuz \E{160}.}
-\eqpar{180}{$\neg \OA{bad}{0}$ \cuz \E{110}, \Eref{def-successor-preserving-mapping-110}.}
-\todo{Finish this proof.}
+\eqpar{180}{$\neg \OA{BAD}{0}$ \cuz \E{110}, \Eref{def-successor-preserving-mapping-110}.}
+\eqpar{190}{$\V{bad} > 0$ \cuz \E{120}, \E{180}.}
+\eqpar{200}{$\V{bad}-1 \in \Domain{\V{spm}}$ \cuz \E{150}, \E{190}.}
+\eqpar{210}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{120}, \E{200}.}
+\eqgath{220}{
+    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{bad}-1,\V{j1}} \in \V{spm} \land
+        \tuple{\V{bad}-1,\V{j2}} \in \V{spm}
+        \implies \V{j1} = \V{j2}} \\
+        \text{\cuz \E{110},\E{210}.} }
+\eqpar{230}{$\V{predV} \ldefined \iotaQ{\Vnat{i}}{\tuple{\V{bad}-1, \V{i}}} \in \V{spm}$
+    \cuz \E{220}.}
+We know that \E{230} is well defined because of \E{220}.
+\eqgath{240}{
+    \univQ{\Vnat{x},\Vnat{j1}, \Vnat{j2}}{
+        \tuple{\V{x}-1, \V{j1}} \in \V{spm} \land \tuple{\V{x}, \V{j2}} \in \V{spm}
+    \\ \implies \V{j2} = \V{j1}+1 }
+    \\ \text{\cuz \Eref{def-successor-preserving-mapping-120} in
+        \Dfref{successor-preserving-mapping}.}
+}
+\eqpar{250}{
+    $\univQ{\Vnat{j2}}{
+        \tuple{\V{bad}, \V{j2}} \in \V{spm} \implies \V{j2} = \V{predV}+1 }$
+    \cuz \E{200},  \E{230}, \E{240}.
+}
+\eqgath{260}{
+    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{bad},\V{j1}} \in \V{spm} \land
+        \tuple{\V{bad},\V{j2}} \in \V{spm}
+        \implies \V{j1} = \V{predV}+1 = \V{j2}} \\
+        \text{\cuz \E{250}.} }
+\eqpar{270}{$\neg\OA{BAD}{\V{bad}}$ \cuz \E{260}.}
+\eqpar{280}{$\False$ \cuz \E{120}, \E{270}.}
+The theorem to be proved follows by simplification of the NDG of
+\E{120} with the consequent \E{280}.
+\todo{Check this proof.}
 \myqed
 \end{proof}
 
