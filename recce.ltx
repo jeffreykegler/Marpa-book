@@ -253,10 +253,10 @@
 % Footnote fn:
 %
 % * Not in fancyref
-% Definition def:
+% Definition df:
 % Epigraph epi:
 % Theorem th:
-% Lemma lem:
+% Lemma lm:
 % Remark rm:
 % Observation obs:
 % Example ex:
@@ -491,7 +491,7 @@
 
 \newtheorem{definition}[theorem]{Definition}
 \newcommand{\Dfref}[2][]{%
-    \genref[#1]{def:#2}{Df}%
+    \genref[#1]{df:#2}{Df}%
 }
 % some day delete \longDfref
 \newcommand{\longDfref}[2]{%
@@ -522,7 +522,7 @@
 % local theoremoids: Lm
 
 \newtheorem{lemma}{Lemma}[chapter]
-\newcommand{\Lmref}[2][]{\genref[#1]{lem:#2}{Lm}}
+\newcommand{\Lmref}[2][]{\genref[#1]{lm:#2}{Lm}}
 % some day delete \longLmref
 \newcommand{\longLmref}[2]{%
   \ifmmode \text{``#1''\Lmref{#2}}%
@@ -535,7 +535,7 @@
 % local theoremoids: Ld (local definition)
 
 \newtheorem{ldef}{Local Definition}[chapter]
-\newcommand{\Ldref}[2][]{\genref[#1]{ldef:#2}{df}}
+\newcommand{\Ldref}[2][]{\genref[#1]{ldf:#2}{df}}
 % some day delete \longLdref
 \newcommand{\longLdref}[2]{%
   \ifmmode \text{``#1''\Ldref{#2}}%
@@ -2412,7 +2412,7 @@ But our context will always make it clear when the
 notation is intended as \MtL.
 
 \begin{definition}[Ill-definedness value]
-\label{def:ill-definedness-value}
+\label{df:ill-definedness-value}
 Every operator has an \dfn{ill-definedness value}.
 which depends on the metatype of the operator's result.
 \begin{itemize}
@@ -2429,7 +2429,7 @@ then the ill-definedness value is the unicorn, \unicorn. \dfEnd
 \end{definition}
 
 \begin{definition}[Signature mismatch]
-\label{def:signature-mismatch}
+\label{df:signature-mismatch}
 If, in an application of an operator,
 the operands of an operator do not match the signature
 of the operator, then the value of the application is
@@ -2437,7 +2437,7 @@ the ill-definedness value of the operator. \dfEnd
 \end{definition}
 
 \begin{definition}[Strictness with respect to well-definedness]
-\label{def:strictness-with-respect-to-well-definedness}
+\label{df:strictness-with-respect-to-well-definedness}
 Let \V{op} be an operator.
 We say \V{op} is \dfn{strict with respect to well-definedness},
 or \dfn[Strict (with respect to well-definedness)]{strict},
@@ -3947,7 +3947,7 @@ $\wellDefB{\V{f}}{\alpha \tfnMMap \V{C}}$ abbreviates
 \[ \existQ{ \Vtyped{D}{\alpha} }{ \wellDefB{\V{f}}{\V{D} \tfnMap \V{C}}}. \]
 
 \begin{definition}[Function builder]
-\label{def:function-builder}
+\label{df:function-builder}
 \todo{I changed notations and need to fix this}
 To describe function,
 we sometimes use a
@@ -4023,7 +4023,7 @@ in order to spell out our terminology
 and to introduce additional results.
 
 \begin{definition}[Sequence]
-\label{def:sequence}
+\label{df:sequence}
 A sequence is a total function
 whose domain is either a natural number or \naturals.
 \dfEnd
@@ -4198,7 +4198,7 @@ and
 \end{remark}
 
 \begin{definition}[First and last sequence index]
-\label{def:last-index}
+\label{df:last-index}
 Where \V{seq} is a non-empty sequence,
 the first element of \V{seq} is \Velement{seq}{0}.
 Where \V{fseq} is a finite non-empty sequence,
@@ -4223,7 +4223,7 @@ is the sum of the first 100 natural numbers and
 is the product of the next 100.
 
 \begin{definition}[Sequence Predecessor and Successor]
-\label{def:sequence-predecessor}
+\label{df:sequence-predecessor}
 In the context of sequences,
 we overload the terms ``predecessor'' and ``successor''.
 \Velement{seq}{\V{n}+1} is the \dfn{successor}
@@ -4255,7 +4255,7 @@ the following identity:
 
 
 \begin{definition}[Sequence Pairs]
-\label{def:sequence-pairs}
+\label{df:sequence-pairs}
 Let $\Vtyped{seq}{\set{\naturals}\cup\naturals\tfnMMap\sets}$
 be a sequence.
 The set of \dfn{pairs} of \V{seq}, \Pairs{\V{seq}},
@@ -4329,7 +4329,7 @@ The theorem is the UG of \E{150}. \myqed
 
 \renewcommand{\labBase}{def-successor-preserving-mapping}
 \begin{definition}[Successor-preserving mapping]
-\label{def:successor-preserving-mapping}
+\label{df:successor-preserving-mapping}
 Intuitively,
 an \dfn[Successor preserving mapping]{successor-preserving mapping}
 is
@@ -4367,6 +4367,7 @@ is a successor preserving mapping iff
 
 \renewcommand{\labBase}{lm-spm-univocal}
 \begin{lemma}
+\label{lm:spm-univocal}
 Every successor preserving mapping is univocal. \lmEnd
 \end{lemma}
 
@@ -4448,35 +4449,40 @@ and simplifying out the consequent.
 
 \renewcommand{\labBase}{th-successor-preserving-mapping}
 \begin{theorem}
-A successor preserving mapping is a total function.
-That is, where \V{len} is a countable number
-and $\Vtyped{spm}{\V{len}\times\naturals}$
-is a successor-preserving mapping,
-\[ \V{spm} \isWellDef (\V{len} \tfnMap \naturals). \quad \thEnd \]
+Let \V{spm} be a successor preserving mapping of length \Vtyped{len}{\naturals}.
+Then \V{spm} is a total
+function with domain \V{len} and codomain \naturals.
+That is,
+\[ \V{spm} \isWellDef (\V{len}\tfnMap\naturals). \quad \thEnd \]
 \end{theorem}
 
 \begin{proof}
-Where \V{spm} is as in the statement of the theorem,
-we need to show that \V{spm} is a binary relation,
-that it is univocal,
-and that it is well defined for the domain \V{len}.
-We have the first of these because \V{spm} is a
-successor preserving mapping and every successor preserving mapping
-is a binary relation:
-\eqpar{100}{\Rel{spm} \cuz \Dfref{successor-preserving-mapping}}
-To show that \V{spm} we consider two non-deterministically chosen
-natural numbers, \V{x} and \V{y} such that that
-\VFA{spm}{x} and \VFA{spm}{y} are both well-defined.
-\todo{Finish this proof.}
-It remains to show that \V{spm} is univocal, and
-that
-\univQ{ \Vnat{x} }{ \VFA{spm}{x} \isWellDef \iff \V{x}\in\Dom{spm} }
+\eqgath{100}{
+ \Vtyped{len}{\naturals}, \Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals} \\
+     \arbOp \Rel{\V{spm}} \land \Domain{\V{spm}} = \V{len} \\
+ \text{\cuz hypothesis of theorem, \Dfref{successor-preserving-mapping}.}}
+\eqpar{110}{\Rel{\V{spm}} \cuz \E{100}.}
+\eqpar{120}{\Univocal{\V{spm}} \cuz \E{100}, \Lmref{spm-univocal}.}
+Since \V{spm} is a univocal binary relation, it is a function:
+\eqpar{130}{\Fun{\V{spm}} \cuz \E{110}, \E{120}.}
+It remains to show the domain and codomain of \V{spm}, and that it is total.
+\eqpar{140}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
+\eqpar{150}{$\Ran{\V{spm}} \subseteq \naturals$ \cuz \E{100}.}
+The functional domain may be any superset of the relational domain,
+so that
+\eqpar{160}{$\Dom{\V{spm}} = \V{len}$ \cuz \E{140},}
+and the codomain may be any superset of the range, so that
+\eqpar{170}{$\Cod{\V{spm}} = \naturals$ \cuz \E{150}.}
+\eqpar{180}{$\Dom{\V{spm}} = \Domain{\V{spm}}$ \cuz \E{140}, \E{160}.}
+We have shown that \V{spm} is a function \E{130}.
+It follows from \E{160}, \E{170} and \E{180} that \V{spm} is
+of type $\Vtyped{spm}{\V{len}\tfnMap\naturals}$.
 \myqed
 \end{proof}
 
 \renewcommand{\labBase}{def-offset-mapping}
 \begin{definition}[Offset mapping]
-\label{def:offset-mapping}
+\label{df:offset-mapping}
 An \dfn[Offset mapping]{offset mapping}
 is a total function
 \[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
@@ -4496,7 +4502,7 @@ and \FA{spm}{0} is the offset of \V{g}.
 
 \renewcommand{\labBase}{lem-offset-mapping}
 \begin{lemma}[Offset mapping]
-\label{lem:offset-mapping}
+\label{lm:offset-mapping}
 A successor-preserving mapping is equivalent to the
 offset mapping that it induces.
 That is,
@@ -4592,7 +4598,7 @@ that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 
 \renewcommand{\labBase}{def-slice}
 \begin{definition}[Slice]
-\label{def:slice}
+\label{df:slice}
 A \dfn{slice relation} is the relational composition
 of an offset mapping and a sequence.
 That is,
@@ -4646,7 +4652,7 @@ $\V{offset}+\Vdecr{len}$ of \V{seq}.
 
 \renewcommand{\labBase}{lem-slice-relation-existence}
 \begin{lemma}[Slice relation existence]
-\label{lem:slice-relation-existence}
+\label{lm:slice-relation-existence}
 For each offset, length and container sequence,
 a slice relation exists.
 \obEnd
@@ -4688,7 +4694,7 @@ specified as just stated.
 
 \renewcommand{\labBase}{lem-slice-value}
 \begin{lemma}[Slice value]
-\label{lem:slice-value}
+\label{lm:slice-value}
 \begin{equation}
 \Elab{010}
     \begin{gathered}
@@ -4710,7 +4716,7 @@ in the definition of slice \Dfref{slice}.
 
 \renewcommand{\labBase}{lem-slice-functional}
 \begin{lemma}[Slice functional]
-\label{lem:slice-functional}
+\label{lm:slice-functional}
 Every slice relation is functional.  That is,
 \[
     \begin{gathered}
@@ -4749,7 +4755,7 @@ and the proof.
 
 \renewcommand{\labBase}{lem-slice-domain}
 \begin{lemma}[Slice domain]
-\label{lem:slice-domain}
+\label{lm:slice-domain}
 If the offset plus the length of a slice
 relation is less than or equal to the size
 of the container sequence, then
@@ -5049,7 +5055,7 @@ But, for the sake of completeness, here are examples:
 \todo{Define offsets of a slice?}
 
 \begin{definition}[Prefix]
-\label{def:prefix}
+\label{df:prefix}
 \V{slice}
 is a \dfn[Prefix@Prefix (of a sequence)]{prefix}
 of \V{seq} iff
@@ -5094,7 +5100,7 @@ With the reductio, we have both directions and the proof.
 \end{proof}
 
 \begin{definition}[Suffix]
-\label{def:suffix}
+\label{df:suffix}
 \V{slice}
 is a \dfn[Suffix@Suffix (of a sequence)]{suffix}
 of \V{seq} iff
@@ -5129,7 +5135,7 @@ $\V{len} = \Vsize{seq}-\V{offset}$.
 \section{Fusions}
 
 \begin{definition}[Fusion]
-\label{def:fusion}
+\label{df:fusion}
 We say that a container sequence is the
 \dfn[Fusion (of two sequences)]{fusion}
 of a prefix and a suffix iff
@@ -5188,7 +5194,7 @@ This chapter lays out our definitions and basic results
 for directed graphs.
 
 \begin{definition}[Directed graph]
-\label{def:directed-graph}
+\label{df:directed-graph}
 A \dfn{directed graph} is a pair
 $\tuple{\V{V}, \V{E}}$,
 where \V{V} is a finite set of \dfn{vertices},
@@ -5202,7 +5208,7 @@ The \dfn{context graph} is
 $\V{G} = \tuple{\V{V}, \V{E}}$.
 
 \begin{definition}[Parents]
-\label{def:parents}
+\label{df:parents}
 \noindent
 \begin{itemize}
 \item \V{parent} is the \dfn{parent} of \V{child} iff $\tuple{\V{parent},\V{child}} \in \V{E}$.
@@ -5214,7 +5220,7 @@ $\V{G} = \tuple{\V{V}, \V{E}}$.
 \end{definition}
 
 \begin{ldef}[\FA{parents}{} and \FA{children}{}]
-\label{ldef:parents}
+\label{ldf:parents}
 \begin{gather}
 \label{eq:ldef-parents-150}
 \VFA{parents}{child} \ldefined
@@ -5238,7 +5244,7 @@ $\V{G} = \tuple{\V{V}, \V{E}}$.
 \section{Paths}
 
 \begin{definition}[Path]
-\label{def:path}
+\label{df:path}
 We say that a finite non-empty sequence of vertices is a \dfn{path}
 of a directed graph
 iff each successive pair of  values is one
@@ -5290,7 +5296,7 @@ This theorem follows immediately from the definition of a path \Dfref{path}.
 \end{proof}
 
 \begin{definition}[Node-induced Sequence]
-\label{def:node-induced}
+\label{df:node-induced}
 A node \dfn{induces} a sequence iff that sequence is
 the singleton whose only element is that node.
 That is, the node \V{nd} induces the sequence \V{seq}
@@ -5391,7 +5397,7 @@ followed by the unique existential generalization of \V{singleton}.
 \end{proof}
 
 \begin{definition}[Edge-induced Sequence]
-\label{def:edge-induced}
+\label{df:edge-induced}
 Let $\V{edge} \in \V{E}$ be an edge in \V{G} such that
 $\V{edge} = \tuple{\V{from},\V{to}})$.
 We say that \V{edge} \dfn{induces} a sequence iff
@@ -5496,7 +5502,7 @@ followed by the unique existential generalization of \V{duple}.
 \end{proof}
 
 \begin{definition}[Subpath]
-\label{def:subpath}
+\label{df:subpath}
 Let \V{p} be a path in \V{G}.
 A sequence is a \dfn{subpath} of \V{p}
 iff it is a slice of \V{p}.
@@ -5633,7 +5639,7 @@ followed by the unique existential generalization of \V{subpath}.
 \end{proof}
 
 \begin{definition}[Path Fusion]
-\label{def:path-fusion}
+\label{df:path-fusion}
 Let \V{p1} and \V{p2} be paths in \V{G}.
 Their \dfn{fusion}
 is a path, call it \V{fusion},
@@ -5934,7 +5940,7 @@ That is,
 \section{Acyclic directed graphs}
 
 \begin{definition}[Cycle]
-\label{def:cycle}
+\label{df:cycle}
 In a directed graph,
 a cycle is a non-trivial path that starts and ends
 with the same node.
@@ -5948,7 +5954,7 @@ That is,
 \end{definition}
 
 \begin{definition}[Acyclic directed graph]
-\label{def:acyclic}
+\label{df:acyclic}
 A directed graph is \dfn{acyclic} iff
 none of its paths is a cycle.
 \dfEnd
@@ -6066,7 +6072,7 @@ we make our definitions explicit and
 justify the basic results that we will use.
 
 \begin{definition}[Tree]
-\label{def:tree}
+\label{df:tree}
 A \dfn{tree} is a directed graph,
 $\V{G} = \tuple{\V{V}, \V{E}}$
 with the following three properties:
@@ -6131,7 +6137,7 @@ the \dfn{context tree} $\V{G} = \tuple{\V{V}, \V{E}}$
 will be in scope.
 
 \begin{definition}[Root path]
-\label{def:root-path}
+\label{df:root-path}
 A \dfn{root path} is a path that contains the root of its tree.
     \dfEnd
 \end{definition}
@@ -6172,7 +6178,7 @@ it must be the first element of the path.
 \end{proof}
 
 \begin{definition}[Leaf path]
-\label{def:leaf-path}
+\label{df:leaf-path}
 A \dfn{leaf path} is a path which contains a leaf of its tree.
 \dfEnd
 \end{definition}
@@ -6212,7 +6218,7 @@ that leaf node must be the last element of the path.
 \end{proof}
 
 \begin{definition}[Prefix Path]
-\label{def:prefix-path}
+\label{df:prefix-path}
 A path \V{pref} is a \dfn{prefix path},
 or \dfn{prefix},
 with respect to the vertex
@@ -6923,7 +6929,7 @@ will be the set of leaves in \V{G}.
 \section{Tree ancestries}
 
 \begin{ldef}[New Parents]
-\label{ldef:new-parents}
+\label{ldf:new-parents}
 Let the ``new parents'' function,
 \[
     \deffn{NewParents}{\Pow{\Vnodset{V}}}{\Pow{\Vnodset{V}}},
@@ -6942,7 +6948,7 @@ so that
 \end{ldef}
 
 \begin{ldef}[Ancestry]
-\label{ldef:ancestry}
+\label{ldf:ancestry}
 Let the ``ancestry'' function,
 \[
     \deffn{Anc}{%
@@ -6964,7 +6970,7 @@ be such that
 \end{ldef}
 
 \begin{ldef}[Ancestry Predecessor]
-\label{ldef:predecessor-anc}
+\label{ldf:predecessor-anc}
 An ancestry \Vnodset{pred}
 is the ``predecessor''
 of an ancestry \Vnodset{succ} iff \V{pred} is an ancestry with the same base
@@ -6983,7 +6989,7 @@ Symbolically,
 \end{ldef}
 
 \begin{lemma}[Predecessor Parent Disjointness]
-\label{lem:predecessor-parent-disjointness}
+\label{lm:predecessor-parent-disjointness}
 An ancestry and its new parents are disjoint.
 That is,
 \[
@@ -7000,7 +7006,7 @@ The theorem follows immediately from the definition of \Fname{NewParents}
 \end{proof}
 
 \begin{ldef}[Ancestry of Base]
-\label{ldef:ancestry-of-base}
+\label{ldf:ancestry-of-base}
 We say that \Vnodset{A} is an
 \V{N}-level
 \dfn[Ancestry-nodeset@Ancestry (of nodeset)!by level]{ancestry}
@@ -7015,7 +7021,7 @@ some \Vnat{N}.
 \end{ldef}
 
 \begin{lemma}[Ancestry Monotonicity]
-\label{lem:ancestry-monotonicity}
+\label{lm:ancestry-monotonicity}
 Every ancestry of \V{G} contains
 all the ancestries of \V{G}
 that have the same base
@@ -7108,7 +7114,7 @@ and the lemma.
 \end{proof}
 
 \begin{lemma}[Ancestry Addition]
-\label{lem:ancestry-addition}
+\label{lm:ancestry-addition}
 Let a first ancestry be the base of a second ancestry.
 The second ancestry is equal to a third ancestry that
 has the same base as the first ancestry and whose
@@ -7224,7 +7230,7 @@ and the lemma.
 \end{proof}
 
 \begin{lemma}[Ancestry Closure]
-\label{lem:ancestry-closure}
+\label{lm:ancestry-closure}
 Every ancestry is
 the union of all the ancestries with the same base,
 and at the same or a lower level.
@@ -7321,7 +7327,7 @@ and the lemma follows.
 \end{proof}
 
 \begin{lemma}[Ancestry from path]
-\label{lem:ancestry-from-path}
+\label{lm:ancestry-from-path}
 The start of a path is in every ancestry
 whose base contains the last value of the path
 and whose level is at least the last index of the path.
@@ -7555,7 +7561,7 @@ and the lemma follows.
 \section{Tree generations}
 
 \begin{ldef}[Generation]
-\label{ldef:generation}
+\label{ldf:generation}
 A \dfn{generation}
 is the set of nodes
 added to the set of ancestors of \V{leaves} at ancestry level \V{N}.
@@ -7582,7 +7588,7 @@ if
 \end{ldef}
 
 \begin{lemma}[Generation New Parent Equivalence]
-\label{lem:generation-new-parent-equivalence}
+\label{lm:generation-new-parent-equivalence}
 If an ancestry has a predecessor,
 the generation of that ancestry is equivalent to
 the new parents of the predecessor.
@@ -7654,7 +7660,7 @@ for \Vnat{N} and \Vnodset{base}.
 \end{proof}
 
 \begin{lemma}[Generation Disjointness]
-\label{lem:generation-disjointness}
+\label{lm:generation-disjointness}
 Every pair of generations with different levels
 and the same base is disjoint.
 That is,
@@ -7760,7 +7766,7 @@ for \Vnat{lo}, \Vnat{hi} and \Vnodset{base}.
 \end{proof}
 
 \begin{lemma}[Generation Coverage]
-\label{lem:generation-coverage}
+\label{lm:generation-coverage}
 The union of all generations of level \V{N} or less
 is equal to the \V{N}-level ancestry of the same base.
 That is,
@@ -7862,7 +7868,7 @@ which in turn gives us the lemma.
 
 
 \begin{ldef}[Surface]
-\label{ldef:surface}
+\label{ldf:surface}
 The \dfn{surface} of a subset of \V{V}
 is the set of its elements which have parents outside of
 that subset.
@@ -7893,7 +7899,7 @@ implies that the root node
 is never an element of the surface.
 
 \begin{lemma}[Surface Disjointness]
-\label{lem:surface-disjointness}
+\label{lm:surface-disjointness}
 The predecessor and the surface of an ancestry are disjoint.
 That is,
 \begin{equation}
@@ -8038,7 +8044,7 @@ a counter-example, and the lemma.
 \end{proof}
 
 \begin{lemma}[Generation Surface Containment]
-\label{lem:generation-surface-containment}
+\label{lm:generation-surface-containment}
 The surface of the N-level ancestry of a base is a subset
 of the N-level generation of that same base.  That is,
 \begin{equation}
@@ -8138,7 +8144,7 @@ and the lemma follows from the universal generalization of \V{base}.
 \end{proof}
 
 \begin{lemma}[Generation Union Tree Containment]
-\label{lem:generation-union-tree-containment}
+\label{lm:generation-union-tree-containment}
 The union of all generations of the leaves
 whose level is less than the node count
 of \V{G},
@@ -8260,7 +8266,7 @@ and the universal generalization of \V{nd} in
 \end{proof}
 
 \begin{lemma}[Generation Sum Size]
-\label{lem:generation-sum-size}
+\label{lm:generation-sum-size}
 If a set of generations share the same base,
 the sum of their sizes is equal to
 the size of their union.
@@ -8290,7 +8296,7 @@ The lemma follows from these two facts.
 \end{proof}
 
 \begin{lemma}[Generation Addition]
-\label{lem:generation-addition}
+\label{lm:generation-addition}
 Let a first generation be the base of a second generation.
 The second generation is equal to a third generation that
 has the same base as the first generation and whose
@@ -8473,7 +8479,7 @@ which shows the lemma.
 \section{Non-unary tree size}
 
 \begin{definition}[Non-unary tree]
-\label{def:non-unary-tree}
+\label{df:non-unary-tree}
 A tree is \dfn{non-unary} iff
 no node of the tree has an
 out-degree of 1.
@@ -8482,7 +8488,7 @@ two or more child nodes.
 \end{definition}
 
 \begin{lemma}[Surface New Parents Inclusion]
-\label{lem:surface-new-parents-inclusion}
+\label{lm:surface-new-parents-inclusion}
 For all subsets of the nodes of tree,
 every child of a new parent of that subset
 is an element of the surface.
@@ -8574,7 +8580,7 @@ The theorem then follows from
 \end{proof}
 
 \begin{lemma}[Surface--Parents Ratio]
-\label{lem:surface-parents-ratio}
+\label{lm:surface-parents-ratio}
 For any subset of the nodes of a non-unary tree,
 the surface of the subset is at least twice the size of
 the subset's set of direct parents.
@@ -8712,7 +8718,7 @@ The lemma is the universal generalization of
 \end{proof}
 
 \begin{lemma}[Generation Predecessor Size]
-\label{lem:generation-predecessor-size}
+\label{lm:generation-predecessor-size}
 For the nodes of a non-unary tree,
 every generation of a node set
 is at least twice the size
@@ -8782,7 +8788,7 @@ and \V{base}.
 \end{proof}
 
 \begin{lemma}[Non-unary Subtree Size]
-\label{lem:non-unary-subtree-size}
+\label{lm:non-unary-subtree-size}
 For the purposes of this lemma, let \V{G} be non-unary.
 Let \V{base} be a subset of \V{V},
 and let $\V{N}\in\naturals$.
@@ -9016,7 +9022,7 @@ and \Eref{th-non-unary-tree-size-200}.
 \section{Unary paths}
 
 \begin{definition}[Unary edge]
-\label{def:unary-edge}
+\label{df:unary-edge}
 An edge is a unary edge iff it is the only
 edge in its graph with its parent.
 That is,
@@ -9030,7 +9036,7 @@ then the edge $\V{edge}\in\V{E}$ is unary iff
 \end{definition}
 
 \begin{definition}[Unary Path]
-\label{def:unary-path}
+\label{df:unary-path}
 A path is a unary path iff all of its edges are unary edges.
 That is,
 in the graph $\V{G} = \tuple{\V{V}, \V{E}}$
@@ -9120,7 +9126,7 @@ By the Subpath Theorem, we know that \V{subp} is a path:
 \end{proof}
 
 \begin{definition}[Unary Suffix Path]
-\label{def:unary-suffix}
+\label{df:unary-suffix}
 A unary path \V{suff} is a \dfn{unary suffix path},
 or \dfn{unary suffix},
 with respect to the vertex
@@ -9306,7 +9312,7 @@ lemma, which shows us the lemma.
 \end{proof}
 
 \begin{definition}[Maximal Unary Suffix]
-\label{def:maximal-unary-suffix}
+\label{df:maximal-unary-suffix}
 A unary suffix is \dfn{maximal}
 iff its length is not less
 than the length of any other unary suffix of the
@@ -9428,7 +9434,7 @@ string as its rightmost:
 \]
 
 \begin{definition}[Context-free grammar]
-\label{def:context-free-grammar}
+\label{df:context-free-grammar}
 A \dfn{context free grammar} (CFG) is a 4-tuple,
 \begin{equation}
 \begin{gathered}
@@ -9497,7 +9503,7 @@ is \Vcfg{g}.
 \end{definition}
 
 \begin{definition}[Rule size]
-\label{def:rule-size}
+\label{df:rule-size}
 The size of \V{r}, $\size{\Vrule{r}}$,
 is the number of symbols on its RHS,
 so that
@@ -9511,7 +9517,7 @@ is a \dfn{unit rule}.
 \end{definition}
 
 \begin{definition}[Terminal string convention]
-\label{def:terminal-string}
+\label{df:terminal-string}
 When a string
 is a string of terminal symbols,
 we will write it in boldface and enclose it
@@ -9531,7 +9537,7 @@ The following definition
 introduces the first of our binding assumptions.
 
 \begin{definition}[SYM, STR and RULE binding assumptions]
-\label{def:sym-str-rule-binding}
+\label{df:sym-str-rule-binding}
 Let \V{cg} be the context grammar of the most recent scope
 when a variable is bound.
 Unless otherwise stated,
@@ -9684,7 +9690,7 @@ of sentential forms:
 \]
 
 \begin{definition}[Parse]
-\label{def:parse}
+\label{df:parse}
 A \dfn{full parse} is a duple \tuple{ \Vcfg{g}, \Vterm{w} } such that
 $\Vterm{w} \in \myL{\V{g}}$.
 A \dfn{partial parse} is a duple \tuple{ \Vcfg{g}, \Vterm{inp} } such that,
@@ -9707,7 +9713,7 @@ a full parse is a special case of a partial parse.
 \end{definition}
 
 \begin{definition}[Context scopes]
-\label{def:context-scope}
+\label{df:context-scope}
 From this point on, the global scope
 and every new
 definition or theorem scope
@@ -9762,7 +9768,7 @@ so that
 \end{equation*}
 
 \begin{definition}[Token]
-\label{def:token}
+\label{df:token}
 In discussion that are closer to the implementation,
 the contents of the location \Vloc{j}
 in an input \Vstr{w}
@@ -9854,7 +9860,7 @@ we say that \V{ss1} and \V{ss2} are ``equivalent modulo $\pi$'', or
 
 
 \begin{definition}[LR grammar]
-\label{def:LR}
+\label{df:LR}
 Intuitively, an LR($\pi$) grammar is a grammar where two
 sentential forms that differ only in their lookaheads
 have the same handle,
@@ -10555,7 +10561,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{definition}[Internal grammar]
-\label{def:internal-grammar}
+\label{df:internal-grammar}
 A Marpa internal grammar (realm \realm{INT}) is
 a Marpa external grammar which is augmented,
 and which has no nullable symbols.
@@ -10587,7 +10593,7 @@ more simply than we could if they had to apply
 to EXT's, or to CFG's,
 
 \begin{definition}[Right recursion]
-\label{def:rr}
+\label{df:rr}
 Let \Vint{g} be an internal grammar.
 Let \Vstr{sf} be a sentential form of \V{g} non-trivially derived from
 \Vsym{rr}, so that
@@ -10691,7 +10697,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{definition}[Context redefined]
-\label{def:context-parse-int}
+\label{df:context-parse-int}
 Recall our definition of context scope \Dfref{context-scope}.
 We now redefine it.
 From this point on,
@@ -10772,7 +10778,7 @@ is a dotted rule,
 \end{equation*}
 
 \begin{definition}[Size of grammar]
-\label{def:grammar-size}
+\label{df:grammar-size}
 The size of a grammar, \Vsize{\V{g}} is
 the number of distinct dotted rules it allows.
 That is,
@@ -10782,7 +10788,7 @@ That is,
 \end{definition}
 
 \begin{definition}[Dotted rule properties]
-\label{def:dotted-rule-properties}
+\label{df:dotted-rule-properties}
 If we let \Vdr{x} be a dotted rule, such that
 \begin{equation}
 \Vdr{x} = \left[ \Vrule{x}, \V{pos} \right],
@@ -10820,7 +10826,7 @@ then
 \end{definition}
 
 \begin{definition}[Penult]
-\label{def:penult}
+\label{df:penult}
 A dotted rule, \Vdr{d},
 is a \dfn{penult} if it is such that $\Penult{\V{d}} \neq \Lambda$.
 The \dfn{initial dotted rule} is
@@ -10830,7 +10836,7 @@ The \dfn{initial dotted rule} is
 \end{equation*}
 \end{definition}
 \begin{definition}[Prediction]
-\label{def:prediction}
+\label{df:prediction}
 A \dfn{predicted dotted rule},
 or \dfn{prediction} is a dotted rule,
 other than the initial dotted rule,
@@ -10842,7 +10848,7 @@ for example,
 \end{equation*}
 \end{definition}
 \begin{definition}[Completion]
-\label{def:completion}
+\label{df:completion}
 A \dfn{completed dotted rule},
 or \dfn{completion},
 is a dotted rule with its dot
@@ -10857,7 +10863,7 @@ or an \dfn{incompletion}.
 \dfEnd{}
 \end{definition}
 \begin{definition}[Confirmation]
-\label{def:confirmation}
+\label{df:confirmation}
 A \dfn{confirmed dotted rule},
 or \dfn{confirmation},
 is a dotted rule
@@ -10867,14 +10873,14 @@ it is not confirmed.
 \dfEnd{}
 \end{definition}
 \begin{definition}[Medial]
-\label{def:medial}
+\label{df:medial}
 A rule which is both an incompletion and a confirmation
 is called a \dfn{medial rule}, or \dfn{medial}.
 \dfEnd
 \end{definition}
 
 \begin{definition}[EIM]
-\label{def:eim}
+\label{df:eim}
 A Earley item (realm \realm{EIM}) is a triple
 \begin{equation}
 \label{eq:d-eim}
@@ -10947,7 +10953,7 @@ an \realm{EIM} is a \dfn{prediction} if its dotted rule is a prediction,
 and so on.
 
 \begin{definition}[PIM]
-\label{def:pim}
+\label{df:pim}
 A \dfn{parse item} is either an Earley or a Leo item.
 Parse items are of realm \realm{PIM},
 so that
@@ -10960,7 +10966,7 @@ will be defined in \Chref{leo}.
 
 \todo{Revisit productivity, accessibility.  Require in INT?}
 \begin{definition}[EIM validity]
-\label{def:eim-validity}
+\label{df:eim-validity}
 Let
 \begin{equation}
 \label{eq:eim-valid-10}
@@ -11052,7 +11058,7 @@ and
 \end{proof}
 
 \begin{definition}[Matching]
-\label{def:matching-1}
+\label{df:matching-1}
 We say that an \V{l} of some realm \dfn{matches}
 a \V{r} of some realm if
 \Matches{\V{l},\V{r}},
@@ -11116,7 +11122,7 @@ and \Thref{eim-direction}.
 \end{proof}
 
 \begin{lemma}[Reduction]
-\label{lem:reduction}
+\label{lm:reduction}
 let
 \begin{equation}
 \label{eq:th-reduction-lemma-02}
@@ -11360,7 +11366,7 @@ assume
 the partial parse $[\Vint{g}, \Vstr{w}]$.
 
 \begin{definition}[Earley set {[}ES{]}]
-\label{def:earley-set}
+\label{df:earley-set}
 An Earley set
 (realm \realm{ES})
 is as a set of \dfn{parse items}.
@@ -11371,7 +11377,7 @@ That is,
 \end{definition}
 
 \begin{definition}[\realm{ES} Adjoinment]
-\label{def:adjoin}
+\label{df:adjoin}
 An Earley set is a set
 in the mathematical sense,
 so that \realm{PIM}s are \dfn{adjoined} to
@@ -11397,7 +11403,7 @@ a \dfn{proper adjoin} of \V{pim} to \V{before}.
 \end{definition}
 
 \begin{definition}[ES validity]
-\label{def:es-validity}
+\label{df:es-validity}
 \begin{equation}
 \begin{gathered}
 \Valid{\Ves{x}} \defined
@@ -11414,7 +11420,7 @@ define \Valid{\Vpim{lim}}, where \V{lim} is a \realm{LIM}.
 We will do so later \Dfref{lim-validity}.
 
 \begin{definition}[Earley table {[}ET{]}]
-\label{def:et}
+\label{df:et}
 An Earley table, realm \realm{ET},
 is a finite sequence of Earley sets.
 That is,
@@ -11426,7 +11432,7 @@ That is,
 \end{definition}
 
 \begin{definition}[Earley table validity]
-\label{def:et-validity}
+\label{df:et-validity}
 An Earley table is \dfn{valid} iff
 \begin{itemize}
 \item the sequence contains an Earley set for every symbol in the context input
@@ -11456,7 +11462,7 @@ That is, an Earley table all of whose Earley sets are empty is valid,
 as long as it is of the correct length.
 
 \begin{definition}[Context Earley table and sets]
-\label{def:context-earley-table}
+\label{df:context-earley-table}
 From this point on,
 and unless stated otherwise,
 \begin{itemize}
@@ -11475,7 +11481,7 @@ or \dfn{context table},
 \end{definition}
 
 \begin{definition}[ES binding assumption]
-\label{def:es-binding}
+\label{df:es-binding}
 The binding assumption for an ES, call it \Ves{es},
 is that,
 where \Vet{cxt} is the context table,
@@ -11487,7 +11493,7 @@ Typically, \V{cxt} is \V{S}.
 \end{definition}
 
 \begin{definition}[ES current location]
-\label{def:es-current}
+\label{df:es-current}
 Let \V{es} be a valid ES and let \V{table}
 be a valid ET.
 Then
@@ -11506,7 +11512,7 @@ We say that \Current{\Ves{es}} is the
 \end{definition}
 
 \begin{theorem}[ET--EIM current location]
-\label{def:et-eim-current}
+\label{df:et-eim-current}
 Let \VVelement{tab}{j} be a valid Earley set
 in a valid table.  Then
 \[
@@ -11527,7 +11533,7 @@ and the definition of ES current location
 \end{proof}
 
 \begin{theorem}[ES--EIM current location]
-\label{def:es-eim-current}
+\label{df:es-eim-current}
 Let \Ves{es} be an Earley set.  Then
 \[
     \forall \; \Veim{eim} \in \Current{\V{es}} : \Current{\Veim{eim}} = \Current{\V{es}}.
@@ -11549,7 +11555,7 @@ Earley set $\Vloc{i}+1$ describes the state of
 the parse after processing the input at location \Vloc{i}.
 
 \begin{definition}[ES by location]
-\label{def:es-by-location}
+\label{df:es-by-location}
 Let \Vet{cxt} be the context table.
 It is often convenient to refer to an Earley set
 by its location instead of a name.
@@ -11566,7 +11572,7 @@ We will require an idea of direction
 within an Earley table.
 
 \begin{definition}[Earley table directionality]
-\label{def:et-directionality}
+\label{df:et-directionality}
 A sequence of locations within a Earley table is \dfn{left-to-right}
 if it is non-decreasing.
 A sequence of locations within a Earley table is \dfn{right-to-left}
@@ -11575,7 +11581,7 @@ if it is non-increasing.
 \end{definition}
 
 \begin{definition}[Input acceptance]
-\label{def:input-acceptance}
+\label{df:input-acceptance}
 Recall that
 there was a unique accept symbol,
 \Accept{\Vint{g}}, in \Vint{g}.
@@ -12079,7 +12085,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{definition}[Leo items]
-\label{def:lims}
+\label{df:lims}
 
 In \cite{Leo1991}, penults were memoized
 using what Leo called ``transitive items''.
@@ -12113,7 +12119,7 @@ and
 \end{definition}
 
 \begin{definition}[Transition of a \realm{PIM}]
-\label{def:transition}
+\label{df:transition}
 Let \Vpim{pim} be an arbitrary \realm{PIM}.
 The \dfn{transition symbol},
 or \dfn{transition},
@@ -12129,7 +12135,7 @@ may be written
 \end{definition}
 
 \begin{definition}[Current location of a \realm{PIM}]
-\label{def:pim-current}
+\label{df:pim-current}
 Let \Vpim{pim} be an arbitrary \realm{PIM}.
 The \dfn{current location},
 or \dfn{location},
@@ -12145,7 +12151,7 @@ may be written
 \end{definition}
 
 \begin{definition}[Leo unique]
-\label{def:leo-unique}
+\label{df:leo-unique}
 \begin{equation}
 \label{eq:def-leo-unique}
 \begin{gathered}
@@ -12177,7 +12183,7 @@ $\Veim{uniq} \in \LeoUnique{\VVelement{S}{j}}$.
 \end{definition}
 
 \begin{definition}[Leo Eligible]
-\label{def:leo-eligible}
+\label{df:leo-eligible}
 \begin{equation*}
 \label{eq:def-leo-eligible}
 \LeoEligible{\Vloc{i}} \defined \\
@@ -12481,7 +12487,7 @@ $\size{\Vocab{\V{g}}}$.
 \end{proof}
 
 \begin{definition}[Next eligible \realm{EIM}]
-\label{def:next-eligible-eim}
+\label{df:next-eligible-eim}
 \[
 \begin{gathered}
 \FA{NextEligible}{\Veim{next},\Veim{prev}} \\
@@ -12608,7 +12614,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{definition}[Next eligible sequence]
-\label{def:next-eligible-sequence}
+\label{df:next-eligible-sequence}
 A \dfn{next eligible sequence} (realm \realm{LES}) is
 a non-empty sequence of valid, Leo eligible \realm{EIM}s
 such that every \realm{EIM}
@@ -14268,7 +14274,7 @@ The theorem follows from
 \end{proof}
 
 \begin{definition}[LIM validity]
-\label{def:lim-validity}
+\label{df:lim-validity}
 The valid \realm{LIM}s of an \realm{EIM} are defined recursively.
 Let \Veim{src} be an arbitrary \realm{EIM}.
 Then the set of \realm{LIM}s of \var{src} is
@@ -14324,7 +14330,7 @@ and that the \realm{LIM} $\ell$ is the \dfn{LIM} of \Veim{src}.
 \end{definition}
 
 \begin{definition}[Leo source \realm{EIM}]
-\label{def:leo-source-eim}
+\label{df:leo-source-eim}
 \[
     \FA{isSource}{\Veim{src}} \defined \size{\FA{lims}{\var{src}}} > 0.
 \]
@@ -14532,7 +14538,7 @@ Filing pull requests
 will usually be a waste of time.}
 
 \begin{definition}[Leo source sequence {[}LSS{]}]
-\label{def:lss}
+\label{df:lss}
 A \dfn{Leo source \realm{EIM} sequence},
 or \dfn{Leo source sequence} is an \realm{LES},
 every element of which is a Leo source \realm{EIM}.
@@ -14586,7 +14592,7 @@ The theorem follows from
 \end{proof}
 
 \begin{definition}[Underlying LES]
-\label{def:underlying-les}
+\label{df:underlying-les}
 If $\Vles{les} = \Vlss{lss}$ we say that
 \var{les} is the \dfn{underlying LES} of \Vlss{lss}.
 \dfEnd
@@ -14703,7 +14709,7 @@ in \Eref{th-source-eim-containment-30}.
 \end{proof}
 
 \begin{definition}[Maximal LSS]
-\label{def:maximal-lss}
+\label{df:maximal-lss}
 A \dfn{maximal LSS} is an \realm{LSS} which is not the proper prefix
 of another \realm{LSS}.
 We use the notation \Maximal{\Vlss{lss}}
@@ -16974,7 +16980,7 @@ invocations,
 and will then follow with a toy example.
 
 \begin{definition}[Line invocation]
-\label{def:line-invocation}
+\label{df:line-invocation}
 The number of \dfn{invocations} of a line
 is the number of executions of
 that line's logic.
@@ -16982,7 +16988,7 @@ that line's logic.
 \end{definition}
 
 \begin{definition}[Loop invocation]
-\label{def:loop-invocation}
+\label{df:loop-invocation}
 The number of \dfn{invocations} of a loop is the number of times
 the loop is initialized.
 Every line in a loop is either its \dfn{first line},
@@ -17558,7 +17564,7 @@ is minimal.
 \label{sec:dotzeroused-complexity}
 
 \begin{definition}[\var{dotZeroUsed} Bitmap]
-\label{def:dotZeroUsed-bitmap}
+\label{df:dotZeroUsed-bitmap}
 \var{dotZeroUsed} is a bitmap with
 one bit for every rule in the grammar.
 \end{definition}
@@ -17589,7 +17595,7 @@ this may be done in \Oc{} time and \Oc{} space.
 \end{proof}
 
 \begin{definition}[\var{dotZeroUsed} Correctness]
-\label{def:dotZeroUsed-correctness}
+\label{df:dotZeroUsed-correctness}
 We say that \var{dotZeroUsed} is \dfn{correct} for \Vet{table}
 if
 \[
@@ -17629,7 +17635,7 @@ bit writes, and clearing of the bitmap.
 
 
 \begin{definition}[Context \var{dotZeroUsed}]
-\label{def:context-dotzeroused}
+\label{df:context-dotzeroused}
 From this point on,
 and unless stated otherwise,
 every context scope contains its own \var{dotZeroUsed} bitmap.
@@ -17637,7 +17643,7 @@ every context scope contains its own \var{dotZeroUsed} bitmap.
 \end{definition}
 
 \begin{definition}[\var{dotZeroUsed} Binding Assumption]
-\label{def:dotzeroused-binding}
+\label{df:dotzeroused-binding}
 The binding assumption for \var{dotZeroUsed}
 is that \var{dotZeroUsed} is correct for the context
 Earley table.
@@ -17652,7 +17658,7 @@ Earley sets must not contain duplicated \realm{EIM}s and
 \var{seen} is used to efficiently enforce this.
 
 \begin{definition}[\var{seen} PSL]
-\label{def:seen-psl}
+\label{df:seen-psl}
 For each Earley set,
 \var{seen} is a PSL with
 one entry for every dotted rule in the grammar.
@@ -17693,7 +17699,7 @@ in \Chref{per-set-lists}.
 \end{proof}
 
 \begin{definition}[\FA{Seen}{} Correctness]
-\label{def:seen-validity}
+\label{df:seen-validity}
 We say that \FA{Seen}{} is \dfn{correct for} \Vet{table}
 if
 \[
@@ -17710,7 +17716,7 @@ we simply say that \FA{Seen}{} is \dfn{valid}.
 \end{definition}
 
 \begin{definition}[Context \var{seen} Function]
-\label{def:context-seen-fn}
+\label{df:context-seen-fn}
 From this point on,
 and unless stated otherwise,
 every context scope contains its own \FA{Seen}{} function.
@@ -17718,7 +17724,7 @@ every context scope contains its own \FA{Seen}{} function.
 \end{definition}
 
 \begin{definition}[\FA{Seen}{} Binding Assumption]
-\label{def:seen-binding}
+\label{df:seen-binding}
 The binding assumption for \FA{Seen}{}
 is that \FA{Seen}{} is correct for the context
 Earley table.
@@ -17734,7 +17740,7 @@ is for efficient lookup
 of \realm{EIM} and \realm{LIM} matches.
 
 \begin{definition}[\var{transitions} Array]
-\label{def:transitions-array}
+\label{df:transitions-array}
 Conceptually,
 \var{transitions} is an array of arrays of sequences.
 The top-level array is
@@ -17827,7 +17833,7 @@ No space need be incurred in the course of this read.
 \end{proof}
 
 \begin{definition}[\var{transitions} Validity]
-\label{def:transition-validity}
+\label{df:transition-validity}
 We say that \var{transitions} is \dfn{valid for} \Ves{es}
 if
 \[
@@ -17851,7 +17857,7 @@ we say that \var{transitions} is \dfn{valid}.
 \end{definition}
 
 \begin{definition}[\var{transitions} completeness]
-\label{def:transition-completeness}
+\label{df:transition-completeness}
 We say that \var{transitions} is \dfn{complete for} \Ves{es}
 if
 \[
@@ -17876,7 +17882,7 @@ we simply say that \var{transitions} is \dfn{complete}.
 \end{definition}
 
 \begin{definition}[\var{transitions} correctness]
-\label{def:transition-correctness}
+\label{df:transition-correctness}
 Let \var{X} be an \realm{ES},
 the current location of some \realm{ES},
 or an \realm{ET}.
@@ -17888,7 +17894,7 @@ if \var{transitions} is valid and complete.
 \end{definition}
 
 \begin{definition}[Context \var{transitions}]
-\label{def:context-transitions}
+\label{df:context-transitions}
 From this point on,
 and unless stated otherwise,
 every context scope contains its own
@@ -17897,7 +17903,7 @@ every context scope contains its own
 \end{definition}
 
 \begin{definition}[\var{transitions} binding assumption]
-\label{def:transitions-binding}
+\label{df:transitions-binding}
 The binding assumption for \var{transitions}
 is that \var{transitions} is valid for the context
 Earley table.
@@ -18867,7 +18873,7 @@ operation of \Earley{}~\cite{Earley1970}.
 \end{observation}
 
 \section{Scanner op}
-\label{def:scanner}
+\label{df:scanner}
 
 \FloatBarrier
 
@@ -19219,7 +19225,7 @@ operation of \Earley{}.
 \end{observation}
 
 \section{Reducer op}
-\label{def:reducer}
+\label{df:reducer}
 
 \FloatBarrier
 
@@ -19583,7 +19589,7 @@ the \op{Earley-reducer} Space Worksheet
 \FloatBarrier
 
 \begin{definition}[\op{LeoReducer} passes]
-\label{def:op-leo-reducer-passes}
+\label{df:op-leo-reducer-passes}
 A call of \op{LeoReducer} is a \dfn{new pass}
 if it adds a new EIM to an ES.
 A call of \op{LeoReducer} is a \dfn{dup pass}
@@ -20236,7 +20242,7 @@ into the Earley table with the link pair
 \FloatBarrier
 
 \section{Memoizer op}
-\label{def:memoizer}
+\label{df:memoizer}
 
 \begin{algorithm}[H]
 \caption{
@@ -21047,7 +21053,7 @@ We recognize two kinds of ambiguity:
 horizontal and vertical.
 
 \begin{definition}[Horizontal Ambiguity]
-\label{def:h-ambig}
+\label{df:h-ambig}
 Let $\var{p} = [\Vcfg{g}, \Vstr{w}]$ be a parse,
 and let \var{gallia} be a triple $[\Vrule{r}, \var{pos1}, \var{pos2}]$,
 where $0 \le \var{pos1} < \var{pos2} \le \size{\RHS{\var{r}}}$,
@@ -21248,7 +21254,7 @@ This shows the theorem. \myqed
 \end{proof}
 
 \begin{definition}[Vertical Ambiguity]
-\label{def:v-ambig}
+\label{df:v-ambig}
 Let $[\Vcfg{g}, \Vstr{w}]$ be a parse.
 A \dfn{vertical ambiguity} is a 4-tuple,
 \begin{equation}
@@ -21419,7 +21425,7 @@ This shows the theorem. \myqed
 \end{proof}
 
 \begin{definition}
-\label{def:ambig-eim}
+\label{df:ambig-eim}
 An confirmed \realm{EIM} is \dfn{ambiguous} if it is of the form
 \begin{equation}
 \label{eq:ambig-eim-05}
@@ -22216,7 +22222,7 @@ $\because$ Def \var{Next} \Eref{def-next},
 % (realm \realm{VES}).
 
 \begin{definition}[Leo chain]
-\label{def:leo-chain}
+\label{df:leo-chain}
 A \dfn{Leo chain},
 or simply \dfn{chain} when the meaning is clear in context,
 is a sequence of one or more \realm{LIM}s,
@@ -22507,7 +22513,7 @@ $\because$ AF subcase.%
 \end{proof}
 
 \begin{definition}[Leo chain--base match]
-\label{def:leo-chain-base-match}
+\label{df:leo-chain-base-match}
 Let \Veim{base} be an \realm{EIM}
 and let \Vlim{lim} be a \realm{LIM}.
 We say \Veim{base} \dfn{matches} \Vlim{lim},
@@ -22524,7 +22530,7 @@ if and only if \Veim{base} matches $\var{chain}[0]$.
 \end{definition}
 
 \begin{definition}[Leo edge]
-\label{def:leo-edge}
+\label{df:leo-edge}
 Let \Vint{g} be a grammar,
 let \Vlimset{chain} be a valid Leo chain,
 and let $\Veim{base} \in \Ves{current}$ be a valid \realm{EIM} which
@@ -23791,7 +23797,7 @@ unless at least one step of that derivation uses a right recursive rule.
 \section{The complexity results}
 
 \begin{lemma}[Unique Handle]
-\label{lem:handle-unique}
+\label{lm:handle-unique}
 Let \Vint{g} be a LR($\pi$) grammar where $\pi$ is
 a left congruence.
 Let
