@@ -547,12 +547,12 @@
 % I now need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
-\newcommand{\eqWClOp}[1]{\mathrel{=\joinrel{[#1]}}}
+\newcommand{\eqClOpW}[1]{\mathrel{=\joinrel{[#1]}}}
 \newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
-\newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
-\newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
-\newcommand{\eqWMtlOp}{\ensuremath{\eqWClOp{\MtL}}}
-\newcommand{\eqMtlOp}{\ensuremath{\eqClOp{\MtL}}}
+\newcommand{\eqTyOpW}{\ensuremath{\eqClOpW{\Ds}}}
+\newcommand{\eqTyOp}{\ensuremath{\eqClOpW{\Ds}}}
+\newcommand{\eqMtLOpW}{\ensuremath{\eqClOpW{\MtL}}}
+\newcommand{\eqMtLOp}{\ensuremath{\eqClOp{\MtL}}}
 
 \newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
 \newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
@@ -561,14 +561,14 @@
 \newcommand{\DefOp}{\ensuremath{\mathrel{\rawDRel{}}}}
 \newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
 \newcommand{\LDefOp}{\ensuremath{\mathrel{\rawDDRel{}}}}
-\newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=\joinrel{[#1]}}}}
+\newcommand{\DEqClOpW}[1]{\DRel{\mathrel{=\joinrel{[#1]}}}}
 \newcommand{\DEqClOp}[1]{\DRel{\ensuremath{=_{#1}}}}
-\newcommand{\DEqWTyOp}{\DRel{\ensuremath{\eqWClOp{\Ds}}}}
-\newcommand{\DEqTyOp}{\DRel{\ensuremath{\eqClOp{\Ds}}}}
-\newcommand{\DDEqWClOp}[1]{\DDRel{\mathrel{=\joinrel{[#1]}}}}
+\newcommand{\DEqTyOpW}{\DRel{\ensuremath{\eqClOpW{\Ds}}}}
+\newcommand{\DEqTyOp}{\DRel{\ensuremath{\eqClOpW{\Ds}}}}
+\newcommand{\DDEqClOpW}[1]{\DDRel{\mathrel{=\joinrel{[#1]}}}}
 \newcommand{\DDEqClOp}[1]{\DDRel{\ensuremath{=_{#1}}}}
-\newcommand{\DDEqWTyOp}{\DDRel{\ensuremath{\eqWClOp{\Ds}}}}
-\newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
+\newcommand{\DDEqTyOpW}{\DDRel{\ensuremath{\eqClOpW{\Ds}}}}
+\newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOpW{\Ds}}}}
 
 % operators for declarators of "arbitrary", or non-deterministic,
 % variables
@@ -2358,15 +2358,19 @@ Similarly, the range of a function must be class,
 and therefore the value of each function application
 must be a set.
 
-We describe the \dfn[Signature, of \COL operator]{signature}
-of a \COL operator with the \MtL notation as the sequence
+We describe the \dfn[Signature, of operator]{signature}
+of an operator as the \MtL sequence
 \begin{equation}
 \label{eq:col-operator-signature}
     \V{sig} = \Velement{sig}{0}, \Velement{sig}{1}, \ldots \VVelement{sig}{N}),
 \end{equation}
 of one or more metatypes.
-\dfn[Metatype]{Metatypes} are \MtL collections which contain
-\COL values.
+\dfn[Metatype]{Metatypes} are
+\begin{itemize}
+\item \MtL collections which contain
+\COL values, or
+\item the special metatype \MtL.
+\end{itemize}
 Important examples of metatypes are
 $\Ds$, $\classes$,
 $\classes\cup\set{\unicorn}$,
@@ -2376,6 +2380,12 @@ Metatypes allow us to characterize the possible values
 of \COL objects,
 even when the \COL objects are not first class-objects,
 something which cannot, in general, be done with a \COL type.
+
+As noted, signatures are an \MtL notation and not part of the \COL.
+When the special \MtL metatype is one of the elements of the operator's
+signature, that operator must be a metalanguage operator.
+When an element of the signature is \MtL, it means that element
+may be anything in the metalanguage.
 
 Let \V{op} be an operator with the signature in \Eref{col-operator-signature}.
 The arity of \V{op} is $\V{N} = \Vsize{sig}$.
@@ -2938,21 +2948,21 @@ Equivalences form the next precedence group.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{The operation for metalanguage equality is $\eqWMtlOp$} \\
+\cellboxr{The operation for metalanguage equality is $\eqMtLOpW$} \\
 \hline
-\cellboxr{$\eqMtlOp$ is a synonym for $\eqWMtlOp$} \\
+\cellboxr{$\eqMtLOp$ is a synonym for $\eqMtLOpW$} \\
 \hline
-\cellboxr{The operation for equality of types is $\eqWTyOp$} \\
+\cellboxr{The operation for equality of types is $\eqTyOpW$} \\
 \hline
-\cellboxr{$\eqTyOp$ is a synonym for $\eqWTyOp$} \\
+\cellboxr{$\eqTyOp$ is a synonym for $\eqTyOpW$} \\
 \hline
-\cellboxr{The operation for equality of classes of type $\alpha$ is $\eqWClOp{\alpha}$} \\
+\cellboxr{The operation for equality of classes of type $\alpha$ is $\eqClOpW{\alpha}$} \\
 \hline
-\cellboxr{$\eqClOp{\alpha}$ is a synonym for $\eqWClOp{\alpha}$} \\
+\cellboxr{$\eqClOpW{\alpha}$ is a synonym for $\eqClOpW{\alpha}$} \\
 \hline
-\cellboxr{$\eqClOp{\classes}$ is a synonym for $\eqWClOp{\classes}$} \\
+\cellboxr{$\eqClOpW{\classes}$ is a synonym for $\eqClOpW{\classes}$} \\
 \hline
-\cellboxr{$=$ is a synonym for $\eqClOp{\classes}$} \\
+\cellboxr{$=$ is a synonym for $\eqClOpW{\classes}$} \\
 \hline
 \cellboxr{$\V{a}\qeq\V{b}$ means
     $(\V{a} \isWellDef \mathrel{\land} \V{b} \isWellDef) \implies \V{a} = \V{b}$} \\
@@ -2972,19 +2982,19 @@ As operators, they are not typed,
 but their metatype ``tags'' suggest their signature.
 Each tagged equivalence operator has a ``wide'' form
 and a ``narrow'' form.
-The wide form operator for the equivalence of classes is $\eqWClOp{\classes}$.
-Its narrow form synonym is $\eqClOp{\classes}$.
+The wide form operator for the equivalence of classes is $\eqClOpW{\classes}$.
+Its narrow form synonym is $\eqClOpW{\classes}$.
 We sometimes surround the wide form operator with parentheses for clarity,
 so that instead of
-$\V{x}\eqWClOp{\classes}\V{y}$ we write
-$\V{x} \mathbin{(\eqWClOp{\classes})} \V{y}$.
+$\V{x}\eqClOpW{\classes}\V{y}$ we write
+$\V{x} \mathbin{(\eqClOpW{\classes})} \V{y}$.
 
 More formally,
 the \COL expression $\V{x}=\V{y}$
-abbreviates $\V{x}\eqWClOp{\classes}\V{y}$.
-The operator $\eqWClOp{\classes}$
+abbreviates $\V{x}\eqClOpW{\classes}\V{y}$.
+The operator $\eqClOpW{\classes}$
 has signature $(\Dbool,\classes,\classes)$
-and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
+and the \COL expression $\V{x}\eqClOpW{\classes}\V{y}$ abbreviates
 \begin{equation}
 \label{eq:def-eq-classes}
     \univQ{ \Vtyped{el}{\sets} }{ \V{el}\in\V{x} \iff \V{el}\in\V{y}}.
@@ -2992,61 +3002,95 @@ and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
 We recall from NBG that
 \Eref{def-eq-classes} is the Axiom of Extension for classes.
 
-$\eqWClOp{\classes}$ generalizes to
-$\eqWClOp{\alpha}$, the equivalence operator for this type $\alpha$.
-The narrow form of $\eqWClOp{\alpha}$ is $\eqClOp{\alpha}$.
-For example, $\eqWClOp{\sets}$ and $\eqClOp{\sets}$, are the two forms
+$\eqClOpW{\classes}$ generalizes to
+$\eqClOpW{\alpha}$, the equivalence operator for this type $\alpha$.
+The narrow form of $\eqClOpW{\alpha}$ is $\eqClOpW{\alpha}$.
+For example, $\eqClOpW{\sets}$ and $\eqClOpW{\sets}$, are the two forms
 of the operator for the ZF concept of equality,
 the equality of sets.
 
-The $\eqWClOp{\alpha}$ operator has signature $(\Dbool,\classes,\classes)$
-and the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$
+The $\eqClOpW{\alpha}$ operator has signature $(\Dbool,\classes,\classes)$
+and the \COL expression $\V{x}\eqClOpW{\alpha}\V{y}$
 abbreviates
-\[  \wellDefB{\V{x}}{\alpha} \land \wellDefB{\V{y}}{\alpha} \land \V{x}\eqClOp{\classes}\V{y}. \]
+\[  \wellDefB{\V{x}}{\alpha} \land \wellDefB{\V{y}}{\alpha} \land \V{x}\eqClOpW{\classes}\V{y}. \]
 
 \begin{remark}[Alternative definition of equivalence by type]
 An alternative, if trickier, way of defining
-$\V{x}\eqWClOp{\alpha}\V{y}$, when $\alpha$ is a constant,
+$\V{x}\eqClOpW{\alpha}\V{y}$, when $\alpha$ is a constant,
 is to let its signature be $(\Dbool,\alpha,\alpha)$
-and to say that the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$
+and to say that the \COL expression $\V{x}\eqClOpW{\alpha}\V{y}$
 abbreviates $\V{x}=\V{y}$.
 \rmEnd \end{remark}
 
-The less frequently used operator $\eqWTyOp$,
+The less frequently used operator $\eqTyOpW$,
 which represents the equality of types.
 We recall that types are not necessarily first-class variables.
-The narrow form of $\eqWTyOp$
+The narrow form of $\eqTyOpW$
 is $\eqTyOp$, and their signature is $(\Dbool,\Ds,\Ds)$.
 The \COL expression $\V{x}\eqTyOp\V{y}$ abbreviates
 \[ \univQ{ \Vtyped{cl}{\classes} }{
     \wellDefB{\V{cl}}{\V{x}} \iff \wellDefB{\V{cl}}{\V{y}} }. \]
 
-\begin{remark}[Type equivalence versus first class object equivalence]
-We notice that types which are first class objects are equivalent
-iff they are equivalent as first class objects,
-and in this case we have both
-$\alpha \eqTyOp \beta$ and $\alpha = \beta$.
-If $\alpha$ and $\beta$ are types which are not first class objects, however,
-we may have both $\alpha \eqTyOp \beta$ and $\alpha \neq \beta$.
-For example,
+\begin{remark}[Narrow and wide equivalence operators]
+An equivalence operator $\eqClOpW{w}$ is
+\dfn[Wide (equivalence operator)]{wider}
+than another,
+call it $\eqClOpW{n}$, iff
+for every \MtL object \Vtyped{obj}{\MtL},
 \[
-\gamma \eqTyOp \classes \setminus \naturals \land
-    \gamma \eqTyOp \delta \implies \gamma \neq \delta,
+    \V{obj}\eqClOpW{n}\V{obj} \implies \V{obj}\eqClOpW{w}\V{obj}
 \]
-because $\gamma = \delta$ only if both $\wellDefB{\gamma}{\classes}$
-and $\wellDefB{\delta}{\classes}$,
-and
-$\illDefB{(\classes \setminus \naturals)}{\classes}$.
-That is because
-$\gamma = \delta$
-abbreviates $\gamma \eqClOp{\classes} \delta$;
-and $\classes \setminus \naturals$,
-the superclass of all
-classes which are not natural numbers,
-is not well-defined in $\classes$.
-Therefore, $\illDefB{\gamma}{\classes}$, and
-$\gamma \eqClOp{\classes} \delta$ is false.
+The equivalence operator $\eqClOpW{n}$ is
+\dfn[Narrow (equivalence operator)]{narrower}
+than $\eqClOpW{w}$ iff,
+for every \MtL object \Vtyped{obj}{\MtL},
+\[
+    \V{obj}\eqClOpW{w}\V{obj} \implies \V{obj}\eqClOpW{n}\V{obj}.
+\]
+For example, the series of operators
+\[
+    \eqMtLOpW, \quad
+    \eqTyOpW, \quad
+    \eqClOpW{\classes}, \quad
+    \eqClOpW{\sets}, \quad
+    \eqClOpW{\naturals}
+\]
+goes from wide to narrow.
+Notice that by this definition, every equivalence operator is
+both narrower and wider than itself.
 \rmEnd
+\end{remark}
+
+\begin{remark}[Narrow and wide equivalence]
+Every pair of \MtL objects which are equivalent for an equivalence operator,
+are also equivalent for every wider equivalence operator.
+The converse is not true.
+\MtL objects which compare equal for one equivalence operator
+may be unequal if a narrower equivalence operator is used.
+
+As an example we define, within the scope of this remark,
+two objects \Vtyped{a}{\Ds} and \Vtyped{b}{\Ds}
+as $\classes$,
+the superclass of all
+classes.
+\[ \begin{gathered}
+\V{a} \DDEqTyOp \classes \\
+\land \; \V{b} \DDEqTyOp \classes.
+\end{gathered} \]
+Considered as types, \V{a} and \V{b} are equivalent:
+\[
+    \V{a} \eqTyOpW \V{b}.
+\]
+But the superclass of all classes is not a class:
+\[ \illDefB{\V{a}}{\classes} \land \illDefB{\V{b}}{\classes}. \]
+In order for $\V{a} = \V{b}$, both \V{a} and \V{b} must
+be well-defined as classes, so that
+\[ \illDefB{\V{a}}{\classes} \lor \illDefB{\V{b}}{\classes} \implies \V{a} \neq \V{b}. \]
+(We recall that the operator $=$ is a synonym for $\eqClOpW{\classes}$.)
+Therefore we have both
+\[
+    \V{a} \eqTyOpW \V{b} \text{ and } \V{a} \neq \V{b}. \quad \rmEnd
+\]
 \end{remark}
 
 \begin{remark}
@@ -3055,11 +3099,11 @@ The operator $\qeq$ is not strict for well-definedness.
 \rmEnd
 \end{remark}
 
-The operator $\eqWMtlOp$
+The operator $\eqMtLOpW$
 represents metalanguage equality,
 which is an informal notion.
-The narrow form of $\eqWMtlOp$
-is $\eqMtlOp$, and their signature is $(\Dbool,\MtL,\MtL)$.
+The narrow form of $\eqMtLOpW$
+is $\eqMtLOp$, and their signature is $(\Dbool,\MtL,\MtL)$.
 
 \subsection{Comparison operators}
 
@@ -3562,11 +3606,11 @@ of the equivalence operations.
 \hline
 \hline
 \cellboxr{The diamond variants of equivalence operations function as global definitions.
-    They include $\DEqWTyOp$, $\DEqTyOp$, $\DEqWClOp{\alpha}$, $\DEqClOp{\alpha}$, $\DEqClOp{\classes}$,
+    They include $\DEqTyOpW$, $\DEqTyOp$, $\DEqClOpW{\alpha}$, $\DEqClOp{\alpha}$, $\DEqClOp{\classes}$,
     and $\defined$.} \\
 \hline
 \cellboxr{The double-diamond variants of equivalence operations function as global definitions.
-    They include $\DDEqWTyOp$, $\DDEqTyOp$, $\DDEqWClOp{\alpha}$, $\DDEqClOp{\alpha}$, $\DDEqClOp{\classes}$,
+    They include $\DDEqTyOpW$, $\DDEqTyOp$, $\DDEqClOpW{\alpha}$, $\DDEqClOp{\alpha}$, $\DDEqClOp{\classes}$,
     and $\ldefined$.} \\
 \hline
 \end{tabular}
@@ -3848,7 +3892,6 @@ where the signature of \mname{fun} is $(\Dbool, \classes)$
 and $\Fun{\V{r}}$ abbreviates
 \[ \Rel{\V{r}} \land \Univocal{\V{r}}. \]
 
-\todo{Rewrite this}
 The \MPname{DOM} metaproperty records the domain of a function,
 so that $\Dom{\V{f}}$,%
 \index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
@@ -4465,17 +4508,13 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof starts by assuming \V{spm}, a successor preserving mapping
-of length \V{len},
-and defining \V{tot}, a function of type $\V{len}\tfnMap\naturals$
-equivalent to \V{spm}.
-For the proof, we need seek to show that \V{tot} is not just
-a definition, but is well-defined.
-In other words, we have to show that \V{tot} exists.
-
+The proof assumes that \V{map} is a successor preserving mapping
+of length \V{len}, to show that it is also
+a function of type $\V{len}\tfnMap\naturals$.
 For convenience, we let \Oname{SPM} be a local abbreviation with
 signature $(\Dbool, \classes)$
-such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping.
+such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping
+according to \Dfref{successor-preserving-mapping}.
 \eqgath{100}{
  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals} \\
      }{ \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
@@ -4484,6 +4523,7 @@ such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping.
 \eqpar{110}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-preserving-mapping}.}
 \eqpar{120}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
 \eqpar{130}{\Fun{\V{map}} \cuz \E{110}, \E{120}.}
+Equation \E{130} allows us to narrow the type of \V{map} to a function.
 \eqpar{140}{$\V{map} \isWellDef (\fnMap{naturals\cup\set{naturals}}{\naturals})$
     \cuz \E{100}, \E{130}.}
 We need to show that the function \V{map} is total.
