@@ -551,6 +551,8 @@
 \newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
 \newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
 \newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
+\newcommand{\eqWMtlOp}{\ensuremath{\eqWClOp{\MtL}}}
+\newcommand{\eqMtlOp}{\ensuremath{\eqClOp{\MtL}}}
 
 \newcommand{\rawDRel}[1]{\raise-.3pt\hbox{$\diamondsuit$}\mkern-1mu{#1}}
 \newcommand{\rawDDRel}[1]{\raise-.3pt\hbox{${\diamondsuit}\mkern-11mu{\diamondsuit}$}%
@@ -2936,6 +2938,10 @@ Equivalences form the next precedence group.
 \begin{tabular}{|l|}
 \hline
 \hline
+\cellboxr{The operation for metalanguage equality is $\eqWMtlOp$} \\
+\hline
+\cellboxr{$\eqMtlOp$ is a synonym for $\eqWMtlOp$} \\
+\hline
 \cellboxr{The operation for equality of types is $\eqWTyOp$} \\
 \hline
 \cellboxr{$\eqTyOp$ is a synonym for $\eqWTyOp$} \\
@@ -2960,8 +2966,6 @@ but all of them, except the traditional $=$, are for special cases.
 $\V{x}=\V{y}$ represents the equality of first-class objects,
 and most of the objects that we will need to compare
 are first-class objects.
-The general equality operator $=$
-is also used to represent equality in the meta-language.
 
 The equivalence operators ``pun'' our type notation.
 As operators, they are not typed,
@@ -3008,8 +3012,7 @@ and to say that the \COL expression $\V{x}\eqWClOp{\alpha}\V{y}$
 abbreviates $\V{x}=\V{y}$.
 \rmEnd \end{remark}
 
-It remains to define
-the less frequently used operator $\eqWTyOp$,
+The less frequently used operator $\eqWTyOp$,
 which represents the equality of types.
 We recall that types are not necessarily first-class variables.
 The narrow form of $\eqWTyOp$
@@ -3051,6 +3054,12 @@ $\gamma \eqClOp{\classes} \delta$ is false.
 The operator $\qeq$ is not strict for well-definedness.
 \rmEnd
 \end{remark}
+
+The operator $\eqWMtlOp$
+represents metalanguage equality,
+which is an informal notion.
+The narrow form of $\eqWMtlOp$
+is $\eqMtlOp$, and their signature is $(\Dbool,\MtL,\MtL)$.
 
 \subsection{Comparison operators}
 
@@ -4449,7 +4458,7 @@ and simplifying out the consequent.
 \begin{theorem}
 Let \V{spm} be a successor preserving mapping of length \Vtyped{len}{\naturals}.
 Then \V{spm} is a total
-function of type 
+function of type
 $\V{len}\tfnMap\naturals$.
 That is,
 \[ \V{spm} \isWellDef (\V{len}\tfnMap\naturals). \quad \thEnd \]
