@@ -192,8 +192,8 @@
 \newcommand{\emptyfun}{\triangle}
 \newcommand{\emptylist}{[\,]}
 
-\newcommand{\True}{\mbox{\sf T}}
-\newcommand{\False}{\mbox{\sf F}}
+\newcommand{\True}{\mbox{\sf T}\xspace}
+\newcommand{\False}{\mbox{\sf F}\xspace}
 \newcommand{\Trueword}{\sf true}
 \newcommand{\Falseword}{\sf false}
 \newcommand{\Neg}{\neg}
@@ -306,12 +306,6 @@
 \newcommand{\deffn}[3]{\ensuremath{%
     \Vtyped{#1}{#3\fnMap#2}%
 }}
-
-% function composition operator
-% TODO: Eliminate these?
-\newcommand{\afterOp}{\mathbin{\circ}}
-\newcommand{\fnAfterOp}{\afterOp}
-\newcommand{\relAfterOp}{\mathbin{\circ_R}}
 
 \newcommand{\caret}{\mathord{\char`\^}}
 
@@ -553,7 +547,7 @@
 % I now need to remove this macro.
 \newcommand{\subtract}[2]{\ensuremath{#1-#2}}
 
-\newcommand{\eqWClOp}[1]{\mathrel{=:\joinrel{#1}}}
+\newcommand{\eqWClOp}[1]{\mathrel{=\joinrel{[#1]}}}
 \newcommand{\eqClOp}[1]{\ensuremath{=_{#1}}}
 \newcommand{\eqWTyOp}{\ensuremath{\eqWClOp{\Ds}}}
 \newcommand{\eqTyOp}{\ensuremath{\eqClOp{\Ds}}}
@@ -565,11 +559,11 @@
 \newcommand{\DefOp}{\ensuremath{\mathrel{\rawDRel{}}}}
 \newcommand{\DDRel}[1]{\ensuremath{\mathrel{\rawDDRel{#1}}}}
 \newcommand{\LDefOp}{\ensuremath{\mathrel{\rawDDRel{}}}}
-\newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=:\joinrel{#1}}}}
+\newcommand{\DEqWClOp}[1]{\DRel{\mathrel{=\joinrel{[#1]}}}}
 \newcommand{\DEqClOp}[1]{\DRel{\ensuremath{=_{#1}}}}
 \newcommand{\DEqWTyOp}{\DRel{\ensuremath{\eqWClOp{\Ds}}}}
 \newcommand{\DEqTyOp}{\DRel{\ensuremath{\eqClOp{\Ds}}}}
-\newcommand{\DDEqWClOp}[1]{\DDRel{\mathrel{=:\joinrel{#1}}}}
+\newcommand{\DDEqWClOp}[1]{\DDRel{\mathrel{=\joinrel{[#1]}}}}
 \newcommand{\DDEqClOp}[1]{\DDRel{\ensuremath{=_{#1}}}}
 \newcommand{\DDEqWTyOp}{\DDRel{\ensuremath{\eqWClOp{\Ds}}}}
 \newcommand{\DDEqTyOp}{\DDRel{\ensuremath{\eqClOp{\Ds}}}}
@@ -790,8 +784,10 @@
 \newcommand{\FA}[2]{\ensuremath{\rawfn{\mathop{\Fname{#1}}}{#2}}}
 \newcommand{\VFA}[2]{\FA{#1}{\V{#2}}}
 
-\newcommand{\Dom}[1]{\OA{Dom}{#1}}
-\newcommand{\Cod}[1]{\OA{Cod}{#1}}
+\newcommand{\MPname}[1]{\ensuremath{\mathcal{#1}}\xspace}
+\newcommand{\Dom}[1]{\ensuremath{\mathop{\MPname{DOM}}[#1]}\xspace}
+\newcommand{\Cod}[1]{\ensuremath{\mathop{\MPname{COD}}[#1]}\xspace}
+\newcommand{\Type}[1]{\ensuremath{\mathop{\MPname{TYPE}}[#1]}\xspace}
 \newcommand{\Ran}[1]{\OA{Ran}{#1}}
 \newcommand{\Pairs}[1]{\OA{Pair}{#1}}
 \newcommand{\Rel}[1]{\OA{rel}{#1}}
@@ -2554,6 +2550,36 @@ The bracketing operators bind as tightly as the atomic operators.
 \index{recce-symbol}{cardinality@\Vsize{C}, cardinality of collection \V{C}}
 \FloatBarrier
 
+\subsection{Metaproperties}
+The next tightest level of precedence contains the
+\dfn{metalanguage properties},
+or \dfn{metaproperties}.
+
+\FloatBarrier
+\renewcommand{\cellboxrWidth}{4.5in}
+\begin{table}[H]
+\begin{tabular}{|l|}
+\hline
+\hline
+\cellboxr{Metalanguage property, such as \Dom{\V{f}},
+  \Cod{\V{f}}, or \Type{\V{v}}} \\
+\hline
+\end{tabular}
+\end{table}%
+\index{recce-defienda}{\Dom{\V{f}}, domain of relation \V{f}}%
+\index{recce-defienda}{\Cod{\V{f}}, range of relation \V{f}}
+\index{recce-defienda}{\Type{\V{v}}, range of variable \V{v}}
+\FloatBarrier
+
+We use only a few metaproperties.
+These do not exist in the \COL.
+They are for use in referencing certain \COL values which
+are conceptually related to other \COL values at the \MtL level,
+but which are not properties of their value at the \COL level.
+Metaproperties are usually set by implication,
+as described below.
+\todo{Supply this reference.}
+
 \subsection{Application operators}
 
 The next tightest level of precedence includes the application operators.
@@ -2565,15 +2591,14 @@ The next tightest level of precedence includes the application operators.
 \hline
 \hline
 \cellboxr{Operator application, such as \Pow{\V{A}},
-  \Cod{\V{A}}, \Dom{\V{A}}, and \Ran{\V{A}}} \\
+  \Domain{\V{A}}, and \Ran{\V{A}}} \\
 \hline
 \cellboxr{Function application, such as \VFA{f}{x},
     $\VFA{multicharFn}{v1}$, \VFA{g}{x}, and \VFA{f2}{maxV}} \\
 \hline
 \end{tabular}
 \end{table}%
-\index{recce-defienda}{\Cod{\V{r}}, codomain of function \V{r}}%
-\index{recce-defienda}{\Dom{\V{r}}, domain of relation \V{r}}%
+\index{recce-defienda}{\Domain{\V{r}}, domain of relation \V{r}}%
 \index{recce-defienda}{\Ran{\V{r}}, range of relation \V{r}}
 \FloatBarrier
 
@@ -2630,62 +2655,6 @@ Their associativity is right to left.
 
 Note that the composition of a function zero
 times is the identity function.
-
-\todo{Delete relational composition?}
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{4.5in}
-\begin{table}[H]
-\begin{tabular}{|l|}
-\hline
-  \cellboxr{Relational composition, ``\V{g} after \V{f}'':
-  $\Fname{g}\relAfterOp\Fname{f}$} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-For relations,
-$\Fname{g}\relAfterOp{}\Fname{f}$ is
-the \dfn[Relational composition (of relations)]{relational composition},
-of \Fname{g} and \Fname{f}:
-\Fname{g} ``after'' \Fname{f}.
-That is,
-\[
-\Fname{g}\relAfterOp{}\Fname{f} =
-     \set{ \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Ran{\V{g}}:
-         \tuple{\V{x}, \V{y}} \in \V{f} \land
-         \tuple{\V{y}, \V{z}} \in \V{g} }.
-\]
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{4.5in}
-\begin{table}[H]
-\begin{tabular}{|l|}
-\hline
-    \cellboxr{Functional composition ``\V{g} after \V{f}''
-    $\Fname{g}\fnAfterOp\Fname{f}$ } \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-\todo{Delete functional composition?}
-Where \Fname{f} are \Fname{g} are functions,
-$\Fname{g}\fnAfterOp{}\Fname{f}$ is
-the \dfn[Functional composition (of functions)]{functional composition},
-or simply \dfn[Composition (of functions)]{composition}
-of \Fname{g} and \Fname{f}:
-\Fname{g} ``after'' \Fname{f}.
-That is,
-\[
-\Fname{g}\fnAfterOp{}\Fname{f} =
-     \set{ \begin{gathered}
-         \tuple{\V{x}, \V{z}} \in \Dom{\V{f}}\times\Cod{\V{g}}:
-         \\ \Cod{\V{f}} = \Dom{\V{g}} \land
-             \tuple{\V{x}, \V{y}} \in \V{f} \land
-             \tuple{\V{y}, \V{z}} \in \V{g}
-     \end{gathered} }.
-\]
 
 \subsection{Exponentiation}
 
@@ -2900,6 +2869,13 @@ Based on \EFref{pseudo-type-notation2} by itself,
 and therefore will not necessarily be
 a first-class \COL with a type.
 
+When a variable is instantiated, it implicitly
+sets the \MPname{TYPE} metaproperty.
+For example, the instantiation
+\[ \Vtyped{x}{\alpha} \]
+has the side effect of setting $\Type{x}$ to $\alpha$.
+$\Type{x}$ has the same scope as \V{x}.
+
 \subsection{Well-definedness tests}
 
 The next precedence contains boolean-result operations
@@ -3002,7 +2978,8 @@ $\V{x} \mathbin{(\eqWClOp{\classes})} \V{y}$.
 More formally,
 the \COL expression $\V{x}=\V{y}$
 abbreviates $\V{x}\eqWClOp{\classes}\V{y}$.
-$\eqWClOp{\classes}$ has signature $(\Dbool,\classes,\classes)$
+The operator $\eqWClOp{\classes}$
+has signature $(\Dbool,\classes,\classes)$
 and the \COL expression $\V{x}\eqWClOp{\classes}\V{y}$ abbreviates
 \begin{equation}
 \label{eq:def-eq-classes}
@@ -3699,7 +3676,7 @@ if \V{S1} is a tuple,%
    made hoping to save
    eyesight as well as reading time.}
 $$\VVtupelem{S1}{n} = \rawfn{\left(
-        \Fname{hd}\afterOp\Fname{tl}\caret\V{n}
+        \OA{hd}{\OA{tl}\caret\V{n}}
     \right)}{
         \V{S1}
     }$$
@@ -3862,26 +3839,48 @@ where the signature of \mname{fun} is $(\Dbool, \classes)$
 and $\Fun{\V{r}}$ abbreviates
 \[ \Rel{\V{r}} \land \Univocal{\V{r}}. \]
 
-$\Dom{\V{f}}$,%
+\todo{Rewrite this}
+The \MPname{DOM} metaproperty records the domain of a function,
+so that $\Dom{\V{f}}$,%
 \index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
-with signature $(\classes, \classes)$,
-abbreviates the domain given in the current type declaration
-of a function \V{f}.
+is the functional domain of \V{f}.
 Similarly, $\Cod{\V{f}}$,%
 \index{recce-defienda}{\Cod{\V{f}}, codomain of function \V{f}}
-with signature $(\classes, \classes)$,
-abbreviates the domain given in the current type declaration
-of a function \V{f}.
+records the codomain of a function \V{f}.
+Both the functional domain and codomain are set implicitly
+when a function is instantiated.
 An example of a type declaration of a function is $\Vtyped{f}{\V{X} \fnMap \V{Y}}$,
-which states that $\Dom{\V{f}} = \V{X}$ and $\Cod{\V{f}} = \V{Y}$.
-The type declarations of functions will be described further below.
-It will always be the case that
+which implies that
+$\Type{f}=\V{X} \fnMap \V{Y}$,
+that $\Dom{\V{f}} = \V{X}$
+and that $\Cod{\V{f}} = \V{Y}$.
+
+The above implies that, for a function, type, domain and codomain are related.
+For a well-defined function \V{f},
+and for the implicit values of \MPname{TYPE},
+\MPname{DOM} and \MPname{COD},
+it will always be the case that
+\[ \Type{\V{f}} = \tuple{\Dom{\V{f}}\times\Cod{\V{f}}}. \]
+
+We almost always leave \MPname{TYPE},
+\MPname{DOM} and \MPname{COD} at their implicit values.
+In rare cases, as for example when we need to prove that a function
+is total, we will want to redefine a metaproperty.
+For example, if we find that
+the locally scoped partial function $\Vtyped{f}{\alpha\fnMap\beta}$
+is total, we can narrow its type with the following statement:
+\[
+    \Type{\V{f}} \DDEqTyOp (\alpha\tfnMap\beta).
+\]
+
+The functional and relational domains are related:
+it will always be the case that
 \[ \Dom{\V{f}}\isWellDef \land\; \Domain{\V{f}}\isWellDef
-    \implies \Dom{\V{f}} \subseteq \Domain{\V{f}} \]
-and that
+    \implies \Dom{\V{f}} \subseteq \Domain{\V{f}}. \]
+Similarly, the codomain and range are related:
+it will always be the case that
 \[ \Cod{\V{f}}\isWellDef \land\;\Range{\V{f}}\isWellDef
     \implies \Cod{\V{f}} \subseteq \Range{\V{f}}. \]
-
 
 \V{f} is a \dfn[Total (function)]{total function},
 iff $\Total{\V{f}}$, where \mname{total},
@@ -4450,32 +4449,40 @@ and simplifying out the consequent.
 \begin{theorem}
 Let \V{spm} be a successor preserving mapping of length \Vtyped{len}{\naturals}.
 Then \V{spm} is a total
-function with domain \V{len} and codomain \naturals.
+function of type 
+$\V{len}\tfnMap\naturals$.
 That is,
 \[ \V{spm} \isWellDef (\V{len}\tfnMap\naturals). \quad \thEnd \]
 \end{theorem}
 
 \begin{proof}
+The proof starts by assuming \V{spm}, a successor preserving mapping
+of length \V{len},
+and defining \V{tot}, a function of type $\V{len}\tfnMap\naturals$
+equivalent to \V{spm}.
+For the proof, we need seek to show that \V{tot} is not just
+a definition, but is well-defined.
+In other words, we have to show that \V{tot} exists.
+
+For convenience, we let \Oname{SPM} be a local abbreviation with
+signature $(\Dbool, \classes)$
+such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping.
 \eqgath{100}{
- \Vtyped{len}{\naturals}, \Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals} \\
-     \arbOp \Rel{\V{spm}} \land \Domain{\V{spm}} = \V{len} \\
- \text{\cuz hypothesis of theorem, \Dfref{successor-preserving-mapping}.}}
-\eqpar{110}{\Rel{\V{spm}} \cuz \E{100}.}
-\eqpar{120}{\Univocal{\V{spm}} \cuz \E{100}, \Lmref{spm-univocal}.}
-Since \V{spm} is a univocal binary relation, it is a function:
-\eqpar{130}{\Fun{\V{spm}} \cuz \E{110}, \E{120}.}
+ \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals} \\
+     }{ \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
+ \text{\cuz hypothesis of theorem.}}
+\todo{Finish from here.}
+\eqpar{110}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-preserving-mapping}.}
+\eqpar{120}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
+\eqpar{130}{\Fun{\V{map}} \cuz \E{110}, \E{120}.}
+\eqpar{140}{$\V{map} \isWellDef (\fnMap{naturals\cup\set{naturals}}{\naturals})$
+    \cuz \E{100}, \E{130}.}
+We need to show that the function \V{map} is total.
+\eqpar{150}{$\V{map} \isWellDef (\fnMap{\V{len}}{\naturals})$
+    \cuz \E{100}, \E{140}.}
 It remains to show the domain and codomain of \V{spm}, and that it is total.
-\eqpar{140}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
-\eqpar{150}{$\Ran{\V{spm}} \subseteq \naturals$ \cuz \E{100}.}
-The functional domain may be any superset of the relational domain,
-so that
-\eqpar{160}{$\Dom{\V{spm}} = \V{len}$ \cuz \E{140},}
-and the codomain may be any superset of the range, so that
-\eqpar{170}{$\Cod{\V{spm}} = \naturals$ \cuz \E{150}.}
-\eqpar{180}{$\Dom{\V{spm}} = \Domain{\V{spm}}$ \cuz \E{140}, \E{160}.}
-We have shown that \V{spm} is a function \E{130}.
-It follows from \E{160}, \E{170} and \E{180} that \V{spm} is
-of type $\Vtyped{spm}{\V{len}\tfnMap\naturals}$.
+\eqpar{240}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
+\eqpar{250}{$\Ran{\V{spm}} \subseteq \naturals$ \cuz \E{100}.}
 \myqed
 \end{proof}
 
