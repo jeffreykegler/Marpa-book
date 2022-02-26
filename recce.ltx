@@ -4516,22 +4516,31 @@ signature $(\Dbool, \classes)$
 such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping
 according to \Dfref{successor-preserving-mapping}.
 \eqgath{100}{
- \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals} \\
-     }{ \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
+ \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
+     }{ \\
+     \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
  \text{\cuz hypothesis of theorem.}}
-\todo{Finish from here.}
-\eqpar{110}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-preserving-mapping}.}
-\eqpar{120}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
-\eqpar{130}{\Fun{\V{map}} \cuz \E{110}, \E{120}.}
-Equation \E{130} allows us to narrow the type of \V{map} to a function.
-\eqpar{140}{$\V{map} \isWellDef (\fnMap{naturals\cup\set{naturals}}{\naturals})$
-    \cuz \E{100}, \E{130}.}
-We need to show that the function \V{map} is total.
-\eqpar{150}{$\V{map} \isWellDef (\fnMap{\V{len}}{\naturals})$
-    \cuz \E{100}, \E{140}.}
-It remains to show the domain and codomain of \V{spm}, and that it is total.
-\eqpar{240}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
-\eqpar{250}{$\Ran{\V{spm}} \subseteq \naturals$ \cuz \E{100}.}
+\eqpar{105}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
+\eqpar{110}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\times\naturals}$
+     \cuz \E{105}. }
+\eqpar{120}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-preserving-mapping}.}
+\eqpar{130}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
+\eqpar{140}{\Fun{\V{map}} \cuz \E{120}, \E{130}.}
+Equation \E{140} shows that \V{map} is well-defined as a function:
+\eqpar{150}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\fnMap\naturals}$
+     \cuz \E{140}. }
+\E{150} shows that we can redefine \V{map} in a narrower type:
+\eqpar{160}{
+    $\Type{\V{map}} \DDEqTyOp (\V{len}\cup\set{\naturals}\fnMap\naturals)$
+        \cuz \E{150}.}
+\eqpar{170}{$\Dom{\V{map}} \DDEqTyOp \V{len}$ \cuz \E{160}.}
+\eqpar{180}{$\Domain{\V{spm}} = \Dom{\V{len}}$ \cuz \E{105}, \E{170}.}
+\eqpar{190}{\Total{\V{spm}} \cuz \E{180}.}
+Again we can redefine \V{map} in a narrower type:
+\eqpar{200}{
+    $\Type{\V{map}} \DDEqTyOp (\V{len}\tfnMap\naturals)$
+    \cuz \E{160}, \E{190}.}
+Equation \E{200} is what we needed to show.
 \myqed
 \end{proof}
 
