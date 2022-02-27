@@ -4498,7 +4498,8 @@ and simplifying out the consequent.
 \end{proof}
 
 \renewcommand{\labBase}{th-successor-preserving-mapping}
-\begin{theorem}
+\begin{theorem}[Successor Preserving Mapping Totality]
+\label{th:successor-preserving-mapping-totality}
 Let \V{spm} be a successor preserving mapping of length \Vtyped{len}{\naturals}.
 Then \V{spm} is a total
 function of type
@@ -4595,8 +4596,6 @@ we define the operator \Oname{BAD}:
     \VOA{BAD}{inst} abbreviates
     $\VOA{SPM}{inst} \nqeq \VOA{OFFM}{inst}$
     \bcuz \LABBR{\Dbool,\naturals}.}
-\todo{Copied from previous proof. Revise and finish.}
-\eqpar{210}{}
 Since the possible counter-examples are the natural
 numbers,
 we know that if there is a counter-example,
@@ -4604,10 +4603,26 @@ there is a minimal counter-example.
 We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VOA{BAD}{bad} is true:
-\eqgath{220}{
+\eqgath{140}{
     \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} }{ \\
         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
     \text{\cuz AF reductio.} }
+\eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
+\eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
+\eqpar{170}{
+    $\V{bad} \notin \Domain{\V{spm}}
+    \implies \univQ{\Vnat{i}}{
+    \tuple{\V{bad},\V{i}} \notin \V{spm}}$
+    \bcuz \E{150}.}
+\eqpar{180}{
+    $\V{bad} \notin \Domain{\V{offm}}
+    \implies \univQ{\Vnat{i}}{
+    \tuple{\V{bad},\V{i}} \notin \V{offm}}$
+    \bcuz \E{160}.}
+\eqpar{190}{\Domain{\V{spm}} = \Dom{\V{spm}} \cuz \Thref{successor-preserving-mapping-totality}.}
+\todo{Copied from previous proof. Revise and finish.}
+\eqpar{210}{STUB}
+\eqpar{220}{STUB}
 \eqgath{230}{
     \V{bad} \notin \Domain{\V{spm}} \\
     \implies \univQ{\Vnat{i}}{
