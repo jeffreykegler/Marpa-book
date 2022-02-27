@@ -4569,92 +4569,92 @@ and \FA{spm}{0} is the offset of \V{g}.
 \label{lm:offset-mapping}
 A successor-preserving mapping is equivalent to the
 offset mapping that it induces.
-That is,
-\begin{equation}
-\Elab{050}
-\begin{gathered}
-     \univQ{\Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} }{
-    \\ \left( \begin{gathered}
-        \univQ{ \Vtyped{\V{i1},\V{i2}}{\naturals} }{
-            \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
-        }
-    \end{gathered} \right)
-         \\ \implies \Fname{f} =
-         \left( \begin{gathered}
-         \typed{
-             \left( \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} } \right)
-             \\
-         }{ \Dom{\V{f}}\tfnMap\naturals }
-         \end{gathered} \right)
-         }.
-         \quad \lmEnd
-\end{gathered}
-\end{equation}
 \end{lemma}
 
 \begin{proof}
+After some preliminary definitions,
+the proof is by nested NBG,
+with the inner NBG
+being by reductio, using the simplification of an NBG.
 \todo{Summarize proof strategy.}
-\begin{gather}
-\Elab{100}
-\begin{gathered}
-     \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \arbOp
-    \\
-        \univQ{ \Vtyped{\V{i1},\V{i2}}{\naturals} }{
-            \\ \V{i1}+1 = \V{i2} \iff \VFA{f}{i1}+1 = \VFA{f}{i2}
-        }.
-\end{gathered}
-\\ \nonumber \cuz \E{050}.
-\end{gather}
-
-\eqpar{105}{
-     \typed{\Fname{g}}{ \Dom{\V{f}}\tfnMap\naturals }
-         \ldefined \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }
-     \bcuz \E{050}.
-}
+We define, for the purpose of this proof,
+\eqpar{100}{
+    \typed{\Oname{SPM}}{\LABBR{\Dbool, \classes}}
+    such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping
+    according to \Dfref{successor-preserving-mapping}, and}
+\eqpar{110}{
+    \Vtyped{\Oname{OFFM}}{\LABBR{\classes, \classes}}
+    such that \VOA{OFFM}{map} is the offset mapping
+    induced by \V{map}, as described in \Dfref{offset-mapping}.}
+\eqpar{120}{
+    \existDecl{\typed{\V{spm},\V{map}}{\classes} }{ \VOA{SPM}{spm} \land \V{offm} = \VOA{OFFM}{spm} }
+    \bcuz hypothesis of lemma.}
 To identify counter-examples to the theorem,
 we define the operator \Oname{BAD}:
-\eqpar{110}{
-    \VOA{BAD}{\V{inst}} abbreviates $\VFA{f}{inst} \nqeq \VFA{g}{inst}$
+\eqpar{130}{
+    \VOA{BAD}{inst} abbreviates
+    $\VOA{SPM}{inst} \nqeq \VOA{OFFM}{inst}$
     \bcuz \LABBR{\Dbool,\naturals}.}
-Since the possible counter-examples are a non-empty,
-countable, set,
+\todo{Copied from previous proof. Revise and finish.}
+\eqpar{210}{}
+Since the possible counter-examples are the natural
+numbers,
 we know that if there is a counter-example,
 there is a minimal counter-example.
 We assume, for a reductio,
 that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \VOA{BAD}{bad} is true:
-\eqpar{120}{
-    $\existDecl{ \Vtyped{bad}{\naturals} }{ \VOA{BAD}{bad}
-        \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}}$
-    \bcuz AF reductio.}
-\begin{align}
-\Elab{140} \V{f}=\set{} & \iff \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef} && \cuz \text{ZF, \E{100}.} \\
-\Elab{150} \V{f}=\set{} & \implies \FA{f}{0}\isIllDef && \cuz \E{140}. \\
-\Elab{160} \V{f}=\set{} & \implies (\lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} }) \isIllDef
-    && \cuz \E{150}. \\
-\Elab{170} \V{f}=\set{} & \implies \V{g} \isIllDef && \cuz \E{105}, \E{160}. \\
-\Elab{180} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef \land \VFA{g}{x}\isIllDef}
-    && \cuz \E{140}, \E{170}. \\
-\Elab{190} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x} \qeq \VFA{g}{x}}
-    && \cuz \E{180}. \\
-\Elab{200} \V{f}=\set{} & \implies \univQ{\Vtyped{x}{\naturals}}{\neg \VOA{BAD}{x}}
-    && \cuz \E{110}, \E{190}.
-\end{align}
-\eqpar{210}{$\V{f} \neq \set{}$ \cuz \E{120}, \E{200}.}
-\eqpar{220}{$(\univQ{\Vtyped{x}{\naturals}}{\VFA{f}{x}\isIllDef})
-    \iff \Domain{\V{f}} = \set{}$ \cuz  ZF, \E{100}.}
-\eqpar{230}{$\Domain{\V{f}} \neq \set{}$ \cuz \E{140}, \E{210}, \E{220}.}
-\eqpar{240}{$\Domain{\V{f}} \neq 0$ \cuz ZF, \E{230}.}
-\eqpar{250}{$\Domain{\V{f}} > 0$ \cuz \E{100}, \E{240}.}
-\eqpar{260}{$\VFA{f}{0}\isWellDef$ \cuz \E{250}.}
-\eqpar{270}{$\VFA{g}{0} = \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \FA{f}{0}+\V{x} })}{0}
-    = \FA{f}{0}+0 = \FA{f}{0}$ \cuz \E{105}, \E{260}.}
-\eqpar{280}{$\FA{f}{0} \qeq \FA{g}{0}$ \cuz \E{270}.}
-\eqpar{290}{$\neg\OA{BAD}{0}$ \cuz \E{110}, \E{280}.}
-\eqpar{300}{$\V{bad}>0$ \cuz \E{120}, \E{290}.}
-\eqpar{310}{$(\V{bad}-1)\isWellDef\naturals$ \cuz \E{300}, \E{290}.}
-\eqpar{320}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{120}, \E{300}, \E{310}.}
-\todo{Revise and finish this proof.}
+\eqgath{220}{
+    \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} }{ \\
+        \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
+    \text{\cuz AF reductio.} }
+\eqgath{230}{
+    \V{bad} \notin \Domain{\V{spm}} \\
+    \implies \univQ{\Vnat{i}}{
+    \tuple{\V{bad},\V{i}} \notin \V{spm}} \\
+    \text{\cuz \E{220}.} }
+\eqpar{240}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$ \cuz \E{210}, \E{230}.}
+\eqpar{250}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{220}, \E{240}.}
+\eqpar{255}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$ \cuz \Dfref{successor-preserving-mapping}.}
+\eqpar{260}{$\Domain{\V{spm}} > 0$ \cuz \E{250}, \E{255}.}
+\eqpar{270}{$0 \in \Domain{\V{spm}}$ \cuz \E{260}.}
+\eqpar{280}{$\neg \OA{BAD}{0}$ \cuz \E{210},
+    \Eref{def-successor-preserving-mapping-110} in \Dfref{successor-preserving-mapping}.}
+\eqpar{290}{$\V{bad} > 0$ \cuz \E{220}, \E{250}, \E{270}, \E{280}.}
+\eqpar{300}{$\V{bad}-1 \in \Domain{\V{spm}}$ \cuz \E{250}, \E{255}, \E{290}.}
+\eqpar{310}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{220}, \E{300}.}
+\eqgath{320}{
+    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{bad}-1,\V{j1}} \in \V{spm} \land
+        \tuple{\V{bad}-1,\V{j2}} \in \V{spm}
+        \implies \V{j1} = \V{j2}} \\
+        \text{\cuz \E{210},\E{310}.} }
+\eqpar{330}{$\V{predV} \ldefined \iotaQ{\Vnat{i}}{\tuple{\V{bad}-1, \V{i}}} \in \V{spm}$
+    \cuz \E{320}.}
+We know that \E{330} is well defined because of \E{320}.
+\eqgath{340}{
+    \univQ{\Vnat{x},\Vnat{j1}, \Vnat{j2}}{
+        \tuple{\V{x}-1, \V{j1}} \in \V{spm} \land \tuple{\V{x}, \V{j2}} \in \V{spm}
+    \\ \implies \V{j2} = \V{j1}+1 }
+    \\ \text{\cuz \Eref{def-successor-preserving-mapping-120} in
+        \Dfref{successor-preserving-mapping}.}
+}
+\eqpar{350}{
+    $\univQ{\Vnat{j2}}{
+        \tuple{\V{bad}, \V{j2}} \in \V{spm} \implies \V{j2} = \V{predV}+1 }$
+    \bcuz \E{300},  \E{330}, \E{340}.
+}
+\eqgath{360}{
+    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
+        \tuple{\V{bad},\V{j1}} \in \V{spm} \land
+        \tuple{\V{bad},\V{j2}} \in \V{spm}
+        \implies \V{j1} = \V{predV}+1 = \V{j2}} \\
+        \text{\cuz \E{350}.} }
+\eqpar{370}{$\neg\OA{BAD}{\V{bad}}$ \cuz \E{360}.}
+\eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
+The theorem to be proved follows by taking the NDG of
+\E{220} with the consequent \E{380},
+and simplifying out the consequent.
 \myqed
 \end{proof}
 
