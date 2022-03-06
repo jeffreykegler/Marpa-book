@@ -4591,14 +4591,11 @@ We define, for the purpose of this proof,
 \eqpar{120}{
     \existDecl{\typed{\V{spm},\V{map}}{\classes} }{ \VOA{SPM}{spm} \land \V{offm} = \VOA{OFFM}{spm} }
     \bcuz hypothesis of lemma.}
-\eqpar{123}{ $\V{spm} \isWellDef (\naturals\cup\set{\naturals}) \tfnMMap \naturals$
-        \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
-\eqpar{125}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$ \cuz \E{123}.}
 To identify counter-examples to the theorem,
 we define the operator \Oname{BAD}:
 \eqpar{130}{
     \VOA{BAD}{inst} abbreviates
-    $\VOA{SPM}{inst} \nqeq \VOA{OFFM}{inst}$
+    $\VOA{spm}{inst} \nqeq \VOA{offm}{inst}$
     \bcuz \LABBR{\Dbool,\naturals}.}
 Since the possible counter-examples are the natural
 numbers,
@@ -4611,6 +4608,8 @@ that there is a minimal ``bad'' instance, \Vnat{bad}, such that
     \existDecl{ \Vtyped{bad}{\naturals} }{ \\
         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
     \text{\cuz AF reductio.} }
+\eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$ 
+        \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
 \eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
 \eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
 \eqpar{170}{
@@ -4634,48 +4633,28 @@ We recall that functional domain must be a superset of the relational domain:
 \eqpar{270}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$
     \cuz \E{130}, \E{260}.}
 \eqpar{280}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{140}, \E{270}.}
-\eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$ \cuz \Dfref{successor-preserving-mapping}.}
+\eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$
+    \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
+\eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
+\eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
+Again recalling that the relational domain is a subset of the 
+functional domain:
+\eqpar{320}{$\Domain{\V{spm}} \subseteq \Dom{\V{spm}}$ \cuz ZF.}
+\eqpar{330}{$0 \in \Dom{\V{spm}}$ \cuz \E{310}, \E{320}.}
+\eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$ 
+    \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-preserving-mapping}.}
+\eqpar{350}{\FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}
+         = \FA{spm}{0} \cuz \E{330}, \E{340}.}
+\eqpar{360}{\FA{offm}{0} = \FA{spm}{0}
+         \cuz \E{110}, \E{120}, \E{350}, \Dfref{offset-mapping}.}
+\eqpar{370}{$\neg \OA{BAD}{0}$ \cuz \E{130}, \E{360}.}
+\eqpar{380}{$\V{bad} > 0$ \cuz \E{140}, \E{370}.}
+\eqpar{390}{$(\V{bad}-1) \isWellDef \naturals$ \cuz \E{140}, \E{380}.}
+\eqpar{400}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{140}, \E{390}.}
 \todo{Copied from previous proof. Revise and finish.}
-\eqpar{210}{STUB}
-\eqpar{255}{STUB}
-% \eqpar{260}{$\Domain{\V{spm}} > 0$ \cuz \E{250}, \E{255}.}
-% \eqpar{270}{$0 \in \Domain{\V{spm}}$ \cuz \E{260}.}
-% \eqpar{280}{$\neg \OA{BAD}{0}$ \cuz \E{210},
-    % \Eref{def-successor-preserving-mapping-110} in \Dfref{successor-preserving-mapping}.}
-% \eqpar{290}{$\V{bad} > 0$ \cuz \E{220}, \E{250}, \E{270}, \E{280}.}
-\eqpar{300}{$\V{bad}-1 \in \Domain{\V{spm}}$ \cuz \E{250}, \E{255}, \E{290}.}
-\eqpar{310}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{220}, \E{300}.}
-\eqgath{320}{
-    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{bad}-1,\V{j1}} \in \V{spm} \land
-        \tuple{\V{bad}-1,\V{j2}} \in \V{spm}
-        \implies \V{j1} = \V{j2}} \\
-        \text{\cuz \E{210},\E{310}.} }
-\eqpar{330}{$\V{predV} \ldefined \iotaQ{\Vnat{i}}{\tuple{\V{bad}-1, \V{i}}} \in \V{spm}$
-    \cuz \E{320}.}
-We know that \E{330} is well defined because of \E{320}.
-\eqgath{340}{
-    \univQ{\Vnat{x},\Vnat{j1}, \Vnat{j2}}{
-        \tuple{\V{x}-1, \V{j1}} \in \V{spm} \land \tuple{\V{x}, \V{j2}} \in \V{spm}
-    \\ \implies \V{j2} = \V{j1}+1 }
-    \\ \text{\cuz \Eref{def-successor-preserving-mapping-120} in
-        \Dfref{successor-preserving-mapping}.}
-}
-\eqpar{350}{
-    $\univQ{\Vnat{j2}}{
-        \tuple{\V{bad}, \V{j2}} \in \V{spm} \implies \V{j2} = \V{predV}+1 }$
-    \bcuz \E{300},  \E{330}, \E{340}.
-}
-\eqgath{360}{
-    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{bad},\V{j1}} \in \V{spm} \land
-        \tuple{\V{bad},\V{j2}} \in \V{spm}
-        \implies \V{j1} = \V{predV}+1 = \V{j2}} \\
-        \text{\cuz \E{350}.} }
-\eqpar{370}{$\neg\OA{BAD}{\V{bad}}$ \cuz \E{360}.}
-\eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
-The theorem to be proved follows by taking the NDG of
-\E{220} with the consequent \E{380},
+% \eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
+% The theorem to be proved follows by taking the NDG of
+% \E{220} with the consequent \E{380},
 and simplifying out the consequent.
 \myqed
 \end{proof}
