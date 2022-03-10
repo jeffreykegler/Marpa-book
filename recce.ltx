@@ -209,10 +209,10 @@
 
 \newcommand{\isWellDef}{\mathop{\downarrow}}
 \newcommand{\isIllDef}{\mathop{\uparrow}}
-\newcommand{\wellDefBOp}{\mathbin{\downarrow}}
-\newcommand{\illDefBOp}{\mathbin{\uparrow}}
-\newcommand{\wellDefB}[2]{#1\wellDefBOp#2}
-\newcommand{\illDefB}[2]{#1\illDefBOp#2}
+\newcommand{\wellDefRel}{\mathrel{\downarrow}}
+\newcommand{\illDefRel}{\mathrel{\uparrow}}
+\newcommand{\wellDefB}[2]{#1\wellDefRel#2}
+\newcommand{\illDefB}[2]{#1\illDefRel#2}
 
 \newcommand{\qeq}{\simeq}
 \newcommand{\nqeq}{\not\simeq}
@@ -4377,10 +4377,37 @@ The theorem is the UG of \E{150}. \myqed
 
 \section{Slices}
 
-We begin with the intuitions behind the idea of slices
-of a sequence.
-% Perhaps a function might be more intuitive than a relation,
-% but we go with the weaker assumption.
+Intuitively, a
+\dfn[Slice (sequence)]{slice} is a sequence whose values are a consecutive portion of
+another sequence, called the
+\dfn[Container (sequence)]{container}.
+We proceed to formalize this idea.
+
+\begin{definition}[Successor]
+\label{df:successor}
+We recall the idea of
+\dfn{successor} and \dfn{predecessor}
+from ZF.
+The operator \Oname{succ}, \ABBR{\naturals,\naturals},
+is such that \VOA{succ}{x} is the successor of \Vnat{x}:
+\[ \VOA{succ}{x} = \V{x}\cup\set{\V{x}}. \]
+The operator \Oname{pred}, \ABBR{\naturals,\naturals},
+is such that \VOA{pred}{x} is the predecessor of \Vnat{x}:
+\[ \VOA{pred}{y} = \V{x} \iff \VOA{succ}{x} = \V{y}. \]
+\dfEnd
+\end{definition}
+
+We recall that $\VOA{pred}{0}\isIllDef$,
+and recall that $\VOA{pred}{1}=0$, etc.
+Useful facts are the $\VOA{pred}{x}+1 = \V{x}$ and that
+$\V{x}+1 = \VOA{succ}{\V{x}}$, but these are not used
+to define \V{succ} and \V{pred} because that would be circular:
+ZF defines arithmetic in terms of \V{succ}.
+
+In formalizing the idea of a slice,
+we first consider the case where the container is the sequence of natural
+numbers.
+We notice that the sequence of natural numbers is also the identity function on \naturals.
 
 \renewcommand{\labBase}{def-successor-preserving-mapping}
 \begin{definition}[Successor-preserving mapping]
@@ -4607,7 +4634,7 @@ that there is a minimal ``bad'' instance, \Vnat{bad}, such that
     \existDecl{ \Vtyped{bad}{\naturals} }{ \\
         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
     \text{\cuz AF reductio.} }
-\eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$ 
+\eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$
         \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
 \eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
 \eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
@@ -4636,11 +4663,11 @@ We recall that functional domain must be a superset of the relational domain:
     \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
 \eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
 \eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
-Again recalling that the relational domain is a subset of the 
+Again recalling that the relational domain is a subset of the
 functional domain:
 \eqpar{320}{$\Domain{\V{spm}} \subseteq \Dom{\V{spm}}$ \cuz ZF.}
 \eqpar{330}{$0 \in \Dom{\V{spm}}$ \cuz \E{310}, \E{320}.}
-\eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$ 
+\eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$
     \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-preserving-mapping}.}
 \eqpar{350}{\FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}
          = \FA{spm}{0} \cuz \E{330}, \E{340}.}
@@ -4661,13 +4688,20 @@ functional domain:
     & \mathrlap{ \text{\cuz \E{450},
         \Eref{def-successor-preserving-mapping-110} in \Dfref{successor-preserving-mapping}.}}
 \end{align}
-\begin{align}
-\Elab{470}\OA{spm}{\V{bad}} &
-    = \FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{\V{bad}-1}+1 && \\
-\nonumber
-   & \mathrlap{ \text{ \cuz \E{460}, \Dfref{offset-mapping}.}} \\
-\end{align}
-\todo{Copied from previous proof. Revise and finish.}
+\eqpar{470}{$\OA{spm}{\V{bad}}
+    = \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{\V{bad}-1}+1$
+   \bcuz \E{460}, \Dfref{offset-mapping}.}
+\eqpar{480}{$(\V{bad}-1) \wellDefRel \Domain{\V{spm}}$ \cuz \E{400}.}
+\eqpar{490}{$(\V{bad}-1) \wellDefRel \Dom{\V{spm}}$ \cuz \E{190}, \E{480}.}
+\eqpar{500}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+(\V{bad}-1)+1$
+   \bcuz \E{470}, \E{490}.}
+\eqpar{510}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+\V{bad}$ \cuz \E{500}.}
+\eqpar{520}{$\V{bad} \in \Dom{\V{spm}}$ \cuz \E{190}, \E{280}.}
+\eqpar{530}{$\V{bad} \wellDefRel \Dom{\V{spm}}$ \cuz \E{520}.}
+% \eqpar{540}$\OAV{spm}{bad} =
+    % \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}+\V{bad}$
+    % \cuz \E{470},
+\todo{Revise and finish.}
 % \eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
 % The theorem to be proved follows by taking the NDG of
 % \E{220} with the consequent \E{380},
@@ -6127,26 +6161,20 @@ Take but degree away, untune that string,
 \linebreak And last eat up himself.
 }{Shakespeare, {\em Troilus and Cressida}, Act I, Scene 3}
 
-What the Shakespeare author%
+What Shakespeare%
 \index{recce-general}{Shakespeare}
 calls ``degree'' we
 would call hierarchy today.
 An important means of representing hierarchy in mathematical contexts
 is graph theory, specifically trees.
 
-While the effect in our case
-is not as dire as Shakespeare%
-\index{recce-general}{Shakespeare}
-suggests it could be,
-an inability to establish a hierarchy among our sources
-presents us with a difficulty.
 For most of our preceding disciplines, we can cite a single clear
-authority on whom, usually with changes and updates, we base
+authority on whom, usually with changes and updates, we can base
 our presentation.
-For trees, we did not identify a single authority
-to follow on details of terminology and derivation.\footnote{%
-    Again, in matters of graph theory,
-    our approach is perhap most heavily influenced by \cite{HU1979}.}
+For trees, we did not find such an single authority
+\footnote{%
+    We previously noted that, in topics of graph theory,
+    we are perhaps most heavily influenced by \cite{HU1979}.}
 Trees will be extremely important for us,
 so in this chapter
 we make our definitions explicit and
