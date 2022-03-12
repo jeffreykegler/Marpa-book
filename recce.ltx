@@ -306,7 +306,8 @@
     \Vtyped{#1}{#3\fnMap#2}%
 }}
 
-\newcommand{\caret}{\mathord{\char`\^}}
+% Not currently used
+% \newcommand{\caret}{\mathord{\char`\^}}
 
 \newcommand{\order}[1]{\ensuremath{{\mathcal O}(#1)}}
 \newcommand{\bigorder}[1]{\ensuremath{{\mathcal O}\left(#1\right)}}
@@ -587,6 +588,15 @@
 \newcommand{\boldvar}[1]{\ensuremath{\textbf{#1}}}
 
 \newcommand{\cfg}{CFG}
+
+% List operators
+\newcommand{\Hd}[1]{\OA{hd}{#1}}
+% With the list operators,
+% is looks better if we don't increase paren size as we nest
+\newcommand{\Tl}[1]{\Oname{tl}({#1})}
+\newcommand{\THd}[1]{\Tl{\Hd{#1}}}
+\newcommand{\TTHd}[1]{\Tl{\THd{#1}}}
+\newcommand{\TTTHd}[1]{\Tl{\TTHd{#1}}}
 
 \newcommand{\de}{\mathrel{::=}}
 \newcommand{\derives}{\mapsto}
@@ -2647,26 +2657,6 @@ Similarly, we write
 $\bigcap \V{S}$ for the intersection of the elements of the set \V{S}; and
 $\sum \V{S}$ for the sum of the elements of the set \V{S}.
 
-\subsection{Binary relation builders}
-
-Next in precedence are binary operators on results are relations.
-Their associativity is right to left.
-
-\FloatBarrier
-\renewcommand{\cellboxrWidth}{4.5in}
-\begin{table}[H]
-\begin{tabular}{|l|}
-\hline
-\hline
-\cellboxr{\V{f} repeated \V{n} times: $\Fname{f}\caret\V{n}$} \\
-\hline
-\end{tabular}
-\end{table}
-\FloatBarrier
-
-Note that the composition of a function zero
-times is the identity function.
-
 \subsection{Exponentiation}
 
 At the next loosest priority is exponentiation,
@@ -3708,38 +3698,25 @@ We say that \V{h} is the \dfn{head} of \V{after}.
 We say that \V{before} is the \dfn{tail} of \V{after}.
 \end{itemize}
 
-The head of a tuple \V{S} can be written \VFA{hd}{S}.
-The tail of a tuple \V{S} can be written \VFA{tl}{S}.
+The head of a tuple \V{S} can be written \Hd{S}.
+The tail of a tuple \V{S} can be written \Tl{S}.
 We write tuples using angle brackets.
 For example, where
 \mypareq{eq:tuple-example}{%
     \V{S} = \tuple{ 42, 1729, 42 },
 }
 \V{S} is a 3-tuple, or triple.
-The head of \V{S} is $\VFA{hd}{S} = 42$.
-The tail of \V{S} is $\VFA{tl}{S} = \set{1729, 42}$.
-Using the $\Fname{hd}$ and $\Fname{tl}$ operators,
+The head of \V{S} is $\Hd{S} = 42$.
+The tail of \V{S} is $\Tl{S} = \set{1729, 42}$.
+Using the head and tail operators,
 tuples can be treated as lists.
-We occasionally refer to tuple element by numeric indices where,
-if \V{S1} is a tuple,%
-\footnote{%
-   Our use of \VVelement{S}{i} instead of the more traditional
-   $\V{S}_\V{i}$ is another of the choices that we
-   made hoping to save
-   eyesight as well as reading time.}
-$$\VVtupelem{S1}{n} = \rawfn{\left(
-        \OA{hd}{\OA{tl}\caret\V{n}}
-    \right)}{
-        \V{S1}
-    }$$
 so that, where $\V{S} = \tuple{ 42, 1729, 42 }$,
 \begin{gather*}
-\Vtupelem{S}{0}=42, \\
-\Vtupelem{S}{1}=1729, \\
-\Vtupelem{S}{2}=42, \text{ and} \\
-\Vtupelem{S}{3}\isIllDef.
+\Hd{S}=42, \\
+\THd{S}=1729, \\
+\TTHd{S}=42, \text{ and} \\
+\TTTHd{S}\isIllDef.
 \end{gather*}
-\todo{Move footnote to first use of element macro?}
 
 \section{Extended uses of type notation}
 
@@ -4410,7 +4387,7 @@ Two other useful facts are that
 \VOA{pred}{x}+1 = \V{x} \text{ and } \V{x}+1 = \VOA{succ}{\V{x}}.
 \end{equation}
 Handy as \Eref{pred-arithmetic} is,
-we could not use it in our definitions of \Oname{succ} and \Oname{pred}:
+we did not use it in our definitions of \Oname{succ} and \Oname{pred}:
 ZF defines arithmetic in terms of \Oname{succ},
 so that using arithmetic to define \Oname{succ}
 would be circular.
@@ -4422,26 +4399,39 @@ We notice that the sequence of natural numbers is also the identity function on 
 Among the properties we want a slice of this container to have
 is that its range faithfully preserves the successor relationships on the index set
 of the slice.
+We will show that the other expected properties of a slice follow from
+preservation of the index set successor relationships.
 
-\renewcommand{\labBase}{def-successor-faithful-mapping}
-\begin{definition}[Successor-faithful mapping]
-\label{df:successor-faithful-mapping}
-A \dfn[Successor-faithful mapping]{successor-faithful mapping}
-is a binary relation between a countable number and the natural numbers,
-which faithfully preserves the successor relationships of its domain.
-The domain of the successor-faithful mapping
-is called
-its \dfn[Length (of a successor-faithful mapping]{length}.
-Formally, $\Vtyped{spm}{\V{len}\times\naturals}$,
-is a successor-faithful mapping iff
+\renewcommand{\labBase}{def-offset-mapping-specifier}
+\begin{definition}[Offset mapping specifier]
+\label{df:offset-mapping-specifier}
+An \dfn{offset mapping specifier}
+is a duple, $\Vtyped{omp}{\naturals\times(\naturals\cup\set{\naturals})}$,
+where \Hd{\V{omp}} is the \dfn[Offset (of an offset mapping specifier)]{offset} of \V{omp}
+and \THd{\V{omp}} is the length element,
+or \dfn[Length (of an offset mapping specifier)]{length} of \V{omp}.
+\end{definition}
+
+\renewcommand{\labBase}{def-offset-mapping}
+\begin{definition}[Offset mapping]
+\label{df:offset-mapping}
+An \dfn{offset mapping} is a function which has the offset and length of its
+specifier, and which preserves the successor relationships of its index set.
+That is,
+if \V{map} is an offset mapping induced by the offset mapping specifier \V{spec},
+then
 \begin{gather}
-\Elab{100} \V{len} \mathbin{\isWellDef} (\naturals\cup\set{\naturals}) \\
-\Elab{120} \land\; \left( \begin{gathered}
-    \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{i},\V{j1}} \in \V{spm} \land
-        \tuple{\V{i}+1,\V{j2}} \in \V{spm}
-        \\ \iff \V{j1}+1 = \V{j2}}
-        \end{gathered} \right). \quad \dfEnd
+\Elab{100} \V{map} \wellDefRel \V{len}\fnMap(\naturals\cup\set{\naturals}) \\
+\Elab{110} \mathrel{\land} \Vnat{len} = \Hd{\V{spec}} \\
+\Elab{120} \mathrel{\land}
+    \univQ{\Vnat{j}}{ \FA{map}{0} = \V{j}  \implies \V{j} = \THd{\V{spec}} } \\
+\Elab{130} \mathrel{\land}
+        \left( \begin{gathered}
+            \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
+                \VFA{map}{i} = \V{j1} \land \FA{map}{\VOA{succ}{i}} = \V{j2} \\
+                \implies \VOA{succ}{j1} = \V{j2}}
+        \end{gathered} \right).
+        \quad \dfEnd
 \end{gather}
 \end{definition}
 
@@ -4463,39 +4453,39 @@ a function of type $\V{len}\tfnMap\naturals$.
 For convenience, we let \Oname{SPM} be a local abbreviation with
 signature $(\Dbool, \classes)$
 such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
-according to \Dfref{successor-faithful-mapping}.
-\eqgath{100}{
- \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
-     }{ \\
-     \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
- \text{\cuz hypothesis of theorem.}}
-\eqpar{105}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
-\eqpar{110}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\times\naturals}$
-     \cuz \E{105}. }
-\eqpar{120}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-faithful-mapping}.}
-\eqpar{130}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
-\eqpar{140}{\Fun{\V{map}} \cuz \E{120}, \E{130}.}
-Equation \E{140} shows that \V{map} is well-defined as a function:
-\eqpar{150}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\fnMap\naturals}$
-     \cuz \E{140}. }
-\E{150} shows that we can redefine \V{map} in a narrower type:
-\eqpar{160}{
-    $\Type{\V{map}} \DDEqTyOp (\V{len}\cup\set{\naturals}\fnMap\naturals)$
-        \cuz \E{150}.}
-\eqpar{170}{$\Dom{\V{map}} \DDEqTyOp \V{len}$ \cuz \E{160}.}
-\eqpar{180}{$\Domain{\V{spm}} = \Dom{\V{len}}$ \cuz \E{105}, \E{170}.}
-\eqpar{190}{\Total{\V{spm}} \cuz \E{180}.}
-Again we can redefine \V{map} in a narrower type:
-\eqpar{200}{
-    $\Type{\V{map}} \DDEqTyOp (\V{len}\tfnMap\naturals)$
-    \cuz \E{160}, \E{190}.}
-Equation \E{200} is what we needed to show.
+% according to \Dfref{successor-faithful-mapping}.
+% \eqgath{100}{
+%  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
+%      }{ \\
+%      \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
+%  \text{\cuz hypothesis of theorem.}}
+% \eqpar{105}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
+% \eqpar{110}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\times\naturals}$
+%      \cuz \E{105}. }
+% \eqpar{120}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-faithful-mapping}.}
+% \eqpar{130}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
+% \eqpar{140}{\Fun{\V{map}} \cuz \E{120}, \E{130}.}
+% Equation \E{140} shows that \V{map} is well-defined as a function:
+% \eqpar{150}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\fnMap\naturals}$
+%      \cuz \E{140}. }
+% \E{150} shows that we can redefine \V{map} in a narrower type:
+% \eqpar{160}{
+%     $\Type{\V{map}} \DDEqTyOp (\V{len}\cup\set{\naturals}\fnMap\naturals)$
+%         \cuz \E{150}.}
+% \eqpar{170}{$\Dom{\V{map}} \DDEqTyOp \V{len}$ \cuz \E{160}.}
+% \eqpar{180}{$\Domain{\V{spm}} = \Dom{\V{len}}$ \cuz \E{105}, \E{170}.}
+% \eqpar{190}{\Total{\V{spm}} \cuz \E{180}.}
+% Again we can redefine \V{map} in a narrower type:
+% \eqpar{200}{
+%     $\Type{\V{map}} \DDEqTyOp (\V{len}\tfnMap\naturals)$
+%     \cuz \E{160}, \E{190}.}
+% Equation \E{200} is what we needed to show.
 \myqed
 \end{proof}
 
 \renewcommand{\labBase}{def-offset-mapping}
 \begin{definition}[Offset mapping]
-\label{df:offset-mapping}
+\label{df:offset-mapping-OLD}
 An \dfn[Offset mapping]{offset mapping}
 is a total function
 \[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
@@ -4527,106 +4517,106 @@ with the inner NBG
 being by reductio, using the simplification of an NBG.
 \todo{Summarize proof strategy.}
 We define, for the purpose of this proof,
-\eqpar{100}{
-    \typed{\Oname{SPM}}{\LABBR{\Dbool, \classes}}
-    such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
-    according to \Dfref{successor-faithful-mapping}, and}
-\eqpar{110}{
-    \Vtyped{\Oname{OFFM}}{\LABBR{\classes, \classes}}
-    such that \VOA{OFFM}{map} is the offset mapping
-    induced by \V{map}, as described in \Dfref{offset-mapping}.}
-\eqpar{120}{
-    \existDecl{\typed{\V{spm},\V{map}}{\classes} }{ \VOA{SPM}{spm} \land \V{offm} = \VOA{OFFM}{spm} }
-    \bcuz hypothesis of lemma.}
-To identify counter-examples to the theorem,
-we define the operator \Oname{BAD}:
-\eqpar{130}{
-    \VOA{BAD}{inst} abbreviates
-    $\VOA{spm}{inst} \nqeq \VOA{offm}{inst}$
-    \bcuz \LABBR{\Dbool,\naturals}.}
-Since the possible counter-examples are the natural
-numbers,
-we know that if there is a counter-example,
-there is a minimal counter-example.
-We assume, for a reductio,
-that there is a minimal ``bad'' instance, \Vnat{bad}, such that
-\VOA{BAD}{bad} is true:
-\eqgath{140}{
-    \existDecl{ \Vtyped{bad}{\naturals} }{ \\
-        \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
-    \text{\cuz AF reductio.} }
-\eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$
-        \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
-\eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
-\eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
-\eqpar{170}{
-    $\V{bad} \notin \Domain{\V{spm}} \implies \VFA{spm}{bad}\isIllDef$
-    \cuz \E{150}.}
-\eqpar{180}{
-    $\V{bad} \notin \Domain{\V{offm}} \implies \VFA{offm}{bad}\isIllDef$
-    \cuz \E{160}.}
-\eqpar{190}{$\Domain{\V{spm}} = \Dom{\V{spm}}$ \cuz \Thref{successor-faithful-mapping-totality}.}
-\eqpar{200}{$\Dom{\V{offm}} = \Dom{\V{spm}}$ \cuz \Dfref{offset-mapping}.}
-We recall that functional domain must be a superset of the relational domain:
-\eqpar{220}{$\Domain{\V{offm}} \subseteq \Dom{\V{offm}}$ \cuz ZF.}
-\eqpar{230}{$\V{bad} \notin \Dom{\V{offm}} \implies \V{bad} \notin \Domain{\V{offm}}$
-    \cuz \E{220}.}
-\eqpar{240}{$\V{bad} \notin \Domain{\V{spm}} \implies \V{bad} \notin \Domain{\V{offm}}$
-    \bcuz \E{190}, \E{200}, \E{230}.}
-\eqpar{250}{$\V{bad} \notin \Domain{\V{spm}} \implies \VFA{offm}{bad}\isIllDef$
-    \cuz \E{180}, \E{240}.}
-\eqpar{260}{$\V{bad} \notin \Domain{\V{spm}} \implies \VFA{offm}{bad} \qeq \VFA{spm}{bad}$
-    \cuz \E{170}, \E{250}.}
-\eqpar{270}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$
-    \cuz \E{130}, \E{260}.}
-\eqpar{280}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{140}, \E{270}.}
-\eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$
-    \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
-\eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
-\eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
-Again recalling that the relational domain is a subset of the
-functional domain:
-\eqpar{320}{$\Domain{\V{spm}} \subseteq \Dom{\V{spm}}$ \cuz ZF.}
-\eqpar{330}{$0 \in \Dom{\V{spm}}$ \cuz \E{310}, \E{320}.}
-\eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$
-    \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-faithful-mapping}.}
-\eqpar{350}{\FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}
-         = \FA{spm}{0} \cuz \E{330}, \E{340}.}
-\eqpar{360}{\FA{offm}{0} = \FA{spm}{0}
-         \cuz \E{110}, \E{120}, \E{350}, \Dfref{offset-mapping}.}
-\eqpar{370}{$\neg \OA{BAD}{0}$ \cuz \E{130}, \E{360}.}
-\eqpar{380}{$\V{bad} > 0$ \cuz \E{140}, \E{370}.}
-\eqpar{390}{$(\V{bad}-1) \isWellDef \naturals$ \cuz \E{140}, \E{380}.}
-\eqpar{400}{$(\V{bad}-1) \in \Domain{\V{spm}}$ \cuz \E{280}, \E{290}, \E{390}.}
-\eqpar{410}{$\FA{spm}{\V{bad}-1} \isWellDef$ \cuz \E{400}.}
-\eqpar{420}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{140}, \E{390}.}
-\begin{align}
-\Elab{430}\OA{spm}{\V{bad}-1} & \qeq \OA{offm}{\V{bad}-1} && \cuz \E{420}. \\
-\Elab{440}\OA{spm}{\V{bad}-1} & = \OA{offm}{\V{bad}-1} && \cuz \E{410}, \E{430}. \\
-\Elab{450}\OA{spm}{\V{bad}-1}+1 & = \OA{offm}{\V{bad}-1}+1 && \cuz \E{440}. \\
-\Elab{460}\OA{spm}{\V{bad}} & = \OA{offm}{\V{bad}-1}+1 && \\
-\nonumber
-    & \mathrlap{ \text{\cuz \E{450},
-        \Eref{def-successor-faithful-mapping-110} in \Dfref{successor-faithful-mapping}.}}
-\end{align}
-\eqpar{470}{$\OA{spm}{\V{bad}}
-    = \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{\V{bad}-1}+1$
-   \bcuz \E{460}, \Dfref{offset-mapping}.}
-\eqpar{480}{$(\V{bad}-1) \wellDefRel \Domain{\V{spm}}$ \cuz \E{400}.}
-\eqpar{490}{$(\V{bad}-1) \wellDefRel \Dom{\V{spm}}$ \cuz \E{190}, \E{480}.}
-\eqpar{500}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+(\V{bad}-1)+1$
-   \bcuz \E{470}, \E{490}.}
-\eqpar{510}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+\V{bad}$ \cuz \E{500}.}
-\eqpar{520}{$\V{bad} \in \Dom{\V{spm}}$ \cuz \E{190}, \E{280}.}
-\eqpar{530}{$\V{bad} \wellDefRel \Dom{\V{spm}}$ \cuz \E{520}.}
-% \eqpar{540}$\OAV{spm}{bad} =
-    % \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}+\V{bad}$
-    % \cuz \E{470},
-\todo{Revise and finish.}
-% \eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
-% The theorem to be proved follows by taking the NDG of
-% \E{220} with the consequent \E{380},
-and simplifying out the consequent.
+% \eqpar{100}{
+%     \typed{\Oname{SPM}}{\LABBR{\Dbool, \classes}}
+%     such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
+%     according to \Dfref{successor-faithful-mapping}, and}
+% \eqpar{110}{
+%     \Vtyped{\Oname{OFFM}}{\LABBR{\classes, \classes}}
+%     such that \VOA{OFFM}{map} is the offset mapping
+%     induced by \V{map}, as described in \Dfref{offset-mapping}.}
+% \eqpar{120}{
+%     \existDecl{\typed{\V{spm},\V{map}}{\classes} }{ \VOA{SPM}{spm} \land \V{offm} = \VOA{OFFM}{spm} }
+%     \bcuz hypothesis of lemma.}
+% To identify counter-examples to the theorem,
+% we define the operator \Oname{BAD}:
+% \eqpar{130}{
+%     \VOA{BAD}{inst} abbreviates
+%     $\VOA{spm}{inst} \nqeq \VOA{offm}{inst}$
+%     \bcuz \LABBR{\Dbool,\naturals}.}
+% Since the possible counter-examples are the natural
+% numbers,
+% we know that if there is a counter-example,
+% there is a minimal counter-example.
+% We assume, for a reductio,
+% that there is a minimal ``bad'' instance, \Vnat{bad}, such that
+% \VOA{BAD}{bad} is true:
+% \eqgath{140}{
+%     \existDecl{ \Vtyped{bad}{\naturals} }{ \\
+%         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
+%     \text{\cuz AF reductio.} }
+% \eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$
+%         \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
+% \eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
+% \eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
+% \eqpar{170}{
+%     $\V{bad} \notin \Domain{\V{spm}} \implies \VFA{spm}{bad}\isIllDef$
+%     \cuz \E{150}.}
+% \eqpar{180}{
+%     $\V{bad} \notin \Domain{\V{offm}} \implies \VFA{offm}{bad}\isIllDef$
+%     \cuz \E{160}.}
+% \eqpar{190}{$\Domain{\V{spm}} = \Dom{\V{spm}}$ \cuz \Thref{successor-faithful-mapping-totality}.}
+% \eqpar{200}{$\Dom{\V{offm}} = \Dom{\V{spm}}$ \cuz \Dfref{offset-mapping}.}
+% We recall that functional domain must be a superset of the relational domain:
+% \eqpar{220}{$\Domain{\V{offm}} \subseteq \Dom{\V{offm}}$ \cuz ZF.}
+% \eqpar{230}{$\V{bad} \notin \Dom{\V{offm}} \implies \V{bad} \notin \Domain{\V{offm}}$
+%     \cuz \E{220}.}
+% \eqpar{240}{$\V{bad} \notin \Domain{\V{spm}} \implies \V{bad} \notin \Domain{\V{offm}}$
+%     \bcuz \E{190}, \E{200}, \E{230}.}
+% \eqpar{250}{$\V{bad} \notin \Domain{\V{spm}} \implies \VFA{offm}{bad}\isIllDef$
+%     \cuz \E{180}, \E{240}.}
+% \eqpar{260}{$\V{bad} \notin \Domain{\V{spm}} \implies \VFA{offm}{bad} \qeq \VFA{spm}{bad}$
+%     \cuz \E{170}, \E{250}.}
+% \eqpar{270}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$
+%     \cuz \E{130}, \E{260}.}
+% \eqpar{280}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{140}, \E{270}.}
+% \eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$
+%     \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
+% \eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
+% \eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
+% Again recalling that the relational domain is a subset of the
+% functional domain:
+% \eqpar{320}{$\Domain{\V{spm}} \subseteq \Dom{\V{spm}}$ \cuz ZF.}
+% \eqpar{330}{$0 \in \Dom{\V{spm}}$ \cuz \E{310}, \E{320}.}
+% \eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$
+%     \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-faithful-mapping}.}
+% \eqpar{350}{\FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}
+%          = \FA{spm}{0} \cuz \E{330}, \E{340}.}
+% \eqpar{360}{\FA{offm}{0} = \FA{spm}{0}
+%          \cuz \E{110}, \E{120}, \E{350}, \Dfref{offset-mapping}.}
+% \eqpar{370}{$\neg \OA{BAD}{0}$ \cuz \E{130}, \E{360}.}
+% \eqpar{380}{$\V{bad} > 0$ \cuz \E{140}, \E{370}.}
+% \eqpar{390}{$(\V{bad}-1) \isWellDef \naturals$ \cuz \E{140}, \E{380}.}
+% \eqpar{400}{$(\V{bad}-1) \in \Domain{\V{spm}}$ \cuz \E{280}, \E{290}, \E{390}.}
+% \eqpar{410}{$\FA{spm}{\V{bad}-1} \isWellDef$ \cuz \E{400}.}
+% \eqpar{420}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{140}, \E{390}.}
+% \begin{align}
+% \Elab{430}\OA{spm}{\V{bad}-1} & \qeq \OA{offm}{\V{bad}-1} && \cuz \E{420}. \\
+% \Elab{440}\OA{spm}{\V{bad}-1} & = \OA{offm}{\V{bad}-1} && \cuz \E{410}, \E{430}. \\
+% \Elab{450}\OA{spm}{\V{bad}-1}+1 & = \OA{offm}{\V{bad}-1}+1 && \cuz \E{440}. \\
+% \Elab{460}\OA{spm}{\V{bad}} & = \OA{offm}{\V{bad}-1}+1 && \\
+% \nonumber
+%     & \mathrlap{ \text{\cuz \E{450},
+%         \Eref{def-successor-faithful-mapping-110} in \Dfref{successor-faithful-mapping}.}}
+% \end{align}
+% \eqpar{470}{$\OA{spm}{\V{bad}}
+%     = \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{\V{bad}-1}+1$
+%    \bcuz \E{460}, \Dfref{offset-mapping}.}
+% \eqpar{480}{$(\V{bad}-1) \wellDefRel \Domain{\V{spm}}$ \cuz \E{400}.}
+% \eqpar{490}{$(\V{bad}-1) \wellDefRel \Dom{\V{spm}}$ \cuz \E{190}, \E{480}.}
+% \eqpar{500}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+(\V{bad}-1)+1$
+%    \bcuz \E{470}, \E{490}.}
+% \eqpar{510}{$\OA{spm}{\V{bad}} = \FA{spm}{0}+\V{bad}$ \cuz \E{500}.}
+% \eqpar{520}{$\V{bad} \in \Dom{\V{spm}}$ \cuz \E{190}, \E{280}.}
+% \eqpar{530}{$\V{bad} \wellDefRel \Dom{\V{spm}}$ \cuz \E{520}.}
+% % \eqpar{540}$\OAV{spm}{bad} =
+%     % \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}+\V{bad}$
+%     % \cuz \E{470},
+% \todo{Revise and finish.}
+% % \eqpar{380}{$\False$ \cuz \E{220}, \E{370}.}
+% % The theorem to be proved follows by taking the NDG of
+% % \E{220} with the consequent \E{380},
+% and simplifying out the consequent.
 \myqed
 \end{proof}
 
