@@ -4378,10 +4378,15 @@ The theorem is the UG of \E{150}. \myqed
 \section{Slices}
 
 Intuitively, a
-\dfn[Slice (sequence)]{slice} is a sequence whose values are a consecutive portion of
-another sequence, called the
-\dfn[Container (sequence)]{container}.
-We proceed to formalize this idea.
+\dfn[Slice (sequence)]{slice} is a sequence whose values are a single, consecutive portion of
+another sequence.
+We proceed to formalize this idea.%
+\todo{Prove uniqueness, given container, offset, length}
+
+We call the index set of the slice, its \dfn[Length (of a slice)]{length}.
+We call the value of the zero element of the slice, its \dfn[Offset (of a slice)]{offset}.
+We call the possibly larger sequence from which the values of the slice are taken,
+the container sequence, or \dfn[Container (sequence)]{container}.
 
 \begin{definition}[Successor]
 \label{df:successor}
@@ -4393,141 +4398,53 @@ is such that \VOA{succ}{x} is the successor of \Vnat{x}:
 \[ \VOA{succ}{x} = \V{x}\cup\set{\V{x}}. \]
 The operator \Oname{pred}, \ABBR{\naturals,\naturals},
 is such that \VOA{pred}{x} is the predecessor of \Vnat{x}:
-\[ \VOA{pred}{y} = \V{x} \iff \VOA{succ}{x} = \V{y}. \]
-\dfEnd
+\[ \VOA{pred}{y} = \V{x} \iff \VOA{succ}{x} = \V{y}.
+    \quad \dfEnd \]
 \end{definition}
 
 We recall that $\VOA{pred}{0}\isIllDef$,
 and recall that $\VOA{pred}{1}=0$, etc.
-Useful facts are the $\VOA{pred}{x}+1 = \V{x}$ and that
-$\V{x}+1 = \VOA{succ}{\V{x}}$, but these are not used
-to define \V{succ} and \V{pred} because that would be circular:
+Two useful facts are
+\[ \VOA{pred}{x}+1 = \V{x} \text{ and }
+    \V{x}+1 = \VOA{succ}{\V{x}}, \]
+but we cannot use these facts
+as our definition of \V{succ} and \V{pred} because that would be circular:
 ZF defines arithmetic in terms of \V{succ}.
 
-In formalizing the idea of a slice,
-we first consider the case where the container is the sequence of natural
+It is convenient to
+first consider the special case where the container is the sequence of natural
 numbers.
 We notice that the sequence of natural numbers is also the identity function on \naturals.
+Among the properties we want a slice of this container to have
+is that its range faithfully preserves the successor relationships on the index set
+of the slice.
 
-\renewcommand{\labBase}{def-successor-preserving-mapping}
-\begin{definition}[Successor-preserving mapping]
-\label{df:successor-preserving-mapping}
-Intuitively,
-an \dfn[Successor preserving mapping]{successor-preserving mapping}
-is
-\begin{itemize}
-\item a binary relation between a countable number and the natural numbers,
-\item which preserves successor relationships within its domain,
-\item as well as the uniqueness of the zero element.
-\end{itemize}
-The domain of the successor-preserving mapping
+\renewcommand{\labBase}{def-successor-faithful-mapping}
+\begin{definition}[Successor-faithful mapping]
+\label{df:successor-faithful-mapping}
+A \dfn[Successor-faithful mapping]{successor-faithful mapping}
+is a binary relation between a countable number and the natural numbers,
+which faithfully preserves the successor relationships of its domain.
+The domain of the successor-faithful mapping
 is called
-its \dfn[Length (of a successor-preserving mapping]{length}.
+its \dfn[Length (of a successor-faithful mapping]{length}.
 Formally, $\Vtyped{spm}{\V{len}\times\naturals}$,
-is a successor preserving mapping iff
+is a successor-faithful mapping iff
 \begin{gather}
 \Elab{100} \V{len} \mathbin{\isWellDef} (\naturals\cup\set{\naturals}) \\
-\Elab{110} \land\; \left( \begin{gathered}
-    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{0,\V{j1}} \in \V{spm} \land
-        \tuple{0,\V{j2}} \in \V{spm}
-        \\ \implies \V{j1} = \V{j2}}
-        \end{gathered} \right) \\
 \Elab{120} \land\; \left( \begin{gathered}
     \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
         \tuple{\V{i},\V{j1}} \in \V{spm} \land
         \tuple{\V{i}+1,\V{j2}} \in \V{spm}
-        \\ \implies \V{j1}+1 = \V{j2}}
+        \\ \iff \V{j1}+1 = \V{j2}}
         \end{gathered} \right). \quad \dfEnd
 \end{gather}
 \end{definition}
 
-\renewcommand{\labBase}{lm-spm-univocal}
-\begin{lemma}
-\label{lm:spm-univocal}
-Every successor preserving mapping is univocal. \lmEnd
-\end{lemma}
-
-\begin{proof}
-The proof is by reductio, using the simplification of an NBG.
-To identify counter-examples to the theorem,
-we define the operator \Oname{BAD}:
-\begin{equation}
-\Elab{110}
-\begin{gathered}
-    \text{\VOA{BAD}{\V{inst}} abbreviates} \\
-    \existQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{inst},\V{j1}} \in \V{spm} \land
-        \tuple{\V{inst},\V{j2}} \in \V{spm} \land
-        \V{j1} \neq \V{j2}} \\
-    \text{\cuz \LABBR{\Dbool,\naturals}.}
-\end{gathered}
-\end{equation}
-Since the possible counter-examples are the natural
-numbers,
-we know that if there is a counter-example,
-there is a minimal counter-example.
-We assume, for a reductio,
-that there is a minimal ``bad'' instance, \Vnat{bad}, such that
-\VOA{BAD}{bad} is true:
-\eqgath{120}{
-    \existDecl{ (\Vtyped{spm}{\naturals\cup\set{\naturals}\times\naturals}) ,\; \Vtyped{bad}{\naturals} }{ \\
-        \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
-    \text{\cuz AF reductio.} }
-\eqgath{130}{
-    \V{bad} \notin \Domain{\V{spm}} \\
-    \implies \univQ{\Vnat{i}}{
-    \tuple{\V{bad},\V{i}} \notin \V{spm}} \\
-    \text{\cuz \E{120}.} }
-\eqpar{140}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$ \cuz \E{110}, \E{130}.}
-\eqpar{150}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{120}, \E{140}.}
-\eqpar{155}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$ \cuz \Dfref{successor-preserving-mapping}.}
-\eqpar{160}{$\Domain{\V{spm}} > 0$ \cuz \E{150}, \E{155}.}
-\eqpar{170}{$0 \in \Domain{\V{spm}}$ \cuz \E{160}.}
-\eqpar{180}{$\neg \OA{BAD}{0}$ \cuz \E{110},
-    \Eref{def-successor-preserving-mapping-110} in \Dfref{successor-preserving-mapping}.}
-\eqpar{190}{$\V{bad} > 0$ \cuz \E{120}, \E{150}, \E{170}, \E{180}.}
-\eqpar{200}{$\V{bad}-1 \in \Domain{\V{spm}}$ \cuz \E{150}, \E{155}, \E{190}.}
-\eqpar{210}{$\neg\OA{BAD}{\V{bad}-1}$ \cuz \E{120}, \E{200}.}
-\eqgath{220}{
-    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{bad}-1,\V{j1}} \in \V{spm} \land
-        \tuple{\V{bad}-1,\V{j2}} \in \V{spm}
-        \implies \V{j1} = \V{j2}} \\
-        \text{\cuz \E{110},\E{210}.} }
-\eqpar{230}{$\V{predV} \ldefined \iotaQ{\Vnat{i}}{\tuple{\V{bad}-1, \V{i}}} \in \V{spm}$
-    \cuz \E{220}.}
-We know that \E{230} is well defined because of \E{220}.
-\eqgath{240}{
-    \univQ{\Vnat{x},\Vnat{j1}, \Vnat{j2}}{
-        \tuple{\V{x}-1, \V{j1}} \in \V{spm} \land \tuple{\V{x}, \V{j2}} \in \V{spm}
-    \\ \implies \V{j2} = \V{j1}+1 }
-    \\ \text{\cuz \Eref{def-successor-preserving-mapping-120} in
-        \Dfref{successor-preserving-mapping}.}
-}
-\eqpar{250}{
-    $\univQ{\Vnat{j2}}{
-        \tuple{\V{bad}, \V{j2}} \in \V{spm} \implies \V{j2} = \V{predV}+1 }$
-    \bcuz \E{200},  \E{230}, \E{240}.
-}
-\eqgath{260}{
-    \univQ{\typed{\V{j1},\V{j2}}{\naturals}}{ \\
-        \tuple{\V{bad},\V{j1}} \in \V{spm} \land
-        \tuple{\V{bad},\V{j2}} \in \V{spm}
-        \implies \V{j1} = \V{predV}+1 = \V{j2}} \\
-        \text{\cuz \E{250}.} }
-\eqpar{270}{$\neg\OA{BAD}{\V{bad}}$ \cuz \E{260}.}
-\eqpar{280}{$\False$ \cuz \E{120}, \E{270}.}
-The theorem to be proved follows by taking the NDG of
-\E{120} with the consequent \E{280},
-and simplifying out the consequent.
-\myqed
-\end{proof}
-
-\renewcommand{\labBase}{th-successor-preserving-mapping}
+\renewcommand{\labBase}{th-successor-faithful-mapping-totality}
 \begin{theorem}[Successor Preserving Mapping Totality]
-\label{th:successor-preserving-mapping-totality}
-Let \V{spm} be a successor preserving mapping of length \Vtyped{len}{\naturals}.
+\label{th:successor-faithful-mapping-totality}
+Let \V{spm} be a successor-faithful mapping of length \Vtyped{len}{\naturals}.
 Then \V{spm} is a total
 function of type
 $\V{len}\tfnMap\naturals$.
@@ -4536,13 +4453,13 @@ That is,
 \end{theorem}
 
 \begin{proof}
-The proof assumes that \V{map} is a successor preserving mapping
+The proof assumes that \V{map} is a successor-faithful mapping
 of length \V{len}, to show that it is also
 a function of type $\V{len}\tfnMap\naturals$.
 For convenience, we let \Oname{SPM} be a local abbreviation with
 signature $(\Dbool, \classes)$
-such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping
-according to \Dfref{successor-preserving-mapping}.
+such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
+according to \Dfref{successor-faithful-mapping}.
 \eqgath{100}{
  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
      }{ \\
@@ -4551,7 +4468,7 @@ according to \Dfref{successor-preserving-mapping}.
 \eqpar{105}{$\Domain{\V{spm}} = \V{len}$ \cuz \E{100}.}
 \eqpar{110}{$\V{map} \isWellDef \Vtyped{map}{\V{len}\cup\set{\naturals}\times\naturals}$
      \cuz \E{105}. }
-\eqpar{120}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-preserving-mapping}.}
+\eqpar{120}{\Rel{\V{map}} \cuz \E{100} , \Dfref{successor-faithful-mapping}.}
 \eqpar{130}{\Univocal{\V{map}} \cuz \E{100}, \Lmref{spm-univocal}.}
 \eqpar{140}{\Fun{\V{map}} \cuz \E{120}, \E{130}.}
 Equation \E{140} shows that \V{map} is well-defined as a function:
@@ -4582,11 +4499,11 @@ such that
 \[ \Fname{f} = \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \V{off}+\V{x} }, \]
 where we say that \V{off} is the \dfn[offset (of an offset mapping)]{offset}
 and that $\Dom{\V{f}}$ is its \dfn[length (of an offset mapping)]{length}.
-Where \Fname{spm} is a successor-preserving mapping,
+Where \Fname{spm} is a successor-faithful mapping,
 we call
 \[ (\Vtyped{g}{\Dom{\V{spm}}\tfnMap\naturals}) = \lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} } \]
-the \dfn[offset mapping!induced by a successor-preserving mapping]{
-    offset mapping induced by the successor preserving mapping} \V{spm},
+the \dfn[offset mapping!induced by a successor-faithful mapping]{
+    offset mapping induced by the successor-faithful mapping} \V{spm},
 so that \Dom{\V{spm}} is the length of \V{g},
 and \FA{spm}{0} is the offset of \V{g}.
 \dfEnd
@@ -4595,7 +4512,7 @@ and \FA{spm}{0} is the offset of \V{g}.
 \renewcommand{\labBase}{lem-offset-mapping}
 \begin{lemma}[Offset mapping]
 \label{lm:offset-mapping}
-A successor-preserving mapping is equivalent to the
+A successor-faithful mapping is equivalent to the
 offset mapping that it induces.
 \end{lemma}
 
@@ -4608,8 +4525,8 @@ being by reductio, using the simplification of an NBG.
 We define, for the purpose of this proof,
 \eqpar{100}{
     \typed{\Oname{SPM}}{\LABBR{\Dbool, \classes}}
-    such that \VOA{SPM}{x} is \True iff \V{x} is a successor preserving mapping
-    according to \Dfref{successor-preserving-mapping}, and}
+    such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
+    according to \Dfref{successor-faithful-mapping}, and}
 \eqpar{110}{
     \Vtyped{\Oname{OFFM}}{\LABBR{\classes, \classes}}
     such that \VOA{OFFM}{map} is the offset mapping
@@ -4635,8 +4552,8 @@ that there is a minimal ``bad'' instance, \Vnat{bad}, such that
         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
     \text{\cuz AF reductio.} }
 \eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$
-        \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
-\eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
+        \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
+\eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
 \eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
 \eqpar{170}{
     $\V{bad} \notin \Domain{\V{spm}} \implies \VFA{spm}{bad}\isIllDef$
@@ -4644,7 +4561,7 @@ that there is a minimal ``bad'' instance, \Vnat{bad}, such that
 \eqpar{180}{
     $\V{bad} \notin \Domain{\V{offm}} \implies \VFA{offm}{bad}\isIllDef$
     \cuz \E{160}.}
-\eqpar{190}{$\Domain{\V{spm}} = \Dom{\V{spm}}$ \cuz \Thref{successor-preserving-mapping-totality}.}
+\eqpar{190}{$\Domain{\V{spm}} = \Dom{\V{spm}}$ \cuz \Thref{successor-faithful-mapping-totality}.}
 \eqpar{200}{$\Dom{\V{offm}} = \Dom{\V{spm}}$ \cuz \Dfref{offset-mapping}.}
 We recall that functional domain must be a superset of the relational domain:
 \eqpar{220}{$\Domain{\V{offm}} \subseteq \Dom{\V{offm}}$ \cuz ZF.}
@@ -4660,7 +4577,7 @@ We recall that functional domain must be a superset of the relational domain:
     \cuz \E{130}, \E{260}.}
 \eqpar{280}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{140}, \E{270}.}
 \eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$
-    \cuz \E{100}, \E{120}, \Dfref{successor-preserving-mapping}.}
+    \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
 \eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
 \eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
 Again recalling that the relational domain is a subset of the
@@ -4668,7 +4585,7 @@ functional domain:
 \eqpar{320}{$\Domain{\V{spm}} \subseteq \Dom{\V{spm}}$ \cuz ZF.}
 \eqpar{330}{$0 \in \Dom{\V{spm}}$ \cuz \E{310}, \E{320}.}
 \eqpar{340}{$\FA{spm}{0}\isWellDef\naturals$
-    \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-preserving-mapping}.}
+    \cuz \E{100}, \E{120}, \E{310}, \Dfref{successor-faithful-mapping}.}
 \eqpar{350}{\FA{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{0}
          = \FA{spm}{0} \cuz \E{330}, \E{340}.}
 \eqpar{360}{\FA{offm}{0} = \FA{spm}{0}
@@ -4686,7 +4603,7 @@ functional domain:
 \Elab{460}\OA{spm}{\V{bad}} & = \OA{offm}{\V{bad}-1}+1 && \\
 \nonumber
     & \mathrlap{ \text{\cuz \E{450},
-        \Eref{def-successor-preserving-mapping-110} in \Dfref{successor-preserving-mapping}.}}
+        \Eref{def-successor-faithful-mapping-110} in \Dfref{successor-faithful-mapping}.}}
 \end{align}
 \eqpar{470}{$\OA{spm}{\V{bad}}
     = \rawfn{(\lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} })}{\V{bad}-1}+1$
