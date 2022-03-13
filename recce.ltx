@@ -4443,16 +4443,20 @@ or \dfn[Length (of an offset mapping specifier)]{length} of \V{omp}.
 \renewcommand{\labBase}{def-offset-mapping}
 \begin{definition}[Offset mapping]
 \label{df:offset-mapping}
-An \dfn{offset mapping} is a function which has the offset and length of its
-specifier, and which preserves the successor relationships of its index set.
+An \dfn{offset mapping} is a function
+whose domain is the length of its specifier,
+whose codomain is the natural numbers,
+whose zero element maps to the offset of its specifier,
+and which preserves the successor relationships of its index set.
 That is,
-if \V{map} is an offset mapping induced by the offset mapping specifier \V{spec},
-then
+the offset mapping specifier
 \begin{gather}
-\Elab{100} \V{map} \wellDefRel \V{len}\fnMap(\naturals\cup\set{\naturals}) \\
-\Elab{110} \mathrel{\land} \Vnat{len} = \Hd{\V{spec}} \\
-\Elab{120} \mathrel{\land}
-    \univQ{\Vnat{j}}{ \FA{map}{0} = \V{j}  \implies \V{j} = \THd{\V{spec}} } \\
+\Elab{100} \tuple{\V{len}, \V{offset}} \\
+\intertext{induces the offset mapping}
+\Elab{110} \Vtyped{map}{\V{len}\fnMap\naturals} \\
+\intertext{such that}
+\Elab{120}
+    \univQ{\Vnat{j}}{ \FA{map}{0} = \V{j}  \implies \V{j} = \V{offset} } \\
 \Elab{130} \mathrel{\land}
         \left( \begin{gathered}
             \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
@@ -4463,25 +4467,22 @@ then
 \end{gather}
 \end{definition}
 
-\renewcommand{\labBase}{th-successor-faithful-mapping-totality}
-\begin{theorem}[Successor Preserving Mapping Totality]
-\label{th:successor-faithful-mapping-totality}
-Let \V{spm} be a successor-faithful mapping of length \Vtyped{len}{\naturals}.
-Then \V{spm} is a total
-function of type
-$\V{len}\tfnMap\naturals$.
-That is,
-\[ \V{spm} \isWellDef (\V{len}\tfnMap\naturals). \quad \thEnd \]
+\renewcommand{\labBase}{th-offset-mapping-totality}
+\begin{theorem}[Offset Mapping Totality]
+\label{th:offset-mapping-totality}
+An offset mapping is a total function.  \thEnd
 \end{theorem}
 
 \begin{proof}
-The proof assumes that \V{map} is a successor-faithful mapping
-of length \V{len}, to show that it is also
-a function of type $\V{len}\tfnMap\naturals$.
-For convenience, we let \Oname{SPM} be a local abbreviation with
-signature $(\Dbool, \classes)$
-such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
-% according to \Dfref{successor-faithful-mapping}.
+The proof assumes that \Vtyped{map}{\V{len}\fnMap\naturals}
+is an offset mapping to show that it is also
+of type $\V{len}\tfnMap\naturals$.
+For convenience, we let \Oname{OFFM} be a local abbreviation with
+signature
+\[ \left(\classes, \naturals\cup\set{natural}\times\naturals) \right) \]
+such that \VOA{OFFM}{spec} is an offset mapping of the 
+offset mapping specifier $\tuple{\V{len}, \V{offset}}$.
+according to \Dfref{offset-mapping}.
 % \eqgath{100}{
 %  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
 %      }{ \\
@@ -4511,34 +4512,23 @@ such that \VOA{SPM}{x} is \True iff \V{x} is a successor-faithful mapping
 \myqed
 \end{proof}
 
-\renewcommand{\labBase}{def-offset-mapping}
-\begin{definition}[Offset mapping]
-\label{df:offset-mapping-OLD}
+\renewcommand{\labBase}{th-offset-mapping}
+\begin{theorem}[Offset mapping]
+\label{th:offset-mapping}
 An \dfn[Offset mapping]{offset mapping}
 is a total function
-\[ \Vtyped{f}{\naturals\cup\set{\naturals}  \tfnMMap \naturals} \]
+\[ \Vtyped{f}{\V{len} \tfnMMap \naturals} \]
 such that
 \[ \Fname{f} = \lambdaQ{ \Vtyped{x}{\Dom{\V{f}}} }{ \V{off}+\V{x} }, \]
-where we say that \V{off} is the \dfn[offset (of an offset mapping)]{offset}
-and that $\Dom{\V{f}}$ is its \dfn[length (of an offset mapping)]{length}.
-Where \Fname{spm} is a successor-faithful mapping,
-we call
-\[ (\Vtyped{g}{\Dom{\V{spm}}\tfnMap\naturals}) = \lambdaQ{ \Vtyped{x}{\Dom{\V{spm}}} }{ \FA{spm}{0}+\V{x} } \]
-the \dfn[offset mapping!induced by a successor-faithful mapping]{
-    offset mapping induced by the successor-faithful mapping} \V{spm},
-so that \Dom{\V{spm}} is the length of \V{g},
-and \FA{spm}{0} is the offset of \V{g}.
+where
+\[ \tuple{\V{len}, \V{off}} \]
+is the offset mapping specifier that induces it.
 \dfEnd
-\end{definition}
-
-\renewcommand{\labBase}{lem-offset-mapping}
-\begin{lemma}[Offset mapping]
-\label{lm:offset-mapping}
-A successor-faithful mapping is equivalent to the
-offset mapping that it induces.
-\end{lemma}
+\end{theorem}
 
 \begin{proof}
+% Proof template
+\todo{Rewrite this proof.}
 After some preliminary definitions,
 the proof is by nested NBG,
 with the inner NBG
