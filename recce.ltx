@@ -2593,13 +2593,28 @@ or \dfn{metaproperties}.
 \FloatBarrier
 
 We use only a few metaproperties.
-These do not exist in the \COL.
-They are for use in referencing certain \COL values which
-are conceptually related to other \COL values at the \MtL level,
-but which are not properties of their value at the \COL level.
-Metaproperties are usually set by implication,
-as described below.
-\todo{Supply this reference.}
+These are local abbreviations of \COL values.
+They are ``properties'' in the sense they are associated with
+the variable in brackets, but they are not deducible from the
+value of the variable -- that is,
+they properties of the \COL variable's name, not of the \COL variable's value.
+
+The metaproperties are the functional domain and codomain of a function,
+and the type of a variable.
+Metaproperties can be set either by implication,
+as described in \Rmref{implicit-TYPE}
+and \Rmref{implicit-function-metaproperties},
+or explicitly \Rmref{explicit-function-metaproperties}.
+
+Despite what the use of brackets may suggest,
+metaproperties are not parameterized,
+and are not composite values.
+The brackets, and the text they enclose, are part of the name of a metaproperty.
+For example, until \Type{\V{v1}} has been set,
+either implicitly or explicitly,
+\Type{\V{v1}} is a name which has never been defined.
+Until it is set, \Type{\V{v1}} is undefined in the strict sense,
+and therefore neither well-defined or ill-defined.
 
 \subsection{Application operators}
 
@@ -2870,12 +2885,19 @@ Based on \EFref{pseudo-type-notation2} by itself,
 and therefore will not necessarily be
 a first-class \COL with a type.
 
+\begin{remark}[Implicit setting of \MPname{TYPE}]
+\label{rm:implicit-TYPE}
 When a variable is instantiated, it implicitly
 sets the \MPname{TYPE} metaproperty.
 For example, the instantiation
 \[ \Vtyped{x}{\alpha} \]
 has the side effect of setting $\Type{x}$ to $\alpha$.
 $\Type{x}$ has the same scope as \V{x}.
+\MPname{TYPE} may also be set explicitly,
+as described below
+(\Rmref{explicit-function-metaproperties}).
+\rmEnd
+\end{remark}
 
 \subsection{Well-definedness tests}
 
@@ -3868,6 +3890,8 @@ where the signature of \mname{fun} is $(\Dbool, \classes)$
 and $\Fun{\V{r}}$ abbreviates
 \[ \Rel{\V{r}} \land \Univocal{\V{r}}. \]
 
+\begin{remark}[Implicit setting of function metaproperties]
+\label{rm:implicit-function-metaproperties}
 The \MPname{DOM} metaproperty records the domain of a function,
 so that $\Dom{\V{f}}$,%
 \index{recce-defienda}{\Dom{\V{f}}, domain of function \V{f}}
@@ -3888,8 +3912,11 @@ For a well-defined function \V{f},
 and for the implicit values of \MPname{TYPE},
 \MPname{DOM} and \MPname{COD},
 it will always be the case that
-\[ \Type{\V{f}} = \tuple{\Dom{\V{f}}\times\Cod{\V{f}}}. \]
+\[ \Type{\V{f}} = \tuple{\Dom{\V{f}}\times\Cod{\V{f}}}. \quad \rmEnd \]
+\end{remark}
 
+\begin{remark}[Explicit setting of function metaproperties]
+\label{rm:explicit-function-metaproperties}
 We almost always leave \MPname{TYPE},
 \MPname{DOM} and \MPname{COD} at their implicit values.
 In rare cases, as for example when we need to prove that a function
@@ -3898,17 +3925,18 @@ For example, if we find that
 the locally scoped partial function $\Vtyped{f}{\alpha\fnMap\beta}$
 is total, we can narrow its type with the following statement:
 \[
-    \Type{\V{f}} \DDEqTyOp (\alpha\tfnMap\beta).
+    \Type{\V{f}} \DDEqTyOp (\alpha\tfnMap\beta). \quad \rmEnd
 \]
+\end{remark}
 
 The functional and relational domains are related:
 it will always be the case that
-\[ \Dom{\V{f}}\isWellDef \land\; \Domain{\V{f}}\isWellDef
-    \implies \Dom{\V{f}} \subseteq \Domain{\V{f}}. \]
+\[ \Domain{\V{f}}\isWellDef \land\; \Dom{\V{f}}\isWellDef
+    \implies \Domain{\V{f}} \subseteq \Dom{\V{f}}. \]
 Similarly, the codomain and range are related:
 it will always be the case that
-\[ \Cod{\V{f}}\isWellDef \land\;\Range{\V{f}}\isWellDef
-    \implies \Cod{\V{f}} \subseteq \Range{\V{f}}. \]
+\[ \Range{\V{f}}\isWellDef \land\;\Cod{\V{f}}\isWellDef
+    \implies \Range{\V{f}} \subseteq \Cod{\V{f}}. \]
 
 \V{f} is a \dfn[Total (function)]{total function},
 iff $\Total{\V{f}}$, where \mname{total},
