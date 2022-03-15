@@ -976,6 +976,7 @@
 \hyphenation{look-ahead}
 \hyphenation{memo-ization}
 \hyphenation{TeXbook}
+\hyphenation{co-domain}
 
 \begin{document}
 
@@ -4434,10 +4435,10 @@ preservation of the index set successor relationships.
 \begin{definition}[Offset mapping specifier]
 \label{df:offset-mapping-specifier}
 An \dfn{offset mapping specifier}
-is a duple, $\Vtyped{omp}{\naturals\times(\naturals\cup\set{\naturals})}$,
-where \Hd{\V{omp}} is the \dfn[Offset (of an offset mapping specifier)]{offset} of \V{omp}
-and \THd{\V{omp}} is the length element,
-or \dfn[Length (of an offset mapping specifier)]{length} of \V{omp}.
+is a duple, $\Vtyped{spec}{\naturals\times(\naturals\cup\set{\naturals})}$,
+where \Hd{\V{spec}} is the \dfn[Offset (of an offset mapping specifier)]{offset} of \V{spec}
+and \THd{\V{spec}} is the length element,
+or \dfn[Length (of an offset mapping specifier)]{length} of \V{spec}.
 \end{definition}
 
 \renewcommand{\labBase}{def-offset-mapping}
@@ -4451,7 +4452,7 @@ and which preserves the successor relationships of its index set.
 That is,
 the offset mapping specifier
 \begin{gather}
-\Elab{100} \tuple{\V{len}, \V{offset}} \\
+\Elab{100} \tuple{\V{offset}, \V{len}} \\
 \intertext{induces the offset mapping}
 \Elab{110} \Vtyped{map}{\V{len}\fnMap\naturals} \\
 \intertext{such that}
@@ -4475,18 +4476,18 @@ An offset mapping is a total function.  \thEnd
 
 \todo{For each major definition,
     prove well-definedness, uniqueness, length,
-    type(domain, codomain), and slice pairs.}
+    type (domain, codomain), and slice pairs.}
 
 \begin{proof}
 The proof assumes that \Vtyped{map}{\V{len}\fnMap\naturals}
 is an offset mapping to show that it is also
 of type $\V{len}\tfnMap\naturals$.
-For convenience, we let \Oname{OFFM} be a local abbreviation with
-signature
-\[ \left(\classes, \naturals\cup\set{natural}\times\naturals) \right) \]
-such that \VOA{OFFM}{spec} is an offset mapping of the 
-offset mapping specifier $\tuple{\V{len}, \V{offset}}$.
-according to \Dfref{offset-mapping}.
+\eqpar{100}{
+    We define \typed{\Oname{OFFM}}{
+        \LABBR{ \; \classes, \; (\naturals\cup\set{\naturals}) \times\naturals \;}}
+    as the offset mapping induced by the
+    offset mapping specifier $\tuple{\V{len}, \V{offset}}$
+    according to \Dfref{offset-mapping}.}
 % \eqgath{100}{
 %  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
 %      }{ \\
