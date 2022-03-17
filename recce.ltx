@@ -4431,16 +4431,6 @@ of the slice.
 We will show that the other expected properties of a slice follow from
 preservation of the index set successor relationships.
 
-\renewcommand{\labBase}{def-offset-mapping-specifier}
-\begin{definition}[Offset mapping specifier]
-\label{df:offset-mapping-specifier}
-An \dfn{offset mapping specifier}
-is a duple, $\Vtyped{spec}{\naturals\times(\naturals\cup\set{\naturals})}$,
-where \Hd{\V{spec}} is the \dfn[Offset (of an offset mapping specifier)]{offset} of \V{spec}
-and \THd{\V{spec}} is the length element,
-or \dfn[Length (of an offset mapping specifier)]{length} of \V{spec}.
-\end{definition}
-
 \renewcommand{\labBase}{def-offset-mapping}
 \begin{definition}[Offset mapping]
 \label{df:offset-mapping}
@@ -4449,15 +4439,11 @@ whose domain is the length of its specifier,
 whose codomain is the natural numbers,
 whose zero element maps to the offset of its specifier,
 and which preserves the successor relationships of its index set.
-That is,
-the offset mapping specifier
+That is, \V{map} is an offset mapping iff
 \begin{gather}
-\Elab{100} \tuple{\V{offset}, \V{len}} \\
-\intertext{induces the offset mapping}
-\Elab{110} \Vtyped{map}{\V{len}\fnMap\naturals} \\
-\intertext{such that}
+\Elab{100} \Type{\V{map}} = \V{len} \fnMap \naturals \\
 \Elab{120}
-    \univQ{\Vnat{j}}{ \FA{map}{0} = \V{j}  \implies \V{j} = \V{offset} } \\
+    \mathrel{\land} \univQ{\Vnat{j}}{ \FA{map}{0} = \V{j}  \implies \V{j} = \V{off} } \\
 \Elab{130} \mathrel{\land}
         \left( \begin{gathered}
             \univQ{\typed{\V{i},\V{j1},\V{j2}}{\naturals}}{ \\
@@ -4465,7 +4451,17 @@ the offset mapping specifier
                 \implies \VOA{succ}{j1} = \V{j2}}
         \end{gathered} \right).
         \quad \dfEnd
+\intertext{where}
+\Elab{140} \V{off} \wellDefRel \naturals \text{ and } \V{len} \wellDefRel (\naturals\cup\set{\naturals}).
 \end{gather}
+We say that
+\eqpar{160}{$\Vtyped{spec}{\naturals\times(\naturals\cup\set{\naturals})}
+    = \tuple{\V{off}, \V{len}}$}
+is the \dfn[Specifier!offset mapping]{offset mapping specifier}
+of \V{map}.
+We say that \V{off} is the \dfn{offset} of \V{map} and of \V{spec}.
+We say that \V{len} is the \dfn{length} of \V{map} and of \V{spec}.
+\dfEnd
 \end{definition}
 
 \renewcommand{\labBase}{th-offset-mapping-totality}
