@@ -4459,10 +4459,55 @@ We say that
     = \tuple{\V{off}, \V{len}}$}
 is the \dfn[Specifier!offset mapping]{offset mapping specifier}
 of \V{map}.
-We say that \V{off} is the \dfn{offset} of \V{map} and of \V{spec}.
-We say that \V{len} is the \dfn{length} of \V{map} and of \V{spec}.
-\dfEnd
+We also say
+\begin{itemize}
+\item that offset mapping \V{map} \dfn[Induce (specifier, offset mapping)]{induces}
+    the specifier \V{spec},
+\item that the specifier \V{spec} \dfn[Induce (offset mapping, specifier)]{induces}
+    the offset mapping \V{map},
+\item that \V{off} is the \dfn{offset} of \V{map} and of \V{spec},
+\item that \V{len} is the \dfn{length} of \V{map} and of \V{spec}.  \dfEnd
+\end{itemize}
 \end{definition}
+
+\renewcommand{\labBase}{th-offset-mapping-specifier-uniqueness}
+\begin{theorem}[Offset Mapping Specifier Uniqueness]
+\label{th:offset-mapping-specifier-uniqueness}
+Every offset mapping has exactly one specifier.
+\thEnd
+\end{theorem}
+
+\begin{proof}
+\todo{Finish this proof.}
+The proof is direct.
+For convenience,
+\eqpar{100}{
+    we let \VOA{OFFM}{spec} abbreviate
+    the offset mapping induced by the
+    offset mapping specifier \V{spec}
+    \cuz
+    \LABBR{ \; \classes, \; (\naturals\cup\set{\naturals}) \times\naturals \;}
+    \Dfref{offset-mapping}.}
+We consider a non-deterministic choice of offset, length,
+and offset mapping:
+\eqpar{100}{\existDecl{\Vtyped{len}{\naturals\cup\set{\naturals},
+    \Vtyped{off}{\naturals},
+    \Vtyped{map}{\V{len}\fnMap\naturals}}{\True}} \cuz AF proof.}
+Since
+the specifier's offset
+and length
+are well-defined, so is a tuple containing them:
+\eqpar{110}{$\tuple{\V{off}, \V{len}}\wellDefRel$ \cuz \E{100}.}
+\eqpar{120}{$\OA{OFFM}{\tuple{\V{off}, \V{len}}} = \V{map}$
+    \cuz \Dfref{offset-mapping}, \E{110}.}
+Therefore \V{map} has at least one specifier:
+\eqpar{130}{\existQ{\Vtyped{spec}{\naturals\cup\set{\naturals}) \times\naturals}}{
+    \VOA{OFFM}{spec}=\V{map}
+    } \cuz \E{120}.}
+
+We now choose two specifiers, non-deterministically.
+\myqed
+\end{proof}
 
 \renewcommand{\labBase}{th-offset-mapping-totality}
 \begin{theorem}[Offset Mapping Totality]
