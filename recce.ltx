@@ -4492,14 +4492,12 @@ Every offset mapping has exactly one specifier.
 \todo{Finish this proof.}
 The proof is direct.
 For convenience, we abbreviate the type for offset mapping specifiers:
-\eqpar{100}{$\V{specTy} \ldefined \countables \times\naturals$. }
-and we also define
 \eqpar{110}{
      \typed{\Oname{OFFMAP}}{\LABBR{\Dbool, \classes}}
      such that \VOA{OFFMAP}{x} is \True iff \V{x} is an offset mapping
      according to its definition \Dfref{offset-mapping}, and}
 \eqpar{120}{
-    \typed{\Oname{SPECOF}}{\LABBR{  \Dbool, \V{specTy}, \classes}}
+    \typed{\Oname{SPECOF}}{\LABBR{  \Dbool, (\countables\times\naturals), \classes}}
     such that 
     \OA{SPECOF}{\V{spec},\V{offmap}} is \True iff
     \VOA{OFFMAP}{offmap} and
@@ -4513,20 +4511,37 @@ We make two definitions, local to this proof:
 \eqpar{140}{\Vtyped{offset}{\naturals} is the offset of \V{map} \cuz \E{130}.}
 \eqpar{150}{\Vtyped{len}{\countables} is the length of \V{map} \cuz \E{130}.}
 Therefore, a tuple containing them must be well-defined:
-\eqpar{160}{$\tuple{\V{off}, \V{len}}\wellDefRel \V{specTy}$ \cuz \E{100}, \E{140}, \E{150}.}
+\eqpar{160}{$\tuple{\V{off}, \V{len}}\wellDefRel (\countables\times\naturals)$ \cuz \E{140}, \E{150}.}
 \eqpar{170}{$\OA{SPECOF}{\tuple{\V{off}, \V{len}},\V{map}}$
     \cuz \E{160}, \Dfref{offset-mapping}.}
 Therefore \V{map} has at least one specifier:
 \eqpar{180}{\existQ{\Vtyped{spec}{\countables \times\naturals}}{
     \VOA{OFFM}{spec}=\V{map}
     } \cuz \E{170}.}
-\eqgath{190}{\univQ{\V{map}}{ \VOA{OFFMAP}{map} \\
-        \implies \existQ{\Vtyped{spec}{\countables \times\naturals}}{
-        \VOA{OFFM}{spec}=\V{map}
-    }} \\
-    \text{\cuz NBG of \E{130} with \E{180} as consequence.} }
 
-We now choose two specifiers, non-deterministically.
+With \E{180}, we have what we need to show that every
+offset mapping has at least one specifier.
+It remains to show that every offset mapping has at
+most one specifier.
+We choose two specifiers, non-deterministically.
+\eqpar{200}{$\typed{\V{spec1},\V{spec2}}{\countables\times\naturals} \arbRel
+    \OA{SPECOF}{\V{spec1},\V{map}} \land \OA{SPECOF}{\V{spec2},\V{map}}
+    $ \cuz AF NDG.}
+\eqpar{210}{$\V{spec1} = \tuple{\V{off}, \V{len}}$ \cuz \E{200}, \Dfref{offset-mapping}.}
+\eqpar{220}{$\V{spec2} = \tuple{\V{off}, \V{len}}$ \cuz \E{200}, \Dfref{offset-mapping}.}
+\eqpar{230}{$\V{spec1} = \V{spec2}$ \cuz \E{210}, \E{220}.}
+\eqgath{240}{\univQ{\typed{\V{spec1},\V{spec2}}{\countables\times\naturals}}{ \\
+        \OA{SPECOF}{\V{spec1},\V{map}} \land \OA{SPECOF}{\V{spec2},\V{map}} \\
+    \implies \V{spec1} = \V{spec2}} \\
+    \text{\cuz NBG of \E{200} with \E{240} as consequence.} }
+\eqpar{250}{\existUniqQ{\Vtyped{spec}{\countables \times\naturals}}{
+        \VOA{SPECOF}{\V{spec},\V{map}}
+    } \cuz \E{180},\E{240}.}
+\eqgath{260}{\univQ{\V{map}}{ \VOA{OFFMAP}{map} \\
+        \implies \existUniqQ{\Vtyped{spec}{\countables \times\naturals}}{
+        \VOA{SPECOF}{\V{spec},\V{map}}
+    }} \\
+    \text{\cuz NBG of \E{130} with \E{250} as consequence.} }
 \myqed
 \end{proof}
 
