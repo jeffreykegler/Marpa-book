@@ -572,8 +572,10 @@
 
 % operators for declarators of "arbitrary", or non-deterministic,
 % variables
-\newcommand{\gArbOp}{\mathrel{\rawDRel{}}}
-\newcommand{\arbOp}{\mathrel{\rawDDRel{}}}
+\newcommand{\gArbOp}{\rawDRel{}}
+\newcommand{\gArbRel}{\mathrel{\gArbOp}}
+\newcommand{\arbOp}{\rawDDRel{}}
+\newcommand{\arbRel}{\mathrel{\arbOp}}
 
 \newcommand{\defined}{\DRel{\mathrel{=}}}
 \newcommand{\ldefined}{\DDRel{\mathrel{=}}}
@@ -636,7 +638,7 @@
 
 \newcommand{\suchthat}{\mcoloncolon}
 \newcommand{\quantify}[3]{% quantifier, binding, predicate
-    \ensuremath{#1#2 \suchthat #3}%
+    \ensuremath{\mathrel{#1}#2 \suchthat #3}%
 }
 
 \newcommand{\rIota}{\mathop{\scalebox{1.5}{\rotatebox[origin=c]{180}{$\iota$}}}}
@@ -662,8 +664,8 @@
 \newcommand{\univQOp}{\mathop{\forall{}\,}}
 \newcommand{\univQ}[2]{\quantify{\univQOp}{#1}{#2}}
 
-\newcommand{\existDecl}[2]{\quantify{\existQOp\arbOp}{#1}{#2}}
-\newcommand{\existGDecl}[2]{\quantify{\existQOp\gArbOp}{#1}{#2}}
+\newcommand{\existDecl}[2]{\quantify{\existQOp\arbRel}{#1}{#2}}
+\newcommand{\existGDecl}[2]{\quantify{\existQOp\gArbRel}{#1}{#2}}
 
 \newcommand{\tuple}[1]{\ensuremath{\left\langle #1 \right\rangle}}
 
@@ -764,6 +766,7 @@
 \newcommand{\Vz}[1]{\z{\V{#1}}}
 
 \newcommand{\naturals}{\ensuremath{\mathbb{N}}\xspace}
+\newcommand{\countables}{\ensuremath{\mathbb{CNT}}\xspace}
 \newcommand{\integers}{\ensuremath{\mathbb{Z}}\xspace}
 \newcommand{\algo}[1]{\texorpdfstring{\ensuremath{\mathbb{\uppercase{#1}}}}{#1}\xspace}
 \newcommand{\Earley}{\algo{Earley}}
@@ -2530,7 +2533,7 @@ The first, or tightest level of precedence contains the various ``atomic'' eleme
 \begin{tabular}{|l|}
 \hline
 \cellboxr{Constants, such as $\classes$,
-    $\naturals$, $\sets$, and $\unicorn$} \\
+    $\naturals$, $\countables$, $\sets$, and $\unicorn$} \\
 \hline
 \cellboxr{Variables, such as (possibly) \V{x}, $\mathbb{ABC}$, $\alpha$ and \V{multichar}} \\
 \hline
@@ -2540,6 +2543,8 @@ The first, or tightest level of precedence contains the various ``atomic'' eleme
 \end{table}%
 \index{recce-symbol}{C@$\classes$ (the universal type)}%
 \index{recce-defienda}{C@$\classes$ (the universal type)}%
+\index{recce-symbol}{N@$\countables$ (set of countable numbers)}%
+\index{recce-defienda}{N@$\countables$ (set of countable numbers)}%
 \index{recce-symbol}{N@$\naturals$ (set of natural numbers)}%
 \index{recce-defienda}{N@$\naturals$ (set of natural numbers)}%
 \index{recce-symbol}{V@$\sets$ (the class of all sets)}%
@@ -2743,6 +2748,12 @@ for
     \V{y}>0 \implies
         (\V{x} / \V{y}) \mult \V{y} + \V{x} \bmod \V{y} = \V{x}.
 \]
+
+The countable numbers are the natural numbers,
+plus the countable infinity.
+We write \countables for the set (and therefore type)
+of countable numbers,
+so that $\countables = \naturals\cup\set{\naturals}$.
 
 \subsection{String concatenation}
 
@@ -3396,7 +3407,7 @@ That is, where $\alpha$ is a type and \Oname{P} is some operator,
 we might abbreviate the two statements
 \begin{gather*}
 \existQ{ \Vtyped{x}{\alpha} }{ \VOA{P}{x}} \\
-\Vtyped{x}{\alpha} \mathrel{\arbOp} \VOA{P}{x}
+\Vtyped{x}{\alpha} \arbRel \VOA{P}{x}
 \end{gather*}
 as the single statement
 \begin{gather*}
@@ -3431,18 +3442,18 @@ as \dfn[NDD (non-deterministic variable declarator)]{NDD}.
 \begin{tabular}{|l|}
 \hline
 \hline
-\cellboxr{Global non-deterministic declarator: $\Vtyped{x}{\alpha}  \gArbOp \VFA{P}{x}$} \\
+\cellboxr{Global non-deterministic declarator: $\Vtyped{x}{\alpha}  \gArbRel \VFA{P}{x}$} \\
 \hline
-\cellboxr{Local non-deterministic declarator: $\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$} \\
+\cellboxr{Local non-deterministic declarator: $\Vtyped{x}{\alpha} \arbRel \VFA{P}{x}$} \\
 \hline
 \end{tabular}
 \end{table}
 \FloatBarrier
 
-$\Vtyped{x}{\alpha} \gArbOp \VFA{P}{x}$ abbreviates
+$\Vtyped{x}{\alpha} \gArbRel \VFA{P}{x}$ abbreviates
 \[  \Vtyped{x}{\alpha} \defined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} } \]
 and
-$\Vtyped{x}{\alpha} \arbOp \VFA{P}{x}$ abbreviates
+$\Vtyped{x}{\alpha} \arbRel \VFA{P}{x}$ abbreviates
 \[  \Vtyped{x}{\alpha} \ldefined \epsQ{ \Vtyped{x}{\alpha} }{ \VFA{P}{x} }. \]
 In an NDD, the predicate to the right of the diamond or double-diamond
 operator, \VFA{P}{x} in the examples above,
@@ -3454,14 +3465,14 @@ we say that the hypothesis is
 
 \begin{example}[NDDs]
 The NDD
-\[ \Vtyped{x}{\naturals} \arbOp \V{x} \bmod 2 = 0 \]
+\[ \Vtyped{x}{\naturals} \arbRel \V{x} \bmod 2 = 0 \]
 instantiates the local variable \V{x},
 with type \naturals, subject to the restriction that $\V{x} \bmod 2 = 0$,
 so that \V{x} is an even number, but is otherwise non-deterministic.
 The NDD
 \begin{equation}
 \label{eq:ex-ndd-2}
-    \Vtyped{answer}{\naturals} \arbOp 41 < \V{x} < 43
+    \Vtyped{answer}{\naturals} \arbRel 41 < \V{x} < 43
 \end{equation}
 instantiates a local variable \V{answer}, whose value must be 42.
 Variable \V{answer} is also constant,
@@ -3469,7 +3480,7 @@ and \Eref{ex-ndd-2} demonstrates
 that constants can be special case of non-determinism.
 A single diamond operator indicates
 a global variable, so that
-\[ \Vtyped{y}{\naturals} \gArbOp \True \]
+\[ \Vtyped{y}{\naturals} \gArbRel \True \]
 instantiates the global variable \V{y} with the trivial hypothesis,
 so that value of \V{y} can be any natural number.
 \exEnd
@@ -3494,10 +3505,10 @@ When a series of NDDs follows the schema
 \begin{equation}
 \label{eq:ndd-2}
 \begin{gathered}
-    \VVtyped{v1}{Ty1} \arbOp \VFA{P1}{v1} \\
-    \VVtyped{v2}{Ty2} \arbOp \FA{P2}{\V{v1},\V{v2}} \\
+    \VVtyped{v1}{Ty1} \arbRel \VFA{P1}{v1} \\
+    \VVtyped{v2}{Ty2} \arbRel \FA{P2}{\V{v1},\V{v2}} \\
     \vdots \\
-    \VVtyped{vN}{TyN} \arbOp \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
+    \VVtyped{vN}{TyN} \arbRel \FA{P2}{\V{v1},\V{v2}, \ldots \V{vN} }. \\
 \end{gathered}
 \end{equation}
 we will find it very convenient to abbreviate it to the form
@@ -3505,7 +3516,7 @@ we will find it very convenient to abbreviate it to the form
 \label{eq:ndd-3}
 \begin{gathered}
     \VVtyped{v1}{Ty1}, \VVtyped{v2}{Ty2}, \ldots \VVtyped{vN}{TyN}
-    \arbOp \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} }, \\
+    \arbRel \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} }, \\
     \text{where } \FA{Hyp}{\V{v1},\V{v2}, \ldots \V{vN} } \iff \\
         \VFA{P1}{v1} \land
         \FA{P2}{\V{v1},\V{v2}} \land \ldots
@@ -4091,7 +4102,7 @@ and we allow sequences to be countably infinite.
 This means that codomain of the cardinality operator for sequences
 is the countable numbers.
 That is, where \V{seq} is a sequence,
-$\Vsize{seq} \in \naturals\cup\set{\naturals}$.
+$\Vsize{seq} \in \countables$.
 
 When \V{seq} is of length zero,
 that is, when it has an empty domain,
@@ -4129,7 +4140,7 @@ for the set of all finite sequences
 whose codomain is \sets{}.
 We write $\sets{}\tfnMap\naturals$
 for the infinite sequence whose codomain is \sets{}.
-We write $\sets{}\tfnMMap(\naturals\cup\set{\naturals})$
+We write $\sets{}\tfnMMap\countables$
 for the set of all sequences
 whose codomain is \sets{}.
 
@@ -4298,7 +4309,7 @@ the countable numbers less than itself,
 so that every countable number is equal to its own cardinality.
 From this, the definition of a sequence,
 and \Rmref{function-size-identities},
-we have, for every sequence \Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets},
+we have, for every sequence \Vtyped{seq}{\countables\tfnMMap\sets},
 the following identity:
 \[
 \begin{gathered}
@@ -4338,7 +4349,7 @@ A sequence index is valid iff it is a natural number
 less than the sequence size.
 That is,
 \[ \begin{gathered}
-\univQ{\Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets}}{ \\
+\univQ{\Vtyped{seq}{\countables\tfnMMap\sets}}{ \\
     \univQ{\Vtyped{ix}{\sets}}{ \\
         \VVelement{seq}{ix} \isWellDef \iff \V{ix} < \Vsize{seq}
     } }. \quad \thEnd
@@ -4348,8 +4359,8 @@ That is,
 \begin{proof}
 The proof is by generalization of a chain of equivalences.
 \eqpar{100}{
-    $\Vtyped{seq}{\naturals\cup\set{\naturals}\tfnMMap\sets},\,
-        \Vtyped{ix}{\sets} \arbOp \True$
+    $\Vtyped{seq}{\countables\tfnMMap\sets},\,
+        \Vtyped{ix}{\sets} \arbRel \True$
     \cuz AF theorem.
 }
 The rest of this proof is valid for the corner cases
@@ -4452,10 +4463,10 @@ That is, \V{map} is an offset mapping iff
         \end{gathered} \right).
         \quad \dfEnd
 \intertext{where}
-\Elab{140} \V{off} \wellDefRel \naturals \text{ and } \V{len} \wellDefRel (\naturals\cup\set{\naturals}).
+\Elab{140} \V{off} \wellDefRel \naturals \text{ and } \V{len} \wellDefRel \countables.
 \end{gather}
 We say that
-\eqpar{160}{$\Vtyped{spec}{\naturals\times(\naturals\cup\set{\naturals})}
+\eqpar{160}{$\Vtyped{spec}{\naturals\times\countables}
     = \tuple{\V{off}, \V{len}}$}
 is the \dfn[Specifier!offset mapping]{offset mapping specifier}
 of \V{map}.
@@ -4481,30 +4492,39 @@ Every offset mapping has exactly one specifier.
 \todo{Finish this proof.}
 The proof is direct.
 For convenience, we abbreviate the type for offset mapping specifiers:
-\eqpar{100}{$\V{specTy} \ldefined (\naturals\cup\set{\naturals}) \times\naturals$. }
-and we define
-\eqpar{100}{
-    \typed{\Oname{SPEC}}{\LABBR{  \Dbool, \V{specTy}, \classes}}
+\eqpar{100}{$\V{specTy} \ldefined \countables \times\naturals$. }
+and we also define
+\eqpar{110}{
+     \typed{\Oname{OFFMAP}}{\LABBR{\Dbool, \classes}}
+     such that \VOA{OFFMAP}{x} is \True iff \V{x} is an offset mapping
+     according to its definition \Dfref{offset-mapping}, and}
+\eqpar{120}{
+    \typed{\Oname{SPECOF}}{\LABBR{  \Dbool, \V{specTy}, \classes}}
     such that 
-    \OA{SPEC}{\V{spec},\V{offmap}} is \True iff
+    \OA{SPECOF}{\V{spec},\V{offmap}} is \True iff
+    \VOA{OFFMAP}{offmap} and
     \V{spec} is the offset mapping specifier of \V{offmap}
-    \cuz \Dfref{offset-mapping}.}
-We consider a non-deterministic choice of offset, length,
-and offset mapping:
-\eqpar{100}{\existDecl{\Vtyped{len}{\naturals\cup\set{\naturals},
-    \Vtyped{off}{\naturals},
-    \Vtyped{map}{\V{len}\fnMap\naturals}}{\True}} \cuz AF proof.}
-Since
-the specifier's offset
-and length
-are well-defined, so is a tuple containing them:
-\eqpar{110}{$\tuple{\V{off}, \V{len}}\wellDefRel$ \cuz \E{100}.}
-\eqpar{120}{$\OA{OFFM}{\tuple{\V{off}, \V{len}}} = \V{map}$
-    \cuz \Dfref{offset-mapping}, \E{110}.}
+    according to \Dfref{offset-mapping}.}
+We consider a non-deterministic choice of offset mapping:
+\eqpar{130}{$\Vtyped{map}{\classes} \arbRel \VOA{OFFMAP}{map}$ \cuz AF NDG.}
+From the definition of an offset mapping \Dfref{offset-mapping}
+we know that \V{map} has an offset and a length.
+We make two definitions, local to this proof:
+\eqpar{140}{\Vtyped{offset}{\naturals} is the offset of \V{map} \cuz \E{130}.}
+\eqpar{150}{\Vtyped{len}{\countables} is the length of \V{map} \cuz \E{130}.}
+Therefore, a tuple containing them must be well-defined:
+\eqpar{160}{$\tuple{\V{off}, \V{len}}\wellDefRel \V{specTy}$ \cuz \E{100}, \E{140}, \E{150}.}
+\eqpar{170}{$\OA{SPECOF}{\tuple{\V{off}, \V{len}},\V{map}}$
+    \cuz \E{160}, \Dfref{offset-mapping}.}
 Therefore \V{map} has at least one specifier:
-\eqpar{130}{\existQ{\Vtyped{spec}{\naturals\cup\set{\naturals}) \times\naturals}}{
+\eqpar{180}{\existQ{\Vtyped{spec}{\countables \times\naturals}}{
     \VOA{OFFM}{spec}=\V{map}
-    } \cuz \E{120}.}
+    } \cuz \E{170}.}
+\eqgath{190}{\univQ{\V{map}}{ \VOA{OFFMAP}{map} \\
+        \implies \existQ{\Vtyped{spec}{\countables \times\naturals}}{
+        \VOA{OFFM}{spec}=\V{map}
+    }} \\
+    \text{\cuz NBG of \E{130} with \E{180} as consequence.} }
 
 We now choose two specifiers, non-deterministically.
 \myqed
@@ -4526,12 +4546,12 @@ is an offset mapping to show that it is also
 of type $\V{len}\tfnMap\naturals$.
 \eqpar{100}{
     We define \typed{\Oname{OFFM}}{
-        \LABBR{ \; \classes, \; (\naturals\cup\set{\naturals}) \times\naturals \;}}
+        \LABBR{ \; \classes, \; \countables \times\naturals \;}}
     as the offset mapping induced by the
     offset mapping specifier $\tuple{\V{len}, \V{offset}}$
     according to \Dfref{offset-mapping}.}
 % \eqgath{100}{
-%  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\naturals\cup\set{\naturals}\times\naturals}
+%  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\countables\times\naturals}
 %      }{ \\
 %      \VOA{SPM}{map} \land \Domain{\V{map}} = \V{len} } \\
 %  \text{\cuz hypothesis of theorem.}}
@@ -4610,7 +4630,7 @@ We define, for the purpose of this proof,
 %     \existDecl{ \Vtyped{bad}{\naturals} }{ \\
 %         \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
 %     \text{\cuz AF reductio.} }
-% \eqpar{145}{ $\Dom{\V{spm}} \isWellDef (\naturals\cup\set{\naturals})$
+% \eqpar{145}{ $\Dom{\V{spm}} \isWellDef \countables$
 %         \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
 % \eqpar{150}{\Fun{\V{spm}} \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
 % \eqpar{160}{\Fun{\V{offm}} \cuz \E{110}, \E{120}, \Dfref{offset-mapping}.}
@@ -4635,7 +4655,7 @@ We define, for the purpose of this proof,
 % \eqpar{270}{$\V{bad} \notin \Domain{\V{spm}} \implies \neg \VOA{BAD}{bad}$
 %     \cuz \E{130}, \E{260}.}
 % \eqpar{280}{$\V{bad} \in \Domain{\V{spm}}$ \cuz \E{140}, \E{270}.}
-% \eqpar{290}{$\Domain{\V{spm}}\isWellDef(\naturals\cup\set{\naturals})$
+% \eqpar{290}{$\Domain{\V{spm}}\isWellDef\countables$
 %     \cuz \E{100}, \E{120}, \Dfref{successor-faithful-mapping}.}
 % \eqpar{300}{$\Domain{\V{spm}} > 0$ \cuz \E{280}, \E{290}.}
 % \eqpar{310}{$0 \in \Domain{\V{spm}}$ \cuz \E{300}.}
@@ -4694,14 +4714,14 @@ A \dfn{slice relation} is the relational composition
 of an offset mapping and a sequence.
 That is,
 \begin{itemize}
-\item let $\V{len} \inr \naturals\cup\set{\naturals}$
+\item let $\V{len} \inr \countables$
     be a countable number,
 \item let $\Vnat{offset} \inr \naturals$,
 \item let $\V{offmap}\inr \naturals\tfnMap\V{len}$
     be the offset mapping
     which \V{offset} induces
     for the domain \V{len}, and
-\item let $\V{seq} \inr \V{V}\tfnMMap\naturals\cup\set{\naturals}$
+\item let $\V{seq} \inr \V{V}\tfnMMap\countables$
     be a sequence.
 \end{itemize}
 Then the relational composition of \V{offMap} and \V{seq},
@@ -4770,8 +4790,8 @@ contains%
 the variables
 \begin{itemize}
 \item $\V{offset}\inr\naturals,$
-\item $\V{len}\inr\naturals\cup\set{\naturals},$
-\item $\V{seq}\inr\V{V}\tfnMMap(\naturals\cup\set{\naturals}),$ and
+\item $\V{len}\inr\countables,$
+\item $\V{seq}\inr\V{V}\tfnMMap\countables,$ and
 \item $\V{sliceRel} \inr \Pow{\V{len}\times\V{V}}$,
     where \V{sliceRel} is a slice relation
     at offset \V{offset} of \V{seq}.
