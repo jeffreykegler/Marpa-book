@@ -198,14 +198,10 @@
 \newcommand{\Neg}{\neg}
 \newcommand{\Implies}{\supset}
 \newcommand{\ImpliesAlt}{\Rightarrow}
-% \newcommand{\Iff}{\equiv}
+\newcommand{\NEquiv}{\not\equiv}
+\newcommand{\NEquivRel}{\mathrel{\not\equiv}}
 % \newcommand{\IffAlt}{\Leftrightarrow}
 \newcommand{\Sheffer}{\mathrel|}
-\newcommand{\Forall}{\forall}
-\newcommand{\ForallApp}{\forall\,}
-\newcommand{\Forsome}{\exists}
-\newcommand{\ForsomeApp}{\exists\,}
-\newcommand{\ForsomeUniqueApp}{\exists\,!\,}
 
 \newcommand{\isWellDef}{\mathop{\downarrow}}
 \newcommand{\isIllDef}{\mathop{\uparrow}}
@@ -3179,6 +3175,10 @@ At the next precedence are the operators on truth values.
 \hline \hline
 \cellboxr{Logical equivalence: ${\equiv}$} \\
 \hline
+\cellboxr{Logical equivalence (synonym): ${\iff}$} \\
+\hline
+\cellboxr{Logical non-equivalence: ${\NEquiv}$} \\
+\hline
 \end{tabular}
 \end{table}
 \FloatBarrier
@@ -3941,6 +3941,8 @@ is total, we can narrow its type with the following statement:
 \]
 \end{remark}
 
+\begin{remark}[Functional and relation domain]
+\label{rm:functional-and-relation-domain}
 The functional and relational domains are related:
 it will always be the case that
 \[ \Domain{\V{f}}\isWellDef \land\; \Dom{\V{f}}\isWellDef
@@ -3948,7 +3950,9 @@ it will always be the case that
 Similarly, the codomain and range are related:
 it will always be the case that
 \[ \Range{\V{f}}\isWellDef \land\;\Cod{\V{f}}\isWellDef
-    \implies \Range{\V{f}} \subseteq \Cod{\V{f}}. \]
+    \implies \Range{\V{f}} \subseteq \Cod{\V{f}}.
+    \quad \rmEnd \]
+\end{remark}
 
 \V{f} is a \dfn[Total (function)]{total function},
 iff $\Total{\V{f}}$, where \mname{total},
@@ -4392,6 +4396,8 @@ and \refeq{eq:th-sequence-index-bound-corner2} separately.
 The theorem is the UG of \E{150}. \myqed
 \end{proof}
 
+\todo{Add theoremoids about sequence pairs here}
+
 \section{Slices}
 
 Intuitively, a
@@ -4559,12 +4565,52 @@ An offset mapping is a total function.  \thEnd
 The proof assumes that \Vtyped{map}{\V{len}\fnMap\naturals}
 is an offset mapping to show that it is also
 of type $\V{len}\tfnMap\naturals$.
+We define
 \eqpar{100}{
-    We define \typed{\Oname{OFFM}}{
-        \LABBR{ \; \classes, \; \countables \times\naturals \;}}
-    as the offset mapping induced by the
-    offset mapping specifier $\tuple{\V{len}, \V{offset}}$
-    according to \Dfref{offset-mapping}.}
+     \typed{\Oname{OFFMAP}}{\LABBR{\Dbool, \classes}}
+     such that \VOA{OFFMAP}{x} is \True iff \V{x} is an offset mapping
+     according to its definition \Dfref{offset-mapping}.}
+\eqpar{105}{
+    \typed{\Oname{SPECOF}}{\LABBR{  \Dbool, (\countables\times\naturals), \classes}}
+    such that 
+    \OA{SPECOF}{\V{spec},\V{offmap}} is \True iff
+    \VOA{OFFMAP}{offmap} and
+    \V{spec} is the offset mapping specifier of \V{offmap}
+    according to \Dfref{offset-mapping}, and}
+\eqpar{110}{
+  \existDecl{ \Vtyped{map}{\classes} }{ \VOA{OFFMAP}{map} } \cuz AF proof. }
+\eqpar{115}{
+  \existDecl{ \Vtyped{offset}{\naturals}, \Vtyped{length}{\countables} }{
+  \VOA{SPECOF}{\tuple{\V{offset},\V{length}}, \V{map} } }
+      \bcuz \longThref{Offset specifier uniqueness}{offset-mapping-specifier-uniqueness}. }
+\eqgath{120}{
+     \VOA{BAD}{inst} \text{ abbreviates } \\
+     \V{inst} \in \Dom{\V{map}} \NEquivRel \V{inst} \in \Domain{\V{map}} \\
+     \cuz \LABBR{\Dbool,\naturals}.}
+\eqgath{130}{
+    \existDecl{ \Vtyped{bad}{\naturals} }{ \\
+        \VOA{BAD}{bad} \land \forall\; \Vnat{i} < \V{bad} : \neg \VOA{BAD}{i}} \\
+    \text{\cuz AF reductio.} }
+\eqpar{140}{$\Domain{\V{map}} \subseteq \Dom{\V{map}}$
+    \cuz \E{130}, \Rmref{functional-and-relation-domain}. }
+\eqpar{150}{$\V{bad}\in\Domain{\V{map}} \implies \V{bad}\in\Dom{\V{map}}$
+    \cuz \E{140}.}
+\eqpar{160}{\VOA{BAD}{bad} \cuz \E{130}. }
+\eqpar{170}{$\V{bad}\in\Domain{\V{map}} \NEquivRel \V{bad}\in\Dom{\V{map}}$
+    \cuz \E{120}, \E{160}.}
+\eqpar{180}{$\V{bad}\notin\Domain{\V{map}} \land \V{bad}\in\Dom{\V{map}}$
+    \cuz \E{150}, \E{170}.}
+\eqpar{190}{$\V{bad}\notin\Domain{\V{map}}$ \cuz \E{180}.}
+\eqpar{200}{$\V{bad}\in\Dom{\V{map}}$ \cuz \E{180}.}
+We have shown that \V{bad} must be in the functional domain
+of \V{map}.
+Our reductio now proceeds to show that none of the values in
+\Dom{\V{map}} are possible values of \V{bad}.
+\eqpar{210}{$\Dom{\V{map}} \neq 0$ \cuz \E{190}.}
+\eqpar{220}{$\Dom{\V{map}} \wellDefRel \naturals$
+    \cuz \longDfref{Offset mapping}{offset-mapping}.}
+\eqpar{230}{$0 \in \Dom{\V{map}}$ \cuz \E{210}, \E{220}.}
+\eqpar{240}{$\FA{map}{0} = \V{offset}$ \cuz \E{230}, \Dfref{offset-mapping}.}
 % \eqgath{100}{
 %  \existDecl{ \Vtyped{len}{\naturals}, \Vtyped{map}{\countables\times\naturals}
 %      }{ \\
