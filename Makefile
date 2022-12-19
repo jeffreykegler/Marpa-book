@@ -15,7 +15,7 @@
 
 # See below for the list Debian packages required to 'make' this
 
-.phony: all clean recce-indexes full travis stage aspell arxiv test
+.phony: all clean marpaBook-indexes full travis stage aspell arxiv test
 
 LATEX = pdflatex
 MAKEINDEX = makeindex
@@ -24,7 +24,7 @@ INDEX_LIST = general defienda symbol
 .SUFFIXES:
 .SUFFIXES: .pdf .ltx .ind .idx .ilg .ist
 
-all: recce.pdf
+all: marpaBook.pdf
 
 test: test.pdf
 
@@ -32,38 +32,38 @@ test: test.pdf
 arxiv:
 	-mkdir stage_arxiv
 	chmod 0775 stage_arxiv
-	cp recce.ltx arxiv.pl stage_arxiv
-	for ix in $(INDEX_LIST); do cp recce-$$ix.ind stage_arxiv; done
+	cp marpaBook.ltx arxiv.pl stage_arxiv
+	for ix in $(INDEX_LIST); do cp marpaBook-$$ix.ind stage_arxiv; done
 
-full: ah2002_notes.pdf recce.pdf finite.pdf
+full: ah2002_notes.pdf marpaBook.pdf finite.pdf
 
 test:
 	$(LATEX) test.ltx
 
 travis:
-	$(LATEX) recce.ltx
-	$(LATEX) recce.ltx
-	$(LATEX) recce.ltx
-	$(LATEX) recce.ltx
-	$(LATEX) recce.ltx
+	$(LATEX) marpaBook.ltx
+	$(LATEX) marpaBook.ltx
+	$(LATEX) marpaBook.ltx
+	$(LATEX) marpaBook.ltx
+	$(LATEX) marpaBook.ltx
 
 clean:
-	rm -f recce.out recce.aux recce.toc recce.tdo recce.loe \
-	    recce.loa recce.lot recce.pdf
+	rm -f marpaBook.out marpaBook.aux marpaBook.toc marpaBook.tdo marpaBook.loe \
+	    marpaBook.loa marpaBook.lot marpaBook.pdf
 	for ix in $(INDEX_LIST); do \
-	    rm -f recce-$$ix.idx recce-$$ix.ind recce-$$ix.ilg; \
+	    rm -f marpaBook-$$ix.idx marpaBook-$$ix.ind marpaBook-$$ix.ilg; \
 	done
 
-recce.pdf: recce.ltx
+marpaBook.pdf: marpaBook.ltx
 	for ix in $(INDEX_LIST); do \
-	  if ! test -f recce-$$ix.idx ; then touch recce-$$ix.idx; fi; \
+	  if ! test -f marpaBook-$$ix.idx ; then touch marpaBook-$$ix.idx; fi; \
 	done
-	$(MAKE) recce-indexes
+	$(MAKE) marpaBook-indexes
 	max_print_line=99999 $(LATEX) $?
 
-recce-indexes:
+marpaBook-indexes:
 	for ix in $(INDEX_LIST); do \
-	  $(MAKEINDEX) -s recce-$$ix.ist -t recce-$$ix.ilg -o recce-$$ix.ind recce-$$ix.idx; \
+	  $(MAKEINDEX) -s marpaBook-$$ix.ist -t marpaBook-$$ix.ilg -o marpaBook-$$ix.ind marpaBook-$$ix.idx; \
 	done
 
 finite.pdf: finite.ltx
@@ -73,10 +73,10 @@ ah2002_notes.pdf: ah2002_notes.ltx
 	$(LATEX) $?
 
 aspell:
-	cat recce.ltx | aspell list --home-dir=. --personal=aspell-ignore.txt -t | sort | uniq
+	cat marpaBook.ltx | aspell list --home-dir=. --personal=aspell-ignore.txt -t | sort | uniq
 
 # interactive aspell command:
-#     aspell --home-dir=. --personal=aspell-ignore.txt -t -c recce.ltx
+#     aspell --home-dir=. --personal=aspell-ignore.txt -t -c marpaBook.ltx
 
 # Five years outdated, but anyway this is a start
 # Requires these Debian packages (as of Thu Sep 17 10:11:18 PDT 2015)
